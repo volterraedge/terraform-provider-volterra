@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.rate_limiter.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.rate_limiter.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/rate_limitercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.rate_limiter.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/rate_limitercrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/rate_limitercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.rate_limiter.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/rate_limitercrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.rate_limiter.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/rate_limitercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2929,6 +2917,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "rate_limitercrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.rate_limiter.crudapi.ErrorCode"
         },
         "runtimeStreamError": {
             "type": "object",

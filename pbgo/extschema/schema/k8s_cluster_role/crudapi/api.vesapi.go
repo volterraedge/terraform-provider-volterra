@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.k8s_cluster_role.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/k8s_cluster_rolecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/k8s_cluster_rolecrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/k8s_cluster_rolecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/k8s_cluster_rolecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.k8s_cluster_role.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/k8s_cluster_rolecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3031,6 +3019,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "k8s_cluster_rolecrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.k8s_cluster_role.crudapi.ErrorCode"
         },
         "protobufAny": {
             "type": "object",

@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.namespace.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.namespace.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/namespacecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/namespacecrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/namespacecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/namespacecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.namespace.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/namespacecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2951,6 +2939,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Version"
                 }
             }
+        },
+        "namespacecrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.namespace.crudapi.ErrorCode"
         },
         "protobufAny": {
             "type": "object",

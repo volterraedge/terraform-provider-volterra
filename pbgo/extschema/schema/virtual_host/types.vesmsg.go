@@ -8223,6 +8223,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["http_redirect_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_redirect_options"))
+		if err := fv(ctx, m.GetHttpRedirectOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
@@ -9101,6 +9110,75 @@ var DefaultHttpProtocolOptionsValidator = func() *ValidateHttpProtocolOptions {
 
 func HttpProtocolOptionsValidator() db.Validator {
 	return DefaultHttpProtocolOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpRedirectOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpRedirectOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpRedirectOptions) DeepCopy() *HttpRedirectOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpRedirectOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpRedirectOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpRedirectOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpRedirectOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpRedirectOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpRedirectOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpRedirectOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpRedirectOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpRedirectOptionsValidator = func() *ValidateHttpRedirectOptions {
+	v := &ValidateHttpRedirectOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HttpRedirectOptionsValidator() db.Validator {
+	return DefaultHttpRedirectOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -11815,6 +11893,15 @@ func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["js_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("js_path"))
+		if err := fv(ctx, m.GetJsPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["reload_header_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("reload_header_name"))
@@ -12473,9 +12560,7 @@ var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 
 	vrhCoalescedVhosts := v.CoalescedVhostsValidationRuleHandler
 	rulesCoalescedVhosts := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.repeated.unique": "true",
 	}
 	vFn, err = vrhCoalescedVhosts(rulesCoalescedVhosts)
 	if err != nil {
@@ -12486,9 +12571,7 @@ var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 
 	vrhNonCoalescedVhosts := v.NonCoalescedVhostsValidationRuleHandler
 	rulesNonCoalescedVhosts := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.repeated.unique": "true",
 	}
 	vFn, err = vrhNonCoalescedVhosts(rulesNonCoalescedVhosts)
 	if err != nil {

@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.views.tenant_configuration.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenant_configurationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenant_configurationcrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenant_configurationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenant_configurationcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenant_configurationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3501,6 +3489,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "tenant_configurationcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.tenant_configuration.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

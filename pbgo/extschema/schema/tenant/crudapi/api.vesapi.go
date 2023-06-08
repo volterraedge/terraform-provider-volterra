@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.tenant.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.tenant.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenantcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenantcrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenantcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenantcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.tenant.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/tenantcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2762,6 +2750,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
                 }
             }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -2970,6 +2965,33 @@ var APISwaggerJSON string = `{
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
             "x-ves-proto-message": "ves.io.schema.ListMetaType"
+        },
+        "schemaNetworkingStackType": {
+            "type": "object",
+            "description": "Type of networking stack",
+            "title": "NetworkingStackType",
+            "x-displayname": "Networking Stack",
+            "x-ves-oneof-field-choice": "[\"dual\",\"ipv4\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.NetworkingStackType",
+            "properties": {
+                "dual": {
+                    "description": "Exclusive with [ipv4 ipv6]\n Supports both IPv4 and IPv6",
+                    "title": "Dual",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Dual"
+                },
+                "ipv4": {
+                    "description": "Exclusive with [dual ipv6]\n Supports only IPv4",
+                    "title": "IPv4",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "IPv4"
+                },
+                "ipv6": {
+                    "description": "Exclusive with [dual ipv4]\n x-displaName: \"IPv6\"\n Supports only IPv6",
+                    "title": "IPv6",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
         },
         "schemaObjectMetaType": {
             "type": "object",
@@ -3534,6 +3556,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "tenantFSMState": {
+            "type": "string",
+            "description": "Tenant states https://gitlab.com/volterra/ves.io/eywa/-/wikis/Tenant-State-Machine.\n\n - StateUndefined: StateUndefined\n\nTenant state when it was created without any state.\n - StateCreating: StateCreating\n\nTenant state of initial bootstrapping tenant, registering tenant in other service and\npre-create default objects for the tenant like default namespaces, default roles etc.\n - StateCreateFailed: StateCreateFailed\n\nTenant state when initial bootstrapping was failed by some reason and must be retried\nafter issue is solved.\n - StateInactive: StateInactive\n\nTenant state when initial creation is completed and we have trigger next stage of tenant\nregistration like creating support account, billing account in third party services.\n - StateActive: StateActive\n\nTenant state of completely registered tenant and available to use.\n - StateSuspended: StateSuspended\n\nTenant state of suspended tenant by some reason like not finished billing payments,\nmanually suspended by administrator, etc.\n - StateDisabled: StateDisabled\n\nTenant state of disabled tenant which are in pre-deletion state.\n - StateConfiguring: StateConfiguring\n\nConfiguring state of the specific tenant, can be set for instance if tenant is setting up billing account, etc..\n - StateConfiguringFailed: StateConfiguringFailed\n\nConfiguring state of the specific tenant, can be set for instance if tenant is setting up billing account, etc..",
+            "title": "States",
+            "enum": [
+                "StateUndefined",
+                "StateCreating",
+                "StateCreateFailed",
+                "StateInactive",
+                "StateActive",
+                "StateSuspended",
+                "StateDisabled",
+                "StateConfiguring",
+                "StateConfiguringFailed"
+            ],
+            "default": "StateUndefined",
+            "x-displayname": "States",
+            "x-ves-proto-enum": "ves.io.schema.tenant.FSMState"
+        },
         "tenantGlobalSpecType": {
             "type": "object",
             "description": "This is the shape of the tenant representation in the database at Global Controller.",
@@ -3670,6 +3711,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 },
+                "site_network_stack": {
+                    "description": " Site (CE) networking stack type",
+                    "title": "Site (CE) Networking Stack Type",
+                    "$ref": "#/definitions/schemaNetworkingStackType",
+                    "x-displayname": "Site (CE) Networking Stack Type"
+                },
+                "state": {
+                    "description": " State of the tenant.",
+                    "title": "State",
+                    "$ref": "#/definitions/tenantFSMState",
+                    "x-displayname": "State"
+                },
                 "tenant_fqdn": {
                     "type": "string",
                     "description": " Tenant's fully qualified domain name for external access via Volterra's global controller.\n Freemium tenant will have common access domain for eg: console.ves.volterra.io and in case of enterprise tenant,\n it will include domain name tenant admin chose as cname for specific tenant access; for eg: abc.console.ves.volterra.io\n\nExample: - \"abc.console.ves.volterra.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -3786,6 +3839,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Version"
                 }
             }
+        },
+        "tenantcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.tenant.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

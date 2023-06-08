@@ -61,12 +61,16 @@ type GlobalSpecType struct {
 	// x-example: "TCP"
 	// Protocol to advertise.
 	Protocol string `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	// port
+	// Port
 	//
 	// x-displayName: "TCP/UDP Port"
 	// x-example: "80"
 	// Port to advertise.
-	Port uint32 `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	//
+	// Types that are valid to be assigned to PortChoice:
+	//	*GlobalSpecType_Port
+	//	*GlobalSpecType_PortRanges
+	PortChoice isGlobalSpecType_PortChoice `protobuf_oneof:"port_choice"`
 	// TLS parameters
 	//
 	// x-displayName: "TLS Parameters"
@@ -108,6 +112,30 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+type isGlobalSpecType_PortChoice interface {
+	isGlobalSpecType_PortChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_Port struct {
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3,oneof" json:"port,omitempty"`
+}
+type GlobalSpecType_PortRanges struct {
+	PortRanges string `protobuf:"bytes,8,opt,name=port_ranges,json=portRanges,proto3,oneof" json:"port_ranges,omitempty"`
+}
+
+func (*GlobalSpecType_Port) isGlobalSpecType_PortChoice()       {}
+func (*GlobalSpecType_PortRanges) isGlobalSpecType_PortChoice() {}
+
+func (m *GlobalSpecType) GetPortChoice() isGlobalSpecType_PortChoice {
+	if m != nil {
+		return m.PortChoice
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetWhere() *schema.NetworkSiteRefSelector {
 	if m != nil {
 		return m.Where
@@ -137,10 +165,17 @@ func (m *GlobalSpecType) GetProtocol() string {
 }
 
 func (m *GlobalSpecType) GetPort() uint32 {
-	if m != nil {
-		return m.Port
+	if x, ok := m.GetPortChoice().(*GlobalSpecType_Port); ok {
+		return x.Port
 	}
 	return 0
+}
+
+func (m *GlobalSpecType) GetPortRanges() string {
+	if x, ok := m.GetPortChoice().(*GlobalSpecType_PortRanges); ok {
+		return x.PortRanges
+	}
+	return ""
 }
 
 func (m *GlobalSpecType) GetTlsParameters() *schema.DownstreamTlsParamsType {
@@ -157,16 +192,27 @@ func (m *GlobalSpecType) GetSkipXffAppend() bool {
 	return false
 }
 
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GlobalSpecType_Port)(nil),
+		(*GlobalSpecType_PortRanges)(nil),
+	}
+}
+
 // Create advertise policy
 //
 // x-displayName: "Create Advertise Policy"
 // advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.
 type CreateSpecType struct {
-	Where         *schema.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
-	Address       string                          `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	PublicIp      []*schema.ObjectRefType         `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
-	Protocol      string                          `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	Port          uint32                          `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	Where    *schema.NetworkSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	Address  string                         `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	PublicIp []*schema.ObjectRefType        `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
+	Protocol string                         `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	// Types that are valid to be assigned to PortChoice:
+	//	*CreateSpecType_Port
+	//	*CreateSpecType_PortRanges
+	PortChoice    isCreateSpecType_PortChoice     `protobuf_oneof:"port_choice"`
 	TlsParameters *schema.DownstreamTlsParamsType `protobuf:"bytes,5,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
 	SkipXffAppend bool                            `protobuf:"varint,6,opt,name=skip_xff_append,json=skipXffAppend,proto3" json:"skip_xff_append,omitempty"`
 }
@@ -199,6 +245,30 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+type isCreateSpecType_PortChoice interface {
+	isCreateSpecType_PortChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_Port struct {
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3,oneof" json:"port,omitempty"`
+}
+type CreateSpecType_PortRanges struct {
+	PortRanges string `protobuf:"bytes,8,opt,name=port_ranges,json=portRanges,proto3,oneof" json:"port_ranges,omitempty"`
+}
+
+func (*CreateSpecType_Port) isCreateSpecType_PortChoice()       {}
+func (*CreateSpecType_PortRanges) isCreateSpecType_PortChoice() {}
+
+func (m *CreateSpecType) GetPortChoice() isCreateSpecType_PortChoice {
+	if m != nil {
+		return m.PortChoice
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetWhere() *schema.NetworkSiteRefSelector {
 	if m != nil {
 		return m.Where
@@ -228,10 +298,17 @@ func (m *CreateSpecType) GetProtocol() string {
 }
 
 func (m *CreateSpecType) GetPort() uint32 {
-	if m != nil {
-		return m.Port
+	if x, ok := m.GetPortChoice().(*CreateSpecType_Port); ok {
+		return x.Port
 	}
 	return 0
+}
+
+func (m *CreateSpecType) GetPortRanges() string {
+	if x, ok := m.GetPortChoice().(*CreateSpecType_PortRanges); ok {
+		return x.PortRanges
+	}
+	return ""
 }
 
 func (m *CreateSpecType) GetTlsParameters() *schema.DownstreamTlsParamsType {
@@ -248,16 +325,27 @@ func (m *CreateSpecType) GetSkipXffAppend() bool {
 	return false
 }
 
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateSpecType_Port)(nil),
+		(*CreateSpecType_PortRanges)(nil),
+	}
+}
+
 // Replace advertise policy
 //
 // x-displayName: "Replace Advertise Policy"
 // advertise_policy object controls how and where a service represented by a given virtual_host object is advertised to consumers.
 type ReplaceSpecType struct {
-	Where         *schema.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
-	Address       string                          `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	PublicIp      []*schema.ObjectRefType         `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
-	Protocol      string                          `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	Port          uint32                          `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	Where    *schema.NetworkSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	Address  string                         `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	PublicIp []*schema.ObjectRefType        `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
+	Protocol string                         `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	// Types that are valid to be assigned to PortChoice:
+	//	*ReplaceSpecType_Port
+	//	*ReplaceSpecType_PortRanges
+	PortChoice    isReplaceSpecType_PortChoice    `protobuf_oneof:"port_choice"`
 	TlsParameters *schema.DownstreamTlsParamsType `protobuf:"bytes,5,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
 	SkipXffAppend bool                            `protobuf:"varint,6,opt,name=skip_xff_append,json=skipXffAppend,proto3" json:"skip_xff_append,omitempty"`
 }
@@ -290,6 +378,30 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+type isReplaceSpecType_PortChoice interface {
+	isReplaceSpecType_PortChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_Port struct {
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3,oneof" json:"port,omitempty"`
+}
+type ReplaceSpecType_PortRanges struct {
+	PortRanges string `protobuf:"bytes,8,opt,name=port_ranges,json=portRanges,proto3,oneof" json:"port_ranges,omitempty"`
+}
+
+func (*ReplaceSpecType_Port) isReplaceSpecType_PortChoice()       {}
+func (*ReplaceSpecType_PortRanges) isReplaceSpecType_PortChoice() {}
+
+func (m *ReplaceSpecType) GetPortChoice() isReplaceSpecType_PortChoice {
+	if m != nil {
+		return m.PortChoice
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetWhere() *schema.NetworkSiteRefSelector {
 	if m != nil {
 		return m.Where
@@ -319,10 +431,17 @@ func (m *ReplaceSpecType) GetProtocol() string {
 }
 
 func (m *ReplaceSpecType) GetPort() uint32 {
-	if m != nil {
-		return m.Port
+	if x, ok := m.GetPortChoice().(*ReplaceSpecType_Port); ok {
+		return x.Port
 	}
 	return 0
+}
+
+func (m *ReplaceSpecType) GetPortRanges() string {
+	if x, ok := m.GetPortChoice().(*ReplaceSpecType_PortRanges); ok {
+		return x.PortRanges
+	}
+	return ""
 }
 
 func (m *ReplaceSpecType) GetTlsParameters() *schema.DownstreamTlsParamsType {
@@ -339,16 +458,27 @@ func (m *ReplaceSpecType) GetSkipXffAppend() bool {
 	return false
 }
 
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceSpecType_Port)(nil),
+		(*ReplaceSpecType_PortRanges)(nil),
+	}
+}
+
 // Get advertise policy
 //
 // x-displayName: "Get Advertise Policy"
 // Get advertise_policy read a given object from storage backend for metadata.namespace
 type GetSpecType struct {
-	Where         *schema.NetworkSiteRefSelector  `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
-	Address       string                          `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
-	PublicIp      []*schema.ObjectRefType         `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
-	Protocol      string                          `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
-	Port          uint32                          `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	Where    *schema.NetworkSiteRefSelector `protobuf:"bytes,1,opt,name=where,proto3" json:"where,omitempty"`
+	Address  string                         `protobuf:"bytes,2,opt,name=address,proto3" json:"address,omitempty"`
+	PublicIp []*schema.ObjectRefType        `protobuf:"bytes,7,rep,name=public_ip,json=publicIp,proto3" json:"public_ip,omitempty"`
+	Protocol string                         `protobuf:"bytes,3,opt,name=protocol,proto3" json:"protocol,omitempty"`
+	// Types that are valid to be assigned to PortChoice:
+	//	*GetSpecType_Port
+	//	*GetSpecType_PortRanges
+	PortChoice    isGetSpecType_PortChoice        `protobuf_oneof:"port_choice"`
 	TlsParameters *schema.DownstreamTlsParamsType `protobuf:"bytes,5,opt,name=tls_parameters,json=tlsParameters,proto3" json:"tls_parameters,omitempty"`
 	SkipXffAppend bool                            `protobuf:"varint,6,opt,name=skip_xff_append,json=skipXffAppend,proto3" json:"skip_xff_append,omitempty"`
 }
@@ -381,6 +511,30 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+type isGetSpecType_PortChoice interface {
+	isGetSpecType_PortChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_Port struct {
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3,oneof" json:"port,omitempty"`
+}
+type GetSpecType_PortRanges struct {
+	PortRanges string `protobuf:"bytes,8,opt,name=port_ranges,json=portRanges,proto3,oneof" json:"port_ranges,omitempty"`
+}
+
+func (*GetSpecType_Port) isGetSpecType_PortChoice()       {}
+func (*GetSpecType_PortRanges) isGetSpecType_PortChoice() {}
+
+func (m *GetSpecType) GetPortChoice() isGetSpecType_PortChoice {
+	if m != nil {
+		return m.PortChoice
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetWhere() *schema.NetworkSiteRefSelector {
 	if m != nil {
 		return m.Where
@@ -410,10 +564,17 @@ func (m *GetSpecType) GetProtocol() string {
 }
 
 func (m *GetSpecType) GetPort() uint32 {
-	if m != nil {
-		return m.Port
+	if x, ok := m.GetPortChoice().(*GetSpecType_Port); ok {
+		return x.Port
 	}
 	return 0
+}
+
+func (m *GetSpecType) GetPortRanges() string {
+	if x, ok := m.GetPortChoice().(*GetSpecType_PortRanges); ok {
+		return x.PortRanges
+	}
+	return ""
 }
 
 func (m *GetSpecType) GetTlsParameters() *schema.DownstreamTlsParamsType {
@@ -428,6 +589,14 @@ func (m *GetSpecType) GetSkipXffAppend() bool {
 		return m.SkipXffAppend
 	}
 	return false
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSpecType_Port)(nil),
+		(*GetSpecType_PortRanges)(nil),
+	}
 }
 
 type ListenerConfig struct {
@@ -518,53 +687,59 @@ func init() {
 }
 
 var fileDescriptor_c2a7dbc5a9f3eb12 = []byte{
-	// 727 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x95, 0x4d, 0x4f, 0x2b, 0x55,
-	0x18, 0xc7, 0x7b, 0x3a, 0xa5, 0x94, 0x03, 0x2d, 0x32, 0x31, 0x66, 0xac, 0xe4, 0xa4, 0x62, 0x80,
-	0x86, 0x94, 0x19, 0x05, 0x5f, 0x88, 0x26, 0x26, 0x14, 0x12, 0x62, 0xa2, 0xd2, 0x0c, 0x35, 0x1a,
-	0x37, 0xcd, 0x74, 0xfa, 0x4c, 0x19, 0x99, 0xf6, 0x9c, 0x9c, 0x39, 0x6d, 0x61, 0x61, 0xc2, 0x47,
-	0x30, 0x7e, 0x0a, 0xe3, 0x47, 0xb0, 0x2e, 0x1a, 0x57, 0xc6, 0x55, 0x97, 0x0d, 0x2b, 0x99, 0x2e,
-	0xf4, 0xde, 0xbb, 0xe1, 0x1b, 0x70, 0x33, 0xa7, 0x2d, 0xb4, 0x93, 0xb0, 0xb8, 0xb9, 0x97, 0x1d,
-	0xbb, 0xe7, 0xcc, 0xff, 0x79, 0xff, 0x9d, 0xc9, 0xc1, 0x5b, 0x6d, 0xf0, 0x75, 0x97, 0x1a, 0xbe,
-	0x7d, 0x0a, 0x0d, 0xcb, 0xb0, 0x6a, 0x6d, 0xe0, 0xc2, 0xf5, 0xa1, 0xc2, 0xa8, 0xe7, 0xda, 0x17,
-	0x86, 0xb8, 0x60, 0xe0, 0xeb, 0x8c, 0x53, 0x41, 0x55, 0x32, 0xf2, 0xd5, 0x47, 0xbe, 0x7a, 0xd4,
-	0x37, 0xbb, 0x5d, 0x77, 0xc5, 0x69, 0xab, 0xaa, 0xdb, 0xb4, 0x61, 0xd4, 0x69, 0x9d, 0x1a, 0x32,
-	0xac, 0xda, 0x72, 0xe4, 0x49, 0x1e, 0xa4, 0x35, 0x4a, 0x97, 0x7d, 0x6f, 0xb6, 0x34, 0x65, 0xc2,
-	0xa5, 0xcd, 0x71, 0xad, 0xec, 0xbb, 0xb3, 0xe2, 0x54, 0x1b, 0xd9, 0xd5, 0x59, 0xa9, 0x6d, 0x79,
-	0x6e, 0xcd, 0x12, 0x30, 0x56, 0x73, 0x11, 0xd5, 0x85, 0x4e, 0x65, 0x26, 0xf5, 0xda, 0x40, 0xc1,
-	0x99, 0x23, 0x8f, 0x56, 0x2d, 0xef, 0x84, 0x81, 0x5d, 0xbe, 0x60, 0xa0, 0x7e, 0x81, 0xe7, 0x3a,
-	0xa7, 0xc0, 0x41, 0x43, 0x39, 0x94, 0x5f, 0xdc, 0x59, 0xd7, 0x67, 0x27, 0xfd, 0x16, 0x44, 0x87,
-	0xf2, 0xb3, 0x13, 0x57, 0x80, 0x09, 0xce, 0x09, 0x78, 0x60, 0x0b, 0xca, 0xcd, 0x51, 0x8c, 0xba,
-	0x89, 0xe7, 0xad, 0x5a, 0x8d, 0x83, 0xef, 0x6b, 0xf1, 0x1c, 0xca, 0x2f, 0x14, 0xd3, 0xbd, 0x2e,
-	0x42, 0x7f, 0x3c, 0xeb, 0x29, 0x09, 0x1e, 0x67, 0xc8, 0x9c, 0xa8, 0xea, 0x31, 0x5e, 0x60, 0xad,
-	0xaa, 0xe7, 0xda, 0x15, 0x97, 0x69, 0xf3, 0x39, 0x25, 0xbf, 0xb8, 0xb3, 0x1a, 0xa9, 0x74, 0x5c,
-	0xfd, 0x09, 0x6c, 0x61, 0x82, 0x13, 0xb6, 0x55, 0x7c, 0xfb, 0xf7, 0x9f, 0xef, 0x23, 0xc2, 0xa4,
-	0x97, 0x7f, 0x22, 0x64, 0xa6, 0x46, 0x9f, 0xbe, 0x62, 0xea, 0x1e, 0x4e, 0xc9, 0x91, 0x6c, 0xea,
-	0x69, 0x8a, 0x2c, 0xbd, 0x1a, 0x7a, 0x5d, 0x75, 0x91, 0x52, 0x3e, 0x28, 0x85, 0x1d, 0x2c, 0x71,
-	0x6c, 0x86, 0xb6, 0xa9, 0x7c, 0x77, 0x58, 0x32, 0xef, 0xbc, 0xd5, 0x75, 0x9c, 0x60, 0x94, 0x0b,
-	0x2d, 0x91, 0x43, 0xf9, 0x74, 0x71, 0xe5, 0xaa, 0x8b, 0xe2, 0x7b, 0x1f, 0x86, 0x01, 0xc9, 0xad,
-	0x84, 0x76, 0x7b, 0xab, 0x98, 0x52, 0x56, 0xbf, 0xc7, 0x19, 0xe1, 0xf9, 0x15, 0x66, 0x71, 0xab,
-	0x01, 0x02, 0xb8, 0xaf, 0xcd, 0xc9, 0x05, 0x6d, 0x44, 0xda, 0x3e, 0xa4, 0x9d, 0xa6, 0x2f, 0x38,
-	0x58, 0x8d, 0xb2, 0xe7, 0x97, 0x42, 0x6f, 0x5f, 0x0e, 0x90, 0x0a, 0xdb, 0xe9, 0x77, 0x11, 0x32,
-	0xd3, 0x62, 0x2c, 0xc8, 0x34, 0x6a, 0x01, 0x2f, 0xfb, 0x67, 0x2e, 0xab, 0x9c, 0x3b, 0x4e, 0xc5,
-	0x62, 0x0c, 0x9a, 0x35, 0x2d, 0x99, 0x43, 0xf9, 0x54, 0x31, 0xd1, 0x93, 0xde, 0xa1, 0xf8, 0x83,
-	0xe3, 0xec, 0x4b, 0xe9, 0xf3, 0xcd, 0xbf, 0xba, 0xe8, 0x03, 0xfc, 0x3e, 0x7e, 0x6b, 0x7f, 0x72,
-	0xe5, 0x72, 0x25, 0x79, 0xe5, 0xd4, 0xf4, 0x47, 0x85, 0xdd, 0xc2, 0xc7, 0x85, 0x9d, 0xc2, 0x27,
-	0x85, 0x4f, 0x0b, 0x9f, 0xad, 0x3d, 0x8f, 0xe3, 0xcc, 0x01, 0x07, 0x4b, 0xc0, 0x9b, 0x41, 0xab,
-	0x45, 0xd0, 0xde, 0xb3, 0x3c, 0x7a, 0x55, 0x96, 0x4b, 0xd3, 0x2c, 0xa7, 0x18, 0x66, 0xa3, 0x0c,
-	0xa7, 0x28, 0xa9, 0xd3, 0x94, 0xc6, 0x48, 0xbe, 0x79, 0x3d, 0x24, 0x51, 0x10, 0x1b, 0x0f, 0x80,
-	0x88, 0x22, 0x58, 0xf9, 0xe7, 0xcb, 0xc8, 0x4f, 0xb3, 0xf6, 0x22, 0x8e, 0x97, 0x4d, 0x60, 0x9e,
-	0x65, 0x3f, 0x6d, 0xfb, 0xf1, 0xb7, 0xfd, 0x5f, 0x1c, 0x2f, 0x1e, 0x81, 0x78, 0xda, 0xf4, 0xa3,
-	0x6f, 0xba, 0x84, 0x33, 0x5f, 0xbb, 0xbe, 0x80, 0x26, 0xf0, 0x03, 0xda, 0x74, 0xdc, 0x7a, 0xd8,
-	0x6f, 0xd3, 0x6a, 0x8c, 0x56, 0xbd, 0x60, 0x4a, 0x5b, 0x7d, 0x07, 0x27, 0x7d, 0x61, 0x89, 0xd6,
-	0x64, 0x83, 0xe3, 0xd3, 0xdd, 0x6c, 0xca, 0xfd, 0x6c, 0xc5, 0x5f, 0x51, 0xff, 0x9a, 0xc4, 0x06,
-	0xd7, 0x24, 0x76, 0x73, 0x4d, 0xd0, 0x65, 0x40, 0xd0, 0x6f, 0x01, 0x41, 0x7f, 0x07, 0x04, 0xf5,
-	0x03, 0x82, 0x06, 0x01, 0x41, 0xff, 0x06, 0x04, 0xfd, 0x1f, 0x90, 0xd8, 0x4d, 0x40, 0xd0, 0x2f,
-	0x43, 0x12, 0xeb, 0x0d, 0x09, 0xea, 0x0f, 0x49, 0x6c, 0x30, 0x24, 0xb1, 0x1f, 0xcb, 0x75, 0xca,
-	0xce, 0xea, 0x7a, 0x9b, 0x7a, 0x02, 0x38, 0xb7, 0xf4, 0x96, 0x6f, 0x48, 0xc3, 0xa1, 0xbc, 0xb1,
-	0xcd, 0x38, 0x6d, 0xbb, 0x35, 0xe0, 0xdb, 0x13, 0xd9, 0x60, 0xd5, 0x3a, 0x35, 0xe0, 0x5c, 0x8c,
-	0x5f, 0xc0, 0x07, 0x5e, 0xf6, 0x6a, 0x52, 0xe2, 0xd8, 0x7d, 0x19, 0x00, 0x00, 0xff, 0xff, 0x00,
-	0xe0, 0xe5, 0x61, 0x02, 0x08, 0x00, 0x00,
+	// 831 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xf6, 0x64, 0x37, 0xa9, 0x3d, 0xa9, 0x93, 0x74, 0x55, 0xa1, 0x25, 0x84, 0x91, 0x5b, 0x44,
+	0x63, 0x55, 0x8e, 0x0d, 0x29, 0x3f, 0x02, 0x48, 0x88, 0x3a, 0x95, 0x52, 0x10, 0x50, 0x6b, 0x13,
+	0x04, 0xe2, 0xb2, 0x1a, 0xaf, 0xdf, 0x6e, 0x96, 0xac, 0x3d, 0xa3, 0x99, 0xb1, 0xd3, 0x1c, 0x90,
+	0x22, 0xfe, 0x02, 0xc4, 0x5f, 0x81, 0x38, 0x22, 0xc1, 0x81, 0xe5, 0x60, 0xf5, 0x54, 0x71, 0xf2,
+	0x31, 0xea, 0x89, 0x6c, 0x2e, 0x70, 0xeb, 0x99, 0x4b, 0xd1, 0x8e, 0xd7, 0xad, 0xbd, 0xd0, 0x03,
+	0xa2, 0x97, 0x4a, 0x39, 0xf9, 0xcd, 0x7c, 0xdf, 0x7b, 0x6f, 0xdf, 0xfb, 0x3e, 0x4b, 0x83, 0xaf,
+	0x0f, 0x40, 0xd6, 0x43, 0xd6, 0x90, 0xde, 0x3e, 0x74, 0x69, 0x83, 0x76, 0x06, 0x20, 0x54, 0x28,
+	0xc1, 0xe5, 0x2c, 0x0a, 0xbd, 0xa3, 0x86, 0x3a, 0xe2, 0x20, 0xeb, 0x5c, 0x30, 0xc5, 0x2c, 0x32,
+	0xe6, 0xd6, 0xc7, 0xdc, 0x7a, 0x9e, 0xbb, 0xba, 0x11, 0x84, 0x6a, 0xbf, 0xdf, 0xae, 0x7b, 0xac,
+	0xdb, 0x08, 0x58, 0xc0, 0x1a, 0x3a, 0xad, 0xdd, 0xf7, 0xf5, 0x49, 0x1f, 0x74, 0x34, 0x2e, 0xb7,
+	0x4a, 0x66, 0x5b, 0x7b, 0x20, 0x94, 0x3b, 0xd5, 0x6e, 0xf5, 0xa5, 0x59, 0x9c, 0x71, 0x15, 0xb2,
+	0xde, 0x04, 0x7c, 0x71, 0x16, 0x9c, 0xce, 0x5b, 0x9b, 0x85, 0x06, 0x34, 0x0a, 0x3b, 0x54, 0x41,
+	0x86, 0x56, 0x72, 0x68, 0x08, 0x87, 0xee, 0x4c, 0xe9, 0xab, 0xf7, 0x4c, 0xbc, 0xb4, 0x13, 0xb1,
+	0x36, 0x8d, 0x76, 0x39, 0x78, 0x7b, 0x47, 0x1c, 0xac, 0xf7, 0xf0, 0xfc, 0xe1, 0x3e, 0x08, 0xb0,
+	0x51, 0x05, 0x55, 0x17, 0x37, 0x5f, 0xad, 0xcf, 0x6e, 0xe2, 0x53, 0x50, 0x87, 0x4c, 0x1c, 0xec,
+	0x86, 0x0a, 0x1c, 0xf0, 0x77, 0x21, 0x02, 0x4f, 0x31, 0xe1, 0x8c, 0x73, 0xac, 0x75, 0x7c, 0x81,
+	0x76, 0x3a, 0x02, 0xa4, 0xb4, 0xe7, 0x2a, 0xa8, 0x5a, 0x6a, 0x96, 0x87, 0x31, 0x42, 0xbf, 0xfc,
+	0x39, 0x34, 0x4c, 0x31, 0xc7, 0x91, 0x33, 0x41, 0xad, 0x3b, 0xb8, 0xc4, 0xfb, 0xed, 0x28, 0xf4,
+	0xdc, 0x90, 0xdb, 0x17, 0x2a, 0x46, 0x75, 0x71, 0x73, 0x2d, 0xd7, 0xe9, 0x4e, 0xfb, 0x2b, 0xf0,
+	0x94, 0x03, 0x7e, 0xfa, 0x59, 0xcd, 0xcb, 0x3f, 0x7c, 0xfd, 0x24, 0x23, 0x2d, 0x7a, 0xfc, 0x2b,
+	0x42, 0x4e, 0x71, 0x7c, 0xf5, 0x21, 0xb7, 0xb6, 0x70, 0x51, 0x8f, 0xe4, 0xb1, 0xc8, 0x36, 0x74,
+	0xeb, 0xb5, 0x94, 0xf5, 0x20, 0x46, 0xc6, 0xde, 0x76, 0x2b, 0xfd, 0x82, 0x8b, 0x02, 0x3b, 0x69,
+	0xec, 0x18, 0x9f, 0xdd, 0x6a, 0x39, 0x8f, 0xd9, 0xd6, 0x3a, 0x36, 0x39, 0x13, 0xca, 0x36, 0x2b,
+	0xa8, 0x5a, 0x6e, 0x5e, 0x7a, 0x10, 0xa3, 0xb9, 0xad, 0xd7, 0xd2, 0x84, 0x85, 0xeb, 0xa6, 0xfd,
+	0xe8, 0x91, 0x71, 0xbb, 0xe0, 0x68, 0x82, 0xf5, 0x01, 0x5e, 0x4c, 0x7f, 0x5d, 0x41, 0x7b, 0x01,
+	0x48, 0xbb, 0xa8, 0xbb, 0xbc, 0x9c, 0x32, 0xe7, 0x85, 0x61, 0x1f, 0x9b, 0xd9, 0x98, 0x2b, 0x28,
+	0xbb, 0xba, 0x3f, 0x87, 0x6e, 0x17, 0x1c, 0x9c, 0xe6, 0x38, 0x3a, 0xc5, 0xfa, 0x1c, 0x2f, 0xa9,
+	0x48, 0xba, 0x9c, 0x0a, 0xda, 0x05, 0x05, 0x42, 0xda, 0xf3, 0x7a, 0xc9, 0xd7, 0x72, 0xa3, 0xdf,
+	0x62, 0x87, 0x3d, 0xa9, 0x04, 0xd0, 0xee, 0x5e, 0x24, 0x5b, 0x29, 0x5b, 0xea, 0x25, 0x14, 0xd3,
+	0x91, 0x46, 0x31, 0x42, 0x4e, 0x59, 0x65, 0x80, 0x2e, 0x63, 0xd5, 0xf0, 0xb2, 0x3c, 0x08, 0xb9,
+	0x7b, 0xd7, 0xf7, 0x5d, 0xca, 0x39, 0xf4, 0x3a, 0xf6, 0x42, 0x05, 0x55, 0x8b, 0x4d, 0x73, 0xa8,
+	0xd9, 0x29, 0xf8, 0x85, 0xef, 0xdf, 0xd4, 0xd0, 0xbb, 0xeb, 0xf7, 0x62, 0xf4, 0x0a, 0xbe, 0x82,
+	0x57, 0x6e, 0x4e, 0x6c, 0x5d, 0x69, 0x69, 0x5b, 0x5b, 0xe5, 0xd7, 0x6b, 0x37, 0x6a, 0xef, 0xd4,
+	0x36, 0x6b, 0x6f, 0xd6, 0xde, 0xaa, 0xbd, 0xdd, 0x24, 0xd9, 0xc4, 0xde, 0x3e, 0x0b, 0x3d, 0xb0,
+	0x96, 0x87, 0x31, 0x32, 0x47, 0x31, 0x2a, 0x25, 0x31, 0x32, 0xde, 0xa8, 0x6d, 0x7d, 0x64, 0x16,
+	0x4b, 0x2b, 0xf8, 0xea, 0x4f, 0x06, 0x5e, 0xda, 0x16, 0x40, 0x15, 0x3c, 0x1b, 0x13, 0xd9, 0x39,
+	0x13, 0x3d, 0x71, 0xcd, 0xce, 0x7f, 0x75, 0xcd, 0xc5, 0x69, 0xd7, 0x4c, 0xb9, 0x65, 0x35, 0xef,
+	0x96, 0x29, 0x3f, 0x5c, 0x9e, 0xf6, 0xc3, 0x63, 0xf1, 0xaf, 0xfc, 0x8b, 0xf8, 0x39, 0x75, 0x3f,
+	0xf9, 0x7f, 0xea, 0xe6, 0x35, 0xbd, 0xf6, 0x14, 0x4d, 0xf3, 0x6a, 0x5e, 0xfa, 0xed, 0xfd, 0xdc,
+	0x7f, 0xf8, 0x1f, 0xba, 0x7d, 0xf3, 0x17, 0x9a, 0xbe, 0xc8, 0x74, 0xfb, 0xd9, 0xc0, 0xcb, 0x0e,
+	0xf0, 0x88, 0x7a, 0xe7, 0xc2, 0x3d, 0x57, 0xc2, 0xfd, 0x68, 0xe0, 0xc5, 0x1d, 0x50, 0xe7, 0xa2,
+	0x3d, 0x4f, 0xa2, 0xb5, 0xf0, 0xd2, 0xc7, 0xa1, 0x54, 0xd0, 0x03, 0xb1, 0xcd, 0x7a, 0x7e, 0x18,
+	0x58, 0x16, 0x36, 0x7b, 0xb4, 0x3b, 0x56, 0xad, 0xe4, 0xe8, 0xd8, 0x7a, 0x01, 0x2f, 0x48, 0x45,
+	0x55, 0x7f, 0x22, 0x46, 0x76, 0x4a, 0xb9, 0x7a, 0x4d, 0xe9, 0xfa, 0xca, 0xe3, 0x25, 0x35, 0xbf,
+	0x43, 0xa3, 0x53, 0x52, 0x38, 0x39, 0x25, 0x85, 0x87, 0xa7, 0x04, 0x1d, 0x27, 0x04, 0x7d, 0x9f,
+	0x10, 0x74, 0x3f, 0x21, 0x68, 0x94, 0x10, 0x74, 0x92, 0x10, 0xf4, 0x7b, 0x42, 0xd0, 0x1f, 0x09,
+	0x29, 0x3c, 0x4c, 0x08, 0xfa, 0xf6, 0x8c, 0x14, 0x86, 0x67, 0x04, 0x8d, 0xce, 0x48, 0xe1, 0xe4,
+	0x8c, 0x14, 0xbe, 0xdc, 0x0b, 0x18, 0x3f, 0x08, 0xea, 0x03, 0x16, 0x29, 0x10, 0x82, 0xd6, 0xfb,
+	0xb2, 0xa1, 0x03, 0x9f, 0x89, 0xee, 0x06, 0x17, 0x6c, 0x10, 0x76, 0x40, 0x6c, 0x4c, 0xe0, 0x06,
+	0x6f, 0x07, 0xac, 0x01, 0x77, 0x55, 0xf6, 0x98, 0x78, 0xca, 0x23, 0xaa, 0xbd, 0xa0, 0x95, 0xbd,
+	0xf1, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xdb, 0xc7, 0x11, 0x94, 0x6d, 0x09, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -603,13 +778,67 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.Protocol != that1.Protocol {
 		return false
 	}
-	if this.Port != that1.Port {
+	if that1.PortChoice == nil {
+		if this.PortChoice != nil {
+			return false
+		}
+	} else if this.PortChoice == nil {
+		return false
+	} else if !this.PortChoice.Equal(that1.PortChoice) {
 		return false
 	}
 	if !this.TlsParameters.Equal(that1.TlsParameters) {
 		return false
 	}
 	if this.SkipXffAppend != that1.SkipXffAppend {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Port) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Port)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Port)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_PortRanges) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_PortRanges)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_PortRanges)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PortRanges != that1.PortRanges {
 		return false
 	}
 	return true
@@ -650,13 +879,67 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if this.Protocol != that1.Protocol {
 		return false
 	}
-	if this.Port != that1.Port {
+	if that1.PortChoice == nil {
+		if this.PortChoice != nil {
+			return false
+		}
+	} else if this.PortChoice == nil {
+		return false
+	} else if !this.PortChoice.Equal(that1.PortChoice) {
 		return false
 	}
 	if !this.TlsParameters.Equal(that1.TlsParameters) {
 		return false
 	}
 	if this.SkipXffAppend != that1.SkipXffAppend {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Port) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Port)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Port)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_PortRanges) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_PortRanges)
+	if !ok {
+		that2, ok := that.(CreateSpecType_PortRanges)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PortRanges != that1.PortRanges {
 		return false
 	}
 	return true
@@ -697,13 +980,67 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if this.Protocol != that1.Protocol {
 		return false
 	}
-	if this.Port != that1.Port {
+	if that1.PortChoice == nil {
+		if this.PortChoice != nil {
+			return false
+		}
+	} else if this.PortChoice == nil {
+		return false
+	} else if !this.PortChoice.Equal(that1.PortChoice) {
 		return false
 	}
 	if !this.TlsParameters.Equal(that1.TlsParameters) {
 		return false
 	}
 	if this.SkipXffAppend != that1.SkipXffAppend {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_Port) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Port)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Port)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_PortRanges) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_PortRanges)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_PortRanges)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PortRanges != that1.PortRanges {
 		return false
 	}
 	return true
@@ -744,13 +1081,67 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.Protocol != that1.Protocol {
 		return false
 	}
-	if this.Port != that1.Port {
+	if that1.PortChoice == nil {
+		if this.PortChoice != nil {
+			return false
+		}
+	} else if this.PortChoice == nil {
+		return false
+	} else if !this.PortChoice.Equal(that1.PortChoice) {
 		return false
 	}
 	if !this.TlsParameters.Equal(that1.TlsParameters) {
 		return false
 	}
 	if this.SkipXffAppend != that1.SkipXffAppend {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_Port) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Port)
+	if !ok {
+		that2, ok := that.(GetSpecType_Port)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_PortRanges) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_PortRanges)
+	if !ok {
+		that2, ok := that.(GetSpecType_PortRanges)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PortRanges != that1.PortRanges {
 		return false
 	}
 	return true
@@ -789,7 +1180,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&advertise_policy.GlobalSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -799,7 +1190,9 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "PublicIp: "+fmt.Sprintf("%#v", this.PublicIp)+",\n")
 	}
 	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.PortChoice != nil {
+		s = append(s, "PortChoice: "+fmt.Sprintf("%#v", this.PortChoice)+",\n")
+	}
 	if this.TlsParameters != nil {
 		s = append(s, "TlsParameters: "+fmt.Sprintf("%#v", this.TlsParameters)+",\n")
 	}
@@ -807,11 +1200,27 @@ func (this *GlobalSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GlobalSpecType_Port) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.GlobalSpecType_Port{` +
+		`Port:` + fmt.Sprintf("%#v", this.Port) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_PortRanges) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.GlobalSpecType_PortRanges{` +
+		`PortRanges:` + fmt.Sprintf("%#v", this.PortRanges) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&advertise_policy.CreateSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -821,7 +1230,9 @@ func (this *CreateSpecType) GoString() string {
 		s = append(s, "PublicIp: "+fmt.Sprintf("%#v", this.PublicIp)+",\n")
 	}
 	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.PortChoice != nil {
+		s = append(s, "PortChoice: "+fmt.Sprintf("%#v", this.PortChoice)+",\n")
+	}
 	if this.TlsParameters != nil {
 		s = append(s, "TlsParameters: "+fmt.Sprintf("%#v", this.TlsParameters)+",\n")
 	}
@@ -829,11 +1240,27 @@ func (this *CreateSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *CreateSpecType_Port) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.CreateSpecType_Port{` +
+		`Port:` + fmt.Sprintf("%#v", this.Port) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_PortRanges) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.CreateSpecType_PortRanges{` +
+		`PortRanges:` + fmt.Sprintf("%#v", this.PortRanges) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&advertise_policy.ReplaceSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -843,7 +1270,9 @@ func (this *ReplaceSpecType) GoString() string {
 		s = append(s, "PublicIp: "+fmt.Sprintf("%#v", this.PublicIp)+",\n")
 	}
 	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.PortChoice != nil {
+		s = append(s, "PortChoice: "+fmt.Sprintf("%#v", this.PortChoice)+",\n")
+	}
 	if this.TlsParameters != nil {
 		s = append(s, "TlsParameters: "+fmt.Sprintf("%#v", this.TlsParameters)+",\n")
 	}
@@ -851,11 +1280,27 @@ func (this *ReplaceSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ReplaceSpecType_Port) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.ReplaceSpecType_Port{` +
+		`Port:` + fmt.Sprintf("%#v", this.Port) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_PortRanges) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.ReplaceSpecType_PortRanges{` +
+		`PortRanges:` + fmt.Sprintf("%#v", this.PortRanges) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&advertise_policy.GetSpecType{")
 	if this.Where != nil {
 		s = append(s, "Where: "+fmt.Sprintf("%#v", this.Where)+",\n")
@@ -865,13 +1310,31 @@ func (this *GetSpecType) GoString() string {
 		s = append(s, "PublicIp: "+fmt.Sprintf("%#v", this.PublicIp)+",\n")
 	}
 	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	if this.PortChoice != nil {
+		s = append(s, "PortChoice: "+fmt.Sprintf("%#v", this.PortChoice)+",\n")
+	}
 	if this.TlsParameters != nil {
 		s = append(s, "TlsParameters: "+fmt.Sprintf("%#v", this.TlsParameters)+",\n")
 	}
 	s = append(s, "SkipXffAppend: "+fmt.Sprintf("%#v", this.SkipXffAppend)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *GetSpecType_Port) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.GetSpecType_Port{` +
+		`Port:` + fmt.Sprintf("%#v", this.Port) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_PortRanges) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&advertise_policy.GetSpecType_PortRanges{` +
+		`PortRanges:` + fmt.Sprintf("%#v", this.PortRanges) + `}`}, ", ")
+	return s
 }
 func (this *ListenerConfig) GoString() string {
 	if this == nil {
@@ -913,6 +1376,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PortChoice != nil {
+		{
+			size := m.PortChoice.Size()
+			i -= size
+			if _, err := m.PortChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.PublicIp) > 0 {
 		for iNdEx := len(m.PublicIp) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -949,11 +1421,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if m.Port != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-		i--
-		dAtA[i] = 0x20
-	}
 	if len(m.Protocol) > 0 {
 		i -= len(m.Protocol)
 		copy(dAtA[i:], m.Protocol)
@@ -983,6 +1450,32 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GlobalSpecType_Port) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_PortRanges) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_PortRanges) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.PortRanges)
+	copy(dAtA[i:], m.PortRanges)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.PortRanges)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1003,6 +1496,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PortChoice != nil {
+		{
+			size := m.PortChoice.Size()
+			i -= size
+			if _, err := m.PortChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.PublicIp) > 0 {
 		for iNdEx := len(m.PublicIp) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1039,11 +1541,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if m.Port != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-		i--
-		dAtA[i] = 0x20
-	}
 	if len(m.Protocol) > 0 {
 		i -= len(m.Protocol)
 		copy(dAtA[i:], m.Protocol)
@@ -1073,6 +1570,32 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateSpecType_Port) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_PortRanges) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_PortRanges) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.PortRanges)
+	copy(dAtA[i:], m.PortRanges)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.PortRanges)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1093,6 +1616,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PortChoice != nil {
+		{
+			size := m.PortChoice.Size()
+			i -= size
+			if _, err := m.PortChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.PublicIp) > 0 {
 		for iNdEx := len(m.PublicIp) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1129,11 +1661,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if m.Port != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-		i--
-		dAtA[i] = 0x20
-	}
 	if len(m.Protocol) > 0 {
 		i -= len(m.Protocol)
 		copy(dAtA[i:], m.Protocol)
@@ -1163,6 +1690,32 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ReplaceSpecType_Port) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_PortRanges) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_PortRanges) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.PortRanges)
+	copy(dAtA[i:], m.PortRanges)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.PortRanges)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1183,6 +1736,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PortChoice != nil {
+		{
+			size := m.PortChoice.Size()
+			i -= size
+			if _, err := m.PortChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.PublicIp) > 0 {
 		for iNdEx := len(m.PublicIp) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1219,11 +1781,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if m.Port != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
-		i--
-		dAtA[i] = 0x20
-	}
 	if len(m.Protocol) > 0 {
 		i -= len(m.Protocol)
 		copy(dAtA[i:], m.Protocol)
@@ -1253,6 +1810,32 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSpecType_Port) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Port) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+	i--
+	dAtA[i] = 0x20
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_PortRanges) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_PortRanges) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.PortRanges)
+	copy(dAtA[i:], m.PortRanges)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.PortRanges)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
 func (m *ListenerConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1324,8 +1907,8 @@ func (m *GlobalSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Port != 0 {
-		n += 1 + sovTypes(uint64(m.Port))
+	if m.PortChoice != nil {
+		n += m.PortChoice.Size()
 	}
 	if m.TlsParameters != nil {
 		l = m.TlsParameters.Size()
@@ -1343,6 +1926,25 @@ func (m *GlobalSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GlobalSpecType_Port) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.Port))
+	return n
+}
+func (m *GlobalSpecType_PortRanges) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PortRanges)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1361,8 +1963,8 @@ func (m *CreateSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Port != 0 {
-		n += 1 + sovTypes(uint64(m.Port))
+	if m.PortChoice != nil {
+		n += m.PortChoice.Size()
 	}
 	if m.TlsParameters != nil {
 		l = m.TlsParameters.Size()
@@ -1380,6 +1982,25 @@ func (m *CreateSpecType) Size() (n int) {
 	return n
 }
 
+func (m *CreateSpecType_Port) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.Port))
+	return n
+}
+func (m *CreateSpecType_PortRanges) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PortRanges)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1398,8 +2019,8 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Port != 0 {
-		n += 1 + sovTypes(uint64(m.Port))
+	if m.PortChoice != nil {
+		n += m.PortChoice.Size()
 	}
 	if m.TlsParameters != nil {
 		l = m.TlsParameters.Size()
@@ -1417,6 +2038,25 @@ func (m *ReplaceSpecType) Size() (n int) {
 	return n
 }
 
+func (m *ReplaceSpecType_Port) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.Port))
+	return n
+}
+func (m *ReplaceSpecType_PortRanges) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PortRanges)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1435,8 +2075,8 @@ func (m *GetSpecType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Port != 0 {
-		n += 1 + sovTypes(uint64(m.Port))
+	if m.PortChoice != nil {
+		n += m.PortChoice.Size()
 	}
 	if m.TlsParameters != nil {
 		l = m.TlsParameters.Size()
@@ -1454,6 +2094,25 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GetSpecType_Port) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovTypes(uint64(m.Port))
+	return n
+}
+func (m *GetSpecType_PortRanges) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PortRanges)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *ListenerConfig) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1493,10 +2152,30 @@ func (this *GlobalSpecType) String() string {
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "NetworkSiteRefSelector", "schema.NetworkSiteRefSelector", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`PortChoice:` + fmt.Sprintf("%v", this.PortChoice) + `,`,
 		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "DownstreamTlsParamsType", "schema.DownstreamTlsParamsType", 1) + `,`,
 		`SkipXffAppend:` + fmt.Sprintf("%v", this.SkipXffAppend) + `,`,
 		`PublicIp:` + repeatedStringForPublicIp + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Port) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Port{`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_PortRanges) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_PortRanges{`,
+		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1514,10 +2193,30 @@ func (this *CreateSpecType) String() string {
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "NetworkSiteRefSelector", "schema.NetworkSiteRefSelector", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`PortChoice:` + fmt.Sprintf("%v", this.PortChoice) + `,`,
 		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "DownstreamTlsParamsType", "schema.DownstreamTlsParamsType", 1) + `,`,
 		`SkipXffAppend:` + fmt.Sprintf("%v", this.SkipXffAppend) + `,`,
 		`PublicIp:` + repeatedStringForPublicIp + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Port) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Port{`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_PortRanges) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_PortRanges{`,
+		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1535,10 +2234,30 @@ func (this *ReplaceSpecType) String() string {
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "NetworkSiteRefSelector", "schema.NetworkSiteRefSelector", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`PortChoice:` + fmt.Sprintf("%v", this.PortChoice) + `,`,
 		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "DownstreamTlsParamsType", "schema.DownstreamTlsParamsType", 1) + `,`,
 		`SkipXffAppend:` + fmt.Sprintf("%v", this.SkipXffAppend) + `,`,
 		`PublicIp:` + repeatedStringForPublicIp + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_Port) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Port{`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_PortRanges) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_PortRanges{`,
+		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1556,10 +2275,30 @@ func (this *GetSpecType) String() string {
 		`Where:` + strings.Replace(fmt.Sprintf("%v", this.Where), "NetworkSiteRefSelector", "schema.NetworkSiteRefSelector", 1) + `,`,
 		`Address:` + fmt.Sprintf("%v", this.Address) + `,`,
 		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`PortChoice:` + fmt.Sprintf("%v", this.PortChoice) + `,`,
 		`TlsParameters:` + strings.Replace(fmt.Sprintf("%v", this.TlsParameters), "DownstreamTlsParamsType", "schema.DownstreamTlsParamsType", 1) + `,`,
 		`SkipXffAppend:` + fmt.Sprintf("%v", this.SkipXffAppend) + `,`,
 		`PublicIp:` + repeatedStringForPublicIp + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Port) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Port{`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_PortRanges) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_PortRanges{`,
+		`PortRanges:` + fmt.Sprintf("%v", this.PortRanges) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1717,7 +2456,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
 			}
-			m.Port = 0
+			var v uint32
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1727,11 +2466,12 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= uint32(b&0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			m.PortChoice = &GlobalSpecType_Port{v}
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TlsParameters", wireType)
@@ -1821,6 +2561,38 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.PublicIp[len(m.PublicIp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortChoice = &GlobalSpecType_PortRanges{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1979,7 +2751,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
 			}
-			m.Port = 0
+			var v uint32
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -1989,11 +2761,12 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= uint32(b&0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			m.PortChoice = &CreateSpecType_Port{v}
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TlsParameters", wireType)
@@ -2083,6 +2856,38 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.PublicIp[len(m.PublicIp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortChoice = &CreateSpecType_PortRanges{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2241,7 +3046,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
 			}
-			m.Port = 0
+			var v uint32
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2251,11 +3056,12 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= uint32(b&0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			m.PortChoice = &ReplaceSpecType_Port{v}
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TlsParameters", wireType)
@@ -2345,6 +3151,38 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.PublicIp[len(m.PublicIp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortChoice = &ReplaceSpecType_PortRanges{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2503,7 +3341,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
 			}
-			m.Port = 0
+			var v uint32
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2513,11 +3351,12 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Port |= uint32(b&0x7F) << shift
+				v |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+			m.PortChoice = &GetSpecType_Port{v}
 		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TlsParameters", wireType)
@@ -2607,6 +3446,38 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.PublicIp[len(m.PublicIp)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortRanges", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortChoice = &GetSpecType_PortRanges{string(dAtA[iNdEx:postIndex])}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

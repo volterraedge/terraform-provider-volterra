@@ -909,6 +909,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["site_network_stack"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_network_stack"))
+		if err := fv(ctx, m.GetSiteNetworkStack(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_fqdn"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_fqdn"))

@@ -2792,7 +2792,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "alert_receivercrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2824,7 +2824,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/alert_receivercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2845,7 +2845,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/alert_receivercrudapiErrorCode"
                 }
             }
         },
@@ -2860,7 +2860,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/alert_receivercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2887,7 +2887,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/alert_receivercrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2966,7 +2966,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.alert_receiver.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/alert_receivercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

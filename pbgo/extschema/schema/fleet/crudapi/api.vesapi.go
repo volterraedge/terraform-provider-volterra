@@ -2859,18 +2859,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.fleet.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.fleet.crudapi.ObjectCreateReq",
@@ -2891,7 +2879,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fleetcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2912,7 +2900,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fleetcrudapiErrorCode"
                 }
             }
         },
@@ -2927,7 +2915,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fleetcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2954,7 +2942,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fleetcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3033,7 +3021,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fleetcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3076,7 +3064,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "DNS port"
@@ -3634,14 +3622,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "bond_devices": {
                     "type": "array",
-                    "description": " List of bond devices for this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of bond devices\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Bond Devices List",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetBondDeviceType"
                     },
-                    "x-displayname": "Bond Devices List",
+                    "x-displayname": "Bond Devices",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -4167,31 +4155,6 @@ var APISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Unix Mode Permissions",
                     "x-ves-example": "777"
-                }
-            }
-        },
-        "fleetOpenebsMayastorPoolType": {
-            "type": "object",
-            "description": "x-displayName: \"OpenEBS Mayastor Pool\"\nConfiguration for OpenEBS Mayastor Pool. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
-            "title": "OpenEBS Mayastor Pool",
-            "properties": {
-                "node": {
-                    "type": "string",
-                    "description": "x-displayName: \"Node Name\"\nx-required\nx-example: \"master-0\"\nEnter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.",
-                    "title": "Node Name"
-                },
-                "pool_disk_devices": {
-                    "type": "array",
-                    "description": "x-displayName: \"List of  Disk Devices\"\nx-required\nx-example: \"/dev/sdb\"\nList of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\ndisk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\nIt supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".",
-                    "title": "List of Disk Devices",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pool_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Mayastor Pool Name\"\nx-example: \"maya-pool-01\"\nx-required\nEnter Mayastor Pool Name",
-                    "title": "Mayastor Pool Name"
                 }
             }
         },
@@ -5077,21 +5040,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "fleetStorageDeviceOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "x-displayName: \"OpenEBS Enterprise\"\nDevice configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "properties": {
-                "mayastor_pools": {
-                    "type": "array",
-                    "description": "x-displayName: \"List of  Mayastor Pools\"\nList of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
-                    "title": "List of  Mayastor Pools",
-                    "items": {
-                        "$ref": "#/definitions/fleetOpenebsMayastorPoolType"
-                    }
-                }
-            }
-        },
         "fleetStorageDevicePureStorageServiceOrchestratorType": {
             "type": "object",
             "description": "Device configuration for Pure Storage Service Orchestrator",
@@ -5202,6 +5150,18 @@ var APISwaggerJSON string = `{
             "title": "VM Configuration",
             "x-displayname": "VM Configuration",
             "x-ves-proto-message": "ves.io.schema.fleet.VMConfiguration"
+        },
+        "fleetcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.fleet.crudapi.ErrorCode"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -6555,11 +6515,17 @@ var APISwaggerJSON string = `{
             "title": "L3 Mode Enhanced Performance options",
             "x-displayname": "L3 Mode Enhanced Performance",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
+            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo\",\"no_jumbo\"]",
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
+                "jumbo": {
+                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
+                    "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
+                },
                 "no_jumbo": {
-                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
@@ -6615,21 +6581,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

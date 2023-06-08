@@ -2665,7 +2665,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "api_group_elementcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2697,7 +2697,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.api_group_element.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/api_group_elementcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2718,7 +2718,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.api_group_element.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/api_group_elementcrudapiErrorCode"
                 }
             }
         },
@@ -2733,7 +2733,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/api_group_elementcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2760,7 +2760,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.api_group_element.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/api_group_elementcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2839,7 +2839,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.api_group_element.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/api_group_elementcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

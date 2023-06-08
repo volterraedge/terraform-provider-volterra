@@ -2714,7 +2714,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "contactcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2746,7 +2746,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.contact.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/contactcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2767,7 +2767,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.contact.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/contactcrudapiErrorCode"
                 }
             }
         },
@@ -2782,7 +2782,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/contactcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2809,7 +2809,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.contact.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/contactcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2888,7 +2888,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.contact.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/contactcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

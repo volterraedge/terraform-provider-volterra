@@ -4099,11 +4099,17 @@ var APISwaggerJSON string = `{
             "description": "Configure Static IP parameters",
             "title": "Static IP Parameters",
             "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"node_static_ip\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"node_static_ip\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
+                "cluster_static_ip": {
+                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
+                    "title": "Node Specific",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
+                    "x-displayname": "Cluster, All Nodes of the Site"
+                },
                 "node_static_ip": {
-                    "description": "Exclusive with []\n Static IP configuration for the Node",
+                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
                     "x-displayname": "Specific Node"
@@ -4112,13 +4118,21 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
+            "description": "Configure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
+            "x-displayname": "Cluster: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
-                    "title": "Site:Node to IP mapping"
+                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
+                    "title": "Site:Node to IP mapping",
+                    "x-displayname": "Node to IP Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "128"
+                    }
                 }
             }
         },
@@ -4156,16 +4170,6 @@ var APISwaggerJSON string = `{
                     "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
-                    "x-ves-example": "192.168.20.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "dns_server": {
-                    "type": "string",
-                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "DNS Server",
-                    "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -4396,7 +4400,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -4406,7 +4410,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

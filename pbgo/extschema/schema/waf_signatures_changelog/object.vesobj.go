@@ -840,6 +840,8 @@ var DefaultObjectValidator = func() *ValidateObject {
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
+	v.FldValidators["spec"] = SpecTypeValidator().Validate
+
 	return v
 }()
 

@@ -324,14 +324,6 @@ type ValidateStorageClassType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateStorageClassType) DeviceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for device_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateStorageClassType) StorageClassNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -365,31 +357,6 @@ func (v *ValidateStorageClassType) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["device_choice"]; exists {
-		val := m.GetDeviceChoice()
-		vOpts := append(opts,
-			db.WithValidateField("device_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetDeviceChoice().(type) {
-	case *StorageClassType_OpenebsEnterprise:
-		if fv, exists := v.FldValidators["device_choice.openebs_enterprise"]; exists {
-			val := m.GetDeviceChoice().(*StorageClassType_OpenebsEnterprise).OpenebsEnterprise
-			vOpts := append(opts,
-				db.WithValidateField("device_choice"),
-				db.WithValidateField("openebs_enterprise"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["storage_class_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("storage_class_name"))
@@ -414,17 +381,6 @@ var DefaultStorageClassTypeValidator = func() *ValidateStorageClassType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhDeviceChoice := v.DeviceChoiceValidationRuleHandler
-	rulesDeviceChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhDeviceChoice(rulesDeviceChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for StorageClassType.device_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["device_choice"] = vFn
-
 	vrhStorageClassName := v.StorageClassNameValidationRuleHandler
 	rulesStorageClassName := map[string]string{
 		"ves.io.schema.rules.message.required":       "true",
@@ -436,8 +392,6 @@ var DefaultStorageClassTypeValidator = func() *ValidateStorageClassType {
 		panic(errMsg)
 	}
 	v.FldValidators["storage_class_name"] = vFn
-
-	v.FldValidators["device_choice.openebs_enterprise"] = StorageClassOpenebsEnterpriseTypeValidator().Validate
 
 	return v
 }()

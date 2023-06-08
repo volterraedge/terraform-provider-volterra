@@ -3004,6 +3004,15 @@ func (v *ValidatePrimaryDNSConfig) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["allow_http_lb_managed_records"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_http_lb_managed_records"))
+		if err := fv(ctx, m.GetAllowHttpLbManagedRecords(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["default_rr_set_group"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_rr_set_group"))
 		if err := fv(ctx, m.GetDefaultRrSetGroup(), vOpts...); err != nil {
@@ -3351,6 +3360,15 @@ func (v *ValidatePrimaryDNSCreateSpecType) Validate(ctx context.Context, pm inte
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["allow_http_lb_managed_records"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_http_lb_managed_records"))
+		if err := fv(ctx, m.GetAllowHttpLbManagedRecords(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["default_rr_set_group"]; exists {
 		vOpts := append(opts, db.WithValidateField("default_rr_set_group"))
 		if err := fv(ctx, m.GetDefaultRrSetGroup(), vOpts...); err != nil {
@@ -3672,6 +3690,15 @@ func (v *ValidatePrimaryDNSGetSpecType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("admin"))
 		if err := fv(ctx, m.GetAdmin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["allow_http_lb_managed_records"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_http_lb_managed_records"))
+		if err := fv(ctx, m.GetAllowHttpLbManagedRecords(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5752,6 +5779,7 @@ func (m *PrimaryDNSCreateSpecType) fromPrimaryDNSConfig(f *PrimaryDNSConfig, wit
 	if f == nil {
 		return
 	}
+	m.AllowHttpLbManagedRecords = f.GetAllowHttpLbManagedRecords()
 	m.DefaultRrSetGroup = f.GetDefaultRrSetGroup()
 	m.DnssecMode = f.GetDnssecMode()
 	m.RrSetGroup = f.GetRrSetGroup()
@@ -5773,6 +5801,7 @@ func (m *PrimaryDNSCreateSpecType) toPrimaryDNSConfig(f *PrimaryDNSConfig, withD
 	}
 	_ = m1
 
+	f.AllowHttpLbManagedRecords = m1.AllowHttpLbManagedRecords
 	f.DefaultRrSetGroup = m1.DefaultRrSetGroup
 	f.DnssecMode = m1.DnssecMode
 	f.RrSetGroup = m1.RrSetGroup
@@ -5827,6 +5856,7 @@ func (m *PrimaryDNSGetSpecType) fromPrimaryDNSConfig(f *PrimaryDNSConfig, withDe
 		return
 	}
 	m.Admin = f.GetAdmin()
+	m.AllowHttpLbManagedRecords = f.GetAllowHttpLbManagedRecords()
 	m.DefaultRrSetGroup = f.GetDefaultRrSetGroup()
 	m.DnssecMode = f.GetDnssecMode()
 	m.RrSetGroup = f.GetRrSetGroup()
@@ -5850,6 +5880,7 @@ func (m *PrimaryDNSGetSpecType) toPrimaryDNSConfig(f *PrimaryDNSConfig, withDeep
 	_ = m1
 
 	f.Admin = m1.Admin
+	f.AllowHttpLbManagedRecords = m1.AllowHttpLbManagedRecords
 	f.DefaultRrSetGroup = m1.DefaultRrSetGroup
 	f.DnssecMode = m1.DnssecMode
 	f.RrSetGroup = m1.RrSetGroup

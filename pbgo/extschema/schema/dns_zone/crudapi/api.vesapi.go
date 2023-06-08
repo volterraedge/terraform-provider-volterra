@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.dns_zone.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.dns_zone.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.dns_zone.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/dns_zonecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.dns_zone.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/dns_zonecrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/dns_zonecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.dns_zone.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/dns_zonecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.dns_zone.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/dns_zonecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3425,7 +3413,7 @@ var APISwaggerJSON string = `{
             "description": "Declares a DNS zone with primary DNS features",
             "title": "Primary DNS Configuration",
             "x-displayname": "Primary DNS Configuration",
-            "x-ves-displayorder": "5,12,11,8",
+            "x-ves-displayorder": "5,12,13,11,8",
             "x-ves-oneof-field-soa_record_parameters_choice": "[\"default_soa_parameters\",\"soa_parameters\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.PrimaryDNSConfig",
             "properties": {
@@ -3780,12 +3768,6 @@ var APISwaggerJSON string = `{
                     "title": "TSIG Key value",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "TSIG key value in base 64 format"
-                },
-                "zone_file": {
-                    "type": "string",
-                    "description": " The most recent zone file retrieved from the Primary DNS server",
-                    "title": "Zonefile",
-                    "x-displayname": "Zone File"
                 }
             }
         },
@@ -3857,6 +3839,18 @@ var APISwaggerJSON string = `{
             "default": "HMAC_MD5",
             "x-displayname": "TSIG Key algorithm",
             "x-ves-proto-enum": "ves.io.schema.dns_zone.TSIGKeyAlgorithm"
+        },
+        "dns_zonecrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.crudapi.ErrorCode"
         },
         "ioschemaObjectRefType": {
             "type": "object",

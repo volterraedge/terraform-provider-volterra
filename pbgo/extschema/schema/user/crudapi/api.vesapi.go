@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.user.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.user.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/usercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/usercrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/usercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/usercrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.user.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/usercrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3447,11 +3435,12 @@ var APISwaggerJSON string = `{
         },
         "userIdmType": {
             "type": "string",
-            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.\n - UNDEFINED: Undefined\nUndefined IDM type",
             "title": "IDM Type",
             "enum": [
                 "SSO",
-                "VOLTERRA_MANAGED"
+                "VOLTERRA_MANAGED",
+                "UNDEFINED"
             ],
             "default": "SSO",
             "x-displayname": "Identity Management Type",
@@ -3534,6 +3523,18 @@ var APISwaggerJSON string = `{
             "default": "USER",
             "x-displayname": "User Type",
             "x-ves-proto-enum": "ves.io.schema.user.UserType"
+        },
+        "usercrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.user.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

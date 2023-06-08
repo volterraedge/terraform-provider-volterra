@@ -15,6 +15,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -1135,12 +1136,6 @@ func (m *ValidateRulesResponse) GetError() string {
 // x-displayName: "Networking related objects inventory request"
 // Request for inventory of networking related objects
 type NetworkingInventoryRequest struct {
-	// namespace
-	//
-	// x-displayName: "Namespace"
-	// x-example: "ns1"
-	// The name of the namespace
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
 }
 
 func (m *NetworkingInventoryRequest) Reset()      { *m = NetworkingInventoryRequest{} }
@@ -1174,13 +1169,6 @@ func (m *NetworkingInventoryRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_NetworkingInventoryRequest proto.InternalMessageInfo
-
-func (m *NetworkingInventoryRequest) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
 
 // NetworkingInventoryResponse
 //
@@ -1269,6 +1257,769 @@ func (m *NetworkingInventoryResponse) GetDcClusterGroups() uint32 {
 	return 0
 }
 
+// TCPLoadbalancerInventoryFilterType
+//
+// x-displayName: "Filter for Inventory of TCP Loadbalancers"
+// TCP Loadbalancer inventory Filter
+type TCPLoadbalancerInventoryFilterType struct {
+	// TLS Encryption
+	//
+	// x-displayName: "TLS Encryption"
+	// Filter results with TCP loadbalancers with TLS Encryption configured
+	TlsEncryption *types.BoolValue `protobuf:"bytes,7,opt,name=tls_encryption,json=tlsEncryption,proto3" json:"tls_encryption,omitempty"`
+	// Namespace Service Policy
+	//
+	// x-displayName: "Namespace Service Policy"
+	// Filter results with TCP loadbalancers with Namespace Service Policy configured
+	NamespaceServicePolicy *types.BoolValue `protobuf:"bytes,8,opt,name=namespace_service_policy,json=namespaceServicePolicy,proto3" json:"namespace_service_policy,omitempty"`
+	// Service Policy
+	//
+	// x-displayName: "Service Policy"
+	// Filter results with TCP loadbalancers with Service Policy configured
+	ServicePolicy *types.BoolValue `protobuf:"bytes,9,opt,name=service_policy,json=servicePolicy,proto3" json:"service_policy,omitempty"`
+	// Private Advertisement
+	//
+	// x-displayName: "Private Advertisement"
+	// Filter results with TCP loadbalancers advertised privately
+	PrivateAdvertisement *types.BoolValue `protobuf:"bytes,10,opt,name=private_advertisement,json=privateAdvertisement,proto3" json:"private_advertisement,omitempty"`
+	// Public Advertisement
+	//
+	// x-displayName: "Public Advertisement"
+	// Filter results with TCP loadbalancers advertised publicly
+	PublicAdvertisment *types.BoolValue `protobuf:"bytes,11,opt,name=public_advertisment,json=publicAdvertisment,proto3" json:"public_advertisment,omitempty"`
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) Reset()      { *m = TCPLoadbalancerInventoryFilterType{} }
+func (*TCPLoadbalancerInventoryFilterType) ProtoMessage() {}
+func (*TCPLoadbalancerInventoryFilterType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{22}
+}
+func (m *TCPLoadbalancerInventoryFilterType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TCPLoadbalancerInventoryFilterType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TCPLoadbalancerInventoryFilterType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TCPLoadbalancerInventoryFilterType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TCPLoadbalancerInventoryFilterType.Merge(m, src)
+}
+func (m *TCPLoadbalancerInventoryFilterType) XXX_Size() int {
+	return m.Size()
+}
+func (m *TCPLoadbalancerInventoryFilterType) XXX_DiscardUnknown() {
+	xxx_messageInfo_TCPLoadbalancerInventoryFilterType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TCPLoadbalancerInventoryFilterType proto.InternalMessageInfo
+
+func (m *TCPLoadbalancerInventoryFilterType) GetTlsEncryption() *types.BoolValue {
+	if m != nil {
+		return m.TlsEncryption
+	}
+	return nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) GetNamespaceServicePolicy() *types.BoolValue {
+	if m != nil {
+		return m.NamespaceServicePolicy
+	}
+	return nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) GetServicePolicy() *types.BoolValue {
+	if m != nil {
+		return m.ServicePolicy
+	}
+	return nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) GetPrivateAdvertisement() *types.BoolValue {
+	if m != nil {
+		return m.PrivateAdvertisement
+	}
+	return nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) GetPublicAdvertisment() *types.BoolValue {
+	if m != nil {
+		return m.PublicAdvertisment
+	}
+	return nil
+}
+
+// TCPLoadbalancerInventoryType
+//
+// x-displayName: "Inventory of TCP Loadbalancers"
+// TCP Loadbalancer inventory
+type TCPLoadbalancerInventoryType struct {
+	// TLS Encryption
+	//
+	// x-displayName: "TLS Encryption"
+	// Number of TCP loadbalancers with TLS Encryption configured
+	TlsEncryption uint32 `protobuf:"varint,1,opt,name=tls_encryption,json=tlsEncryption,proto3" json:"tls_encryption,omitempty"`
+	// Namespace Service Policy
+	//
+	// x-displayName: "Namespace Service Policy"
+	// Number of TCP loadbalancers with Namespace Service Policy configured
+	NamespaceServicePolicy uint32 `protobuf:"varint,2,opt,name=namespace_service_policy,json=namespaceServicePolicy,proto3" json:"namespace_service_policy,omitempty"`
+	// Service Policy
+	//
+	// x-displayName: "Service Policy"
+	// Number of TCP loadbalancers with Service Policy configured
+	ServicePolicy uint32 `protobuf:"varint,3,opt,name=service_policy,json=servicePolicy,proto3" json:"service_policy,omitempty"`
+	// Private Advertisement
+	//
+	// x-displayName: "Private Advertisement"
+	// Number of TCP loadbalancers advertised privately
+	PrivateAdvertisement uint32 `protobuf:"varint,4,opt,name=private_advertisement,json=privateAdvertisement,proto3" json:"private_advertisement,omitempty"`
+	// Public Advertisement
+	//
+	// x-displayName: "Public Advertisement"
+	// Number of TCP loadbalancers advertised publicly
+	PublicAdvertisment uint32 `protobuf:"varint,5,opt,name=public_advertisment,json=publicAdvertisment,proto3" json:"public_advertisment,omitempty"`
+	// TCP Loadbalancers
+	//
+	// x-displayName: "List of TCP Loadbalancers"
+	// List of TCP loadbalancers
+	Name []string `protobuf:"bytes,6,rep,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *TCPLoadbalancerInventoryType) Reset()      { *m = TCPLoadbalancerInventoryType{} }
+func (*TCPLoadbalancerInventoryType) ProtoMessage() {}
+func (*TCPLoadbalancerInventoryType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{23}
+}
+func (m *TCPLoadbalancerInventoryType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TCPLoadbalancerInventoryType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TCPLoadbalancerInventoryType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TCPLoadbalancerInventoryType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TCPLoadbalancerInventoryType.Merge(m, src)
+}
+func (m *TCPLoadbalancerInventoryType) XXX_Size() int {
+	return m.Size()
+}
+func (m *TCPLoadbalancerInventoryType) XXX_DiscardUnknown() {
+	xxx_messageInfo_TCPLoadbalancerInventoryType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TCPLoadbalancerInventoryType proto.InternalMessageInfo
+
+func (m *TCPLoadbalancerInventoryType) GetTlsEncryption() uint32 {
+	if m != nil {
+		return m.TlsEncryption
+	}
+	return 0
+}
+
+func (m *TCPLoadbalancerInventoryType) GetNamespaceServicePolicy() uint32 {
+	if m != nil {
+		return m.NamespaceServicePolicy
+	}
+	return 0
+}
+
+func (m *TCPLoadbalancerInventoryType) GetServicePolicy() uint32 {
+	if m != nil {
+		return m.ServicePolicy
+	}
+	return 0
+}
+
+func (m *TCPLoadbalancerInventoryType) GetPrivateAdvertisement() uint32 {
+	if m != nil {
+		return m.PrivateAdvertisement
+	}
+	return 0
+}
+
+func (m *TCPLoadbalancerInventoryType) GetPublicAdvertisment() uint32 {
+	if m != nil {
+		return m.PublicAdvertisment
+	}
+	return 0
+}
+
+func (m *TCPLoadbalancerInventoryType) GetName() []string {
+	if m != nil {
+		return m.Name
+	}
+	return nil
+}
+
+// HTTPLoadbalancerInventoryFilterType
+//
+// x-displayName: "Filter for HTTP Loadbalancers Inventory"
+// HTTP Loadbalancer Inventory Filter
+type HTTPLoadbalancerInventoryFilterType struct {
+	// HTTP Only
+	//
+	// x-displayName: "HTTP Only"
+	// Filter results with HTTP only loadbalancers
+	HttpOnly *types.BoolValue `protobuf:"bytes,14,opt,name=http_only,json=httpOnly,proto3" json:"http_only,omitempty"`
+	// WAF
+	//
+	// x-displayName: "WAF"
+	// Filter results with HTTP loadbalancers with WAF configured
+	Waf *types.BoolValue `protobuf:"bytes,15,opt,name=waf,proto3" json:"waf,omitempty"`
+	// Bot Protection
+	//
+	// x-displayName: "Bot Protection"
+	// Filter results with HTTP loadbalancers with Bot Protection configured
+	BotProtection *types.BoolValue `protobuf:"bytes,16,opt,name=bot_protection,json=botProtection,proto3" json:"bot_protection,omitempty"`
+	// API Protection
+	//
+	// x-displayName: "API Protection"
+	// Filter results with HTTP loadbalancers with API Protection configured
+	ApiProtection *types.BoolValue `protobuf:"bytes,17,opt,name=api_protection,json=apiProtection,proto3" json:"api_protection,omitempty"`
+	// DDoS Protection
+	//
+	// x-displayName: "DDoS Protection"
+	// Filter results with HTTP loadbalancers with DDoS Protection configured
+	DdosProtection *types.BoolValue `protobuf:"bytes,18,opt,name=ddos_protection,json=ddosProtection,proto3" json:"ddos_protection,omitempty"`
+	// Client Side Defense
+	//
+	// x-displayName: "Client Side Defense"
+	// Filter results with HTTP loadbalancers with Client Side Defense configured
+	ClientSideDefense *types.BoolValue `protobuf:"bytes,19,opt,name=client_side_defense,json=clientSideDefense,proto3" json:"client_side_defense,omitempty"`
+	// Namespace Service Policy
+	//
+	// x-displayName: "Namespace Service Policy"
+	// Filter results with HTTP loadbalancers with Namespace Service Policy configured
+	NamespaceServicePolicy *types.BoolValue `protobuf:"bytes,20,opt,name=namespace_service_policy,json=namespaceServicePolicy,proto3" json:"namespace_service_policy,omitempty"`
+	// Service Policy
+	//
+	// x-displayName: "Service Policy"
+	// Filter results with HTTP loadbalancers with Service Policy configured
+	ServicePolicy *types.BoolValue `protobuf:"bytes,21,opt,name=service_policy,json=servicePolicy,proto3" json:"service_policy,omitempty"`
+	// IP Reputation
+	//
+	// x-displayName: "IP Reputation"
+	// Filter results with HTTP loadbalancers with IP Reputation configured
+	IpReputation *types.BoolValue `protobuf:"bytes,22,opt,name=ip_reputation,json=ipReputation,proto3" json:"ip_reputation,omitempty"`
+	// Malicious User Detection
+	//
+	// x-displayName: "Malicious User Detection"
+	// Filter results with HTTP loadbalancers with Malicious User Detection configured
+	MaliciousUserDetection *types.BoolValue `protobuf:"bytes,23,opt,name=malicious_user_detection,json=maliciousUserDetection,proto3" json:"malicious_user_detection,omitempty"`
+	// Private Advertisement
+	//
+	// x-displayName: "Private Advertisement"
+	// Filter results with HTTP loadbalancers advertised privately
+	PrivateAdvertisement *types.BoolValue `protobuf:"bytes,24,opt,name=private_advertisement,json=privateAdvertisement,proto3" json:"private_advertisement,omitempty"`
+	// Public Advertisement
+	//
+	// x-displayName: "Public Advertisement"
+	// Filter results with HTTP loadbalancers advertised publicly
+	PublicAdvertisment *types.BoolValue `protobuf:"bytes,25,opt,name=public_advertisment,json=publicAdvertisment,proto3" json:"public_advertisment,omitempty"`
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) Reset()      { *m = HTTPLoadbalancerInventoryFilterType{} }
+func (*HTTPLoadbalancerInventoryFilterType) ProtoMessage() {}
+func (*HTTPLoadbalancerInventoryFilterType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{24}
+}
+func (m *HTTPLoadbalancerInventoryFilterType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPLoadbalancerInventoryFilterType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_HTTPLoadbalancerInventoryFilterType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *HTTPLoadbalancerInventoryFilterType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPLoadbalancerInventoryFilterType.Merge(m, src)
+}
+func (m *HTTPLoadbalancerInventoryFilterType) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPLoadbalancerInventoryFilterType) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPLoadbalancerInventoryFilterType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPLoadbalancerInventoryFilterType proto.InternalMessageInfo
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetHttpOnly() *types.BoolValue {
+	if m != nil {
+		return m.HttpOnly
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetWaf() *types.BoolValue {
+	if m != nil {
+		return m.Waf
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetBotProtection() *types.BoolValue {
+	if m != nil {
+		return m.BotProtection
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetApiProtection() *types.BoolValue {
+	if m != nil {
+		return m.ApiProtection
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetDdosProtection() *types.BoolValue {
+	if m != nil {
+		return m.DdosProtection
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetClientSideDefense() *types.BoolValue {
+	if m != nil {
+		return m.ClientSideDefense
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetNamespaceServicePolicy() *types.BoolValue {
+	if m != nil {
+		return m.NamespaceServicePolicy
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetServicePolicy() *types.BoolValue {
+	if m != nil {
+		return m.ServicePolicy
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetIpReputation() *types.BoolValue {
+	if m != nil {
+		return m.IpReputation
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetMaliciousUserDetection() *types.BoolValue {
+	if m != nil {
+		return m.MaliciousUserDetection
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetPrivateAdvertisement() *types.BoolValue {
+	if m != nil {
+		return m.PrivateAdvertisement
+	}
+	return nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) GetPublicAdvertisment() *types.BoolValue {
+	if m != nil {
+		return m.PublicAdvertisment
+	}
+	return nil
+}
+
+// HTTPLoadbalancerInventoryType
+//
+// x-displayName: "Inventory of HTTP Loadbalancers"
+// HTTP Loadbalancer inventory
+type HTTPLoadbalancerInventoryType struct {
+	// HTTP Only
+	//
+	// x-displayName: "HTTP Only"
+	// Number of HTTP Only loadbalancers
+	HttpOnly uint32 `protobuf:"varint,1,opt,name=http_only,json=httpOnly,proto3" json:"http_only,omitempty"`
+	// WAF
+	//
+	// x-displayName: "WAF"
+	// Number of HTTP loadbalancers with WAF configured
+	Waf uint32 `protobuf:"varint,2,opt,name=waf,proto3" json:"waf,omitempty"`
+	// Bot Protection
+	//
+	// x-displayName: "Bot Protection"
+	// Number of HTTP loadbalancers with Bot Protection configured
+	BotProtection uint32 `protobuf:"varint,3,opt,name=bot_protection,json=botProtection,proto3" json:"bot_protection,omitempty"`
+	// API Protection
+	//
+	// x-displayName: "API Protection"
+	// Number of HTTP loadbalancers with API Protection configured
+	ApiProtection uint32 `protobuf:"varint,4,opt,name=api_protection,json=apiProtection,proto3" json:"api_protection,omitempty"`
+	// DDoS Protection
+	//
+	// x-displayName: "DDoS Protection"
+	// Number of HTTP loadbalancers with DDoS Protection configured
+	DdosProtection uint32 `protobuf:"varint,5,opt,name=ddos_protection,json=ddosProtection,proto3" json:"ddos_protection,omitempty"`
+	// Client Side Defense
+	//
+	// x-displayName: "Client Side Defense"
+	// Number of HTTP loadbalancers with Client Side Defense configured
+	ClientSideDefense uint32 `protobuf:"varint,6,opt,name=client_side_defense,json=clientSideDefense,proto3" json:"client_side_defense,omitempty"`
+	// Namespace Service Policy
+	//
+	// x-displayName: "Namespace Service Policy"
+	// Number of HTTP loadbalancers with Namespace Service Policy configured
+	NamespaceServicePolicy uint32 `protobuf:"varint,7,opt,name=namespace_service_policy,json=namespaceServicePolicy,proto3" json:"namespace_service_policy,omitempty"`
+	// Service Policy
+	//
+	// x-displayName: "Service Policy"
+	// Number of HTTP loadbalancers with Service Policy configured
+	ServicePolicy uint32 `protobuf:"varint,8,opt,name=service_policy,json=servicePolicy,proto3" json:"service_policy,omitempty"`
+	// IP Reputation
+	//
+	// x-displayName: "IP Reputation"
+	// Number of HTTP loadbalancers with IP Reputation configured
+	IpReputation uint32 `protobuf:"varint,9,opt,name=ip_reputation,json=ipReputation,proto3" json:"ip_reputation,omitempty"`
+	// Malicious User Detection
+	//
+	// x-displayName: "Malicious User Detection"
+	// Number of HTTP loadbalancers with Malicious User Detection configured
+	MaliciousUserDetection uint32 `protobuf:"varint,10,opt,name=malicious_user_detection,json=maliciousUserDetection,proto3" json:"malicious_user_detection,omitempty"`
+	// Private Advertisement
+	//
+	// x-displayName: "Private Advertisement"
+	// Number of HTTP loadbalancers advertised privately
+	PrivateAdvertisement uint32 `protobuf:"varint,11,opt,name=private_advertisement,json=privateAdvertisement,proto3" json:"private_advertisement,omitempty"`
+	// Public Advertisement
+	//
+	// x-displayName: "Public Advertisement"
+	// Number of HTTP loadbalancers advertised publicly
+	PublicAdvertisment uint32 `protobuf:"varint,12,opt,name=public_advertisment,json=publicAdvertisment,proto3" json:"public_advertisment,omitempty"`
+	// HTTP Loadbalancers
+	//
+	// x-displayName: "List of HTTP Loadbalancers"
+	// List of HTTP loadbalancers
+	Name []string `protobuf:"bytes,13,rep,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *HTTPLoadbalancerInventoryType) Reset()      { *m = HTTPLoadbalancerInventoryType{} }
+func (*HTTPLoadbalancerInventoryType) ProtoMessage() {}
+func (*HTTPLoadbalancerInventoryType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{25}
+}
+func (m *HTTPLoadbalancerInventoryType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPLoadbalancerInventoryType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_HTTPLoadbalancerInventoryType.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *HTTPLoadbalancerInventoryType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPLoadbalancerInventoryType.Merge(m, src)
+}
+func (m *HTTPLoadbalancerInventoryType) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPLoadbalancerInventoryType) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPLoadbalancerInventoryType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPLoadbalancerInventoryType proto.InternalMessageInfo
+
+func (m *HTTPLoadbalancerInventoryType) GetHttpOnly() uint32 {
+	if m != nil {
+		return m.HttpOnly
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetWaf() uint32 {
+	if m != nil {
+		return m.Waf
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetBotProtection() uint32 {
+	if m != nil {
+		return m.BotProtection
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetApiProtection() uint32 {
+	if m != nil {
+		return m.ApiProtection
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetDdosProtection() uint32 {
+	if m != nil {
+		return m.DdosProtection
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetClientSideDefense() uint32 {
+	if m != nil {
+		return m.ClientSideDefense
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetNamespaceServicePolicy() uint32 {
+	if m != nil {
+		return m.NamespaceServicePolicy
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetServicePolicy() uint32 {
+	if m != nil {
+		return m.ServicePolicy
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetIpReputation() uint32 {
+	if m != nil {
+		return m.IpReputation
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetMaliciousUserDetection() uint32 {
+	if m != nil {
+		return m.MaliciousUserDetection
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetPrivateAdvertisement() uint32 {
+	if m != nil {
+		return m.PrivateAdvertisement
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetPublicAdvertisment() uint32 {
+	if m != nil {
+		return m.PublicAdvertisment
+	}
+	return 0
+}
+
+func (m *HTTPLoadbalancerInventoryType) GetName() []string {
+	if m != nil {
+		return m.Name
+	}
+	return nil
+}
+
+// ApplicationInventoryRequest
+//
+// x-displayName: "Application related objects inventory request"
+// Request for inventory of application related objects
+type ApplicationInventoryRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "ns1"
+	// The name of the namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// HTTPLoadbalancerInventoryFilterType
+	//
+	// x-displayName: "HTTP LoadBalancer Inventory Filter Type"
+	// Filters for HTTP LoadBalancer
+	HttpLoadBalancerFilter *HTTPLoadbalancerInventoryFilterType `protobuf:"bytes,2,opt,name=http_load_balancer_filter,json=httpLoadBalancerFilter,proto3" json:"http_load_balancer_filter,omitempty"`
+	// TCPLoadbalancerInventoryFilterType
+	//
+	// x-displayName: "TCP LoadBalancer Inventory Filter Type"
+	// Filters for TCP LoadBalancer
+	TcpLoadBalancerFilter *TCPLoadbalancerInventoryFilterType `protobuf:"bytes,3,opt,name=tcp_load_balancer_filter,json=tcpLoadBalancerFilter,proto3" json:"tcp_load_balancer_filter,omitempty"`
+}
+
+func (m *ApplicationInventoryRequest) Reset()      { *m = ApplicationInventoryRequest{} }
+func (*ApplicationInventoryRequest) ProtoMessage() {}
+func (*ApplicationInventoryRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{26}
+}
+func (m *ApplicationInventoryRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApplicationInventoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApplicationInventoryRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApplicationInventoryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationInventoryRequest.Merge(m, src)
+}
+func (m *ApplicationInventoryRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApplicationInventoryRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationInventoryRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApplicationInventoryRequest proto.InternalMessageInfo
+
+func (m *ApplicationInventoryRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ApplicationInventoryRequest) GetHttpLoadBalancerFilter() *HTTPLoadbalancerInventoryFilterType {
+	if m != nil {
+		return m.HttpLoadBalancerFilter
+	}
+	return nil
+}
+
+func (m *ApplicationInventoryRequest) GetTcpLoadBalancerFilter() *TCPLoadbalancerInventoryFilterType {
+	if m != nil {
+		return m.TcpLoadBalancerFilter
+	}
+	return nil
+}
+
+// ApplicationInventoryResponse
+//
+// x-displayName: "Application related objects inventory response"
+// Response for inventory of application related objects
+type ApplicationInventoryResponse struct {
+	// Load Balancers
+	//
+	// x-displayName: "Load Balancers"
+	// Number of HTTP and TCP Load Balancers configured
+	Loadbalancers uint32 `protobuf:"varint,1,opt,name=loadbalancers,proto3" json:"loadbalancers,omitempty"`
+	// Origin Pools
+	//
+	// x-displayName: "Origin Pools"
+	// Number of origin pools configured
+	OriginPools uint32 `protobuf:"varint,2,opt,name=origin_pools,json=originPools,proto3" json:"origin_pools,omitempty"`
+	// Services Discovered
+	//
+	// x-displayName: "Services Discovered"
+	// Number of services discovered
+	ServicesDiscovered uint32 `protobuf:"varint,3,opt,name=services_discovered,json=servicesDiscovered,proto3" json:"services_discovered,omitempty"`
+	// HTTP Loadbalancer Inventory
+	//
+	// x-displayName: "HTTP Loadbalancers"
+	// Inventory of configured HTTP Loadbalancers
+	HttpLoadbalancers *HTTPLoadbalancerInventoryType `protobuf:"bytes,4,opt,name=http_loadbalancers,json=httpLoadbalancers,proto3" json:"http_loadbalancers,omitempty"`
+	// TCP Loadbalancer Inventory
+	//
+	// x-displayName: "TCP Loadbalancers"
+	// Inventory of configured TCP Loadbalancers
+	TcpLoadbalancers *TCPLoadbalancerInventoryType `protobuf:"bytes,5,opt,name=tcp_loadbalancers,json=tcpLoadbalancers,proto3" json:"tcp_loadbalancers,omitempty"`
+}
+
+func (m *ApplicationInventoryResponse) Reset()      { *m = ApplicationInventoryResponse{} }
+func (*ApplicationInventoryResponse) ProtoMessage() {}
+func (*ApplicationInventoryResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3ad0896b746b19a, []int{27}
+}
+func (m *ApplicationInventoryResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApplicationInventoryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApplicationInventoryResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApplicationInventoryResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApplicationInventoryResponse.Merge(m, src)
+}
+func (m *ApplicationInventoryResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApplicationInventoryResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApplicationInventoryResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApplicationInventoryResponse proto.InternalMessageInfo
+
+func (m *ApplicationInventoryResponse) GetLoadbalancers() uint32 {
+	if m != nil {
+		return m.Loadbalancers
+	}
+	return 0
+}
+
+func (m *ApplicationInventoryResponse) GetOriginPools() uint32 {
+	if m != nil {
+		return m.OriginPools
+	}
+	return 0
+}
+
+func (m *ApplicationInventoryResponse) GetServicesDiscovered() uint32 {
+	if m != nil {
+		return m.ServicesDiscovered
+	}
+	return 0
+}
+
+func (m *ApplicationInventoryResponse) GetHttpLoadbalancers() *HTTPLoadbalancerInventoryType {
+	if m != nil {
+		return m.HttpLoadbalancers
+	}
+	return nil
+}
+
+func (m *ApplicationInventoryResponse) GetTcpLoadbalancers() *TCPLoadbalancerInventoryType {
+	if m != nil {
+		return m.TcpLoadbalancers
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*SetFastACLsForInternetVIPsRequest)(nil), "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest")
 	golang_proto.RegisterType((*SetFastACLsForInternetVIPsRequest)(nil), "ves.io.schema.namespace.SetFastACLsForInternetVIPsRequest")
@@ -1316,6 +2067,18 @@ func init() {
 	golang_proto.RegisterType((*NetworkingInventoryRequest)(nil), "ves.io.schema.namespace.NetworkingInventoryRequest")
 	proto.RegisterType((*NetworkingInventoryResponse)(nil), "ves.io.schema.namespace.NetworkingInventoryResponse")
 	golang_proto.RegisterType((*NetworkingInventoryResponse)(nil), "ves.io.schema.namespace.NetworkingInventoryResponse")
+	proto.RegisterType((*TCPLoadbalancerInventoryFilterType)(nil), "ves.io.schema.namespace.TCPLoadbalancerInventoryFilterType")
+	golang_proto.RegisterType((*TCPLoadbalancerInventoryFilterType)(nil), "ves.io.schema.namespace.TCPLoadbalancerInventoryFilterType")
+	proto.RegisterType((*TCPLoadbalancerInventoryType)(nil), "ves.io.schema.namespace.TCPLoadbalancerInventoryType")
+	golang_proto.RegisterType((*TCPLoadbalancerInventoryType)(nil), "ves.io.schema.namespace.TCPLoadbalancerInventoryType")
+	proto.RegisterType((*HTTPLoadbalancerInventoryFilterType)(nil), "ves.io.schema.namespace.HTTPLoadbalancerInventoryFilterType")
+	golang_proto.RegisterType((*HTTPLoadbalancerInventoryFilterType)(nil), "ves.io.schema.namespace.HTTPLoadbalancerInventoryFilterType")
+	proto.RegisterType((*HTTPLoadbalancerInventoryType)(nil), "ves.io.schema.namespace.HTTPLoadbalancerInventoryType")
+	golang_proto.RegisterType((*HTTPLoadbalancerInventoryType)(nil), "ves.io.schema.namespace.HTTPLoadbalancerInventoryType")
+	proto.RegisterType((*ApplicationInventoryRequest)(nil), "ves.io.schema.namespace.ApplicationInventoryRequest")
+	golang_proto.RegisterType((*ApplicationInventoryRequest)(nil), "ves.io.schema.namespace.ApplicationInventoryRequest")
+	proto.RegisterType((*ApplicationInventoryResponse)(nil), "ves.io.schema.namespace.ApplicationInventoryResponse")
+	golang_proto.RegisterType((*ApplicationInventoryResponse)(nil), "ves.io.schema.namespace.ApplicationInventoryResponse")
 }
 
 func init() {
@@ -1326,106 +2089,151 @@ func init() {
 }
 
 var fileDescriptor_e3ad0896b746b19a = []byte{
-	// 1578 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x98, 0xcd, 0x6f, 0x1b, 0x45,
-	0x1f, 0xc7, 0x33, 0xce, 0xd3, 0x3c, 0xed, 0xf4, 0x49, 0xe2, 0x6e, 0xfb, 0xb4, 0xc6, 0x4d, 0x37,
-	0xce, 0x52, 0x41, 0x88, 0x6a, 0x5b, 0x4a, 0x4a, 0x49, 0x53, 0x50, 0xe5, 0x84, 0x76, 0x15, 0xd1,
-	0x97, 0xc8, 0x81, 0x02, 0xbd, 0x6c, 0xc7, 0xeb, 0xb1, 0xb3, 0x64, 0xbd, 0xb3, 0x9d, 0x99, 0x75,
-	0x6a, 0x95, 0x48, 0x55, 0x05, 0xe2, 0x8a, 0xca, 0xdf, 0x80, 0x84, 0x72, 0xe0, 0xc0, 0x01, 0xa1,
-	0x96, 0x43, 0x2f, 0x28, 0x3d, 0xa1, 0x0a, 0x2e, 0x95, 0xb8, 0xb4, 0x0e, 0x07, 0xe8, 0xa9, 0x1c,
-	0x11, 0x17, 0xb4, 0x2f, 0x76, 0xd7, 0x6b, 0xaf, 0xd7, 0x2f, 0xb7, 0x9d, 0x9d, 0xf9, 0xfd, 0xe6,
-	0xf7, 0x99, 0xef, 0xee, 0xcc, 0x77, 0x17, 0x2e, 0x54, 0x31, 0xcb, 0x68, 0x24, 0xcb, 0xd4, 0x0d,
-	0x5c, 0x41, 0x59, 0x03, 0x55, 0x30, 0x33, 0x91, 0x8a, 0xb3, 0xa6, 0x55, 0xd0, 0x35, 0x55, 0x51,
-	0x2d, 0xc6, 0x49, 0x05, 0x99, 0x9a, 0x82, 0x36, 0x11, 0xcd, 0x98, 0x94, 0x70, 0x22, 0x1c, 0x73,
-	0x83, 0x32, 0x6e, 0x50, 0xa6, 0x19, 0x94, 0x4c, 0x97, 0x35, 0xbe, 0x61, 0x15, 0x32, 0x2a, 0xa9,
-	0x64, 0xcb, 0xa4, 0x4c, 0xb2, 0xce, 0xf8, 0x82, 0x55, 0x72, 0x5a, 0x4e, 0xc3, 0xb9, 0x72, 0xf3,
-	0x24, 0xa7, 0xca, 0x84, 0x94, 0x75, 0x9c, 0x45, 0xa6, 0x96, 0x45, 0x86, 0x41, 0x38, 0xe2, 0x1a,
-	0x31, 0x98, 0xd7, 0xfb, 0x6a, 0x58, 0x69, 0xbc, 0x66, 0xe2, 0xc6, 0xa0, 0xe3, 0xad, 0x83, 0x88,
-	0xe9, 0xcf, 0x30, 0xd5, 0xda, 0x59, 0x45, 0xba, 0x56, 0x44, 0x1c, 0x7b, 0xbd, 0x52, 0xa0, 0x17,
-	0x33, 0x6c, 0x54, 0x03, 0x19, 0x52, 0x81, 0x31, 0x1a, 0xde, 0x52, 0x5a, 0x47, 0x4c, 0xb7, 0x8f,
-	0x60, 0xfe, 0x0a, 0xa5, 0xaf, 0x01, 0x9c, 0x59, 0xc7, 0xfc, 0x22, 0x62, 0x3c, 0xb7, 0x72, 0x89,
-	0x5d, 0x24, 0x74, 0xd5, 0xe0, 0x98, 0x1a, 0x98, 0x5f, 0x5b, 0x5d, 0x63, 0x79, 0x7c, 0xd3, 0xc2,
-	0x8c, 0x0b, 0x53, 0xf0, 0x40, 0x13, 0x30, 0x01, 0x52, 0x60, 0xf6, 0x40, 0xfe, 0xe5, 0x0d, 0xa1,
-	0x00, 0x0f, 0x94, 0x10, 0xe3, 0x0a, 0x52, 0x75, 0x96, 0x88, 0xa5, 0x46, 0x67, 0x0f, 0xce, 0x4b,
-	0x99, 0x56, 0x11, 0x9c, 0x89, 0x33, 0x57, 0x0b, 0x9f, 0x60, 0x95, 0xe7, 0x71, 0xe9, 0xfd, 0x9a,
-	0x89, 0x97, 0x67, 0x76, 0xb6, 0xf7, 0x37, 0xe2, 0xee, 0xff, 0xf9, 0x70, 0x74, 0xec, 0x1e, 0x18,
-	0x8d, 0xdf, 0x01, 0xf5, 0xa7, 0x3f, 0x8d, 0x8e, 0xdd, 0xfb, 0x11, 0xc4, 0xe2, 0x20, 0xef, 0xf4,
-	0xe7, 0x54, 0x9d, 0x49, 0x27, 0xa1, 0xd4, 0xad, 0x4c, 0x66, 0x12, 0x83, 0x61, 0x29, 0x07, 0x67,
-	0xe4, 0xe1, 0x60, 0x24, 0x0a, 0x25, 0x39, 0x72, 0x22, 0xe1, 0x92, 0x1f, 0x19, 0xf4, 0x8c, 0x7c,
-	0xd0, 0x87, 0xec, 0x83, 0xfb, 0x1e, 0xc0, 0xe9, 0x75, 0xcc, 0x73, 0x2a, 0xd7, 0xaa, 0x78, 0x1d,
-	0xd3, 0xaa, 0xa6, 0xe2, 0x35, 0xa2, 0x6b, 0xaa, 0x86, 0x7b, 0x94, 0xc0, 0x82, 0x71, 0xe6, 0xc6,
-	0x29, 0xa6, 0x17, 0xd8, 0x87, 0x12, 0xaf, 0xed, 0x6c, 0x4f, 0xb4, 0x84, 0xd7, 0x6c, 0x3d, 0xf6,
-	0xdd, 0x03, 0xb1, 0x78, 0xca, 0x2f, 0xc7, 0x24, 0x6b, 0xad, 0x4d, 0x92, 0x60, 0x2a, 0xbc, 0x6e,
-	0x4f, 0x93, 0xf3, 0x70, 0x5a, 0x1e, 0x86, 0x4d, 0xfa, 0x0c, 0xc0, 0x94, 0x1c, 0x31, 0x8b, 0x70,
-	0x63, 0xa8, 0x05, 0x38, 0xd4, 0xb6, 0x00, 0xed, 0xac, 0x2d, 0x22, 0x5d, 0xc1, 0x7c, 0x8b, 0xd0,
-	0xcd, 0xbe, 0x45, 0x32, 0xdc, 0xb8, 0x41, 0x45, 0x6a, 0x09, 0x0f, 0x13, 0xc9, 0x68, 0xad, 0xad,
-	0x45, 0xa4, 0xb6, 0xba, 0x3b, 0x88, 0x34, 0x08, 0x5b, 0xab, 0x48, 0x21, 0xb3, 0xd8, 0x22, 0x0d,
-	0xb1, 0x00, 0x87, 0xda, 0x16, 0xa0, 0x9d, 0xf5, 0x5b, 0x00, 0x4f, 0x34, 0x61, 0x73, 0x3a, 0xa6,
-	0xbc, 0x3f, 0x89, 0x08, 0x9c, 0x40, 0x76, 0xd4, 0x20, 0xf5, 0x9d, 0xdc, 0xd9, 0xfe, 0x9f, 0x2f,
-	0x38, 0x44, 0x9e, 0x71, 0xe4, 0xaf, 0x4a, 0x4a, 0x41, 0x31, 0xac, 0x5e, 0x4f, 0x9a, 0x77, 0xe0,
-	0x09, 0x79, 0x70, 0x22, 0xe9, 0x53, 0x28, 0xca, 0x5d, 0x27, 0x10, 0xae, 0x0f, 0xc1, 0x3c, 0x19,
-	0x60, 0x0e, 0xe2, 0xed, 0x00, 0x38, 0xfd, 0x81, 0x69, 0x1f, 0x6b, 0x39, 0x5d, 0x27, 0x5b, 0xb9,
-	0x62, 0x15, 0x53, 0xae, 0x31, 0x7c, 0xd5, 0x58, 0x73, 0x4e, 0xf0, 0x3c, 0xbe, 0x19, 0xa1, 0x88,
-	0x06, 0x5f, 0x41, 0x76, 0xa8, 0x82, 0x1a, 0xb1, 0x0a, 0x31, 0x14, 0xf7, 0xfc, 0x4f, 0xc4, 0x52,
-	0x60, 0x76, 0x62, 0x3e, 0x93, 0x09, 0x39, 0xf1, 0x33, 0xee, 0x24, 0xcd, 0x59, 0x57, 0x36, 0x88,
-	0xa6, 0xe2, 0xfc, 0x51, 0xd4, 0xb1, 0x16, 0x69, 0x09, 0xa6, 0xba, 0xd7, 0xca, 0x4c, 0xe1, 0x28,
-	0x1c, 0xa3, 0x98, 0x59, 0x3a, 0x77, 0x2a, 0xdd, 0x9f, 0xf7, 0x5a, 0xd2, 0xe7, 0x31, 0x18, 0xbf,
-	0xe6, 0x9d, 0xe0, 0x79, 0x4b, 0x77, 0xd4, 0x89, 0xdc, 0x0e, 0x8e, 0x78, 0x67, 0x3e, 0xa1, 0x0a,
-	0xae, 0x22, 0xdd, 0x72, 0x0c, 0x86, 0xb7, 0xfa, 0xcb, 0xa1, 0x50, 0xc1, 0x69, 0x1a, 0x37, 0x08,
-	0xbd, 0xd0, 0x4c, 0x72, 0xc1, 0xe0, 0xb4, 0x96, 0x3f, 0x5c, 0x6d, 0xef, 0x11, 0x8e, 0xc0, 0x7d,
-	0x76, 0x03, 0x27, 0x46, 0x9d, 0x82, 0xdc, 0x46, 0xf2, 0x22, 0x4c, 0x84, 0xa5, 0x11, 0xe2, 0x70,
-	0x74, 0x13, 0xd7, 0x3c, 0x00, 0xfb, 0xf2, 0x65, 0x8e, 0x98, 0x2f, 0xc7, 0x52, 0x6c, 0x11, 0x48,
-	0x32, 0xfc, 0x7f, 0xa0, 0x3e, 0xef, 0x29, 0x4b, 0xc0, 0xff, 0x32, 0x4b, 0x55, 0x31, 0x63, 0xde,
-	0xca, 0x35, 0x9a, 0x76, 0x32, 0x4c, 0x29, 0xa1, 0x8d, 0x64, 0x4e, 0x43, 0x7a, 0x0f, 0x26, 0xbd,
-	0x6d, 0x44, 0x33, 0xca, 0xab, 0x46, 0x15, 0x1b, 0x9c, 0xd0, 0x5a, 0xe3, 0x99, 0x4f, 0xb7, 0xad,
-	0xec, 0xf2, 0xa4, 0xfd, 0xbe, 0x41, 0xba, 0x1f, 0x8e, 0xb1, 0x1a, 0xe3, 0xb8, 0xe2, 0x7f, 0x09,
-	0xbe, 0x03, 0xf0, 0x78, 0xc7, 0x6c, 0x5e, 0x71, 0xaf, 0xc3, 0xc9, 0xb2, 0x4e, 0x0a, 0x48, 0x57,
-	0xbc, 0x0d, 0xc5, 0x2d, 0x72, 0x3c, 0x3f, 0xe1, 0xde, 0xf6, 0x62, 0x9d, 0x5a, 0x99, 0xc6, 0x9d,
-	0x57, 0xc4, 0xee, 0x76, 0x1b, 0xc2, 0x2c, 0x8c, 0xdb, 0x17, 0x4a, 0x05, 0xb3, 0x0d, 0xa5, 0x4c,
-	0x89, 0x65, 0x32, 0x67, 0x75, 0xc7, 0xf3, 0x13, 0xf6, 0xfd, 0xcb, 0x98, 0x6d, 0xc8, 0xce, 0x5d,
-	0x61, 0x0e, 0x1e, 0x2a, 0xaa, 0x8a, 0xaa, 0x5b, 0x8c, 0x63, 0xda, 0x18, 0xfa, 0x1f, 0x67, 0xe8,
-	0x64, 0x51, 0x5d, 0x71, 0xef, 0xbb, 0x63, 0xe7, 0x9f, 0x1f, 0x83, 0xc2, 0x95, 0x06, 0xc2, 0x8a,
-	0xe3, 0x74, 0x73, 0x6b, 0xab, 0xc2, 0x23, 0x00, 0xc7, 0x57, 0x10, 0x53, 0x51, 0x11, 0xbf, 0x8b,
-	0x75, 0xcc, 0xb1, 0x90, 0x0e, 0x7d, 0x54, 0x5a, 0xc6, 0x79, 0x6b, 0x97, 0xcc, 0xf4, 0x3a, 0xdc,
-	0xdb, 0x80, 0x3e, 0xaa, 0xef, 0x26, 0x66, 0x4a, 0x6f, 0xde, 0x52, 0xd3, 0x05, 0xc4, 0xf0, 0x29,
-	0xdb, 0x74, 0xa6, 0x35, 0x92, 0xb6, 0x50, 0x25, 0x8d, 0x8a, 0x15, 0xcd, 0x48, 0x6f, 0x51, 0x8d,
-	0xe3, 0xbb, 0xbf, 0xfe, 0xfe, 0x55, 0x2c, 0x2d, 0xcd, 0x7a, 0xd6, 0xfc, 0xa5, 0x21, 0x66, 0xd9,
-	0xdb, 0xf6, 0xf5, 0x76, 0x56, 0x75, 0xb3, 0x2b, 0x45, 0x27, 0xfd, 0x12, 0x98, 0x13, 0xfe, 0x06,
-	0x70, 0xaa, 0xdb, 0x1b, 0x27, 0x2c, 0x86, 0x96, 0x1a, 0xb1, 0xa9, 0x24, 0xcf, 0x0e, 0x18, 0xc9,
-	0x4c, 0xa9, 0x58, 0xdf, 0x4d, 0x1c, 0xf7, 0x20, 0x35, 0xa3, 0x44, 0x11, 0xe3, 0xd4, 0x52, 0xb9,
-	0x45, 0xb1, 0x8f, 0xf4, 0xbc, 0xb4, 0xd4, 0x81, 0xd4, 0x7d, 0xf2, 0xb2, 0x96, 0x33, 0x85, 0x12,
-	0xba, 0x6f, 0xd9, 0xec, 0xff, 0x00, 0x98, 0x0c, 0x77, 0xb4, 0xc2, 0x52, 0x68, 0xfd, 0x91, 0x6e,
-	0x3d, 0x79, 0x6e, 0xa0, 0x58, 0x4f, 0xed, 0x21, 0xe8, 0x6f, 0x37, 0xaf, 0xb7, 0xb3, 0x4d, 0x77,
-	0xac, 0x94, 0x08, 0x55, 0x34, 0x6f, 0x26, 0xa5, 0xaa, 0x99, 0xac, 0x41, 0x2f, 0x0f, 0x42, 0x2f,
-	0x0f, 0x41, 0x2f, 0xf7, 0x40, 0xff, 0xe8, 0x87, 0x18, 0xa8, 0xef, 0x26, 0x92, 0x9d, 0x57, 0x80,
-	0x62, 0x54, 0x74, 0x16, 0xe0, 0x6d, 0x61, 0x88, 0x05, 0x10, 0xfe, 0x02, 0x30, 0x11, 0xe6, 0x9b,
-	0xbb, 0x3c, 0xf3, 0x11, 0x9f, 0x08, 0x5d, 0x9e, 0xf9, 0x48, 0x93, 0x7e, 0xc3, 0xa7, 0xba, 0x49,
-	0xc9, 0xad, 0x5a, 0x9a, 0x61, 0xd5, 0xa2, 0x1a, 0xaf, 0xf9, 0x54, 0x3f, 0x27, 0x9d, 0x89, 0x80,
-	0x46, 0xce, 0x24, 0x4a, 0xd0, 0x89, 0xdb, 0x8a, 0xdb, 0xcc, 0x72, 0xff, 0xcc, 0xf2, 0xc0, 0xcc,
-	0x72, 0x24, 0x73, 0x40, 0xeb, 0x00, 0x77, 0x53, 0xeb, 0x45, 0x61, 0x40, 0x6c, 0xe1, 0xb9, 0x5f,
-	0xe7, 0x80, 0x29, 0xee, 0x45, 0xe7, 0xce, 0x4e, 0xbc, 0x17, 0x9d, 0xc3, 0x7c, 0xfe, 0xc7, 0xf5,
-	0xdd, 0xc4, 0x11, 0x8f, 0xd7, 0x3b, 0xea, 0x06, 0x11, 0x38, 0xe8, 0xe2, 0x6d, 0x81, 0x9f, 0xfb,
-	0x05, 0xee, 0x1d, 0x56, 0x1e, 0x18, 0x56, 0x8e, 0x84, 0xf5, 0x04, 0x3e, 0x1c, 0x00, 0xee, 0x5f,
-	0xd9, 0x20, 0xaf, 0x50, 0x07, 0xf0, 0x68, 0x67, 0xdf, 0x2e, 0x9c, 0x89, 0x56, 0xa7, 0x93, 0x8d,
-	0x4f, 0xbe, 0xd5, 0x77, 0x9c, 0x87, 0xf9, 0xa1, 0x4f, 0xd3, 0x32, 0x36, 0x30, 0x45, 0xba, 0x4f,
-	0xd3, 0xb3, 0xd2, 0xe9, 0xde, 0x18, 0x5b, 0xbf, 0x01, 0x6c, 0x45, 0x6d, 0x48, 0xb9, 0x5f, 0x48,
-	0x79, 0x40, 0x48, 0x39, 0x02, 0x32, 0xa0, 0x65, 0x03, 0xb4, 0xa9, 0xe5, 0x19, 0x61, 0x20, 0x4e,
-	0xe1, 0x01, 0x80, 0xe3, 0xeb, 0x56, 0xb9, 0x8c, 0x19, 0xbf, 0x66, 0xbb, 0x58, 0x26, 0xbc, 0x11,
-	0x2e, 0x84, 0x7f, 0x9c, 0xed, 0x32, 0xe6, 0x7a, 0x1d, 0xca, 0x4c, 0x69, 0x3d, 0x8a, 0x60, 0x5e,
-	0x4a, 0x47, 0x10, 0x30, 0x37, 0x69, 0xda, 0xb1, 0xdb, 0x8e, 0x44, 0xf7, 0x01, 0x1c, 0x6f, 0xf1,
-	0xdb, 0x5d, 0xaa, 0x0f, 0x7e, 0x37, 0x74, 0x31, 0x82, 0x1d, 0x2d, 0xbc, 0x74, 0x25, 0x8a, 0xa0,
-	0xb3, 0xfd, 0xf3, 0x4c, 0x51, 0xe3, 0xff, 0xa6, 0x42, 0xed, 0xa4, 0x76, 0xf1, 0xbf, 0x01, 0x78,
-	0xb8, 0x83, 0x2b, 0x17, 0x16, 0x42, 0xeb, 0x0a, 0xff, 0x22, 0x48, 0x9e, 0xee, 0x2f, 0x28, 0x64,
-	0x8b, 0x68, 0x43, 0x5a, 0x94, 0x16, 0x22, 0x44, 0x31, 0x9a, 0xe9, 0x15, 0xad, 0x91, 0x7f, 0x09,
-	0xcc, 0x25, 0x4f, 0x3d, 0x7c, 0x00, 0x46, 0x7f, 0x79, 0x00, 0xc4, 0xb0, 0xba, 0xdc, 0x2f, 0xe9,
-	0xbb, 0x3f, 0x27, 0x62, 0x71, 0xb0, 0xfc, 0x05, 0x78, 0xfc, 0x4c, 0x1c, 0x79, 0xf2, 0x4c, 0x1c,
-	0x79, 0xf1, 0x4c, 0x04, 0x77, 0xea, 0x22, 0xf8, 0xa6, 0x2e, 0x82, 0x47, 0x75, 0x11, 0x3c, 0xae,
-	0x8b, 0xe0, 0x69, 0x5d, 0x04, 0x7f, 0xd4, 0xc5, 0x91, 0x17, 0x75, 0x11, 0x7c, 0xb9, 0x27, 0x8e,
-	0x3c, 0xdc, 0x13, 0xc1, 0xe3, 0x3d, 0x71, 0xe4, 0xc9, 0x9e, 0x38, 0x72, 0xfd, 0x72, 0x99, 0x98,
-	0x9b, 0xe5, 0x4c, 0x95, 0xe8, 0x1c, 0x53, 0x8a, 0x32, 0x16, 0xcb, 0x3a, 0x17, 0x25, 0x42, 0x2b,
-	0xf6, 0xa1, 0x56, 0xd5, 0x8a, 0x98, 0xa6, 0x1b, 0xdd, 0x59, 0xb3, 0x50, 0x26, 0x59, 0x7c, 0x8b,
-	0x7b, 0xbf, 0x84, 0x83, 0xff, 0xaf, 0x0b, 0x63, 0xce, 0x8f, 0xe1, 0x85, 0x7f, 0x03, 0x00, 0x00,
-	0xff, 0xff, 0xf6, 0x49, 0x12, 0x2b, 0x7c, 0x17, 0x00, 0x00,
+	// 2290 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x5a, 0xcf, 0x6f, 0xdb, 0xc8,
+	0x15, 0x36, 0xa5, 0xc4, 0xb1, 0xc7, 0xb1, 0x2d, 0x8f, 0x1d, 0x2f, 0xa3, 0x38, 0x8a, 0xc2, 0x24,
+	0x5d, 0x37, 0x88, 0x24, 0xc0, 0xd9, 0x64, 0xb3, 0xc9, 0x16, 0x81, 0xe2, 0x24, 0x6a, 0xb6, 0xd9,
+	0xc4, 0x90, 0xbd, 0x69, 0x9b, 0x0b, 0x97, 0xa2, 0xc6, 0x32, 0x1b, 0x8a, 0xc3, 0x9d, 0x19, 0xca,
+	0x11, 0xb6, 0x01, 0x16, 0x8b, 0x16, 0xbd, 0x16, 0xe9, 0x3f, 0xd0, 0x43, 0x0b, 0x14, 0x39, 0xb4,
+	0x40, 0x0f, 0x45, 0xb1, 0xe9, 0x21, 0x97, 0x22, 0x39, 0x15, 0x41, 0x0b, 0x14, 0x7b, 0xeb, 0x46,
+	0xe9, 0xa1, 0xdd, 0xd3, 0xf6, 0x54, 0x14, 0xbd, 0x2c, 0x66, 0x48, 0xca, 0x24, 0x25, 0x8a, 0x92,
+	0xbc, 0x37, 0x91, 0xf3, 0x7e, 0x7d, 0xef, 0x7b, 0xf3, 0x38, 0xf3, 0x6c, 0x70, 0xbe, 0x85, 0x68,
+	0xd1, 0xc0, 0x25, 0xaa, 0xef, 0xa0, 0xa6, 0x56, 0xb2, 0xb4, 0x26, 0xa2, 0xb6, 0xa6, 0xa3, 0x92,
+	0xed, 0xd4, 0x4c, 0x43, 0x57, 0x75, 0x87, 0x32, 0xdc, 0xd4, 0x6c, 0x43, 0xd5, 0x1e, 0x68, 0xa4,
+	0x68, 0x13, 0xcc, 0x30, 0x7c, 0xc3, 0x55, 0x2a, 0xba, 0x4a, 0xc5, 0xae, 0x52, 0xb6, 0xd0, 0x30,
+	0xd8, 0x8e, 0x53, 0x2b, 0xea, 0xb8, 0x59, 0x6a, 0xe0, 0x06, 0x2e, 0x09, 0xf9, 0x9a, 0xb3, 0x2d,
+	0x9e, 0xc4, 0x83, 0xf8, 0xe5, 0xda, 0xc9, 0xae, 0x34, 0x30, 0x6e, 0x98, 0xa8, 0xa4, 0xd9, 0x46,
+	0x49, 0xb3, 0x2c, 0xcc, 0x34, 0x66, 0x60, 0x8b, 0x7a, 0xab, 0x39, 0x6f, 0xb5, 0x6b, 0x63, 0x97,
+	0x68, 0xb6, 0x8d, 0x88, 0xbf, 0x7e, 0x2a, 0x2e, 0x74, 0xd6, 0xb6, 0x91, 0x2f, 0x74, 0x2c, 0x2c,
+	0x84, 0xed, 0xa0, 0x87, 0x95, 0xf0, 0x62, 0x4b, 0x33, 0x8d, 0xba, 0xc6, 0x90, 0xb7, 0xaa, 0x44,
+	0x56, 0x11, 0x45, 0x56, 0x2b, 0x62, 0x21, 0x1f, 0x91, 0x31, 0xd0, 0xae, 0x1a, 0x96, 0x38, 0xd1,
+	0x2b, 0x41, 0x83, 0x11, 0x2a, 0xbf, 0x96, 0xc0, 0xc9, 0x4d, 0xc4, 0x6e, 0x6a, 0x94, 0x95, 0xd7,
+	0x6f, 0xd3, 0x9b, 0x98, 0xdc, 0xb2, 0x18, 0x22, 0x16, 0x62, 0xf7, 0x6e, 0x6d, 0xd0, 0x2a, 0xfa,
+	0xc8, 0x41, 0x94, 0xc1, 0x15, 0x30, 0xdd, 0x05, 0x28, 0x4b, 0x79, 0x69, 0x75, 0xba, 0xba, 0xf7,
+	0x02, 0xd6, 0xc0, 0xf4, 0xb6, 0x46, 0x99, 0xaa, 0xe9, 0x26, 0x95, 0x53, 0xf9, 0xf4, 0xea, 0xcc,
+	0x9a, 0x52, 0x0c, 0x93, 0x24, 0x1c, 0x17, 0xef, 0xd6, 0x7e, 0x84, 0x74, 0x56, 0x45, 0xdb, 0x5b,
+	0x6d, 0x1b, 0x5d, 0x3b, 0xf9, 0xe4, 0xd1, 0x94, 0xaf, 0xf7, 0xd9, 0xbf, 0x9f, 0xa5, 0x27, 0x1f,
+	0x4b, 0xe9, 0xcc, 0x27, 0x52, 0xe7, 0x8b, 0x3f, 0xa7, 0x27, 0x1f, 0xff, 0x49, 0x4a, 0x65, 0xa4,
+	0xaa, 0x58, 0x2f, 0xeb, 0x26, 0x55, 0x4e, 0x03, 0x65, 0x50, 0x98, 0xd4, 0xc6, 0x16, 0x45, 0x4a,
+	0x19, 0x9c, 0xac, 0xec, 0x0f, 0x8c, 0x42, 0x80, 0x52, 0x49, 0x74, 0x04, 0x6f, 0x07, 0x21, 0x4b,
+	0x43, 0x43, 0x9e, 0x09, 0x40, 0x0e, 0x80, 0xfb, 0x83, 0x04, 0x4e, 0x6c, 0x22, 0x56, 0xd6, 0x99,
+	0xd1, 0x42, 0x9b, 0x88, 0xb4, 0x0c, 0x1d, 0x6d, 0x60, 0xd3, 0xd0, 0x0d, 0x34, 0x24, 0x05, 0x0e,
+	0xc8, 0x50, 0x57, 0x4f, 0xb5, 0x3d, 0xc5, 0x11, 0x98, 0xf8, 0xd6, 0x93, 0x47, 0x73, 0x21, 0xf5,
+	0x36, 0xe7, 0xe3, 0xe0, 0x63, 0x29, 0x95, 0xc9, 0x07, 0xe9, 0x98, 0xa7, 0xe1, 0xd8, 0x14, 0x05,
+	0xe4, 0xe3, 0xe3, 0xf6, 0x38, 0xb9, 0x0a, 0x4e, 0x54, 0xf6, 0x83, 0x4d, 0xf9, 0x89, 0x04, 0xf2,
+	0x95, 0x04, 0x2f, 0xf0, 0xc3, 0x7d, 0x25, 0x60, 0xa1, 0x27, 0x01, 0xbd, 0x58, 0x43, 0x24, 0xdd,
+	0x41, 0x6c, 0x17, 0x93, 0x07, 0x23, 0x93, 0x64, 0xb9, 0x7a, 0xe3, 0x92, 0x14, 0x52, 0x8f, 0x23,
+	0xc9, 0x0a, 0xc7, 0x16, 0x22, 0xa9, 0x27, 0xee, 0x3e, 0x24, 0x8d, 0x83, 0x2d, 0x4c, 0x52, 0x8c,
+	0x17, 0x4e, 0xd2, 0x3e, 0x12, 0xb0, 0xd0, 0x93, 0x80, 0x5e, 0xac, 0xbf, 0x95, 0xc0, 0xf1, 0x2e,
+	0xd8, 0xb2, 0x89, 0x08, 0x1b, 0x8d, 0x22, 0x0c, 0xe6, 0x34, 0xae, 0x35, 0x4e, 0x7c, 0xa7, 0x9f,
+	0x3c, 0x3a, 0x1c, 0x50, 0x8e, 0xa1, 0x67, 0x56, 0x0b, 0x46, 0xa5, 0xe4, 0x41, 0x2e, 0x2e, 0x5e,
+	0x8f, 0x9a, 0xef, 0x80, 0xe3, 0x95, 0xf1, 0x11, 0x29, 0x3f, 0x06, 0xb9, 0xca, 0x40, 0x07, 0xf0,
+	0xfe, 0x3e, 0x30, 0xcf, 0x47, 0x30, 0x47, 0xe1, 0x3d, 0x91, 0xc0, 0x89, 0x0f, 0x6c, 0xfe, 0x59,
+	0x2b, 0x9b, 0x26, 0xde, 0x2d, 0xd7, 0x5b, 0x88, 0x30, 0x83, 0xa2, 0xbb, 0xd6, 0x86, 0xf8, 0xc2,
+	0x57, 0xd1, 0x47, 0x09, 0x8c, 0x18, 0xe0, 0xa8, 0xc6, 0x55, 0x55, 0xcd, 0xd7, 0x55, 0xb1, 0xa5,
+	0xba, 0xe7, 0x03, 0x39, 0x95, 0x97, 0x56, 0xe7, 0xd6, 0x8a, 0xc5, 0x98, 0x13, 0x41, 0xd1, 0x75,
+	0xd2, 0xf5, 0xba, 0xbe, 0x83, 0x0d, 0x1d, 0x55, 0x97, 0xb5, 0xbe, 0xb1, 0x28, 0x97, 0x41, 0x7e,
+	0x70, 0xac, 0xd4, 0x86, 0xcb, 0x60, 0x92, 0x20, 0xea, 0x98, 0x4c, 0x44, 0x3a, 0x55, 0xf5, 0x9e,
+	0x94, 0x9f, 0xa6, 0x40, 0xe6, 0x9e, 0xf7, 0x05, 0xaf, 0x3a, 0xa6, 0x60, 0x27, 0xb1, 0x1d, 0x2c,
+	0x79, 0xdf, 0x7c, 0x4c, 0x54, 0xd4, 0xd2, 0x4c, 0x47, 0x1c, 0x40, 0xbc, 0xec, 0x5f, 0x8b, 0x05,
+	0x15, 0x75, 0xe3, 0xbf, 0xc0, 0xe4, 0x46, 0xd7, 0xc8, 0x0d, 0x8b, 0x91, 0x76, 0x75, 0xb1, 0xd5,
+	0xbb, 0x02, 0x97, 0xc0, 0x41, 0xfe, 0x80, 0xe4, 0xb4, 0x08, 0xc8, 0x7d, 0xc8, 0xde, 0x04, 0x72,
+	0x9c, 0x19, 0x98, 0x01, 0xe9, 0x07, 0xa8, 0xed, 0x01, 0xe0, 0x3f, 0xf7, 0x6c, 0xa4, 0x02, 0x36,
+	0x2e, 0xa7, 0x2e, 0x49, 0x4a, 0x05, 0x1c, 0x89, 0xc4, 0xe7, 0x55, 0x99, 0x0c, 0x0e, 0x51, 0x47,
+	0xd7, 0x11, 0xa5, 0x5e, 0xe6, 0xfc, 0x47, 0x6e, 0x0c, 0x11, 0x82, 0x89, 0x6f, 0x4c, 0x3c, 0x28,
+	0x2b, 0x20, 0xeb, 0xb5, 0x11, 0xc3, 0x6a, 0xdc, 0xb2, 0x5a, 0xc8, 0x62, 0x98, 0xb4, 0xbd, 0x9a,
+	0x57, 0x7e, 0x2f, 0x81, 0x63, 0x7d, 0x97, 0x3d, 0x6f, 0x6f, 0x82, 0xf9, 0x86, 0x89, 0x6b, 0x9a,
+	0xa9, 0x7a, 0x1d, 0xc2, 0xf5, 0x3a, 0x5b, 0x9d, 0x73, 0x5f, 0x7b, 0xba, 0xc2, 0x39, 0x35, 0x98,
+	0xa8, 0x79, 0xbe, 0xec, 0x3e, 0xc0, 0x55, 0x90, 0xe1, 0x3f, 0xd4, 0x26, 0xa2, 0x3b, 0x6a, 0x83,
+	0x60, 0xc7, 0xa6, 0x22, 0x5d, 0xb3, 0xd5, 0x39, 0xfe, 0xfe, 0x7d, 0x44, 0x77, 0x2a, 0xe2, 0x2d,
+	0x3c, 0x0b, 0x16, 0xea, 0xba, 0xaa, 0x9b, 0x0e, 0x65, 0x88, 0xf8, 0xa2, 0x07, 0x84, 0xe8, 0x7c,
+	0x5d, 0x5f, 0x77, 0xdf, 0xbb, 0xb2, 0xca, 0xaf, 0xd2, 0x40, 0xd9, 0x5a, 0xdf, 0xb8, 0x8d, 0xb5,
+	0x7a, 0x4d, 0x33, 0x35, 0x4b, 0x47, 0xa4, 0x1b, 0xf9, 0x4d, 0xc3, 0x64, 0x88, 0xf0, 0x3d, 0x05,
+	0xcb, 0x60, 0x8e, 0x99, 0x54, 0x45, 0x96, 0x4e, 0xda, 0xe2, 0x30, 0x27, 0x1f, 0xca, 0x4b, 0xab,
+	0x33, 0x6b, 0xd9, 0xa2, 0x7b, 0x24, 0x2d, 0xfa, 0x47, 0xd2, 0xe2, 0x35, 0x8c, 0xcd, 0x7b, 0x3c,
+	0xf5, 0xd5, 0x59, 0x66, 0xd2, 0x1b, 0x5d, 0x05, 0xb8, 0x05, 0xe4, 0x6e, 0xbd, 0xa8, 0xe1, 0x0f,
+	0x9b, 0x3c, 0x95, 0x68, 0x6c, 0xb9, 0xab, 0x1b, 0xfc, 0xda, 0xb6, 0x79, 0x60, 0x11, 0x5b, 0xd3,
+	0xc9, 0x81, 0xd1, 0x90, 0x89, 0xbb, 0xe0, 0x88, 0x4d, 0x8c, 0x96, 0xc6, 0xd0, 0xde, 0x7e, 0x6e,
+	0x22, 0x8b, 0xc9, 0x20, 0xd1, 0xd2, 0x92, 0xa7, 0x58, 0x0e, 0xea, 0xc1, 0xef, 0x81, 0x45, 0xef,
+	0xae, 0xe0, 0xdb, 0x13, 0xe6, 0x66, 0x12, 0xcd, 0x41, 0x3b, 0xd4, 0x1b, 0xb8, 0xd6, 0x7b, 0x07,
+	0xa6, 0xa4, 0xcc, 0x21, 0xe5, 0x97, 0x29, 0xb0, 0x12, 0x47, 0x93, 0x20, 0xe8, 0x4c, 0x0f, 0x41,
+	0x6e, 0x6d, 0x45, 0x48, 0xb8, 0x34, 0x80, 0x04, 0xb7, 0xda, 0xe2, 0x12, 0x7d, 0xa6, 0x27, 0xd1,
+	0x6e, 0xf1, 0x45, 0x92, 0x79, 0x3e, 0x2e, 0x99, 0x6e, 0xfd, 0xf5, 0x4f, 0x58, 0xa9, 0x7f, 0xc2,
+	0x0e, 0x0a, 0x95, 0x3e, 0x49, 0x81, 0x10, 0x1c, 0xe0, 0x61, 0xca, 0x93, 0xf9, 0xf4, 0xea, 0x74,
+	0x55, 0xfc, 0x56, 0xfe, 0x3b, 0x09, 0x4e, 0x7d, 0x77, 0x6b, 0x2b, 0xb1, 0x94, 0xdf, 0x06, 0xd3,
+	0x3b, 0x8c, 0xd9, 0x2a, 0xb6, 0xcc, 0xb6, 0x3c, 0x97, 0xc8, 0xc9, 0x14, 0x17, 0xbe, 0x6b, 0x99,
+	0x6d, 0x78, 0x0e, 0xa4, 0x77, 0xb5, 0x6d, 0x79, 0x3e, 0x51, 0x85, 0x8b, 0xf1, 0xc2, 0xac, 0x61,
+	0xa6, 0xf2, 0x65, 0xa4, 0x0b, 0x42, 0x32, 0xc9, 0x85, 0x59, 0xc3, 0x6c, 0xa3, 0xab, 0xc0, 0x4d,
+	0xf0, 0x6b, 0x66, 0xc0, 0xc4, 0x42, 0xb2, 0x09, 0xcd, 0x36, 0x02, 0x26, 0xd6, 0xc1, 0x7c, 0xbd,
+	0x8e, 0x69, 0xd0, 0x06, 0x4c, 0xb4, 0x31, 0xc7, 0x55, 0x02, 0x46, 0xde, 0x03, 0x8b, 0xba, 0x69,
+	0x20, 0x8b, 0xa9, 0xd4, 0xa8, 0x23, 0xb5, 0x8e, 0xb6, 0x91, 0x45, 0x91, 0xbc, 0x98, 0x68, 0x68,
+	0xc1, 0x55, 0xdb, 0x34, 0xea, 0xe8, 0xba, 0xab, 0x34, 0xb0, 0x0b, 0x2c, 0x7d, 0x83, 0x5d, 0xe0,
+	0xc8, 0xa8, 0x5d, 0xe0, 0x2a, 0x98, 0x35, 0x6c, 0x95, 0x20, 0xdb, 0x71, 0xef, 0xdc, 0xf2, 0x72,
+	0xa2, 0x85, 0xc3, 0x86, 0x5d, 0xed, 0xca, 0x73, 0x64, 0x4d, 0x8d, 0x1f, 0x31, 0xb0, 0x43, 0x55,
+	0x87, 0x22, 0xa2, 0xd6, 0x91, 0x9f, 0xf3, 0x37, 0x92, 0x91, 0x75, 0x75, 0x3f, 0xa0, 0x88, 0x5c,
+	0xf7, 0x35, 0xe3, 0x9b, 0x93, 0xfc, 0xcd, 0x36, 0xa7, 0xa3, 0x63, 0x37, 0xa7, 0x39, 0xe5, 0x77,
+	0x07, 0xc0, 0xf1, 0xd8, 0x9d, 0x27, 0xf6, 0xdc, 0xb1, 0xe0, 0x9e, 0x73, 0x1b, 0xd3, 0xde, 0xbe,
+	0xca, 0xb8, 0xfb, 0xca, 0x6d, 0x3f, 0x62, 0xef, 0x9c, 0xe9, 0xd9, 0x3b, 0x5e, 0xaf, 0x09, 0xef,
+	0x8f, 0x33, 0x3d, 0xfb, 0xc3, 0x6d, 0x32, 0x91, 0x3d, 0xf0, 0x66, 0xef, 0x1e, 0x70, 0x3b, 0x4b,
+	0xb4, 0xce, 0x8b, 0xfd, 0xeb, 0x7c, 0x52, 0x08, 0xf7, 0xa9, 0xe5, 0x41, 0xcd, 0xf4, 0xd0, 0x88,
+	0xcd, 0x74, 0xaa, 0x5f, 0x33, 0x3d, 0x15, 0xad, 0xc9, 0x69, 0x21, 0x15, 0xae, 0xbb, 0x4b, 0x03,
+	0xea, 0x0e, 0xb8, 0x51, 0xc4, 0xd4, 0x56, 0x6c, 0xaf, 0x9e, 0x19, 0xbd, 0x57, 0x1f, 0x4e, 0xec,
+	0xd5, 0xb3, 0x81, 0x5e, 0xfd, 0x24, 0x05, 0x8e, 0x95, 0x6d, 0xdb, 0x34, 0x74, 0x81, 0x21, 0x7a,
+	0x94, 0x4a, 0x38, 0xa4, 0xee, 0x82, 0xa3, 0xa2, 0x9a, 0x4c, 0xac, 0xd5, 0x55, 0xbf, 0xe0, 0xd4,
+	0x6d, 0xd1, 0xe2, 0x45, 0x19, 0xcd, 0xac, 0xbd, 0x1b, 0x7b, 0x52, 0x1d, 0xe2, 0x13, 0x51, 0x5d,
+	0xe6, 0xe6, 0xb9, 0xd0, 0x35, 0x4f, 0xc8, 0x5d, 0x83, 0x0c, 0xc8, 0x4c, 0x8f, 0xf1, 0x9b, 0x16,
+	0x7e, 0xaf, 0xc4, 0xfa, 0x4d, 0x3e, 0x64, 0x55, 0x8f, 0x30, 0xbd, 0x8f, 0x57, 0xe5, 0x75, 0x0a,
+	0xac, 0xf4, 0x4f, 0x96, 0x77, 0xb0, 0x3c, 0x0d, 0x66, 0xcd, 0x80, 0x69, 0xff, 0x58, 0x19, 0x7e,
+	0x09, 0x4f, 0x82, 0xc3, 0x98, 0x18, 0x0d, 0xc3, 0x52, 0x6d, 0x8c, 0x4d, 0xff, 0x70, 0x39, 0xe3,
+	0xbe, 0xdb, 0xe0, 0xaf, 0x38, 0xb7, 0x5e, 0x01, 0x52, 0xb5, 0x6e, 0x50, 0x1d, 0xb7, 0x10, 0x41,
+	0x75, 0x6f, 0xf3, 0x41, 0x7f, 0xe9, 0x7a, 0x77, 0x05, 0x22, 0x00, 0xbb, 0x4c, 0xec, 0xb9, 0x3f,
+	0x20, 0x52, 0x71, 0x71, 0x74, 0x0a, 0x44, 0x16, 0x16, 0xfc, 0xe4, 0xef, 0x85, 0x5e, 0x03, 0x0b,
+	0x7e, 0xde, 0xf7, 0xbc, 0x1c, 0x14, 0x5e, 0x2e, 0x8c, 0x9c, 0x70, 0xe1, 0x24, 0xe3, 0xa5, 0xba,
+	0x6b, 0x6e, 0xed, 0xf9, 0x51, 0x00, 0xef, 0xf8, 0xca, 0xeb, 0x62, 0xc6, 0x5b, 0xde, 0xb8, 0x05,
+	0x5f, 0x48, 0x60, 0x76, 0x5d, 0xa3, 0xba, 0xc6, 0xb7, 0xbd, 0x89, 0x18, 0x82, 0x85, 0x58, 0x8f,
+	0x21, 0x39, 0xaf, 0x94, 0xb3, 0xc5, 0x61, 0xc5, 0xbd, 0xab, 0xf5, 0x0f, 0x3a, 0xcf, 0xe5, 0x93,
+	0xdb, 0x17, 0x1e, 0xea, 0x85, 0x9a, 0x46, 0xd1, 0xb9, 0x7c, 0x0b, 0xd1, 0x82, 0x81, 0x0b, 0x8e,
+	0xd6, 0x2c, 0x68, 0xf5, 0xa6, 0x61, 0x15, 0x76, 0x89, 0xc1, 0xd0, 0xa7, 0x7f, 0xfb, 0xe7, 0x2f,
+	0x52, 0x05, 0x65, 0xd5, 0x1b, 0x4a, 0xef, 0x8d, 0x7a, 0x69, 0xe9, 0x63, 0xfe, 0xfb, 0x51, 0x49,
+	0x77, 0xad, 0xab, 0x75, 0x61, 0xfe, 0xb2, 0x74, 0x16, 0xfe, 0x4f, 0x02, 0x2b, 0x83, 0xee, 0x92,
+	0xf0, 0x52, 0x6c, 0xa8, 0x09, 0xd7, 0xe5, 0xec, 0x3b, 0x63, 0x6a, 0x52, 0x5b, 0xa9, 0x77, 0x9e,
+	0xcb, 0xc7, 0x3c, 0x90, 0x86, 0xb5, 0x4d, 0x34, 0xca, 0x88, 0xa3, 0x33, 0x87, 0xa0, 0x00, 0xd2,
+	0xab, 0xca, 0xe5, 0x3e, 0x48, 0x69, 0x9b, 0x32, 0xd4, 0x2c, 0x39, 0xc2, 0x85, 0x1a, 0x7b, 0x23,
+	0xe7, 0xd8, 0xff, 0x2f, 0x81, 0x6c, 0xfc, 0xac, 0x16, 0x5e, 0x8e, 0x8d, 0x3f, 0x71, 0x0e, 0x9d,
+	0xbd, 0x32, 0x96, 0xae, 0xc7, 0xf6, 0x3e, 0xd0, 0x7f, 0xdc, 0xfd, 0xfd, 0xa8, 0xd4, 0x9d, 0xfb,
+	0xaa, 0xdb, 0x98, 0xa8, 0x86, 0xe7, 0x49, 0x6d, 0x19, 0x36, 0xf5, 0xd1, 0x57, 0xc6, 0x41, 0x5f,
+	0xd9, 0x07, 0xfa, 0xca, 0x10, 0xe8, 0x5f, 0xfc, 0x31, 0x25, 0x75, 0x9e, 0xcb, 0xd9, 0xfe, 0x19,
+	0x20, 0x48, 0xab, 0x8b, 0x04, 0xbc, 0x0b, 0xf7, 0x91, 0x00, 0xf8, 0x1f, 0x09, 0xc8, 0x71, 0x13,
+	0xe1, 0x01, 0x35, 0x9f, 0x30, 0xfc, 0x1e, 0x50, 0xf3, 0x89, 0xe3, 0xe7, 0x0f, 0x03, 0xac, 0xdb,
+	0x04, 0x3f, 0x6c, 0x17, 0x28, 0xd2, 0x1d, 0x62, 0xb0, 0x76, 0x80, 0xf5, 0x2b, 0xca, 0xc5, 0x04,
+	0xd0, 0x9a, 0x70, 0xa2, 0x46, 0x67, 0xcc, 0x9c, 0x71, 0x8e, 0xb9, 0x32, 0x3a, 0xe6, 0xca, 0xd8,
+	0x98, 0x2b, 0x89, 0x98, 0x23, 0x5c, 0x47, 0x70, 0x77, 0xb9, 0xbe, 0x04, 0xc7, 0x84, 0x0d, 0xbf,
+	0x0c, 0xf2, 0x1c, 0x19, 0xf7, 0x0e, 0xc3, 0x73, 0xff, 0x19, 0xf3, 0x30, 0x3c, 0xc7, 0x4d, 0xb0,
+	0x7f, 0xd8, 0x79, 0x2e, 0x2f, 0x79, 0x78, 0xbd, 0x99, 0xcf, 0x38, 0x04, 0x47, 0xe7, 0xd3, 0x9c,
+	0xe0, 0x2f, 0x83, 0x04, 0x0f, 0x0f, 0xb6, 0x32, 0x36, 0xd8, 0x4a, 0x22, 0x58, 0x8f, 0xe0, 0xc5,
+	0x08, 0xe0, 0xd1, 0x99, 0x8d, 0xe2, 0x85, 0x1d, 0x09, 0x2c, 0xf7, 0x9f, 0x48, 0xc3, 0x8b, 0xc9,
+	0xec, 0xf4, 0x1b, 0x50, 0x67, 0xdf, 0x1e, 0x59, 0xcf, 0x83, 0xf9, 0xfd, 0x00, 0xa7, 0x0d, 0x64,
+	0x21, 0xa2, 0x99, 0x01, 0x4e, 0xdf, 0x51, 0xde, 0x1a, 0x0e, 0x63, 0x78, 0xba, 0xcd, 0x19, 0xe5,
+	0x20, 0x2b, 0xa3, 0x82, 0xac, 0x8c, 0x09, 0xb2, 0x92, 0x00, 0x32, 0xc2, 0xa5, 0x0f, 0xb4, 0xcb,
+	0xe5, 0x45, 0x38, 0x16, 0x4e, 0xf8, 0x54, 0x02, 0xb3, 0x9b, 0x4e, 0xa3, 0x81, 0x28, 0x13, 0xb7,
+	0x4a, 0x0a, 0xbf, 0x1d, 0x4f, 0x44, 0x50, 0x8e, 0x9f, 0x32, 0xce, 0x0e, 0x2b, 0x4a, 0x6d, 0x65,
+	0x33, 0x09, 0xc1, 0x9a, 0x52, 0x48, 0x40, 0x40, 0x5d, 0xa3, 0x05, 0x31, 0x48, 0x16, 0x14, 0x7d,
+	0x26, 0x81, 0xd9, 0xd0, 0x24, 0x79, 0x40, 0xf4, 0xd1, 0x89, 0xf8, 0x80, 0x83, 0x60, 0xdf, 0xe1,
+	0xb4, 0x72, 0x27, 0x09, 0x41, 0xff, 0xe3, 0x9f, 0x77, 0x28, 0xf2, 0xff, 0x72, 0xaf, 0x12, 0x6e,
+	0x94, 0x07, 0xff, 0x77, 0x09, 0x2c, 0xf6, 0x19, 0x4f, 0xc3, 0xf3, 0xb1, 0x71, 0xc5, 0xcf, 0xba,
+	0xb3, 0x6f, 0x8d, 0xa6, 0xe4, 0x41, 0xda, 0x4a, 0x82, 0x74, 0x5e, 0x29, 0xc6, 0x43, 0xb2, 0xba,
+	0x96, 0x55, 0xc3, 0x37, 0xcd, 0x81, 0xfd, 0x43, 0x02, 0x4b, 0xfd, 0xee, 0x47, 0x30, 0x3e, 0xc8,
+	0x01, 0x77, 0xcf, 0xec, 0x85, 0x11, 0xb5, 0x3c, 0x6c, 0xf7, 0x93, 0xb0, 0x0d, 0xd1, 0x1a, 0xf6,
+	0xec, 0x87, 0x10, 0x66, 0xcf, 0x3d, 0x7b, 0x2a, 0xa5, 0xff, 0xfa, 0x54, 0xca, 0xc5, 0x45, 0xe6,
+	0xfe, 0x01, 0xec, 0xd3, 0xbf, 0xc8, 0xa9, 0x8c, 0x74, 0xed, 0x67, 0xd2, 0xcb, 0x57, 0xb9, 0x89,
+	0xcf, 0x5f, 0xe5, 0x26, 0xbe, 0x7a, 0x95, 0x93, 0x3e, 0xe9, 0xe4, 0xa4, 0xdf, 0x74, 0x72, 0xd2,
+	0x8b, 0x4e, 0x4e, 0x7a, 0xd9, 0xc9, 0x49, 0x5f, 0x74, 0x72, 0xd2, 0xbf, 0x3a, 0xb9, 0x89, 0xaf,
+	0x3a, 0x39, 0xe9, 0xe7, 0xaf, 0x73, 0x13, 0xcf, 0x5e, 0xe7, 0xa4, 0x97, 0xaf, 0x73, 0x13, 0x9f,
+	0xbf, 0xce, 0x4d, 0xdc, 0x7f, 0xbf, 0x81, 0xed, 0x07, 0x8d, 0x62, 0x0b, 0xf3, 0x8b, 0x27, 0xd1,
+	0x8a, 0x0e, 0x2d, 0x89, 0x1f, 0xdb, 0x98, 0x34, 0xf9, 0x17, 0xbb, 0x65, 0xd4, 0x11, 0x29, 0xf8,
+	0xcb, 0x25, 0xbb, 0xd6, 0xc0, 0x25, 0xf4, 0x90, 0x79, 0xff, 0xc9, 0x11, 0xfd, 0xb7, 0x93, 0xda,
+	0xa4, 0x18, 0x23, 0x9d, 0xff, 0x3a, 0x00, 0x00, 0xff, 0xff, 0x94, 0x4b, 0xe8, 0x68, 0x53, 0x23,
+	0x00, 0x00,
 }
 
 func (this *SetFastACLsForInternetVIPsRequest) Equal(that interface{}) bool {
@@ -1984,9 +2792,6 @@ func (this *NetworkingInventoryRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
 	return true
 }
 func (this *NetworkingInventoryResponse) Equal(that interface{}) bool {
@@ -2018,6 +2823,274 @@ func (this *NetworkingInventoryResponse) Equal(that interface{}) bool {
 		return false
 	}
 	if this.DcClusterGroups != that1.DcClusterGroups {
+		return false
+	}
+	return true
+}
+func (this *TCPLoadbalancerInventoryFilterType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TCPLoadbalancerInventoryFilterType)
+	if !ok {
+		that2, ok := that.(TCPLoadbalancerInventoryFilterType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TlsEncryption.Equal(that1.TlsEncryption) {
+		return false
+	}
+	if !this.NamespaceServicePolicy.Equal(that1.NamespaceServicePolicy) {
+		return false
+	}
+	if !this.ServicePolicy.Equal(that1.ServicePolicy) {
+		return false
+	}
+	if !this.PrivateAdvertisement.Equal(that1.PrivateAdvertisement) {
+		return false
+	}
+	if !this.PublicAdvertisment.Equal(that1.PublicAdvertisment) {
+		return false
+	}
+	return true
+}
+func (this *TCPLoadbalancerInventoryType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TCPLoadbalancerInventoryType)
+	if !ok {
+		that2, ok := that.(TCPLoadbalancerInventoryType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.TlsEncryption != that1.TlsEncryption {
+		return false
+	}
+	if this.NamespaceServicePolicy != that1.NamespaceServicePolicy {
+		return false
+	}
+	if this.ServicePolicy != that1.ServicePolicy {
+		return false
+	}
+	if this.PrivateAdvertisement != that1.PrivateAdvertisement {
+		return false
+	}
+	if this.PublicAdvertisment != that1.PublicAdvertisment {
+		return false
+	}
+	if len(this.Name) != len(that1.Name) {
+		return false
+	}
+	for i := range this.Name {
+		if this.Name[i] != that1.Name[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *HTTPLoadbalancerInventoryFilterType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPLoadbalancerInventoryFilterType)
+	if !ok {
+		that2, ok := that.(HTTPLoadbalancerInventoryFilterType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpOnly.Equal(that1.HttpOnly) {
+		return false
+	}
+	if !this.Waf.Equal(that1.Waf) {
+		return false
+	}
+	if !this.BotProtection.Equal(that1.BotProtection) {
+		return false
+	}
+	if !this.ApiProtection.Equal(that1.ApiProtection) {
+		return false
+	}
+	if !this.DdosProtection.Equal(that1.DdosProtection) {
+		return false
+	}
+	if !this.ClientSideDefense.Equal(that1.ClientSideDefense) {
+		return false
+	}
+	if !this.NamespaceServicePolicy.Equal(that1.NamespaceServicePolicy) {
+		return false
+	}
+	if !this.ServicePolicy.Equal(that1.ServicePolicy) {
+		return false
+	}
+	if !this.IpReputation.Equal(that1.IpReputation) {
+		return false
+	}
+	if !this.MaliciousUserDetection.Equal(that1.MaliciousUserDetection) {
+		return false
+	}
+	if !this.PrivateAdvertisement.Equal(that1.PrivateAdvertisement) {
+		return false
+	}
+	if !this.PublicAdvertisment.Equal(that1.PublicAdvertisment) {
+		return false
+	}
+	return true
+}
+func (this *HTTPLoadbalancerInventoryType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPLoadbalancerInventoryType)
+	if !ok {
+		that2, ok := that.(HTTPLoadbalancerInventoryType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.HttpOnly != that1.HttpOnly {
+		return false
+	}
+	if this.Waf != that1.Waf {
+		return false
+	}
+	if this.BotProtection != that1.BotProtection {
+		return false
+	}
+	if this.ApiProtection != that1.ApiProtection {
+		return false
+	}
+	if this.DdosProtection != that1.DdosProtection {
+		return false
+	}
+	if this.ClientSideDefense != that1.ClientSideDefense {
+		return false
+	}
+	if this.NamespaceServicePolicy != that1.NamespaceServicePolicy {
+		return false
+	}
+	if this.ServicePolicy != that1.ServicePolicy {
+		return false
+	}
+	if this.IpReputation != that1.IpReputation {
+		return false
+	}
+	if this.MaliciousUserDetection != that1.MaliciousUserDetection {
+		return false
+	}
+	if this.PrivateAdvertisement != that1.PrivateAdvertisement {
+		return false
+	}
+	if this.PublicAdvertisment != that1.PublicAdvertisment {
+		return false
+	}
+	if len(this.Name) != len(that1.Name) {
+		return false
+	}
+	for i := range this.Name {
+		if this.Name[i] != that1.Name[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *ApplicationInventoryRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApplicationInventoryRequest)
+	if !ok {
+		that2, ok := that.(ApplicationInventoryRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if !this.HttpLoadBalancerFilter.Equal(that1.HttpLoadBalancerFilter) {
+		return false
+	}
+	if !this.TcpLoadBalancerFilter.Equal(that1.TcpLoadBalancerFilter) {
+		return false
+	}
+	return true
+}
+func (this *ApplicationInventoryResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApplicationInventoryResponse)
+	if !ok {
+		that2, ok := that.(ApplicationInventoryResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Loadbalancers != that1.Loadbalancers {
+		return false
+	}
+	if this.OriginPools != that1.OriginPools {
+		return false
+	}
+	if this.ServicesDiscovered != that1.ServicesDiscovered {
+		return false
+	}
+	if !this.HttpLoadbalancers.Equal(that1.HttpLoadbalancers) {
+		return false
+	}
+	if !this.TcpLoadbalancers.Equal(that1.TcpLoadbalancers) {
 		return false
 	}
 	return true
@@ -2258,9 +3331,8 @@ func (this *NetworkingInventoryRequest) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 4)
 	s = append(s, "&namespace.NetworkingInventoryRequest{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2274,6 +3346,146 @@ func (this *NetworkingInventoryResponse) GoString() string {
 	s = append(s, "Sites: "+fmt.Sprintf("%#v", this.Sites)+",\n")
 	s = append(s, "SiteMeshGroups: "+fmt.Sprintf("%#v", this.SiteMeshGroups)+",\n")
 	s = append(s, "DcClusterGroups: "+fmt.Sprintf("%#v", this.DcClusterGroups)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TCPLoadbalancerInventoryFilterType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&namespace.TCPLoadbalancerInventoryFilterType{")
+	if this.TlsEncryption != nil {
+		s = append(s, "TlsEncryption: "+fmt.Sprintf("%#v", this.TlsEncryption)+",\n")
+	}
+	if this.NamespaceServicePolicy != nil {
+		s = append(s, "NamespaceServicePolicy: "+fmt.Sprintf("%#v", this.NamespaceServicePolicy)+",\n")
+	}
+	if this.ServicePolicy != nil {
+		s = append(s, "ServicePolicy: "+fmt.Sprintf("%#v", this.ServicePolicy)+",\n")
+	}
+	if this.PrivateAdvertisement != nil {
+		s = append(s, "PrivateAdvertisement: "+fmt.Sprintf("%#v", this.PrivateAdvertisement)+",\n")
+	}
+	if this.PublicAdvertisment != nil {
+		s = append(s, "PublicAdvertisment: "+fmt.Sprintf("%#v", this.PublicAdvertisment)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *TCPLoadbalancerInventoryType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&namespace.TCPLoadbalancerInventoryType{")
+	s = append(s, "TlsEncryption: "+fmt.Sprintf("%#v", this.TlsEncryption)+",\n")
+	s = append(s, "NamespaceServicePolicy: "+fmt.Sprintf("%#v", this.NamespaceServicePolicy)+",\n")
+	s = append(s, "ServicePolicy: "+fmt.Sprintf("%#v", this.ServicePolicy)+",\n")
+	s = append(s, "PrivateAdvertisement: "+fmt.Sprintf("%#v", this.PrivateAdvertisement)+",\n")
+	s = append(s, "PublicAdvertisment: "+fmt.Sprintf("%#v", this.PublicAdvertisment)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPLoadbalancerInventoryFilterType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&namespace.HTTPLoadbalancerInventoryFilterType{")
+	if this.HttpOnly != nil {
+		s = append(s, "HttpOnly: "+fmt.Sprintf("%#v", this.HttpOnly)+",\n")
+	}
+	if this.Waf != nil {
+		s = append(s, "Waf: "+fmt.Sprintf("%#v", this.Waf)+",\n")
+	}
+	if this.BotProtection != nil {
+		s = append(s, "BotProtection: "+fmt.Sprintf("%#v", this.BotProtection)+",\n")
+	}
+	if this.ApiProtection != nil {
+		s = append(s, "ApiProtection: "+fmt.Sprintf("%#v", this.ApiProtection)+",\n")
+	}
+	if this.DdosProtection != nil {
+		s = append(s, "DdosProtection: "+fmt.Sprintf("%#v", this.DdosProtection)+",\n")
+	}
+	if this.ClientSideDefense != nil {
+		s = append(s, "ClientSideDefense: "+fmt.Sprintf("%#v", this.ClientSideDefense)+",\n")
+	}
+	if this.NamespaceServicePolicy != nil {
+		s = append(s, "NamespaceServicePolicy: "+fmt.Sprintf("%#v", this.NamespaceServicePolicy)+",\n")
+	}
+	if this.ServicePolicy != nil {
+		s = append(s, "ServicePolicy: "+fmt.Sprintf("%#v", this.ServicePolicy)+",\n")
+	}
+	if this.IpReputation != nil {
+		s = append(s, "IpReputation: "+fmt.Sprintf("%#v", this.IpReputation)+",\n")
+	}
+	if this.MaliciousUserDetection != nil {
+		s = append(s, "MaliciousUserDetection: "+fmt.Sprintf("%#v", this.MaliciousUserDetection)+",\n")
+	}
+	if this.PrivateAdvertisement != nil {
+		s = append(s, "PrivateAdvertisement: "+fmt.Sprintf("%#v", this.PrivateAdvertisement)+",\n")
+	}
+	if this.PublicAdvertisment != nil {
+		s = append(s, "PublicAdvertisment: "+fmt.Sprintf("%#v", this.PublicAdvertisment)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPLoadbalancerInventoryType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 17)
+	s = append(s, "&namespace.HTTPLoadbalancerInventoryType{")
+	s = append(s, "HttpOnly: "+fmt.Sprintf("%#v", this.HttpOnly)+",\n")
+	s = append(s, "Waf: "+fmt.Sprintf("%#v", this.Waf)+",\n")
+	s = append(s, "BotProtection: "+fmt.Sprintf("%#v", this.BotProtection)+",\n")
+	s = append(s, "ApiProtection: "+fmt.Sprintf("%#v", this.ApiProtection)+",\n")
+	s = append(s, "DdosProtection: "+fmt.Sprintf("%#v", this.DdosProtection)+",\n")
+	s = append(s, "ClientSideDefense: "+fmt.Sprintf("%#v", this.ClientSideDefense)+",\n")
+	s = append(s, "NamespaceServicePolicy: "+fmt.Sprintf("%#v", this.NamespaceServicePolicy)+",\n")
+	s = append(s, "ServicePolicy: "+fmt.Sprintf("%#v", this.ServicePolicy)+",\n")
+	s = append(s, "IpReputation: "+fmt.Sprintf("%#v", this.IpReputation)+",\n")
+	s = append(s, "MaliciousUserDetection: "+fmt.Sprintf("%#v", this.MaliciousUserDetection)+",\n")
+	s = append(s, "PrivateAdvertisement: "+fmt.Sprintf("%#v", this.PrivateAdvertisement)+",\n")
+	s = append(s, "PublicAdvertisment: "+fmt.Sprintf("%#v", this.PublicAdvertisment)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApplicationInventoryRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&namespace.ApplicationInventoryRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.HttpLoadBalancerFilter != nil {
+		s = append(s, "HttpLoadBalancerFilter: "+fmt.Sprintf("%#v", this.HttpLoadBalancerFilter)+",\n")
+	}
+	if this.TcpLoadBalancerFilter != nil {
+		s = append(s, "TcpLoadBalancerFilter: "+fmt.Sprintf("%#v", this.TcpLoadBalancerFilter)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApplicationInventoryResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&namespace.ApplicationInventoryResponse{")
+	s = append(s, "Loadbalancers: "+fmt.Sprintf("%#v", this.Loadbalancers)+",\n")
+	s = append(s, "OriginPools: "+fmt.Sprintf("%#v", this.OriginPools)+",\n")
+	s = append(s, "ServicesDiscovered: "+fmt.Sprintf("%#v", this.ServicesDiscovered)+",\n")
+	if this.HttpLoadbalancers != nil {
+		s = append(s, "HttpLoadbalancers: "+fmt.Sprintf("%#v", this.HttpLoadbalancers)+",\n")
+	}
+	if this.TcpLoadbalancers != nil {
+		s = append(s, "TcpLoadbalancers: "+fmt.Sprintf("%#v", this.TcpLoadbalancers)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2367,9 +3579,14 @@ type NamespaceCustomAPIClient interface {
 	//
 	// x-displayName: "Networking Objects Inventory"
 	// NetworkingInventory returns inventory of configured networking related objects for the tenant.
-	// If namespace is system, inventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.
-	// Else inventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.
+	// Inventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.
 	NetworkingInventory(ctx context.Context, in *NetworkingInventoryRequest, opts ...grpc.CallOption) (*NetworkingInventoryResponse, error)
+	// Inventory of configured application related objects.
+	//
+	// x-displayName: "Application Objects Inventory"
+	// ApplicationInventory returns inventory of configured application related objects for the tenant.
+	// Inventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.
+	ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error)
 }
 
 type namespaceCustomAPIClient struct {
@@ -2497,6 +3714,15 @@ func (c *namespaceCustomAPIClient) NetworkingInventory(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *namespaceCustomAPIClient) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
+	out := new(ApplicationInventoryResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.NamespaceCustomAPI/ApplicationInventory", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NamespaceCustomAPIServer is the server API for NamespaceCustomAPI service.
 type NamespaceCustomAPIServer interface {
 	// CascadeDelete
@@ -2568,9 +3794,14 @@ type NamespaceCustomAPIServer interface {
 	//
 	// x-displayName: "Networking Objects Inventory"
 	// NetworkingInventory returns inventory of configured networking related objects for the tenant.
-	// If namespace is system, inventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.
-	// Else inventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.
+	// Inventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.
 	NetworkingInventory(context.Context, *NetworkingInventoryRequest) (*NetworkingInventoryResponse, error)
+	// Inventory of configured application related objects.
+	//
+	// x-displayName: "Application Objects Inventory"
+	// ApplicationInventory returns inventory of configured application related objects for the tenant.
+	// Inventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.
+	ApplicationInventory(context.Context, *ApplicationInventoryRequest) (*ApplicationInventoryResponse, error)
 }
 
 // UnimplementedNamespaceCustomAPIServer can be embedded to have forward compatible implementations.
@@ -2615,6 +3846,9 @@ func (*UnimplementedNamespaceCustomAPIServer) ValidateRules(ctx context.Context,
 }
 func (*UnimplementedNamespaceCustomAPIServer) NetworkingInventory(ctx context.Context, req *NetworkingInventoryRequest) (*NetworkingInventoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method NetworkingInventory not implemented")
+}
+func (*UnimplementedNamespaceCustomAPIServer) ApplicationInventory(ctx context.Context, req *ApplicationInventoryRequest) (*ApplicationInventoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ApplicationInventory not implemented")
 }
 
 func RegisterNamespaceCustomAPIServer(s *grpc.Server, srv NamespaceCustomAPIServer) {
@@ -2855,6 +4089,24 @@ func _NamespaceCustomAPI_NetworkingInventory_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NamespaceCustomAPI_ApplicationInventory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplicationInventoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NamespaceCustomAPIServer).ApplicationInventory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.NamespaceCustomAPI/ApplicationInventory",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NamespaceCustomAPIServer).ApplicationInventory(ctx, req.(*ApplicationInventoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _NamespaceCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.namespace.NamespaceCustomAPI",
 	HandlerType: (*NamespaceCustomAPIServer)(nil),
@@ -2910,6 +4162,10 @@ var _NamespaceCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NetworkingInventory",
 			Handler:    _NamespaceCustomAPI_NetworkingInventory_Handler,
+		},
+		{
+			MethodName: "ApplicationInventory",
+			Handler:    _NamespaceCustomAPI_ApplicationInventory_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -3636,13 +4892,6 @@ func (m *NetworkingInventoryRequest) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
@@ -3683,6 +4932,541 @@ func (m *NetworkingInventoryResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	if m.GlobalNetworks != 0 {
 		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.GlobalNetworks))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PublicAdvertisment != nil {
+		{
+			size, err := m.PublicAdvertisment.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.PrivateAdvertisement != nil {
+		{
+			size, err := m.PrivateAdvertisement.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.ServicePolicy != nil {
+		{
+			size, err := m.ServicePolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.NamespaceServicePolicy != nil {
+		{
+			size, err := m.NamespaceServicePolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.TlsEncryption != nil {
+		{
+			size, err := m.TlsEncryption.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *TCPLoadbalancerInventoryType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TCPLoadbalancerInventoryType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TCPLoadbalancerInventoryType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		for iNdEx := len(m.Name) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Name[iNdEx])
+			copy(dAtA[i:], m.Name[iNdEx])
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Name[iNdEx])))
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if m.PublicAdvertisment != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.PublicAdvertisment))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.PrivateAdvertisement != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.PrivateAdvertisement))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.ServicePolicy != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.ServicePolicy))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.NamespaceServicePolicy != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.NamespaceServicePolicy))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.TlsEncryption != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.TlsEncryption))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PublicAdvertisment != nil {
+		{
+			size, err := m.PublicAdvertisment.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	if m.PrivateAdvertisement != nil {
+		{
+			size, err := m.PrivateAdvertisement.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	if m.MaliciousUserDetection != nil {
+		{
+			size, err := m.MaliciousUserDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	if m.IpReputation != nil {
+		{
+			size, err := m.IpReputation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	if m.ServicePolicy != nil {
+		{
+			size, err := m.ServicePolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	if m.NamespaceServicePolicy != nil {
+		{
+			size, err := m.NamespaceServicePolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
+	if m.ClientSideDefense != nil {
+		{
+			size, err := m.ClientSideDefense.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	if m.DdosProtection != nil {
+		{
+			size, err := m.DdosProtection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.ApiProtection != nil {
+		{
+			size, err := m.ApiProtection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if m.BotProtection != nil {
+		{
+			size, err := m.BotProtection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	if m.Waf != nil {
+		{
+			size, err := m.Waf.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	if m.HttpOnly != nil {
+		{
+			size, err := m.HttpOnly.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPLoadbalancerInventoryType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPLoadbalancerInventoryType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPLoadbalancerInventoryType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		for iNdEx := len(m.Name) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Name[iNdEx])
+			copy(dAtA[i:], m.Name[iNdEx])
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Name[iNdEx])))
+			i--
+			dAtA[i] = 0x6a
+		}
+	}
+	if m.PublicAdvertisment != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.PublicAdvertisment))
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.PrivateAdvertisement != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.PrivateAdvertisement))
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.MaliciousUserDetection != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.MaliciousUserDetection))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.IpReputation != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.IpReputation))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.ServicePolicy != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.ServicePolicy))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.NamespaceServicePolicy != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.NamespaceServicePolicy))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.ClientSideDefense != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.ClientSideDefense))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.DdosProtection != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.DdosProtection))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.ApiProtection != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.ApiProtection))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.BotProtection != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.BotProtection))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Waf != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.Waf))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.HttpOnly != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.HttpOnly))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApplicationInventoryRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApplicationInventoryRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApplicationInventoryRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TcpLoadBalancerFilter != nil {
+		{
+			size, err := m.TcpLoadBalancerFilter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.HttpLoadBalancerFilter != nil {
+		{
+			size, err := m.HttpLoadBalancerFilter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApplicationInventoryResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApplicationInventoryResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApplicationInventoryResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TcpLoadbalancers != nil {
+		{
+			size, err := m.TcpLoadbalancers.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HttpLoadbalancers != nil {
+		{
+			size, err := m.HttpLoadbalancers.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ServicesDiscovered != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.ServicesDiscovered))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.OriginPools != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.OriginPools))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Loadbalancers != 0 {
+		i = encodeVarintPublicCustomapiAkar(dAtA, i, uint64(m.Loadbalancers))
 		i--
 		dAtA[i] = 0x8
 	}
@@ -3999,10 +5783,6 @@ func (m *NetworkingInventoryRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
-	}
 	return n
 }
 
@@ -4023,6 +5803,220 @@ func (m *NetworkingInventoryResponse) Size() (n int) {
 	}
 	if m.DcClusterGroups != 0 {
 		n += 1 + sovPublicCustomapiAkar(uint64(m.DcClusterGroups))
+	}
+	return n
+}
+
+func (m *TCPLoadbalancerInventoryFilterType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsEncryption != nil {
+		l = m.TlsEncryption.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.NamespaceServicePolicy != nil {
+		l = m.NamespaceServicePolicy.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.ServicePolicy != nil {
+		l = m.ServicePolicy.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.PrivateAdvertisement != nil {
+		l = m.PrivateAdvertisement.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.PublicAdvertisment != nil {
+		l = m.PublicAdvertisment.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	return n
+}
+
+func (m *TCPLoadbalancerInventoryType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TlsEncryption != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.TlsEncryption))
+	}
+	if m.NamespaceServicePolicy != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.NamespaceServicePolicy))
+	}
+	if m.ServicePolicy != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.ServicePolicy))
+	}
+	if m.PrivateAdvertisement != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.PrivateAdvertisement))
+	}
+	if m.PublicAdvertisment != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.PublicAdvertisment))
+	}
+	if len(m.Name) > 0 {
+		for _, s := range m.Name {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *HTTPLoadbalancerInventoryFilterType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpOnly != nil {
+		l = m.HttpOnly.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.Waf != nil {
+		l = m.Waf.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.BotProtection != nil {
+		l = m.BotProtection.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.ApiProtection != nil {
+		l = m.ApiProtection.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.DdosProtection != nil {
+		l = m.DdosProtection.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.ClientSideDefense != nil {
+		l = m.ClientSideDefense.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.NamespaceServicePolicy != nil {
+		l = m.NamespaceServicePolicy.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.ServicePolicy != nil {
+		l = m.ServicePolicy.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.IpReputation != nil {
+		l = m.IpReputation.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.MaliciousUserDetection != nil {
+		l = m.MaliciousUserDetection.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.PrivateAdvertisement != nil {
+		l = m.PrivateAdvertisement.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.PublicAdvertisment != nil {
+		l = m.PublicAdvertisment.Size()
+		n += 2 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	return n
+}
+
+func (m *HTTPLoadbalancerInventoryType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpOnly != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.HttpOnly))
+	}
+	if m.Waf != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.Waf))
+	}
+	if m.BotProtection != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.BotProtection))
+	}
+	if m.ApiProtection != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.ApiProtection))
+	}
+	if m.DdosProtection != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.DdosProtection))
+	}
+	if m.ClientSideDefense != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.ClientSideDefense))
+	}
+	if m.NamespaceServicePolicy != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.NamespaceServicePolicy))
+	}
+	if m.ServicePolicy != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.ServicePolicy))
+	}
+	if m.IpReputation != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.IpReputation))
+	}
+	if m.MaliciousUserDetection != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.MaliciousUserDetection))
+	}
+	if m.PrivateAdvertisement != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.PrivateAdvertisement))
+	}
+	if m.PublicAdvertisment != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.PublicAdvertisment))
+	}
+	if len(m.Name) > 0 {
+		for _, s := range m.Name {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ApplicationInventoryRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.HttpLoadBalancerFilter != nil {
+		l = m.HttpLoadBalancerFilter.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.TcpLoadBalancerFilter != nil {
+		l = m.TcpLoadBalancerFilter.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	return n
+}
+
+func (m *ApplicationInventoryResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Loadbalancers != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.Loadbalancers))
+	}
+	if m.OriginPools != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.OriginPools))
+	}
+	if m.ServicesDiscovered != 0 {
+		n += 1 + sovPublicCustomapiAkar(uint64(m.ServicesDiscovered))
+	}
+	if m.HttpLoadbalancers != nil {
+		l = m.HttpLoadbalancers.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
+	}
+	if m.TcpLoadbalancers != nil {
+		l = m.TcpLoadbalancers.Size()
+		n += 1 + l + sovPublicCustomapiAkar(uint64(l))
 	}
 	return n
 }
@@ -4292,7 +6286,6 @@ func (this *NetworkingInventoryRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&NetworkingInventoryRequest{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4306,6 +6299,104 @@ func (this *NetworkingInventoryResponse) String() string {
 		`Sites:` + fmt.Sprintf("%v", this.Sites) + `,`,
 		`SiteMeshGroups:` + fmt.Sprintf("%v", this.SiteMeshGroups) + `,`,
 		`DcClusterGroups:` + fmt.Sprintf("%v", this.DcClusterGroups) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TCPLoadbalancerInventoryFilterType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TCPLoadbalancerInventoryFilterType{`,
+		`TlsEncryption:` + strings.Replace(fmt.Sprintf("%v", this.TlsEncryption), "BoolValue", "types.BoolValue", 1) + `,`,
+		`NamespaceServicePolicy:` + strings.Replace(fmt.Sprintf("%v", this.NamespaceServicePolicy), "BoolValue", "types.BoolValue", 1) + `,`,
+		`ServicePolicy:` + strings.Replace(fmt.Sprintf("%v", this.ServicePolicy), "BoolValue", "types.BoolValue", 1) + `,`,
+		`PrivateAdvertisement:` + strings.Replace(fmt.Sprintf("%v", this.PrivateAdvertisement), "BoolValue", "types.BoolValue", 1) + `,`,
+		`PublicAdvertisment:` + strings.Replace(fmt.Sprintf("%v", this.PublicAdvertisment), "BoolValue", "types.BoolValue", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TCPLoadbalancerInventoryType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TCPLoadbalancerInventoryType{`,
+		`TlsEncryption:` + fmt.Sprintf("%v", this.TlsEncryption) + `,`,
+		`NamespaceServicePolicy:` + fmt.Sprintf("%v", this.NamespaceServicePolicy) + `,`,
+		`ServicePolicy:` + fmt.Sprintf("%v", this.ServicePolicy) + `,`,
+		`PrivateAdvertisement:` + fmt.Sprintf("%v", this.PrivateAdvertisement) + `,`,
+		`PublicAdvertisment:` + fmt.Sprintf("%v", this.PublicAdvertisment) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPLoadbalancerInventoryFilterType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPLoadbalancerInventoryFilterType{`,
+		`HttpOnly:` + strings.Replace(fmt.Sprintf("%v", this.HttpOnly), "BoolValue", "types.BoolValue", 1) + `,`,
+		`Waf:` + strings.Replace(fmt.Sprintf("%v", this.Waf), "BoolValue", "types.BoolValue", 1) + `,`,
+		`BotProtection:` + strings.Replace(fmt.Sprintf("%v", this.BotProtection), "BoolValue", "types.BoolValue", 1) + `,`,
+		`ApiProtection:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtection), "BoolValue", "types.BoolValue", 1) + `,`,
+		`DdosProtection:` + strings.Replace(fmt.Sprintf("%v", this.DdosProtection), "BoolValue", "types.BoolValue", 1) + `,`,
+		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "BoolValue", "types.BoolValue", 1) + `,`,
+		`NamespaceServicePolicy:` + strings.Replace(fmt.Sprintf("%v", this.NamespaceServicePolicy), "BoolValue", "types.BoolValue", 1) + `,`,
+		`ServicePolicy:` + strings.Replace(fmt.Sprintf("%v", this.ServicePolicy), "BoolValue", "types.BoolValue", 1) + `,`,
+		`IpReputation:` + strings.Replace(fmt.Sprintf("%v", this.IpReputation), "BoolValue", "types.BoolValue", 1) + `,`,
+		`MaliciousUserDetection:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserDetection), "BoolValue", "types.BoolValue", 1) + `,`,
+		`PrivateAdvertisement:` + strings.Replace(fmt.Sprintf("%v", this.PrivateAdvertisement), "BoolValue", "types.BoolValue", 1) + `,`,
+		`PublicAdvertisment:` + strings.Replace(fmt.Sprintf("%v", this.PublicAdvertisment), "BoolValue", "types.BoolValue", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPLoadbalancerInventoryType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPLoadbalancerInventoryType{`,
+		`HttpOnly:` + fmt.Sprintf("%v", this.HttpOnly) + `,`,
+		`Waf:` + fmt.Sprintf("%v", this.Waf) + `,`,
+		`BotProtection:` + fmt.Sprintf("%v", this.BotProtection) + `,`,
+		`ApiProtection:` + fmt.Sprintf("%v", this.ApiProtection) + `,`,
+		`DdosProtection:` + fmt.Sprintf("%v", this.DdosProtection) + `,`,
+		`ClientSideDefense:` + fmt.Sprintf("%v", this.ClientSideDefense) + `,`,
+		`NamespaceServicePolicy:` + fmt.Sprintf("%v", this.NamespaceServicePolicy) + `,`,
+		`ServicePolicy:` + fmt.Sprintf("%v", this.ServicePolicy) + `,`,
+		`IpReputation:` + fmt.Sprintf("%v", this.IpReputation) + `,`,
+		`MaliciousUserDetection:` + fmt.Sprintf("%v", this.MaliciousUserDetection) + `,`,
+		`PrivateAdvertisement:` + fmt.Sprintf("%v", this.PrivateAdvertisement) + `,`,
+		`PublicAdvertisment:` + fmt.Sprintf("%v", this.PublicAdvertisment) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApplicationInventoryRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApplicationInventoryRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`HttpLoadBalancerFilter:` + strings.Replace(this.HttpLoadBalancerFilter.String(), "HTTPLoadbalancerInventoryFilterType", "HTTPLoadbalancerInventoryFilterType", 1) + `,`,
+		`TcpLoadBalancerFilter:` + strings.Replace(this.TcpLoadBalancerFilter.String(), "TCPLoadbalancerInventoryFilterType", "TCPLoadbalancerInventoryFilterType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApplicationInventoryResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApplicationInventoryResponse{`,
+		`Loadbalancers:` + fmt.Sprintf("%v", this.Loadbalancers) + `,`,
+		`OriginPools:` + fmt.Sprintf("%v", this.OriginPools) + `,`,
+		`ServicesDiscovered:` + fmt.Sprintf("%v", this.ServicesDiscovered) + `,`,
+		`HttpLoadbalancers:` + strings.Replace(this.HttpLoadbalancers.String(), "HTTPLoadbalancerInventoryType", "HTTPLoadbalancerInventoryType", 1) + `,`,
+		`TcpLoadbalancers:` + strings.Replace(this.TcpLoadbalancers.String(), "TCPLoadbalancerInventoryType", "TCPLoadbalancerInventoryType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6249,38 +8340,6 @@ func (m *NetworkingInventoryRequest) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: NetworkingInventoryRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapiAkar
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapiAkar
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
@@ -6410,6 +8469,1556 @@ func (m *NetworkingInventoryResponse) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TCPLoadbalancerInventoryFilterType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TCPLoadbalancerInventoryFilterType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TCPLoadbalancerInventoryFilterType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsEncryption", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TlsEncryption == nil {
+				m.TlsEncryption = &types.BoolValue{}
+			}
+			if err := m.TlsEncryption.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceServicePolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NamespaceServicePolicy == nil {
+				m.NamespaceServicePolicy = &types.BoolValue{}
+			}
+			if err := m.NamespaceServicePolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ServicePolicy == nil {
+				m.ServicePolicy = &types.BoolValue{}
+			}
+			if err := m.ServicePolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateAdvertisement", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PrivateAdvertisement == nil {
+				m.PrivateAdvertisement = &types.BoolValue{}
+			}
+			if err := m.PrivateAdvertisement.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicAdvertisment", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PublicAdvertisment == nil {
+				m.PublicAdvertisment = &types.BoolValue{}
+			}
+			if err := m.PublicAdvertisment.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TCPLoadbalancerInventoryType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TCPLoadbalancerInventoryType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TCPLoadbalancerInventoryType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsEncryption", wireType)
+			}
+			m.TlsEncryption = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TlsEncryption |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceServicePolicy", wireType)
+			}
+			m.NamespaceServicePolicy = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NamespaceServicePolicy |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicy", wireType)
+			}
+			m.ServicePolicy = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServicePolicy |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateAdvertisement", wireType)
+			}
+			m.PrivateAdvertisement = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PrivateAdvertisement |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicAdvertisment", wireType)
+			}
+			m.PublicAdvertisment = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PublicAdvertisment |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = append(m.Name, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPLoadbalancerInventoryFilterType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPLoadbalancerInventoryFilterType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPLoadbalancerInventoryFilterType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpOnly", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpOnly == nil {
+				m.HttpOnly = &types.BoolValue{}
+			}
+			if err := m.HttpOnly.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Waf", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Waf == nil {
+				m.Waf = &types.BoolValue{}
+			}
+			if err := m.Waf.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotProtection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.BotProtection == nil {
+				m.BotProtection = &types.BoolValue{}
+			}
+			if err := m.BotProtection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiProtection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiProtection == nil {
+				m.ApiProtection = &types.BoolValue{}
+			}
+			if err := m.ApiProtection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DdosProtection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DdosProtection == nil {
+				m.DdosProtection = &types.BoolValue{}
+			}
+			if err := m.DdosProtection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSideDefense", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClientSideDefense == nil {
+				m.ClientSideDefense = &types.BoolValue{}
+			}
+			if err := m.ClientSideDefense.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceServicePolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NamespaceServicePolicy == nil {
+				m.NamespaceServicePolicy = &types.BoolValue{}
+			}
+			if err := m.NamespaceServicePolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ServicePolicy == nil {
+				m.ServicePolicy = &types.BoolValue{}
+			}
+			if err := m.ServicePolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpReputation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IpReputation == nil {
+				m.IpReputation = &types.BoolValue{}
+			}
+			if err := m.IpReputation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaliciousUserDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MaliciousUserDetection == nil {
+				m.MaliciousUserDetection = &types.BoolValue{}
+			}
+			if err := m.MaliciousUserDetection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateAdvertisement", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PrivateAdvertisement == nil {
+				m.PrivateAdvertisement = &types.BoolValue{}
+			}
+			if err := m.PrivateAdvertisement.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 25:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicAdvertisment", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PublicAdvertisment == nil {
+				m.PublicAdvertisment = &types.BoolValue{}
+			}
+			if err := m.PublicAdvertisment.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPLoadbalancerInventoryType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPLoadbalancerInventoryType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPLoadbalancerInventoryType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpOnly", wireType)
+			}
+			m.HttpOnly = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.HttpOnly |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Waf", wireType)
+			}
+			m.Waf = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Waf |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotProtection", wireType)
+			}
+			m.BotProtection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BotProtection |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiProtection", wireType)
+			}
+			m.ApiProtection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ApiProtection |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DdosProtection", wireType)
+			}
+			m.DdosProtection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DdosProtection |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSideDefense", wireType)
+			}
+			m.ClientSideDefense = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ClientSideDefense |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NamespaceServicePolicy", wireType)
+			}
+			m.NamespaceServicePolicy = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.NamespaceServicePolicy |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicy", wireType)
+			}
+			m.ServicePolicy = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServicePolicy |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpReputation", wireType)
+			}
+			m.IpReputation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IpReputation |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaliciousUserDetection", wireType)
+			}
+			m.MaliciousUserDetection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaliciousUserDetection |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateAdvertisement", wireType)
+			}
+			m.PrivateAdvertisement = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PrivateAdvertisement |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicAdvertisment", wireType)
+			}
+			m.PublicAdvertisment = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PublicAdvertisment |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = append(m.Name, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApplicationInventoryRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApplicationInventoryRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApplicationInventoryRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadBalancerFilter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLoadBalancerFilter == nil {
+				m.HttpLoadBalancerFilter = &HTTPLoadbalancerInventoryFilterType{}
+			}
+			if err := m.HttpLoadBalancerFilter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpLoadBalancerFilter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TcpLoadBalancerFilter == nil {
+				m.TcpLoadBalancerFilter = &TCPLoadbalancerInventoryFilterType{}
+			}
+			if err := m.TcpLoadBalancerFilter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApplicationInventoryResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapiAkar
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApplicationInventoryResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApplicationInventoryResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Loadbalancers", wireType)
+			}
+			m.Loadbalancers = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Loadbalancers |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginPools", wireType)
+			}
+			m.OriginPools = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OriginPools |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicesDiscovered", wireType)
+			}
+			m.ServicesDiscovered = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServicesDiscovered |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLoadbalancers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLoadbalancers == nil {
+				m.HttpLoadbalancers = &HTTPLoadbalancerInventoryType{}
+			}
+			if err := m.HttpLoadbalancers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TcpLoadbalancers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapiAkar
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapiAkar
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TcpLoadbalancers == nil {
+				m.TcpLoadbalancers = &TCPLoadbalancerInventoryType{}
+			}
+			if err := m.TcpLoadbalancers.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapiAkar(dAtA[iNdEx:])

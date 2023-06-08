@@ -3280,7 +3280,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DNS port"
@@ -3591,7 +3591,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3601,7 +3601,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4904,35 +4905,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaviewsStorageClassOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "Storage class Device configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "x-displayname": "OpenEBS Enterprise",
-            "x-ves-proto-message": "ves.io.schema.views.StorageClassOpenebsEnterpriseType",
-            "properties": {
-                "replication": {
-                    "type": "integer",
-                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
-                    "title": "Replication",
-                    "format": "int32",
-                    "x-displayname": "Replication",
-                    "x-ves-example": "1"
-                },
-                "storage_class_size": {
-                    "type": "integer",
-                    "description": " Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
-                    "title": "Storage Size",
-                    "format": "int64",
-                    "x-displayname": "Storage Size",
-                    "x-ves-example": "10",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "1024"
-                    }
-                }
-            }
-        },
         "siteCoordinates": {
             "type": "object",
             "description": "Coordinates of the site which provides the site physical location",
@@ -5204,6 +5176,49 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
+        },
+        "viewsAWSNATGatewaychoiceType": {
+            "type": "object",
+            "description": "With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
+            "title": "AWS NAT Gateway choice",
+            "x-displayname": "AWS NAT Gateway choice",
+            "x-ves-oneof-field-choice": "[\"nat_gw_id\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AWSNATGatewaychoiceType",
+            "properties": {
+                "nat_gw_id": {
+                    "type": "string",
+                    "description": "Exclusive with []\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 21\n  ves.io.schema.rules.string.pattern: ^(nat-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "AWS existing NAT Gateway ID",
+                    "maxLength": 21,
+                    "x-displayname": "Existing NAT Gateway ID",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "21",
+                        "ves.io.schema.rules.string.pattern": "^(nat-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "viewsAWSSubnetIdsType": {
             "type": "object",
             "description": "AWS Subnet Ids used by volterra site",
@@ -5441,7 +5456,7 @@ var APISwaggerJSON string = `{
                 "vpc_id": {
                     "type": "string",
                     "description": "Exclusive with [new_vpc]\n Information about existing VPC ID\n\nExample: - \"vpc-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "Existing VPC ID",
+                    "title": "Existing VPC",
                     "maxLength": 64,
                     "x-displayname": "Existing VPC ID",
                     "x-ves-example": "vpc-12345678901234567",
@@ -5452,34 +5467,61 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsAWSVirtualPrivateGatewaychoiceType": {
+            "type": "object",
+            "description": "With this option, egress site traffic will be routed through an Virtual Private Gateway.",
+            "title": "AWS Virtual Private Gateway choice",
+            "x-displayname": "AWS Virtual Private Gateway choice",
+            "x-ves-oneof-field-choice": "[\"vgw_id\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AWSVirtualPrivateGatewaychoiceType",
+            "properties": {
+                "vgw_id": {
+                    "type": "string",
+                    "description": "Exclusive with []\n\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 21\n  ves.io.schema.rules.string.pattern: ^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "AWS existing Virtual Private Gateway ID",
+                    "maxLength": 21,
+                    "x-displayname": "Existing Virtual Private Gateway ID",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "21",
+                        "ves.io.schema.rules.string.pattern": "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "viewsAllowedVIPPorts": {
             "type": "object",
             "description": "This defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the F5XC Site",
             "title": "Allowed VIP Ports",
             "x-displayname": "Allowed VIP Ports",
-            "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"disable_allowed_vip_port\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.AllowedVIPPorts",
             "properties": {
                 "custom_ports": {
-                    "description": "Exclusive with [use_http_https_port use_http_port use_https_port]\n Custom list of ports to be allowed",
+                    "description": "Exclusive with [disable_allowed_vip_port use_http_https_port use_http_port use_https_port]\n Custom list of ports to be allowed",
                     "title": "Custom Ports",
                     "$ref": "#/definitions/viewsCustomPorts",
                     "x-displayname": " Ports Allowed on Public"
                 },
+                "disable_allowed_vip_port": {
+                    "description": "Exclusive with [custom_ports use_http_https_port use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be disabled.",
+                    "title": "Disable Allowed VIP Port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Allowed VIP Port"
+                },
                 "use_http_https_port": {
-                    "description": "Exclusive with [custom_ports use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTP \u0026 HTTPS Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTP \u0026 HTTPS Port"
                 },
                 "use_http_port": {
-                    "description": "Exclusive with [custom_ports use_http_https_port use_https_port]\n Only HTTP Port (80) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_https_port use_https_port]\n Only HTTP Port (80) will be allowed.",
                     "title": "Allow HTTP Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTP Port"
                 },
                 "use_https_port": {
-                    "description": "Exclusive with [custom_ports use_http_https_port use_http_port]\n Only HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_https_port use_http_port]\n Only HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTPS Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTPS Port"
@@ -5777,11 +5819,17 @@ var APISwaggerJSON string = `{
             "title": "L3 Mode Enhanced Performance options",
             "x-displayname": "L3 Mode Enhanced Performance",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
+            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo\",\"no_jumbo\"]",
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
+                "jumbo": {
+                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
+                    "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
+                },
                 "no_jumbo": {
-                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
@@ -5941,7 +5989,6 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"openebs_enterprise\"]",
             "x-ves-proto-message": "ves.io.schema.views.StorageClassType",
             "properties": {
                 "default_storage_class": {
@@ -5950,12 +5997,6 @@ var APISwaggerJSON string = `{
                     "title": "Default Storage Class",
                     "format": "boolean",
                     "x-displayname": "Default Storage Class"
-                },
-                "openebs_enterprise": {
-                    "description": "Exclusive with []\n Storage class Device configuration for OpenEBS Enterprise",
-                    "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/schemaviewsStorageClassOpenebsEnterpriseType",
-                    "x-displayname": "OpenEBS Enterprise"
                 },
                 "storage_class_name": {
                     "type": "string",
@@ -6045,6 +6086,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -6121,6 +6163,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "egress_gateway_default": {
+                    "description": "Exclusive with [egress_nat_gw egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Internet Gateway.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to route site traffic through a Internet Gateway"
+                },
+                "egress_nat_gw": {
+                    "description": "Exclusive with [egress_gateway_default egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
+                    "$ref": "#/definitions/viewsAWSNATGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Network Address Translation (NAT) Gateway."
+                },
+                "egress_virtual_private_gateway": {
+                    "description": "Exclusive with [egress_gateway_default egress_nat_gw]\n With this option, egress site traffic will be routed through an Virtual Private Gateway.",
+                    "$ref": "#/definitions/viewsAWSVirtualPrivateGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Virtual Private Gateway."
                 },
                 "enable_internet_vip": {
                     "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
@@ -6244,6 +6301,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -6330,6 +6388,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "egress_gateway_default": {
+                    "description": "Exclusive with [egress_nat_gw egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Internet Gateway.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to route site traffic through a Internet Gateway"
+                },
+                "egress_nat_gw": {
+                    "description": "Exclusive with [egress_gateway_default egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
+                    "$ref": "#/definitions/viewsAWSNATGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Network Address Translation (NAT) Gateway."
+                },
+                "egress_virtual_private_gateway": {
+                    "description": "Exclusive with [egress_gateway_default egress_nat_gw]\n With this option, egress site traffic will be routed through an Virtual Private Gateway.",
+                    "$ref": "#/definitions/viewsAWSVirtualPrivateGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Virtual Private Gateway."
                 },
                 "enable_internet_vip": {
                     "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
@@ -6447,6 +6520,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
@@ -6546,6 +6620,24 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "2048"
                     }
+                },
+                "egress_gateway_default": {
+                    "description": "Exclusive with [egress_nat_gw egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Internet Gateway.",
+                    "title": "Egress Traffic to Internet on Site Via Internet Gateway",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to route site traffic through a Internet Gateway"
+                },
+                "egress_nat_gw": {
+                    "description": "Exclusive with [egress_gateway_default egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
+                    "title": "Egress Traffic to Internet on Site Via Nat Gateway",
+                    "$ref": "#/definitions/viewsAWSNATGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Network Address Translation (NAT) Gateway."
+                },
+                "egress_virtual_private_gateway": {
+                    "description": "Exclusive with [egress_gateway_default egress_nat_gw]\n With this option, egress site traffic will be routed through an Virtual Private Gateway.",
+                    "title": "Egress Traffic to Internet on Site Via Virtual Private Gateway",
+                    "$ref": "#/definitions/viewsAWSVirtualPrivateGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Virtual Private Gateway."
                 },
                 "enable_internet_vip": {
                     "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",

@@ -202,6 +202,12 @@ func (m *CertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetValidationParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetValidationParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -294,6 +300,24 @@ func (m *CertificateParamsType) GetCrlDBEntries(ctx context.Context, d db.Interf
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetValidationParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateCertificateParamsType struct {
@@ -639,4 +663,1378 @@ var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsTyp
 
 func CertificateParamsTypeValidator() db.Validator {
 	return DefaultCertificateParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DownstreamTlsParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DownstreamTlsParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *DownstreamTlsParamsType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetCommonParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting DownstreamTlsParamsType.common_params")
+	}
+
+	return nil
+}
+
+func (m *DownstreamTlsParamsType) DeepCopy() *DownstreamTlsParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DownstreamTlsParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DownstreamTlsParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DownstreamTlsParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DownstreamTlsParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DownstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCommonParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCommonParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCrlDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCrlDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DownstreamTlsParamsType) GetCommonParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCommonParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCommonParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "common_params." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+func (m *DownstreamTlsParamsType) GetCrlDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCrl()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("DownstreamTlsParamsType.crl[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "crl.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "crl",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCrlDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DownstreamTlsParamsType) GetCrlDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "crl.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: crl")
+	}
+	for _, ref := range m.GetCrl() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateDownstreamTlsParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDownstreamTlsParamsType) CrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for crl")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for crl")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated crl")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items crl")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDownstreamTlsParamsType) XfccHeaderElementsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(XfccElement)
+		return int32(i)
+	}
+	// XfccElement_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, XfccElement_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for xfcc_header_elements")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []XfccElement, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for xfcc_header_elements")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]XfccElement)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []XfccElement, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated xfcc_header_elements")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items xfcc_header_elements")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DownstreamTlsParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DownstreamTlsParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["common_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("common_params"))
+		if err := fv(ctx, m.GetCommonParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["crl"]; exists {
+		vOpts := append(opts, db.WithValidateField("crl"))
+		if err := fv(ctx, m.GetCrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["require_client_certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("require_client_certificate"))
+		if err := fv(ctx, m.GetRequireClientCertificate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["xfcc_header_elements"]; exists {
+		vOpts := append(opts, db.WithValidateField("xfcc_header_elements"))
+		if err := fv(ctx, m.GetXfccHeaderElements(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParamsType {
+	v := &ValidateDownstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCrl := v.CrlValidationRuleHandler
+	rulesCrl := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhCrl(rulesCrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.crl: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["crl"] = vFn
+
+	vrhXfccHeaderElements := v.XfccHeaderElementsValidationRuleHandler
+	rulesXfccHeaderElements := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[0]",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhXfccHeaderElements(rulesXfccHeaderElements)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.xfcc_header_elements: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["xfcc_header_elements"] = vFn
+
+	v.FldValidators["common_params"] = TlsParamsTypeValidator().Validate
+
+	return v
+}()
+
+func DownstreamTlsParamsTypeValidator() db.Validator {
+	return DefaultDownstreamTlsParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HostAccessInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HostAccessInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *HostAccessInfoType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTlsConfig().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HostAccessInfoType.tls_config")
+	}
+
+	if err := m.GetRestAuthInfo().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HostAccessInfoType.rest_auth_info")
+	}
+
+	if err := m.GetVaultAuthInfo().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HostAccessInfoType.vault_auth_info")
+	}
+
+	return nil
+}
+
+func (m *HostAccessInfoType) DeepCopy() *HostAccessInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HostAccessInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HostAccessInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HostAccessInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HostAccessInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *HostAccessInfoType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsConfigDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HostAccessInfoType) GetTlsConfigDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsConfig() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsConfig().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_config." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateHostAccessInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHostAccessInfoType) ServerEndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_endpoint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHostAccessInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HostAccessInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HostAccessInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAuthParams().(type) {
+	case *HostAccessInfoType_RestAuthInfo:
+		if fv, exists := v.FldValidators["auth_params.rest_auth_info"]; exists {
+			val := m.GetAuthParams().(*HostAccessInfoType_RestAuthInfo).RestAuthInfo
+			vOpts := append(opts,
+				db.WithValidateField("auth_params"),
+				db.WithValidateField("rest_auth_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HostAccessInfoType_VaultAuthInfo:
+		if fv, exists := v.FldValidators["auth_params.vault_auth_info"]; exists {
+			val := m.GetAuthParams().(*HostAccessInfoType_VaultAuthInfo).VaultAuthInfo
+			vOpts := append(opts,
+				db.WithValidateField("auth_params"),
+				db.WithValidateField("vault_auth_info"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scheme"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scheme"))
+		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_endpoint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_endpoint"))
+		if err := fv(ctx, m.GetServerEndpoint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_config"))
+		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHostAccessInfoTypeValidator = func() *ValidateHostAccessInfoType {
+	v := &ValidateHostAccessInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServerEndpoint := v.ServerEndpointValidationRuleHandler
+	rulesServerEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhServerEndpoint(rulesServerEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HostAccessInfoType.server_endpoint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_endpoint"] = vFn
+
+	v.FldValidators["auth_params.rest_auth_info"] = RestAuthInfoTypeValidator().Validate
+	v.FldValidators["auth_params.vault_auth_info"] = VaultAuthInfoTypeValidator().Validate
+
+	v.FldValidators["tls_config"] = UpstreamTlsParamsTypeValidator().Validate
+
+	return v
+}()
+
+func HostAccessInfoTypeValidator() db.Validator {
+	return DefaultHostAccessInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TlsParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TlsParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *TlsParamsType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetTlsCertificates() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting TlsParamsType.tls_certificates idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
+func (m *TlsParamsType) DeepCopy() *TlsParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TlsParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TlsParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TlsParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TlsParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *TlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetValidationParamsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TlsParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetValidationParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateTlsParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTlsParamsType) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for cipher_suites")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cipher_suites")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cipher_suites")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cipher_suites")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TlsParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TlsParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cipher_suites"]; exists {
+		vOpts := append(opts, db.WithValidateField("cipher_suites"))
+		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
+		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
+		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_certificates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_certificates"))
+		for idx, item := range m.GetTlsCertificates() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
+		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_params"))
+		if err := fv(ctx, m.GetValidationParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTlsParamsTypeValidator = func() *ValidateTlsParamsType {
+	v := &ValidateTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCipherSuites := v.CipherSuitesValidationRuleHandler
+	rulesCipherSuites := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.in": "[\"TLS_AES_128_GCM_SHA256\",\"TLS_AES_256_GCM_SHA384\",\"TLS_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\",\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\",\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\",\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\",\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\",\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\",\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\",\"TLS_RSA_WITH_AES_128_CBC_SHA\",\"TLS_RSA_WITH_AES_128_GCM_SHA256\",\"TLS_RSA_WITH_AES_256_CBC_SHA\",\"TLS_RSA_WITH_AES_256_GCM_SHA384\"]",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhCipherSuites(rulesCipherSuites)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TlsParamsType.cipher_suites: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cipher_suites"] = vFn
+
+	v.FldValidators["tls_certificates"] = TlsCertificateTypeValidator().Validate
+
+	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
+
+	return v
+}()
+
+func TlsParamsTypeValidator() db.Validator {
+	return DefaultTlsParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpstreamCertificateParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpstreamCertificateParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpstreamCertificateParamsType) DeepCopy() *UpstreamCertificateParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpstreamCertificateParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpstreamCertificateParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpstreamCertificateParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpstreamCertificateParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *UpstreamCertificateParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCertificatesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCertificatesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetValidationParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetValidationParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *UpstreamCertificateParamsType) GetCertificatesDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCertificates()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("UpstreamCertificateParamsType.certificates[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "certificates",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCertificatesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *UpstreamCertificateParamsType) GetCertificatesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "certificate.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: certificate")
+	}
+	for _, ref := range m.GetCertificates() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *UpstreamCertificateParamsType) GetValidationParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetValidationParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetValidationParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetValidationParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "validation_params." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateUpstreamCertificateParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpstreamCertificateParamsType) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for certificates")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for certificates")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated certificates")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items certificates")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamCertificateParamsType) CipherSuitesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for cipher_suites")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cipher_suites")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cipher_suites")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cipher_suites")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamCertificateParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpstreamCertificateParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpstreamCertificateParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["certificates"]; exists {
+		vOpts := append(opts, db.WithValidateField("certificates"))
+		if err := fv(ctx, m.GetCertificates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cipher_suites"]; exists {
+		vOpts := append(opts, db.WithValidateField("cipher_suites"))
+		if err := fv(ctx, m.GetCipherSuites(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["maximum_protocol_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("maximum_protocol_version"))
+		if err := fv(ctx, m.GetMaximumProtocolVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["minimum_protocol_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("minimum_protocol_version"))
+		if err := fv(ctx, m.GetMinimumProtocolVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_params"))
+		if err := fv(ctx, m.GetValidationParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpstreamCertificateParamsTypeValidator = func() *ValidateUpstreamCertificateParamsType {
+	v := &ValidateUpstreamCertificateParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCertificates := v.CertificatesValidationRuleHandler
+	rulesCertificates := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "1",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhCertificates(rulesCertificates)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamCertificateParamsType.certificates: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificates"] = vFn
+
+	vrhCipherSuites := v.CipherSuitesValidationRuleHandler
+	rulesCipherSuites := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.in": "[\"TLS_AES_128_GCM_SHA256\",\"TLS_AES_256_GCM_SHA384\",\"TLS_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\",\"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\",\"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\",\"TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\",\"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\",\"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\",\"TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\",\"TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\",\"TLS_RSA_WITH_AES_128_CBC_SHA\",\"TLS_RSA_WITH_AES_128_GCM_SHA256\",\"TLS_RSA_WITH_AES_256_CBC_SHA\",\"TLS_RSA_WITH_AES_256_GCM_SHA384\"]",
+		"ves.io.schema.rules.repeated.unique":          "true",
+	}
+	vFn, err = vrhCipherSuites(rulesCipherSuites)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamCertificateParamsType.cipher_suites: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cipher_suites"] = vFn
+
+	v.FldValidators["validation_params"] = TlsValidationParamsTypeValidator().Validate
+
+	return v
+}()
+
+func UpstreamCertificateParamsTypeValidator() db.Validator {
+	return DefaultUpstreamCertificateParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpstreamTlsParamsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpstreamTlsParamsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *UpstreamTlsParamsType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetCommonParams().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting UpstreamTlsParamsType.common_params")
+	}
+
+	return nil
+}
+
+func (m *UpstreamTlsParamsType) DeepCopy() *UpstreamTlsParamsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpstreamTlsParamsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpstreamTlsParamsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpstreamTlsParamsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpstreamTlsParamsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *UpstreamTlsParamsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsParamsChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParamsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsParamsChoice().(type) {
+	case *UpstreamTlsParamsType_CommonParams:
+		drInfos, err := m.GetCommonParams().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "common_params." + dri.DRField
+		}
+		return drInfos, err
+
+	case *UpstreamTlsParamsType_CertParams:
+		drInfos, err := m.GetCertParams().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCertParams().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cert_params." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateUpstreamTlsParamsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpstreamTlsParamsType) SniChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamTlsParamsType) SniChoiceSniValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Sni, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni")
+	}
+	return oValidatorFn_Sni, nil
+}
+
+func (v *ValidateUpstreamTlsParamsType) TlsParamsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_params_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpstreamTlsParamsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpstreamTlsParamsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sni_choice"]; exists {
+		val := m.GetSniChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSniChoice().(type) {
+	case *UpstreamTlsParamsType_Sni:
+		if fv, exists := v.FldValidators["sni_choice.sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_UseHostHeaderAsSni:
+		if fv, exists := v.FldValidators["sni_choice.use_host_header_as_sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_UseHostHeaderAsSni).UseHostHeaderAsSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("use_host_header_as_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_DisableSni:
+		if fv, exists := v.FldValidators["sni_choice.disable_sni"]; exists {
+			val := m.GetSniChoice().(*UpstreamTlsParamsType_DisableSni).DisableSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("disable_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_params_choice"]; exists {
+		val := m.GetTlsParamsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_params_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsParamsChoice().(type) {
+	case *UpstreamTlsParamsType_CommonParams:
+		if fv, exists := v.FldValidators["tls_params_choice.common_params"]; exists {
+			val := m.GetTlsParamsChoice().(*UpstreamTlsParamsType_CommonParams).CommonParams
+			vOpts := append(opts,
+				db.WithValidateField("tls_params_choice"),
+				db.WithValidateField("common_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_CertParams:
+		if fv, exists := v.FldValidators["tls_params_choice.cert_params"]; exists {
+			val := m.GetTlsParamsChoice().(*UpstreamTlsParamsType_CertParams).CertParams
+			vOpts := append(opts,
+				db.WithValidateField("tls_params_choice"),
+				db.WithValidateField("cert_params"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsType {
+	v := &ValidateUpstreamTlsParamsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSniChoice := v.SniChoiceValidationRuleHandler
+	rulesSniChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSniChoice(rulesSniChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsParamsType.sni_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sni_choice"] = vFn
+
+	vrhSniChoiceSni := v.SniChoiceSniValidationRuleHandler
+	rulesSniChoiceSni := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+	}
+	vFnMap["sni_choice.sni"], err = vrhSniChoiceSni(rulesSniChoiceSni)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParamsType.sni_choice_sni: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["sni_choice.sni"] = vFnMap["sni_choice.sni"]
+
+	vrhTlsParamsChoice := v.TlsParamsChoiceValidationRuleHandler
+	rulesTlsParamsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsParamsChoice(rulesTlsParamsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsParamsType.tls_params_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_params_choice"] = vFn
+
+	v.FldValidators["tls_params_choice.common_params"] = TlsParamsTypeValidator().Validate
+	v.FldValidators["tls_params_choice.cert_params"] = UpstreamCertificateParamsTypeValidator().Validate
+
+	return v
+}()
+
+func UpstreamTlsParamsTypeValidator() db.Validator {
+	return DefaultUpstreamTlsParamsTypeValidator
 }

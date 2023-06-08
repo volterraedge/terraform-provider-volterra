@@ -2196,7 +2196,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DNS port"
@@ -2359,14 +2359,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "bond_devices": {
                     "type": "array",
-                    "description": " List of bond devices for this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of bond devices\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Bond Devices List",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetBondDeviceType"
                     },
-                    "x-displayname": "Bond Devices List",
+                    "x-displayname": "Bond Devices",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3099,11 +3099,17 @@ var APISwaggerJSON string = `{
             "description": "Configure Static IP parameters",
             "title": "Static IP Parameters",
             "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"node_static_ip\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"node_static_ip\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
+                "cluster_static_ip": {
+                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
+                    "title": "Node Specific",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
+                    "x-displayname": "Cluster, All Nodes of the Site"
+                },
                 "node_static_ip": {
-                    "description": "Exclusive with []\n Static IP configuration for the Node",
+                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
                     "x-displayname": "Specific Node"
@@ -3112,13 +3118,21 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
+            "description": "Configure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
+            "x-displayname": "Cluster: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
-                    "title": "Site:Node to IP mapping"
+                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
+                    "title": "Site:Node to IP mapping",
+                    "x-displayname": "Node to IP Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "128"
+                    }
                 }
             }
         },
@@ -3156,16 +3170,6 @@ var APISwaggerJSON string = `{
                     "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
-                    "x-ves-example": "192.168.20.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "dns_server": {
-                    "type": "string",
-                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "DNS Server",
-                    "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -3318,7 +3322,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3328,7 +3332,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4559,9 +4564,22 @@ var APISwaggerJSON string = `{
             "description": "Interface definition",
             "title": "Interface",
             "x-displayname": "Interface",
+            "x-ves-oneof-field-dc_cluster_group_connectivity_interface_choice": "[\"dc_cluster_group_connectivity_interface_disabled\",\"dc_cluster_group_connectivity_interface_enabled\"]",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site.Interface",
             "properties": {
+                "dc_cluster_group_connectivity_interface_disabled": {
+                    "description": "Exclusive with [dc_cluster_group_connectivity_interface_enabled]\n Do not use this interface to connect to DC cluster group peers. ",
+                    "title": "DC Cluster Group Interface Default",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "dc_cluster_group_connectivity_interface_enabled": {
+                    "description": "Exclusive with [dc_cluster_group_connectivity_interface_disabled]\n Use this interface to connect to DC cluster group peers.",
+                    "title": "DC Cluster Group Interface Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                },
                 "dedicated_interface": {
                     "description": "Exclusive with [dedicated_management_interface ethernet_interface]\n Configuration can be used to set labels, MTU and priority for dedicated interfaces.\n Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet",
                     "title": "Bootstrap Local Interface",
@@ -5021,6 +5039,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Local Network Configuration",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-static_route_choice": "[\"no_static_routes\",\"static_routes\"]",
+            "x-ves-oneof-field-static_v6_route_choice": "[\"no_v6_static_routes\",\"static_v6_routes\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site.VnConfiguration",
             "properties": {
                 "dc_cluster_group": {
@@ -5065,11 +5084,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "no_v6_static_routes": {
+                    "description": "Exclusive with [static_v6_routes]\n Static IPv6 Routes disabled for site local network.",
+                    "title": "Do Not Manage IPv6 Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable IPv6 Static Routes"
+                },
                 "static_routes": {
                     "description": "Exclusive with [no_static_routes]\n Manage static routes for site local network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/securemesh_siteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "static_v6_routes": {
+                    "description": "Exclusive with [no_v6_static_routes]\n Manage IPv6 static routes for site local network.",
+                    "title": "Manage IPv6 Static routes",
+                    "$ref": "#/definitions/virtual_networkStaticV6RoutesListType",
+                    "x-displayname": "Manage IPv6 Static routes"
                 },
                 "vip": {
                     "type": "string",
@@ -5203,23 +5234,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsL3PerformanceEnhancementType": {
-            "type": "object",
-            "description": "x-required\nL3 enhanced performance mode options",
-            "title": "L3 Mode Enhanced Performance options",
-            "x-displayname": "L3 Mode Enhanced Performance",
-            "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
-            "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
-            "properties": {
-                "no_jumbo": {
-                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
-                    "title": "L3 Mode Enhanced Performance with no jumbo frame support",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
-                }
-            }
-        },
         "viewsMasterNode": {
             "type": "object",
             "description": "Master Node is the configuration of the master node",
@@ -5298,29 +5312,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
                     }
-                }
-            }
-        },
-        "viewsPerformanceEnhancementModeType": {
-            "type": "object",
-            "description": "x-required\nPerformance Enhancement Mode to optimize for L3 or L7 networking",
-            "title": "Performance Enhancement Choice",
-            "x-displayname": "Performance Enhancement Mode",
-            "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"perf_mode_l3_enhanced\",\"perf_mode_l7_enhanced\"]",
-            "x-ves-proto-message": "ves.io.schema.views.PerformanceEnhancementModeType",
-            "properties": {
-                "perf_mode_l3_enhanced": {
-                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing\n When the mode is toggled to l3 enhanced, traffic disruption will be seen",
-                    "title": "L3 Mode Enhanced Performance",
-                    "$ref": "#/definitions/viewsL3PerformanceEnhancementType",
-                    "x-displayname": "L3 Mode Enhanced Performance"
-                },
-                "perf_mode_l7_enhanced": {
-                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing\n When the mode is toggled to l7 enhanced, traffic disruption will be seen",
-                    "title": "Default Performance Mode",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "L7 Enhanced"
                 }
             }
         },
@@ -5442,11 +5433,6 @@ var APISwaggerJSON string = `{
                     "description": " Operating System Details",
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
-                },
-                "performance_enhancement_mode": {
-                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
-                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
-                    "x-displayname": "Performance Enhancement Mode"
                 },
                 "sw": {
                     "description": " F5XC Software Details",
@@ -5738,12 +5724,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
-                "performance_enhancement_mode": {
-                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
-                    "title": "Performance Enhancement Choice",
-                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
-                    "x-displayname": "Performance Enhancement Mode"
-                },
                 "sw": {
                     "description": " F5XC Software Details",
                     "title": "F5XC Software",
@@ -5976,6 +5956,98 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_networkStaticV6RouteViewType": {
+            "type": "object",
+            "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
+            "title": "Static IPv6 Route",
+            "x-displayname": "Static IPv6 Route",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
+            "properties": {
+                "attrs": {
+                    "type": "array",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Attributes",
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteAttrType"
+                    },
+                    "x-displayname": "Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "default_gateway": {
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "title": "Default Gateway",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
+                },
+                "interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "title": "Interface",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IP Address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 route prefixes that have common next hop and attributes\n\nExample: - \"2001::/92\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "IPv6 Prefixes",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefixes",
+                    "x-ves-example": "2001::/92",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_networkStaticV6RoutesListType": {
+            "type": "object",
+            "description": "List of IPv6 static routes",
+            "title": "Static IPv6 Routes List",
+            "x-displayname": "Static IPv6 Routes List",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RoutesListType",
+            "properties": {
+                "static_routes": {
+                    "type": "array",
+                    "description": " List of IPv6 static routes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_routes",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/virtual_networkStaticV6RouteViewType"
+                    },
+                    "x-displayname": "Static IPv6 Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

@@ -670,6 +670,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesBigipApmServiceBigIpPassword:
+		if fv, exists := v.FldValidators["choice.ves_bigip_apm_service_big_ip_password"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesBigipApmServiceBigIpPassword).VesBigipApmServiceBigIpPassword
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_bigip_apm_service_big_ip_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

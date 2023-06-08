@@ -88,6 +88,18 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
+		for idx, item := range m.GetAddedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["release_date"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("release_date"))
@@ -109,12 +121,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
+		for idx, item := range m.GetUpdatedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
+
+	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
 }()
@@ -190,6 +218,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
+		for idx, item := range m.GetAddedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["release_date"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("release_date"))
@@ -211,12 +251,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
+		for idx, item := range m.GetUpdatedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
+
+	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
 }()
@@ -292,6 +348,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
+		for idx, item := range m.GetAddedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["release_date"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("release_date"))
@@ -313,12 +381,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
+		for idx, item := range m.GetUpdatedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
+
+	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
 }()
@@ -394,6 +478,18 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["added_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("added_signatures_data"))
+		for idx, item := range m.GetAddedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["release_date"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("release_date"))
@@ -415,12 +511,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["updated_signatures_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("updated_signatures_data"))
+		for idx, item := range m.GetUpdatedSignaturesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["added_signatures_data"] = SignatureValidator().Validate
+
+	v.FldValidators["updated_signatures_data"] = SignatureValidator().Validate
 
 	return v
 }()
@@ -429,13 +541,209 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *Signature) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Signature) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Signature) DeepCopy() *Signature {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Signature{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Signature) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Signature) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignatureValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignature struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignature) LastUpdateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for last_update")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSignature) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Signature)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Signature got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["accuracy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accuracy"))
+		if err := fv(ctx, m.GetAccuracy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["applies_to"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("applies_to"))
+		if err := fv(ctx, m.GetAppliesTo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["attack_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attack_type"))
+		if err := fv(ctx, m.GetAttackType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_update"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_update"))
+		if err := fv(ctx, m.GetLastUpdate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["references"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("references"))
+		for idx, item := range m.GetReferences() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["risk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("risk"))
+		if err := fv(ctx, m.GetRisk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["systems"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("systems"))
+		for idx, item := range m.GetSystems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignatureValidator = func() *ValidateSignature {
+	v := &ValidateSignature{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLastUpdate := v.LastUpdateValidationRuleHandler
+	rulesLastUpdate := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLastUpdate(rulesLastUpdate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Signature.last_update: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["last_update"] = vFn
+
+	return v
+}()
+
+func SignatureValidator() db.Validator {
+	return DefaultSignatureValidator
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddedSignatures = f.GetAddedSignatures()
+	m.AddedSignaturesData = f.GetAddedSignaturesData()
 	m.ReleaseDate = f.GetReleaseDate()
 	m.UpdatedSignatures = f.GetUpdatedSignatures()
+	m.UpdatedSignaturesData = f.GetUpdatedSignaturesData()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -454,8 +762,10 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.AddedSignatures = m1.AddedSignatures
+	f.AddedSignaturesData = m1.AddedSignaturesData
 	f.ReleaseDate = m1.ReleaseDate
 	f.UpdatedSignatures = m1.UpdatedSignatures
+	f.UpdatedSignaturesData = m1.UpdatedSignaturesData
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -471,8 +781,10 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.AddedSignatures = f.GetAddedSignatures()
+	m.AddedSignaturesData = f.GetAddedSignaturesData()
 	m.ReleaseDate = f.GetReleaseDate()
 	m.UpdatedSignatures = f.GetUpdatedSignatures()
+	m.UpdatedSignaturesData = f.GetUpdatedSignaturesData()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -491,8 +803,10 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.AddedSignatures = m1.AddedSignatures
+	f.AddedSignaturesData = m1.AddedSignaturesData
 	f.ReleaseDate = m1.ReleaseDate
 	f.UpdatedSignatures = m1.UpdatedSignatures
+	f.UpdatedSignaturesData = m1.UpdatedSignaturesData
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -508,8 +822,10 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.AddedSignatures = f.GetAddedSignatures()
+	m.AddedSignaturesData = f.GetAddedSignaturesData()
 	m.ReleaseDate = f.GetReleaseDate()
 	m.UpdatedSignatures = f.GetUpdatedSignatures()
+	m.UpdatedSignaturesData = f.GetUpdatedSignaturesData()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -528,8 +844,10 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.AddedSignatures = m1.AddedSignatures
+	f.AddedSignaturesData = m1.AddedSignaturesData
 	f.ReleaseDate = m1.ReleaseDate
 	f.UpdatedSignatures = m1.UpdatedSignatures
+	f.UpdatedSignaturesData = m1.UpdatedSignaturesData
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

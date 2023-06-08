@@ -2576,6 +2576,38 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "app_typeAPIEndpoint": {
+            "type": "object",
+            "description": "x-required\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
+            "title": "api endpoint",
+            "properties": {
+                "api_endpoint_path": {
+                    "type": "string",
+                    "description": "x-required\nx-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
+                    "title": "api endpoint path"
+                },
+                "methods": {
+                    "type": "array",
+                    "description": "x-displayName: \"Methods\"\nList of methods values to match against.\nx-required\nx-example: \"['GET', 'POST', 'DELETE']\"",
+                    "title": "methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    }
+                }
+            }
+        },
+        "app_typeBuiltInSensitiveDataType": {
+            "type": "object",
+            "description": "x-displayName: \"Built-In Sensitive Data Type\"\nx-example: \"[EMAIL, CC]\"\nMessage wrapper for built-in sensitive data type.",
+            "title": "BuiltInSensitiveDataType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-example: \"[EMAIL, CC]\"\nx-required\nBuilt-in rule for sensitive data detection.",
+                    "title": "name"
+                }
+            }
+        },
         "app_typeBusinessLogicMarkupSetting": {
             "type": "object",
             "description": "Settings specifying how API Discovery will be performed",
@@ -2595,6 +2627,127 @@ var APISwaggerJSON string = `{
                     "title": "Enable learning from redirected request traffic",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Enable"
+                }
+            }
+        },
+        "app_typeCustomDataDetectionConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Data Detection Config\"\nThe custom data detection config specifies targets, scopes \u0026 the pattern to be detected.",
+            "title": "CustomDataDetectionConfig",
+            "properties": {
+                "all_request_sections": {
+                    "description": "x-displayName: \"All Request\"",
+                    "title": "all_request_sections",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "all_response_sections": {
+                    "description": "x-displayName: \"All Response\"",
+                    "title": "all_response_sections",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "all_sections": {
+                    "description": "x-displayName: \"All Request \u0026 Response\"",
+                    "title": "all_sections",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_domain": {
+                    "description": "x-required\nx-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
+                    "title": "any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "any_target": {
+                    "description": "x-required\nx-displayName: \"All API Endpoints\"\nThe rule will be applied for all requests on this LB.",
+                    "title": "any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "api_endpoint_target": {
+                    "description": "x-required\nx-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
+                    "title": "api endpoint target",
+                    "$ref": "#/definitions/app_typeAPIEndpoint"
+                },
+                "api_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe rule is applied on the APIs that belong to specified api_group.\nAPI groups derived from API Definition swaggers.\nFor example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers.\nCustom groups can be created if user tags paths or operations with \"x-volterra-api-group\" extensions inside swaggers.",
+                    "title": "api_group"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "x-required\nx-example: \"/v1\"\nx-displayName: \"Base Path\"\nThe rule is applied only for the requests matching the specified base path.",
+                    "title": "base path"
+                },
+                "custom_sections": {
+                    "description": "x-displayName: \"Custom Sections\"",
+                    "title": "sections",
+                    "$ref": "#/definitions/app_typeCustomSections"
+                },
+                "key_pattern": {
+                    "description": "x-displayName: \"Key Pattern\"\nx-required\nSearch for pattern across all field names in the specified sections.",
+                    "title": "key pattern",
+                    "$ref": "#/definitions/app_typeKeyPattern"
+                },
+                "key_value_pattern": {
+                    "description": "x-displayName: \"Key-Value Pattern\"\nx-required\nSearch for specific field and value patterns in the specified sections.",
+                    "title": "key-value pattern",
+                    "$ref": "#/definitions/app_typeKeyValuePattern"
+                },
+                "specific_domain": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
+                    "title": "domain"
+                },
+                "value_pattern": {
+                    "description": "x-displayName: \"Value Pattern\"\nx-required\nSearch for pattern across all field values in the specified sections.",
+                    "title": "value pattern",
+                    "$ref": "#/definitions/app_typeValuePattern"
+                }
+            }
+        },
+        "app_typeCustomSections": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Sections\"\nRequest \u0026 Response Sections.",
+            "title": "CustomSections",
+            "properties": {
+                "custom_sections": {
+                    "type": "array",
+                    "description": "x-displayName: \"Custom Sections\"\nx-required\nRequest \u0026 Response Sections.",
+                    "title": "custom_sections",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpSections"
+                    }
+                }
+            }
+        },
+        "app_typeCustomSensitiveDataDetectionRule": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Sensitive Data Detection Rule\"\nCustom Sensitive Data Rule Definition.",
+            "title": "CustomSensitiveDataRule",
+            "properties": {
+                "metadata": {
+                    "description": "x-required\nx-displayName: \"Metadata\"\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "sensitive_data_detection_config": {
+                    "description": "x-displayName: \"Sensitive Data Detection Config\"\nThe custom data detection config specifies targets, scopes \u0026 the pattern to be detected.",
+                    "title": "sensitive_data_detection_config",
+                    "$ref": "#/definitions/app_typeCustomDataDetectionConfig"
+                },
+                "sensitive_data_type": {
+                    "description": "x-displayName: \"Sensitive Data Type\"\nIf the pattern is detected, the request is labeled with specified sensitive data type.",
+                    "title": "sensitive_data_type",
+                    "$ref": "#/definitions/app_typeCustomSensitiveDataType"
+                }
+            }
+        },
+        "app_typeCustomSensitiveDataType": {
+            "type": "object",
+            "description": "x-displayName: \"Custom Sensitive Data Type\"\nThe type/category of the sensitive data this rule detects. e.g. Email, Credit Card etc.",
+            "title": "CustomSensitiveDataType",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"Type\"\nx-example: \"EMAIL\"\nThe request is labeled as specified sensitive data type.",
+                    "title": "sensitive data type"
                 }
             }
         },
@@ -2657,6 +2810,63 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeKeyPattern": {
+            "type": "object",
+            "description": "x-displayName: \"Key Pattern\"\nPattern to detect. Could be exact match or regex match.",
+            "title": "Key Pattern",
+            "properties": {
+                "exact_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"x-volt-header\"\nSearch for values with exact match.",
+                    "title": "exact value"
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"'^new.*$', 'san f.*', '.* del .*'\"\nSearch for values matching this regular expression.",
+                    "title": "regex value"
+                }
+            }
+        },
+        "app_typeKeyValuePattern": {
+            "type": "object",
+            "description": "x-displayName: \"Key \u0026 Value Pattern\"\nSearch for specific key \u0026 value patterns in the specified sections.",
+            "title": "Key-Value Pattern",
+            "properties": {
+                "key_pattern": {
+                    "description": "x-displayName: \"Key Pattern\"\nx-required\nPattern for key/field.",
+                    "title": "key_pattern",
+                    "$ref": "#/definitions/app_typeKeyPattern"
+                },
+                "value_pattern": {
+                    "description": "x-displayName: \"Value Pattern\"\nx-required\nPattern for value.",
+                    "title": "value_pattern",
+                    "$ref": "#/definitions/app_typeValuePattern"
+                }
+            }
+        },
+        "app_typeSensitiveDataDetectionRules": {
+            "type": "object",
+            "description": "x-displayName: \"Sensitive Data Detection Rules\"\nRules to manage/configure sensitive data detection in requests and/or response sections.",
+            "title": "Sensitive Data Detection Rules",
+            "properties": {
+                "custom_sensitive_data_detection_rules": {
+                    "type": "array",
+                    "description": "x-displayName: \"Defined Custom Sensitive Data Types\"\nRules to detect custom sensitive data in requests and/or responses sections.",
+                    "title": "custom sensitive data rules",
+                    "items": {
+                        "$ref": "#/definitions/app_typeCustomSensitiveDataDetectionRule"
+                    }
+                },
+                "disabled_built_in_rules": {
+                    "type": "array",
+                    "description": "x-displayName: \"Disabled Built-In Sensitive Data Types\"\nx-example: \"[EMAIL, CC]\"\nList of disabled built-in sensitive data detection rules.",
+                    "title": "disabled_built_in_rules",
+                    "items": {
+                        "$ref": "#/definitions/app_typeBuiltInSensitiveDataType"
+                    }
+                }
+            }
+        },
         "app_typeSpecType": {
             "type": "object",
             "description": "Shape of the app_type specification",
@@ -2703,7 +2913,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "app_typeValuePattern": {
+            "type": "object",
+            "description": "x-displayName: \"Value Pattern\"\nPattern to detect. Could be exact match or regex match.",
+            "title": "Value Pattern",
+            "properties": {
+                "exact_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"x-volt-header\"\nPattern value to be detected.",
+                    "title": "exact value"
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"'^new.*$', 'san f.*', '.* del .*'\"\nRegular expression for this pattern.",
+                    "title": "regex value"
+                }
+            }
+        },
+        "app_typecrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2735,7 +2962,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_typecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2756,7 +2983,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_typecrudapiErrorCode"
                 }
             }
         },
@@ -2771,7 +2998,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_typecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2798,7 +3025,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_typecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2877,7 +3104,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_type.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_typecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2992,6 +3219,38 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "x-displayName: \"HTTP Method\"\nSpecifies the HTTP method used to access a resource.\n\n - ANY: x-displayName: \"ANY\"\nAny HTTP Method\n - GET: x-displayName: \"GET\"\n - HEAD: x-displayName: \"HEAD\"\n - POST: x-displayName: \"POST\"\n - PUT: x-displayName: \"PUT\"\n - DELETE: x-displayName: \"DELETE\"\n - CONNECT: x-displayName: \"CONNECT\"\n - OPTIONS: x-displayName: \"OPTIONS\"\n - TRACE: x-displayName: \"TRACE\"\n - PATCH: x-displayName: \"PATCH\"",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY"
+        },
+        "schemaHttpSections": {
+            "type": "string",
+            "description": "x-displayName: \"HTTP Sections\"\nRequest \u0026 Response Sections.\n\n - HTTP_SECTION_NONE: None\n\nALL_SECTIONS\nx-displayName: \"None\"\n - HTTP_SECTION_QUERY_PARAMS: QUERY_PARAMS\n\nx-displayName: \"Request Query Params\"\n - HTTP_SECTION_REQ_HEADERS: REQ_HEADERS\n\nx-displayName: \"Request Headers\"\n - HTTP_SECTION_RSP_HEADERS: RSP_HEADERS\n\nx-displayName: \"Response Headers\"\n - HTTP_SECTION_REQ_BODY: REQ_BODY\n\nx-displayName: \"Request Body\"\n - HTTP_SECTION_RSP_BODY: RSP_BODY\n\nx-displayName: \"Response Body\"",
+            "title": "HTTPSections",
+            "enum": [
+                "HTTP_SECTION_NONE",
+                "HTTP_SECTION_QUERY_PARAMS",
+                "HTTP_SECTION_REQ_HEADERS",
+                "HTTP_SECTION_RSP_HEADERS",
+                "HTTP_SECTION_REQ_BODY",
+                "HTTP_SECTION_RSP_BODY"
+            ],
+            "default": "HTTP_SECTION_NONE"
+        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -3037,6 +3296,29 @@ var APISwaggerJSON string = `{
             "title": "ListMetaType",
             "x-displayname": "List Metadata",
             "x-ves-proto-message": "ves.io.schema.ListMetaType"
+        },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "x-displayName: \"Message Metadata\"\nMessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description.",
+                    "title": "description"
+                },
+                "disable": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object that corresponds to the containing message.",
+                    "title": "disable",
+                    "format": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of the message.\nThe value of name has to follow DNS-1035 format.",
+                    "title": "name"
+                }
+            }
         },
         "schemaObjectMetaType": {
             "type": "object",

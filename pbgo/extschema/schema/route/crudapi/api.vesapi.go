@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.route.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.route.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/routecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/routecrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/routecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/routecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/routecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2871,6 +2859,42 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_bytes": "256",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
+        "ioschemaPortMatcherType": {
+            "type": "object",
+            "description": "Port match of the request can be a range or a specific port",
+            "title": "PortMatcherType",
+            "x-displayname": "Port to Match",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-port_match": "[\"port\",\"port_ranges\"]",
+            "x-ves-proto-message": "ves.io.schema.PortMatcherType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "6443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
+                    "title": "port_range",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "x-displayname": "Port range",
+                    "x-ves-example": "8080-8191",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range": "true"
                     }
                 }
             }
@@ -3741,6 +3765,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "routecrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.route.crudapi.ErrorCode"
+        },
         "runtimeStreamError": {
             "type": "object",
             "properties": {
@@ -4438,6 +4474,12 @@ var APISwaggerJSON string = `{
                     "title": "http_method",
                     "$ref": "#/definitions/schemaHttpMethod",
                     "x-displayname": "HTTP Method"
+                },
+                "incoming_port": {
+                    "description": " The port on which the request is received",
+                    "title": "incoming_port",
+                    "$ref": "#/definitions/ioschemaPortMatcherType",
+                    "x-displayname": "Match LB port"
                 },
                 "path": {
                     "description": " URI path of route",

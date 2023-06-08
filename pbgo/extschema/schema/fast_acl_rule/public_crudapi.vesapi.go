@@ -2865,7 +2865,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -2875,7 +2875,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -3328,14 +3329,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefix": {
                     "type": "array",
-                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n",
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n",
                     "title": "Prefix",
                     "maxItems": 256,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Prefix",
-                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]",
+                    "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]\"",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "256"

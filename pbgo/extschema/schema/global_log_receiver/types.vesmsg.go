@@ -969,7 +969,7 @@ var DefaultBatchOptionTypeValidator = func() *ValidateBatchOptionType {
 	vrhBatchBytesMaxBytes := v.BatchBytesMaxBytesValidationRuleHandler
 	rulesBatchBytesMaxBytes := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "4096",
-		"ves.io.schema.rules.uint32.lte": "1048576",
+		"ves.io.schema.rules.uint32.lte": "10485760",
 	}
 	vFnMap["batch_bytes.max_bytes"], err = vrhBatchBytesMaxBytes(rulesBatchBytesMaxBytes)
 	if err != nil {
@@ -1160,6 +1160,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.sumo_logic_receiver")
 	}
 
+	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.qradar_receiver")
+	}
+
 	return nil
 }
 
@@ -1267,6 +1271,10 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_SumoLogicReceiver:
+
+		return nil, nil
+
+	case *CreateSpecType_QradarReceiver:
 
 		return nil, nil
 
@@ -1555,6 +1563,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_QradarReceiver:
+		if fv, exists := v.FldValidators["receiver.qradar_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_QradarReceiver).QradarReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("qradar_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1619,6 +1638,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
+	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
 
 	return v
 }()
@@ -2319,6 +2339,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GetSpecType.sumo_logic_receiver")
 	}
 
+	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.qradar_receiver")
+	}
+
 	return nil
 }
 
@@ -2426,6 +2450,10 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_SumoLogicReceiver:
+
+		return nil, nil
+
+	case *GetSpecType_QradarReceiver:
 
 		return nil, nil
 
@@ -2714,6 +2742,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_QradarReceiver:
+		if fv, exists := v.FldValidators["receiver.qradar_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_QradarReceiver).QradarReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("qradar_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2778,6 +2817,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
+	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
 
 	return v
 }()
@@ -2837,6 +2877,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.sumo_logic_receiver")
+	}
+
+	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.qradar_receiver")
 	}
 
 	return nil
@@ -2959,6 +3003,10 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_SumoLogicReceiver:
+
+		return nil, nil
+
+	case *GlobalSpecType_QradarReceiver:
 
 		return nil, nil
 
@@ -3296,6 +3344,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_QradarReceiver:
+		if fv, exists := v.FldValidators["receiver.qradar_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_QradarReceiver).QradarReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("qradar_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3369,6 +3428,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
+	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4382,6 +4442,205 @@ func NewRelicConfigValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *QRadarConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *QRadarConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *QRadarConfig) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetUseTls().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting QRadarConfig.use_tls")
+	}
+
+	return nil
+}
+
+func (m *QRadarConfig) DeepCopy() *QRadarConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &QRadarConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *QRadarConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *QRadarConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return QRadarConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateQRadarConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateQRadarConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateQRadarConfig) UriValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for uri")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateQRadarConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*QRadarConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *QRadarConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *QRadarConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*QRadarConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QRadarConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*QRadarConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uri"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uri"))
+		if err := fv(ctx, m.GetUri(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultQRadarConfigValidator = func() *ValidateQRadarConfig {
+	v := &ValidateQRadarConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for QRadarConfig.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhUri := v.UriValidationRuleHandler
+	rulesUri := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhUri(rulesUri)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for QRadarConfig.uri: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["uri"] = vFn
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigTypeValidator().Validate
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func QRadarConfigValidator() db.Validator {
+	return DefaultQRadarConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4431,6 +4690,10 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetSumoLogicReceiver().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.sumo_logic_receiver")
+	}
+
+	if err := m.GetQradarReceiver().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.qradar_receiver")
 	}
 
 	return nil
@@ -4540,6 +4803,10 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_SumoLogicReceiver:
+
+		return nil, nil
+
+	case *ReplaceSpecType_QradarReceiver:
 
 		return nil, nil
 
@@ -4828,6 +5095,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_QradarReceiver:
+		if fv, exists := v.FldValidators["receiver.qradar_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_QradarReceiver).QradarReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("qradar_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4892,6 +5170,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["receiver.kafka_receiver"] = KafkaConfigValidator().Validate
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
+	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
 
 	return v
 }()
@@ -6063,6 +6342,9 @@ func (r *CreateSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_NewRelicReceiver:
 		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
 
+	case *CreateSpecType_QradarReceiver:
+		o.Receiver = &GlobalSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
+
 	case *CreateSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
@@ -6106,6 +6388,9 @@ func (r *CreateSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error 
 
 	case *GlobalSpecType_NewRelicReceiver:
 		r.Receiver = &CreateSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
+	case *GlobalSpecType_QradarReceiver:
+		r.Receiver = &CreateSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
 
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &CreateSpecType_S3Receiver{S3Receiver: of.S3Receiver}
@@ -6277,6 +6562,9 @@ func (r *GetSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_NewRelicReceiver:
 		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
 
+	case *GetSpecType_QradarReceiver:
+		o.Receiver = &GlobalSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
+
 	case *GetSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
@@ -6320,6 +6608,9 @@ func (r *GetSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_NewRelicReceiver:
 		r.Receiver = &GetSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
+	case *GlobalSpecType_QradarReceiver:
+		r.Receiver = &GetSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
 
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &GetSpecType_S3Receiver{S3Receiver: of.S3Receiver}
@@ -6491,6 +6782,9 @@ func (r *ReplaceSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *ReplaceSpecType_NewRelicReceiver:
 		o.Receiver = &GlobalSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
 
+	case *ReplaceSpecType_QradarReceiver:
+		o.Receiver = &GlobalSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
+
 	case *ReplaceSpecType_S3Receiver:
 		o.Receiver = &GlobalSpecType_S3Receiver{S3Receiver: of.S3Receiver}
 
@@ -6534,6 +6828,9 @@ func (r *ReplaceSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error
 
 	case *GlobalSpecType_NewRelicReceiver:
 		r.Receiver = &ReplaceSpecType_NewRelicReceiver{NewRelicReceiver: of.NewRelicReceiver}
+
+	case *GlobalSpecType_QradarReceiver:
+		r.Receiver = &ReplaceSpecType_QradarReceiver{QradarReceiver: of.QradarReceiver}
 
 	case *GlobalSpecType_S3Receiver:
 		r.Receiver = &ReplaceSpecType_S3Receiver{S3Receiver: of.S3Receiver}

@@ -2286,11 +2286,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoints Reachable via all Outside Interfaces"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints]\n List of ip prefixes that are representing endpoint\n For egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\n For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.\n\nExample: - \"192.168.20.0/24\"-",
-                    "title": "ipv4 prefix list",
+                    "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints]\n List of ip prefixes that are representing endpoint\n For egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\n For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.\n\nExample: - \"192.168.20.0/24\", \"2001:db08::1::/112\"-",
+                    "title": "ipv4/ipv6 prefix list",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-displayname": "IPv4i/IPv6 Prefix List",
+                    "x-ves-example": "192.168.20.0/24\", \"2001:db08::1::/112"
                 }
             }
         },
@@ -2388,11 +2388,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoints Reachable via all Outside Interfaces"
                 },
                 "prefix_list": {
-                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector outside_endpoints]\n list of ip prefixes that are representing endpoint\n For Egress rules: from these endpoints to remote endpoints these ip prefixes are source IPs.\n For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.\n\nExample: - \"192.168.20.0/24\"-",
-                    "title": "ipv4 prefix list",
+                    "description": "Exclusive with [any inside_endpoints ip_prefix_set label_selector outside_endpoints]\n list of ip prefixes that are representing endpoint\n For Egress rules: from these endpoints to remote endpoints these ip prefixes are source IPs.\n For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.\n\nExample: - \"192.168.20.0/24\", \"2001:db8::1::/112\"-",
+                    "title": "ipv4/ipv6 prefix list",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4 Prefix List",
-                    "x-ves-example": "192.168.20.0/24"
+                    "x-displayname": "IPv4/IPv6 Prefix List",
+                    "x-ves-example": "192.168.20.0/24\", \"2001:db8::1::/112"
                 },
                 "protocol_port_range": {
                     "description": "Exclusive with [all_tcp_traffic all_traffic all_udp_traffic applications]\n Select specific protocol and port ranges traffic to match",
@@ -2924,7 +2924,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -2934,7 +2934,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -3782,21 +3783,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

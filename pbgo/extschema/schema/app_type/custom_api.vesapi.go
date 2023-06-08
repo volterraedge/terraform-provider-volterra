@@ -2516,6 +2516,21 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "API Groups membership"
                 },
+                "api_type": {
+                    "description": " Signifies api endpoint type.\n\nExample: - API_TYPE_GRAPHQL, API_TYPE_REST, API_TYPE_GRPC-",
+                    "title": "api_type",
+                    "$ref": "#/definitions/app_typeAPIType",
+                    "x-displayname": "API Type"
+                },
+                "attributes": {
+                    "type": "array",
+                    "description": " List of api endpoint attributes.\n\nExample: - [GraphQL, login etc.]-",
+                    "title": "attributes",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Attributes"
+                },
                 "authentication_state": {
                     "description": " The authentication state of the endpoint.\n\nExample: - AUTH_STATE_AUTHENTICATED, AUTH_STATE_UNAUTHENTICATED, AUTH_STATE_UNKNOWN-",
                     "title": "authentication_state",
@@ -2933,6 +2948,20 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeAPIType": {
+            "type": "string",
+            "description": "List of possible types of api that can be discovered for an APIEP.\n\nThe API Type detected as unknown.\nThe API Type detected as GraphQL.\nThe API Type detected as REST.\nThe API Type detected as gRPC.",
+            "title": "APIType",
+            "enum": [
+                "API_TYPE_UNKNOWN",
+                "API_TYPE_GRAPHQL",
+                "API_TYPE_REST",
+                "API_TYPE_GRPC"
+            ],
+            "default": "API_TYPE_UNKNOWN",
+            "x-displayname": "API Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIType"
+        },
         "app_typeApiEndpointInfoRequest": {
             "type": "string",
             "description": "This is the various forms that can be requested to be sent in the ApiEndpointInfoRequest\n\nAPI ENDPOINT INFO NONE option is used to disable any additional info request per api endpoint response\nAPI ENDPOINT INFO PDF SPARKLINES option is used to enable pdf sparkline info along with the api endpoint response",
@@ -2974,7 +3003,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationType": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.",
+            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
             "title": "APIEP Authentication Type",
             "enum": [
                 "AUTH_TYPE_BASIC",
@@ -2983,7 +3012,10 @@ var CustomAPISwaggerJSON string = `{
                 "AUTH_TYPE_API_KEY",
                 "AUTH_TYPE_OAUTH2",
                 "AUTH_TYPE_OPENID",
-                "AUTH_TYPE_HTTP"
+                "AUTH_TYPE_HTTP",
+                "AUTH_TYPE_OAUTH1",
+                "AUTH_TYPE_DIGEST",
+                "AUTH_TYPE_NEGOTIATE"
             ],
             "default": "AUTH_TYPE_BASIC",
             "x-displayname": "",
@@ -3348,6 +3380,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Field",
                     "x-displayname": "Field"
                 },
+                "rule_type": {
+                    "description": " Type of sensitive data detection rule. Could be built-in or custom.",
+                    "title": "Rule Type",
+                    "$ref": "#/definitions/app_typeSensitiveDataDetectionRuleType",
+                    "x-displayname": "Rule Type"
+                },
                 "section": {
                     "type": "string",
                     "description": " Section of sensitive data.\n\nExample: - req_body-",
@@ -3367,6 +3405,18 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Type"
                 }
             }
+        },
+        "app_typeSensitiveDataDetectionRuleType": {
+            "type": "string",
+            "description": "Sensitive Data Detection Rule Type\n\n - RULE_TYPE_BUILT_IN: built_in\n\nBuilt in rule type\n - RULE_TYPE_CUSTOM: custom\n\nCustom rule type",
+            "title": "sensitive_data_detection_rule_type",
+            "enum": [
+                "RULE_TYPE_BUILT_IN",
+                "RULE_TYPE_CUSTOM"
+            ],
+            "default": "RULE_TYPE_BUILT_IN",
+            "x-displayname": "Sensitive Data Detection Rule Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.SensitiveDataDetectionRuleType"
         },
         "app_typeSensitiveDataType": {
             "type": "string",

@@ -2760,7 +2760,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "address_allocatorcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2792,7 +2792,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/address_allocatorcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2813,7 +2813,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/address_allocatorcrudapiErrorCode"
                 }
             }
         },
@@ -2828,7 +2828,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/address_allocatorcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2855,7 +2855,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/address_allocatorcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2934,7 +2934,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.address_allocator.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/address_allocatorcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

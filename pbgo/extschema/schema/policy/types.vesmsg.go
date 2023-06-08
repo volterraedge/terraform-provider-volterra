@@ -5711,6 +5711,14 @@ func (v *ValidateOriginServerSubsetRule) IpChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateOriginServerSubsetRule) SelectorChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for selector_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginServerSubsetRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -5937,15 +5945,6 @@ func (v *ValidateOriginServerSubsetRule) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["client_selector"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("client_selector"))
-		if err := fv(ctx, m.GetClientSelector(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["country_codes"]; exists {
 		vOpts := append(opts, db.WithValidateField("country_codes"))
 		if err := fv(ctx, m.GetCountryCodes(), vOpts...); err != nil {
@@ -6026,6 +6025,42 @@ func (v *ValidateOriginServerSubsetRule) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["selector_choice"]; exists {
+		val := m.GetSelectorChoice()
+		vOpts := append(opts,
+			db.WithValidateField("selector_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSelectorChoice().(type) {
+	case *OriginServerSubsetRule_ClientSelector:
+		if fv, exists := v.FldValidators["selector_choice.client_selector"]; exists {
+			val := m.GetSelectorChoice().(*OriginServerSubsetRule_ClientSelector).ClientSelector
+			vOpts := append(opts,
+				db.WithValidateField("selector_choice"),
+				db.WithValidateField("client_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerSubsetRule_None:
+		if fv, exists := v.FldValidators["selector_choice.none"]; exists {
+			val := m.GetSelectorChoice().(*OriginServerSubsetRule_None).None
+			vOpts := append(opts,
+				db.WithValidateField("selector_choice"),
+				db.WithValidateField("none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -6062,6 +6097,17 @@ var DefaultOriginServerSubsetRuleValidator = func() *ValidateOriginServerSubsetR
 		panic(errMsg)
 	}
 	v.FldValidators["ip_choice"] = vFn
+
+	vrhSelectorChoice := v.SelectorChoiceValidationRuleHandler
+	rulesSelectorChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSelectorChoice(rulesSelectorChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSubsetRule.selector_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["selector_choice"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -6121,7 +6167,7 @@ var DefaultOriginServerSubsetRuleValidator = func() *ValidateOriginServerSubsetR
 	v.FldValidators["ip_choice.ip_matcher"] = IpMatcherTypeValidator().Validate
 	v.FldValidators["ip_choice.ip_prefix_list"] = PrefixMatchListValidator().Validate
 
-	v.FldValidators["client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["selector_choice.client_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 
 	v.FldValidators["body_matcher"] = MatcherTypeValidator().Validate
 
@@ -7135,22 +7181,6 @@ type ValidateRequestConstraintType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateRequestConstraintType) MaxBodySizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_body_size_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateRequestConstraintType) MaxBodySizeChoiceMaxBodySizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_MaxBodySizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_body_size_exceeds")
-	}
-	return oValidatorFn_MaxBodySizeExceeds, nil
-}
-
 func (v *ValidateRequestConstraintType) MaxCookieCountChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7343,22 +7373,6 @@ func (v *ValidateRequestConstraintType) MaxRequestSizeChoiceMaxRequestSizeExceed
 	return oValidatorFn_MaxRequestSizeExceeds, nil
 }
 
-func (v *ValidateRequestConstraintType) MaxUploadFileSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_upload_file_size_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateRequestConstraintType) MaxUploadFileSizeChoiceMaxUploadFileSizeExceedsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_MaxUploadFileSizeExceeds, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for max_upload_file_size_exceeds")
-	}
-	return oValidatorFn_MaxUploadFileSizeExceeds, nil
-}
-
 func (v *ValidateRequestConstraintType) MaxUrlSizeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7387,42 +7401,6 @@ func (v *ValidateRequestConstraintType) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["max_body_size_choice"]; exists {
-		val := m.GetMaxBodySizeChoice()
-		vOpts := append(opts,
-			db.WithValidateField("max_body_size_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetMaxBodySizeChoice().(type) {
-	case *RequestConstraintType_MaxBodySizeNone:
-		if fv, exists := v.FldValidators["max_body_size_choice.max_body_size_none"]; exists {
-			val := m.GetMaxBodySizeChoice().(*RequestConstraintType_MaxBodySizeNone).MaxBodySizeNone
-			vOpts := append(opts,
-				db.WithValidateField("max_body_size_choice"),
-				db.WithValidateField("max_body_size_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RequestConstraintType_MaxBodySizeExceeds:
-		if fv, exists := v.FldValidators["max_body_size_choice.max_body_size_exceeds"]; exists {
-			val := m.GetMaxBodySizeChoice().(*RequestConstraintType_MaxBodySizeExceeds).MaxBodySizeExceeds
-			vOpts := append(opts,
-				db.WithValidateField("max_body_size_choice"),
-				db.WithValidateField("max_body_size_exceeds"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["max_cookie_count_choice"]; exists {
@@ -7857,42 +7835,6 @@ func (v *ValidateRequestConstraintType) Validate(ctx context.Context, pm interfa
 
 	}
 
-	if fv, exists := v.FldValidators["max_upload_file_size_choice"]; exists {
-		val := m.GetMaxUploadFileSizeChoice()
-		vOpts := append(opts,
-			db.WithValidateField("max_upload_file_size_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetMaxUploadFileSizeChoice().(type) {
-	case *RequestConstraintType_MaxUploadFileSizeNone:
-		if fv, exists := v.FldValidators["max_upload_file_size_choice.max_upload_file_size_none"]; exists {
-			val := m.GetMaxUploadFileSizeChoice().(*RequestConstraintType_MaxUploadFileSizeNone).MaxUploadFileSizeNone
-			vOpts := append(opts,
-				db.WithValidateField("max_upload_file_size_choice"),
-				db.WithValidateField("max_upload_file_size_none"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *RequestConstraintType_MaxUploadFileSizeExceeds:
-		if fv, exists := v.FldValidators["max_upload_file_size_choice.max_upload_file_size_exceeds"]; exists {
-			val := m.GetMaxUploadFileSizeChoice().(*RequestConstraintType_MaxUploadFileSizeExceeds).MaxUploadFileSizeExceeds
-			vOpts := append(opts,
-				db.WithValidateField("max_upload_file_size_choice"),
-				db.WithValidateField("max_upload_file_size_exceeds"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["max_url_size_choice"]; exists {
 		val := m.GetMaxUrlSizeChoice()
 		vOpts := append(opts,
@@ -7943,29 +7885,6 @@ var DefaultRequestConstraintTypeValidator = func() *ValidateRequestConstraintTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhMaxBodySizeChoice := v.MaxBodySizeChoiceValidationRuleHandler
-	rulesMaxBodySizeChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaxBodySizeChoice(rulesMaxBodySizeChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_body_size_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_body_size_choice"] = vFn
-
-	vrhMaxBodySizeChoiceMaxBodySizeExceeds := v.MaxBodySizeChoiceMaxBodySizeExceedsValidationRuleHandler
-	rulesMaxBodySizeChoiceMaxBodySizeExceeds := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "1",
-	}
-	vFnMap["max_body_size_choice.max_body_size_exceeds"], err = vrhMaxBodySizeChoiceMaxBodySizeExceeds(rulesMaxBodySizeChoiceMaxBodySizeExceeds)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_body_size_choice_max_body_size_exceeds: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["max_body_size_choice.max_body_size_exceeds"] = vFnMap["max_body_size_choice.max_body_size_exceeds"]
 
 	vrhMaxCookieCountChoice := v.MaxCookieCountChoiceValidationRuleHandler
 	rulesMaxCookieCountChoice := map[string]string{
@@ -8254,30 +8173,6 @@ var DefaultRequestConstraintTypeValidator = func() *ValidateRequestConstraintTyp
 	}
 
 	v.FldValidators["max_request_size_choice.max_request_size_exceeds"] = vFnMap["max_request_size_choice.max_request_size_exceeds"]
-
-	vrhMaxUploadFileSizeChoice := v.MaxUploadFileSizeChoiceValidationRuleHandler
-	rulesMaxUploadFileSizeChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaxUploadFileSizeChoice(rulesMaxUploadFileSizeChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RequestConstraintType.max_upload_file_size_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["max_upload_file_size_choice"] = vFn
-
-	vrhMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds := v.MaxUploadFileSizeChoiceMaxUploadFileSizeExceedsValidationRuleHandler
-	rulesMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "51200",
-	}
-	vFnMap["max_upload_file_size_choice.max_upload_file_size_exceeds"], err = vrhMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds(rulesMaxUploadFileSizeChoiceMaxUploadFileSizeExceeds)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RequestConstraintType.max_upload_file_size_choice_max_upload_file_size_exceeds: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["max_upload_file_size_choice.max_upload_file_size_exceeds"] = vFnMap["max_upload_file_size_choice.max_upload_file_size_exceeds"]
 
 	vrhMaxUrlSizeChoice := v.MaxUrlSizeChoiceValidationRuleHandler
 	rulesMaxUrlSizeChoice := map[string]string{
@@ -9433,6 +9328,16 @@ func (v *ValidateShapeProtectedEndpointAction) FlowLabelValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateShapeProtectedEndpointAction) AllowGoodbotValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allow_goodbot")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ShapeProtectedEndpointAction)
 	if !ok {
@@ -9445,6 +9350,15 @@ func (v *ValidateShapeProtectedEndpointAction) Validate(ctx context.Context, pm 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["allow_goodbot"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_goodbot"))
+		if err := fv(ctx, m.GetAllowGoodbot(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["app_traffic_type"]; exists {
@@ -9551,6 +9465,17 @@ var DefaultShapeProtectedEndpointActionValidator = func() *ValidateShapeProtecte
 		panic(errMsg)
 	}
 	v.FldValidators["flow_label"] = vFn
+
+	vrhAllowGoodbot := v.AllowGoodbotValidationRuleHandler
+	rulesAllowGoodbot := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAllowGoodbot(rulesAllowGoodbot)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ShapeProtectedEndpointAction.allow_goodbot: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_goodbot"] = vFn
 
 	v.FldValidators["transaction_result"] = ves_io_schema.BotDefenseTransactionResultTypeValidator().Validate
 

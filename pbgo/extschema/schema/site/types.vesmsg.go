@@ -1813,6 +1813,26 @@ func (v *ValidateCreateSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) InsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1908,6 +1928,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_v6"))
+		if err := fv(ctx, m.GetInsideVipV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -1930,6 +1959,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1984,6 +2022,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_selection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_selection"))
+		if err := fv(ctx, m.GetVipSelection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2166,6 +2213,28 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
+
+	vrhInsideVipV6 := v.InsideVipV6ValidationRuleHandler
+	rulesInsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideVipV6(rulesInsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.inside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_v6"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -3937,6 +4006,26 @@ func (v *ValidateGetSpecType) IpsecSslNodesFqdnValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) InsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4057,6 +4146,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_v6"))
+		if err := fv(ctx, m.GetInsideVipV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipsec_ssl_nodes_fqdn"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipsec_ssl_nodes_fqdn"))
 		if err := fv(ctx, m.GetIpsecSslNodesFqdn(), vOpts...); err != nil {
@@ -4114,6 +4212,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4202,6 +4309,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if fv, exists := v.FldValidators["vip_params_per_az"]; exists {
 		vOpts := append(opts, db.WithValidateField("vip_params_per_az"))
 		if err := fv(ctx, m.GetVipParamsPerAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_selection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_selection"))
+		if err := fv(ctx, m.GetVipSelection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4457,6 +4573,28 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipsec_ssl_nodes_fqdn"] = vFn
+
+	vrhInsideVipV6 := v.InsideVipV6ValidationRuleHandler
+	rulesInsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideVipV6(rulesInsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.inside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_v6"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -5452,6 +5590,26 @@ func (v *ValidateGlobalSpecType) IpsecSslNodesFqdnValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) InsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5617,6 +5775,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_v6"))
+		if err := fv(ctx, m.GetInsideVipV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipsec_ssl_nodes_fqdn"]; exists {
 		vOpts := append(opts, db.WithValidateField("ipsec_ssl_nodes_fqdn"))
 		if err := fv(ctx, m.GetIpsecSslNodesFqdn(), vOpts...); err != nil {
@@ -5775,6 +5942,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5998,6 +6174,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["vip_selection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_selection"))
+		if err := fv(ctx, m.GetVipSelection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vip_vrrp_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vip_vrrp_mode"))
@@ -6029,6 +6214,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("volterra_software_version"))
 		if err := fv(ctx, m.GetVolterraSoftwareVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpm"))
+		if err := fv(ctx, m.GetVpm(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6326,6 +6520,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipsec_ssl_nodes_fqdn"] = vFn
+
+	vrhInsideVipV6 := v.InsideVipV6ValidationRuleHandler
+	rulesInsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideVipV6(rulesInsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.inside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_v6"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -8857,6 +9073,26 @@ func (v *ValidateReplaceSpecType) TunnelDeadTimeoutValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) InsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -8943,6 +9179,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_vip_v6"))
+		if err := fv(ctx, m.GetInsideVipV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -8965,6 +9210,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9010,6 +9264,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
 		if err := fv(ctx, m.GetTunnelType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_selection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_selection"))
+		if err := fv(ctx, m.GetVipSelection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9190,6 +9453,28 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
+
+	vrhInsideVipV6 := v.InsideVipV6ValidationRuleHandler
+	rulesInsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideVipV6(rulesInsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.inside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_v6"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -10908,6 +11193,15 @@ func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["running_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("running_version"))
+		if err := fv(ctx, m.GetRunningVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -10954,15 +11248,18 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+	m.InsideVipV6 = f.GetInsideVipV6()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideVip = f.GetOutsideVip()
+	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
 	m.SiteToSiteNetworkType = f.GetSiteToSiteNetworkType()
 	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.SiteType = f.GetSiteType()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
+	m.VipSelection = f.GetVipSelection()
 	m.VipVrrpMode = f.GetVipVrrpMode()
 	m.VolterraSoftwareOveride = f.GetVolterraSoftwareOveride()
 }
@@ -10991,15 +11288,18 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+	f.InsideVipV6 = m1.InsideVipV6
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideVip = m1.OutsideVip
+	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region
 	f.SiteToSiteNetworkType = m1.SiteToSiteNetworkType
 	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.SiteType = m1.SiteType
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
+	f.VipSelection = m1.VipSelection
 	f.VipVrrpMode = m1.VipVrrpMode
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
 }
@@ -11028,6 +11328,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+	m.InsideVipV6 = f.GetInsideVipV6()
 	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
 
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
@@ -11035,6 +11336,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideVip = f.GetOutsideVip()
+	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
 	m.SiteSubtype = f.GetSiteSubtype()
@@ -11045,6 +11347,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
+	m.VipSelection = f.GetVipSelection()
 	m.VipVrrpMode = f.GetVipVrrpMode()
 	m.VmEnabled = f.GetVmEnabled()
 	m.VolterraSoftwareOveride = f.GetVolterraSoftwareOveride()
@@ -11078,6 +11381,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+	f.InsideVipV6 = m1.InsideVipV6
 	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
 
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
@@ -11085,6 +11389,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideVip = m1.OutsideVip
+	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState
 	f.SiteSubtype = m1.SiteSubtype
@@ -11095,6 +11400,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
 	f.VipParamsPerAz = m1.VipParamsPerAz
+	f.VipSelection = m1.VipSelection
 	f.VipVrrpMode = m1.VipVrrpMode
 	f.VmEnabled = m1.VmEnabled
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
@@ -11121,14 +11427,17 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
 	m.InsideVip = f.GetInsideVip()
+	m.InsideVipV6 = f.GetInsideVipV6()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideVip = f.GetOutsideVip()
+	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
 	m.SiteToSiteNetworkType = f.GetSiteToSiteNetworkType()
 	m.SiteToSiteTunnelIp = f.GetSiteToSiteTunnelIp()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
+	m.VipSelection = f.GetVipSelection()
 	m.VipVrrpMode = f.GetVipVrrpMode()
 	m.VolterraSoftwareOveride = f.GetVolterraSoftwareOveride()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -11157,14 +11466,17 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
 	f.InsideVip = m1.InsideVip
+	f.InsideVipV6 = m1.InsideVipV6
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideVip = m1.OutsideVip
+	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region
 	f.SiteToSiteNetworkType = m1.SiteToSiteNetworkType
 	f.SiteToSiteTunnelIp = m1.SiteToSiteTunnelIp
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
+	f.VipSelection = m1.VipSelection
 	f.VipVrrpMode = m1.VipVrrpMode
 	f.VolterraSoftwareOveride = m1.VolterraSoftwareOveride
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion

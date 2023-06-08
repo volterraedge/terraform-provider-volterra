@@ -2509,7 +2509,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "keys",
                     "maxItems": 16,
                     "items": {
@@ -2517,7 +2517,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Keys",
                     "x-ves-example": "production",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
                 }
@@ -3532,7 +3535,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3542,7 +3545,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4491,6 +4495,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4502,11 +4507,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4524,20 +4528,74 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaTrustedCAList": {
+            "type": "object",
+            "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+            "title": "Trusted CA List",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+                    "title": "Trusted CA List",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
+                }
+            }
+        },
+        "schemaUpstreamCertificateParamsType": {
+            "type": "object",
+            "description": "x-displayName: \"Upstream Certificate Parameters\"\nCertificate Parameters for authentication, TLS ciphers, and trust store",
+            "title": "UpstreamCertificateParamsType",
+            "properties": {
+                "certificates": {
+                    "type": "array",
+                    "description": "x-displayName: \"Client Certificate\"\nx-required\nClient TLS Certificate required for mTLS authentication",
+                    "title": "certificates",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
+                },
+                "cipher_suites": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cipher Suites\"\nx-example: \"TLS_AES_128_GCM_SHA256\"\nThe following list specifies the supported cipher suite\n  TLS_AES_128_GCM_SHA256\n  TLS_AES_256_GCM_SHA384\n  TLS_CHACHA20_POLY1305_SHA256\n  TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n  TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n  TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\n  TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n  TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA\n  TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA\n  TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA\n  TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA\n  TLS_RSA_WITH_AES_128_CBC_SHA\n  TLS_RSA_WITH_AES_128_GCM_SHA256\n  TLS_RSA_WITH_AES_256_CBC_SHA\n  TLS_RSA_WITH_AES_256_GCM_SHA384\n\nIf not specified, the default list:\n  TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256\n  TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256\n  TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256\n  TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256\n  TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384\n  TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384\nwill be used.",
+                    "title": "cipher_suites",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "maximum_protocol_version": {
+                    "description": "x-displayName: \"Maximum TLS Version\"\nMaximum TLS protocol version.",
+                    "title": "maximum_protocol_version",
+                    "$ref": "#/definitions/schemaTlsProtocol"
+                },
+                "minimum_protocol_version": {
+                    "description": "x-displayName: \"Minimum TLS Version\"\nMinimum TLS protocol version.",
+                    "title": "minimum_protocol_version",
+                    "$ref": "#/definitions/schemaTlsProtocol"
+                },
+                "validation_params": {
+                    "description": "x-displayName: \"Trusted CA Validation params\"\nThis includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
+                    "title": "validation_params",
+                    "$ref": "#/definitions/schemaTlsValidationParamsType"
+                }
+            }
+        },
         "schemaUpstreamTlsParamsType": {
             "type": "object",
             "description": "TLS configuration for upstream connections",
             "title": "UpstreamTlsParamsType",
             "x-displayname": "Upstream TLS Parameters",
-            "x-ves-displayorder": "5,1",
+            "x-ves-displayorder": "5,6",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
+            "x-ves-oneof-field-tls_params_choice": "[\"cert_params\",\"common_params\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
             "properties": {
                 "common_params": {
-                    "description": " Common TLS parameters used in both upstream and downstream connections",
+                    "description": "Exclusive with [cert_params]\n Common TLS parameters used in upstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
-                    "x-displayname": "Common Parameters"
+                    "x-displayname": "Inline TLS Parameters"
                 },
                 "disable_sni": {
                     "description": "Exclusive with [sni use_host_header_as_sni]\n Do not use SNI.",

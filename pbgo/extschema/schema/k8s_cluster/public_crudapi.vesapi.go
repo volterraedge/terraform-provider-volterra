@@ -2451,12 +2451,12 @@ var APISwaggerJSON string = `{
                 "cluster_scoped_access_deny": {
                     "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Deny K8s API Access"
                 },
                 "cluster_scoped_access_permit": {
                     "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Allow K8s API Access"
                 },
                 "cluster_wide_app_list": {
                     "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
@@ -2655,12 +2655,12 @@ var APISwaggerJSON string = `{
                 "cluster_scoped_access_deny": {
                     "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Deny K8s API Access"
                 },
                 "cluster_scoped_access_permit": {
                     "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Allow K8s API Access"
                 },
                 "cluster_wide_app_list": {
                     "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
@@ -2753,13 +2753,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
                     "title": "Deny K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Deny K8s API Access"
                 },
                 "cluster_scoped_access_permit": {
                     "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
                     "title": "Allow K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Allow K8s API Access"
                 },
                 "cluster_wide_app_list": {
                     "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
@@ -3241,12 +3241,12 @@ var APISwaggerJSON string = `{
                 "cluster_scoped_access_deny": {
                     "description": "Exclusive with [cluster_scoped_access_permit]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will not be allowed through K8s cluster API. It can be managed only through VoltConsole.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Deny K8s API Access"
                 },
                 "cluster_scoped_access_permit": {
                     "description": "Exclusive with [cluster_scoped_access_deny]\n Access to Create, Patch, Replace, Update and Delete for ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration will be allowed through K8s cluster API. This allows native k8s API operation with ClusterRoles and ClusterRoleBindings.",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow K8s API Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration"
+                    "x-displayname": "Allow K8s API Access"
                 },
                 "cluster_wide_app_list": {
                     "description": "Exclusive with [no_cluster_wide_apps]\n Select cluster wide applications to be deployed",
@@ -3506,7 +3506,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3516,7 +3516,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

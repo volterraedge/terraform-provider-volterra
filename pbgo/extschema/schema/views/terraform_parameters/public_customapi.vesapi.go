@@ -1038,6 +1038,17 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
         "terraform_parametersStatusObject": {
             "type": "object",
             "description": "view terraform parameters status object",
@@ -1082,6 +1093,17 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Plan Status"
                 }
             }
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
         },
         "viewsterraform_parametersGlobalSpecType": {
             "type": "object",

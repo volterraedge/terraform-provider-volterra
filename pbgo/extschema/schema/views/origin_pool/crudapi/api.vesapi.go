@@ -2649,7 +2649,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "keys": {
                     "type": "array",
-                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "description": " List of keys that define a cluster subset class.\n\nExample: - \"production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
                     "title": "keys",
                     "maxItems": 16,
                     "items": {
@@ -2657,7 +2657,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Keys",
                     "x-ves-example": "production",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "16"
                     }
                 }
@@ -2759,18 +2762,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.views.origin_pool.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.crudapi.ObjectCreateReq",
@@ -2791,7 +2782,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/origin_poolcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2812,7 +2803,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/origin_poolcrudapiErrorCode"
                 }
             }
         },
@@ -2827,7 +2818,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/origin_poolcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2848,7 +2839,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/origin_poolcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2921,7 +2912,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/origin_poolcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3137,14 +3128,16 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint_subsets": {
                     "type": "array",
-                    "description": " List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
+                    "description": " List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n",
                     "title": "Origin Server Subsets Classes",
                     "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/clusterEndpointSubsetSelectorType"
                     },
                     "x-displayname": "Origin Server Subsets Classes",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "32"
                     }
                 },
@@ -3639,9 +3632,9 @@ var APISwaggerJSON string = `{
                 },
                 "use_mtls": {
                     "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use MTLS",
+                    "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Enable MTLS With Inline Certificate"
                 },
                 "use_server_verification": {
                     "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
@@ -3662,26 +3655,35 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " Trusted CA certificates for verification of Server's certificate\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA certificates for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "Trusted CAs",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CAs",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.truststore_url": "true"
                     }
                 }
             }
+        },
+        "origin_poolcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.origin_pool.crudapi.ErrorCode"
         },
         "protobufAny": {
             "type": "object",
@@ -4513,7 +4515,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-health_check_port_choice": "[\"health_check_port\",\"same_as_endpoint_port\"]",
-            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"port\"]",
+            "x-ves-oneof-field-port_choice": "[\"automatic_port\",\"lb_port\",\"port\"]",
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.GlobalSpecType",
             "properties": {
@@ -4524,7 +4526,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Other Settings"
                 },
                 "automatic_port": {
-                    "description": "Exclusive with [port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
+                    "description": "Exclusive with [lb_port port]\n\n Automatic selection of port for endpoint\n\n For Consul service discovery, port will be discovered as part of service discovery.\n For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled",
                     "title": "Automatic selection of endpoint port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic port"
@@ -4562,6 +4564,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 },
+                "lb_port": {
+                    "description": "Exclusive with [automatic_port port]\n\n Endpoint port is selected based on loadbalancer port",
+                    "title": "Same as Loadbalancer port",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Loadbalancer port"
+                },
                 "loadbalancer_algorithm": {
                     "description": " When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses\n loadbalancer_algorithm to determine which host is selected.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "loadbalancer_algorithm",
@@ -4598,7 +4606,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [automatic_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [automatic_port lb_port]\n Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Port",

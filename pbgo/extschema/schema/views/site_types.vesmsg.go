@@ -25,6 +25,148 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSNATGatewaychoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSNATGatewaychoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSNATGatewaychoiceType) DeepCopy() *AWSNATGatewaychoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSNATGatewaychoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSNATGatewaychoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSNATGatewaychoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSNATGatewaychoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSNATGatewaychoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSNATGatewaychoiceType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSNATGatewaychoiceType) ChoiceNatGwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NatGwId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nat_gw_id")
+	}
+	return oValidatorFn_NatGwId, nil
+}
+
+func (v *ValidateAWSNATGatewaychoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSNATGatewaychoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSNATGatewaychoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *AWSNATGatewaychoiceType_NatGwId:
+		if fv, exists := v.FldValidators["choice.nat_gw_id"]; exists {
+			val := m.GetChoice().(*AWSNATGatewaychoiceType_NatGwId).NatGwId
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("nat_gw_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSNATGatewaychoiceTypeValidator = func() *ValidateAWSNATGatewaychoiceType {
+	v := &ValidateAWSNATGatewaychoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSNATGatewaychoiceType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	vrhChoiceNatGwId := v.ChoiceNatGwIdValidationRuleHandler
+	rulesChoiceNatGwId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "21",
+		"ves.io.schema.rules.string.pattern": "^(nat-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFnMap["choice.nat_gw_id"], err = vrhChoiceNatGwId(rulesChoiceNatGwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSNATGatewaychoiceType.choice_nat_gw_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["choice.nat_gw_id"] = vFnMap["choice.nat_gw_id"]
+
+	return v
+}()
+
+func AWSNATGatewaychoiceTypeValidator() db.Validator {
+	return DefaultAWSNATGatewaychoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSSubnetIdsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1078,6 +1220,148 @@ func AWSVPCchoiceTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSVirtualPrivateGatewaychoiceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSVirtualPrivateGatewaychoiceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSVirtualPrivateGatewaychoiceType) DeepCopy() *AWSVirtualPrivateGatewaychoiceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSVirtualPrivateGatewaychoiceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSVirtualPrivateGatewaychoiceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSVirtualPrivateGatewaychoiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSVirtualPrivateGatewaychoiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSVirtualPrivateGatewaychoiceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSVirtualPrivateGatewaychoiceType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSVirtualPrivateGatewaychoiceType) ChoiceVgwIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VgwId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vgw_id")
+	}
+	return oValidatorFn_VgwId, nil
+}
+
+func (v *ValidateAWSVirtualPrivateGatewaychoiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSVirtualPrivateGatewaychoiceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSVirtualPrivateGatewaychoiceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *AWSVirtualPrivateGatewaychoiceType_VgwId:
+		if fv, exists := v.FldValidators["choice.vgw_id"]; exists {
+			val := m.GetChoice().(*AWSVirtualPrivateGatewaychoiceType_VgwId).VgwId
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("vgw_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSVirtualPrivateGatewaychoiceTypeValidator = func() *ValidateAWSVirtualPrivateGatewaychoiceType {
+	v := &ValidateAWSVirtualPrivateGatewaychoiceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVirtualPrivateGatewaychoiceType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	vrhChoiceVgwId := v.ChoiceVgwIdValidationRuleHandler
+	rulesChoiceVgwId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "21",
+		"ves.io.schema.rules.string.pattern": "^(vgw-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFnMap["choice.vgw_id"], err = vrhChoiceVgwId(rulesChoiceVgwId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSVirtualPrivateGatewaychoiceType.choice_vgw_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["choice.vgw_id"] = vFnMap["choice.vgw_id"]
+
+	return v
+}()
+
+func AWSVirtualPrivateGatewaychoiceTypeValidator() db.Validator {
+	return DefaultAWSVirtualPrivateGatewaychoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AllowedVIPPorts) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1171,6 +1455,17 @@ func (v *ValidateAllowedVIPPorts) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("port_choice"),
 				db.WithValidateField("custom_ports"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AllowedVIPPorts_DisableAllowedVipPort:
+		if fv, exists := v.FldValidators["port_choice.disable_allowed_vip_port"]; exists {
+			val := m.GetPortChoice().(*AllowedVIPPorts_DisableAllowedVipPort).DisableAllowedVipPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("disable_allowed_vip_port"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

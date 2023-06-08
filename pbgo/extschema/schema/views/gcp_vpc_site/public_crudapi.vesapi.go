@@ -2176,7 +2176,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DNS port"
@@ -3594,7 +3594,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3604,7 +3604,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4907,35 +4908,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaviewsStorageClassOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "Storage class Device configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "x-displayname": "OpenEBS Enterprise",
-            "x-ves-proto-message": "ves.io.schema.views.StorageClassOpenebsEnterpriseType",
-            "properties": {
-                "replication": {
-                    "type": "integer",
-                    "description": " Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3.\n\nExample: - \"1\"-",
-                    "title": "Replication",
-                    "format": "int32",
-                    "x-displayname": "Replication",
-                    "x-ves-example": "1"
-                },
-                "storage_class_size": {
-                    "type": "integer",
-                    "description": " Size of each node of storage class. e.g If \"Storage Class Replicas\" will be set to 3 and \"Storage Class Size\" to 10GB.\n Three 10GB disk will be created and assigned to nodes.\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
-                    "title": "Storage Size",
-                    "format": "int64",
-                    "x-displayname": "Storage Size",
-                    "x-ves-example": "10",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "1",
-                        "ves.io.schema.rules.uint32.lte": "1024"
-                    }
-                }
-            }
-        },
         "siteCoordinates": {
             "type": "object",
             "description": "Coordinates of the site which provides the site physical location",
@@ -5168,6 +5140,28 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
         },
         "viewsGCPSubnetParamsType": {
             "type": "object",
@@ -5408,11 +5402,17 @@ var APISwaggerJSON string = `{
             "title": "L3 Mode Enhanced Performance options",
             "x-displayname": "L3 Mode Enhanced Performance",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
+            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo\",\"no_jumbo\"]",
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
+                "jumbo": {
+                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
+                    "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
+                },
                 "no_jumbo": {
-                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
@@ -5572,7 +5572,6 @@ var APISwaggerJSON string = `{
             "description": "Configuration of custom storage class",
             "title": "Custom Storage Class",
             "x-displayname": "Custom Storage Class",
-            "x-ves-oneof-field-device_choice": "[\"openebs_enterprise\"]",
             "x-ves-proto-message": "ves.io.schema.views.StorageClassType",
             "properties": {
                 "default_storage_class": {
@@ -5581,12 +5580,6 @@ var APISwaggerJSON string = `{
                     "title": "Default Storage Class",
                     "format": "boolean",
                     "x-displayname": "Default Storage Class"
-                },
-                "openebs_enterprise": {
-                    "description": "Exclusive with []\n Storage class Device configuration for OpenEBS Enterprise",
-                    "title": "OpenEBS Enterprise",
-                    "$ref": "#/definitions/schemaviewsStorageClassOpenebsEnterpriseType",
-                    "x-displayname": "OpenEBS Enterprise"
                 },
                 "storage_class_name": {
                     "type": "string",

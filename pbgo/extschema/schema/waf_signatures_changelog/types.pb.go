@@ -41,14 +41,24 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Added Signatures"
 	// x-example: ["200101852", "200103290"]
-	// A list of new signatures in the release.
-	AddedSignatures []string `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
+	// A list of new signature ids in the release.
+	AddedSignatures []string `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"` // Deprecated: Do not use.
 	// Updated Signatures
 	//
 	// x-displayName: "Updated Signatures"
 	// x-example: ["200101852", "200103290"]
+	// A list of updated signature ids in the release.
+	UpdatedSignatures []string `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"` // Deprecated: Do not use.
+	// Added Signatures Data
+	//
+	// x-displayName: "Added Signatures Data"
+	// A list of new signatures in the release.
+	AddedSignaturesData []*Signature `protobuf:"bytes,4,rep,name=added_signatures_data,json=addedSignaturesData,proto3" json:"added_signatures_data,omitempty"`
+	// Updated Signatures Data
+	//
+	// x-displayName: "Updated Signatures Data"
 	// A list of updated signatures in the release.
-	UpdatedSignatures []string `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	UpdatedSignaturesData []*Signature `protobuf:"bytes,5,rep,name=updated_signatures_data,json=updatedSignaturesData,proto3" json:"updated_signatures_data,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -90,6 +100,7 @@ func (m *GlobalSpecType) GetReleaseDate() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetAddedSignatures() []string {
 	if m != nil {
 		return m.AddedSignatures
@@ -97,6 +108,7 @@ func (m *GlobalSpecType) GetAddedSignatures() []string {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetUpdatedSignatures() []string {
 	if m != nil {
 		return m.UpdatedSignatures
@@ -104,20 +116,202 @@ func (m *GlobalSpecType) GetUpdatedSignatures() []string {
 	return nil
 }
 
+func (m *GlobalSpecType) GetAddedSignaturesData() []*Signature {
+	if m != nil {
+		return m.AddedSignaturesData
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetUpdatedSignaturesData() []*Signature {
+	if m != nil {
+		return m.UpdatedSignaturesData
+	}
+	return nil
+}
+
+type Signature struct {
+	// id
+	//
+	// x-displayName: "ID"
+	// x-example: "200104853"
+	// The Signature ID
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// name
+	//
+	// x-displayName: "Name"
+	// x-example: "Java code injection FreeMarker - objectWrapper (URI)"
+	// The Signature Name
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// attack_type
+	//
+	// x-displayName: "Attack Type"
+	// x-example: "Server Side Code Injection"
+	// The Signature Attack Type
+	AttackType string `protobuf:"bytes,3,opt,name=attack_type,json=attackType,proto3" json:"attack_type,omitempty"`
+	// risk
+	//
+	// x-displayName: "Risk"
+	// x-example: "High"
+	// The Signature Risk
+	Risk string `protobuf:"bytes,4,opt,name=risk,proto3" json:"risk,omitempty"`
+	// accuracy
+	//
+	// x-displayName: "Accuracy"
+	// x-example: "Medium"
+	// The Signature Accuracy
+	Accuracy string `protobuf:"bytes,5,opt,name=accuracy,proto3" json:"accuracy,omitempty"`
+	// applies_to
+	//
+	// x-displayName: "Applies To"
+	// x-example: "Request"
+	// The Signature Applies to
+	AppliesTo string `protobuf:"bytes,6,opt,name=applies_to,json=appliesTo,proto3" json:"applies_to,omitempty"`
+	// systems
+	//
+	// x-displayName: "Systems"
+	// x-example: "['Java Servlets/JSP', 'Apache Struts', 'JavaServer Faces (JSF)']"
+	// The Signature Systems
+	Systems []string `protobuf:"bytes,7,rep,name=systems,proto3" json:"systems,omitempty"`
+	// description
+	//
+	// x-displayName: "Description"
+	// x-example: "Summary:\nThis event is generated when an attempt is made to inject Server-side Include code. This is a general attack detection signature (i.e. it is not specific to any web application).\n\nImpact:\nSerious. Execution of arbitrary commands may be possible.\n\nDetailed Information:\nThis event indicates that an attempt has been made to inject Server-side Include (SSI) code. SSI Injection allows to attacker to send server side code that could be executed locally by the web server.\n\nAffected Systems:\nAll systems.\n\nAttack Scenarios:\nThere are many possible.\n\nEase Of Attack:\nSimple to medium.\n\nFalse Positives:\nSome applications may accept valid input which matches these signatures.\n\nFalse Negatives:\nNone known.\n\nCorrective Action:\nEnsure the system is using an up to date version of the software and has had all vendor supplied patches applied. Utilize \"Positive Security Model\" by accepting only known types of input in web application.\n\nAdditional References:\nhttp://www.webappsec.org/projects/threat/classes/ssi_injection.shtml\n\n"
+	// The Signature Description
+	Description string `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
+	// references
+	//
+	// x-displayName: "References"
+	// x-example: "['http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-26377']"
+	// The Signature References
+	References []string `protobuf:"bytes,9,rep,name=references,proto3" json:"references,omitempty"`
+	// last_update
+	//
+	// x-displayName: "Last Update"
+	// x-example: "2022/11/29 20:19:17"
+	// x-required
+	// The Signature last update time
+	LastUpdate string `protobuf:"bytes,10,opt,name=last_update,json=lastUpdate,proto3" json:"last_update,omitempty"`
+}
+
+func (m *Signature) Reset()      { *m = Signature{} }
+func (*Signature) ProtoMessage() {}
+func (*Signature) Descriptor() ([]byte, []int) {
+	return fileDescriptor_126413124a3f5ee5, []int{1}
+}
+func (m *Signature) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Signature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Signature.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Signature) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Signature.Merge(m, src)
+}
+func (m *Signature) XXX_Size() int {
+	return m.Size()
+}
+func (m *Signature) XXX_DiscardUnknown() {
+	xxx_messageInfo_Signature.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Signature proto.InternalMessageInfo
+
+func (m *Signature) GetId() int64 {
+	if m != nil {
+		return m.Id
+	}
+	return 0
+}
+
+func (m *Signature) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Signature) GetAttackType() string {
+	if m != nil {
+		return m.AttackType
+	}
+	return ""
+}
+
+func (m *Signature) GetRisk() string {
+	if m != nil {
+		return m.Risk
+	}
+	return ""
+}
+
+func (m *Signature) GetAccuracy() string {
+	if m != nil {
+		return m.Accuracy
+	}
+	return ""
+}
+
+func (m *Signature) GetAppliesTo() string {
+	if m != nil {
+		return m.AppliesTo
+	}
+	return ""
+}
+
+func (m *Signature) GetSystems() []string {
+	if m != nil {
+		return m.Systems
+	}
+	return nil
+}
+
+func (m *Signature) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *Signature) GetReferences() []string {
+	if m != nil {
+		return m.References
+	}
+	return nil
+}
+
+func (m *Signature) GetLastUpdate() string {
+	if m != nil {
+		return m.LastUpdate
+	}
+	return ""
+}
+
 // Create Signatures Changelog
 //
 // x-displayName: "Create Signatures Changelog"
 // Create signatures changelog when signatures are released
 type CreateSpecType struct {
-	ReleaseDate       string   `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
-	AddedSignatures   []string `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
-	UpdatedSignatures []string `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	ReleaseDate           string       `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
+	AddedSignatures       []string     `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
+	UpdatedSignatures     []string     `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	AddedSignaturesData   []*Signature `protobuf:"bytes,4,rep,name=added_signatures_data,json=addedSignaturesData,proto3" json:"added_signatures_data,omitempty"`
+	UpdatedSignaturesData []*Signature `protobuf:"bytes,5,rep,name=updated_signatures_data,json=updatedSignaturesData,proto3" json:"updated_signatures_data,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_126413124a3f5ee5, []int{1}
+	return fileDescriptor_126413124a3f5ee5, []int{2}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -167,20 +361,36 @@ func (m *CreateSpecType) GetUpdatedSignatures() []string {
 	return nil
 }
 
+func (m *CreateSpecType) GetAddedSignaturesData() []*Signature {
+	if m != nil {
+		return m.AddedSignaturesData
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetUpdatedSignaturesData() []*Signature {
+	if m != nil {
+		return m.UpdatedSignaturesData
+	}
+	return nil
+}
+
 // Replace Signatures Changelog
 //
 // x-displayName: "Replace Signatures Changelog"
 // Update signatures changelog by replacing the existing spec with the provided one
 type ReplaceSpecType struct {
-	ReleaseDate       string   `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
-	AddedSignatures   []string `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
-	UpdatedSignatures []string `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	ReleaseDate           string       `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
+	AddedSignatures       []string     `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
+	UpdatedSignatures     []string     `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	AddedSignaturesData   []*Signature `protobuf:"bytes,4,rep,name=added_signatures_data,json=addedSignaturesData,proto3" json:"added_signatures_data,omitempty"`
+	UpdatedSignaturesData []*Signature `protobuf:"bytes,5,rep,name=updated_signatures_data,json=updatedSignaturesData,proto3" json:"updated_signatures_data,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_126413124a3f5ee5, []int{2}
+	return fileDescriptor_126413124a3f5ee5, []int{3}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -230,20 +440,36 @@ func (m *ReplaceSpecType) GetUpdatedSignatures() []string {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetAddedSignaturesData() []*Signature {
+	if m != nil {
+		return m.AddedSignaturesData
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetUpdatedSignaturesData() []*Signature {
+	if m != nil {
+		return m.UpdatedSignaturesData
+	}
+	return nil
+}
+
 // Get Signatures Changelog
 //
 // x-displayName: "Get Signatures Changelog"
 // Get signatures changelog
 type GetSpecType struct {
-	ReleaseDate       string   `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
-	AddedSignatures   []string `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
-	UpdatedSignatures []string `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	ReleaseDate           string       `protobuf:"bytes,1,opt,name=release_date,json=releaseDate,proto3" json:"release_date,omitempty"`
+	AddedSignatures       []string     `protobuf:"bytes,2,rep,name=added_signatures,json=addedSignatures,proto3" json:"added_signatures,omitempty"`
+	UpdatedSignatures     []string     `protobuf:"bytes,3,rep,name=updated_signatures,json=updatedSignatures,proto3" json:"updated_signatures,omitempty"`
+	AddedSignaturesData   []*Signature `protobuf:"bytes,4,rep,name=added_signatures_data,json=addedSignaturesData,proto3" json:"added_signatures_data,omitempty"`
+	UpdatedSignaturesData []*Signature `protobuf:"bytes,5,rep,name=updated_signatures_data,json=updatedSignaturesData,proto3" json:"updated_signatures_data,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_126413124a3f5ee5, []int{3}
+	return fileDescriptor_126413124a3f5ee5, []int{4}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -293,8 +519,23 @@ func (m *GetSpecType) GetUpdatedSignatures() []string {
 	return nil
 }
 
+func (m *GetSpecType) GetAddedSignaturesData() []*Signature {
+	if m != nil {
+		return m.AddedSignaturesData
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetUpdatedSignaturesData() []*Signature {
+	if m != nil {
+		return m.UpdatedSignaturesData
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.waf_signatures_changelog.GlobalSpecType")
+	proto.RegisterType((*Signature)(nil), "ves.io.schema.waf_signatures_changelog.Signature")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.waf_signatures_changelog.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.waf_signatures_changelog.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.waf_signatures_changelog.GetSpecType")
@@ -305,33 +546,49 @@ func init() {
 }
 
 var fileDescriptor_126413124a3f5ee5 = []byte{
-	// 408 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x54, 0xbd, 0xae, 0xd3, 0x30,
-	0x14, 0x8e, 0xb9, 0x12, 0xd2, 0xf5, 0x45, 0xf7, 0xd2, 0x4c, 0xa5, 0x20, 0xab, 0x74, 0xa8, 0xca,
-	0x90, 0x58, 0x82, 0x8d, 0x81, 0x01, 0x90, 0xba, 0xb7, 0x4c, 0x08, 0x29, 0x72, 0x92, 0x13, 0xd7,
-	0xc2, 0xad, 0x2d, 0xc7, 0x49, 0xe9, 0xc6, 0x0b, 0x20, 0x21, 0x76, 0x24, 0xd8, 0x78, 0x14, 0xc4,
-	0xd4, 0xb1, 0x23, 0x4d, 0x17, 0xc6, 0x3e, 0x02, 0xaa, 0x9b, 0x42, 0x53, 0x09, 0xb1, 0x76, 0x3b,
-	0xe7, 0x7c, 0x3f, 0xfe, 0x74, 0x64, 0x1b, 0x3f, 0x2e, 0x21, 0x0f, 0x85, 0xa2, 0x79, 0x32, 0x81,
-	0x29, 0xa3, 0x73, 0x96, 0x45, 0xb9, 0xe0, 0x33, 0x66, 0x0b, 0x03, 0x79, 0x94, 0x4c, 0xd8, 0x8c,
-	0x83, 0x54, 0x9c, 0xda, 0x85, 0x86, 0x3c, 0xd4, 0x46, 0x59, 0xe5, 0xf7, 0xf7, 0x9a, 0x70, 0xaf,
-	0x09, 0xff, 0xa5, 0xe9, 0x04, 0x5c, 0xd8, 0x49, 0x11, 0x87, 0x89, 0x9a, 0x52, 0xae, 0xb8, 0xa2,
-	0x4e, 0x1e, 0x17, 0x99, 0xeb, 0x5c, 0xe3, 0xaa, 0xbd, 0x6d, 0xa7, 0xdf, 0x8c, 0xc2, 0xb4, 0x8e,
-	0x32, 0x61, 0x60, 0xce, 0xa4, 0x3c, 0x3e, 0xbe, 0x73, 0xbf, 0xc9, 0x53, 0xda, 0x0a, 0x35, 0x3b,
-	0x80, 0xf7, 0x9a, 0xe0, 0xb1, 0xee, 0x41, 0x13, 0x2a, 0x99, 0x14, 0x29, 0xb3, 0x50, 0xa3, 0xdd,
-	0x13, 0x54, 0xc0, 0x3c, 0x6a, 0x58, 0xf7, 0x3e, 0x20, 0x7c, 0x3d, 0x94, 0x2a, 0x66, 0x72, 0xac,
-	0x21, 0x79, 0xb5, 0xd0, 0xe0, 0x3f, 0xc4, 0x77, 0x0c, 0x48, 0x60, 0x39, 0x44, 0x3b, 0xab, 0x36,
-	0xea, 0xa2, 0xc1, 0xe5, 0xe8, 0xaa, 0x9e, 0xbd, 0x64, 0x16, 0xfc, 0x47, 0xf8, 0x2e, 0x4b, 0x53,
-	0x48, 0x8f, 0x56, 0xd4, 0xbe, 0xd5, 0xbd, 0x18, 0x5c, 0x8e, 0x6e, 0xdc, 0x7c, 0xfc, 0x67, 0xec,
-	0x07, 0xd8, 0x2f, 0xf4, 0xce, 0xa7, 0x41, 0xbe, 0x70, 0xe4, 0x56, 0x8d, 0xfc, 0xa5, 0xf7, 0xbe,
-	0x20, 0x7c, 0xfd, 0xc2, 0x00, 0xb3, 0x70, 0x16, 0x79, 0x9e, 0xb6, 0x7e, 0x3c, 0x3b, 0xd9, 0x4f,
-	0xef, 0x2b, 0xc2, 0x37, 0x23, 0xd0, 0x92, 0x25, 0xe7, 0x9b, 0xf1, 0x33, 0xc2, 0x57, 0x43, 0xb0,
-	0xe7, 0x9a, 0xef, 0xf9, 0x27, 0xb4, 0x5c, 0x13, 0x6f, 0xb5, 0x26, 0xde, 0x76, 0x4d, 0xd0, 0xfb,
-	0x8a, 0xa0, 0x6f, 0x15, 0x41, 0xdf, 0x2b, 0x82, 0x96, 0x15, 0x41, 0x3f, 0x2b, 0x82, 0x7e, 0x55,
-	0xc4, 0xdb, 0x56, 0x04, 0x7d, 0xdc, 0x10, 0x6f, 0xb9, 0x21, 0xde, 0x6a, 0x43, 0xbc, 0xd7, 0x6f,
-	0xb8, 0xd2, 0x6f, 0x79, 0x58, 0x2a, 0x69, 0xc1, 0x18, 0x16, 0x16, 0x39, 0x75, 0x45, 0xa6, 0xcc,
-	0x34, 0xd0, 0x46, 0x95, 0x22, 0x05, 0x13, 0x1c, 0x60, 0xaa, 0x63, 0xae, 0x28, 0xbc, 0xb3, 0xf5,
-	0xf5, 0xff, 0xcf, 0x77, 0x10, 0xdf, 0x76, 0x4f, 0xe2, 0xc9, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xc6, 0x9e, 0xba, 0xe7, 0x3f, 0x04, 0x00, 0x00,
+	// 664 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xbf, 0x6f, 0xd3, 0x40,
+	0x18, 0x8d, 0x9d, 0xf4, 0x47, 0x2e, 0xa8, 0xa5, 0x87, 0x2a, 0x4c, 0x80, 0xab, 0x89, 0x50, 0x55,
+	0x86, 0xd8, 0xa2, 0x6c, 0x0c, 0x0c, 0xa5, 0x52, 0x25, 0xc6, 0xb4, 0x2c, 0x08, 0xc9, 0xba, 0xd8,
+	0x5f, 0xdc, 0x53, 0x9d, 0xdc, 0xe9, 0xee, 0x92, 0x90, 0xa1, 0x12, 0x7f, 0x02, 0x62, 0x66, 0x46,
+	0xfc, 0x29, 0x88, 0xa9, 0x63, 0x47, 0xea, 0x2e, 0x6c, 0x54, 0xf0, 0x0f, 0x20, 0x9f, 0xd3, 0xc8,
+	0x49, 0x55, 0xf1, 0x63, 0xe8, 0x42, 0xb7, 0xbb, 0xf7, 0xfc, 0xde, 0x77, 0xf7, 0x7d, 0x2f, 0xb1,
+	0xd1, 0xe6, 0x00, 0x94, 0xc7, 0xb8, 0xaf, 0xc2, 0x7d, 0xe8, 0x52, 0x7f, 0x48, 0x3b, 0x81, 0x62,
+	0x71, 0x8f, 0xea, 0xbe, 0x04, 0x15, 0x84, 0xfb, 0xb4, 0x17, 0x43, 0xc2, 0x63, 0x5f, 0x8f, 0x04,
+	0x28, 0x4f, 0x48, 0xae, 0x39, 0x5e, 0xcf, 0x35, 0x5e, 0xae, 0xf1, 0x2e, 0xd3, 0xd4, 0x9b, 0x31,
+	0xd3, 0xfb, 0xfd, 0xb6, 0x17, 0xf2, 0xae, 0x1f, 0xf3, 0x98, 0xfb, 0x46, 0xde, 0xee, 0x77, 0xcc,
+	0xce, 0x6c, 0xcc, 0x2a, 0xb7, 0xad, 0xaf, 0x4f, 0x1f, 0x85, 0x0a, 0x11, 0x74, 0x98, 0x84, 0x21,
+	0x4d, 0x92, 0x62, 0xf9, 0xfa, 0xdd, 0xe9, 0xe7, 0xb8, 0xd0, 0x8c, 0xf7, 0xce, 0xc9, 0x3b, 0xd3,
+	0x64, 0x51, 0x77, 0x6f, 0x9a, 0x1a, 0xd0, 0x84, 0x45, 0x54, 0xc3, 0x98, 0x75, 0x67, 0x58, 0x06,
+	0xc3, 0x60, 0xca, 0xba, 0xf1, 0xb1, 0x8c, 0x96, 0x76, 0x12, 0xde, 0xa6, 0xc9, 0xae, 0x80, 0x70,
+	0x6f, 0x24, 0x00, 0x3f, 0x40, 0x37, 0x24, 0x24, 0x40, 0x15, 0x04, 0x99, 0x95, 0x63, 0xb9, 0xd6,
+	0x46, 0xb5, 0x55, 0x1b, 0x63, 0xdb, 0x54, 0x03, 0x7e, 0x81, 0x6e, 0xd2, 0x28, 0x82, 0xa8, 0xd0,
+	0x22, 0xc7, 0x76, 0xcb, 0x1b, 0xd5, 0xad, 0xb5, 0xf4, 0xb0, 0xde, 0x02, 0x91, 0xd0, 0x10, 0x22,
+	0xb7, 0x3d, 0x72, 0x7b, 0x30, 0x74, 0x0b, 0x0f, 0x59, 0xad, 0x65, 0x23, 0xdc, 0x9d, 0x40, 0x78,
+	0x17, 0xe1, 0xbe, 0xc8, 0x0a, 0x4d, 0xb9, 0x95, 0x8d, 0xdb, 0xc3, 0xf4, 0x70, 0xad, 0xe8, 0xd6,
+	0xe5, 0x11, 0xeb, 0x30, 0x88, 0xa6, 0x2d, 0x57, 0xc6, 0xfa, 0x82, 0x29, 0xa0, 0xd5, 0xd9, 0x03,
+	0x66, 0x97, 0xa1, 0x4e, 0xc5, 0x2d, 0x6f, 0xd4, 0x36, 0x1f, 0x7b, 0x7f, 0x36, 0x6d, 0x6f, 0x62,
+	0xd9, 0xba, 0x35, 0x73, 0xee, 0x6d, 0xaa, 0x29, 0x66, 0xe8, 0xf6, 0xc5, 0xb3, 0xe7, 0x85, 0xe6,
+	0xfe, 0xb5, 0xd0, 0xea, 0x85, 0xdb, 0x64, 0xa5, 0x1a, 0x1f, 0x6c, 0x54, 0x9d, 0x40, 0x78, 0x09,
+	0xd9, 0x2c, 0x32, 0x93, 0x29, 0xb7, 0x6c, 0x16, 0x61, 0x8c, 0x2a, 0x3d, 0xda, 0x05, 0xc7, 0x36,
+	0xb3, 0x32, 0x6b, 0xbc, 0x86, 0x6a, 0x54, 0x6b, 0x1a, 0x1e, 0x04, 0x59, 0x60, 0x9c, 0xb2, 0xa1,
+	0x50, 0x0e, 0x99, 0x41, 0x63, 0x54, 0x91, 0x4c, 0x1d, 0x38, 0x95, 0x5c, 0x94, 0xad, 0x71, 0x1d,
+	0x2d, 0xd2, 0x30, 0xec, 0x4b, 0x1a, 0x8e, 0x9c, 0x39, 0x83, 0x4f, 0xf6, 0xf8, 0x3e, 0x42, 0x54,
+	0x88, 0x84, 0x81, 0x0a, 0x34, 0x77, 0xe6, 0x0d, 0x5b, 0x1d, 0x23, 0x7b, 0x1c, 0x3b, 0x68, 0x41,
+	0x8d, 0x94, 0x86, 0xae, 0x72, 0x16, 0xb2, 0xe9, 0xb5, 0xce, 0xb7, 0xd8, 0x45, 0xb5, 0x08, 0x54,
+	0x28, 0x99, 0x89, 0x9e, 0xb3, 0x98, 0x07, 0xaa, 0x00, 0x61, 0x82, 0x90, 0x84, 0x0e, 0x48, 0xe8,
+	0x85, 0xa0, 0x9c, 0xaa, 0x91, 0x17, 0x90, 0xec, 0x2e, 0x09, 0x55, 0x3a, 0xc8, 0x7b, 0xe3, 0xa0,
+	0xfc, 0x2e, 0x19, 0xf4, 0xd2, 0x20, 0x8d, 0x1f, 0x36, 0x5a, 0x7a, 0x2e, 0x81, 0x6a, 0xf8, 0x9b,
+	0x1c, 0x3f, 0xba, 0x2c, 0xc7, 0x17, 0x63, 0xda, 0xbc, 0x3c, 0xa6, 0xff, 0x45, 0x00, 0x9f, 0xae,
+	0x7c, 0x79, 0x36, 0xf3, 0x4f, 0xd1, 0xf8, 0x69, 0xa3, 0xe5, 0xf1, 0xcf, 0xf3, 0xba, 0xeb, 0x57,
+	0xd6, 0xf5, 0xef, 0x36, 0xaa, 0xed, 0x80, 0xbe, 0xee, 0xf8, 0x55, 0x75, 0x7c, 0xeb, 0xbd, 0x75,
+	0x74, 0x42, 0x4a, 0xc7, 0x27, 0xa4, 0x74, 0x76, 0x42, 0xac, 0xb7, 0x29, 0xb1, 0x3e, 0xa5, 0xc4,
+	0xfa, 0x9c, 0x12, 0xeb, 0x28, 0x25, 0xd6, 0xd7, 0x94, 0x58, 0xdf, 0x52, 0x52, 0x3a, 0x4b, 0x89,
+	0xf5, 0xee, 0x94, 0x94, 0x8e, 0x4e, 0x49, 0xe9, 0xf8, 0x94, 0x94, 0x5e, 0xbd, 0x8e, 0xb9, 0x38,
+	0x88, 0xbd, 0x01, 0x4f, 0x34, 0x48, 0x49, 0xbd, 0xbe, 0xf2, 0xcd, 0xa2, 0xc3, 0x65, 0xb7, 0x29,
+	0x24, 0x1f, 0xb0, 0x08, 0x64, 0xf3, 0x9c, 0xf6, 0x45, 0x3b, 0xe6, 0x3e, 0xbc, 0xd1, 0xe3, 0x97,
+	0xf5, 0x6f, 0x3e, 0x5e, 0xda, 0xf3, 0xe6, 0x05, 0xfe, 0xe4, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x8a, 0xce, 0x46, 0x04, 0xed, 0x08, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -372,6 +629,83 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.AddedSignaturesData) != len(that1.AddedSignaturesData) {
+		return false
+	}
+	for i := range this.AddedSignaturesData {
+		if !this.AddedSignaturesData[i].Equal(that1.AddedSignaturesData[i]) {
+			return false
+		}
+	}
+	if len(this.UpdatedSignaturesData) != len(that1.UpdatedSignaturesData) {
+		return false
+	}
+	for i := range this.UpdatedSignaturesData {
+		if !this.UpdatedSignaturesData[i].Equal(that1.UpdatedSignaturesData[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *Signature) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Signature)
+	if !ok {
+		that2, ok := that.(Signature)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Id != that1.Id {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.AttackType != that1.AttackType {
+		return false
+	}
+	if this.Risk != that1.Risk {
+		return false
+	}
+	if this.Accuracy != that1.Accuracy {
+		return false
+	}
+	if this.AppliesTo != that1.AppliesTo {
+		return false
+	}
+	if len(this.Systems) != len(that1.Systems) {
+		return false
+	}
+	for i := range this.Systems {
+		if this.Systems[i] != that1.Systems[i] {
+			return false
+		}
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if len(this.References) != len(that1.References) {
+		return false
+	}
+	for i := range this.References {
+		if this.References[i] != that1.References[i] {
+			return false
+		}
+	}
+	if this.LastUpdate != that1.LastUpdate {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -409,6 +743,22 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.UpdatedSignatures {
 		if this.UpdatedSignatures[i] != that1.UpdatedSignatures[i] {
+			return false
+		}
+	}
+	if len(this.AddedSignaturesData) != len(that1.AddedSignaturesData) {
+		return false
+	}
+	for i := range this.AddedSignaturesData {
+		if !this.AddedSignaturesData[i].Equal(that1.AddedSignaturesData[i]) {
+			return false
+		}
+	}
+	if len(this.UpdatedSignaturesData) != len(that1.UpdatedSignaturesData) {
+		return false
+	}
+	for i := range this.UpdatedSignaturesData {
+		if !this.UpdatedSignaturesData[i].Equal(that1.UpdatedSignaturesData[i]) {
 			return false
 		}
 	}
@@ -452,6 +802,22 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.AddedSignaturesData) != len(that1.AddedSignaturesData) {
+		return false
+	}
+	for i := range this.AddedSignaturesData {
+		if !this.AddedSignaturesData[i].Equal(that1.AddedSignaturesData[i]) {
+			return false
+		}
+	}
+	if len(this.UpdatedSignaturesData) != len(that1.UpdatedSignaturesData) {
+		return false
+	}
+	for i := range this.UpdatedSignaturesData {
+		if !this.UpdatedSignaturesData[i].Equal(that1.UpdatedSignaturesData[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -492,17 +858,58 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.AddedSignaturesData) != len(that1.AddedSignaturesData) {
+		return false
+	}
+	for i := range this.AddedSignaturesData {
+		if !this.AddedSignaturesData[i].Equal(that1.AddedSignaturesData[i]) {
+			return false
+		}
+	}
+	if len(this.UpdatedSignaturesData) != len(that1.UpdatedSignaturesData) {
+		return false
+	}
+	for i := range this.UpdatedSignaturesData {
+		if !this.UpdatedSignaturesData[i].Equal(that1.UpdatedSignaturesData[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&waf_signatures_changelog.GlobalSpecType{")
 	s = append(s, "ReleaseDate: "+fmt.Sprintf("%#v", this.ReleaseDate)+",\n")
 	s = append(s, "AddedSignatures: "+fmt.Sprintf("%#v", this.AddedSignatures)+",\n")
 	s = append(s, "UpdatedSignatures: "+fmt.Sprintf("%#v", this.UpdatedSignatures)+",\n")
+	if this.AddedSignaturesData != nil {
+		s = append(s, "AddedSignaturesData: "+fmt.Sprintf("%#v", this.AddedSignaturesData)+",\n")
+	}
+	if this.UpdatedSignaturesData != nil {
+		s = append(s, "UpdatedSignaturesData: "+fmt.Sprintf("%#v", this.UpdatedSignaturesData)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Signature) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&waf_signatures_changelog.Signature{")
+	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "AttackType: "+fmt.Sprintf("%#v", this.AttackType)+",\n")
+	s = append(s, "Risk: "+fmt.Sprintf("%#v", this.Risk)+",\n")
+	s = append(s, "Accuracy: "+fmt.Sprintf("%#v", this.Accuracy)+",\n")
+	s = append(s, "AppliesTo: "+fmt.Sprintf("%#v", this.AppliesTo)+",\n")
+	s = append(s, "Systems: "+fmt.Sprintf("%#v", this.Systems)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "References: "+fmt.Sprintf("%#v", this.References)+",\n")
+	s = append(s, "LastUpdate: "+fmt.Sprintf("%#v", this.LastUpdate)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -510,11 +917,17 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&waf_signatures_changelog.CreateSpecType{")
 	s = append(s, "ReleaseDate: "+fmt.Sprintf("%#v", this.ReleaseDate)+",\n")
 	s = append(s, "AddedSignatures: "+fmt.Sprintf("%#v", this.AddedSignatures)+",\n")
 	s = append(s, "UpdatedSignatures: "+fmt.Sprintf("%#v", this.UpdatedSignatures)+",\n")
+	if this.AddedSignaturesData != nil {
+		s = append(s, "AddedSignaturesData: "+fmt.Sprintf("%#v", this.AddedSignaturesData)+",\n")
+	}
+	if this.UpdatedSignaturesData != nil {
+		s = append(s, "UpdatedSignaturesData: "+fmt.Sprintf("%#v", this.UpdatedSignaturesData)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -522,11 +935,17 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&waf_signatures_changelog.ReplaceSpecType{")
 	s = append(s, "ReleaseDate: "+fmt.Sprintf("%#v", this.ReleaseDate)+",\n")
 	s = append(s, "AddedSignatures: "+fmt.Sprintf("%#v", this.AddedSignatures)+",\n")
 	s = append(s, "UpdatedSignatures: "+fmt.Sprintf("%#v", this.UpdatedSignatures)+",\n")
+	if this.AddedSignaturesData != nil {
+		s = append(s, "AddedSignaturesData: "+fmt.Sprintf("%#v", this.AddedSignaturesData)+",\n")
+	}
+	if this.UpdatedSignaturesData != nil {
+		s = append(s, "UpdatedSignaturesData: "+fmt.Sprintf("%#v", this.UpdatedSignaturesData)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -534,11 +953,17 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&waf_signatures_changelog.GetSpecType{")
 	s = append(s, "ReleaseDate: "+fmt.Sprintf("%#v", this.ReleaseDate)+",\n")
 	s = append(s, "AddedSignatures: "+fmt.Sprintf("%#v", this.AddedSignatures)+",\n")
 	s = append(s, "UpdatedSignatures: "+fmt.Sprintf("%#v", this.UpdatedSignatures)+",\n")
+	if this.AddedSignaturesData != nil {
+		s = append(s, "AddedSignaturesData: "+fmt.Sprintf("%#v", this.AddedSignaturesData)+",\n")
+	}
+	if this.UpdatedSignaturesData != nil {
+		s = append(s, "UpdatedSignaturesData: "+fmt.Sprintf("%#v", this.UpdatedSignaturesData)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -570,6 +995,34 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.UpdatedSignaturesData) > 0 {
+		for iNdEx := len(m.UpdatedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UpdatedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.AddedSignaturesData) > 0 {
+		for iNdEx := len(m.AddedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AddedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.UpdatedSignatures) > 0 {
 		for iNdEx := len(m.UpdatedSignatures) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.UpdatedSignatures[iNdEx])
@@ -598,6 +1051,101 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Signature) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Signature) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Signature) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.LastUpdate) > 0 {
+		i -= len(m.LastUpdate)
+		copy(dAtA[i:], m.LastUpdate)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LastUpdate)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.References) > 0 {
+		for iNdEx := len(m.References) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.References[iNdEx])
+			copy(dAtA[i:], m.References[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.References[iNdEx])))
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Systems) > 0 {
+		for iNdEx := len(m.Systems) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Systems[iNdEx])
+			copy(dAtA[i:], m.Systems[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Systems[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.AppliesTo) > 0 {
+		i -= len(m.AppliesTo)
+		copy(dAtA[i:], m.AppliesTo)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AppliesTo)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Accuracy) > 0 {
+		i -= len(m.Accuracy)
+		copy(dAtA[i:], m.Accuracy)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Accuracy)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Risk) > 0 {
+		i -= len(m.Risk)
+		copy(dAtA[i:], m.Risk)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Risk)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.AttackType) > 0 {
+		i -= len(m.AttackType)
+		copy(dAtA[i:], m.AttackType)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.AttackType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -618,6 +1166,34 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.UpdatedSignaturesData) > 0 {
+		for iNdEx := len(m.UpdatedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UpdatedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.AddedSignaturesData) > 0 {
+		for iNdEx := len(m.AddedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AddedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.UpdatedSignatures) > 0 {
 		for iNdEx := len(m.UpdatedSignatures) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.UpdatedSignatures[iNdEx])
@@ -666,6 +1242,34 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.UpdatedSignaturesData) > 0 {
+		for iNdEx := len(m.UpdatedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UpdatedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.AddedSignaturesData) > 0 {
+		for iNdEx := len(m.AddedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AddedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.UpdatedSignatures) > 0 {
 		for iNdEx := len(m.UpdatedSignatures) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.UpdatedSignatures[iNdEx])
@@ -714,6 +1318,34 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.UpdatedSignaturesData) > 0 {
+		for iNdEx := len(m.UpdatedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UpdatedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.AddedSignaturesData) > 0 {
+		for iNdEx := len(m.AddedSignaturesData) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AddedSignaturesData[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.UpdatedSignatures) > 0 {
 		for iNdEx := len(m.UpdatedSignatures) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.UpdatedSignatures[iNdEx])
@@ -775,6 +1407,70 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.AddedSignaturesData) > 0 {
+		for _, e := range m.AddedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.UpdatedSignaturesData) > 0 {
+		for _, e := range m.UpdatedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *Signature) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTypes(uint64(m.Id))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AttackType)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Risk)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Accuracy)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.AppliesTo)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Systems) > 0 {
+		for _, s := range m.Systems {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.References) > 0 {
+		for _, s := range m.References {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = len(m.LastUpdate)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -797,6 +1493,18 @@ func (m *CreateSpecType) Size() (n int) {
 	if len(m.UpdatedSignatures) > 0 {
 		for _, s := range m.UpdatedSignatures {
 			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.AddedSignaturesData) > 0 {
+		for _, e := range m.AddedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.UpdatedSignaturesData) > 0 {
+		for _, e := range m.UpdatedSignaturesData {
+			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -825,6 +1533,18 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.AddedSignaturesData) > 0 {
+		for _, e := range m.AddedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.UpdatedSignaturesData) > 0 {
+		for _, e := range m.UpdatedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -850,6 +1570,18 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.AddedSignaturesData) > 0 {
+		for _, e := range m.AddedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.UpdatedSignaturesData) > 0 {
+		for _, e := range m.UpdatedSignaturesData {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -863,10 +1595,41 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForAddedSignaturesData := "[]*Signature{"
+	for _, f := range this.AddedSignaturesData {
+		repeatedStringForAddedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForAddedSignaturesData += "}"
+	repeatedStringForUpdatedSignaturesData := "[]*Signature{"
+	for _, f := range this.UpdatedSignaturesData {
+		repeatedStringForUpdatedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForUpdatedSignaturesData += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`ReleaseDate:` + fmt.Sprintf("%v", this.ReleaseDate) + `,`,
 		`AddedSignatures:` + fmt.Sprintf("%v", this.AddedSignatures) + `,`,
 		`UpdatedSignatures:` + fmt.Sprintf("%v", this.UpdatedSignatures) + `,`,
+		`AddedSignaturesData:` + repeatedStringForAddedSignaturesData + `,`,
+		`UpdatedSignaturesData:` + repeatedStringForUpdatedSignaturesData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Signature) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Signature{`,
+		`Id:` + fmt.Sprintf("%v", this.Id) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`AttackType:` + fmt.Sprintf("%v", this.AttackType) + `,`,
+		`Risk:` + fmt.Sprintf("%v", this.Risk) + `,`,
+		`Accuracy:` + fmt.Sprintf("%v", this.Accuracy) + `,`,
+		`AppliesTo:` + fmt.Sprintf("%v", this.AppliesTo) + `,`,
+		`Systems:` + fmt.Sprintf("%v", this.Systems) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`References:` + fmt.Sprintf("%v", this.References) + `,`,
+		`LastUpdate:` + fmt.Sprintf("%v", this.LastUpdate) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -875,10 +1638,22 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForAddedSignaturesData := "[]*Signature{"
+	for _, f := range this.AddedSignaturesData {
+		repeatedStringForAddedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForAddedSignaturesData += "}"
+	repeatedStringForUpdatedSignaturesData := "[]*Signature{"
+	for _, f := range this.UpdatedSignaturesData {
+		repeatedStringForUpdatedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForUpdatedSignaturesData += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`ReleaseDate:` + fmt.Sprintf("%v", this.ReleaseDate) + `,`,
 		`AddedSignatures:` + fmt.Sprintf("%v", this.AddedSignatures) + `,`,
 		`UpdatedSignatures:` + fmt.Sprintf("%v", this.UpdatedSignatures) + `,`,
+		`AddedSignaturesData:` + repeatedStringForAddedSignaturesData + `,`,
+		`UpdatedSignaturesData:` + repeatedStringForUpdatedSignaturesData + `,`,
 		`}`,
 	}, "")
 	return s
@@ -887,10 +1662,22 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForAddedSignaturesData := "[]*Signature{"
+	for _, f := range this.AddedSignaturesData {
+		repeatedStringForAddedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForAddedSignaturesData += "}"
+	repeatedStringForUpdatedSignaturesData := "[]*Signature{"
+	for _, f := range this.UpdatedSignaturesData {
+		repeatedStringForUpdatedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForUpdatedSignaturesData += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`ReleaseDate:` + fmt.Sprintf("%v", this.ReleaseDate) + `,`,
 		`AddedSignatures:` + fmt.Sprintf("%v", this.AddedSignatures) + `,`,
 		`UpdatedSignatures:` + fmt.Sprintf("%v", this.UpdatedSignatures) + `,`,
+		`AddedSignaturesData:` + repeatedStringForAddedSignaturesData + `,`,
+		`UpdatedSignaturesData:` + repeatedStringForUpdatedSignaturesData + `,`,
 		`}`,
 	}, "")
 	return s
@@ -899,10 +1686,22 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForAddedSignaturesData := "[]*Signature{"
+	for _, f := range this.AddedSignaturesData {
+		repeatedStringForAddedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForAddedSignaturesData += "}"
+	repeatedStringForUpdatedSignaturesData := "[]*Signature{"
+	for _, f := range this.UpdatedSignaturesData {
+		repeatedStringForUpdatedSignaturesData += strings.Replace(f.String(), "Signature", "Signature", 1) + ","
+	}
+	repeatedStringForUpdatedSignaturesData += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`ReleaseDate:` + fmt.Sprintf("%v", this.ReleaseDate) + `,`,
 		`AddedSignatures:` + fmt.Sprintf("%v", this.AddedSignatures) + `,`,
 		`UpdatedSignatures:` + fmt.Sprintf("%v", this.UpdatedSignatures) + `,`,
+		`AddedSignaturesData:` + repeatedStringForAddedSignaturesData + `,`,
+		`UpdatedSignaturesData:` + repeatedStringForUpdatedSignaturesData + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1039,6 +1838,434 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.UpdatedSignatures = append(m.UpdatedSignatures, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddedSignaturesData = append(m.AddedSignaturesData, &Signature{})
+			if err := m.AddedSignaturesData[len(m.AddedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedSignaturesData = append(m.UpdatedSignaturesData, &Signature{})
+			if err := m.UpdatedSignaturesData[len(m.UpdatedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Signature) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Signature: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Signature: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttackType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AttackType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Risk", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Risk = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Accuracy", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Accuracy = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppliesTo", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AppliesTo = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Systems", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Systems = append(m.Systems, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field References", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.References = append(m.References, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LastUpdate = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1189,6 +2416,74 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.UpdatedSignatures = append(m.UpdatedSignatures, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddedSignaturesData = append(m.AddedSignaturesData, &Signature{})
+			if err := m.AddedSignaturesData[len(m.AddedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedSignaturesData = append(m.UpdatedSignaturesData, &Signature{})
+			if err := m.UpdatedSignaturesData[len(m.UpdatedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1338,6 +2633,74 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.UpdatedSignatures = append(m.UpdatedSignatures, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddedSignaturesData = append(m.AddedSignaturesData, &Signature{})
+			if err := m.AddedSignaturesData[len(m.AddedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedSignaturesData = append(m.UpdatedSignaturesData, &Signature{})
+			if err := m.UpdatedSignaturesData[len(m.UpdatedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1486,6 +2849,74 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.UpdatedSignatures = append(m.UpdatedSignatures, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddedSignaturesData = append(m.AddedSignaturesData, &Signature{})
+			if err := m.AddedSignaturesData[len(m.AddedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedSignaturesData", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedSignaturesData = append(m.UpdatedSignaturesData, &Signature{})
+			if err := m.UpdatedSignaturesData[len(m.UpdatedSignaturesData)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

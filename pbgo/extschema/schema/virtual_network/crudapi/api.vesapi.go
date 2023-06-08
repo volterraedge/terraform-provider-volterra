@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.virtual_network.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.virtual_network.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_networkcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_networkcrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_networkcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_networkcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_network.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_networkcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3970,8 +3958,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ipv4_prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
+                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nList of IPv4 prefixes used as SNAT pool",
                     "title": "List of IPv4 Prefixes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": "x-displayName: \"List of IPv6 Prefixes\"\nx-example: \"2001::/92\"\nList of IPv6 prefixes used as SNAT pool",
+                    "title": "List of IPv6 Prefixes",
                     "items": {
                         "type": "string"
                     }
@@ -4128,6 +4124,18 @@ var APISwaggerJSON string = `{
                     "title": "Per Tenant Information"
                 }
             }
+        },
+        "virtual_networkcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.virtual_network.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

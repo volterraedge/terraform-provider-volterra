@@ -113,6 +113,84 @@ func DependenciesValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *EnumInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EnumInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EnumInfo) DeepCopy() *EnumInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EnumInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EnumInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EnumInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EnumInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEnumInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEnumInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EnumInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EnumInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEnumInfoValidator = func() *ValidateEnumInfo {
+	v := &ValidateEnumInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func EnumInfoValidator() db.Validator {
+	return DefaultEnumInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Key) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

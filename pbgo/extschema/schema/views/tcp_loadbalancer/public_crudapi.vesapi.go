@@ -2377,7 +2377,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -2387,7 +2387,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -3940,6 +3941,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -3957,15 +3959,12 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4270,6 +4269,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
+                "ip6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the site",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
                 "network": {
                     "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SiteNetwork",
@@ -4467,6 +4476,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.CreateSpecType",
@@ -4559,7 +4569,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -4588,6 +4598,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -4631,6 +4656,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GetSpecType",
@@ -4750,7 +4776,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -4779,6 +4805,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -4822,6 +4863,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
@@ -4959,8 +5001,8 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "Listen Port",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -4992,6 +5034,22 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "title": "Port_ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -5074,6 +5132,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ReplaceSpecType",
@@ -5166,7 +5225,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": " Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "0",
@@ -5195,6 +5254,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 },
                 "retract_cluster": {

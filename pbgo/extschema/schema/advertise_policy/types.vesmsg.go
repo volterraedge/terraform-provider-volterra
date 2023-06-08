@@ -187,6 +187,21 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateCreateSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -202,16 +217,6 @@ func (v *ValidateCreateSpecType) ProtocolValidationRuleHandler(rules map[string]
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
 
 	return validatorFn, nil
@@ -240,11 +245,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *CreateSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*CreateSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*CreateSpecType_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -312,6 +334,31 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
@@ -333,17 +380,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -520,6 +556,21 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateGetSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -535,16 +586,6 @@ func (v *ValidateGetSpecType) ProtocolValidationRuleHandler(rules map[string]str
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
 
 	return validatorFn, nil
@@ -573,11 +614,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *GetSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*GetSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*GetSpecType_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -645,6 +703,31 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
@@ -666,17 +749,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -853,6 +925,21 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateGlobalSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -868,16 +955,6 @@ func (v *ValidateGlobalSpecType) ProtocolValidationRuleHandler(rules map[string]
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
 
 	return validatorFn, nil
@@ -906,11 +983,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *GlobalSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*GlobalSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*GlobalSpecType_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -978,6 +1072,31 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
@@ -999,17 +1118,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["protocol"] = vFn
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
@@ -1282,6 +1390,21 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateReplaceSpecType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -1297,16 +1420,6 @@ func (v *ValidateReplaceSpecType) ProtocolValidationRuleHandler(rules map[string
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for protocol")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
 
 	return validatorFn, nil
@@ -1335,11 +1448,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *ReplaceSpecType_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*ReplaceSpecType_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*ReplaceSpecType_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1407,6 +1537,31 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.ip": "true",
@@ -1429,17 +1584,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["protocol"] = vFn
 
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
-
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.DownstreamTlsParamsTypeValidator().Validate
@@ -1451,12 +1595,47 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *CreateSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	case *CreateSpecType_PortRanges:
+		o.PortChoice = &GlobalSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &CreateSpecType_Port{Port: of.Port}
+
+	case *GlobalSpecType_PortRanges:
+		r.PortChoice = &CreateSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.Protocol = f.GetProtocol()
 	m.PublicIp = f.GetPublicIp()
 	m.SkipXffAppend = f.GetSkipXffAppend()
@@ -1480,7 +1659,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.Address = m1.Address
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	f.Protocol = m1.Protocol
 	f.PublicIp = m1.PublicIp
 	f.SkipXffAppend = m1.SkipXffAppend
@@ -1496,12 +1675,47 @@ func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *GetSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	case *GetSpecType_PortRanges:
+		o.PortChoice = &GlobalSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &GetSpecType_Port{Port: of.Port}
+
+	case *GlobalSpecType_PortRanges:
+		r.PortChoice = &GetSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.Protocol = f.GetProtocol()
 	m.PublicIp = f.GetPublicIp()
 	m.SkipXffAppend = f.GetSkipXffAppend()
@@ -1525,7 +1739,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Address = m1.Address
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	f.Protocol = m1.Protocol
 	f.PublicIp = m1.PublicIp
 	f.SkipXffAppend = m1.SkipXffAppend
@@ -1541,12 +1755,47 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PortChoice.(type) {
+	case nil:
+		o.PortChoice = nil
+
+	case *ReplaceSpecType_Port:
+		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
+
+	case *ReplaceSpecType_PortRanges:
+		o.PortChoice = &GlobalSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PortChoice.(type) {
+	case nil:
+		r.PortChoice = nil
+
+	case *GlobalSpecType_Port:
+		r.PortChoice = &ReplaceSpecType_Port{Port: of.Port}
+
+	case *GlobalSpecType_PortRanges:
+		r.PortChoice = &ReplaceSpecType_PortRanges{PortRanges: of.PortRanges}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Address = f.GetAddress()
-	m.Port = f.GetPort()
+	m.GetPortChoiceFromGlobalSpecType(f)
 	m.Protocol = f.GetProtocol()
 	m.PublicIp = f.GetPublicIp()
 	m.SkipXffAppend = f.GetSkipXffAppend()
@@ -1570,7 +1819,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.Address = m1.Address
-	f.Port = m1.Port
+	m1.SetPortChoiceToGlobalSpecType(f)
 	f.Protocol = m1.Protocol
 	f.PublicIp = m1.PublicIp
 	f.SkipXffAppend = m1.SkipXffAppend

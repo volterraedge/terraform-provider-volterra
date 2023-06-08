@@ -1074,6 +1074,48 @@ func (v *ValidatePrefixListType) PrefixValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidatePrefixListType) Ipv6PrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv6_prefix")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefix")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefix")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefix")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidatePrefixListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*PrefixListType)
 	if !ok {
@@ -1086,6 +1128,14 @@ func (v *ValidatePrefixListType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefix"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefix"))
+		if err := fv(ctx, m.GetIpv6Prefix(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["prefix"]; exists {
@@ -1122,6 +1172,18 @@ var DefaultPrefixListTypeValidator = func() *ValidatePrefixListType {
 		panic(errMsg)
 	}
 	v.FldValidators["prefix"] = vFn
+
+	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
+	rulesIpv6Prefix := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "256",
+	}
+	vFn, err = vrhIpv6Prefix(rulesIpv6Prefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrefixListType.ipv6_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefix"] = vFn
 
 	return v
 }()

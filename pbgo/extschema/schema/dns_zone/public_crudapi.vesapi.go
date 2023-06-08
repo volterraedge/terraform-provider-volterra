@@ -3205,7 +3205,7 @@ var APISwaggerJSON string = `{
             "description": "Declares a DNS zone with primary DNS features",
             "title": "Primary DNS Configuration",
             "x-displayname": "Primary DNS Configuration",
-            "x-ves-displayorder": "5,12,11,8",
+            "x-ves-displayorder": "5,12,13,11,8",
             "x-ves-oneof-field-soa_record_parameters_choice": "[\"default_soa_parameters\",\"soa_parameters\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.PrimaryDNSConfig",
             "properties": {
@@ -3314,7 +3314,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "PrimaryDNSGetSpecType",
             "x-displayname": "PrimaryDNSGetSpecType",
-            "x-ves-displayorder": "5,12,8,9,11,10",
+            "x-ves-displayorder": "5,12,13,8,9,11,10",
             "x-ves-oneof-field-soa_record_parameters_choice": "[\"default_soa_parameters\",\"soa_parameters\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.PrimaryDNSGetSpecType",
             "properties": {
@@ -3700,12 +3700,6 @@ var APISwaggerJSON string = `{
                     "title": "TSIG Key value",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "TSIG key value in base 64 format"
-                },
-                "zone_file": {
-                    "type": "string",
-                    "description": " The most recent zone file retrieved from the Primary DNS server",
-                    "title": "Zonefile",
-                    "x-displayname": "Zone File"
                 }
             }
         },
@@ -3763,7 +3757,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "SecondaryDNSGetSpecType",
             "x-displayname": "SecondaryDNSGetSpecType",
-            "x-ves-displayorder": "5,6,7,8,9,10",
+            "x-ves-displayorder": "5,6,7,8,9",
             "x-ves-proto-message": "ves.io.schema.dns_zone.SecondaryDNSGetSpecType",
             "properties": {
                 "last_axfr_timestamp": {
@@ -3800,10 +3794,6 @@ var APISwaggerJSON string = `{
                 },
                 "tsig_key_value": {
                     "$ref": "#/definitions/schemaSecretType"
-                },
-                "zone_file": {
-                    "type": "string",
-                    "description": " The most recent zone file retrieved from the Primary DNS server"
                 }
             }
         },
@@ -4066,7 +4056,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -4076,7 +4066,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

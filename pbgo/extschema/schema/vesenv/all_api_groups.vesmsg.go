@@ -1034,6 +1034,17 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_VoltconsoleAipApplication:
+		if fv, exists := v.FldValidators["choice.voltconsole_aip_application"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_VoltconsoleAipApplication).VoltconsoleAipApplication
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("voltconsole_aip_application"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *APIGroupChoice_F5XcDefaultAccess:
 		if fv, exists := v.FldValidators["choice.f5xc_default_access"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcDefaultAccess).F5XcDefaultAccess
@@ -1359,6 +1370,39 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_bot_defense_basic_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBigIpApmMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmMonitor).F5XcBigIpApmMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_big_ip_apm_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBigIpApmUser:
+		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmUser).F5XcBigIpApmUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_big_ip_apm_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcBigIpApmAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcBigIpApmAdmin).F5XcBigIpApmAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_big_ip_apm_admin"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

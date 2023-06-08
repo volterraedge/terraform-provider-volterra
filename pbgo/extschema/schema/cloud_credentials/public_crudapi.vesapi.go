@@ -2187,6 +2187,93 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "cloud_credentialsAWSAssumeRoleType": {
+            "type": "object",
+            "description": "AWS Assume Role to Handle Delegated Access",
+            "title": "AWS Assume Role to Handle Delegated Access",
+            "x-displayname": "AWS Assume Role to Handle Delegated Access",
+            "x-ves-displayorder": "1,2,6,7,8",
+            "x-ves-oneof-field-external_id": "[\"custom_external_id\",\"external_id_is_optional\",\"external_id_is_tenant_id\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_credentials.AWSAssumeRoleType",
+            "properties": {
+                "custom_external_id": {
+                    "type": "string",
+                    "description": "Exclusive with [external_id_is_optional external_id_is_tenant_id]\n External ID is Custom ID\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 2\n",
+                    "title": "External ID is Custom ID",
+                    "minLength": 2,
+                    "maxLength": 64,
+                    "x-displayname": "External ID is Custom ID",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "2"
+                    }
+                },
+                "duration_seconds": {
+                    "type": "integer",
+                    "description": " The duration, in seconds of the role session.\n\nExample: - \"5400\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 3600\n  ves.io.schema.rules.uint32.lte: 43200\n",
+                    "title": "Role Session Duration Seconds",
+                    "format": "int64",
+                    "x-displayname": "Role Session Duration Seconds",
+                    "x-ves-example": "5400",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "3600",
+                        "ves.io.schema.rules.uint32.lte": "43200"
+                    }
+                },
+                "external_id_is_optional": {
+                    "description": "Exclusive with [custom_external_id external_id_is_tenant_id]\n External ID is Optional",
+                    "title": "External ID is Optional",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "External ID is Optional"
+                },
+                "external_id_is_tenant_id": {
+                    "description": "Exclusive with [custom_external_id external_id_is_optional]\n External ID is Tenant ID",
+                    "title": "External ID is Tenant ID",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "External ID is Tenant ID"
+                },
+                "role_arn": {
+                    "type": "string",
+                    "description": " IAM Role ARN to assume the role\n\nExample: - \"arn:aws:iam::121212121212:role/aws-iam-role-arn\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.min_len: 20\n  ves.io.schema.rules.string.pattern: ^(arn:aws:iam::)([0-9]{12}:role/.*)$\n",
+                    "title": "IAM Role ARN",
+                    "minLength": 20,
+                    "maxLength": 2048,
+                    "x-displayname": "IAM Role ARN",
+                    "x-ves-example": "arn:aws:iam::121212121212:role/aws-iam-role-arn",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "2048",
+                        "ves.io.schema.rules.string.min_len": "20",
+                        "ves.io.schema.rules.string.pattern": "^(arn:aws:iam::)([0-9]{12}:role/.*)$"
+                    }
+                },
+                "session_name": {
+                    "type": "string",
+                    "description": " Use the role session name to uniquely identify a session, which will\n be used for deploy, monitor from F5XC console\n\nExample: - \"cloud-f5xc-deployment\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: [\\\\w+=,.@-]*\n",
+                    "title": "Role Session Name",
+                    "maxLength": 64,
+                    "x-displayname": "Role Session Name",
+                    "x-ves-example": "cloud-f5xc-deployment",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "[\\\\w+=,.@-]*"
+                    }
+                },
+                "session_tags": {
+                    "type": "object",
+                    "description": " Session tags are key-value pair attributes that you pass when you assume an IAM role\n\nExample: - \"envstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "title": "Role Session Tags",
+                    "x-displayname": "Role Session Tags",
+                    "x-ves-example": "env: staging",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "40",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
+                }
+            }
+        },
         "cloud_credentialsAWSSecretType": {
             "type": "object",
             "description": "AWS Programmatic Access Credentials type",
@@ -2402,26 +2489,31 @@ var APISwaggerJSON string = `{
             "description": "API to create cloud_credentials object",
             "title": "Create cloud_credentials",
             "x-displayname": "Create Cloud Credentials",
-            "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_assume_role\",\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.CreateSpecType",
             "properties": {
+                "aws_assume_role": {
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file]\n F5XC will assume role designated by customer",
+                    "$ref": "#/definitions/cloud_credentialsAWSAssumeRoleType",
+                    "x-displayname": "AWS Assume Role"
+                },
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "description": "Exclusive with [aws_assume_role azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "$ref": "#/definitions/cloud_credentialsAWSSecretType",
                     "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "$ref": "#/definitions/cloud_credentialsAzureSecretType",
                     "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "$ref": "#/definitions/cloud_credentialsAzurePfxType",
                     "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
                     "x-displayname": "GCP Credentials"
                 }
@@ -2558,26 +2650,31 @@ var APISwaggerJSON string = `{
             "description": "API to Get cloud_credentials object",
             "title": "Get cloud_credentials",
             "x-displayname": "Get Cloud Credentials",
-            "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_assume_role\",\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GetSpecType",
             "properties": {
+                "aws_assume_role": {
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file]\n F5XC will assume role designated by customer",
+                    "$ref": "#/definitions/cloud_credentialsAWSAssumeRoleType",
+                    "x-displayname": "AWS Assume Role"
+                },
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "description": "Exclusive with [aws_assume_role azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "$ref": "#/definitions/cloud_credentialsAWSSecretType",
                     "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "$ref": "#/definitions/cloud_credentialsAzureSecretType",
                     "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "$ref": "#/definitions/cloud_credentialsAzurePfxType",
                     "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
                     "x-displayname": "GCP Credentials"
                 }
@@ -2588,29 +2685,35 @@ var APISwaggerJSON string = `{
             "description": "Desired state of cloud_credentials",
             "title": "Specification for cloud_credentials",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_assume_role\",\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.GlobalSpecType",
             "properties": {
+                "aws_assume_role": {
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file]\n F5XC will assume role designated by customer",
+                    "title": "AWS Assume Role",
+                    "$ref": "#/definitions/cloud_credentialsAWSAssumeRoleType",
+                    "x-displayname": "AWS Assume Role"
+                },
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "description": "Exclusive with [aws_assume_role azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "title": "AWS Programmatic Access Credentials",
                     "$ref": "#/definitions/cloud_credentialsAWSSecretType",
                     "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "title": "Azure Credential Client Password",
                     "$ref": "#/definitions/cloud_credentialsAzureSecretType",
                     "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "title": "Azure Credential Client Certificate",
                     "$ref": "#/definitions/cloud_credentialsAzurePfxType",
                     "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "title": "GCP Credentials",
                     "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
                     "x-displayname": "GCP Credentials"
@@ -2802,26 +2905,31 @@ var APISwaggerJSON string = `{
             "description": "API to replace cloud_credentials object",
             "title": "Replace cloud_credentials",
             "x-displayname": "Replace Cloud Credentials",
-            "x-ves-oneof-field-cloud": "[\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_assume_role\",\"aws_secret_key\",\"azure_client_secret\",\"azure_pfx_certificate\",\"gcp_cred_file\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_credentials.ReplaceSpecType",
             "properties": {
+                "aws_assume_role": {
+                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate gcp_cred_file]\n F5XC will assume role designated by customer",
+                    "$ref": "#/definitions/cloud_credentialsAWSAssumeRoleType",
+                    "x-displayname": "AWS Assume Role"
+                },
                 "aws_secret_key": {
-                    "description": "Exclusive with [azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
+                    "description": "Exclusive with [aws_assume_role azure_client_secret azure_pfx_certificate gcp_cred_file]\n AWS authentication using access keys",
                     "$ref": "#/definitions/cloud_credentialsAWSSecretType",
                     "x-displayname": "AWS Programmatic Access Credentials"
                 },
                 "azure_client_secret": {
-                    "description": "Exclusive with [aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_pfx_certificate gcp_cred_file]\n Azure authentication using a service principal account with client secret",
                     "$ref": "#/definitions/cloud_credentialsAzureSecretType",
                     "x-displayname": "Azure Client Secret for Service Principal"
                 },
                 "azure_pfx_certificate": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret gcp_cred_file]\n Azure authentication using a service principal account with client certificate",
                     "$ref": "#/definitions/cloud_credentialsAzurePfxType",
                     "x-displayname": "Azure Credential Client Certificate"
                 },
                 "gcp_cred_file": {
-                    "description": "Exclusive with [aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
+                    "description": "Exclusive with [aws_assume_role aws_secret_key azure_client_secret azure_pfx_certificate]\n Google authentication using content of Google Credentials File",
                     "$ref": "#/definitions/cloud_credentialsGCPCredFileType",
                     "x-displayname": "GCP Credentials"
                 }
@@ -2874,6 +2982,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -3014,7 +3129,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3024,7 +3139,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

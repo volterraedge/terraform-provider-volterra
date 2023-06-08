@@ -92,6 +92,8 @@ func (v *ValidateSpecType) Validate(ctx context.Context, pm interface{}, opts ..
 var DefaultSpecTypeValidator = func() *ValidateSpecType {
 	v := &ValidateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["gc_spec"] = GlobalSpecTypeValidator().Validate
+
 	return v
 }()
 

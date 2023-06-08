@@ -3292,7 +3292,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "bgpcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -3324,7 +3324,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgpcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3345,7 +3345,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgpcrudapiErrorCode"
                 }
             }
         },
@@ -3360,7 +3360,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgpcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3387,7 +3387,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgpcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3466,7 +3466,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgpcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

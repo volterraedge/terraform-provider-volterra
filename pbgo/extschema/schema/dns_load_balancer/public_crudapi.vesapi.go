@@ -2874,6 +2874,25 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "ioschemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL",
+                "EPARTIAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
         "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
@@ -2988,24 +3007,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaErrorCode": {
-            "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
-            "title": "ErrorCode",
-            "enum": [
-                "EOK",
-                "EPERMS",
-                "EBADINPUT",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN",
-                "ESERIALIZE",
-                "EINTERNAL"
-            ],
-            "default": "EOK",
-            "x-displayname": "Error Code",
-            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
-        },
         "schemaErrorType": {
             "type": "object",
             "description": "Information about a error in API operation",
@@ -3016,7 +3017,7 @@ var APISwaggerJSON string = `{
                 "code": {
                     "description": " A simple general code by category",
                     "title": "code",
-                    "$ref": "#/definitions/schemaErrorCode",
+                    "$ref": "#/definitions/ioschemaErrorCode",
                     "x-displayname": "Code"
                 },
                 "error_obj": {

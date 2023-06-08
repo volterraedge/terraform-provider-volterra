@@ -4382,6 +4382,14 @@ func (v *ValidateCreateSpecType) DirectConnectChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) EgressGatewayChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for egress_gateway_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4682,6 +4690,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["egress_gateway_choice"]; exists {
+		val := m.GetEgressGatewayChoice()
+		vOpts := append(opts,
+			db.WithValidateField("egress_gateway_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEgressGatewayChoice().(type) {
+	case *CreateSpecType_EgressGatewayDefault:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_gateway_default"]; exists {
+			val := m.GetEgressGatewayChoice().(*CreateSpecType_EgressGatewayDefault).EgressGatewayDefault
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_gateway_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EgressNatGw:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_nat_gw"]; exists {
+			val := m.GetEgressGatewayChoice().(*CreateSpecType_EgressNatGw).EgressNatGw
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_nat_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EgressVirtualPrivateGateway:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"]; exists {
+			val := m.GetEgressGatewayChoice().(*CreateSpecType_EgressVirtualPrivateGateway).EgressVirtualPrivateGateway
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_virtual_private_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["instance_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("instance_type"))
@@ -4958,6 +5013,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
 
+	vrhEgressGatewayChoice := v.EgressGatewayChoiceValidationRuleHandler
+	rulesEgressGatewayChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEgressGatewayChoice(rulesEgressGatewayChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.egress_gateway_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_gateway_choice"] = vFn
+
 	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
 	rulesInternetVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5101,6 +5167,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+
+	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5400,6 +5469,14 @@ func (v *ValidateGetSpecType) DirectConnectChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) EgressGatewayChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for egress_gateway_choice")
 	}
 	return validatorFn, nil
 }
@@ -5801,6 +5878,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["egress_gateway_choice"]; exists {
+		val := m.GetEgressGatewayChoice()
+		vOpts := append(opts,
+			db.WithValidateField("egress_gateway_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEgressGatewayChoice().(type) {
+	case *GetSpecType_EgressGatewayDefault:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_gateway_default"]; exists {
+			val := m.GetEgressGatewayChoice().(*GetSpecType_EgressGatewayDefault).EgressGatewayDefault
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_gateway_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EgressNatGw:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_nat_gw"]; exists {
+			val := m.GetEgressGatewayChoice().(*GetSpecType_EgressNatGw).EgressNatGw
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_nat_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EgressVirtualPrivateGateway:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"]; exists {
+			val := m.GetEgressGatewayChoice().(*GetSpecType_EgressVirtualPrivateGateway).EgressVirtualPrivateGateway
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_virtual_private_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["instance_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("instance_type"))
@@ -6103,6 +6227,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
 
+	vrhEgressGatewayChoice := v.EgressGatewayChoiceValidationRuleHandler
+	rulesEgressGatewayChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEgressGatewayChoice(rulesEgressGatewayChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.egress_gateway_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_gateway_choice"] = vFn
+
 	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
 	rulesInternetVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6280,6 +6415,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+
+	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6693,6 +6831,14 @@ func (v *ValidateGlobalSpecType) DirectConnectChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) EgressGatewayChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for egress_gateway_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7090,6 +7236,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["egress_gateway_choice"]; exists {
+		val := m.GetEgressGatewayChoice()
+		vOpts := append(opts,
+			db.WithValidateField("egress_gateway_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEgressGatewayChoice().(type) {
+	case *GlobalSpecType_EgressGatewayDefault:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_gateway_default"]; exists {
+			val := m.GetEgressGatewayChoice().(*GlobalSpecType_EgressGatewayDefault).EgressGatewayDefault
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_gateway_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EgressNatGw:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_nat_gw"]; exists {
+			val := m.GetEgressGatewayChoice().(*GlobalSpecType_EgressNatGw).EgressNatGw
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_nat_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EgressVirtualPrivateGateway:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"]; exists {
+			val := m.GetEgressGatewayChoice().(*GlobalSpecType_EgressVirtualPrivateGateway).EgressVirtualPrivateGateway
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_virtual_private_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["instance_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("instance_type"))
@@ -7428,6 +7621,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
 
+	vrhEgressGatewayChoice := v.EgressGatewayChoiceValidationRuleHandler
+	rulesEgressGatewayChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEgressGatewayChoice(rulesEgressGatewayChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.egress_gateway_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_gateway_choice"] = vFn
+
 	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
 	rulesInternetVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7605,6 +7809,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+
+	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -9043,6 +9250,47 @@ func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetEgressGatewayChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EgressGatewayChoice.(type) {
+	case nil:
+		o.EgressGatewayChoice = nil
+
+	case *CreateSpecType_EgressGatewayDefault:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *CreateSpecType_EgressNatGw:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *CreateSpecType_EgressVirtualPrivateGateway:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetEgressGatewayChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EgressGatewayChoice.(type) {
+	case nil:
+		r.EgressGatewayChoice = nil
+
+	case *GlobalSpecType_EgressGatewayDefault:
+		r.EgressGatewayChoice = &CreateSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *GlobalSpecType_EgressNatGw:
+		r.EgressGatewayChoice = &CreateSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *GlobalSpecType_EgressVirtualPrivateGateway:
+		r.EgressGatewayChoice = &CreateSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetInternetVipChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.InternetVipChoice.(type) {
 	case nil:
@@ -9205,6 +9453,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
+	m.GetEgressGatewayChoiceFromGlobalSpecType(f)
 	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -9240,6 +9489,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
+	m1.SetEgressGatewayChoiceToGlobalSpecType(f)
 	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
@@ -9365,6 +9615,47 @@ func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetEgressGatewayChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EgressGatewayChoice.(type) {
+	case nil:
+		o.EgressGatewayChoice = nil
+
+	case *GetSpecType_EgressGatewayDefault:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *GetSpecType_EgressNatGw:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *GetSpecType_EgressVirtualPrivateGateway:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetEgressGatewayChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EgressGatewayChoice.(type) {
+	case nil:
+		r.EgressGatewayChoice = nil
+
+	case *GlobalSpecType_EgressGatewayDefault:
+		r.EgressGatewayChoice = &GetSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *GlobalSpecType_EgressNatGw:
+		r.EgressGatewayChoice = &GetSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *GlobalSpecType_EgressVirtualPrivateGateway:
+		r.EgressGatewayChoice = &GetSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9537,6 +9828,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.DiskSize = f.GetDiskSize()
+	m.GetEgressGatewayChoiceFromGlobalSpecType(f)
 	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
@@ -9577,6 +9869,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
 	f.DiskSize = m1.DiskSize
+	m1.SetEgressGatewayChoiceToGlobalSpecType(f)
 	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)

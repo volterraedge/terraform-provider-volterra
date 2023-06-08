@@ -598,6 +598,15 @@ func (v *ValidateAddressMember) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["disable"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable"))
+		if err := fv(ctx, m.GetDisable(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ip_endpoint"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ip_endpoint"))

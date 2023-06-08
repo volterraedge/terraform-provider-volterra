@@ -2651,7 +2651,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "bgp_asn_setcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2683,7 +2683,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp_asn_set.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgp_asn_setcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2704,7 +2704,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp_asn_set.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgp_asn_setcrudapiErrorCode"
                 }
             }
         },
@@ -2719,7 +2719,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgp_asn_setcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2746,7 +2746,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp_asn_set.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgp_asn_setcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2825,7 +2825,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.bgp_asn_set.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/bgp_asn_setcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

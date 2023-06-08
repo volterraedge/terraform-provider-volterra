@@ -3072,6 +3072,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of endpoint",
             "title": "Endpoint status",
             "x-displayname": "Status",
+            "x-ves-displayorder": "1,4,3",
             "x-ves-proto-message": "ves.io.schema.endpoint.StatusObject",
             "properties": {
                 "conditions": {
@@ -3144,12 +3145,6 @@ var APISwaggerJSON string = `{
                     "title": "discovered_port",
                     "format": "int64",
                     "x-displayname": "Discovered Port"
-                },
-                "health_status": {
-                    "type": "object",
-                    "description": " Map of HealthCheck UID to health status",
-                    "title": "Health Status",
-                    "x-displayname": "Health Status"
                 },
                 "service_name": {
                     "type": "string",
@@ -3259,7 +3254,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3269,7 +3264,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

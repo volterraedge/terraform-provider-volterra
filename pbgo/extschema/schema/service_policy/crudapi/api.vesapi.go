@@ -2663,18 +2663,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Attack Types",
             "x-ves-proto-enum": "ves.io.schema.app_firewall.AttackType"
         },
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.service_policy.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.service_policy.crudapi.ObjectCreateReq",
@@ -2695,7 +2683,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/service_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2716,7 +2704,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/service_policycrudapiErrorCode"
                 }
             }
         },
@@ -2731,7 +2719,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/service_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2758,7 +2746,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/service_policycrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2837,7 +2825,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.service_policy.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/service_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3958,40 +3946,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "policyPortMatcherType": {
-            "type": "object",
-            "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
-            "title": "port matcher type",
-            "x-displayname": "Port Matcher",
-            "x-ves-proto-message": "ves.io.schema.policy.PortMatcherType",
-            "properties": {
-                "invert_matcher": {
-                    "type": "boolean",
-                    "description": " Invert the match result.",
-                    "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert Port Matcher"
-                },
-                "ports": {
-                    "type": "array",
-                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.port_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "port ranges",
-                    "maxItems": 16,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Port Ranges",
-                    "x-ves-example": "8000-8191",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.port_range": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
         "policyPrefixMatchList": {
             "type": "object",
             "description": "List of IP Prefix strings to match against.",
@@ -4028,7 +3982,6 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "RequestConstraintType",
             "x-displayname": "Request Constraints",
-            "x-ves-oneof-field-max_body_size_choice": "[\"max_body_size_exceeds\",\"max_body_size_none\"]",
             "x-ves-oneof-field-max_cookie_count_choice": "[\"max_cookie_count_exceeds\",\"max_cookie_count_none\"]",
             "x-ves-oneof-field-max_cookie_key_size_choice": "[\"max_cookie_key_size_exceeds\",\"max_cookie_key_size_none\"]",
             "x-ves-oneof-field-max_cookie_value_size_choice": "[\"max_cookie_value_size_exceeds\",\"max_cookie_value_size_none\"]",
@@ -4041,27 +3994,9 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-max_query_size_choice": "[\"max_query_size_exceeds\",\"max_query_size_none\"]",
             "x-ves-oneof-field-max_request_line_size_choice": "[\"max_request_line_size_exceeds\",\"max_request_line_size_none\"]",
             "x-ves-oneof-field-max_request_size_choice": "[\"max_request_size_exceeds\",\"max_request_size_none\"]",
-            "x-ves-oneof-field-max_upload_file_size_choice": "[\"max_upload_file_size_exceeds\",\"max_upload_file_size_none\"]",
             "x-ves-oneof-field-max_url_size_choice": "[\"max_url_size_exceeds\",\"max_url_size_none\"]",
             "x-ves-proto-message": "ves.io.schema.policy.RequestConstraintType",
             "properties": {
-                "max_body_size_exceeds": {
-                    "type": "integer",
-                    "description": "Exclusive with [max_body_size_none]\n\nExample: - \"32768\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n",
-                    "title": "max_body_size_exceeds",
-                    "format": "int64",
-                    "x-displayname": "Match on the Request Body Size that exceed this value",
-                    "x-ves-example": "32768",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "1"
-                    }
-                },
-                "max_body_size_none": {
-                    "description": "Exclusive with [max_body_size_exceeds]\n",
-                    "title": "max_body_size_none",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Not Configured"
-                },
                 "max_cookie_count_exceeds": {
                     "type": "integer",
                     "description": "Exclusive with [max_cookie_count_none]\n\nExample: - \"40\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 1024\n",
@@ -4278,24 +4213,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Not Configured"
                 },
-                "max_upload_file_size_exceeds": {
-                    "type": "integer",
-                    "description": "Exclusive with [max_upload_file_size_none]\n\nExample: - \"1024\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 51200\n",
-                    "title": "max_upload_file_size_exceeds",
-                    "format": "int64",
-                    "x-displayname": "Match on the File Upload Size that exceed this value",
-                    "x-ves-example": "1024",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "51200"
-                    }
-                },
-                "max_upload_file_size_none": {
-                    "description": "Exclusive with [max_upload_file_size_exceeds]\n",
-                    "title": "max_upload_file_size_none",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Not Configured"
-                },
                 "max_url_size_exceeds": {
                     "type": "integer",
                     "description": "Exclusive with [max_url_size_none]\n\nExample: - \"4096\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 128000\n",
@@ -4452,6 +4369,12 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Protected Endpoint Action\"\nProtected Endpoint Action",
             "title": "ShapeProtectedEndpointAction",
             "properties": {
+                "allow_goodbot": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Good bot\"\nx-required\nGood bot",
+                    "title": "GoodBot",
+                    "format": "boolean"
+                },
                 "app_traffic_type": {
                     "description": "x-displayName: \"Traffic type\"\nx-required\nTraffic type",
                     "title": "Application traffic type",
@@ -5183,7 +5106,7 @@ var APISwaggerJSON string = `{
         },
         "schemaOpenApiValidationProperties": {
             "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification",
+            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification\n - PROPERTY_SECURITY_SCHEMA: x-displayName: \"Security Schema\"\nValidate that the security schema is according to the OpenAPI specification",
             "title": "OpenApiValidationProperties",
             "enum": [
                 "PROPERTY_QUERY_PARAMETERS",
@@ -5191,7 +5114,8 @@ var APISwaggerJSON string = `{
                 "PROPERTY_CONTENT_TYPE",
                 "PROPERTY_COOKIE_PARAMETERS",
                 "PROPERTY_HTTP_HEADERS",
-                "PROPERTY_HTTP_BODY"
+                "PROPERTY_HTTP_BODY",
+                "PROPERTY_SECURITY_SCHEMA"
             ],
             "default": "PROPERTY_QUERY_PARAMETERS"
         },
@@ -5650,6 +5574,40 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemapolicyPortMatcherType": {
+            "type": "object",
+            "description": "A port matcher specifies a list of port ranges as match criteria. The match is considered successful if the input port falls within any of the port ranges.\nThe result of the match is inverted if invert_matcher is true.",
+            "title": "port matcher type",
+            "x-displayname": "Port Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.PortMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Port Matcher"
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " A list of strings, each of which is a single port value or a tuple of start and end port values separated by \"-\". The start and end values are considered\n to be part of the range.\n\nExample: - \"8000-8191\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.port_range: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "port ranges",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "8000-8191",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.port_range": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "schemapolicyQueryParameterMatcherType": {
             "type": "object",
             "description": "A query parameter matcher specifies the name of a single query parameter and the criteria for the input request to match it. The input has a list of actual\nvalues for each query parameter name in the original HTTP request.\nA query parameter matcher can check for one of the following:\n* Presence or absence of the query parameter in the input\n* At least one of the values for the query parameter in the input satisfies the MatcherType item",
@@ -5995,7 +5953,7 @@ var APISwaggerJSON string = `{
                 "port_matcher": {
                     "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
                     "title": "port matcher",
-                    "$ref": "#/definitions/policyPortMatcherType",
+                    "$ref": "#/definitions/schemapolicyPortMatcherType",
                     "x-displayname": "Port Matcher"
                 },
                 "query_params": {
@@ -6383,6 +6341,11 @@ var APISwaggerJSON string = `{
                     "title": "OpenAPI Validation Action",
                     "$ref": "#/definitions/policyOpenApiValidationAction"
                 },
+                "origin_server_subsets_action": {
+                    "type": "object",
+                    "description": "x-displayName: \"Origin Server Subsets Action\"\nx-example: \"value\"\nAdd Labels for this origin server, these labels can be used to form subset.",
+                    "title": "Origin Server Subsets Action"
+                },
                 "path": {
                     "description": "x-displayName: \"HTTP Path\"\nA list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\nvalue extracted from the HTTP URL Resource, excluding any query and fragment information.\nThe predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
                     "title": "path",
@@ -6391,7 +6354,7 @@ var APISwaggerJSON string = `{
                 "port_matcher": {
                     "description": "x-displayName: \"Port Matcher\"\nThe list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
                     "title": "port matcher",
-                    "$ref": "#/definitions/policyPortMatcherType"
+                    "$ref": "#/definitions/schemapolicyPortMatcherType"
                 },
                 "query_params": {
                     "type": "array",
@@ -6629,6 +6592,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "service_policycrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.service_policy.crudapi.ErrorCode"
+        },
         "viewsPrefixStringListType": {
             "type": "object",
             "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
@@ -6638,21 +6613,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

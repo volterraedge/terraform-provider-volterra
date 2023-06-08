@@ -153,7 +153,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -299,7 +299,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -445,7 +445,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)
@@ -893,7 +893,7 @@ var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
 	vrhAsNumbers := v.AsNumbersValidationRuleHandler
 	rulesAsNumbers := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhAsNumbers(rulesAsNumbers)
@@ -906,7 +906,7 @@ var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
 	vrhTlsFingerprints := v.TlsFingerprintsValidationRuleHandler
 	rulesTlsFingerprints := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.len": "32",
-		"ves.io.schema.rules.repeated.max_items":        "16",
+		"ves.io.schema.rules.repeated.max_items":        "64",
 		"ves.io.schema.rules.repeated.unique":           "true",
 	}
 	vFn, err = vrhTlsFingerprints(rulesTlsFingerprints)
@@ -1209,7 +1209,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhL7AclRule := v.L7AclRuleValidationRuleHandler
 	rulesL7AclRule := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "64",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhL7AclRule(rulesL7AclRule)

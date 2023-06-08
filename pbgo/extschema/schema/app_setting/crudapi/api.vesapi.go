@@ -2623,7 +2623,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DDoS Detection"
                 },
                 "user_behavior_analysis_setting": {
-                    "description": " Malicious User Detection performs user behavior analysis and assigns a suspicion score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The suspicion score of the user decays over time, if no further suspicious activity is noted",
+                    "description": " Malicious User Detection performs user behavior analysis and assigns a risk score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The risk score of the user decays over time, if no further suspicious activity is noted",
                     "title": "Malicious User Detection Settings",
                     "$ref": "#/definitions/app_settingUserBehaviorAnalysisSetting",
                     "x-displayname": "Malicious User Detection"
@@ -2692,32 +2692,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gt": "0"
-                    }
-                }
-            }
-        },
-        "app_settingGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of App setting specification",
-            "title": "Specification for App setting",
-            "x-displayname": "App Setting Spec",
-            "x-ves-proto-message": "ves.io.schema.app_setting.GlobalSpecType",
-            "properties": {
-                "app_type_settings": {
-                    "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "List of App Type Settings",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/app_settingAppTypeSettings"
-                    },
-                    "x-displayname": "Customize AppType For This Namespace",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 }
             }
@@ -2931,7 +2905,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/app_settingGlobalSpecType",
+                    "$ref": "#/definitions/schemaapp_settingGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3025,7 +2999,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "app_settingcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -3057,7 +3031,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_settingcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3078,7 +3052,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_settingcrudapiErrorCode"
                 }
             }
         },
@@ -3093,7 +3067,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_settingcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3120,7 +3094,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_settingcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3199,7 +3173,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.app_setting.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/app_settingcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3755,6 +3729,32 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaapp_settingGlobalSpecType": {
+            "type": "object",
+            "description": "Shape of App setting specification",
+            "title": "Specification for App setting",
+            "x-displayname": "App Setting Spec",
+            "x-ves-proto-message": "ves.io.schema.app_setting.GlobalSpecType",
+            "properties": {
+                "app_type_settings": {
+                    "type": "array",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "List of App Type Settings",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/app_settingAppTypeSettings"
+                    },
+                    "x-displayname": "Customize AppType For This Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         }
