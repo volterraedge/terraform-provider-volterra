@@ -23,10 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "vn_private_name public_ip public_name private_ip private_name k8s_service consul_service vn_private_ip custom_endpoint_object" must be set
+    // One of the arguments from this list "k8s_service custom_endpoint_object vn_private_name public_ip public_name private_ip private_name consul_service vn_private_ip" must be set
 
-    public_name {
-      dns_name = "value"
+    public_ip {
+      ip = "8.8.8.8"
     }
 
     labels = {
@@ -34,7 +34,7 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  // One of the arguments from this list "port automatic_port" must be set
+  // One of the arguments from this list "automatic_port lb_port port" must be set
   automatic_port = true
 
   // One of the arguments from this list "no_tls use_tls" must be set
@@ -77,6 +77,8 @@ Argument Reference
 `origin_servers` - (Required) List of origin servers in this pool. See [Origin Servers ](#origin-servers) below for details.
 
 `automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (bool).
+
+`lb_port` - (Optional) Endpoint port is selected based on loadbalancer port (bool).
 
 `port` - (Optional) Endpoint service is available on this port (`Int`).
 
@@ -244,7 +246,7 @@ Subset load balancing is disabled. All eligible origin servers will be considere
 
 Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing..
 
-`endpoint_subsets` - (Optional) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
+`endpoint_subsets` - (Required) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
 
 `any_endpoint` - (Optional) Select any origin server from available healthy origin servers in this pool (bool).
 
@@ -256,7 +258,7 @@ Subset load balancing is enabled. Based on route, subset of origin servers will 
 
 List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
 
-`keys` - (Optional) List of keys that define a cluster subset class. (`String`).
+`keys` - (Required) List of keys that define a cluster subset class. (`String`).
 
 ### Fail Request
 
@@ -476,7 +478,7 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-x-displayName: "Enable".
+x-displayName: "Enable MTLS With Inline Certificate".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
@@ -484,7 +486,9 @@ x-displayName: "Enable".
 
 Perform origin server verification using the provided trusted CA list.
 
-`trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -496,7 +500,9 @@ x-displayName: "Enable".
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+
+`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 

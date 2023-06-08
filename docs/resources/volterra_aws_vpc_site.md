@@ -33,7 +33,14 @@ resource "volterra_aws_vpc_site" "example" {
   }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
-  instance_type           = ["a1.xlarge"]
+
+  // One of the arguments from this list "egress_virtual_private_gateway egress_gateway_default egress_nat_gw" must be set
+
+  egress_nat_gw {
+    // One of the arguments from this list "nat_gw_id" must be set
+    nat_gw_id = "nat_gw_id"
+  }
+  instance_type = ["a1.xlarge"]
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
   disable_internet_vip = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -41,20 +48,40 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_gw {
+  ingress_egress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports" must be set
-      use_http_port = true
+      // One of the arguments from this list "disable_allowed_vip_port use_http_port use_https_port use_http_https_port custom_ports" must be set
+      disable_allowed_vip_port = true
     }
 
-    aws_certified_hw = "aws-byol-voltmesh"
+    allowed_vip_port_sli {
+      // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_port use_https_port use_http_https_port" must be set
+
+      custom_ports {
+        port_ranges = "80, 8080-8085"
+      }
+    }
+
+    aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
-      disk_size   = "80"
 
-      local_subnet {
+      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      reserved_inside_subnet = true
+      disk_size              = "80"
+
+      outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
+      workload_subnet {
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -63,12 +90,63 @@ resource "volterra_aws_vpc_site" "example" {
       }
     }
 
+    // One of the arguments from this list "dc_cluster_group_outside_vn dc_cluster_group_inside_vn no_dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+
+    global_network_list {
+      global_network_connections {
+        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
+
+        sli_to_global_dr {
+          global_vn {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+
+        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
+
+        enable_forward_proxy {
+          connection_timeout   = "4000"
+          max_connect_attempts = "3"
+
+          // One of the arguments from this list "no_interception tls_intercept" must be set
+          no_interception = true
+
+          white_listed_ports = ["[22, 9400]"]
+
+          white_listed_prefixes = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
+        }
+      }
+    }
+    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
+
+    active_network_policies {
+      network_policies {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+    }
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+    no_outside_static_routes = true
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
       perf_mode_l7_enhanced = true
     }
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
   }
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -112,6 +190,12 @@ Argument Reference
 `direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+`egress_gateway_default` - (Optional) With this option, egress site traffic will be routed through an Internet Gateway. (bool).
+
+`egress_nat_gw` - (Optional) With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.. See [Egress Nat Gw ](#egress-nat-gw) below for details.
+
+`egress_virtual_private_gateway` - (Optional) With this option, egress site traffic will be routed through an Virtual Private Gateway.. See [Egress Virtual Private Gateway ](#egress-virtual-private-gateway) below for details.
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
@@ -171,6 +255,8 @@ Allowed VIP Port Configuration for Outside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
 
+`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
+
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
@@ -182,6 +268,8 @@ Allowed VIP Port Configuration for Outside Network.
 Allowed VIP Port Configuration for Inside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
 
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
@@ -243,7 +331,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -337,6 +425,10 @@ Direct Connect feature is enabled.
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
 
+### Disable Allowed Vip Port
+
+HTTP Port (80) & HTTPS Port (443) will be disabled..
+
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -351,7 +443,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
 
 ### Domain Match
 
@@ -362,6 +454,18 @@ Domain value or regular expression to match.
 `regex_value` - (Optional) Regular Expression value for the domain name (`String`).
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### Egress Nat Gw
+
+With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway..
+
+`nat_gw_id` - (Optional) x-displayName: "Existing NAT Gateway ID" (`String`).
+
+### Egress Virtual Private Gateway
+
+With this option, egress site traffic will be routed through an Virtual Private Gateway..
+
+`vgw_id` - (Optional) x-displayName: "Existing Virtual Private Gateway ID" (`String`).
 
 ### Enable For All Domains
 
@@ -607,14 +711,6 @@ Enable/Disable offline survivability mode.
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-### Openebs Enterprise
-
-Storage class Device configuration for OpenEBS Enterprise.
-
-`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
-
-`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
-
 ### Os
 
 Operating System Details.
@@ -754,8 +850,6 @@ Add additional custom storage classes in kubernetes for site.
 List of custom storage classes.
 
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
-
-`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 

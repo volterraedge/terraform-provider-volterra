@@ -20,8 +20,47 @@ resource "volterra_enhanced_firewall_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "allowed_destinations deny_all denied_sources denied_destinations rule_list allow_all allowed_sources" must be set
-  allow_all = true
+  // One of the arguments from this list "rule_list allow_all allowed_sources allowed_destinations deny_all denied_sources denied_destinations" must be set
+
+  rule_list {
+    rules {
+      // One of the arguments from this list "deny allow insert_service" must be set
+      deny = true
+
+      advanced_action {
+        action = "action"
+      }
+
+      // One of the arguments from this list "destination_ip_prefix_set inside_destinations destination_namespace destination_label_selector all_destinations destination_prefix_list outside_destinations all_slo_vips all_sli_vips destination_aws_vpc_ids" must be set
+      all_destinations = true
+
+      label_matcher {
+        keys = ["['environment', 'location', 'deployment']"]
+      }
+
+      metadata {
+        description = "Virtual Host for acmecorp website"
+        disable     = true
+        name        = "acmecorp-web"
+      }
+
+      // One of the arguments from this list "outside_sources source_namespace source_label_selector source_aws_vpc_ids all_sources source_prefix_list source_ip_prefix_set inside_sources" must be set
+
+      source_ip_prefix_set {
+        ref {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+
+      // One of the arguments from this list "all_traffic all_tcp_traffic all_udp_traffic applications protocol_port_range" must be set
+
+      applications {
+        applications = ["applications"]
+      }
+    }
+  }
 }
 
 ```
@@ -101,11 +140,15 @@ Allow any connection matching the rule.
 
 Allow all connections to list of destinations from any source.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Allowed Sources
 
 Allow all connections from list of sources to any destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
@@ -119,11 +162,15 @@ Select Application traffic to match.
 
 Deny all connections to list of destinations from any source.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Denied Sources
 
 Deny all connections from list of sources to any destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
@@ -153,7 +200,9 @@ These labels can be cloud tags defined on the vpc resource, labels on the global
 
 Addresses that match one of the prefix in the list.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Insert Service
 
@@ -301,7 +350,9 @@ These labels can be cloud tags defined on the vpc resource, labels on the global
 
 Addresses that match one of the prefix in the list.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 Attribute Reference
 -------------------

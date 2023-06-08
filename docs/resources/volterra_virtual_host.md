@@ -723,6 +723,12 @@ in advertise policy.
 
 `xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
 
+### Trusted Ca
+
+Trusted CA List.
+
+`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
+
 ### Use Auth Object Config
 
 Use the Cookie Params configured in Authentication Object.
@@ -737,7 +743,9 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca_url` - (Optional) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
 

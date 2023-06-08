@@ -21,13 +21,13 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
+  advertise_on_public_default_vip = true
 
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_round_robin = true
+  // One of the arguments from this list "hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random" must be set
+  hash_policy_choice_random = true
 
   // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
   tcp = true
@@ -86,8 +86,6 @@ Argument Reference
 
 `idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
-`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
-
 `tcp` - (Optional) TCP Load Balancer. (bool).
 
 `tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
@@ -95,6 +93,10 @@ Argument Reference
 `tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
+
+`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
+
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
 
@@ -260,6 +262,8 @@ Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 
+`ip6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
@@ -346,7 +350,9 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca_url` - (Required) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
 

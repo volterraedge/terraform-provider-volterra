@@ -39,10 +39,15 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        regex = "regex"
+        exact = "application/json"
       }
 
       http_method = "http_method"
+
+      incoming_port {
+        // One of the arguments from this list "port port_ranges" must be set
+        port = "6443"
+      }
 
       path {
         // One of the arguments from this list "prefix path regex" must be set
@@ -52,8 +57,8 @@ resource "volterra_route" "example" {
       query_params {
         key = "assignee_username"
 
-        // One of the arguments from this list "exact regex" must be set
-        regex = "regex"
+        // One of the arguments from this list "regex exact" must be set
+        exact = "exact"
       }
     }
 
@@ -77,103 +82,20 @@ resource "volterra_route" "example" {
 
     response_headers_to_remove = ["host"]
 
-    // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
+    // One of the arguments from this list "route_direct_response route_destination route_redirect" must be set
 
-    route_destination {
-      buffer_policy {
-        disabled          = true
-        max_request_bytes = "2048"
-        max_request_time  = "30"
-      }
+    route_redirect {
+      host_redirect  = "one.ves.io"
+      port_redirect  = "8443"
+      proto_redirect = "https"
 
-      // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
-      retract_cluster = true
+      // One of the arguments from this list "strip_query_params all_params retain_all_params remove_all_params replace_params" must be set
+      replace_params = "replace_params"
 
-      cors_policy {
-        allow_credentials = true
-        allow_headers     = "value"
-        allow_methods     = "GET"
+      // One of the arguments from this list "path_redirect prefix_rewrite" must be set
+      path_redirect = "/api/register"
 
-        allow_origin = ["value"]
-
-        allow_origin_regex = ["value"]
-        disabled           = true
-        expose_headers     = "value"
-        max_age            = "value"
-        maximum_age        = "-1"
-      }
-
-      destinations {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        endpoint_subsets = {
-          "key1" = "value1"
-        }
-
-        priority = "1"
-        weight   = "10"
-      }
-
-      endpoint_subsets = {
-        "key1" = "value1"
-      }
-
-      hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
-
-        terminal = true
-      }
-
-      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
-
-      mirror_policy {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        percent {
-          denominator = "denominator"
-          numerator   = "5"
-        }
-      }
-
-      prefix_rewrite = "/"
-      priority       = "priority"
-
-      retry_policy {
-        back_off {
-          base_interval = "5"
-          max_interval  = "60"
-        }
-
-        num_retries     = "3"
-        per_try_timeout = "1000"
-
-        retriable_status_codes = ["403"]
-
-        retry_condition = ["5xx"]
-        retry_on        = "5xx"
-      }
-
-      spdy_config {
-        use_spdy = true
-      }
-
-      timeout = "2000"
-
-      web_socket_config {
-        idle_timeout         = "2000"
-        max_connect_attempts = "5"
-        use_websocket        = true
-      }
+      response_code = "303"
     }
     service_policy {
       // One of the arguments from this list "disable context_extensions" must be set
@@ -181,10 +103,10 @@ resource "volterra_route" "example" {
     }
     skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "waf waf_rules app_firewall" must be set
+      // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
 
-      waf {
-        waf {
+      app_firewall {
+        app_firewall {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
@@ -229,7 +151,7 @@ Add secure attribute.
 
 A direct reference to an Application Firewall configuration object.
 
-`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
+`app_firewall` - (Required) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Back Off
 
@@ -361,6 +283,10 @@ sent to the cluster specified in the destination.
 
 `weight` - (Optional) sent to the cluster specified in the destination (`Int`).
 
+### Disable Waf
+
+Any Application Firewall configuration will not be enforced.
+
 ### Do Not Retract Cluster
 
 configuration..
@@ -403,6 +329,18 @@ Ignore Samesite attribute.
 
 Ignore secure attribute.
 
+### Incoming Port
+
+The port on which the request is received.
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
+### Inherit Waf
+
+Any Application Firewall configuration that was configured on a higher level will be enforced.
+
 ### Inherited Bot Defense Javascript Injection
 
 Hence no custom configuration is applied on the route.
@@ -414,6 +352,8 @@ route match condition.
 `headers` - (Optional) List of (key, value) headers. See [Headers ](#headers) below for details.
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
+
+`incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
 
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
@@ -567,6 +507,8 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
+`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).
+
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).
@@ -683,27 +625,15 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Waf
-
-A WAF object direct reference.
-
-`waf` - (Optional) A direct reference to web application firewall configuration object. See [ref](#ref) below for details.
-
-### Waf Rules
-
-A set of direct references of WAF Rules objects.
-
-`waf_rules` - (Optional) References to a set of WAF Rules configuration object. See [ref](#ref) below for details.
-
 ### Waf Type
 
 waf_type specified at route level overrides waf configuration at VirtualHost level.
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
-`waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
+`disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (bool).
 
-`waf_rules` - (Optional) A set of direct references of WAF Rules objects. See [Waf Rules ](#waf-rules) below for details.
+`inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (bool).
 
 ### Web Socket Config
 

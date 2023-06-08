@@ -20,20 +20,70 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
+  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
   do_not_advertise = true
 
-  // One of the arguments from this list "api_definition api_specification api_definitions disable_api_definition" must be set
-  disable_api_definition = true
+  // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
+
+  api_specification {
+    api_definition {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "validation_disabled validation_all_spec_endpoints validation_custom_list" must be set
+    validation_disabled = true
+  }
 
   // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
 
   enable_api_discovery {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
     disable_learn_from_redirect_traffic = true
+
+    sensitive_data_detection_rules {
+      custom_sensitive_data_detection_rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        sensitive_data_detection_config {
+          // One of the arguments from this list "any_domain specific_domain" must be set
+          any_domain = true
+
+          // One of the arguments from this list "key_pattern value_pattern key_value_pattern" must be set
+
+          value_pattern {
+            // One of the arguments from this list "regex_value exact_value" must be set
+            exact_value = "x-volt-header"
+          }
+          // One of the arguments from this list "all_response_sections custom_sections all_sections all_request_sections" must be set
+          all_sections = true
+          // One of the arguments from this list "api_endpoint_target base_path api_group any_target" must be set
+          any_target = true
+        }
+
+        sensitive_data_type {
+          type = "EMAIL"
+        }
+      }
+
+      disabled_built_in_rules {
+        name = "[EMAIL, CC]"
+      }
+    }
   }
-  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
-  no_challenge = true
+
+  // One of the arguments from this list "captcha_challenge policy_based_challenge no_challenge enable_challenge js_challenge" must be set
+
+  js_challenge {
+    cookie_expiry   = "1000"
+    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    js_script_delay = "1000"
+  }
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
@@ -42,36 +92,24 @@ resource "volterra_http_loadbalancer" "example" {
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
-
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
-
-  cookie_stickiness {
-    // One of the arguments from this list "ignore_httponly add_httponly" must be set
-    ignore_httponly = true
-    name            = "userid"
-    path            = "/Users/userid/browser/cookies"
-
-    // One of the arguments from this list "ignore_samesite samesite_strict samesite_lax samesite_none" must be set
-    ignore_samesite = true
-
-    // One of the arguments from this list "ignore_secure add_secure" must be set
-    ignore_secure = true
-    ttl           = "5000"
-  }
+  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+  random = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
   http {
     dns_volterra_managed = true
-    port                 = "80"
+
+    // One of the arguments from this list "port port_ranges" must be set
+    port = "80"
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
   disable_rate_limit = true
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-  // One of the arguments from this list "enable_trust_client_ip_headers disable_trust_client_ip_headers" must be set
+  // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
@@ -200,7 +238,7 @@ Argument Reference
 
 `default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Default Pool List ](#default-pool-list) below for details.
 
-`origin_server_subset_rule_list` - (Optional) Origin Server Subset Selection Rules. See [Origin Server Subset Rule List ](#origin-server-subset-rule-list) below for details.
+`origin_server_subset_rule_list` - (Optional) When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.. See [Origin Server Subset Rule List ](#origin-server-subset-rule-list) below for details.
 
 `protected_cookies` - (Optional) Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.. See [Protected Cookies ](#protected-cookies) below for details.
 
@@ -352,9 +390,25 @@ Where should this load balancer be available.
 
 Add All load balancer domains to source origin (allow) list..
 
+### All Request Sections
+
+x-displayName: "All Request".
+
+### All Response Sections
+
+x-displayName: "All Response".
+
+### All Sections
+
+x-displayName: "All Request & Response".
+
 ### Allow
 
 Allow the request to proceed..
+
+### Allow Good Bots
+
+System flags Good Bot traffic and allow it to continue to the origin.
 
 ### Always Enable Captcha Challenge
 
@@ -388,6 +442,10 @@ Any Source IP.
 
 Match all paths.
 
+### Any Target
+
+The rule will be applied for all requests on this LB..
+
 ### Api Definitions
 
 DEPRECATED by 'api_definition'.
@@ -398,9 +456,9 @@ DEPRECATED by 'api_definition'.
 
 The API endpoint (Path + Method) which this validation applies to.
 
-`methods` - (Optional) methods to be matched (`List of Strings`).
+`methods` - (Optional) Methods to be matched (`List of Strings`).
 
-`path` - (Required) path to be matched (`String`).
+`path` - (Required) Path to be matched (`String`).
 
 ### Api Endpoint Method
 
@@ -429,6 +487,14 @@ If request matches any of these rules, skipping second category rules..
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
 `request_matcher` - (Optional) Conditions related to the request, such as query parameters, headers, etc.. See [Request Matcher ](#request-matcher) below for details.
+
+### Api Endpoint Target
+
+The rule is applied only for the specified api endpoints..
+
+`api_endpoint_path` - (Required) The rule is applied only for the specified api endpoints. (`String`).
+
+`methods` - (Required) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
 
 ### Api Groups Rules
 
@@ -898,6 +964,12 @@ A custom route uses a route object created outside of this view..
 
 `route_ref` - (Optional) Reference to a custom route object. See [ref](#ref) below for details.
 
+### Custom Sections
+
+x-displayName: "Custom Sections".
+
+`custom_sections` - (Required) Request & Response Sections. (`List of Strings`).
+
 ### Custom Security
 
 Custom selection of TLS versions and cipher suites.
@@ -907,6 +979,16 @@ Custom selection of TLS versions and cipher suites.
 `max_version` - (Optional) Maximum TLS protocol version. (`String`).
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Custom Sensitive Data Detection Rules
+
+Rules to detect custom sensitive data in requests and/or responses sections..
+
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+
+`sensitive_data_detection_config` - (Optional) The custom data detection config specifies targets, scopes & the pattern to be detected.. See [Sensitive Data Detection Config ](#sensitive-data-detection-config) below for details.
+
+`sensitive_data_type` - (Optional) If the pattern is detected, the request is labeled with specified sensitive data type.. See [Sensitive Data Type ](#sensitive-data-type) below for details.
 
 ### Data Guard Rules
 
@@ -997,6 +1079,8 @@ Single Origin Pool.
 `origin_servers` - (Required) List of origin servers in this pool. See [Origin Servers ](#origin-servers) below for details.
 
 `automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (bool).
+
+`lb_port` - (Optional) Endpoint port is selected based on loadbalancer port (bool).
 
 `port` - (Optional) Endpoint service is available on this port (`Int`).
 
@@ -1128,6 +1212,12 @@ x-displayName: "Disable".
 
 Disable collection of transaction result..
 
+### Disabled Built In Rules
+
+List of disabled built-in sensitive data detection rules..
+
+`name` - (Required) Built-in rule for sensitive data detection. (`String`).
+
 ### Domain
 
 Domain matcher..
@@ -1145,6 +1235,8 @@ x-displayName: "Enable".
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
 
 `enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
+
+`sensitive_data_detection_rules` - (Optional) Manage rules to detect sensitive data in requests and/or response sections.. See [Sensitive Data Detection Rules ](#sensitive-data-detection-rules) below for details.
 
 ### Enable Auto Mitigation
 
@@ -1182,6 +1274,8 @@ x-displayName: "Enable".
 
 `enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (bool).
 
+`sensitive_data_detection_rules` - (Optional) Manage rules to detect sensitive data in requests and/or response sections.. See [Sensitive Data Detection Rules ](#sensitive-data-detection-rules) below for details.
+
 ### Enable Introspection
 
 Enable introspection queries for the load balancer..
@@ -1212,7 +1306,7 @@ Enable strict SNI and Host header check.
 
 Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing..
 
-`endpoint_subsets` - (Optional) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
+`endpoint_subsets` - (Required) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
 
 `any_endpoint` - (Optional) Select any origin server from available healthy origin servers in this pool (bool).
 
@@ -1462,7 +1556,9 @@ HTTP Load Balancer..
 
 `dns_volterra_managed` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal. (`Bool`).
 
-`port` - (Optional) x-example: "80" (`Int`).
+`port` - (Optional) HTTP port to Listen. (`Int`).
+
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 ### Http1 Config
 
@@ -1522,7 +1618,9 @@ User is responsible for managing DNS to this load balancer..
 
 `enable_path_normalize` - (Optional) x-displayName: "Enable" (bool).
 
-`port` - (Optional) x-example: "443" (`Int`).
+`port` - (Optional) HTTPS port to Listen. (`Int`).
+
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
@@ -1562,7 +1660,9 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `enable_path_normalize` - (Optional) x-displayName: "Enable" (bool).
 
-`port` - (Optional) x-example: "443" (`Int`).
+`port` - (Optional) HTTPS port to Listen. (`Int`).
+
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
@@ -1610,7 +1710,9 @@ Inside network on the site.
 
 List of IP(s) for which rate limiting will be disabled..
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Ip Matcher
 
@@ -1714,6 +1816,26 @@ Specify origin server with K8s service name and site information.
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
+### Key Pattern
+
+Search for pattern across all field names in the specified sections..
+
+`exact_value` - (Optional) Search for values with exact match. (`String`).
+
+`regex_value` - (Optional) Search for values matching this regular expression. (`String`).
+
+### Key Value Pattern
+
+Search for specific field and value patterns in the specified sections..
+
+`key_pattern` - (Required) Pattern for key/field.. See [Key Pattern ](#key-pattern) below for details.
+
+`value_pattern` - (Required) Pattern for value.. See [Value Pattern ](#value-pattern) below for details.
+
+### Lb Port
+
+Endpoint port is selected based on loadbalancer port.
+
 ### Login
 
 x-displayName: "Login".
@@ -1759,6 +1881,10 @@ x-displayName: "GET".
 ### Method Post
 
 x-displayName: "POST".
+
+### Mitigate Good Bots
+
+System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above.
 
 ### Mitigation
 
@@ -1884,8 +2010,6 @@ x-displayName: "Custom Fall Through Rule List".
 
 `api_endpoint` - (Optional) The API endpoint (Path + Method) which this validation applies to. See [Api Endpoint ](#api-endpoint) below for details.
 
-`api_endpoint_path` - (Optional) The API endpoint which this validation applies to (`String`).
-
 `api_group` - (Optional) The API group which this validation applies to (`String`).
 
 `base_path` - (Optional) The base path which this validation applies to (`String`).
@@ -1908,7 +2032,7 @@ Origin Pools for this route.
 
 ### Origin Server Subset Rule List
 
-Origin Server Subset Selection Rules.
+When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated..
 
 `origin_server_subset_rules` - (Optional) When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.. See [Origin Server Subset Rules ](#origin-server-subset-rules) below for details.
 
@@ -1924,8 +2048,6 @@ When an Origin server subset rule is matched, then this selection rule takes eff
 
 `body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Body Matcher ](#body-matcher) below for details.
 
-`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
-
 `country_codes` - (Optional) List of Country Codes (`List of Strings`).
 
 `any_ip` - (Optional) Any Source IP (bool).
@@ -1936,9 +2058,13 @@ When an Origin server subset rule is matched, then this selection rule takes eff
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
-`origin_server_subsets_action` - (Required) Add Labels for this origin server, these labels can be used to form subset. (`String`).
+`origin_server_subsets_action` - (Required) 2. Enable subset load balancing in the Origin Server Subsets section and configure keys in origin server subsets classes (`String`).
 
 `re_name_list` - (Optional) List of RE names for match (`String`).
+
+`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
+
+`none` - (Optional) No Label Selector (bool).
 
 ### Origin Servers
 
@@ -2135,6 +2261,10 @@ List of protected application endpoints (max 128 items)..
 `flow_label` - (Optional) x-displayName: "Specify Endpoint label category". See [Flow Label ](#flow-label) below for details.
 
 `undefined_flow_label` - (Optional) x-displayName: "Undefined" (bool).
+
+`allow_good_bots` - (Optional) System flags Good Bot traffic and allow it to continue to the origin (bool).
+
+`mitigate_good_bots` - (Optional) System flags Good Bot Traffic, but mitigation is handled in the same manner as malicious automated traffic defined above (bool).
 
 `http_methods` - (Required) List of HTTP methods. (`List of Strings`).
 
@@ -2424,6 +2554,50 @@ Secret Value of the HTTP header..
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
+### Sensitive Data Detection Config
+
+The custom data detection config specifies targets, scopes & the pattern to be detected..
+
+`any_domain` - (Required) The rule will apply for all domains. (bool).
+
+`specific_domain` - (Required) For example: api.example.com (`String`).
+
+`key_pattern` - (Required) Search for pattern across all field names in the specified sections.. See [Key Pattern ](#key-pattern) below for details.
+
+`key_value_pattern` - (Required) Search for specific field and value patterns in the specified sections.. See [Key Value Pattern ](#key-value-pattern) below for details.
+
+`value_pattern` - (Required) Search for pattern across all field values in the specified sections.. See [Value Pattern ](#value-pattern) below for details.
+
+`all_request_sections` - (Optional) x-displayName: "All Request" (bool).
+
+`all_response_sections` - (Optional) x-displayName: "All Response" (bool).
+
+`all_sections` - (Optional) x-displayName: "All Request & Response" (bool).
+
+`custom_sections` - (Optional) x-displayName: "Custom Sections". See [Custom Sections ](#custom-sections) below for details.
+
+`any_target` - (Required) The rule will be applied for all requests on this LB. (bool).
+
+`api_endpoint_target` - (Required) The rule is applied only for the specified api endpoints.. See [Api Endpoint Target ](#api-endpoint-target) below for details.
+
+`api_group` - (Optional) Custom groups can be created if user tags paths or operations with "x-volterra-api-group" extensions inside swaggers. (`String`).
+
+`base_path` - (Required) The rule is applied only for the requests matching the specified base path. (`String`).
+
+### Sensitive Data Detection Rules
+
+Manage rules to detect sensitive data in requests and/or response sections..
+
+`custom_sensitive_data_detection_rules` - (Optional) Rules to detect custom sensitive data in requests and/or responses sections.. See [Custom Sensitive Data Detection Rules ](#custom-sensitive-data-detection-rules) below for details.
+
+`disabled_built_in_rules` - (Optional) List of disabled built-in sensitive data detection rules.. See [Disabled Built In Rules ](#disabled-built-in-rules) below for details.
+
+### Sensitive Data Type
+
+If the pattern is detected, the request is labeled with specified sensitive data type..
+
+`type` - (Required) The request is labeled as specified sensitive data type. (`String`).
+
 ### Server Url Rules
 
 For matching also specific endpoints you can use the API endpoint rules set bellow..
@@ -2553,6 +2727,8 @@ ML Config applied on this load balancer.
 Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
+
+`ip6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
 
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
@@ -2738,7 +2914,9 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca_url` - (Required) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
 
@@ -2748,7 +2926,9 @@ x-displayName: "Enable".
 
 Perform origin server verification using the provided trusted CA list.
 
-`trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -2760,7 +2940,9 @@ x-displayName: "Enable".
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+
+`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 
@@ -2813,6 +2995,14 @@ Enforce OpenAPI validation processing for this event.
 `enforcement_block` - (Optional) Block the request, trigger an API security event (bool).
 
 `enforcement_report` - (Optional) Allow the request, trigger an API security event (bool).
+
+### Value Pattern
+
+Pattern for value..
+
+`exact_value` - (Optional) Pattern value to be detected. (`String`).
+
+`regex_value` - (Optional) Regular expression for this pattern. (`String`).
 
 ### Vault Secret Info
 

@@ -28,8 +28,8 @@ resource "volterra_app_setting" "example" {
     }
 
     business_logic_markup_setting {
-      // One of the arguments from this list "disable enable" must be set
-      enable = true
+      // One of the arguments from this list "enable disable" must be set
+      disable = true
     }
 
     timeseries_analyses_setting {
@@ -54,11 +54,15 @@ resource "volterra_app_setting" "example" {
         include_failed_login_activity {
           login_failures_threshold = "10"
         }
+
         // One of the arguments from this list "include_forbidden_activity exclude_forbidden_activity" must be set
-        exclude_forbidden_activity = true
+
+        include_forbidden_activity {
+          forbidden_requests_threshold = "10"
+        }
         // One of the arguments from this list "exclude_ip_reputation include_ip_reputation" must be set
         include_ip_reputation = true
-        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
+        // One of the arguments from this list "include_non_existent_url_activity_automatic exclude_non_existent_url_activity include_non_existent_url_activity_custom" must be set
         exclude_non_existent_url_activity = true
         // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
         include_waf_activity = true
@@ -100,23 +104,23 @@ List of settings to enable for each AppType, given instance of AppType Exist in 
 
 `app_type_ref` - (Required) Associating an AppType reference, will enable analysis on this instance's generated data. See [ref](#ref) below for details.
 
-`business_logic_markup_setting` - (Optional) Setting specifying how Business Logic Markup will be performed.. See [Business Logic Markup Setting ](#business-logic-markup-setting) below for details.
+`business_logic_markup_setting` - (Optional) Setting specifying how API Discovery will be performed.. See [Business Logic Markup Setting ](#business-logic-markup-setting) below for details.
 
-`timeseries_analyses_setting` - (Optional) Configuration for timeseries analyses. See [Timeseries Analyses Setting ](#timeseries-analyses-setting) below for details.
+`timeseries_analyses_setting` - (Optional) The clients are flagged if anomalies are observed. See [Timeseries Analyses Setting ](#timeseries-analyses-setting) below for details.
 
-`user_behavior_analysis_setting` - (Optional) Configuration for user behavior analysis in this namespace. See [User Behavior Analysis Setting ](#user-behavior-analysis-setting) below for details.
+`user_behavior_analysis_setting` - (Optional) The risk score of the user decays over time, if no further suspicious activity is noted. See [User Behavior Analysis Setting ](#user-behavior-analysis-setting) below for details.
 
 ### Business Logic Markup Setting
 
-Setting specifying how Business Logic Markup will be performed..
+Setting specifying how API Discovery will be performed..
 
-`disable` - (Optional) Disable learning API patterns from this namespace (bool).
+`disable` - (Optional) API Endpoints are not discovered in this namespace (bool).
 
-`enable` - (Optional) Enable learning API patterns from this namespace (bool).
+`enable` - (Optional) API Endpoints are discovered in this namespace (bool).
 
 ### Disable
 
-Disable learning API patterns from this namespace.
+API Endpoints are not discovered in this namespace.
 
 ### Disable Detection
 
@@ -128,7 +132,7 @@ Disable learning user behavior patterns from this namespace.
 
 ### Enable
 
-Enable learning API patterns from this namespace.
+API Endpoints are discovered in this namespace.
 
 ### Enable Detection
 
@@ -144,9 +148,9 @@ Enable AI based malicious user detection.
 
 `include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Include Forbidden Activity ](#include-forbidden-activity) below for details.
 
-`exclude_ip_reputation` - (Optional) Exclude IP Reputation by policy in malicious user detection (bool).
+`exclude_ip_reputation` - (Optional) Exclude IP Reputation in malicious user detection (bool).
 
-`include_ip_reputation` - (Optional) Include IP Reputation by policy in malicious user detection (bool).
+`include_ip_reputation` - (Optional) Include IP Reputation in malicious user detection (bool).
 
 `exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (bool).
 
@@ -172,7 +176,7 @@ Exclude forbidden activity by policy in malicious user detection.
 
 ### Exclude Ip Reputation
 
-Exclude IP Reputation by policy in malicious user detection.
+Exclude IP Reputation in malicious user detection.
 
 ### Exclude Non Existent Url Activity
 
@@ -184,7 +188,7 @@ Exclude WAF activity in malicious user detection.
 
 ### High
 
-High : learnt threshold - 15 %.
+Use auto-calculated threshold decreased by margin for more sensitive detection.
 
 ### Include Failed Login Activity
 
@@ -200,17 +204,17 @@ Include forbidden activity by policy in malicious user detection.
 
 ### Include Ip Reputation
 
-Include IP Reputation by policy in malicious user detection.
+Include IP Reputation in malicious user detection.
 
 ### Include Non Existent Url Activity Automatic
 
 Include Non-Existent URL Activity using automatic threshold in malicious user detection.
 
-`high` - (Optional) High : learnt threshold - 15 % (bool).
+`high` - (Optional) Use auto-calculated threshold decreased by margin for more sensitive detection (bool).
 
-`low` - (Optional) Low : learnt threshold + 15 % (bool).
+`low` - (Optional) Use auto-calculated threshold with margin for less sensitive detection (bool).
 
-`medium` - (Optional) Medium : using learnt threshold derived from statistics per given app_type/tenant. (bool).
+`medium` - (Optional) Use auto-calculated threshold learnt from statistics per given application (bool).
 
 ### Include Non Existent Url Activity Custom
 
@@ -224,19 +228,19 @@ Include WAF activity in malicious user detection.
 
 ### Low
 
-Low : learnt threshold + 15 %.
+Use auto-calculated threshold with margin for less sensitive detection.
 
 ### Medium
 
-Medium : using learnt threshold derived from statistics per given app_type/tenant..
+Use auto-calculated threshold learnt from statistics per given application.
 
 ### Metric Selectors
 
-List of metric selectors where each selector specifies which metrics are selected to be analyzed.
+be included in the detection logic.
 
-`metric` - (Optional) Metrics enabled to be analyzed (`List of Strings`).
+`metric` - (Optional) Choose one or more metrics to be included in the detection logic (`List of Strings`).
 
-`metrics_source` - (Optional) Source from where this metric is gathered for analyses (`String`).
+`metrics_source` - (Optional) Choose the source for the metrics to be included in the detection logic (`String`).
 
 ### Ref
 
@@ -250,13 +254,13 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Timeseries Analyses Setting
 
-Configuration for timeseries analyses.
+The clients are flagged if anomalies are observed.
 
-`metric_selectors` - (Optional) List of metric selectors where each selector specifies which metrics are selected to be analyzed. See [Metric Selectors ](#metric-selectors) below for details.
+`metric_selectors` - (Optional) be included in the detection logic. See [Metric Selectors ](#metric-selectors) below for details.
 
 ### User Behavior Analysis Setting
 
-Configuration for user behavior analysis in this namespace.
+The risk score of the user decays over time, if no further suspicious activity is noted.
 
 `disable_learning` - (Optional) Disable learning user behavior patterns from this namespace (bool).
 

@@ -1,148 +1,110 @@
 ---
 
-page_title: "Volterra: nfv_service"
+page_title: "Volterra: apm"
 
-description: "The nfv_service allows CRUD of Nfv Service resource on Volterra SaaS"
------------------------------------------------------------------------------------
+description: "The apm allows CRUD of Apm resource on Volterra SaaS"
+-------------------------------------------------------------------
 
-Resource volterra_nfv_service
-=============================
+Resource volterra_apm
+=====================
 
-The Nfv Service allows CRUD of Nfv Service resource on Volterra SaaS
+The Apm allows CRUD of Apm resource on Volterra SaaS
 
-~> **Note:** Please refer to [Nfv Service API docs](https://volterra.io/docs/api/nfv-service) to learn more
+~> **Note:** Please refer to [Apm API docs](https://volterra.io/docs/api/apm) to learn more
 
 Example Usage
 -------------
 
 ```hcl
-resource "volterra_nfv_service" "example" {
+resource "volterra_apm" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "disable_https_management https_management" must be set
+  // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local" must be set
+    // One of the arguments from this list "disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli" must be set
+    advertise_on_internet_default_vip = true
+    domain_suffix                     = "foo.com"
 
-    advertise_on_slo_internet_vip {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "value"
-        description     = "Certificate used in production environment"
-
-        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
-
-        use_system_defaults {}
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-        default_security = true
-      }
-    }
-
-    domain_suffix = "foo.com"
-
-    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    // One of the arguments from this list "advertise_on_public do_not_advertise advertise_on_public_default_vip" must be set
     do_not_advertise = true
 
     // One of the arguments from this list "default_https_port https_port" must be set
     default_https_port = true
   }
 
-  // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
+  // One of the arguments from this list "aws_site_type_choice baremetal_site_type_choice" must be set
 
-  f5_big_ip_aws_service {
-    admin_password {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+  aws_site_type_choice {
+    apm_aws_site {
+      admin_password {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+        blindfold_secret_info {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
       }
 
-      secret_encoding_type = "secret_encoding_type"
+      admin_username = "admin"
 
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+      aws_tgw_site {
+        aws_tgw_site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      endpoint_service {
+        // One of the arguments from this list "advertise_on_slo_ip_external disable_advertise_on_slo_ip advertise_on_slo_ip" must be set
+        disable_advertise_on_slo_ip = true
+
+        // One of the arguments from this list "automatic_vip configured_vip" must be set
+        automatic_vip = true
+
+        // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
+        https_port = true
+
+        // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
+        no_udp_ports = true
+      }
+
+      nodes {
+        aws_az_name = "us-west-2a"
+
+        // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
+        reserved_mgmt_subnet = true
+        node_name            = "node1"
+
+        // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
+        automatic_prefix = true
+      }
+
+      ssh_key = "ssh-rsa AAAAB..."
+
+      tags = {
+        "key1" = "value1"
       }
     }
 
-    admin_username = "admin"
-
-    endpoint_service {
-      // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-      advertise_on_slo_ip = true
-
-      // One of the arguments from this list "automatic_vip configured_vip" must be set
-      configured_vip = "10.1.2.6/32"
-
-      // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
-      default_tcp_ports = true
-
-      // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
-
-      custom_udp_ports {
-        ports = ["100-200"]
-      }
-    }
-
-    // One of the arguments from this list "market_place_image byol_image" must be set
+    // One of the arguments from this list "market_place_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
-      AWAFPayG200Mbps = true
-    }
-    nodes {
-      aws_az_name = "us-west-2a"
-
-      // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
-      reserved_mgmt_subnet = true
-      node_name            = "node1"
-
-      // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
-      automatic_prefix = true
-    }
-
-    // One of the arguments from this list "aws_tgw_site_params aws_vpc_site_params" must be set
-
-    aws_tgw_site_params {
-      aws_tgw_site {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    ssh_key = "ssh-rsa AAAAB..."
-    tags = {
-      "key1" = "value1"
+      // One of the arguments from this list "BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
+      BestPlusPayG200Mbps = true
     }
   }
-  // One of the arguments from this list "disable_ssh_access enabled_ssh_access" must be set
-  disable_ssh_access = true
 }
 
 ```
@@ -166,33 +128,19 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`disable_https_management` - (Optional) HTTPS based management is not enabled (bool).
-
 `https_management` - (Optional) Enable HTTPS based management. See [Https Management ](#https-management) below for details.
 
-`f5_big_ip_aws_service` - (Optional) Virtual BIG-IP service to be deployed on AWS. See [F5 Big Ip Aws Service ](#f5-big-ip-aws-service) below for details.
+`aws_site_type_choice` - (Optional) Virtual F5 BIG-IP service to be deployed on AWS Transit Gateway Site. See [Aws Site Type Choice ](#aws-site-type-choice) below for details.
 
-`palo_alto_fw_service` - (Optional) Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud. See [Palo Alto Fw Service ](#palo-alto-fw-service) below for details.
-
-`disable_ssh_access` - (Optional) SSH based access is disabled (bool).
-
-`enabled_ssh_access` - (Optional) Enable SSH access to nodes. See [Enabled Ssh Access ](#enabled-ssh-access) below for details.
-
-### AWAFPayG200Mbps
-
-F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps).
-
-### AWAFPayG3Gbps
-
-F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps).
+`baremetal_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site. See [Baremetal Site Type Choice ](#baremetal-site-type-choice) below for details.
 
 ### BestPlusPayG200Mbps
 
-F5 Best Plus with all modules (PAYG, 200mbps).
+F5 Best Plus with all modules in 200Mbps flavor.
 
 ### Admin Password
 
-Secret admin password for BIG ip.
+Secret admin password for BIG-IP.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
@@ -282,37 +230,23 @@ Enable on Site local outside network, default VIP will be used.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
-### Authorization Key
+### Apm Aws Site
 
-Authentication key for Panorama.
+Virtual F5 BIG-IP service to be deployed on AWS.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`admin_password` - (Required) Secret admin password for BIG-IP. See [Admin Password ](#admin-password) below for details.
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`admin_username` - (Required) Admin Username for BIG-IP (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [Aws Tgw Site ](#aws-tgw-site) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+`nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
 
-### Auto Setup
-
-Auto Setup API Access & Users. With this firewall api access and given admin user will be auto setup.
-
-`admin_password` - (Required) Firewall Admin Password. See [Admin Password ](#admin-password) below for details.
-
-`admin_username` - (Required) Firewall Admin Username (`String`).
-
-`autogenerated_ssh_keys` - (Optional) Autogenerated SSH Keys, users will be able to download the keys after external service is created (bool).
-
-`manual_ssh_keys` - (Optional) User given public and private SSH keys. See [Manual Ssh Keys ](#manual-ssh-keys) below for details.
-
-### Autogenerated Ssh Keys
-
-Autogenerated SSH Keys, users will be able to download the keys after external service is created.
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
 
 ### Automatic Prefix
 
@@ -322,17 +256,25 @@ System will automatically select tunnel prefix.
 
 System will automatically select a VIP.
 
-### Aws Tgw Site Params
+### Aws Site Type Choice
 
-Select AWS transit gateway site.
+Virtual F5 BIG-IP service to be deployed on AWS Transit Gateway Site.
+
+`apm_aws_site` - (Required) Virtual F5 BIG-IP service to be deployed on AWS. See [Apm Aws Site ](#apm-aws-site) below for details.
+
+`market_place_image` - (Optional) Select the BIG-IP pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
+
+### Aws Tgw Site
+
+Reference to AWS transit gateway site.
 
 `aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [ref](#ref) below for details.
 
-### Aws Vpc Site Params
+### Baremetal Site Type Choice
 
-Select AWS VPC site.
+Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site.
 
-`aws_vpc_site` - (Required) Reference to AWS VPC site. See [ref](#ref) below for details.
+`f5_bare_metal_site` - (Optional) Virtual BIG-IP specification for App Stack Bare Metal Site. See [F5 Bare Metal Site ](#f5-bare-metal-site) below for details.
 
 ### Best Plus Payg 1gbps
 
@@ -357,14 +299,6 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Byol Image
-
-Select the BIG-IP bring your own license image to be used for this service.
-
-`image` - (Required) Select the BIG-IP pay as you go image to be used for this service (`String`).
-
-`license` - (Optional) Secret License data. See [License ](#license) below for details.
 
 ### Clear Secret Info
 
@@ -426,10 +360,6 @@ Disable on Site local network.
 
 This is the default behavior if no choice is selected..
 
-### Disable Panaroma
-
-Disable Panorama connection during bootstrap, user can always enable it using firewall management console.
-
 ### Do Not Advertise
 
 Do not enable access to management from internet.
@@ -437,24 +367,6 @@ Do not enable access to management from internet.
 ### Do Not Advertise On Internet
 
 Do not enable access to management from internet.
-
-### Enabled Ssh Access
-
-Enable SSH access to nodes.
-
-`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
-
-`advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (bool).
-
-`advertise_on_sli_vip` - (Optional) Enable on Site local inside network, default VIP will be used. See [Advertise On Sli Vip ](#advertise-on-sli-vip) below for details.
-
-`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP. See [Advertise On Slo Internet Vip ](#advertise-on-slo-internet-vip) below for details.
-
-`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used. See [Advertise On Slo Sli ](#advertise-on-slo-sli) below for details.
-
-`advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise On Slo Vip ](#advertise-on-slo-vip) below for details.
-
-`ssh_ports` - (Required) Enter TCP port per node (`Int`).
 
 ### Endpoint Service
 
@@ -468,7 +380,7 @@ External service type is Endpoint service.
 
 `automatic_vip` - (Optional) System will automatically select a VIP (bool).
 
-`configured_vip` - (Required) Enter IP address for the default VIP (`String`).
+`configured_vip` - (Optional) Enter IP address for the default VIP (`String`).
 
 `custom_tcp_ports` - (Optional) select custom tcp ports. See [Custom Tcp Ports ](#custom-tcp-ports) below for details.
 
@@ -484,29 +396,21 @@ External service type is Endpoint service.
 
 `no_udp_ports` - (Optional) do not select udp ports (bool).
 
-### F5 Big Ip Aws Service
+### F5 Bare Metal Site
 
-Virtual BIG-IP service to be deployed on AWS.
+Virtual BIG-IP specification for App Stack Bare Metal Site.
 
-`admin_password` - (Required) Secret admin password for BIG ip. See [Admin Password ](#admin-password) below for details.
+`admin_password` - (Required) Secret admin password for BIG-IP. See [Admin Password ](#admin-password) below for details.
 
 `admin_username` - (Required) Admin Username for BIG-IP (`String`).
 
-`endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
-
-`byol_image` - (Required) Select the BIG-IP bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
-
-`market_place_image` - (Required) Select the BIG-IP pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
+`bare_metal_site` - (Required) Reference to bare metal site on which BIG-IP should be deployed. See [ref](#ref) below for details.
 
 `nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
-`aws_tgw_site_params` - (Optional) Select AWS transit gateway site. See [Aws Tgw Site Params ](#aws-tgw-site-params) below for details.
+`public_download_url` - (Required) Public URL where BIG-IP VE image is hosted (`String`).
 
-`aws_vpc_site_params` - (Optional) Select AWS VPC site. See [Aws Vpc Site Params ](#aws-vpc-site-params) below for details.
-
-`ssh_key` - (Required) Public SSH key for accessing the Big IP nodes. (`String`).
-
-`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
 
 ### Http Port
 
@@ -548,45 +452,17 @@ Enable HTTPS based management.
 
 Select HTTPS Port 443.
 
-### License
-
-Secret License data.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
 ### Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
-
-### Manual Ssh Keys
-
-User given public and private SSH keys.
-
-`private_key` - (Required) Authorized Public SSH key which will be programmed on the node. See [Private Key ](#private-key) below for details.
-
-`public_key` - (Required) Authorized Public SSH key which will be programmed on the node (`String`).
 
 ### Market Place Image
 
 Select the BIG-IP pay as you go image to be used for this service.
 
-`AWAFPayG200Mbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (bool).
+`BestPlusPayG200Mbps` - (Optional) F5 Best Plus with all modules in 200Mbps flavor (bool).
 
-`AWAFPayG3Gbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (bool).
-
-`BestPlusPayG200Mbps` - (Required) F5 Best Plus with all modules (PAYG, 200mbps) (bool).
-
-`best_plus_payg_1gbps` - (Required) F5 Best Plus with all modules in 1Gbps flavor (bool).
+`best_plus_payg_1gbps` - (Optional) F5 Best Plus with all modules in 1Gbps flavor (bool).
 
 ### Medium Security
 
@@ -595,10 +471,6 @@ TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 ### Mgmt Subnet
 
 Select Existing Subnet or Create New.
-
-`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
-
-`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
 
 ### No Crl
 
@@ -632,52 +504,6 @@ Specify how and where the service nodes are spawned.
 
 `tunnel_prefix` - (Optional) Enter IP prefix for the tunnel, it has to be /30 (`String`).
 
-### Palo Alto Fw Service
-
-Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud.
-
-`pan_ami_bundle1` - (Required) VM-Series Next-Generation Firewall Bundle 1 (bool).
-
-`pan_ami_bundle2` - (Required) VM-Series Next-Generation Firewall Bundle 2 (bool).
-
-`aws_tgw_site` - (Required) Select AWS transit gateway site. See [ref](#ref) below for details.
-
-`instance_type` - (Required) AWS Instance type (`String`).
-
-`disable_panaroma` - (Optional) Disable Panorama connection during bootstrap, user can always enable it using firewall management console (bool).
-
-`panorama_server` - (Optional) Enabled adding firewall instances to Panorama for config management during bootstrap. See [Panorama Server ](#panorama-server) below for details.
-
-`service_nodes` - (Required) Specify how and where the Palo Alto Networks Vm-Series AZ Nodes are spawned. See [Service Nodes ](#service-nodes) below for details.
-
-`auto_setup` - (Optional) Auto Setup API Access & Users. With this firewall api access and given admin user will be auto setup. See [Auto Setup ](#auto-setup) below for details.
-
-`ssh_key` - (Required) its corresponding ssh private key. (`String`).
-
-`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
-
-`version` - (Optional) PAN-OS version (`String`).
-
-### Pan Ami Bundle1
-
-VM-Series Next-Generation Firewall Bundle 1.
-
-### Pan Ami Bundle2
-
-VM-Series Next-Generation Firewall Bundle 2.
-
-### Panorama Server
-
-Enabled adding firewall instances to Panorama for config management during bootstrap.
-
-`authorization_key` - (Required) Authentication key for Panorama. See [Authorization Key ](#authorization-key) below for details.
-
-`device_group_name` - (Optional) Device Group Name (`String`).
-
-`server` - (Required) Panorama Server Address to which the firewall should connect to (`String`).
-
-`template_stack_name` - (Optional) Template Stack Name (`String`).
-
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -707,20 +533,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Mgmt Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
-
-### Service Nodes
-
-Specify how and where the Palo Alto Networks Vm-Series AZ Nodes are spawned.
-
-`nodes` - (Required) x-required. See [Nodes ](#nodes) below for details.
-
-### Subnet Param
-
-Parameters for creating new subnet.
-
-`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
-
-`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
 
 ### Tls Certificates
 
@@ -803,4 +615,4 @@ X-Forwarded-Client-Cert header will be added with the configured fields.
 Attribute Reference
 -------------------
 
--	`id` - This is the id of the configured nfv_service.
+-	`id` - This is the id of the configured apm.

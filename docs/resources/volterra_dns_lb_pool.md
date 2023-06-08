@@ -21,14 +21,21 @@ resource "volterra_dns_lb_pool" "example" {
   namespace           = "staging"
   load_balancing_mode = ["load_balancing_mode"]
 
-  // One of the arguments from this list "aaaa_pool cname_pool mx_pool a_pool" must be set
+  // One of the arguments from this list "a_pool aaaa_pool cname_pool mx_pool" must be set
 
   a_pool {
     // One of the arguments from this list "disable_health_check health_check" must be set
-    disable_health_check = true
-    max_answers          = "1"
+
+    health_check {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    max_answers = "1"
 
     members {
+      disable     = true
       ip_endpoint = "8.8.8.8"
       priority    = "10"
       ratio       = "10"
@@ -106,6 +113,8 @@ When health check is disabled, the pool member is presumed to be always healthy.
 ### Members
 
 x-required.
+
+`disable` - (Optional) A value of true will disable the pool-member (`Bool`).
 
 `ip_endpoint` - (Required) Public IP address (`String`).
 

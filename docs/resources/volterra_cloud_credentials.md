@@ -20,7 +20,7 @@ resource "volterra_cloud_credentials" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "aws_secret_key azure_pfx_certificate azure_client_secret gcp_cred_file" must be set
+  // One of the arguments from this list "gcp_cred_file aws_secret_key aws_assume_role azure_pfx_certificate azure_client_secret" must be set
 
   aws_secret_key {
     access_key = "value"
@@ -34,7 +34,7 @@ resource "volterra_cloud_credentials" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
 
       blindfold_secret_info {
         decryption_provider = "value"
@@ -66,6 +66,8 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`aws_assume_role` - (Optional) F5XC will assume role designated by customer. See [Aws Assume Role ](#aws-assume-role) below for details.
+
 `aws_secret_key` - (Optional) AWS authentication using access keys. See [Aws Secret Key ](#aws-secret-key) below for details.
 
 `azure_client_secret` - (Optional) Azure authentication using a service principal account with client secret. See [Azure Client Secret ](#azure-client-secret) below for details.
@@ -73,6 +75,24 @@ Argument Reference
 `azure_pfx_certificate` - (Optional) Azure authentication using a service principal account with client certificate. See [Azure Pfx Certificate ](#azure-pfx-certificate) below for details.
 
 `gcp_cred_file` - (Optional) Google authentication using content of Google Credentials File. See [Gcp Cred File ](#gcp-cred-file) below for details.
+
+### Aws Assume Role
+
+F5XC will assume role designated by customer.
+
+`duration_seconds` - (Optional) The duration, in seconds of the role session. (`Int`).
+
+`custom_external_id` - (Optional) External ID is Custom ID (`String`).
+
+`external_id_is_optional` - (Optional) External ID is Optional (bool).
+
+`external_id_is_tenant_id` - (Optional) External ID is Tenant ID (bool).
+
+`role_arn` - (Required) IAM Role ARN to assume the role (`String`).
+
+`session_name` - (Optional) be used for deploy, monitor from F5XC console (`String`).
+
+`session_tags` - (Optional) Session tags are key-value pair attributes that you pass when you assume an IAM role (`String`).
 
 ### Aws Secret Key
 
@@ -110,7 +130,7 @@ Azure authentication using a service principal account with client certificate.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -144,13 +164,13 @@ Client Secret (alias password) for your Azure service principal.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Credential File
 
@@ -160,13 +180,21 @@ Content of Credential File for your GCP account.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### External Id Is Optional
+
+External ID is Optional.
+
+### External Id Is Tenant Id
+
+External ID is Tenant ID.
 
 ### Gcp Cred File
 
@@ -182,13 +210,13 @@ Password for your '.p12' or '.pfx' file whose certificate is linked to service p
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Secret Key
 
@@ -198,13 +226,13 @@ Secret Access Key for your AWS account.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Vault Secret Info
 
@@ -222,7 +250,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

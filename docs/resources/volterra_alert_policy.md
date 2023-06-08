@@ -28,11 +28,13 @@ resource "volterra_alert_policy" "example" {
 
   routes {
     // One of the arguments from this list "send dont_send" must be set
-    dont_send = true
+    send = true
 
     // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
-    any = true
 
+    severity {
+      severities = ["severities"]
+    }
     notification_parameters {
       // One of the arguments from this list "default individual ves_io_group custom" must be set
       default         = true

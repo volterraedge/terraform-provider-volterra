@@ -22,46 +22,28 @@ resource "volterra_dns_zone" "example" {
 
   // One of the arguments from this list "primary secondary" must be set
 
-  primary {
-    default_rr_set_group {
-      ttl = "3600"
+  secondary {
+    primary_servers    = ["8.8.8.8"]
+    tsig_key_algorithm = "tsig_key_algorithm"
+    tsig_key_name      = "value"
 
-      // One of the arguments from this list "aaaa_record caa_record mx_record ns_record ptr_record txt_record lb_record a_record cname_record srv_record alias_record" must be set
-
-      aaaa_record {
-        name = "www or mail or * or corp.web or *.b"
-
-        values = ["2001:0db8:85a3:0000:0000:8a2e:0370:7334"]
-      }
-    }
-
-    dnssec_mode {
-      // One of the arguments from this list "disable enable" must be set
-      disable = true
-    }
-
-    rr_set_group {
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
+    tsig_key_value {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
       }
 
-      rr_set {
-        ttl = "3600"
+      secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "alias_record cname_record srv_record txt_record lb_record a_record aaaa_record caa_record mx_record ns_record ptr_record" must be set
+      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-        a_record {
-          name = "www or mail or * or corp.web or *.b"
-
-          values = ["1.1.1.1"]
-        }
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
       }
     }
-
-    // One of the arguments from this list "default_soa_parameters soa_parameters" must be set
-    default_soa_parameters = true
   }
 }
 
@@ -116,7 +98,7 @@ x-displayName: "ALIAS".
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -174,7 +156,7 @@ default_rr_set_group.
 
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
 
-`lb_record` - (Optional) x-displayName: "DNS LB". See [Lb Record ](#lb-record) below for details.
+`lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
 
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
 
@@ -208,11 +190,11 @@ DNSSEC enable.
 
 ### Lb Record
 
-x-displayName: "DNS LB".
+x-displayName: "DNS Load Balancer".
 
 `name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
 
-`value` - (Optional) x-displayName: "DNS LB Record". See [ref](#ref) below for details.
+`value` - (Optional) x-displayName: "DNS Load Balancer Record". See [ref](#ref) below for details.
 
 ### Metadata
 
@@ -243,6 +225,8 @@ x-displayName: "NS".
 ### Primary
 
 Primary DNS.
+
+`allow_http_lb_managed_records` - (Optional)allow_http_lb_managed_records (`Bool`).
 
 `default_rr_set_group` - (Optional)default_rr_set_group. See [Default Rr Set Group ](#default-rr-set-group) below for details.
 
@@ -288,7 +272,7 @@ Collection of DNS resource record sets.
 
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
 
-`lb_record` - (Optional) x-displayName: "DNS LB". See [Lb Record ](#lb-record) below for details.
+`lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
 
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
 
@@ -350,13 +334,13 @@ x-displayName: "TSIG key value in base 64 format".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Txt Record
 
@@ -392,7 +376,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

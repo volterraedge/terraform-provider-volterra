@@ -20,12 +20,12 @@ resource "volterra_dns_lb_health_check" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "udp_health_check icmp_health_check https_health_check http_health_check tcp_health_check" must be set
+  // One of the arguments from this list "tcp_hex_health_check http_health_check tcp_health_check udp_health_check icmp_health_check https_health_check" must be set
 
-  tcp_health_check {
+  http_health_check {
     health_check_port = "80"
-    receive           = "receive"
-    send              = "send"
+    receive           = "HTTP/1"
+    send              = "HEAD / HTTP/1.0"
   }
 }
 
@@ -58,6 +58,8 @@ Argument Reference
 
 `tcp_health_check` - (Optional) TCP Health Check. See [Tcp Health Check ](#tcp-health-check) below for details.
 
+`tcp_hex_health_check` - (Optional) TCP Health Check with Hex Encoded Payload. See [Tcp Hex Health Check ](#tcp-hex-health-check) below for details.
+
 `udp_health_check` - (Optional) UDP Health Check. See [Udp Health Check ](#udp-health-check) below for details.
 
 ### Http Health Check
@@ -89,6 +91,16 @@ TCP Health Check.
 `receive` - (Optional) Regular expression used to match against the response to the monitor's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
 
 `send` - (Optional) Send this string to target (default empty. When send and receive are both empty, monitor just tests 3WHS) (`String`).
+
+### Tcp Hex Health Check
+
+TCP Health Check with Hex Encoded Payload.
+
+`health_check_port` - (Required) x-example: "80" (`Int`).
+
+`receive` - (Optional) Hex encoded raw bytes expected in the response. (`String`).
+
+`send` - (Optional) Hex encoded raw bytes sent in the request. Empty payloads imply a connect-only health check. (`String`).
 
 ### Udp Health Check
 

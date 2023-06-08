@@ -34,7 +34,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_key  = "value"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "from_site ip_address local_address" must be set
+    // One of the arguments from this list "local_address from_site ip_address" must be set
     local_address = true
   }
 
@@ -46,15 +46,16 @@ resource "volterra_bgp" "example" {
     }
 
     // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
-    passive_mode_enabled = true
-    target_service       = "value"
+    passive_mode_disabled = true
+    target_service        = "value"
 
     // One of the arguments from this list "external internal" must be set
 
     external {
       // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
-      from_site = true
-      asn       = "64512"
+      subnet_end_offset = "subnet_end_offset"
+
+      asn = "64512"
 
       family_inet {
         // One of the arguments from this list "enable disable" must be set
@@ -75,7 +76,7 @@ resource "volterra_bgp" "example" {
   where {
     // One of the arguments from this list "site virtual_site" must be set
 
-    virtual_site {
+    site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
       disable_internet_vip = true
       network_type         = "network_type"
@@ -350,7 +351,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -362,7 +363,7 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 
