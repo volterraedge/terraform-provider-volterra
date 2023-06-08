@@ -22,30 +22,15 @@ resource "volterra_log_receiver" "example" {
 
   // One of the arguments from this list "syslog data_dog splunk" must be set
 
-  splunk {
-    // One of the arguments from this list "splunk_server_name splunk_server_ip splunk_server_tls" must be set
+  syslog {
+    // One of the arguments from this list "syslog_rfc5424 syslog_rfc3164" must be set
+    syslog_rfc5424 = "500"
 
-    splunk_server_name {
-      port        = "3000"
+    // One of the arguments from this list "udp_server tcp_server tls_server" must be set
+
+    udp_server {
+      port        = "514"
       server_name = "server.example.com"
-    }
-
-    splunk_hec_token {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
     }
   }
   // One of the arguments from this list "site_local log_receiver_sites" must be set
@@ -85,7 +70,7 @@ Argument Reference
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -125,7 +110,7 @@ Stream log to Datadog receiver.
 
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
-`volterra_ca` - (Optional) Use Volterra default CA (bool).
+`volterra_ca` - (Optional) Use F5XC default CA (bool).
 
 `compression_disabled` - (Optional) Disable compression of log messages (bool).
 
@@ -149,13 +134,13 @@ Secret API key to access datadog servers.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Datadog Default Server
 
@@ -181,13 +166,13 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Log Receiver Sites
 
@@ -239,13 +224,13 @@ Secret splunk HEC token.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Splunk Server Ip
 
@@ -269,7 +254,7 @@ Splunk TLS Server Parameters.
 
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
-`volterra_ca` - (Optional) Use Volterra default CA (bool).
+`volterra_ca` - (Optional) Use F5XC default CA (bool).
 
 `mtls_disabled` - (Optional) mTLS is disabled (bool).
 
@@ -311,7 +296,7 @@ Syslog transport mode is TLS.
 
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
-`volterra_ca` - (Optional) Use Volterra default CA (bool).
+`volterra_ca` - (Optional) Use F5XC default CA (bool).
 
 `mtls_disabled` - (Optional) mTLS is disabled (bool).
 
@@ -349,11 +334,11 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Volterra Ca
 
-Use Volterra default CA.
+Use F5XC default CA.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

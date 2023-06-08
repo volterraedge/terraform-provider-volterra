@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.site.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/sitecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/sitecrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/sitecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/sitecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/sitecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3721,6 +3709,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "inside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "inside_vip_v6",
+                    "x-displayname": "Inside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
                 "ipsec_ssl_nodes_fqdn": {
                     "type": "array",
                     "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
@@ -3835,6 +3833,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "outside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "outside_vip_v6",
+                    "x-displayname": "Outside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "phobos_list": {
@@ -3980,6 +3988,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
                     }
                 },
+                "vip_selection": {
+                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
+                    "title": "vip_selection",
+                    "$ref": "#/definitions/siteVIPSelection",
+                    "x-displayname": "VIP Selection"
+                },
                 "vip_vrrp_mode": {
                     "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
                     "title": "vip_vrrp_mode",
@@ -4005,6 +4019,12 @@ var APISwaggerJSON string = `{
                     "title": "volterra_software_version",
                     "x-displayname": "Software Version",
                     "x-ves-example": "value"
+                },
+                "vpm": {
+                    "description": " Vpm in the site",
+                    "title": "vpm",
+                    "$ref": "#/definitions/schemaServiceParameters",
+                    "x-displayname": "Vpm Parameters"
                 }
             }
         },
@@ -4840,10 +4860,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IP Mode"
                 },
                 "ipv6": {
-                    "description": " IPV6 address of interface",
-                    "title": "IPV6 subnet",
+                    "description": " IPv6 address of interface",
+                    "title": "IPv6 subnet",
                     "$ref": "#/definitions/schemaIpSubnetType",
-                    "x-displayname": "IPV6 Subnet"
+                    "x-displayname": "IPv6 Subnet"
                 },
                 "link_quality": {
                     "description": " Link quality for the interface",
@@ -5631,6 +5651,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of site object",
             "title": "Site Status Object",
             "x-displayname": "Status",
+            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20",
             "x-ves-proto-message": "ves.io.schema.site.StatusObject",
             "properties": {
                 "certified_hardware": {
@@ -6066,6 +6087,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "USB Type",
             "x-ves-proto-enum": "ves.io.schema.site.UsbType"
         },
+        "siteVIPSelection": {
+            "type": "string",
+            "description": "VIP type to choose from IPv4/IPv6/both if different VIPs are available\n",
+            "title": "VIP Selection",
+            "enum": [
+                "VIP_SELECTION_IPV4_IPV6",
+                "VIP_SELECTION_IPV4",
+                "VIP_SELECTION_IPV6"
+            ],
+            "default": "VIP_SELECTION_IPV4_IPV6",
+            "x-displayname": "VIP Selection",
+            "x-ves-proto-enum": "ves.io.schema.site.VIPSelection"
+        },
         "siteVTRPState": {
             "type": "string",
             "description": "State of VTRP connection between (VER control plane)Vega \u0026 (F5XC Fabric control)Ares\n\nConnection is initialized\nVTRP connection is active\nConnecting to the server\nTCP connection is up\nVTRP session established\nConnection is deleted",
@@ -6254,8 +6288,26 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "running_version": {
+                    "type": "string",
+                    "description": " running version represent volterra software version currently running in the site.",
+                    "title": "running_version",
+                    "x-displayname": "Running Version"
                 }
             }
+        },
+        "sitecrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.site.crudapi.ErrorCode"
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
@@ -6437,6 +6489,28 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
         },
         "viewsAzureVnetType": {
             "type": "object",

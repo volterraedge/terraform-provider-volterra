@@ -3251,7 +3251,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DNS port"
@@ -3562,7 +3562,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3572,7 +3572,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -5185,6 +5186,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
+        },
         "viewsAWSSubnetIdsType": {
             "type": "object",
             "description": "AWS Subnet Ids used by volterra site",
@@ -5383,29 +5406,35 @@ var APISwaggerJSON string = `{
             "description": "This defines the TCP port(s) which will be opened on the cloud loadbalancer.\nSuch that the client can use the cloud VIP IP and port combination\nto reach TCP/HTTP lb configured on the F5XC Site",
             "title": "Allowed VIP Ports",
             "x-displayname": "Allowed VIP Ports",
-            "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"custom_ports\",\"disable_allowed_vip_port\",\"use_http_https_port\",\"use_http_port\",\"use_https_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.AllowedVIPPorts",
             "properties": {
                 "custom_ports": {
-                    "description": "Exclusive with [use_http_https_port use_http_port use_https_port]\n Custom list of ports to be allowed",
+                    "description": "Exclusive with [disable_allowed_vip_port use_http_https_port use_http_port use_https_port]\n Custom list of ports to be allowed",
                     "title": "Custom Ports",
                     "$ref": "#/definitions/viewsCustomPorts",
                     "x-displayname": " Ports Allowed on Public"
                 },
+                "disable_allowed_vip_port": {
+                    "description": "Exclusive with [custom_ports use_http_https_port use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be disabled.",
+                    "title": "Disable Allowed VIP Port",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Allowed VIP Port"
+                },
                 "use_http_https_port": {
-                    "description": "Exclusive with [custom_ports use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_port use_https_port]\n HTTP Port (80) \u0026 HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTP \u0026 HTTPS Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTP \u0026 HTTPS Port"
                 },
                 "use_http_port": {
-                    "description": "Exclusive with [custom_ports use_http_https_port use_https_port]\n Only HTTP Port (80) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_https_port use_https_port]\n Only HTTP Port (80) will be allowed.",
                     "title": "Allow HTTP Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTP Port"
                 },
                 "use_https_port": {
-                    "description": "Exclusive with [custom_ports use_http_https_port use_http_port]\n Only HTTPS Port (443) will be allowed.",
+                    "description": "Exclusive with [custom_ports disable_allowed_vip_port use_http_https_port use_http_port]\n Only HTTPS Port (443) will be allowed.",
                     "title": "Allow HTTPS Port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Allow HTTPS Port"
@@ -5703,11 +5732,17 @@ var APISwaggerJSON string = `{
             "title": "L3 Mode Enhanced Performance options",
             "x-displayname": "L3 Mode Enhanced Performance",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-perf_mode_choice": "[\"no_jumbo\"]",
+            "x-ves-oneof-field-perf_mode_choice": "[\"jumbo\",\"no_jumbo\"]",
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
+                "jumbo": {
+                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
+                    "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
+                },
                 "no_jumbo": {
-                    "description": "Exclusive with []\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"

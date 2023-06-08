@@ -133,6 +133,7 @@ func (c *CustomDataAPIRestClient) doRPCMetrics(ctx context.Context, callOpts *se
 		q.Add("field_selector", fmt.Sprintf("%v", req.FieldSelector))
 		q.Add("filter", fmt.Sprintf("%v", req.Filter))
 		q.Add("group_by", fmt.Sprintf("%v", req.GroupBy))
+		q.Add("is_trend_request", fmt.Sprintf("%v", req.IsTrendRequest))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("range", fmt.Sprintf("%v", req.Range))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
@@ -498,6 +499,13 @@ var CustomDataAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Group By"
                 },
+                "is_trend_request": {
+                    "type": "boolean",
+                    "description": " Trend value computation requested by the user\n Optional: default is false\n\nExample: - \"true\"-",
+                    "format": "boolean",
+                    "x-displayname": "Trend calculation requested by the user",
+                    "x-ves-example": "true"
+                },
                 "namespace": {
                     "type": "string",
                     "description": "\n\nExample: - \"system\"-",
@@ -580,12 +588,69 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Timestamp",
                     "x-ves-example": "1570007981"
                 },
+                "trend_value": {
+                    "description": " trend value for the metric\n\nExample: - \"100.000000\"-",
+                    "title": "Trend value",
+                    "$ref": "#/definitions/schemaTrendValue",
+                    "x-displayname": "Trend Value",
+                    "x-ves-example": "100.000000"
+                },
                 "value": {
                     "type": "string",
                     "description": "\n\nExample: - \"15\"-",
                     "title": "Value",
                     "x-displayname": "Value",
                     "x-ves-example": "15"
+                }
+            }
+        },
+        "schemaTrendSentiment": {
+            "type": "string",
+            "description": "trend sentiment\n\nIndicates trend sentiment is positive\nIndicates trend sentiment is negative.",
+            "title": "Trend Sentiment",
+            "enum": [
+                "TREND_SENTIMENT_NONE",
+                "TREND_SENTIMENT_POSITIVE",
+                "TREND_SENTIMENT_NEGATIVE"
+            ],
+            "default": "TREND_SENTIMENT_NONE",
+            "x-displayname": "Trend Sentiment",
+            "x-ves-proto-enum": "ves.io.schema.TrendSentiment"
+        },
+        "schemaTrendValue": {
+            "type": "object",
+            "description": "Trend value contains trend value, trend sentiment and trend calculation description and window size.",
+            "title": "Trend Value",
+            "x-displayname": "Trend Value",
+            "x-ves-proto-message": "ves.io.schema.TrendValue",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " description of the method used to calculate trend.\n\nExample: - \"Trend was calculated by comparing the avg of window size intervals of end-start Time and last window time interval\"-",
+                    "title": "Description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Trend was calculated by comparing the avg of window size intervals of end-start Time and last window time interval"
+                },
+                "previous_value": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"200.00\"-",
+                    "title": "Previous Value",
+                    "x-displayname": "Previous Value",
+                    "x-ves-example": "200.00"
+                },
+                "sentiment": {
+                    "description": "\n\nExample: - \"Positive\"-",
+                    "title": "Sentiment",
+                    "$ref": "#/definitions/schemaTrendSentiment",
+                    "x-displayname": "Sentiment",
+                    "x-ves-example": "Positive"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"-15\"-",
+                    "title": "Value",
+                    "x-displayname": "Value",
+                    "x-ves-example": "-15"
                 }
             }
         },

@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.fast_acl.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.fast_acl.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fast_aclcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fast_aclcrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fast_aclcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fast_aclcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fast_acl.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/fast_aclcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3089,6 +3077,18 @@ var APISwaggerJSON string = `{
                 "ALLOW"
             ],
             "default": "DENY"
+        },
+        "fast_aclcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.fast_acl.crudapi.ErrorCode"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -3503,9 +3503,17 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"IP Prefix List\"\nList of IP Address prefixes. Prefix must contain both prefix and prefix-length\nThe list can contain mix of both IPv4 and IPv6 prefixes",
             "title": "IP Prefix List",
             "properties": {
+                "ipv6_prefix": {
+                    "type": "array",
+                    "description": "x-displayName: \"IPv6 Prefix\"\nx-example: \"[2001:db8::1::/112, 2001::db8::2::/112]\"\nIP Address prefix in string format. String must contain both prefix and prefix-length",
+                    "title": "ipv6 prefix",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "prefix": {
                     "type": "array",
-                    "description": "x-displayName: \"Prefix\"\nx-example: \"[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]\"\nIP Address prefix in string format. String must contain both prefix and prefix-length",
+                    "description": "x-displayName: \"Prefix\"\nx-example: \"[192.168.1.0/24, 192.168.2.0/24]\"\"\nIP Address prefix in string format. String must contain both prefix and prefix-length",
                     "title": "Prefix",
                     "items": {
                         "type": "string"

@@ -385,6 +385,15 @@ func (v *ValidateMetricsRequest) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["is_trend_request"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("is_trend_request"))
+		if err := fv(ctx, m.GetIsTrendRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["namespace"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace"))

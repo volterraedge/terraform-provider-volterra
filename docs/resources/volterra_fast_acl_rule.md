@@ -22,20 +22,20 @@ resource "volterra_fast_acl_rule" "example" {
 
   action {
     // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
+    simple_action = "simple_action"
+  }
 
-    protocol_policer_action {
-      ref {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+  port {
+    // One of the arguments from this list "all user_defined dns" must be set
+    all = true
   }
 
   // One of the arguments from this list "prefix ip_prefix_set" must be set
 
   prefix {
-    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
+    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
   }
 }
 
@@ -62,7 +62,7 @@ Argument Reference
 
 `action` - (Required) Action to be applied if traffic matched rule (allow, deny or police). See [Action ](#action) below for details.
 
-`port` - (Optional) L4 port numbers to match. See [Port ](#port) below for details.
+`port` - (Required) L4 port numbers to match. See [Port ](#port) below for details.
 
 `ip_prefix_set` - (Optional) Reference to IP prefix set object. See [Ip Prefix Set ](#ip-prefix-set) below for details.
 
@@ -111,6 +111,8 @@ L4 port numbers to match.
 ### Prefix
 
 List of IP prefixes.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 

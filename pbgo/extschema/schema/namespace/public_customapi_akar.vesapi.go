@@ -36,6 +36,15 @@ type NamespaceCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *NamespaceCustomAPIGrpcClient) doRPCApplicationInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ApplicationInventoryRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.ApplicationInventoryRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ApplicationInventory(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceCustomAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CascadeDeleteRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -183,6 +192,8 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewNamespaceCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
+
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
 
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
@@ -220,6 +231,91 @@ type NamespaceCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ApplicationInventoryRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.ApplicationInventoryRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ApplicationInventoryResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ApplicationInventoryResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *NamespaceCustomAPIRestClient) doRPCCascadeDelete(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -676,7 +772,6 @@ func (c *NamespaceCustomAPIRestClient) doRPCNetworkingInventory(ctx context.Cont
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1335,6 +1430,8 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
+
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
 
 	rpcFns["GetActiveAlertPolicies"] = ccl.doRPCGetActiveAlertPolicies
@@ -1373,6 +1470,9 @@ type namespaceCustomAPIInprocClient struct {
 	NamespaceCustomAPIServer
 }
 
+func (c *namespaceCustomAPIInprocClient) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
+	return c.NamespaceCustomAPIServer.ApplicationInventory(ctx, in)
+}
 func (c *namespaceCustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
 	return c.NamespaceCustomAPIServer.CascadeDelete(ctx, in)
 }
@@ -1434,6 +1534,55 @@ type namespaceCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *namespaceCustomAPISrv) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest) (*ApplicationInventoryResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ApplicationInventoryResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApplicationInventoryRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.ApplicationInventory' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ApplicationInventory(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApplicationInventoryResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *namespaceCustomAPISrv) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest) (*CascadeDeleteResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
@@ -2107,6 +2256,90 @@ var NamespaceCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/networking_inventory": {
+            "post": {
+                "summary": "Networking Objects Inventory",
+                "description": "NetworkingInventory returns inventory of configured networking related objects for the tenant.\nInventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceNetworkingInventoryResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceNetworkingInventoryRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-networkinginventory"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/update_allow_advertise_on_public": {
             "post": {
                 "summary": "Update allow advertise on public.",
@@ -2788,6 +3021,98 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/application_inventory": {
+            "post": {
+                "summary": "Application Objects Inventory",
+                "description": "ApplicationInventory returns inventory of configured application related objects for the tenant.\nInventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceApplicationInventoryResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceApplicationInventoryRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-applicationinventory"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/fast_acls_for_internet_vips": {
             "get": {
                 "summary": "Get FastACLs For Internet VIPs",
@@ -2954,98 +3279,6 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setfastaclsforinternetvips"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"
-            },
-            "x-displayname": "NamespaceCustomAPI",
-            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/namespaces/{namespace}/networking_inventory": {
-            "post": {
-                "summary": "Networking Objects Inventory",
-                "description": "NetworkingInventory returns inventory of configured networking related objects for the tenant.\nIf namespace is system, inventory of system-wide objects (global networks, sites, site mesh groups, etc) is returned.\nElse inventory of namespaced objects (HTTP LBs, TCP LBs, etc) in a particular namespace is returned.",
-                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/namespaceNetworkingInventoryResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "description": "namespace\n\nx-example: \"ns1\"\nThe name of the namespace",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Namespace"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/namespaceNetworkingInventoryRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "NamespaceCustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-networkinginventory"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory"
             },
             "x-displayname": "NamespaceCustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
@@ -3237,6 +3470,76 @@ var NamespaceCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "namespaceApplicationInventoryRequest": {
+            "type": "object",
+            "description": "Request for inventory of application related objects",
+            "title": "ApplicationInventoryRequest",
+            "x-displayname": "Application related objects inventory request",
+            "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryRequest",
+            "properties": {
+                "http_load_balancer_filter": {
+                    "description": " Filters for HTTP LoadBalancer",
+                    "title": "HTTPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryFilterType",
+                    "x-displayname": "HTTP LoadBalancer Inventory Filter Type"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The name of the namespace\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tcp_load_balancer_filter": {
+                    "description": " Filters for TCP LoadBalancer",
+                    "title": "TCPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
+                    "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                }
+            }
+        },
+        "namespaceApplicationInventoryResponse": {
+            "type": "object",
+            "description": "Response for inventory of application related objects",
+            "title": "ApplicationInventoryResponse",
+            "x-displayname": "Application related objects inventory response",
+            "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryResponse",
+            "properties": {
+                "http_loadbalancers": {
+                    "description": " Inventory of configured HTTP Loadbalancers",
+                    "title": "HTTP Loadbalancer Inventory",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryType",
+                    "x-displayname": "HTTP Loadbalancers"
+                },
+                "loadbalancers": {
+                    "type": "integer",
+                    "description": " Number of HTTP and TCP Load Balancers configured",
+                    "title": "Load Balancers",
+                    "format": "int64",
+                    "x-displayname": "Load Balancers"
+                },
+                "origin_pools": {
+                    "type": "integer",
+                    "description": " Number of origin pools configured",
+                    "title": "Origin Pools",
+                    "format": "int64",
+                    "x-displayname": "Origin Pools"
+                },
+                "services_discovered": {
+                    "type": "integer",
+                    "description": " Number of services discovered",
+                    "title": "Services Discovered",
+                    "format": "int64",
+                    "x-displayname": "Services Discovered"
+                },
+                "tcp_loadbalancers": {
+                    "description": " Inventory of configured TCP Loadbalancers",
+                    "title": "TCP Loadbalancer Inventory",
+                    "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryType",
+                    "x-displayname": "TCP Loadbalancers"
+                }
+            }
+        },
         "namespaceCascadeDeleteItemType": {
             "type": "object",
             "description": "CascadeDeleteItemType is details of object that was handled as part of cascade delete\nof namespace and whether it was successfully deleted",
@@ -3381,24 +3684,207 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceHTTPLoadbalancerInventoryFilterType": {
+            "type": "object",
+            "description": "HTTP Loadbalancer Inventory Filter",
+            "title": "HTTPLoadbalancerInventoryFilterType",
+            "x-displayname": "Filter for HTTP Loadbalancers Inventory",
+            "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerInventoryFilterType",
+            "properties": {
+                "api_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with API Protection configured",
+                    "title": "API Protection",
+                    "format": "boolean",
+                    "x-displayname": "API Protection"
+                },
+                "bot_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Bot Protection configured",
+                    "title": "Bot Protection",
+                    "format": "boolean",
+                    "x-displayname": "Bot Protection"
+                },
+                "client_side_defense": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Client Side Defense configured",
+                    "title": "Client Side Defense",
+                    "format": "boolean",
+                    "x-displayname": "Client Side Defense"
+                },
+                "ddos_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with DDoS Protection configured",
+                    "title": "DDoS Protection",
+                    "format": "boolean",
+                    "x-displayname": "DDoS Protection"
+                },
+                "http_only": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP only loadbalancers",
+                    "title": "HTTP Only",
+                    "format": "boolean",
+                    "x-displayname": "HTTP Only"
+                },
+                "ip_reputation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with IP Reputation configured",
+                    "title": "IP Reputation",
+                    "format": "boolean",
+                    "x-displayname": "IP Reputation"
+                },
+                "malicious_user_detection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Malicious User Detection configured",
+                    "title": "Malicious User Detection",
+                    "format": "boolean",
+                    "x-displayname": "Malicious User Detection"
+                },
+                "namespace_service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Namespace Service Policy"
+                },
+                "private_advertisement": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Service Policy"
+                },
+                "waf": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with WAF configured",
+                    "title": "WAF",
+                    "format": "boolean",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceHTTPLoadbalancerInventoryType": {
+            "type": "object",
+            "description": "HTTP Loadbalancer inventory",
+            "title": "HTTPLoadbalancerInventoryType",
+            "x-displayname": "Inventory of HTTP Loadbalancers",
+            "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerInventoryType",
+            "properties": {
+                "api_protection": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with API Protection configured",
+                    "title": "API Protection",
+                    "format": "int64",
+                    "x-displayname": "API Protection"
+                },
+                "bot_protection": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Bot Protection configured",
+                    "title": "Bot Protection",
+                    "format": "int64",
+                    "x-displayname": "Bot Protection"
+                },
+                "client_side_defense": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Client Side Defense configured",
+                    "title": "Client Side Defense",
+                    "format": "int64",
+                    "x-displayname": "Client Side Defense"
+                },
+                "ddos_protection": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with DDoS Protection configured",
+                    "title": "DDoS Protection",
+                    "format": "int64",
+                    "x-displayname": "DDoS Protection"
+                },
+                "http_only": {
+                    "type": "integer",
+                    "description": " Number of HTTP Only loadbalancers",
+                    "title": "HTTP Only",
+                    "format": "int64",
+                    "x-displayname": "HTTP Only"
+                },
+                "ip_reputation": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with IP Reputation configured",
+                    "title": "IP Reputation",
+                    "format": "int64",
+                    "x-displayname": "IP Reputation"
+                },
+                "malicious_user_detection": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Malicious User Detection configured",
+                    "title": "Malicious User Detection",
+                    "format": "int64",
+                    "x-displayname": "Malicious User Detection"
+                },
+                "name": {
+                    "type": "array",
+                    "description": " List of HTTP loadbalancers",
+                    "title": "HTTP Loadbalancers",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of HTTP Loadbalancers"
+                },
+                "namespace_service_policy": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Namespace Service Policy"
+                },
+                "private_advertisement": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Service Policy"
+                },
+                "waf": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with WAF configured",
+                    "title": "WAF",
+                    "format": "int64",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
         "namespaceNetworkingInventoryRequest": {
             "type": "object",
             "description": "Request for inventory of networking related objects",
             "title": "NetworkingInventoryRequest",
             "x-displayname": "Networking related objects inventory request",
-            "x-ves-proto-message": "ves.io.schema.namespace.NetworkingInventoryRequest",
-            "properties": {
-                "namespace": {
-                    "type": "string",
-                    "description": " The name of the namespace\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.const: system\n",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.const": "system"
-                    }
-                }
-            }
+            "x-ves-proto-message": "ves.io.schema.namespace.NetworkingInventoryRequest"
         },
         "namespaceNetworkingInventoryResponse": {
             "type": "object",
@@ -3688,6 +4174,103 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "description": " Suggested value for the field.\n Should use value_choice.str_value instead.",
                     "title": "value",
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "namespaceTCPLoadbalancerInventoryFilterType": {
+            "type": "object",
+            "description": "TCP Loadbalancer inventory Filter",
+            "title": "TCPLoadbalancerInventoryFilterType",
+            "x-displayname": "Filter for Inventory of TCP Loadbalancers",
+            "x-ves-proto-message": "ves.io.schema.namespace.TCPLoadbalancerInventoryFilterType",
+            "properties": {
+                "namespace_service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with TCP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Namespace Service Policy"
+                },
+                "private_advertisement": {
+                    "type": "boolean",
+                    "description": " Filter results with TCP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "boolean",
+                    "description": " Filter results with TCP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with TCP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "boolean",
+                    "x-displayname": "Service Policy"
+                },
+                "tls_encryption": {
+                    "type": "boolean",
+                    "description": " Filter results with TCP loadbalancers with TLS Encryption configured",
+                    "title": "TLS Encryption",
+                    "format": "boolean",
+                    "x-displayname": "TLS Encryption"
+                }
+            }
+        },
+        "namespaceTCPLoadbalancerInventoryType": {
+            "type": "object",
+            "description": "TCP Loadbalancer inventory",
+            "title": "TCPLoadbalancerInventoryType",
+            "x-displayname": "Inventory of TCP Loadbalancers",
+            "x-ves-proto-message": "ves.io.schema.namespace.TCPLoadbalancerInventoryType",
+            "properties": {
+                "name": {
+                    "type": "array",
+                    "description": " List of TCP loadbalancers",
+                    "title": "TCP Loadbalancers",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of TCP Loadbalancers"
+                },
+                "namespace_service_policy": {
+                    "type": "integer",
+                    "description": " Number of TCP loadbalancers with Namespace Service Policy configured",
+                    "title": "Namespace Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Namespace Service Policy"
+                },
+                "private_advertisement": {
+                    "type": "integer",
+                    "description": " Number of TCP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "integer",
+                    "description": " Number of TCP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Public Advertisement"
+                },
+                "service_policy": {
+                    "type": "integer",
+                    "description": " Number of TCP loadbalancers with Service Policy configured",
+                    "title": "Service Policy",
+                    "format": "int64",
+                    "x-displayname": "Service Policy"
+                },
+                "tls_encryption": {
+                    "type": "integer",
+                    "description": " Number of TCP loadbalancers with TLS Encryption configured",
+                    "title": "TLS Encryption",
+                    "format": "int64",
+                    "x-displayname": "TLS Encryption"
                 }
             }
         },

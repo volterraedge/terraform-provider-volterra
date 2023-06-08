@@ -1685,7 +1685,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "title": "PrimaryDNSGetSpecType",
             "x-displayname": "PrimaryDNSGetSpecType",
-            "x-ves-displayorder": "5,12,8,9,11,10",
+            "x-ves-displayorder": "5,12,13,8,9,11,10",
             "x-ves-oneof-field-soa_record_parameters_choice": "[\"default_soa_parameters\",\"soa_parameters\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.PrimaryDNSGetSpecType",
             "properties": {
@@ -1977,7 +1977,7 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "title": "SecondaryDNSGetSpecType",
             "x-displayname": "SecondaryDNSGetSpecType",
-            "x-ves-displayorder": "5,6,7,8,9,10",
+            "x-ves-displayorder": "5,6,7,8,9",
             "x-ves-proto-message": "ves.io.schema.dns_zone.SecondaryDNSGetSpecType",
             "properties": {
                 "last_axfr_timestamp": {
@@ -2014,10 +2014,6 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "tsig_key_value": {
                     "$ref": "#/definitions/schemaSecretType"
-                },
-                "zone_file": {
-                    "type": "string",
-                    "description": " The most recent zone file retrieved from the Primary DNS server"
                 }
             }
         },

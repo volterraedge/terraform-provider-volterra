@@ -172,7 +172,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -514,7 +543,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -856,7 +914,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -1198,7 +1285,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -1995,6 +2111,12 @@ func resourceVolterraNfvService() *schema.Resource {
 									},
 
 									"best_plus_pay_g200_mbps": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"best_plus_payg_1gbps": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
@@ -2877,7 +2999,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -3219,7 +3370,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -3561,7 +3741,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -3903,7 +4112,36 @@ func resourceVolterraNfvService() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -4423,9 +4661,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -4876,9 +5154,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -5329,9 +5647,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -5782,9 +6140,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -6893,6 +7291,18 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 						if v.(bool) {
 							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_BestPlusPayG200Mbps{}
 							amiChoiceInt.BestPlusPayG200Mbps = &ves_io_schema.Empty{}
+							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["best_plus_payg_1gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
+
+						amiChoiceTypeFound = true
+
+						if v.(bool) {
+							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_BestPlusPayg_1Gbps{}
+							amiChoiceInt.BestPlusPayg_1Gbps = &ves_io_schema.Empty{}
 							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
 						}
 
@@ -8087,9 +8497,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -8540,9 +8990,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -8993,9 +9483,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -9446,9 +9976,49 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -10089,9 +10659,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -10542,9 +11152,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -10995,9 +11645,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -11448,9 +12138,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -12317,9 +13047,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -12770,9 +13540,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -13223,9 +14033,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -13676,9 +14526,49 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 

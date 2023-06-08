@@ -2567,18 +2567,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.virtual_host_dns_info.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.virtual_host_dns_info.crudapi.ObjectCreateReq",
@@ -2599,7 +2587,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_host_dns_info.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_host_dns_infocrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2620,7 +2608,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_host_dns_info.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_host_dns_infocrudapiErrorCode"
                 }
             }
         },
@@ -2635,7 +2623,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_host_dns_infocrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2656,7 +2644,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_host_dns_info.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_host_dns_infocrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2729,7 +2717,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_host_dns_info.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/virtual_host_dns_infocrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3217,6 +3205,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "GC Spec"
                 }
             }
+        },
+        "virtual_host_dns_infocrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host_dns_info.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

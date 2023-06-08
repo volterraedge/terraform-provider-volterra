@@ -2580,6 +2580,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-port_choice": "[\"port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.advertise_policy.GlobalSpecType",
             "properties": {
                 "address": {
@@ -2594,13 +2595,29 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": " Port to advertise.\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "port",
+                    "description": "Exclusive with [port_ranges]\n Port to advertise.\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
                     "format": "int64",
                     "x-displayname": "TCP/UDP Port",
                     "x-ves-example": "80",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "title": "Port_ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 },
                 "protocol": {
@@ -2727,7 +2744,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "advertise_policycrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2759,7 +2776,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.advertise_policy.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/advertise_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2780,7 +2797,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.advertise_policy.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/advertise_policycrudapiErrorCode"
                 }
             }
         },
@@ -2795,7 +2812,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/advertise_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2822,7 +2839,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.advertise_policy.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/advertise_policycrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2901,7 +2918,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.advertise_policy.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/advertise_policycrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3825,6 +3842,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -3836,11 +3854,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -3855,6 +3872,21 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "List of SANs for matching",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaTrustedCAList": {
+            "type": "object",
+            "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+            "title": "Trusted CA List",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+                    "title": "Trusted CA List",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
                 }
             }
         },

@@ -2192,20 +2192,45 @@ var APISwaggerJSON string = `{
             "description": "Options to authenticate incoming client requests",
             "title": "AuthenticationOptions",
             "x-displayname": "Authentication Options",
-            "x-ves-oneof-field-auth_options": "[\"disable_auth\",\"jwt\"]",
+            "x-ves-oneof-field-auth_options": "[\"custom\",\"disable_auth\",\"jwt\"]",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.AuthenticationOptions",
             "properties": {
+                "custom": {
+                    "description": "Exclusive with [disable_auth jwt]\n Enable Custom Authenticaiton",
+                    "title": "Custom Authentication",
+                    "$ref": "#/definitions/cdn_loadbalancerCDNCustomAuthentication",
+                    "x-displayname": "Custom Authentication"
+                },
                 "disable_auth": {
-                    "description": "Exclusive with [jwt]\n No Authenticaiton",
+                    "description": "Exclusive with [custom jwt]\n No Authenticaiton",
                     "title": "No Authentication",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No Authentication"
                 },
                 "jwt": {
-                    "description": "Exclusive with [disable_auth]\n Enable JWT Authenticaiton",
+                    "description": "Exclusive with [custom disable_auth]\n Enable JWT Authenticaiton",
                     "title": "JWT Token Authentication",
                     "$ref": "#/definitions/policyJwtTokenAuthOptions",
                     "x-displayname": "JWT Token Authentication"
+                }
+            }
+        },
+        "cdn_loadbalancerCDNCustomAuthentication": {
+            "type": "object",
+            "description": "Custom  Authentication",
+            "title": "CDNCustomAuthentication",
+            "x-displayname": "Custom Authentication",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNCustomAuthentication",
+            "properties": {
+                "custom_auth_config": {
+                    "type": "string",
+                    "description": " Custom Authentication Configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n",
+                    "title": "custom_auth_config",
+                    "maxLength": 4096,
+                    "x-displayname": "Custom Auth Config",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096"
+                    }
                 }
             }
         },
@@ -3059,7 +3084,8 @@ var APISwaggerJSON string = `{
             "description": "Choice for selecting HTTP proxy",
             "title": "HTTP Choice",
             "x-displayname": "HTTP Choice",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "1,3",
+            "x-ves-oneof-field-port_choice": "[\"port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ProxyTypeHttp",
             "properties": {
                 "dns_volterra_managed": {
@@ -3071,13 +3097,29 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "port",
+                    "description": "Exclusive with [port_ranges]\n HTTP port to Listen.\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "HTTP port to listen",
                     "format": "int64",
-                    "x-displayname": "HTTP Port",
+                    "x-displayname": "HTTP Listen Port",
                     "x-ves-example": "80",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "title": "Port_ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range_list": "true"
                     }
                 }
             }
@@ -3266,9 +3308,9 @@ var APISwaggerJSON string = `{
                 },
                 "use_mtls": {
                     "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use MTLS",
+                    "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "Enable"
+                    "x-displayname": "Enable MTLS With Inline Certificate"
                 },
                 "use_server_verification": {
                     "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
@@ -3289,20 +3331,17 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " Trusted CA certificates for verification of Server's certificate\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA certificates for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "Trusted CAs",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CAs",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -3888,7 +3927,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3898,7 +3937,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",

@@ -21,7 +21,79 @@ resource "volterra_k8s_pod_security_policy" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "psp_spec yaml" must be set
-  yaml = "yaml"
+
+  psp_spec {
+    allow_privilege_escalation = true
+
+    // One of the arguments from this list "no_allowed_capabilities allowed_capabilities" must be set
+    no_allowed_capabilities = true
+
+    allowed_csi_drivers = ["value"]
+
+    allowed_flex_volumes = ["value"]
+
+    allowed_host_paths {
+      path_prefix = "value"
+      read_only   = true
+    }
+
+    allowed_proc_mounts = ["value"]
+
+    allowed_unsafe_sysctls             = ["value"]
+    default_allow_privilege_escalation = true
+
+    // One of the arguments from this list "default_capabilities no_default_capabilities" must be set
+    no_default_capabilities = true
+
+    // One of the arguments from this list "no_drop_capabilities drop_capabilities" must be set
+
+    drop_capabilities {
+      capabilities = ["value"]
+    }
+    forbidden_sysctls = ["value"]
+
+    // One of the arguments from this list "no_fs_groups fs_group_strategy_options" must be set
+
+    fs_group_strategy_options {
+      id_ranges {
+        max_id = "3000"
+        min_id = "2000"
+      }
+
+      rule = "MustRunAs"
+    }
+    // One of the arguments from this list "no_run_as_group run_as_group" must be set
+    no_run_as_group           = true
+    host_ipc                  = true
+    host_network              = true
+    host_pid                  = true
+    host_port_ranges          = "80,443,8080-8191,9080"
+    privileged                = true
+    read_only_root_filesystem = true
+
+    // One of the arguments from this list "runtime_class no_runtime_class" must be set
+
+    runtime_class {
+      allowed_runtime_class_names = ["value"]
+      default_runtime_class_name  = "value"
+    }
+    // One of the arguments from this list "no_se_linux_options se_linux_options" must be set
+    no_se_linux_options = true
+    // One of the arguments from this list "no_supplemental_groups supplemental_groups" must be set
+    no_supplemental_groups = true
+
+    // One of the arguments from this list "no_run_as_user run_as_user" must be set
+
+    run_as_user {
+      id_ranges {
+        max_id = "3000"
+        min_id = "2000"
+      }
+
+      rule = "MustRunAs"
+    }
+    volumes = ["gitRepo"]
+  }
 }
 
 ```

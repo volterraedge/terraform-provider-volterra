@@ -68,6 +68,11 @@ func resourceVolterraDnsZone() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"allow_http_lb_managed_records": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"default_rr_set_group": {
 
 							Type:     schema.TypeList,
@@ -1083,6 +1088,12 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
+
+				dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
+
+			}
 
 			if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
 
@@ -2351,6 +2362,12 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["allow_http_lb_managed_records"]; ok && !isIntfNil(v) {
+
+				dnsTypeInt.Primary.AllowHttpLbManagedRecords = v.(bool)
+
+			}
 
 			if v, ok := cs["default_rr_set_group"]; ok && !isIntfNil(v) {
 

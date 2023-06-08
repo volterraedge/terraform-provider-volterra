@@ -305,6 +305,44 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				Optional: true,
 			},
 
+			"egress_gateway_default": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"egress_nat_gw": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"nat_gw_id": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"egress_virtual_private_gateway": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"vgw_id": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"instance_type": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -424,6 +462,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 										},
 									},
 
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"use_http_https_port": {
 
 										Type:     schema.TypeBool,
@@ -465,6 +509,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"use_http_https_port": {
@@ -1699,6 +1749,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 										},
 									},
 
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"use_http_https_port": {
 
 										Type:     schema.TypeBool,
@@ -1849,6 +1905,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"use_http_https_port": {
@@ -2776,26 +2838,6 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 													Optional: true,
 												},
 
-												"openebs_enterprise": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"replication": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-
-															"storage_class_size": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
-												},
-
 												"storage_class_name": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -3350,6 +3392,78 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//egress_gateway_choice
+
+	egressGatewayChoiceTypeFound := false
+
+	if v, ok := d.GetOk("egress_gateway_default"); ok && !egressGatewayChoiceTypeFound {
+
+		egressGatewayChoiceTypeFound = true
+
+		if v.(bool) {
+			egressGatewayChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_EgressGatewayDefault{}
+			egressGatewayChoiceInt.EgressGatewayDefault = &ves_io_schema.Empty{}
+			createSpec.EgressGatewayChoice = egressGatewayChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("egress_nat_gw"); ok && !egressGatewayChoiceTypeFound {
+
+		egressGatewayChoiceTypeFound = true
+		egressGatewayChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_EgressNatGw{}
+		egressGatewayChoiceInt.EgressNatGw = &ves_io_schema_views.AWSNATGatewaychoiceType{}
+		createSpec.EgressGatewayChoice = egressGatewayChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			choiceTypeFound := false
+
+			if v, ok := cs["nat_gw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views.AWSNATGatewaychoiceType_NatGwId{}
+
+				egressGatewayChoiceInt.EgressNatGw.Choice = choiceInt
+
+				choiceInt.NatGwId = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("egress_virtual_private_gateway"); ok && !egressGatewayChoiceTypeFound {
+
+		egressGatewayChoiceTypeFound = true
+		egressGatewayChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_EgressVirtualPrivateGateway{}
+		egressGatewayChoiceInt.EgressVirtualPrivateGateway = &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType{}
+		createSpec.EgressGatewayChoice = egressGatewayChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			choiceTypeFound := false
+
+			if v, ok := cs["vgw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+				choiceTypeFound = true
+				choiceInt := &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType_VgwId{}
+
+				egressGatewayChoiceInt.EgressVirtualPrivateGateway.Choice = choiceInt
+
+				choiceInt.VgwId = v.(string)
+
+			}
+
+		}
+
+	}
+
 	//instance_type
 	if v, ok := d.GetOk("instance_type"); ok && !isIntfNil(v) {
 
@@ -3558,6 +3672,18 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -3625,6 +3751,18 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -5381,6 +5519,18 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -5609,6 +5759,18 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
 						}
 
 					}
@@ -6919,35 +7081,6 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 								storageClasses[i].DefaultStorageClass = w.(bool)
 							}
 
-							deviceChoiceTypeFound := false
-
-							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-								deviceChoiceTypeFound = true
-								deviceChoiceInt := &ves_io_schema_views.StorageClassType_OpenebsEnterprise{}
-								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_views.StorageClassOpenebsEnterpriseType{}
-								storageClasses[i].DeviceChoice = deviceChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
-
-									}
-
-									if v, ok := cs["storage_class_size"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.StorageClassSize = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
 							if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
 								storageClasses[i].StorageClassName = w.(string)
 							}
@@ -7716,6 +7849,18 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -7783,6 +7928,18 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -9339,6 +9496,18 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -9488,6 +9657,18 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
 						}
 
 					}

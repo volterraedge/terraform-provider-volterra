@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
-                    "description": "Exclusive with [ssh web_user_interface]\n Matches ssh port 53",
+                    "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
                     "title": "DNS port",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DNS port"
@@ -3035,14 +3035,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "bond_devices": {
                     "type": "array",
-                    "description": " List of bond devices for this fleet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of bond devices\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Bond Devices List",
                     "minItems": 1,
                     "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/fleetFleetBondDeviceType"
                     },
-                    "x-displayname": "Bond Devices List",
+                    "x-displayname": "Bond Devices",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3448,31 +3448,6 @@ var APISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Unix Mode Permissions",
                     "x-ves-example": "777"
-                }
-            }
-        },
-        "fleetOpenebsMayastorPoolType": {
-            "type": "object",
-            "description": "x-displayName: \"OpenEBS Mayastor Pool\"\nConfiguration for OpenEBS Mayastor Pool. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
-            "title": "OpenEBS Mayastor Pool",
-            "properties": {
-                "node": {
-                    "type": "string",
-                    "description": "x-displayName: \"Node Name\"\nx-required\nx-example: \"master-0\"\nEnter k8s node name of Mayastor Node (MSN) where this pool is or going to be located.",
-                    "title": "Node Name"
-                },
-                "pool_disk_devices": {
-                    "type": "array",
-                    "description": "x-displayName: \"List of  Disk Devices\"\nx-required\nx-example: \"/dev/sdb\"\nList of Disk Devices on Mayastore Node (MSN). Once Mayastor has created a pool it is assumed that it henceforth has exclusive use of the associated\ndisk device; it should not be partitioned, formatted, or shared with another application or process.  Any existing data on the device will be destroyed.\nIt supports various types such as \"/dev/sdb\", \"nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432\" or \"iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2\".",
-                    "title": "List of Disk Devices",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "pool_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Mayastor Pool Name\"\nx-example: \"maya-pool-01\"\nx-required\nEnter Mayastor Pool Name",
-                    "title": "Mayastor Pool Name"
                 }
             }
         },
@@ -4302,21 +4277,6 @@ var APISwaggerJSON string = `{
                     "title": "ONTAP SAN",
                     "$ref": "#/definitions/fleetStorageDeviceNetappBackendOntapSanType",
                     "x-displayname": "ONTAP SAN"
-                }
-            }
-        },
-        "fleetStorageDeviceOpenebsEnterpriseType": {
-            "type": "object",
-            "description": "x-displayName: \"OpenEBS Enterprise\"\nDevice configuration for OpenEBS Enterprise",
-            "title": "OpenEBS Enterprise",
-            "properties": {
-                "mayastor_pools": {
-                    "type": "array",
-                    "description": "x-displayName: \"List of  Mayastor Pools\"\nList of  Mayastor Pools. When a Mayastor Node (MSN) allocates storage capacity for a Persistent Volume (PV) it does so from a construct named a Mayastor Pool (MSP).\nEach MSN may have zero, one, or more such pools associated with it.  The ownership of a pool by a MSN is exclusive.\nIn the current version of Mayastor, a pool may have only a single block device member, which constitutes the entire data persistence layer for that pool.\nEach MSP include a unique name for the pool, the host name of the MSN on which it is hosted and a reference to a disk device which is accessible from that node (for inclusion within the pool).\nThe pool definition allows the reference to its member disk to adhere to one of a number of possible schemes, each associated with a specific access\nmechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.",
-                    "title": "List of  Mayastor Pools",
-                    "items": {
-                        "$ref": "#/definitions/fleetOpenebsMayastorPoolType"
-                    }
                 }
             }
         },
@@ -5153,11 +5113,17 @@ var APISwaggerJSON string = `{
             "description": "Configure Static IP parameters",
             "title": "Static IP Parameters",
             "x-displayname": "Static IP Parameters",
-            "x-ves-oneof-field-network_prefix_choice": "[\"node_static_ip\"]",
+            "x-ves-oneof-field-network_prefix_choice": "[\"cluster_static_ip\",\"node_static_ip\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.StaticIPParametersType",
             "properties": {
+                "cluster_static_ip": {
+                    "description": "Exclusive with [node_static_ip]\n Static IP configuration for a specific node",
+                    "title": "Node Specific",
+                    "$ref": "#/definitions/network_interfaceStaticIpParametersClusterType",
+                    "x-displayname": "Cluster, All Nodes of the Site"
+                },
                 "node_static_ip": {
-                    "description": "Exclusive with []\n Static IP configuration for the Node",
+                    "description": "Exclusive with [cluster_static_ip]\n Static IP configuration for the Node",
                     "title": "Node",
                     "$ref": "#/definitions/network_interfaceStaticIpParametersNodeType",
                     "x-displayname": "Specific Node"
@@ -5166,13 +5132,21 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceStaticIpParametersClusterType": {
             "type": "object",
-            "description": "x-displayName: \"Cluster: Static IP Parameters\"\nConfigure Static IP parameters  for cluster",
+            "description": "Configure Static IP parameters  for cluster",
             "title": "Static IP Parameters",
+            "x-displayname": "Cluster: Static IP Parameters",
+            "x-ves-proto-message": "ves.io.schema.network_interface.StaticIpParametersClusterType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": "x-displayName: \"Node to IP Mapping\"\nMap of Node to Static ip configuration value, Key:Node, Value:IP Address",
-                    "title": "Site:Node to IP mapping"
+                    "description": " Map of Node to Static ip configuration value, Key:Node, Value:IP Address\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 128\n",
+                    "title": "Site:Node to IP mapping",
+                    "x-displayname": "Node to IP Mapping",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "128"
+                    }
                 }
             }
         },
@@ -5210,16 +5184,6 @@ var APISwaggerJSON string = `{
                     "description": " IP address of the default gateway.\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "Default Gateway",
                     "x-displayname": "Default Gateway",
-                    "x-ves-example": "192.168.20.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "dns_server": {
-                    "type": "string",
-                    "description": " IP address of the DNS server\n\nExample: - \"192.168.20.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "DNS Server",
-                    "x-displayname": "DNS Server",
                     "x-ves-example": "192.168.20.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
@@ -5478,7 +5442,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -5488,7 +5452,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -6718,6 +6683,37 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsMasterNode": {
+            "type": "object",
+            "description": "Master Node is the configuration of the master node",
+            "title": "Master Node",
+            "x-displayname": "Master Node",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.MasterNode",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Names of master node\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "master-0",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "public_ip": {
+                    "type": "string",
+                    "description": " IP Address of the master node. This ip will be used when other sites connect\n via Site Mesh Group\n\nExample: - \"192.168.0.156\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Public IP",
+                    "x-displayname": "Public IP",
+                    "x-ves-example": "192.168.0.156",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                }
+            }
+        },
         "viewsOfflineSurvivabilityModeType": {
             "type": "object",
             "description": "Offline Survivability Mode",
@@ -6777,21 +6773,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv4 prefix list",
-                    "minItems": 1,
                     "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "IPv4 Prefix List",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -6947,21 +6939,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
                 },
-                "master_nodes": {
+                "master_node_configuration": {
                     "type": "array",
-                    "description": " Names of master nodes\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.num_items: 1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configuration of master nodes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n",
                     "maxItems": 3,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/viewsMasterNode"
                     },
                     "x-displayname": "Master Nodes",
-                    "x-ves-example": "master-0",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "3",
-                        "ves.io.schema.rules.repeated.num_items": "1,3",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "ves.io.schema.rules.repeated.max_items": "3"
                     }
                 },
                 "no_bond_devices": {
@@ -7152,21 +7141,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
                 },
-                "master_nodes": {
+                "master_node_configuration": {
                     "type": "array",
-                    "description": " Names of master nodes\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.num_items: 1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configuration of master nodes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n",
                     "maxItems": 3,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/viewsMasterNode"
                     },
                     "x-displayname": "Master Nodes",
-                    "x-ves-example": "master-0",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "3",
-                        "ves.io.schema.rules.repeated.num_items": "1,3",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "ves.io.schema.rules.repeated.max_items": "3"
                     }
                 },
                 "no_bond_devices": {
@@ -7398,22 +7384,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
                 },
-                "master_nodes": {
+                "master_node_configuration": {
                     "type": "array",
-                    "description": " Names of master nodes\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.num_items: 1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configuration of master nodes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n",
                     "title": "Master Nodes",
                     "maxItems": 3,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/viewsMasterNode"
                     },
                     "x-displayname": "Master Nodes",
-                    "x-ves-example": "master-0",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "3",
-                        "ves.io.schema.rules.repeated.num_items": "1,3",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "ves.io.schema.rules.repeated.max_items": "3"
                     }
                 },
                 "no_bond_devices": {
@@ -7633,21 +7616,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Logs Streaming"
                 },
-                "master_nodes": {
+                "master_node_configuration": {
                     "type": "array",
-                    "description": " Names of master nodes\n\nExample: - \"master-0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.num_items: 1,3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configuration of master nodes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n",
                     "maxItems": 3,
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/viewsMasterNode"
                     },
                     "x-displayname": "Master Nodes",
-                    "x-ves-example": "master-0",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "3",
-                        "ves.io.schema.rules.repeated.num_items": "1,3",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "ves.io.schema.rules.repeated.max_items": "3"
                     }
                 },
                 "no_bond_devices": {
@@ -7763,6 +7743,98 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_networkStaticV6RouteViewType": {
+            "type": "object",
+            "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
+            "title": "Static IPv6 Route",
+            "x-displayname": "Static IPv6 Route",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
+            "properties": {
+                "attrs": {
+                    "type": "array",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Attributes",
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteAttrType"
+                    },
+                    "x-displayname": "Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "default_gateway": {
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "title": "Default Gateway",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
+                },
+                "interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "title": "Interface",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IP Address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 route prefixes that have common next hop and attributes\n\nExample: - \"2001::/92\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "IPv6 Prefixes",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefixes",
+                    "x-ves-example": "2001::/92",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_networkStaticV6RoutesListType": {
+            "type": "object",
+            "description": "List of IPv6 static routes",
+            "title": "Static IPv6 Routes List",
+            "x-displayname": "Static IPv6 Routes List",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RoutesListType",
+            "properties": {
+                "static_routes": {
+                    "type": "array",
+                    "description": " List of IPv6 static routes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_routes",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/virtual_networkStaticV6RouteViewType"
+                    },
+                    "x-displayname": "Static IPv6 Routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -7926,9 +7998,22 @@ var APISwaggerJSON string = `{
             "description": "Interface definition",
             "title": "Interface",
             "x-displayname": "Interface",
+            "x-ves-oneof-field-dc_cluster_group_connectivity_interface_choice": "[\"dc_cluster_group_connectivity_interface_disabled\",\"dc_cluster_group_connectivity_interface_enabled\"]",
             "x-ves-oneof-field-interface_choice": "[\"dedicated_interface\",\"dedicated_management_interface\",\"ethernet_interface\",\"tunnel_interface\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.Interface",
             "properties": {
+                "dc_cluster_group_connectivity_interface_disabled": {
+                    "description": "Exclusive with [dc_cluster_group_connectivity_interface_enabled]\n Do not use this interface to connect to DC Cluster Group peers. ",
+                    "title": "DC Cluster Group Interface Default",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "dc_cluster_group_connectivity_interface_enabled": {
+                    "description": "Exclusive with [dc_cluster_group_connectivity_interface_disabled]\n Use this interface to connect to DC Cluster Group peers.",
+                    "title": "DC Cluster Group Interface Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                },
                 "dedicated_interface": {
                     "description": "Exclusive with [dedicated_management_interface ethernet_interface tunnel_interface]\n Configuration can be used to set labels, MTU and priority for dedicated interfaces.\n Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet",
                     "title": "Bootstrap Local Interface",
@@ -8186,6 +8271,7 @@ var APISwaggerJSON string = `{
             "title": "SLI Virtual Network Configuration",
             "x-displayname": "Site Local Inside Network Configuration",
             "x-ves-oneof-field-static_route_choice": "[\"no_static_routes\",\"static_routes\"]",
+            "x-ves-oneof-field-static_v6_route_choice": "[\"no_v6_static_routes\",\"static_v6_routes\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.SliVnConfiguration",
             "properties": {
                 "no_static_routes": {
@@ -8194,11 +8280,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "no_v6_static_routes": {
+                    "description": "Exclusive with [static_v6_routes]\n Static IPv6 Routes disabled for site local inside network.",
+                    "title": "Do Not Manage IPv6 Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable IPv6 Static Routes"
+                },
                 "static_routes": {
                     "description": "Exclusive with [no_static_routes]\n Manage static routes for site local inside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/voltstack_siteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "static_v6_routes": {
+                    "description": "Exclusive with [no_v6_static_routes]\n Manage IPv6 static routes for site local inside network.",
+                    "title": "Manage IPv6 Static routes",
+                    "$ref": "#/definitions/virtual_networkStaticV6RoutesListType",
+                    "x-displayname": "Manage IPv6 Static routes"
                 }
             }
         },
@@ -8344,6 +8442,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Local Network Configuration",
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-static_route_choice": "[\"no_static_routes\",\"static_routes\"]",
+            "x-ves-oneof-field-static_v6_route_choice": "[\"no_static_v6_routes\",\"static_v6_routes\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VnConfiguration",
             "properties": {
                 "dc_cluster_group": {
@@ -8351,20 +8450,6 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group"
-                },
-                "dc_cluster_group_interface": {
-                    "type": "array",
-                    "description": " This App Stack is member of dc cluster group and connected to network over this interface. By default it takes default gateway interface.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "DC Cluster group connectivity interface",
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "DC cluster Group connectivity interface",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
                 },
                 "labels": {
                     "type": "object",
@@ -8385,11 +8470,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "no_static_v6_routes": {
+                    "description": "Exclusive with [static_v6_routes]\n Static IPv6 Routes disabled for site local network.",
+                    "title": "Do Not Manage IPv6 Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable IPv6 Static Routes"
+                },
                 "static_routes": {
                     "description": "Exclusive with [no_static_routes]\n Manage static routes for site local network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/voltstack_siteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "static_v6_routes": {
+                    "description": "Exclusive with [no_static_v6_routes]\n Manage static IPv6 routes for site local network.",
+                    "title": "Manage IPv6 Static routes",
+                    "$ref": "#/definitions/virtual_networkStaticV6RoutesListType",
+                    "x-displayname": "Manage Static IPv6 routes"
                 }
             }
         },
@@ -8401,6 +8498,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interface_config\",\"interface_list\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"active_network_policies\",\"no_network_policy\"]",
+            "x-ves-oneof-field-site_mesh_group_choice": "[\"site_to_site_tunnel_ip\",\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-oneof-field-sli_choice": "[\"default_sli_config\",\"sli_config\"]",
             "x-ves-oneof-field-slo_choice": "[\"default_config\",\"slo_config\"]",
             "x-ves-proto-message": "ves.io.schema.views.voltstack_site.VssNetworkConfiguration",
@@ -8519,10 +8617,9 @@ var APISwaggerJSON string = `{
                 },
                 "site_to_site_tunnel_ip": {
                     "type": "string",
-                    "description": " Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "site_to_site_tunnel_ip",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
+                    "description": "Exclusive with [sm_connection_public_ip sm_connection_pvt_ip]\n Site Mesh Group Connection Via Virtual IP. This option will use the Virtual IP provided for\n creating ipsec between two sites which are part of the site mesh group\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Site Mesh Group Connection Via Virtual Ip",
+                    "x-displayname": "Site Mesh Group Connection Via  Virtual Ip",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
                     }
@@ -8538,6 +8635,18 @@ var APISwaggerJSON string = `{
                     "title": "Configure Site Local Network",
                     "$ref": "#/definitions/voltstack_siteVnConfiguration",
                     "x-displayname": "Configure Site Local Network"
+                },
+                "sm_connection_public_ip": {
+                    "description": "Exclusive with [site_to_site_tunnel_ip sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use the statically\n configured public IPs of each master node for creating ipsec between two sites\n which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Public Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via Public Ip"
+                },
+                "sm_connection_pvt_ip": {
+                    "description": "Exclusive with [site_to_site_tunnel_ip sm_connection_public_ip]\n Site Mesh Group Connection Via Private IP. This option will use the SLO addresses for\n creating ipsec between two sites which are part of the site mesh group",
+                    "title": "Site Mesh Group Connection Via Private Ip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Site Mesh Group Connection Via  Private Ip"
                 },
                 "tunnel_dead_timeout": {
                     "type": "integer",

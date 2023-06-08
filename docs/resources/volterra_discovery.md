@@ -23,72 +23,26 @@ resource "volterra_discovery" "example" {
   // One of the arguments from this list "no_cluster_id cluster_id" must be set
   no_cluster_id = true
 
-  // One of the arguments from this list "discovery_k8s discovery_consul" must be set
+  // One of the arguments from this list "discovery_consul discovery_k8s" must be set
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
+      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
 
-      connection_info {
-        api_server = "api.acme.com:4430"
+      kubeconfig_url {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
 
-        tls_info {
-          ca_certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
+        secret_encoding_type = "secret_encoding_type"
 
-            secret_encoding_type = "secret_encoding_type"
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
-
-          certificate = "value"
-
-          certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-          }
-
-          key_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-          }
-
-          server_name    = "k8s.acme.com"
-          trusted_ca_url = "value"
+        clear_secret_info {
+          provider = "box-provider"
+          url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
         }
       }
 
@@ -97,12 +51,12 @@ resource "volterra_discovery" "example" {
     }
 
     publish_info {
-      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
+      // One of the arguments from this list "publish_fqdns dns_delegation disable publish" must be set
       disable = true
     }
   }
   where {
-    // One of the arguments from this list "site virtual_site virtual_network" must be set
+    // One of the arguments from this list "virtual_network site virtual_site" must be set
 
     virtual_network {
       ref {
@@ -323,7 +277,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Tls Info
 
@@ -359,7 +313,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Direct reference to virtual network object.
 
-`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -371,7 +325,7 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 

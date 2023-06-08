@@ -2234,7 +2234,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DDoS Detection"
                 },
                 "user_behavior_analysis_setting": {
-                    "description": " Malicious User Detection performs user behavior analysis and assigns a suspicion score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The suspicion score of the user decays over time, if no further suspicious activity is noted",
+                    "description": " Malicious User Detection performs user behavior analysis and assigns a risk score and\n threat level of low, medium, or high based on suspicious activity of the user.\n The risk score of the user decays over time, if no further suspicious activity is noted",
                     "title": "Malicious User Detection Settings",
                     "$ref": "#/definitions/app_settingUserBehaviorAnalysisSetting",
                     "x-displayname": "Malicious User Detection"
@@ -2279,7 +2279,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
                     "title": "spec",
-                    "$ref": "#/definitions/app_settingCreateSpecType",
+                    "$ref": "#/definitions/schemaapp_settingCreateSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2297,7 +2297,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
                     "title": "spec",
-                    "$ref": "#/definitions/app_settingGetSpecType",
+                    "$ref": "#/definitions/schemaapp_settingGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "system_metadata": {
@@ -2305,31 +2305,6 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "app_settingCreateSpecType": {
-            "type": "object",
-            "description": "Create App setting configuration in namespace metadata.namespace",
-            "title": "Create App setting",
-            "x-displayname": "Create App Setting",
-            "x-ves-proto-message": "ves.io.schema.app_setting.CreateSpecType",
-            "properties": {
-                "app_type_settings": {
-                    "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/app_settingAppTypeSettings"
-                    },
-                    "x-displayname": "Customize AppType For This Namespace",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
                 }
             }
         },
@@ -2450,7 +2425,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
                     "title": "spec",
-                    "$ref": "#/definitions/app_settingGetSpecType",
+                    "$ref": "#/definitions/schemaapp_settingGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -2483,57 +2458,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "app_settingGetSpecType": {
-            "type": "object",
-            "description": "Get App setting will retrieve the configuration from  namespace metadata.namespace",
-            "title": "Get App setting",
-            "x-displayname": "Get App Setting",
-            "x-ves-proto-message": "ves.io.schema.app_setting.GetSpecType",
-            "properties": {
-                "app_type_settings": {
-                    "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/app_settingAppTypeSettings"
-                    },
-                    "x-displayname": "Customize AppType For This Namespace",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                }
-            }
-        },
-        "app_settingGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of App setting specification",
-            "title": "Specification for App setting",
-            "x-displayname": "App Setting Spec",
-            "x-ves-proto-message": "ves.io.schema.app_setting.GlobalSpecType",
-            "properties": {
-                "app_type_settings": {
-                    "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "List of App Type Settings",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/app_settingAppTypeSettings"
-                    },
-                    "x-displayname": "Customize AppType For This Namespace",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                }
-            }
         },
         "app_settingListResponse": {
             "type": "object",
@@ -2591,7 +2515,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/app_settingGetSpecType",
+                    "$ref": "#/definitions/schemaapp_settingGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2906,7 +2830,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the appsettings",
                     "title": "spec",
-                    "$ref": "#/definitions/app_settingReplaceSpecType",
+                    "$ref": "#/definitions/schemaapp_settingReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2914,31 +2838,6 @@ var APISwaggerJSON string = `{
         "app_settingReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.app_setting.ReplaceResponse"
-        },
-        "app_settingReplaceSpecType": {
-            "type": "object",
-            "description": "Replacing an App setting will update the configuration by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
-            "title": "Replace App setting",
-            "x-displayname": "Replace App Setting",
-            "x-ves-proto-message": "ves.io.schema.app_setting.ReplaceSpecType",
-            "properties": {
-                "app_type_settings": {
-                    "type": "array",
-                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/app_settingAppTypeSettings"
-                    },
-                    "x-displayname": "Customize AppType For This Namespace",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                }
-            }
         },
         "app_settingSpecType": {
             "type": "object",
@@ -2949,7 +2848,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/app_settingGlobalSpecType",
+                    "$ref": "#/definitions/schemaapp_settingGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3122,7 +3021,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3132,7 +3031,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -3876,6 +3776,107 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemaapp_settingCreateSpecType": {
+            "type": "object",
+            "description": "Create App setting configuration in namespace metadata.namespace",
+            "title": "Create App setting",
+            "x-displayname": "Create App Setting",
+            "x-ves-proto-message": "ves.io.schema.app_setting.CreateSpecType",
+            "properties": {
+                "app_type_settings": {
+                    "type": "array",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/app_settingAppTypeSettings"
+                    },
+                    "x-displayname": "Customize AppType For This Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaapp_settingGetSpecType": {
+            "type": "object",
+            "description": "Get App setting will retrieve the configuration from  namespace metadata.namespace",
+            "title": "Get App setting",
+            "x-displayname": "Get App Setting",
+            "x-ves-proto-message": "ves.io.schema.app_setting.GetSpecType",
+            "properties": {
+                "app_type_settings": {
+                    "type": "array",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/app_settingAppTypeSettings"
+                    },
+                    "x-displayname": "Customize AppType For This Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaapp_settingGlobalSpecType": {
+            "type": "object",
+            "description": "Shape of App setting specification",
+            "title": "Specification for App setting",
+            "x-displayname": "App Setting Spec",
+            "x-ves-proto-message": "ves.io.schema.app_setting.GlobalSpecType",
+            "properties": {
+                "app_type_settings": {
+                    "type": "array",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "List of App Type Settings",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/app_settingAppTypeSettings"
+                    },
+                    "x-displayname": "Customize AppType For This Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaapp_settingReplaceSpecType": {
+            "type": "object",
+            "description": "Replacing an App setting will update the configuration by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
+            "title": "Replace App setting",
+            "x-displayname": "Replace App Setting",
+            "x-ves-proto-message": "ves.io.schema.app_setting.ReplaceSpecType",
+            "properties": {
+                "app_type_settings": {
+                    "type": "array",
+                    "description": " List of settings to enable for each AppType, given instance of AppType Exist in this Namespace\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/app_settingAppTypeSettings"
+                    },
+                    "x-displayname": "Customize AppType For This Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         }

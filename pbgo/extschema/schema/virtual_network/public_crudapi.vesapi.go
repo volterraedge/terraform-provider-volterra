@@ -2310,7 +2310,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -2320,7 +2320,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -3711,6 +3712,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "static_v6_routes": {
+                    "type": "array",
+                    "description": "List of static IPv6 routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_v6_routes",
+                    "maxItems": 165,
+                    "items": {
+                        "$ref": "#/definitions/virtual_networkStaticV6RouteViewType"
+                    },
+                    "x-displayname": "Static IPv6 Routes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "165",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4181,8 +4196,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ipv4_prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nx-required\nList of IPv4 prefixes used as SNAT pool",
+                    "description": "x-displayName: \"List of IPv4 Prefixes\"\nx-example: \"10.0.0.0/24\"\nList of IPv4 prefixes used as SNAT pool",
                     "title": "List of IPv4 Prefixes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": "x-displayName: \"List of IPv6 Prefixes\"\nx-example: \"2001::/92\"\nList of IPv6 prefixes used as SNAT pool",
+                    "title": "List of IPv6 Prefixes",
                     "items": {
                         "type": "string"
                     }
@@ -4273,6 +4296,71 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "virtual_networkStaticV6RouteViewType": {
+            "type": "object",
+            "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
+            "title": "Static IPv6 Route",
+            "x-displayname": "Static IPv6 Route",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
+            "properties": {
+                "attrs": {
+                    "type": "array",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Attributes",
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/schemaRouteAttrType"
+                    },
+                    "x-displayname": "Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "default_gateway": {
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "title": "Default Gateway",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
+                },
+                "interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "title": "Interface",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Interface"
+                },
+                "ip_address": {
+                    "type": "string",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IP Address",
+                    "x-displayname": "IP Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 route prefixes that have common next hop and attributes\n\nExample: - \"2001::/92\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "IPv6 Prefixes",
+                    "minItems": 1,
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefixes",
+                    "x-ves-example": "2001::/92",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"

@@ -895,7 +895,7 @@ type GlobalSpecType struct {
 	InsecureRegistriesChoice isGlobalSpecType_InsecureRegistriesChoice `protobuf_oneof:"insecure_registries_choice"`
 	// Cluster Scoped Roles, RoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration Access
 	//
-	// x-displayName: "Cluster Scoped Roles, RoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration Access"
+	// x-displayName: "Cluster Scoped RBAC and Webhook Resources Access"
 	// x-required
 	// Select method of Access to ClusterRoles, ClusterRoleBindings, MutatingWebhookConfiguration and ValidatingWebhookConfiguration
 	//

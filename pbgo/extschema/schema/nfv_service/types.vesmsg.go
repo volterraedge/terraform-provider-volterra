@@ -1590,6 +1590,9 @@ func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceAWAFPayG3GbpsValidatio
 func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceBestPlusPayG200MbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema.EmptyValidator().Validate, nil
 }
+func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceBestPlusPayg_1GbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.EmptyValidator().Validate, nil
+}
 
 func (v *ValidateF5BigIpAWSMarketPlaceImageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*F5BigIpAWSMarketPlaceImageType)
@@ -1644,6 +1647,17 @@ func (v *ValidateF5BigIpAWSMarketPlaceImageType) Validate(ctx context.Context, p
 			vOpts := append(opts,
 				db.WithValidateField("ami_choice"),
 				db.WithValidateField("BestPlusPayG200Mbps"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *F5BigIpAWSMarketPlaceImageType_BestPlusPayg_1Gbps:
+		if fv, exists := v.FldValidators["ami_choice.best_plus_payg_1gbps"]; exists {
+			val := m.GetAmiChoice().(*F5BigIpAWSMarketPlaceImageType_BestPlusPayg_1Gbps).BestPlusPayg_1Gbps
+			vOpts := append(opts,
+				db.WithValidateField("ami_choice"),
+				db.WithValidateField("best_plus_payg_1gbps"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1705,10 +1719,20 @@ var DefaultF5BigIpAWSMarketPlaceImageTypeValidator = func() *ValidateF5BigIpAWSM
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_BestPlusPayG200Mbps: %s", err)
 		panic(errMsg)
 	}
+	vrhAmiChoiceBestPlusPayg_1Gbps := v.AmiChoiceBestPlusPayg_1GbpsValidationRuleHandler
+	rulesAmiChoiceBestPlusPayg_1Gbps := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["ami_choice.best_plus_payg_1gbps"], err = vrhAmiChoiceBestPlusPayg_1Gbps(rulesAmiChoiceBestPlusPayg_1Gbps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_best_plus_payg_1gbps: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["ami_choice.AWAFPayG200Mbps"] = vFnMap["ami_choice.AWAFPayG200Mbps"]
 	v.FldValidators["ami_choice.AWAFPayG3Gbps"] = vFnMap["ami_choice.AWAFPayG3Gbps"]
 	v.FldValidators["ami_choice.BestPlusPayG200Mbps"] = vFnMap["ami_choice.BestPlusPayG200Mbps"]
+	v.FldValidators["ami_choice.best_plus_payg_1gbps"] = vFnMap["ami_choice.best_plus_payg_1gbps"]
 
 	return v
 }()
@@ -1862,7 +1886,7 @@ var DefaultF5BigIpAWSReplaceTypeValidator = func() *ValidateF5BigIpAWSReplaceTyp
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "40",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -2766,6 +2790,434 @@ func F5BigIpAWSVPCSiteTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *F5BigIpAppStackBareMetalType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *F5BigIpAppStackBareMetalType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *F5BigIpAppStackBareMetalType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting F5BigIpAppStackBareMetalType.admin_password")
+	}
+
+	return nil
+}
+
+func (m *F5BigIpAppStackBareMetalType) DeepCopy() *F5BigIpAppStackBareMetalType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &F5BigIpAppStackBareMetalType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *F5BigIpAppStackBareMetalType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *F5BigIpAppStackBareMetalType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return F5BigIpAppStackBareMetalTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *F5BigIpAppStackBareMetalType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBareMetalSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBareMetalSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetNodesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetNodesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetBareMetalSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("voltstack_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "voltstack_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bare_metal_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetBareMetalSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *F5BigIpAppStackBareMetalType) GetBareMetalSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "voltstack_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: voltstack_site")
+	}
+
+	vref := m.GetBareMetalSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "voltstack_site.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *F5BigIpAppStackBareMetalType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNodes() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetNodes() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("nodes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateF5BigIpAppStackBareMetalType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) AdminUsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for admin_username")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) AdminPasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_password")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) NodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ServiceNodesBareMetalType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ServiceNodesBareMetalTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ServiceNodesBareMetalType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ServiceNodesBareMetalType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) BareMetalSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bare_metal_site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) PublicDownloadUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for public_download_url")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateF5BigIpAppStackBareMetalType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*F5BigIpAppStackBareMetalType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *F5BigIpAppStackBareMetalType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_username"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_username"))
+		if err := fv(ctx, m.GetAdminUsername(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bare_metal_site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bare_metal_site"))
+		if err := fv(ctx, m.GetBareMetalSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("nodes"))
+		if err := fv(ctx, m.GetNodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_download_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("public_download_url"))
+		if err := fv(ctx, m.GetPublicDownloadUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_key"))
+		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultF5BigIpAppStackBareMetalTypeValidator = func() *ValidateF5BigIpAppStackBareMetalType {
+	v := &ValidateF5BigIpAppStackBareMetalType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAdminUsername := v.AdminUsernameValidationRuleHandler
+	rulesAdminUsername := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhAdminUsername(rulesAdminUsername)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.admin_username: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["admin_username"] = vFn
+
+	vrhAdminPassword := v.AdminPasswordValidationRuleHandler
+	rulesAdminPassword := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAdminPassword(rulesAdminPassword)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.admin_password: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["admin_password"] = vFn
+
+	vrhSshKey := v.SshKeyValidationRuleHandler
+	rulesSshKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhSshKey(rulesSshKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.ssh_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_key"] = vFn
+
+	vrhNodes := v.NodesValidationRuleHandler
+	rulesNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "2",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhNodes(rulesNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nodes"] = vFn
+
+	vrhBareMetalSite := v.BareMetalSiteValidationRuleHandler
+	rulesBareMetalSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBareMetalSite(rulesBareMetalSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.bare_metal_site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bare_metal_site"] = vFn
+
+	vrhPublicDownloadUrl := v.PublicDownloadUrlValidationRuleHandler
+	rulesPublicDownloadUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPublicDownloadUrl(rulesPublicDownloadUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.public_download_url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["public_download_url"] = vFn
+
+	return v
+}()
+
+func F5BigIpAppStackBareMetalTypeValidator() db.Validator {
+	return DefaultF5BigIpAppStackBareMetalTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ForwardingServiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3339,6 +3791,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.enabled_ssh_access")
 	}
 
+	if err := m.GetF5BigIpBareMetalType().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.f5_big_ip_bare_metal_type")
+	}
+
 	return nil
 }
 
@@ -3389,6 +3845,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetHttpManagementChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHttpManagementChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetK8SManifestParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetK8SManifestParamsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -3562,6 +4024,51 @@ func (m *GlobalSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 
 }
 
+func (m *GlobalSpecType) GetK8SManifestParamsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetK8SManifestParams()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.k8s_manifest_params[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "k8s_manifest_params.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "k8s_manifest_params",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetK8SManifestParamsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetK8SManifestParamsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "k8s_manifest_params.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_manifest_params")
+	}
+	for _, ref := range m.GetK8SManifestParams() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetManagementEndpointRefsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetManagementEndpointRefs() == nil {
@@ -3699,6 +4206,17 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "f5_big_ip_aws_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_F5BigIpBareMetalType:
+		drInfos, err := m.GetF5BigIpBareMetalType().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetF5BigIpBareMetalType().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "f5_big_ip_bare_metal_type." + dri.DRField
 		}
 		return drInfos, err
 
@@ -4168,6 +4686,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["k8s_manifest_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("k8s_manifest_params"))
+		for idx, item := range m.GetK8SManifestParams() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["management_endpoint_refs"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("management_endpoint_refs"))
@@ -4224,6 +4754,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("service_provider_choice"),
 				db.WithValidateField("f5_big_ip_aws_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_F5BigIpBareMetalType:
+		if fv, exists := v.FldValidators["service_provider_choice.f5_big_ip_bare_metal_type"]; exists {
+			val := m.GetServiceProviderChoice().(*GlobalSpecType_F5BigIpBareMetalType).F5BigIpBareMetalType
+			vOpts := append(opts,
+				db.WithValidateField("service_provider_choice"),
+				db.WithValidateField("f5_big_ip_bare_metal_type"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -4452,6 +4993,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["service_provider_choice.palo_alto_fw_service"] = PaloAltoFWAWSTypeValidator().Validate
 	v.FldValidators["service_provider_choice.f5_big_ip_aws_service"] = F5BigIpAWSTypeValidator().Validate
+	v.FldValidators["service_provider_choice.f5_big_ip_bare_metal_type"] = F5BigIpAppStackBareMetalTypeValidator().Validate
 
 	v.FldValidators["service_type_choice.endpoint_service"] = EndpointServiceTypeValidator().Validate
 
@@ -4468,6 +5010,243 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InterfaceDetails) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InterfaceDetails) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InterfaceDetails) DeepCopy() *InterfaceDetails {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InterfaceDetails{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InterfaceDetails) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InterfaceDetails) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InterfaceDetailsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *InterfaceDetails) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceDRefInfo()
+
+}
+
+func (m *InterfaceDetails) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetInterface()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("subnet.Object")
+	dri := db.DRefInfo{
+		RefdType:   "subnet.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "interface",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *InterfaceDetails) GetInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "subnet.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: subnet")
+	}
+
+	vref := m.GetInterface()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "subnet.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateInterfaceDetails struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInterfaceDetails) InterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for interface")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInterfaceDetails) NetworkSelfIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_self_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInterfaceDetails) NetworkGatewayValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_gateway")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInterfaceDetails) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InterfaceDetails)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InterfaceDetails got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interface"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("interface"))
+		if err := fv(ctx, m.GetInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_gateway"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_gateway"))
+		if err := fv(ctx, m.GetNetworkGateway(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_self_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_self_ip"))
+		if err := fv(ctx, m.GetNetworkSelfIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInterfaceDetailsValidator = func() *ValidateInterfaceDetails {
+	v := &ValidateInterfaceDetails{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterface := v.InterfaceValidationRuleHandler
+	rulesInterface := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInterface(rulesInterface)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InterfaceDetails.interface: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface"] = vFn
+
+	vrhNetworkSelfIp := v.NetworkSelfIpValidationRuleHandler
+	rulesNetworkSelfIp := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+	}
+	vFn, err = vrhNetworkSelfIp(rulesNetworkSelfIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InterfaceDetails.network_self_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_self_ip"] = vFn
+
+	vrhNetworkGateway := v.NetworkGatewayValidationRuleHandler
+	rulesNetworkGateway := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhNetworkGateway(rulesNetworkGateway)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InterfaceDetails.network_gateway: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_gateway"] = vFn
+
+	return v
+}()
+
+func InterfaceDetailsValidator() db.Validator {
+	return DefaultInterfaceDetailsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4976,7 +5755,7 @@ var DefaultPaloAltoFWAWSReplaceTypeValidator = func() *ValidatePaloAltoFWAWSRepl
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "40",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -5115,6 +5894,14 @@ func (v *ValidatePaloAltoFWAWSType) AmiChoicePanAmiBundle1ValidationRuleHandler(
 }
 func (v *ValidatePaloAltoFWAWSType) AmiChoicePanAmiBundle2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return ves_io_schema.EmptyValidator().Validate, nil
+}
+
+func (v *ValidatePaloAltoFWAWSType) SetupOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for setup_options")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidatePaloAltoFWAWSType) SetupOptionsSshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -5331,6 +6118,16 @@ func (v *ValidatePaloAltoFWAWSType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["setup_options"]; exists {
+		val := m.GetSetupOptions()
+		vOpts := append(opts,
+			db.WithValidateField("setup_options"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetSetupOptions().(type) {
 	case *PaloAltoFWAWSType_SshKey:
 		if fv, exists := v.FldValidators["setup_options.ssh_key"]; exists {
@@ -5411,6 +6208,17 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 	v.FldValidators["ami_choice.pan_ami_bundle1"] = vFnMap["ami_choice.pan_ami_bundle1"]
 	v.FldValidators["ami_choice.pan_ami_bundle2"] = vFnMap["ami_choice.pan_ami_bundle2"]
 
+	vrhSetupOptions := v.SetupOptionsValidationRuleHandler
+	rulesSetupOptions := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSetupOptions(rulesSetupOptions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PaloAltoFWAWSType.setup_options: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["setup_options"] = vFn
+
 	vrhSetupOptionsSshKey := v.SetupOptionsSshKeyValidationRuleHandler
 	rulesSetupOptionsSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -5461,7 +6269,7 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 	vrhTags := v.TagsValidationRuleHandler
 	rulesTags := map[string]string{
 		"ves.io.schema.rules.map.keys.string.max_len":   "127",
-		"ves.io.schema.rules.map.max_pairs":             "5",
+		"ves.io.schema.rules.map.max_pairs":             "40",
 		"ves.io.schema.rules.map.values.string.max_len": "255",
 	}
 	vFn, err = vrhTags(rulesTags)
@@ -7501,6 +8309,227 @@ var DefaultServiceNodesAWSTypeValidator = func() *ValidateServiceNodesAWSType {
 
 func ServiceNodesAWSTypeValidator() db.Validator {
 	return DefaultServiceNodesAWSTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceNodesBareMetalType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceNodesBareMetalType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceNodesBareMetalType) DeepCopy() *ServiceNodesBareMetalType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceNodesBareMetalType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceNodesBareMetalType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceNodesBareMetalType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceNodesBareMetalTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ServiceNodesBareMetalType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetExternalInterfaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetExternalInterfaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetInternalInterfaceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetInternalInterfaceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ServiceNodesBareMetalType) GetExternalInterfaceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetExternalInterface() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetExternalInterface().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetExternalInterface().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "external_interface." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ServiceNodesBareMetalType) GetInternalInterfaceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetInternalInterface() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetInternalInterface().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetInternalInterface().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "internal_interface." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateServiceNodesBareMetalType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceNodesBareMetalType) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceNodesBareMetalType) LicenseKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for license_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceNodesBareMetalType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceNodesBareMetalType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceNodesBareMetalType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["external_interface"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("external_interface"))
+		if err := fv(ctx, m.GetExternalInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internal_interface"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_interface"))
+		if err := fv(ctx, m.GetInternalInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["license_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("license_key"))
+		if err := fv(ctx, m.GetLicenseKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_name"))
+		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceNodesBareMetalTypeValidator = func() *ValidateServiceNodesBareMetalType {
+	v := &ValidateServiceNodesBareMetalType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeName := v.NodeNameValidationRuleHandler
+	rulesNodeName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhNodeName(rulesNodeName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceNodesBareMetalType.node_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_name"] = vFn
+
+	vrhLicenseKey := v.LicenseKeyValidationRuleHandler
+	rulesLicenseKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^(([A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7})|([A-Z][0-9]{4}-[0-9]{5}-[0-9]{5}-[0-9]{5}-[0-9]{7}))$",
+	}
+	vFn, err = vrhLicenseKey(rulesLicenseKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceNodesBareMetalType.license_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["license_key"] = vFn
+
+	v.FldValidators["internal_interface"] = InterfaceDetailsValidator().Validate
+
+	v.FldValidators["external_interface"] = InterfaceDetailsValidator().Validate
+
+	return v
+}()
+
+func ServiceNodesBareMetalTypeValidator() db.Validator {
+	return DefaultServiceNodesBareMetalTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -20,8 +20,8 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_local_network site_local_inside_network legacy_type srv6_network global_network" must be set
-  site_local_inside_network = true
+  // One of the arguments from this list "legacy_type srv6_network global_network site_local_network site_local_inside_network" must be set
+  global_network = true
 }
 
 ```
@@ -56,6 +56,8 @@ Argument Reference
 `srv6_network` - (Optional) Configure a per site srv6 network. See [Srv6 Network ](#srv6-network) below for details.
 
 `static_routes` - (Optional) List of static routes on the virtual network. See [Static Routes ](#static-routes) below for details.
+
+`static_v6_routes` - (Optional) List of static IPv6 routes on the virtual network. See [Static V6 Routes ](#static-v6-routes) below for details.
 
 ### Access Network Rtargets
 
@@ -153,7 +155,9 @@ Namespace network is not connected to this network.
 
 Per node ip v4 prefix for snat pool.
 
-`ipv4_prefixes` - (Required) List of IPv4 prefixes used as SNAT pool (`String`).
+`ipv4_prefixes` - (Optional) List of IPv4 prefixes used as SNAT pool (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefixes used as SNAT pool (`String`).
 
 ### Ref
 
@@ -218,6 +222,20 @@ List of static routes on the virtual network.
 `attrs` - (Optional) List of attributes that control forwarding, dynamic routing and control plane(host) reachability (`List of Strings`).
 
 `ip_prefixes` - (Required) List of route prefixes that have common next hop and attributes (`String`).
+
+`default_gateway` - (Optional) Traffic matching the ip prefixes is sent to default gateway (bool).
+
+`interface` - (Optional) Traffic matching the ip prefixes is sent to the interface. See [ref](#ref) below for details.
+
+`ip_address` - (Optional) Traffic matching the ip prefixes is sent to IP Address (`String`).
+
+### Static V6 Routes
+
+List of static IPv6 routes on the virtual network.
+
+`attrs` - (Optional) List of attributes that control forwarding, dynamic routing and control plane(host) reachability (`List of Strings`).
+
+`ip_prefixes` - (Required) List of IPv6 route prefixes that have common next hop and attributes (`String`).
 
 `default_gateway` - (Optional) Traffic matching the ip prefixes is sent to default gateway (bool).
 

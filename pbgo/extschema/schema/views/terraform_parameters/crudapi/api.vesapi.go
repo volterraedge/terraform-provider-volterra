@@ -2966,18 +2966,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateReq",
@@ -2998,7 +2986,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3019,7 +3007,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 }
             }
         },
@@ -3034,7 +3022,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3061,7 +3049,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3140,7 +3128,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3158,7 +3146,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3937,6 +3925,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
         "terraform_parametersSpecType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.SpecType",
@@ -3990,6 +3989,29 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Plan Status"
                 }
             }
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
+        },
+        "terraform_parameterscrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",
@@ -6138,18 +6160,6 @@ var StatusAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateReq",
@@ -6170,7 +6180,7 @@ var StatusAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -6191,7 +6201,7 @@ var StatusAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 }
             }
         },
@@ -6206,7 +6216,7 @@ var StatusAPISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -6233,7 +6243,7 @@ var StatusAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -6312,7 +6322,7 @@ var StatusAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -6330,7 +6340,7 @@ var StatusAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.crudapi.StatusObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/terraform_parameterscrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -7109,6 +7119,17 @@ var StatusAPISwaggerJSON string = `{
                 }
             }
         },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
         "terraform_parametersSpecType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.terraform_parameters.SpecType",
@@ -7162,6 +7183,29 @@ var StatusAPISwaggerJSON string = `{
                     "x-displayname": "Plan Status"
                 }
             }
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
+        },
+        "terraform_parameterscrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

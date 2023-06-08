@@ -66,7 +66,14 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 			},
 
 			"port": {
+
 				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"port_ranges": {
+
+				Type:     schema.TypeString,
 				Optional: true,
 			},
 
@@ -352,7 +359,46 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"trusted_ca_list": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -646,11 +692,29 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	//port
-	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
+	//port_choice
 
-		createSpec.Port =
-			uint32(v.(int))
+	portChoiceTypeFound := false
+
+	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_advertise_policy.CreateSpecType_Port{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.Port = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_advertise_policy.CreateSpecType_PortRanges{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 
@@ -986,8 +1050,64 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -1385,10 +1505,27 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) {
+	portChoiceTypeFound := false
 
-		updateSpec.Port =
-			uint32(v.(int))
+	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_advertise_policy.ReplaceSpecType_Port{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.Port = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_advertise_policy.ReplaceSpecType_PortRanges{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 
@@ -1720,8 +1857,64 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {

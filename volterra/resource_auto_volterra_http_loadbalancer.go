@@ -18,6 +18,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
@@ -99,6 +100,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"ip6": {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -529,12 +535,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			},
 																		},
 
-																		"api_endpoint_path": {
-
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
 																		"api_group": {
 
 																			Type:     schema.TypeString,
@@ -709,12 +709,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			},
 																		},
 
-																		"api_endpoint_path": {
-
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
 																		"api_group": {
 
 																			Type:     schema.TypeString,
@@ -791,12 +785,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															},
 														},
 													},
-												},
-
-												"api_endpoint_path": {
-
-													Type:     schema.TypeString,
-													Optional: true,
 												},
 
 												"api_group": {
@@ -940,6 +928,282 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"sensitive_data_detection_rules": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"custom_sensitive_data_detection_rules": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"metadata": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"disable": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"sensitive_data_detection_config": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"any_domain": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"specific_domain": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"key_pattern": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_value": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"regex_value": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"key_value_pattern": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key_pattern": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"value_pattern": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"value_pattern": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_value": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"regex_value": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"all_request_sections": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"all_response_sections": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"all_sections": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"custom_sections": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"custom_sections": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"any_target": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"api_endpoint_target": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"api_endpoint_path": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"methods": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"api_group": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"base_path": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"sensitive_data_type": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"type": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"disabled_built_in_rules": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 					},
 				},
@@ -3232,6 +3496,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												},
 
 												"undefined_flow_label": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"allow_good_bots": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"mitigate_good_bots": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -5695,7 +5971,14 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 
 						"port": {
+
 							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"port_ranges": {
+
+							Type:     schema.TypeString,
 							Optional: true,
 						},
 					},
@@ -5799,7 +6082,14 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 
 						"port": {
+
 							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"port_ranges": {
+
+							Type:     schema.TypeString,
 							Optional: true,
 						},
 
@@ -5909,7 +6199,36 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -6058,7 +6377,36 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -6480,7 +6828,36 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 									},
 
+									"trusted_ca": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"trusted_ca_url": {
+
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -6527,7 +6904,14 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 
 						"port": {
+
 							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"port_ranges": {
+
+							Type:     schema.TypeString,
 							Optional: true,
 						},
 
@@ -6687,6 +7071,282 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"sensitive_data_detection_rules": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"custom_sensitive_data_detection_rules": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"metadata": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"description": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"disable": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sensitive_data_detection_config": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"any_domain": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"specific_domain": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"key_pattern": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"key_value_pattern": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key_pattern": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"exact_value": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"regex_value": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"value_pattern": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"exact_value": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"regex_value": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"value_pattern": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex_value": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"all_request_sections": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"all_response_sections": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"all_sections": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"custom_sections": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"custom_sections": {
+
+																						Type: schema.TypeList,
+
+																						Required: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"any_target": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"api_endpoint_target": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"api_endpoint_path": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"methods": {
+
+																						Type: schema.TypeList,
+
+																						Required: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"api_group": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"base_path": {
+
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sensitive_data_type": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"type": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"disabled_built_in_rules": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
@@ -8114,6 +8774,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Optional: true,
 						},
 
+						"lb_port": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"port": {
 
 							Type:     schema.TypeInt,
@@ -8342,6 +9008,29 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"use_mtls_obj": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"skip_server_verification": {
 
 										Type:     schema.TypeBool,
@@ -8355,7 +9044,31 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -8683,26 +9396,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										},
 									},
 
-									"client_selector": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"expressions": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
-									},
-
 									"country_codes": {
 
 										Type: schema.TypeList,
@@ -8835,6 +9528,32 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
+									},
+
+									"client_selector": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"none": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -9106,11 +9825,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"prefixes": {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -9280,11 +10009,21 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"prefixes": {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -11277,6 +12016,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+
+								choiceInt.Site.Ip6 = v.(string)
+
+							}
+
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
@@ -11836,17 +12581,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											}
 
-											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpointPath{}
-
-												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-												conditionTypeChoiceInt.ApiEndpointPath = v.(string)
-
-											}
-
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -12110,17 +12844,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 											}
 
-											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpointPath{}
-
-												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-												conditionTypeChoiceInt.ApiEndpointPath = v.(string)
-
-											}
-
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -12218,17 +12941,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									}
 
 								}
-
-							}
-
-							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpointPath{}
-
-								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-								conditionTypeChoiceInt.ApiEndpointPath = v.(string)
 
 							}
 
@@ -12465,6 +13177,422 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+				}
+
+			}
+
+			if v, ok := cs["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+				for _, set := range sl {
+					sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+						sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+						for i, set := range sl {
+							customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+							customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								metadata := &ves_io_schema.MessageMetaType{}
+								customSensitiveDataDetectionRules[i].Metadata = metadata
+								for _, set := range sl {
+									metadataMapStrToI := set.(map[string]interface{})
+
+									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+										metadata.Description = w.(string)
+									}
+
+									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+										metadata.Disable = w.(bool)
+									}
+
+									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+										metadata.Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+								customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+								for _, set := range sl {
+									sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+									domainChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+										domainChoiceTypeFound = true
+
+										if v.(bool) {
+											domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+											domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+										domainChoiceTypeFound = true
+										domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+										sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+										domainChoiceInt.SpecificDomain = v.(string)
+
+									}
+
+									patternChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+										patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											keyPatternTypeFound := false
+
+											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+												keyPatternTypeFound = true
+												keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+												keyPatternInt.ExactValue = v.(string)
+
+											}
+
+											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+												keyPatternTypeFound = true
+												keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+												keyPatternInt.RegexValue = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+										patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												keyPattern := &ves_io_schema_app_type.KeyPattern{}
+												patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+												for _, set := range sl {
+													keyPatternMapStrToI := set.(map[string]interface{})
+
+													keyPatternTypeFound := false
+
+													if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+														keyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+														keyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												valuePattern := &ves_io_schema_app_type.ValuePattern{}
+												patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+												for _, set := range sl {
+													valuePatternMapStrToI := set.(map[string]interface{})
+
+													valuePatternTypeFound := false
+
+													if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+														valuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+														valuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+										patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											valuePatternTypeFound := false
+
+											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+												valuePatternTypeFound = true
+												valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+												valuePatternInt.ExactValue = v.(string)
+
+											}
+
+											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+												valuePatternTypeFound = true
+												valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+												valuePatternInt.RegexValue = v.(string)
+
+											}
+
+										}
+
+									}
+
+									sectionChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+											sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+											sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+											sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+										sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+										sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+										sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+												custom_sectionsList := []ves_io_schema.HttpSections{}
+												for _, j := range v.([]interface{}) {
+													custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+												}
+												sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+											}
+
+										}
+
+									}
+
+									targetChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+
+										if v.(bool) {
+											targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+											targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+										targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+												targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+											}
+
+											if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+												methodsList := []ves_io_schema.HttpMethod{}
+												for _, j := range v.([]interface{}) {
+													methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+												}
+												targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										targetChoiceInt.ApiGroup = v.(string)
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										targetChoiceInt.BasePath = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+								customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+								for _, set := range sl {
+									sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+									if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+										sensitiveDataType.Type = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+						sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+						for i, set := range sl {
+							disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+							disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								disabledBuiltInRules[i].Name = w.(string)
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -15726,6 +16854,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_UndefinedFlowLabel{}
 									flowLabelChoiceInt.UndefinedFlowLabel = &ves_io_schema.Empty{}
 									protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+								}
+
+							}
+
+							goodbotChoiceTypeFound := false
+
+							if v, ok := protectedAppEndpointsMapStrToI["allow_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
+
+								goodbotChoiceTypeFound = true
+
+								if v.(bool) {
+									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_AllowGoodBots{}
+									goodbotChoiceInt.AllowGoodBots = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
+								}
+
+							}
+
+							if v, ok := protectedAppEndpointsMapStrToI["mitigate_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
+
+								goodbotChoiceTypeFound = true
+
+								if v.(bool) {
+									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}
+									goodbotChoiceInt.MitigateGoodBots = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
 								}
 
 							}
@@ -19183,9 +20337,27 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.Http.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp_Port{}
+
+				loadbalancerTypeInt.Http.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp_PortRanges{}
+
+				loadbalancerTypeInt.Http.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -19362,9 +20534,27 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.Https.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_Port{}
+
+				loadbalancerTypeInt.Https.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_PortRanges{}
+
+				loadbalancerTypeInt.Https.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -19527,9 +20717,49 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -19750,9 +20980,49 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -20339,9 +21609,49 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 
@@ -20414,9 +21724,27 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.HttpsAutoCert.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_Port{}
+
+				loadbalancerTypeInt.HttpsAutoCert.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_PortRanges{}
+
+				loadbalancerTypeInt.HttpsAutoCert.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -20684,6 +22012,422 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+						}
+
+					}
+
+					if v, ok := cs["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+						apiDiscoveryChoiceInt.EnableDiscovery.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+						for _, set := range sl {
+							sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+								sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+								for i, set := range sl {
+									customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+									customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										customSensitiveDataDetectionRules[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+										customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+										for _, set := range sl {
+											sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+											domainChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+												domainChoiceTypeFound = true
+
+												if v.(bool) {
+													domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+													domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+												domainChoiceTypeFound = true
+												domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+												sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+												domainChoiceInt.SpecificDomain = v.(string)
+
+											}
+
+											patternChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+												patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													keyPatternTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+														patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+														patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+												patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														keyPattern := &ves_io_schema_app_type.KeyPattern{}
+														patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+														for _, set := range sl {
+															keyPatternMapStrToI := set.(map[string]interface{})
+
+															keyPatternTypeFound := false
+
+															if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																keyPatternTypeFound = true
+																keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																keyPattern.KeyPattern = keyPatternInt
+
+																keyPatternInt.ExactValue = v.(string)
+
+															}
+
+															if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																keyPatternTypeFound = true
+																keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																keyPattern.KeyPattern = keyPatternInt
+
+																keyPatternInt.RegexValue = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														valuePattern := &ves_io_schema_app_type.ValuePattern{}
+														patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+														for _, set := range sl {
+															valuePatternMapStrToI := set.(map[string]interface{})
+
+															valuePatternTypeFound := false
+
+															if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																valuePatternTypeFound = true
+																valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																valuePattern.ValuePattern = valuePatternInt
+
+																valuePatternInt.ExactValue = v.(string)
+
+															}
+
+															if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																valuePatternTypeFound = true
+																valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																valuePattern.ValuePattern = valuePatternInt
+
+																valuePatternInt.RegexValue = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+												patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													valuePatternTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+														patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+														patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											sectionChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+													sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+													sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+													sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+												sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+												sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+												sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+														custom_sectionsList := []ves_io_schema.HttpSections{}
+														for _, j := range v.([]interface{}) {
+															custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+														}
+														sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+													}
+
+												}
+
+											}
+
+											targetChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+
+												if v.(bool) {
+													targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+													targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+												targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+														targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+													}
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												targetChoiceInt.ApiGroup = v.(string)
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												targetChoiceInt.BasePath = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+										customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+										for _, set := range sl {
+											sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+											if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+												sensitiveDataType.Type = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+								sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+								for i, set := range sl {
+									disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+									disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+										disabledBuiltInRules[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -22681,6 +24425,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["lb_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+
+				if v.(bool) {
+					portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_LbPort{}
+					portChoiceInt.LbPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 				portChoiceTypeFound = true
@@ -22976,6 +24732,39 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["use_mtls_obj"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+						mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtlsObj{}
+						mtlsChoiceInt.UseMtlsObj = &ves_io_schema_views.ObjectRefType{}
+						tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
 					serverValidationChoiceTypeFound := false
 
 					if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
@@ -23001,9 +24790,49 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCaUrl{}
+
+								serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -23431,26 +25260,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						clientSelector := &ves_io_schema.LabelSelectorType{}
-						originServerSubsetRules[i].ClientSelector = clientSelector
-						for _, set := range sl {
-							clientSelectorMapStrToI := set.(map[string]interface{})
-
-							if w, ok := clientSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientSelector.Expressions = ls
-							}
-
-						}
-
-					}
-
 					if v, ok := originServerSubsetRulesMapStrToI["country_codes"]; ok && !isIntfNil(v) {
 
 						country_codesList := []ves_io_schema_policy.CountryCode{}
@@ -23607,6 +25416,45 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							ls[i] = v.(string)
 						}
 						originServerSubsetRules[i].ReNameList = ls
+					}
+
+					selectorChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) && !selectorChoiceTypeFound {
+
+						selectorChoiceTypeFound = true
+						selectorChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_ClientSelector{}
+						selectorChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+						originServerSubsetRules[i].SelectorChoice = selectorChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								selectorChoiceInt.ClientSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["none"]; ok && !isIntfNil(v) && !selectorChoiceTypeFound {
+
+						selectorChoiceTypeFound = true
+
+						if v.(bool) {
+							selectorChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_None{}
+							selectorChoiceInt.None = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].SelectorChoice = selectorChoiceInt
+						}
+
 					}
 
 				}
@@ -24038,6 +25886,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Ipv6Prefixes = ls
+
+					}
+
 					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
 						ls := make([]string, len(v.([]interface{})))
@@ -24295,6 +26153,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Ipv6Prefixes = ls
+
+					}
 
 					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
@@ -27113,6 +28981,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+
+								choiceInt.Site.Ip6 = v.(string)
+
+							}
+
 							if v, ok := cs["network"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Network = ves_io_schema_views.SiteNetwork(ves_io_schema_views.SiteNetwork_value[v.(string)])
@@ -27670,17 +29544,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											}
 
-											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpointPath{}
-
-												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-												conditionTypeChoiceInt.ApiEndpointPath = v.(string)
-
-											}
-
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -27944,17 +29807,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 											}
 
-											if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpointPath{}
-
-												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-												conditionTypeChoiceInt.ApiEndpointPath = v.(string)
-
-											}
-
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
@@ -28052,17 +29904,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									}
 
 								}
-
-							}
-
-							if v, ok := openApiValidationRulesMapStrToI["api_endpoint_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
-
-								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpointPath{}
-
-								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
-
-								conditionTypeChoiceInt.ApiEndpointPath = v.(string)
 
 							}
 
@@ -28297,6 +30138,422 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+				}
+
+			}
+
+			if v, ok := cs["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+				apiDiscoveryChoiceInt.EnableApiDiscovery.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+				for _, set := range sl {
+					sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+					if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+						sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+						for i, set := range sl {
+							customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+							customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								metadata := &ves_io_schema.MessageMetaType{}
+								customSensitiveDataDetectionRules[i].Metadata = metadata
+								for _, set := range sl {
+									metadataMapStrToI := set.(map[string]interface{})
+
+									if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+										metadata.Description = w.(string)
+									}
+
+									if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+										metadata.Disable = w.(bool)
+									}
+
+									if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+										metadata.Name = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+								customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+								for _, set := range sl {
+									sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+									domainChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+										domainChoiceTypeFound = true
+
+										if v.(bool) {
+											domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+											domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+										domainChoiceTypeFound = true
+										domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+										sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+										domainChoiceInt.SpecificDomain = v.(string)
+
+									}
+
+									patternChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+										patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											keyPatternTypeFound := false
+
+											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+												keyPatternTypeFound = true
+												keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+												keyPatternInt.ExactValue = v.(string)
+
+											}
+
+											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+												keyPatternTypeFound = true
+												keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+												patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+												keyPatternInt.RegexValue = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+										patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												keyPattern := &ves_io_schema_app_type.KeyPattern{}
+												patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+												for _, set := range sl {
+													keyPatternMapStrToI := set.(map[string]interface{})
+
+													keyPatternTypeFound := false
+
+													if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+														keyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+														keyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												valuePattern := &ves_io_schema_app_type.ValuePattern{}
+												patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+												for _, set := range sl {
+													valuePatternMapStrToI := set.(map[string]interface{})
+
+													valuePatternTypeFound := false
+
+													if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+														valuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+														valuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+										patternChoiceTypeFound = true
+										patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+										patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+										sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											valuePatternTypeFound := false
+
+											if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+												valuePatternTypeFound = true
+												valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+												valuePatternInt.ExactValue = v.(string)
+
+											}
+
+											if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+												valuePatternTypeFound = true
+												valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+												patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+												valuePatternInt.RegexValue = v.(string)
+
+											}
+
+										}
+
+									}
+
+									sectionChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+											sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+											sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+
+										if v.(bool) {
+											sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+											sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+										sectionChoiceTypeFound = true
+										sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+										sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+										sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+												custom_sectionsList := []ves_io_schema.HttpSections{}
+												for _, j := range v.([]interface{}) {
+													custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+												}
+												sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+											}
+
+										}
+
+									}
+
+									targetChoiceTypeFound := false
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+
+										if v.(bool) {
+											targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+											targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+											sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+										targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+												targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+											}
+
+											if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+												methodsList := []ves_io_schema.HttpMethod{}
+												for _, j := range v.([]interface{}) {
+													methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+												}
+												targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+											}
+
+										}
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										targetChoiceInt.ApiGroup = v.(string)
+
+									}
+
+									if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+										targetChoiceTypeFound = true
+										targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+										sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+										targetChoiceInt.BasePath = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+								customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+								for _, set := range sl {
+									sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+									if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+										sensitiveDataType.Type = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+						sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+						for i, set := range sl {
+							disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+							disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								disabledBuiltInRules[i].Name = w.(string)
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -31554,6 +33811,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									flowLabelChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_UndefinedFlowLabel{}
 									flowLabelChoiceInt.UndefinedFlowLabel = &ves_io_schema.Empty{}
 									protectedAppEndpoints[i].FlowLabelChoice = flowLabelChoiceInt
+								}
+
+							}
+
+							goodbotChoiceTypeFound := false
+
+							if v, ok := protectedAppEndpointsMapStrToI["allow_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
+
+								goodbotChoiceTypeFound = true
+
+								if v.(bool) {
+									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_AllowGoodBots{}
+									goodbotChoiceInt.AllowGoodBots = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
+								}
+
+							}
+
+							if v, ok := protectedAppEndpointsMapStrToI["mitigate_good_bots"]; ok && !isIntfNil(v) && !goodbotChoiceTypeFound {
+
+								goodbotChoiceTypeFound = true
+
+								if v.(bool) {
+									goodbotChoiceInt := &ves_io_schema_views_http_loadbalancer.AppEndpointType_MitigateGoodBots{}
+									goodbotChoiceInt.MitigateGoodBots = &ves_io_schema.Empty{}
+									protectedAppEndpoints[i].GoodbotChoice = goodbotChoiceInt
 								}
 
 							}
@@ -34992,9 +37275,27 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.Http.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp_Port{}
+
+				loadbalancerTypeInt.Http.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttp_PortRanges{}
+
+				loadbalancerTypeInt.Http.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -35171,9 +37472,27 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.Https.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_Port{}
+
+				loadbalancerTypeInt.Https.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttps_PortRanges{}
+
+				loadbalancerTypeInt.Https.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -35336,9 +37655,49 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -35559,9 +37918,49 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -36148,9 +38547,49 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 
@@ -36223,9 +38662,27 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
-			if v, ok := cs["port"]; ok && !isIntfNil(v) {
+			portChoiceTypeFound := false
 
-				loadbalancerTypeInt.HttpsAutoCert.Port = uint32(v.(int))
+			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_Port{}
+
+				loadbalancerTypeInt.HttpsAutoCert.PortChoice = portChoiceInt
+
+				portChoiceInt.Port = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+				portChoiceInt := &ves_io_schema_views_http_loadbalancer.ProxyTypeHttpsAutoCerts_PortRanges{}
+
+				loadbalancerTypeInt.HttpsAutoCert.PortChoice = portChoiceInt
+
+				portChoiceInt.PortRanges = v.(string)
 
 			}
 
@@ -36488,6 +38945,422 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
+						}
+
+					}
+
+					if v, ok := cs["sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						sensitiveDataDetectionRules := &ves_io_schema_app_type.SensitiveDataDetectionRules{}
+						apiDiscoveryChoiceInt.EnableDiscovery.SensitiveDataDetectionRules = sensitiveDataDetectionRules
+						for _, set := range sl {
+							sensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["custom_sensitive_data_detection_rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								customSensitiveDataDetectionRules := make([]*ves_io_schema_app_type.CustomSensitiveDataDetectionRule, len(sl))
+								sensitiveDataDetectionRules.CustomSensitiveDataDetectionRules = customSensitiveDataDetectionRules
+								for i, set := range sl {
+									customSensitiveDataDetectionRules[i] = &ves_io_schema_app_type.CustomSensitiveDataDetectionRule{}
+									customSensitiveDataDetectionRulesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										metadata := &ves_io_schema.MessageMetaType{}
+										customSensitiveDataDetectionRules[i].Metadata = metadata
+										for _, set := range sl {
+											metadataMapStrToI := set.(map[string]interface{})
+
+											if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+												metadata.Description = w.(string)
+											}
+
+											if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+												metadata.Disable = w.(bool)
+											}
+
+											if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+												metadata.Name = w.(string)
+											}
+
+										}
+
+									}
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_detection_config"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										sensitiveDataDetectionConfig := &ves_io_schema_app_type.CustomDataDetectionConfig{}
+										customSensitiveDataDetectionRules[i].SensitiveDataDetectionConfig = sensitiveDataDetectionConfig
+										for _, set := range sl {
+											sensitiveDataDetectionConfigMapStrToI := set.(map[string]interface{})
+
+											domainChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["any_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+												domainChoiceTypeFound = true
+
+												if v.(bool) {
+													domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyDomain{}
+													domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+												domainChoiceTypeFound = true
+												domainChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_SpecificDomain{}
+
+												sensitiveDataDetectionConfig.DomainChoice = domainChoiceInt
+
+												domainChoiceInt.SpecificDomain = v.(string)
+
+											}
+
+											patternChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["key_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyPattern{}
+												patternChoiceInt.KeyPattern = &ves_io_schema_app_type.KeyPattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													keyPatternTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+														patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+														keyPatternTypeFound = true
+														keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+														patternChoiceInt.KeyPattern.KeyPattern = keyPatternInt
+
+														keyPatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["key_value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_KeyValuePattern{}
+												patternChoiceInt.KeyValuePattern = &ves_io_schema_app_type.KeyValuePattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key_pattern"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														keyPattern := &ves_io_schema_app_type.KeyPattern{}
+														patternChoiceInt.KeyValuePattern.KeyPattern = keyPattern
+														for _, set := range sl {
+															keyPatternMapStrToI := set.(map[string]interface{})
+
+															keyPatternTypeFound := false
+
+															if v, ok := keyPatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																keyPatternTypeFound = true
+																keyPatternInt := &ves_io_schema_app_type.KeyPattern_ExactValue{}
+
+																keyPattern.KeyPattern = keyPatternInt
+
+																keyPatternInt.ExactValue = v.(string)
+
+															}
+
+															if v, ok := keyPatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !keyPatternTypeFound {
+
+																keyPatternTypeFound = true
+																keyPatternInt := &ves_io_schema_app_type.KeyPattern_RegexValue{}
+
+																keyPattern.KeyPattern = keyPatternInt
+
+																keyPatternInt.RegexValue = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := cs["value_pattern"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														valuePattern := &ves_io_schema_app_type.ValuePattern{}
+														patternChoiceInt.KeyValuePattern.ValuePattern = valuePattern
+														for _, set := range sl {
+															valuePatternMapStrToI := set.(map[string]interface{})
+
+															valuePatternTypeFound := false
+
+															if v, ok := valuePatternMapStrToI["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																valuePatternTypeFound = true
+																valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+																valuePattern.ValuePattern = valuePatternInt
+
+																valuePatternInt.ExactValue = v.(string)
+
+															}
+
+															if v, ok := valuePatternMapStrToI["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+																valuePatternTypeFound = true
+																valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+																valuePattern.ValuePattern = valuePatternInt
+
+																valuePatternInt.RegexValue = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["value_pattern"]; ok && !isIntfNil(v) && !patternChoiceTypeFound {
+
+												patternChoiceTypeFound = true
+												patternChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ValuePattern{}
+												patternChoiceInt.ValuePattern = &ves_io_schema_app_type.ValuePattern{}
+												sensitiveDataDetectionConfig.PatternChoice = patternChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													valuePatternTypeFound := false
+
+													if v, ok := cs["exact_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_ExactValue{}
+
+														patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.ExactValue = v.(string)
+
+													}
+
+													if v, ok := cs["regex_value"]; ok && !isIntfNil(v) && !valuePatternTypeFound {
+
+														valuePatternTypeFound = true
+														valuePatternInt := &ves_io_schema_app_type.ValuePattern_RegexValue{}
+
+														patternChoiceInt.ValuePattern.ValuePattern = valuePatternInt
+
+														valuePatternInt.RegexValue = v.(string)
+
+													}
+
+												}
+
+											}
+
+											sectionChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_request_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllRequestSections{}
+													sectionChoiceInt.AllRequestSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_response_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllResponseSections{}
+													sectionChoiceInt.AllResponseSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["all_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+
+												if v.(bool) {
+													sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AllSections{}
+													sectionChoiceInt.AllSections = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["custom_sections"]; ok && !isIntfNil(v) && !sectionChoiceTypeFound {
+
+												sectionChoiceTypeFound = true
+												sectionChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_CustomSections{}
+												sectionChoiceInt.CustomSections = &ves_io_schema_app_type.CustomSections{}
+												sensitiveDataDetectionConfig.SectionChoice = sectionChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["custom_sections"]; ok && !isIntfNil(v) {
+
+														custom_sectionsList := []ves_io_schema.HttpSections{}
+														for _, j := range v.([]interface{}) {
+															custom_sectionsList = append(custom_sectionsList, ves_io_schema.HttpSections(ves_io_schema.HttpSections_value[j.(string)]))
+														}
+														sectionChoiceInt.CustomSections.CustomSections = custom_sectionsList
+
+													}
+
+												}
+
+											}
+
+											targetChoiceTypeFound := false
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["any_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+
+												if v.(bool) {
+													targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_AnyTarget{}
+													targetChoiceInt.AnyTarget = &ves_io_schema.Empty{}
+													sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["api_endpoint_target"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiEndpointTarget{}
+												targetChoiceInt.ApiEndpointTarget = &ves_io_schema_app_type.APIEndpoint{}
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["api_endpoint_path"]; ok && !isIntfNil(v) {
+
+														targetChoiceInt.ApiEndpointTarget.ApiEndpointPath = v.(string)
+
+													}
+
+													if v, ok := cs["methods"]; ok && !isIntfNil(v) {
+
+														methodsList := []ves_io_schema.HttpMethod{}
+														for _, j := range v.([]interface{}) {
+															methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
+														}
+														targetChoiceInt.ApiEndpointTarget.Methods = methodsList
+
+													}
+
+												}
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["api_group"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_ApiGroup{}
+
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												targetChoiceInt.ApiGroup = v.(string)
+
+											}
+
+											if v, ok := sensitiveDataDetectionConfigMapStrToI["base_path"]; ok && !isIntfNil(v) && !targetChoiceTypeFound {
+
+												targetChoiceTypeFound = true
+												targetChoiceInt := &ves_io_schema_app_type.CustomDataDetectionConfig_BasePath{}
+
+												sensitiveDataDetectionConfig.TargetChoice = targetChoiceInt
+
+												targetChoiceInt.BasePath = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := customSensitiveDataDetectionRulesMapStrToI["sensitive_data_type"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										sensitiveDataType := &ves_io_schema_app_type.CustomSensitiveDataType{}
+										customSensitiveDataDetectionRules[i].SensitiveDataType = sensitiveDataType
+										for _, set := range sl {
+											sensitiveDataTypeMapStrToI := set.(map[string]interface{})
+
+											if w, ok := sensitiveDataTypeMapStrToI["type"]; ok && !isIntfNil(w) {
+												sensitiveDataType.Type = w.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := sensitiveDataDetectionRulesMapStrToI["disabled_built_in_rules"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								disabledBuiltInRules := make([]*ves_io_schema_app_type.BuiltInSensitiveDataType, len(sl))
+								sensitiveDataDetectionRules.DisabledBuiltInRules = disabledBuiltInRules
+								for i, set := range sl {
+									disabledBuiltInRules[i] = &ves_io_schema_app_type.BuiltInSensitiveDataType{}
+									disabledBuiltInRulesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+										disabledBuiltInRules[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -38482,6 +41355,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := cs["lb_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+				portChoiceTypeFound = true
+
+				if v.(bool) {
+					portChoiceInt := &ves_io_schema_views_origin_pool.GlobalSpecType_LbPort{}
+					portChoiceInt.LbPort = &ves_io_schema.Empty{}
+					originPoolChoiceInt.DefaultPool.PortChoice = portChoiceInt
+				}
+
+			}
+
 			if v, ok := cs["port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 				portChoiceTypeFound = true
@@ -38777,6 +41662,39 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["use_mtls_obj"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+						mtlsChoiceTypeFound = true
+						mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtlsObj{}
+						mtlsChoiceInt.UseMtlsObj = &ves_io_schema_views.ObjectRefType{}
+						tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtlsObj.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
 					serverValidationChoiceTypeFound := false
 
 					if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
@@ -38802,9 +41720,49 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCaUrl{}
+
+								serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -39231,26 +42189,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
-					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						clientSelector := &ves_io_schema.LabelSelectorType{}
-						originServerSubsetRules[i].ClientSelector = clientSelector
-						for _, set := range sl {
-							clientSelectorMapStrToI := set.(map[string]interface{})
-
-							if w, ok := clientSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-								ls := make([]string, len(w.([]interface{})))
-								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								clientSelector.Expressions = ls
-							}
-
-						}
-
-					}
-
 					if v, ok := originServerSubsetRulesMapStrToI["country_codes"]; ok && !isIntfNil(v) {
 
 						country_codesList := []ves_io_schema_policy.CountryCode{}
@@ -39407,6 +42345,45 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							ls[i] = v.(string)
 						}
 						originServerSubsetRules[i].ReNameList = ls
+					}
+
+					selectorChoiceTypeFound := false
+
+					if v, ok := originServerSubsetRulesMapStrToI["client_selector"]; ok && !isIntfNil(v) && !selectorChoiceTypeFound {
+
+						selectorChoiceTypeFound = true
+						selectorChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_ClientSelector{}
+						selectorChoiceInt.ClientSelector = &ves_io_schema.LabelSelectorType{}
+						originServerSubsetRules[i].SelectorChoice = selectorChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								selectorChoiceInt.ClientSelector.Expressions = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := originServerSubsetRulesMapStrToI["none"]; ok && !isIntfNil(v) && !selectorChoiceTypeFound {
+
+						selectorChoiceTypeFound = true
+
+						if v.(bool) {
+							selectorChoiceInt := &ves_io_schema_policy.OriginServerSubsetRule_None{}
+							selectorChoiceInt.None = &ves_io_schema.Empty{}
+							originServerSubsetRules[i].SelectorChoice = selectorChoiceInt
+						}
+
 					}
 
 				}
@@ -39835,6 +42812,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Ipv6Prefixes = ls
+
+					}
+
 					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
 						ls := make([]string, len(v.([]interface{})))
@@ -40092,6 +43079,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						ipAllowedListChoiceInt.IpAllowedList.Ipv6Prefixes = ls
+
+					}
 
 					if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 

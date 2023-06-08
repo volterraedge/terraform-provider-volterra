@@ -2306,6 +2306,42 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaPortMatcherType": {
+            "type": "object",
+            "description": "Port match of the request can be a range or a specific port",
+            "title": "PortMatcherType",
+            "x-displayname": "Port to Match",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-port_match": "[\"port\",\"port_ranges\"]",
+            "x-ves-proto-message": "ves.io.schema.PortMatcherType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "6443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
+                    "title": "port_range",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "x-displayname": "Port range",
+                    "x-ves-example": "8080-8191",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range": "true"
+                    }
+                }
+            }
+        },
         "ioschemaQueryParameterMatcherType": {
             "type": "object",
             "description": "Query parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
@@ -3788,7 +3824,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3798,7 +3834,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4389,6 +4426,12 @@ var APISwaggerJSON string = `{
                     "title": "http_method",
                     "$ref": "#/definitions/schemaHttpMethod",
                     "x-displayname": "HTTP Method"
+                },
+                "incoming_port": {
+                    "description": " The port on which the request is received",
+                    "title": "incoming_port",
+                    "$ref": "#/definitions/ioschemaPortMatcherType",
+                    "x-displayname": "Match LB port"
                 },
                 "path": {
                     "description": " URI path of route",

@@ -623,6 +623,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["assume_role"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("assume_role"))
+		if err := fv(ctx, m.GetAssumeRole(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_name"))
@@ -1038,6 +1047,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["assume_role"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("assume_role"))
+		if err := fv(ctx, m.GetAssumeRole(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["aws_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("aws_name"))
@@ -1078,6 +1096,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
 		if err := fv(ctx, m.GetDxConnect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["egress_gw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("egress_gw_id"))
+		if err := fv(ctx, m.GetEgressGwId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1241,6 +1268,132 @@ var DefaultAWSVPCTypeValidator = func() *ValidateAWSVPCType {
 
 func AWSVPCTypeValidator() db.Validator {
 	return DefaultAWSVPCTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AssumeRoleType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AssumeRoleType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AssumeRoleType) DeepCopy() *AssumeRoleType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AssumeRoleType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AssumeRoleType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AssumeRoleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AssumeRoleTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAssumeRoleType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAssumeRoleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AssumeRoleType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AssumeRoleType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["duration_seconds"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("duration_seconds"))
+		if err := fv(ctx, m.GetDurationSeconds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enable"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable"))
+		if err := fv(ctx, m.GetEnable(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["external_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("external_id"))
+		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["role_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("role_arn"))
+		if err := fv(ctx, m.GetRoleArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["session_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("session_name"))
+		if err := fv(ctx, m.GetSessionName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["session_tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("session_tags"))
+		for key, value := range m.GetSessionTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAssumeRoleTypeValidator = func() *ValidateAssumeRoleType {
+	v := &ValidateAssumeRoleType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AssumeRoleTypeValidator() db.Validator {
+	return DefaultAssumeRoleTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -3435,6 +3435,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_CookieName:
+		if fv, exists := v.FldValidators["well_known.cookie_name"]; exists {
+			val := m.GetWellKnown().(*StringRules_CookieName).CookieName
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("cookie_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

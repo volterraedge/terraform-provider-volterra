@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
@@ -2866,6 +2867,15 @@ func (v *ValidateApiDiscoverySetting) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_detection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_detection_rules"))
+		if err := fv(ctx, m.GetSensitiveDataDetectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2891,6 +2901,8 @@ var DefaultApiDiscoverySettingValidator = func() *ValidateApiDiscoverySetting {
 		panic(errMsg)
 	}
 	v.FldValidators["learn_from_redirect_traffic"] = vFn
+
+	v.FldValidators["sensitive_data_detection_rules"] = ves_io_schema_app_type.SensitiveDataDetectionRulesValidator().Validate
 
 	return v
 }()
@@ -3440,6 +3452,14 @@ func (v *ValidateAppEndpointType) AppTrafficTypeChoiceValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateAppEndpointType) GoodbotChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for goodbot_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAppEndpointType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -3660,6 +3680,42 @@ func (v *ValidateAppEndpointType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["goodbot_choice"]; exists {
+		val := m.GetGoodbotChoice()
+		vOpts := append(opts,
+			db.WithValidateField("goodbot_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetGoodbotChoice().(type) {
+	case *AppEndpointType_MitigateGoodBots:
+		if fv, exists := v.FldValidators["goodbot_choice.mitigate_good_bots"]; exists {
+			val := m.GetGoodbotChoice().(*AppEndpointType_MitigateGoodBots).MitigateGoodBots
+			vOpts := append(opts,
+				db.WithValidateField("goodbot_choice"),
+				db.WithValidateField("mitigate_good_bots"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AppEndpointType_AllowGoodBots:
+		if fv, exists := v.FldValidators["goodbot_choice.allow_good_bots"]; exists {
+			val := m.GetGoodbotChoice().(*AppEndpointType_AllowGoodBots).AllowGoodBots
+			vOpts := append(opts,
+				db.WithValidateField("goodbot_choice"),
+				db.WithValidateField("allow_good_bots"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_methods"]; exists {
 		vOpts := append(opts, db.WithValidateField("http_methods"))
 		if err := fv(ctx, m.GetHttpMethods(), vOpts...); err != nil {
@@ -3729,6 +3785,17 @@ var DefaultAppEndpointTypeValidator = func() *ValidateAppEndpointType {
 		panic(errMsg)
 	}
 	v.FldValidators["app_traffic_type_choice"] = vFn
+
+	vrhGoodbotChoice := v.GoodbotChoiceValidationRuleHandler
+	rulesGoodbotChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhGoodbotChoice(rulesGoodbotChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppEndpointType.goodbot_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["goodbot_choice"] = vFn
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -8783,13 +8850,6 @@ func (v *ValidateFallThroughRule) ConditionTypeChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateFallThroughRule) ConditionTypeChoiceApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_ApiEndpointPath, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_path")
-	}
-	return oValidatorFn_ApiEndpointPath, nil
-}
 func (v *ValidateFallThroughRule) ConditionTypeChoiceBasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_BasePath, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -8898,17 +8958,6 @@ func (v *ValidateFallThroughRule) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	switch m.GetConditionTypeChoice().(type) {
-	case *FallThroughRule_ApiEndpointPath:
-		if fv, exists := v.FldValidators["condition_type_choice.api_endpoint_path"]; exists {
-			val := m.GetConditionTypeChoice().(*FallThroughRule_ApiEndpointPath).ApiEndpointPath
-			vOpts := append(opts,
-				db.WithValidateField("condition_type_choice"),
-				db.WithValidateField("api_endpoint_path"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *FallThroughRule_BasePath:
 		if fv, exists := v.FldValidators["condition_type_choice.base_path"]; exists {
 			val := m.GetConditionTypeChoice().(*FallThroughRule_BasePath).BasePath
@@ -9023,16 +9072,6 @@ var DefaultFallThroughRuleValidator = func() *ValidateFallThroughRule {
 	}
 	v.FldValidators["condition_type_choice"] = vFn
 
-	vrhConditionTypeChoiceApiEndpointPath := v.ConditionTypeChoiceApiEndpointPathValidationRuleHandler
-	rulesConditionTypeChoiceApiEndpointPath := map[string]string{
-		"ves.io.schema.rules.string.max_len":             "1024",
-		"ves.io.schema.rules.string.templated_http_path": "true",
-	}
-	vFnMap["condition_type_choice.api_endpoint_path"], err = vrhConditionTypeChoiceApiEndpointPath(rulesConditionTypeChoiceApiEndpointPath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FallThroughRule.condition_type_choice_api_endpoint_path: %s", err)
-		panic(errMsg)
-	}
 	vrhConditionTypeChoiceBasePath := v.ConditionTypeChoiceBasePathValidationRuleHandler
 	rulesConditionTypeChoiceBasePath := map[string]string{
 		"ves.io.schema.rules.string.http_path": "true",
@@ -9053,7 +9092,6 @@ var DefaultFallThroughRuleValidator = func() *ValidateFallThroughRule {
 		panic(errMsg)
 	}
 
-	v.FldValidators["condition_type_choice.api_endpoint_path"] = vFnMap["condition_type_choice.api_endpoint_path"]
 	v.FldValidators["condition_type_choice.base_path"] = vFnMap["condition_type_choice.base_path"]
 	v.FldValidators["condition_type_choice.api_group"] = vFnMap["condition_type_choice.api_group"]
 
@@ -16366,13 +16404,6 @@ func (v *ValidateOpenApiValidationRule) ConditionTypeChoiceValidationRuleHandler
 	return validatorFn, nil
 }
 
-func (v *ValidateOpenApiValidationRule) ConditionTypeChoiceApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_ApiEndpointPath, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_path")
-	}
-	return oValidatorFn_ApiEndpointPath, nil
-}
 func (v *ValidateOpenApiValidationRule) ConditionTypeChoiceBasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_BasePath, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -16475,17 +16506,6 @@ func (v *ValidateOpenApiValidationRule) Validate(ctx context.Context, pm interfa
 	}
 
 	switch m.GetConditionTypeChoice().(type) {
-	case *OpenApiValidationRule_ApiEndpointPath:
-		if fv, exists := v.FldValidators["condition_type_choice.api_endpoint_path"]; exists {
-			val := m.GetConditionTypeChoice().(*OpenApiValidationRule_ApiEndpointPath).ApiEndpointPath
-			vOpts := append(opts,
-				db.WithValidateField("condition_type_choice"),
-				db.WithValidateField("api_endpoint_path"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *OpenApiValidationRule_BasePath:
 		if fv, exists := v.FldValidators["condition_type_choice.base_path"]; exists {
 			val := m.GetConditionTypeChoice().(*OpenApiValidationRule_BasePath).BasePath
@@ -16602,16 +16622,6 @@ var DefaultOpenApiValidationRuleValidator = func() *ValidateOpenApiValidationRul
 	}
 	v.FldValidators["condition_type_choice"] = vFn
 
-	vrhConditionTypeChoiceApiEndpointPath := v.ConditionTypeChoiceApiEndpointPathValidationRuleHandler
-	rulesConditionTypeChoiceApiEndpointPath := map[string]string{
-		"ves.io.schema.rules.string.max_len":             "1024",
-		"ves.io.schema.rules.string.templated_http_path": "true",
-	}
-	vFnMap["condition_type_choice.api_endpoint_path"], err = vrhConditionTypeChoiceApiEndpointPath(rulesConditionTypeChoiceApiEndpointPath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OpenApiValidationRule.condition_type_choice_api_endpoint_path: %s", err)
-		panic(errMsg)
-	}
 	vrhConditionTypeChoiceBasePath := v.ConditionTypeChoiceBasePathValidationRuleHandler
 	rulesConditionTypeChoiceBasePath := map[string]string{
 		"ves.io.schema.rules.string.http_path": "true",
@@ -16632,7 +16642,6 @@ var DefaultOpenApiValidationRuleValidator = func() *ValidateOpenApiValidationRul
 		panic(errMsg)
 	}
 
-	v.FldValidators["condition_type_choice.api_endpoint_path"] = vFnMap["condition_type_choice.api_endpoint_path"]
 	v.FldValidators["condition_type_choice.base_path"] = vFnMap["condition_type_choice.base_path"]
 	v.FldValidators["condition_type_choice.api_group"] = vFnMap["condition_type_choice.api_group"]
 
@@ -17290,14 +17299,19 @@ type ValidateProxyTypeHttp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateProxyTypeHttp) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+func (v *ValidateProxyTypeHttp) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateProxyTypeHttp) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
 }
 
 func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -17323,11 +17337,28 @@ func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *ProxyTypeHttp_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttp_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttp_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttp_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -17347,16 +17378,30 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
 	}
-	vFn, err = vrhPort(rulesPort)
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttp.port: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttp.port_choice_port: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["port"] = vFn
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttp.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
 	return v
 }()
@@ -17471,6 +17516,21 @@ func (v *ValidateProxyTypeHttps) PathNormalizeChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateProxyTypeHttps) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateProxyTypeHttps) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateProxyTypeHttps) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -17484,16 +17544,6 @@ func (v *ValidateProxyTypeHttps) ServerHeaderChoiceAppendServerNameValidationRul
 		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
 	}
 	return oValidatorFn_AppendServerName, nil
-}
-
-func (v *ValidateProxyTypeHttps) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateProxyTypeHttps) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -17627,11 +17677,28 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *ProxyTypeHttps_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttps_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttps_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttps_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -17736,6 +17803,31 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	v.FldValidators["path_normalize_choice"] = vFn
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttps.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttps.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
 	rulesServerHeaderChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "8096",
@@ -17757,17 +17849,6 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
 	rulesConnectionIdleTimeout := map[string]string{
@@ -17887,6 +17968,21 @@ func (v *ValidateProxyTypeHttpsAutoCerts) PathNormalizeChoiceValidationRuleHandl
 	return validatorFn, nil
 }
 
+func (v *ValidateProxyTypeHttpsAutoCerts) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+	return oValidatorFn_Port, nil
+}
+func (v *ValidateProxyTypeHttpsAutoCerts) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
+}
+
 func (v *ValidateProxyTypeHttpsAutoCerts) ServerHeaderChoiceServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_ServerName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -17900,16 +17996,6 @@ func (v *ValidateProxyTypeHttpsAutoCerts) ServerHeaderChoiceAppendServerNameVali
 		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
 	}
 	return oValidatorFn_AppendServerName, nil
-}
-
-func (v *ValidateProxyTypeHttpsAutoCerts) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateProxyTypeHttpsAutoCerts) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -18079,11 +18165,28 @@ func (v *ValidateProxyTypeHttpsAutoCerts) Validate(ctx context.Context, pm inter
 
 	}
 
-	if fv, exists := v.FldValidators["port"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("port"))
-		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
-			return err
+	switch m.GetPortChoice().(type) {
+	case *ProxyTypeHttpsAutoCerts_Port:
+		if fv, exists := v.FldValidators["port_choice.port"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttpsAutoCerts_Port).Port
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ProxyTypeHttpsAutoCerts_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*ProxyTypeHttpsAutoCerts_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -18182,6 +18285,31 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 	}
 	v.FldValidators["path_normalize_choice"] = vFn
 
+	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
+	rulesPortChoicePort := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttpsAutoCerts.port_choice_port: %s", err)
+		panic(errMsg)
+	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "512",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ProxyTypeHttpsAutoCerts.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
+
 	vrhServerHeaderChoiceServerName := v.ServerHeaderChoiceServerNameValidationRuleHandler
 	rulesServerHeaderChoiceServerName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "8096",
@@ -18203,17 +18331,6 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
-
-	vrhPort := v.PortValidationRuleHandler
-	rulesPort := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "65535",
-	}
-	vFn, err = vrhPort(rulesPort)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttpsAutoCerts.port: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port"] = vFn
 
 	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
 	rulesConnectionIdleTimeout := map[string]string{

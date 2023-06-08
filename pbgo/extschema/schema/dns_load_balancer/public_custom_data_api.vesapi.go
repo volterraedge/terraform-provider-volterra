@@ -1033,6 +1033,20 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "DNS Load Balancer Pool Member Health Status List Item",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem",
             "properties": {
+                "error_code": {
+                    "description": " Error Code of DNS Load Balancer Pool Member health check failure\n\nExample: - \"2\"-",
+                    "title": "Error Code",
+                    "$ref": "#/definitions/schemadns_load_balancerErrorCode",
+                    "x-displayname": "Error Code",
+                    "x-ves-example": "2"
+                },
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description of DNS Load Balancer Pool Member health check failure\n\nExample: - \"received string mismatch\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "received string mismatch"
+                },
                 "health_check_type": {
                     "type": "string",
                     "description": " Health Check Type associated with the Pool Member\n\nExample: - \"HTTP\"-",
@@ -1060,12 +1074,13 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "dns_load_balancerHealthStatus": {
             "type": "string",
-            "description": "Enumerates Health Status of DNS LB and associated objects\n\n - HEALTH_STATUS_UNHEALTHY: Unhealthy\n\n - HEALTH_STATUS_DEGRADED: Degraded\n\n - HEALTH_STATUS_HEALTHY: Healthy\n",
+            "description": "Enumerates Health Status of DNS LB and associated objects\n\n - HEALTH_STATUS_UNHEALTHY: Unhealthy\n\n - HEALTH_STATUS_DEGRADED: Degraded\n\n - HEALTH_STATUS_HEALTHY: Healthy\n\n - HEALTH_STATUS_DISABLED: Disabled\n",
             "title": "HealthStatus",
             "enum": [
                 "HEALTH_STATUS_UNHEALTHY",
                 "HEALTH_STATUS_DEGRADED",
-                "HEALTH_STATUS_HEALTHY"
+                "HEALTH_STATUS_HEALTHY",
+                "HEALTH_STATUS_DISABLED"
             ],
             "default": "HEALTH_STATUS_UNHEALTHY",
             "x-displayname": "Health Status",
@@ -1110,6 +1125,13 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Timestamp",
                     "x-ves-example": "1570007981"
                 },
+                "trend_value": {
+                    "description": " trend value for the metric\n\nExample: - \"100.000000\"-",
+                    "title": "Trend value",
+                    "$ref": "#/definitions/schemaTrendValue",
+                    "x-displayname": "Trend Value",
+                    "x-ves-example": "100.000000"
+                },
                 "value": {
                     "type": "string",
                     "description": "\n\nExample: - \"15\"-",
@@ -1118,6 +1140,83 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "15"
                 }
             }
+        },
+        "schemaTrendSentiment": {
+            "type": "string",
+            "description": "trend sentiment\n\nIndicates trend sentiment is positive\nIndicates trend sentiment is negative.",
+            "title": "Trend Sentiment",
+            "enum": [
+                "TREND_SENTIMENT_NONE",
+                "TREND_SENTIMENT_POSITIVE",
+                "TREND_SENTIMENT_NEGATIVE"
+            ],
+            "default": "TREND_SENTIMENT_NONE",
+            "x-displayname": "Trend Sentiment",
+            "x-ves-proto-enum": "ves.io.schema.TrendSentiment"
+        },
+        "schemaTrendValue": {
+            "type": "object",
+            "description": "Trend value contains trend value, trend sentiment and trend calculation description and window size.",
+            "title": "Trend Value",
+            "x-displayname": "Trend Value",
+            "x-ves-proto-message": "ves.io.schema.TrendValue",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " description of the method used to calculate trend.\n\nExample: - \"Trend was calculated by comparing the avg of window size intervals of end-start Time and last window time interval\"-",
+                    "title": "Description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Trend was calculated by comparing the avg of window size intervals of end-start Time and last window time interval"
+                },
+                "previous_value": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"200.00\"-",
+                    "title": "Previous Value",
+                    "x-displayname": "Previous Value",
+                    "x-ves-example": "200.00"
+                },
+                "sentiment": {
+                    "description": "\n\nExample: - \"Positive\"-",
+                    "title": "Sentiment",
+                    "$ref": "#/definitions/schemaTrendSentiment",
+                    "x-displayname": "Sentiment",
+                    "x-ves-example": "Positive"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"-15\"-",
+                    "title": "Value",
+                    "x-displayname": "Value",
+                    "x-ves-example": "-15"
+                }
+            }
+        },
+        "schemadns_load_balancerErrorCode": {
+            "type": "string",
+            "description": "All possible error-codes for dns load balancer pool member health check failure\n\n - ERR_NIL: No error\n - ERR_UNDEFINED: Undefined error\n - ERR_RECEIVE_STRING_MISMATCH: Received string mismatch error\n - ERR_INTERNAL: Encountered internal error\n - ERR_MSG_SEND: Message send error\n - ERR_TIMEOUT: Waithing response timeout error\n - ERR_MSG_RECEIVE: Message receive error\n - ERR_MAX_RECEIVE_BYTES: Bytes limit exceeded error\n - ERR_ICMP_PING: ICMP ping failure\n - ERR_CONNECTION_REFUSED: Connection refused error\n - ERR_CONNECTION_ABORTED: Connection aborted error\n - ERR_CONNECTION_RESET: Connection reset error\n - ERR_NET_UN_REACHABLE: Network not reachable\n - ERR_HOST_UN_REACHABLE: Host not reachable\n - ERR_UNKNOWN: Unknown error\n - ERR_TLS_HANDSHAKE_FAILURE: TLS handshake failure\n - ERR_CONNECTION_TIMEDOUT: Connection timeout error",
+            "title": "ErrorCode",
+            "enum": [
+                "ERR_NIL",
+                "ERR_UNDEFINED",
+                "ERR_RECEIVE_STRING_MISMATCH",
+                "ERR_INTERNAL",
+                "ERR_MSG_SEND",
+                "ERR_TIMEOUT",
+                "ERR_MSG_RECEIVE",
+                "ERR_MAX_RECEIVE_BYTES",
+                "ERR_ICMP_PING",
+                "ERR_CONNECTION_REFUSED",
+                "ERR_CONNECTION_ABORTED",
+                "ERR_CONNECTION_RESET",
+                "ERR_NET_UN_REACHABLE",
+                "ERR_HOST_UN_REACHABLE",
+                "ERR_UNKNOWN",
+                "ERR_TLS_HANDSHAKE_FAILURE",
+                "ERR_CONNECTION_TIMEDOUT"
+            ],
+            "default": "ERR_NIL",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.dns_load_balancer.ErrorCode"
         }
     },
     "x-displayname": "DNS Load Balancer",

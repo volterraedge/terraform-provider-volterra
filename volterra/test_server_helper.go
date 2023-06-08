@@ -402,6 +402,11 @@ func (n *namespaceCustomAPIServer) NetworkingInventory(context.Context,
 	return &ves_io_schema_ns.NetworkingInventoryResponse{}, nil
 }
 
+func (n *namespaceCustomAPIServer) ApplicationInventory(context.Context,
+	*ves_io_schema_ns.ApplicationInventoryRequest) (*ves_io_schema_ns.ApplicationInventoryResponse, error) {
+	return &ves_io_schema_ns.ApplicationInventoryResponse{}, nil
+}
+
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
 // ves.io.schema.views.gcp_vpc_site.CustomAPI handling - start

@@ -2576,18 +2576,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "crudapiErrorCode": {
-            "type": "string",
-            "enum": [
-                "EOK",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN"
-            ],
-            "default": "EOK",
-            "x-displayname": "",
-            "x-ves-proto-enum": "ves.io.schema.waf_signatures_changelog.crudapi.ErrorCode"
-        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.crudapi.ObjectCreateReq",
@@ -2608,7 +2596,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/waf_signatures_changelogcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2629,7 +2617,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/waf_signatures_changelogcrudapiErrorCode"
                 }
             }
         },
@@ -2644,7 +2632,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/waf_signatures_changelogcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2671,7 +2659,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/waf_signatures_changelogcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -2750,7 +2738,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/waf_signatures_changelogcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3310,12 +3298,22 @@ var APISwaggerJSON string = `{
             "properties": {
                 "added_signatures": {
                     "type": "array",
-                    "description": " A list of new signatures in the release.\n\nExample: - [\"200101852\", \"200103290\"]-",
+                    "description": " A list of new signature ids in the release.\n\nExample: - [\"200101852\", \"200103290\"]-",
                     "title": "Added Signatures",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Added Signatures"
+                    "x-displayname": "Added Signatures",
+                    "x-ves-deprecated": "Replaced by new signatures"
+                },
+                "added_signatures_data": {
+                    "type": "array",
+                    "description": " A list of new signatures in the release.",
+                    "title": "Added Signatures Data",
+                    "items": {
+                        "$ref": "#/definitions/waf_signatures_changelogSignature"
+                    },
+                    "x-displayname": "Added Signatures Data"
                 },
                 "release_date": {
                     "type": "string",
@@ -3325,12 +3323,109 @@ var APISwaggerJSON string = `{
                 },
                 "updated_signatures": {
                     "type": "array",
-                    "description": " A list of updated signatures in the release.\n\nExample: - [\"200101852\", \"200103290\"]-",
+                    "description": " A list of updated signature ids in the release.\n\nExample: - [\"200101852\", \"200103290\"]-",
                     "title": "Updated Signatures",
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Updated Signatures"
+                    "x-displayname": "Updated Signatures",
+                    "x-ves-deprecated": "Replaced by modified signatures"
+                },
+                "updated_signatures_data": {
+                    "type": "array",
+                    "description": " A list of updated signatures in the release.",
+                    "title": "Updated Signatures Data",
+                    "items": {
+                        "$ref": "#/definitions/waf_signatures_changelogSignature"
+                    },
+                    "x-displayname": "Updated Signatures Data"
+                }
+            }
+        },
+        "waf_signatures_changelogSignature": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.waf_signatures_changelog.Signature",
+            "properties": {
+                "accuracy": {
+                    "type": "string",
+                    "description": " The Signature Accuracy\n\nExample: - \"Medium\"-",
+                    "title": "accuracy",
+                    "x-displayname": "Accuracy",
+                    "x-ves-example": "Medium"
+                },
+                "applies_to": {
+                    "type": "string",
+                    "description": " The Signature Applies to\n\nExample: - \"Request\"-",
+                    "title": "applies_to",
+                    "x-displayname": "Applies To",
+                    "x-ves-example": "Request"
+                },
+                "attack_type": {
+                    "type": "string",
+                    "description": " The Signature Attack Type\n\nExample: - \"Server Side Code Injection\"-",
+                    "title": "attack_type",
+                    "x-displayname": "Attack Type",
+                    "x-ves-example": "Server Side Code Injection"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " The Signature Description\n\nExample: - \"Summary:\\nThis event is generated when an attempt is made to inject Server-side Include code. This is a general attack detection signature (i.e. it is not specific to any web application).\\n\\nImpact:\\nSerious. Execution of arbitrary commands may be possible.\\n\\nDetailed Information:\\nThis event indicates that an attempt has been made to inject Server-side Include (SSI) code. SSI Injection allows to attacker to send server side code that could be executed locally by the web server.\\n\\nAffected Systems:\\nAll systems.\\n\\nAttack Scenarios:\\nThere are many possible.\\n\\nEase Of Attack:\\nSimple to medium.\\n\\nFalse Positives:\\nSome applications may accept valid input which matches these signatures.\\n\\nFalse Negatives:\\nNone known.\\n\\nCorrective Action:\\nEnsure the system is using an up to date version of the software and has had all vendor supplied patches applied. Utilize \\\"Positive Security Model\\\" by accepting only known types of input in web application.\\n\\nAdditional References:\\nhttp://www.webappsec.org/projects/threat/classes/ssi_injection.shtml\\n\\n\"-",
+                    "title": "description",
+                    "x-displayname": "Description",
+                    "x-ves-example": "Summary:\\nThis event is generated when an attempt is made to inject Server-side Include code. This is a general attack detection signature (i.e. it is not specific to any web application).\\n\\nImpact:\\nSerious. Execution of arbitrary commands may be possible.\\n\\nDetailed Information:\\nThis event indicates that an attempt has been made to inject Server-side Include (SSI) code. SSI Injection allows to attacker to send server side code that could be executed locally by the web server.\\n\\nAffected Systems:\\nAll systems.\\n\\nAttack Scenarios:\\nThere are many possible.\\n\\nEase Of Attack:\\nSimple to medium.\\n\\nFalse Positives:\\nSome applications may accept valid input which matches these signatures.\\n\\nFalse Negatives:\\nNone known.\\n\\nCorrective Action:\\nEnsure the system is using an up to date version of the software and has had all vendor supplied patches applied. Utilize \\\"Positive Security Model\\\" by accepting only known types of input in web application.\\n\\nAdditional References:\\nhttp://www.webappsec.org/projects/threat/classes/ssi_injection.shtml\\n\\n"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " The Signature ID\n\nExample: - \"200104853\"-",
+                    "title": "id",
+                    "format": "int64",
+                    "x-displayname": "ID",
+                    "x-ves-example": "200104853"
+                },
+                "last_update": {
+                    "type": "string",
+                    "description": " The Signature last update time\n\nExample: - \"2022/11/29 20:19:17\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "last_update",
+                    "x-displayname": "Last Update",
+                    "x-ves-example": "2022/11/29 20:19:17",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The Signature Name\n\nExample: - \"Java code injection FreeMarker - objectWrapper (URI)\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "Java code injection FreeMarker - objectWrapper (URI)"
+                },
+                "references": {
+                    "type": "array",
+                    "description": " The Signature References\n\nExample: - \"['http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-26377']\"-",
+                    "title": "references",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "References",
+                    "x-ves-example": "['http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-26377']"
+                },
+                "risk": {
+                    "type": "string",
+                    "description": " The Signature Risk\n\nExample: - \"High\"-",
+                    "title": "risk",
+                    "x-displayname": "Risk",
+                    "x-ves-example": "High"
+                },
+                "systems": {
+                    "type": "array",
+                    "description": " The Signature Systems\n\nExample: - \"['Java Servlets/JSP', 'Apache Struts', 'JavaServer Faces (JSF)']\"-",
+                    "title": "systems",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Systems",
+                    "x-ves-example": "['Java Servlets/JSP', 'Apache Struts', 'JavaServer Faces (JSF)']"
                 }
             }
         },
@@ -3380,6 +3475,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "waf_signatures_changelogcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.waf_signatures_changelog.crudapi.ErrorCode"
         }
     },
     "x-displayname": "",

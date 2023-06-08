@@ -251,6 +251,17 @@ func (v *ValidateAuthenticationOptions) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
+	case *AuthenticationOptions_Custom:
+		if fv, exists := v.FldValidators["auth_options.custom"]; exists {
+			val := m.GetAuthOptions().(*AuthenticationOptions_Custom).Custom
+			vOpts := append(opts,
+				db.WithValidateField("auth_options"),
+				db.WithValidateField("custom"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -262,12 +273,120 @@ var DefaultAuthenticationOptionsValidator = func() *ValidateAuthenticationOption
 	v := &ValidateAuthenticationOptions{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["auth_options.jwt"] = ves_io_schema_policy.JwtTokenAuthOptionsValidator().Validate
+	v.FldValidators["auth_options.custom"] = CDNCustomAuthenticationValidator().Validate
 
 	return v
 }()
 
 func AuthenticationOptionsValidator() db.Validator {
 	return DefaultAuthenticationOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNCustomAuthentication) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNCustomAuthentication) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNCustomAuthentication) DeepCopy() *CDNCustomAuthentication {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNCustomAuthentication{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNCustomAuthentication) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNCustomAuthentication) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNCustomAuthenticationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNCustomAuthentication struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNCustomAuthentication) CustomAuthConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_auth_config")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCustomAuthentication) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNCustomAuthentication)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNCustomAuthentication got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["custom_auth_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_auth_config"))
+		if err := fv(ctx, m.GetCustomAuthConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNCustomAuthenticationValidator = func() *ValidateCDNCustomAuthentication {
+	v := &ValidateCDNCustomAuthentication{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCustomAuthConfig := v.CustomAuthConfigValidationRuleHandler
+	rulesCustomAuthConfig := map[string]string{
+		"ves.io.schema.rules.string.max_len": "4096",
+	}
+	vFn, err = vrhCustomAuthConfig(rulesCustomAuthConfig)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCustomAuthentication.custom_auth_config: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["custom_auth_config"] = vFn
+
+	return v
+}()
+
+func CDNCustomAuthenticationValidator() db.Validator {
+	return DefaultCDNCustomAuthenticationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1122,6 +1241,42 @@ func (m *CdnOriginPoolType) Validate(ctx context.Context, opts ...db.ValidateOpt
 	return CdnOriginPoolTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *CdnOriginPoolType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTlsChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CdnOriginPoolType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *CdnOriginPoolType_NoTls:
+
+		return nil, nil
+
+	case *CdnOriginPoolType_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateCdnOriginPoolType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1428,6 +1583,33 @@ func (m *CreateSpecType) DeepCopyProto() proto.Message {
 
 func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return CreateSpecTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginPoolDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOriginPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetOriginPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_pool." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1826,6 +2008,33 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginPoolDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOriginPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetOriginPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2182,7 +2391,38 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetViewInternalDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOriginPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetOriginPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_pool." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -4091,6 +4331,33 @@ func (m *ReplaceSpecType) DeepCopyProto() proto.Message {
 
 func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return ReplaceSpecTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOriginPoolDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOriginPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetOriginPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetOriginPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "origin_pool." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {

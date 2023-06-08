@@ -26,7 +26,9 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   http {
     dns_volterra_managed = true
-    port                 = "80"
+
+    // One of the arguments from this list "port port_ranges" must be set
+    port = "80"
   }
   origin_pool {
     follow_origin_redirect = true
@@ -35,8 +37,8 @@ resource "volterra_cdn_loadbalancer" "example" {
     origin_servers {
       // One of the arguments from this list "public_ip public_name" must be set
 
-      public_ip {
-        ip = "8.8.8.8"
+      public_name {
+        dns_name = "value"
       }
     }
 
@@ -95,6 +97,8 @@ Allow list of countries.
 ### Auth Options
 
 Authentication Options.
+
+`custom` - (Optional) Enable Custom Authenticaiton. See [Custom ](#custom) below for details.
 
 `disable_auth` - (Optional) No Authenticaiton (bool).
 
@@ -166,6 +170,12 @@ Token is found in the cookie.
 
 `name` - (Required) A case-insensitive cookie name. (`String`).
 
+### Custom
+
+Enable Custom Authenticaiton.
+
+`custom_auth_config` - (Optional) Custom Authentication Configuration (`String`).
+
 ### Custom Hash Algorithms
 
 Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
@@ -216,7 +226,9 @@ CDN Distribution serving content over HTTP.
 
 `dns_volterra_managed` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal. (`Bool`).
 
-`port` - (Optional) x-example: "80" (`Int`).
+`port` - (Optional) HTTP port to Listen. (`Int`).
+
+`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 ### Https
 
@@ -352,6 +364,16 @@ Token is found in the Query-Param.
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
+### Ref
+
+Reference to another volterra object is shown like below
+
+name - (Required) then name will hold the referred object's(e.g. route's) name. (String).
+
+namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
+
+tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
 ### Request Headers To Add
 
 Headers specified at this level are applied after headers from matched Route are applied.
@@ -468,7 +490,7 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-x-displayName: "Enable".
+x-displayName: "Enable MTLS With Inline Certificate".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
@@ -476,7 +498,9 @@ x-displayName: "Enable".
 
 Perform origin server verification using the provided trusted CA list.
 
-`trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -488,7 +512,9 @@ Origin servers use TLS.
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+
+`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 

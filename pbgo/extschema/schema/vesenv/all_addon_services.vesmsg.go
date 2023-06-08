@@ -286,6 +286,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_F5XcBigIpApm:
+		if fv, exists := v.FldValidators["choice.f5xc_big_ip_apm"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBigIpApm).F5XcBigIpApm
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_big_ip_apm"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

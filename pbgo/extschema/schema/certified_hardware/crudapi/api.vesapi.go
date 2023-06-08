@@ -2987,7 +2987,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "certified_hardwarecrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -3019,7 +3019,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/certified_hardwarecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3040,7 +3040,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/certified_hardwarecrudapiErrorCode"
                 }
             }
         },
@@ -3055,7 +3055,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/certified_hardwarecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -3082,7 +3082,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/certified_hardwarecrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3161,7 +3161,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.certified_hardware.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/certified_hardwarecrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

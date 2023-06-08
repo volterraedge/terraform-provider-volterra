@@ -2856,6 +2856,21 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "API Groups membership"
                 },
+                "api_type": {
+                    "description": " Signifies api endpoint type.\n\nExample: - API_TYPE_GRAPHQL, API_TYPE_REST, API_TYPE_GRPC-",
+                    "title": "api_type",
+                    "$ref": "#/definitions/app_typeAPIType",
+                    "x-displayname": "API Type"
+                },
+                "attributes": {
+                    "type": "array",
+                    "description": " List of api endpoint attributes.\n\nExample: - [GraphQL, login etc.]-",
+                    "title": "attributes",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Attributes"
+                },
                 "authentication_state": {
                     "description": " The authentication state of the endpoint.\n\nExample: - AUTH_STATE_AUTHENTICATED, AUTH_STATE_UNAUTHENTICATED, AUTH_STATE_UNKNOWN-",
                     "title": "authentication_state",
@@ -3147,6 +3162,20 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "API Endpoint Security Risk",
             "x-ves-proto-enum": "ves.io.schema.app_type.APIEPSecurityRisk"
         },
+        "app_typeAPIType": {
+            "type": "string",
+            "description": "List of possible types of api that can be discovered for an APIEP.\n\nThe API Type detected as unknown.\nThe API Type detected as GraphQL.\nThe API Type detected as REST.\nThe API Type detected as gRPC.",
+            "title": "APIType",
+            "enum": [
+                "API_TYPE_UNKNOWN",
+                "API_TYPE_GRAPHQL",
+                "API_TYPE_REST",
+                "API_TYPE_GRPC"
+            ],
+            "default": "API_TYPE_UNKNOWN",
+            "x-displayname": "API Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIType"
+        },
         "app_typeApiEndpointInfoRequest": {
             "type": "string",
             "description": "This is the various forms that can be requested to be sent in the ApiEndpointInfoRequest\n\nAPI ENDPOINT INFO NONE option is used to disable any additional info request per api endpoint response\nAPI ENDPOINT INFO PDF SPARKLINES option is used to enable pdf sparkline info along with the api endpoint response",
@@ -3225,7 +3254,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationType": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.",
+            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
             "title": "APIEP Authentication Type",
             "enum": [
                 "AUTH_TYPE_BASIC",
@@ -3234,7 +3263,10 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "AUTH_TYPE_API_KEY",
                 "AUTH_TYPE_OAUTH2",
                 "AUTH_TYPE_OPENID",
-                "AUTH_TYPE_HTTP"
+                "AUTH_TYPE_HTTP",
+                "AUTH_TYPE_OAUTH1",
+                "AUTH_TYPE_DIGEST",
+                "AUTH_TYPE_NEGOTIATE"
             ],
             "default": "AUTH_TYPE_BASIC",
             "x-displayname": "",
@@ -3457,6 +3489,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "Field",
                     "x-displayname": "Field"
                 },
+                "rule_type": {
+                    "description": " Type of sensitive data detection rule. Could be built-in or custom.",
+                    "title": "Rule Type",
+                    "$ref": "#/definitions/app_typeSensitiveDataDetectionRuleType",
+                    "x-displayname": "Rule Type"
+                },
                 "section": {
                     "type": "string",
                     "description": " Section of sensitive data.\n\nExample: - req_body-",
@@ -3476,6 +3514,18 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "Type"
                 }
             }
+        },
+        "app_typeSensitiveDataDetectionRuleType": {
+            "type": "string",
+            "description": "Sensitive Data Detection Rule Type\n\n - RULE_TYPE_BUILT_IN: built_in\n\nBuilt in rule type\n - RULE_TYPE_CUSTOM: custom\n\nCustom rule type",
+            "title": "sensitive_data_detection_rule_type",
+            "enum": [
+                "RULE_TYPE_BUILT_IN",
+                "RULE_TYPE_CUSTOM"
+            ],
+            "default": "RULE_TYPE_BUILT_IN",
+            "x-displayname": "Sensitive Data Detection Rule Type",
+            "x-ves-proto-enum": "ves.io.schema.app_type.SensitiveDataDetectionRuleType"
         },
         "app_typeSensitiveDataType": {
             "type": "string",
@@ -3547,6 +3597,38 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Response Code Class",
             "x-ves-proto-enum": "ves.io.schema.HttpResponseCodeClass"
         },
+        "schemavirtual_hostAPIEndpoint": {
+            "type": "object",
+            "description": "APIEndpoint Object.",
+            "title": "APIEndpoint",
+            "x-displayname": "API Endpoint",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpoint",
+            "properties": {
+                "collapsed_url": {
+                    "type": "string",
+                    "description": " Requested API endPoint for api url.\n\nExample: - \"api/v1/user_id/DYN/vehicle_id/DYN\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "API URL",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "API URL",
+                    "x-ves-example": "api/v1/user_id/DYN/vehicle_id/DYN",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "method": {
+                    "type": "string",
+                    "description": " Requested API endPoint for method.\n\nExample: - \"GET\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"GET\\\", \\\"POST\\\", \\\"HEAD\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\", \\\"REGISTER\\\", \\\"DEBUG\\\", \\\"PROPFIND\\\", \\\"PATCH\\\", \\\"CONNECT\\\", \\\"SEARCH\\\", \\\"INDEX\\\", \\\"TRACE\\\"]\n",
+                    "title": "Method of current API URL",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"GET\\\", \\\"POST\\\", \\\"HEAD\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\", \\\"REGISTER\\\", \\\"DEBUG\\\", \\\"PROPFIND\\\", \\\"PATCH\\\", \\\"CONNECT\\\", \\\"SEARCH\\\", \\\"INDEX\\\", \\\"TRACE\\\"]"
+                    }
+                }
+            }
+        },
         "virtual_hostAPIEPActivityMetricType": {
             "type": "string",
             "description": "Activity metric calculation type per API Endpoint\n\nIf specified, API returns top attacked APIEPs summary by sec_event percentage for given virtual host.\nThe percentage is calculated as sec_events_percentage(apiep) = #sec-events(apiep)/#requests(apiep) * 100\nIf specified, API returns top active APIEPs summary by request ratio for given virtual host.\nThe percentage is calculated as request_percentage(apiep) = #requests(apiep)/#requests(all apiep) * 100",
@@ -3615,7 +3697,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Domain",
                     "maxItems": 5,
                     "items": {
@@ -3626,9 +3708,9 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "List of Domains",
                     "x-ves-example": "www.example.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -3646,38 +3728,6 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "start time",
                     "x-displayname": "Start Time",
                     "x-ves-example": "2019-09-23T12:30:11.733Z"
-                }
-            }
-        },
-        "virtual_hostAPIEndpoint": {
-            "type": "object",
-            "description": "APIEndpoint Object.",
-            "title": "APIEndpoint",
-            "x-displayname": "API Endpoint",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpoint",
-            "properties": {
-                "collapsed_url": {
-                    "type": "string",
-                    "description": " Requested API endPoint for api url.\n\nExample: - \"api/v1/user_id/DYN/vehicle_id/DYN\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
-                    "title": "API URL",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "API URL",
-                    "x-ves-example": "api/v1/user_id/DYN/vehicle_id/DYN",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
-                    }
-                },
-                "method": {
-                    "type": "string",
-                    "description": " Requested API endPoint for method.\n\nExample: - \"GET\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"GET\\\", \\\"POST\\\", \\\"HEAD\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\", \\\"REGISTER\\\", \\\"DEBUG\\\", \\\"PROPFIND\\\", \\\"PATCH\\\", \\\"CONNECT\\\", \\\"SEARCH\\\", \\\"INDEX\\\", \\\"TRACE\\\"]\n",
-                    "title": "Method of current API URL",
-                    "x-displayname": "Method",
-                    "x-ves-example": "GET",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"GET\\\", \\\"POST\\\", \\\"HEAD\\\", \\\"PUT\\\", \\\"DELETE\\\", \\\"OPTIONS\\\", \\\"REGISTER\\\", \\\"DEBUG\\\", \\\"PROPFIND\\\", \\\"PATCH\\\", \\\"CONNECT\\\", \\\"SEARCH\\\", \\\"INDEX\\\", \\\"TRACE\\\"]"
-                    }
                 }
             }
         },
@@ -3778,14 +3828,21 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " List of domains that needs to be sent as part of the request\n Optional filter by domains. If absent, all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of domains that needs to be sent as part of the request\n Optional filter by domains. If absent, all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Domain",
+                    "maxItems": 5,
                     "items": {
-                        "type": "string"
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
                     },
                     "x-displayname": "List of Domain",
                     "x-ves-example": "www.example.com",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -4041,7 +4098,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of domains for which top api endpoints summary should be returned.\n Optional filter by domains. If absent, endpoints for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Domain",
                     "maxItems": 5,
                     "items": {
@@ -4052,9 +4109,9 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "List of Domain",
                     "x-ves-example": "www.example.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4116,12 +4173,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "api_endpoint": {
                     "description": "Exclusive with []\n API Endpoint",
                     "title": "api_endpoint",
-                    "$ref": "#/definitions/virtual_hostAPIEndpoint",
+                    "$ref": "#/definitions/schemavirtual_hostAPIEndpoint",
                     "x-displayname": "API Endpoint"
                 },
                 "domains": {
                     "type": "array",
-                    "description": " List of domains for which vulnerabilities should be returned.\n Optional filter by domains. If absent, vulnerabilities for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of domains for which vulnerabilities should be returned.\n Optional filter by domains. If absent, vulnerabilities for all domains are considered.\n\nExample: - \"www.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Domain",
                     "maxItems": 5,
                     "items": {
@@ -4132,9 +4189,9 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "List of Domain",
                     "x-ves-example": "www.example.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
                         "ves.io.schema.rules.repeated.items.string.max_len": "256",
                         "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

@@ -2956,7 +2956,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -2966,7 +2966,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4110,6 +4111,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4121,11 +4123,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4140,6 +4141,21 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "List of SANs for matching",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "schemaTrustedCAList": {
+            "type": "object",
+            "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+            "title": "Trusted CA List",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Trusted CA List Reference\"\nReference to Trusted CA List",
+                    "title": "Trusted CA List",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
                 }
             }
         },
@@ -6571,6 +6587,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostHttpRedirectOptions": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP Protocol Redirect Options to HTTPS\"\nHTTP protocol redirect options to https for downstream connections",
+            "title": "HttpRedirectOptions"
+        },
         "virtual_hostJavaScriptConfigType": {
             "type": "object",
             "description": "Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.",
@@ -6903,6 +6924,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     }
                 },
+                "js_path": {
+                    "type": "string",
+                    "description": "x-displayName: \"JS Path\"\nJavaScript download path",
+                    "title": "JS Path"
+                },
                 "reload_header_name": {
                     "type": "string",
                     "description": "x-displayName: \"SDK Config Header Name\"\nHeader that is used for SDK configuration sync",
@@ -7010,40 +7036,32 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.virtual_host.VerStatusType",
             "properties": {
                 "advertise_policy": {
-                    "description": " AdverstisePolicy for which the coalescing is done.",
+                    "description": " AdvertisePolicy for which the coalescing is done.",
                     "title": "AdvertisePolicy",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Advertise policy name"
                 },
                 "coalesced_vhosts": {
                     "type": "array",
-                    "description": " List of virtual hosts with which TLS coalescing is done\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of virtual hosts with which TLS coalescing is done\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "TLS coalesced virtual hosts",
                     "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType",
-                        "minimum": 1,
-                        "maximum": 256
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "TLS Coalesced VirtualHosts",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "non_coalesced_vhosts": {
                     "type": "array",
-                    "description": " List of virtual hosts having same server certificates and supposed to be\n coalesced but not coalesced due to mismatch is some configuration.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of virtual hosts having same server certificates and supposed to be\n coalesced but not coalesced due to mismatch is some configuration.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "TLS coalescing skipped virtual hosts",
                     "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType",
-                        "minimum": 1,
-                        "maximum": 256
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "TLS Coalescing skipped VirtualHosts",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

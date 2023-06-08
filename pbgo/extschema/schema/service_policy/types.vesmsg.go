@@ -3824,6 +3824,18 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["origin_server_subsets_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_server_subsets_action"))
+		for key, value := range m.GetOriginServerSubsetsAction() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path"))

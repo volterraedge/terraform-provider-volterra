@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
@@ -90,6 +91,164 @@ func (m *AWSSecretType) GetSecretKey() *schema.SecretType {
 	return nil
 }
 
+// AWS Assume Role to Handle Delegated Access
+//
+// x-displayName: "AWS Assume Role to Handle Delegated Access"
+// AWS Assume Role to Handle Delegated Access
+type AWSAssumeRoleType struct {
+	// IAM Role ARN
+	//
+	// x-displayName: "IAM Role ARN"
+	// x-example: "arn:aws:iam::121212121212:role/aws-iam-role-arn"
+	// x-required
+	// IAM Role ARN to assume the role
+	RoleArn string `protobuf:"bytes,1,opt,name=role_arn,json=roleArn,proto3" json:"role_arn,omitempty"`
+	// External ID
+	//
+	// x-displayName: "External ID"
+	// x-required
+	// External ID is a unique identifier which may be needed to assume role
+	//
+	// Types that are valid to be assigned to ExternalId:
+	//	*AWSAssumeRoleType_ExternalIdIsOptional
+	//	*AWSAssumeRoleType_ExternalIdIsTenantId
+	//	*AWSAssumeRoleType_CustomExternalId
+	ExternalId isAWSAssumeRoleType_ExternalId `protobuf_oneof:"external_id"`
+	// Role Session Duration Seconds
+	//
+	// x-displayName: "Role Session Duration Seconds"
+	// x-example: "5400"
+	// The duration, in seconds of the role session.
+	DurationSeconds uint32 `protobuf:"varint,6,opt,name=duration_seconds,json=durationSeconds,proto3" json:"duration_seconds,omitempty"`
+	// Role Session Name
+	//
+	// x-displayName: "Role Session Name"
+	// x-example: "cloud-f5xc-deployment"
+	// Use the role session name to uniquely identify a session, which will
+	// be used for deploy, monitor from F5XC console
+	SessionName string `protobuf:"bytes,7,opt,name=session_name,json=sessionName,proto3" json:"session_name,omitempty"`
+	// Role Session Tags
+	//
+	// x-displayName: "Role Session Tags"
+	// x-example: "env: staging"
+	// Session tags are key-value pair attributes that you pass when you assume an IAM role
+	SessionTags map[string]string `protobuf:"bytes,8,rep,name=session_tags,json=sessionTags,proto3" json:"session_tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *AWSAssumeRoleType) Reset()      { *m = AWSAssumeRoleType{} }
+func (*AWSAssumeRoleType) ProtoMessage() {}
+func (*AWSAssumeRoleType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_801061f8f9e94c2a, []int{1}
+}
+func (m *AWSAssumeRoleType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSAssumeRoleType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AWSAssumeRoleType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSAssumeRoleType.Merge(m, src)
+}
+func (m *AWSAssumeRoleType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSAssumeRoleType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSAssumeRoleType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSAssumeRoleType proto.InternalMessageInfo
+
+type isAWSAssumeRoleType_ExternalId interface {
+	isAWSAssumeRoleType_ExternalId()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AWSAssumeRoleType_ExternalIdIsOptional struct {
+	ExternalIdIsOptional *schema.Empty `protobuf:"bytes,3,opt,name=external_id_is_optional,json=externalIdIsOptional,proto3,oneof" json:"external_id_is_optional,omitempty"`
+}
+type AWSAssumeRoleType_ExternalIdIsTenantId struct {
+	ExternalIdIsTenantId *schema.Empty `protobuf:"bytes,4,opt,name=external_id_is_tenant_id,json=externalIdIsTenantId,proto3,oneof" json:"external_id_is_tenant_id,omitempty"`
+}
+type AWSAssumeRoleType_CustomExternalId struct {
+	CustomExternalId string `protobuf:"bytes,5,opt,name=custom_external_id,json=customExternalId,proto3,oneof" json:"custom_external_id,omitempty"`
+}
+
+func (*AWSAssumeRoleType_ExternalIdIsOptional) isAWSAssumeRoleType_ExternalId() {}
+func (*AWSAssumeRoleType_ExternalIdIsTenantId) isAWSAssumeRoleType_ExternalId() {}
+func (*AWSAssumeRoleType_CustomExternalId) isAWSAssumeRoleType_ExternalId()     {}
+
+func (m *AWSAssumeRoleType) GetExternalId() isAWSAssumeRoleType_ExternalId {
+	if m != nil {
+		return m.ExternalId
+	}
+	return nil
+}
+
+func (m *AWSAssumeRoleType) GetRoleArn() string {
+	if m != nil {
+		return m.RoleArn
+	}
+	return ""
+}
+
+func (m *AWSAssumeRoleType) GetExternalIdIsOptional() *schema.Empty {
+	if x, ok := m.GetExternalId().(*AWSAssumeRoleType_ExternalIdIsOptional); ok {
+		return x.ExternalIdIsOptional
+	}
+	return nil
+}
+
+func (m *AWSAssumeRoleType) GetExternalIdIsTenantId() *schema.Empty {
+	if x, ok := m.GetExternalId().(*AWSAssumeRoleType_ExternalIdIsTenantId); ok {
+		return x.ExternalIdIsTenantId
+	}
+	return nil
+}
+
+func (m *AWSAssumeRoleType) GetCustomExternalId() string {
+	if x, ok := m.GetExternalId().(*AWSAssumeRoleType_CustomExternalId); ok {
+		return x.CustomExternalId
+	}
+	return ""
+}
+
+func (m *AWSAssumeRoleType) GetDurationSeconds() uint32 {
+	if m != nil {
+		return m.DurationSeconds
+	}
+	return 0
+}
+
+func (m *AWSAssumeRoleType) GetSessionName() string {
+	if m != nil {
+		return m.SessionName
+	}
+	return ""
+}
+
+func (m *AWSAssumeRoleType) GetSessionTags() map[string]string {
+	if m != nil {
+		return m.SessionTags
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AWSAssumeRoleType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AWSAssumeRoleType_ExternalIdIsOptional)(nil),
+		(*AWSAssumeRoleType_ExternalIdIsTenantId)(nil),
+		(*AWSAssumeRoleType_CustomExternalId)(nil),
+	}
+}
+
 // Azure Credential Client Certificate type
 //
 // x-displayName: "Client Certificate"
@@ -136,7 +295,7 @@ type AzurePfxType struct {
 func (m *AzurePfxType) Reset()      { *m = AzurePfxType{} }
 func (*AzurePfxType) ProtoMessage() {}
 func (*AzurePfxType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{1}
+	return fileDescriptor_801061f8f9e94c2a, []int{2}
 }
 func (m *AzurePfxType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -233,7 +392,7 @@ type AzureSecretType struct {
 func (m *AzureSecretType) Reset()      { *m = AzureSecretType{} }
 func (*AzureSecretType) ProtoMessage() {}
 func (*AzureSecretType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{2}
+	return fileDescriptor_801061f8f9e94c2a, []int{3}
 }
 func (m *AzureSecretType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -302,7 +461,7 @@ type GCPCredFileType struct {
 func (m *GCPCredFileType) Reset()      { *m = GCPCredFileType{} }
 func (*GCPCredFileType) ProtoMessage() {}
 func (*GCPCredFileType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{3}
+	return fileDescriptor_801061f8f9e94c2a, []int{4}
 }
 func (m *GCPCredFileType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -347,6 +506,7 @@ type GlobalSpecType struct {
 	//
 	// Types that are valid to be assigned to Cloud:
 	//	*GlobalSpecType_AwsSecretKey
+	//	*GlobalSpecType_AwsAssumeRole
 	//	*GlobalSpecType_AzurePfxCertificate
 	//	*GlobalSpecType_AzureClientSecret
 	//	*GlobalSpecType_GcpCredFile
@@ -356,7 +516,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{4}
+	return fileDescriptor_801061f8f9e94c2a, []int{5}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -391,6 +551,9 @@ type isGlobalSpecType_Cloud interface {
 type GlobalSpecType_AwsSecretKey struct {
 	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
+type GlobalSpecType_AwsAssumeRole struct {
+	AwsAssumeRole *AWSAssumeRoleType `protobuf:"bytes,6,opt,name=aws_assume_role,json=awsAssumeRole,proto3,oneof" json:"aws_assume_role,omitempty"`
+}
 type GlobalSpecType_AzurePfxCertificate struct {
 	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
@@ -402,6 +565,7 @@ type GlobalSpecType_GcpCredFile struct {
 }
 
 func (*GlobalSpecType_AwsSecretKey) isGlobalSpecType_Cloud()        {}
+func (*GlobalSpecType_AwsAssumeRole) isGlobalSpecType_Cloud()       {}
 func (*GlobalSpecType_AzurePfxCertificate) isGlobalSpecType_Cloud() {}
 func (*GlobalSpecType_AzureClientSecret) isGlobalSpecType_Cloud()   {}
 func (*GlobalSpecType_GcpCredFile) isGlobalSpecType_Cloud()         {}
@@ -416,6 +580,13 @@ func (m *GlobalSpecType) GetCloud() isGlobalSpecType_Cloud {
 func (m *GlobalSpecType) GetAwsSecretKey() *AWSSecretType {
 	if x, ok := m.GetCloud().(*GlobalSpecType_AwsSecretKey); ok {
 		return x.AwsSecretKey
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAwsAssumeRole() *AWSAssumeRoleType {
+	if x, ok := m.GetCloud().(*GlobalSpecType_AwsAssumeRole); ok {
+		return x.AwsAssumeRole
 	}
 	return nil
 }
@@ -445,6 +616,7 @@ func (m *GlobalSpecType) GetGcpCredFile() *GCPCredFileType {
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_AwsSecretKey)(nil),
+		(*GlobalSpecType_AwsAssumeRole)(nil),
 		(*GlobalSpecType_AzurePfxCertificate)(nil),
 		(*GlobalSpecType_AzureClientSecret)(nil),
 		(*GlobalSpecType_GcpCredFile)(nil),
@@ -458,6 +630,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 type CreateSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*CreateSpecType_AwsSecretKey
+	//	*CreateSpecType_AwsAssumeRole
 	//	*CreateSpecType_AzurePfxCertificate
 	//	*CreateSpecType_AzureClientSecret
 	//	*CreateSpecType_GcpCredFile
@@ -467,7 +640,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{5}
+	return fileDescriptor_801061f8f9e94c2a, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -502,6 +675,9 @@ type isCreateSpecType_Cloud interface {
 type CreateSpecType_AwsSecretKey struct {
 	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
+type CreateSpecType_AwsAssumeRole struct {
+	AwsAssumeRole *AWSAssumeRoleType `protobuf:"bytes,6,opt,name=aws_assume_role,json=awsAssumeRole,proto3,oneof" json:"aws_assume_role,omitempty"`
+}
 type CreateSpecType_AzurePfxCertificate struct {
 	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
@@ -513,6 +689,7 @@ type CreateSpecType_GcpCredFile struct {
 }
 
 func (*CreateSpecType_AwsSecretKey) isCreateSpecType_Cloud()        {}
+func (*CreateSpecType_AwsAssumeRole) isCreateSpecType_Cloud()       {}
 func (*CreateSpecType_AzurePfxCertificate) isCreateSpecType_Cloud() {}
 func (*CreateSpecType_AzureClientSecret) isCreateSpecType_Cloud()   {}
 func (*CreateSpecType_GcpCredFile) isCreateSpecType_Cloud()         {}
@@ -527,6 +704,13 @@ func (m *CreateSpecType) GetCloud() isCreateSpecType_Cloud {
 func (m *CreateSpecType) GetAwsSecretKey() *AWSSecretType {
 	if x, ok := m.GetCloud().(*CreateSpecType_AwsSecretKey); ok {
 		return x.AwsSecretKey
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetAwsAssumeRole() *AWSAssumeRoleType {
+	if x, ok := m.GetCloud().(*CreateSpecType_AwsAssumeRole); ok {
+		return x.AwsAssumeRole
 	}
 	return nil
 }
@@ -556,6 +740,7 @@ func (m *CreateSpecType) GetGcpCredFile() *GCPCredFileType {
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_AwsSecretKey)(nil),
+		(*CreateSpecType_AwsAssumeRole)(nil),
 		(*CreateSpecType_AzurePfxCertificate)(nil),
 		(*CreateSpecType_AzureClientSecret)(nil),
 		(*CreateSpecType_GcpCredFile)(nil),
@@ -569,6 +754,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 type ReplaceSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*ReplaceSpecType_AwsSecretKey
+	//	*ReplaceSpecType_AwsAssumeRole
 	//	*ReplaceSpecType_AzurePfxCertificate
 	//	*ReplaceSpecType_AzureClientSecret
 	//	*ReplaceSpecType_GcpCredFile
@@ -578,7 +764,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{6}
+	return fileDescriptor_801061f8f9e94c2a, []int{7}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -613,6 +799,9 @@ type isReplaceSpecType_Cloud interface {
 type ReplaceSpecType_AwsSecretKey struct {
 	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
+type ReplaceSpecType_AwsAssumeRole struct {
+	AwsAssumeRole *AWSAssumeRoleType `protobuf:"bytes,6,opt,name=aws_assume_role,json=awsAssumeRole,proto3,oneof" json:"aws_assume_role,omitempty"`
+}
 type ReplaceSpecType_AzurePfxCertificate struct {
 	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
@@ -624,6 +813,7 @@ type ReplaceSpecType_GcpCredFile struct {
 }
 
 func (*ReplaceSpecType_AwsSecretKey) isReplaceSpecType_Cloud()        {}
+func (*ReplaceSpecType_AwsAssumeRole) isReplaceSpecType_Cloud()       {}
 func (*ReplaceSpecType_AzurePfxCertificate) isReplaceSpecType_Cloud() {}
 func (*ReplaceSpecType_AzureClientSecret) isReplaceSpecType_Cloud()   {}
 func (*ReplaceSpecType_GcpCredFile) isReplaceSpecType_Cloud()         {}
@@ -638,6 +828,13 @@ func (m *ReplaceSpecType) GetCloud() isReplaceSpecType_Cloud {
 func (m *ReplaceSpecType) GetAwsSecretKey() *AWSSecretType {
 	if x, ok := m.GetCloud().(*ReplaceSpecType_AwsSecretKey); ok {
 		return x.AwsSecretKey
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetAwsAssumeRole() *AWSAssumeRoleType {
+	if x, ok := m.GetCloud().(*ReplaceSpecType_AwsAssumeRole); ok {
+		return x.AwsAssumeRole
 	}
 	return nil
 }
@@ -667,6 +864,7 @@ func (m *ReplaceSpecType) GetGcpCredFile() *GCPCredFileType {
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_AwsSecretKey)(nil),
+		(*ReplaceSpecType_AwsAssumeRole)(nil),
 		(*ReplaceSpecType_AzurePfxCertificate)(nil),
 		(*ReplaceSpecType_AzureClientSecret)(nil),
 		(*ReplaceSpecType_GcpCredFile)(nil),
@@ -680,6 +878,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 type GetSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*GetSpecType_AwsSecretKey
+	//	*GetSpecType_AwsAssumeRole
 	//	*GetSpecType_AzurePfxCertificate
 	//	*GetSpecType_AzureClientSecret
 	//	*GetSpecType_GcpCredFile
@@ -689,7 +888,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_801061f8f9e94c2a, []int{7}
+	return fileDescriptor_801061f8f9e94c2a, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -724,6 +923,9 @@ type isGetSpecType_Cloud interface {
 type GetSpecType_AwsSecretKey struct {
 	AwsSecretKey *AWSSecretType `protobuf:"bytes,1,opt,name=aws_secret_key,json=awsSecretKey,proto3,oneof" json:"aws_secret_key,omitempty"`
 }
+type GetSpecType_AwsAssumeRole struct {
+	AwsAssumeRole *AWSAssumeRoleType `protobuf:"bytes,6,opt,name=aws_assume_role,json=awsAssumeRole,proto3,oneof" json:"aws_assume_role,omitempty"`
+}
 type GetSpecType_AzurePfxCertificate struct {
 	AzurePfxCertificate *AzurePfxType `protobuf:"bytes,2,opt,name=azure_pfx_certificate,json=azurePfxCertificate,proto3,oneof" json:"azure_pfx_certificate,omitempty"`
 }
@@ -735,6 +937,7 @@ type GetSpecType_GcpCredFile struct {
 }
 
 func (*GetSpecType_AwsSecretKey) isGetSpecType_Cloud()        {}
+func (*GetSpecType_AwsAssumeRole) isGetSpecType_Cloud()       {}
 func (*GetSpecType_AzurePfxCertificate) isGetSpecType_Cloud() {}
 func (*GetSpecType_AzureClientSecret) isGetSpecType_Cloud()   {}
 func (*GetSpecType_GcpCredFile) isGetSpecType_Cloud()         {}
@@ -749,6 +952,13 @@ func (m *GetSpecType) GetCloud() isGetSpecType_Cloud {
 func (m *GetSpecType) GetAwsSecretKey() *AWSSecretType {
 	if x, ok := m.GetCloud().(*GetSpecType_AwsSecretKey); ok {
 		return x.AwsSecretKey
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetAwsAssumeRole() *AWSAssumeRoleType {
+	if x, ok := m.GetCloud().(*GetSpecType_AwsAssumeRole); ok {
+		return x.AwsAssumeRole
 	}
 	return nil
 }
@@ -778,6 +988,7 @@ func (m *GetSpecType) GetGcpCredFile() *GCPCredFileType {
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_AwsSecretKey)(nil),
+		(*GetSpecType_AwsAssumeRole)(nil),
 		(*GetSpecType_AzurePfxCertificate)(nil),
 		(*GetSpecType_AzureClientSecret)(nil),
 		(*GetSpecType_GcpCredFile)(nil),
@@ -787,6 +998,10 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 func init() {
 	proto.RegisterType((*AWSSecretType)(nil), "ves.io.schema.cloud_credentials.AWSSecretType")
 	golang_proto.RegisterType((*AWSSecretType)(nil), "ves.io.schema.cloud_credentials.AWSSecretType")
+	proto.RegisterType((*AWSAssumeRoleType)(nil), "ves.io.schema.cloud_credentials.AWSAssumeRoleType")
+	golang_proto.RegisterType((*AWSAssumeRoleType)(nil), "ves.io.schema.cloud_credentials.AWSAssumeRoleType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_credentials.AWSAssumeRoleType.SessionTagsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_credentials.AWSAssumeRoleType.SessionTagsEntry")
 	proto.RegisterType((*AzurePfxType)(nil), "ves.io.schema.cloud_credentials.AzurePfxType")
 	golang_proto.RegisterType((*AzurePfxType)(nil), "ves.io.schema.cloud_credentials.AzurePfxType")
 	proto.RegisterType((*AzureSecretType)(nil), "ves.io.schema.cloud_credentials.AzureSecretType")
@@ -811,59 +1026,89 @@ func init() {
 }
 
 var fileDescriptor_801061f8f9e94c2a = []byte{
-	// 819 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xde, 0x97, 0xb5, 0x43, 0x3c, 0x49, 0x6c, 0xb2, 0x15, 0xc8, 0x0d, 0xd1, 0x12, 0xf9, 0x54,
-	0x81, 0xbd, 0x4b, 0x53, 0xca, 0xc1, 0x48, 0x56, 0x63, 0x23, 0xe2, 0xd0, 0x4b, 0xb5, 0xa6, 0x45,
-	0x82, 0xc3, 0x6a, 0x3c, 0x3b, 0xde, 0xae, 0xba, 0xf1, 0xac, 0x66, 0xd7, 0x76, 0xcc, 0xa9, 0xe2,
-	0xc0, 0xb9, 0x12, 0xff, 0x04, 0x07, 0x90, 0xe0, 0xca, 0x5e, 0x22, 0x4e, 0x08, 0x2e, 0x3e, 0xe6,
-	0x48, 0xd6, 0x17, 0xb8, 0x55, 0xe1, 0x12, 0x71, 0x42, 0x9e, 0x5d, 0xd7, 0xbb, 0xa1, 0xa8, 0xbe,
-	0xd1, 0x4a, 0xb9, 0xcd, 0xcc, 0x7b, 0xdf, 0xf7, 0x7e, 0x7c, 0xef, 0x49, 0x83, 0xde, 0x1d, 0x52,
-	0x5f, 0x73, 0x98, 0xee, 0x93, 0x87, 0xf4, 0x08, 0xeb, 0xc4, 0x65, 0x03, 0xcb, 0x24, 0x9c, 0x5a,
-	0xb4, 0x1f, 0x38, 0xd8, 0xf5, 0xf5, 0x60, 0xec, 0x51, 0x5f, 0xf3, 0x38, 0x0b, 0x98, 0xf2, 0x76,
-	0xec, 0xac, 0xc5, 0xce, 0xda, 0xbf, 0x9c, 0xb7, 0x6b, 0xb6, 0x13, 0x3c, 0x1c, 0x74, 0x35, 0xc2,
-	0x8e, 0x74, 0x9b, 0xd9, 0x4c, 0x17, 0xb8, 0xee, 0xa0, 0x27, 0x6e, 0xe2, 0x22, 0x4e, 0x31, 0xdf,
-	0xf6, 0x5b, 0xd9, 0xe0, 0xcc, 0x0b, 0x1c, 0xd6, 0x4f, 0x82, 0x6d, 0x5f, 0xcf, 0x1a, 0x53, 0x79,
-	0x6c, 0xef, 0x64, 0x4d, 0x43, 0xec, 0x3a, 0x16, 0x0e, 0x68, 0x62, 0xdd, 0xbd, 0x64, 0x75, 0xe8,
-	0xc8, 0xcc, 0x50, 0x57, 0xbe, 0x06, 0xb4, 0xb9, 0xff, 0x59, 0xa7, 0x43, 0x09, 0xa7, 0xc1, 0xa7,
-	0x63, 0x8f, 0x2a, 0x35, 0x84, 0x30, 0x21, 0xd4, 0xf7, 0xcd, 0x47, 0x74, 0x5c, 0x86, 0x5d, 0xb8,
-	0x51, 0x68, 0x16, 0x2f, 0x42, 0x80, 0x9f, 0xfe, 0x3c, 0x91, 0xf3, 0x5c, 0x2e, 0x3f, 0x06, 0xa3,
-	0x10, 0x7b, 0xdc, 0xa5, 0x63, 0xa5, 0x81, 0x90, 0x2f, 0xc0, 0xc2, 0x7d, 0x65, 0x17, 0x6e, 0xac,
-	0xef, 0x5d, 0xd7, 0xb2, 0xdd, 0x59, 0xb0, 0x37, 0x73, 0x93, 0x10, 0xc0, 0x28, 0xc4, 0x90, 0xbb,
-	0x74, 0x5c, 0x5f, 0x3d, 0x6f, 0xc8, 0x37, 0xab, 0x7b, 0x95, 0xef, 0x56, 0xd0, 0xc6, 0xfe, 0x97,
-	0x03, 0x4e, 0xef, 0xf5, 0x8e, 0x45, 0x1e, 0xef, 0xa0, 0x02, 0x71, 0x1d, 0xda, 0x0f, 0x4c, 0xc7,
-	0x4a, 0xd2, 0xd8, 0xbc, 0x08, 0x41, 0x9a, 0xa5, 0x91, 0xe3, 0x2b, 0xe5, 0x3b, 0xc6, 0x5a, 0x6c,
-	0x3f, 0xb4, 0x94, 0x0f, 0x50, 0xc9, 0x1f, 0x74, 0x7d, 0xc2, 0x1d, 0x51, 0xdc, 0x0c, 0xb1, 0xf2,
-	0x3c, 0x44, 0x31, 0xed, 0x75, 0x68, 0xcd, 0x62, 0x04, 0xb4, 0x8f, 0xe3, 0x18, 0xf2, 0x73, 0x63,
-	0xc4, 0xf6, 0x43, 0x4b, 0xd9, 0x47, 0x25, 0x42, 0x79, 0xe0, 0xf4, 0x1c, 0x82, 0x03, 0x6a, 0x0e,
-	0xb8, 0x5b, 0xce, 0x09, 0x44, 0xf9, 0x22, 0x04, 0xf9, 0x59, 0x73, 0xee, 0x24, 0xa7, 0x27, 0x00,
-	0x46, 0x31, 0x05, 0xb8, 0xcf, 0x5d, 0xe5, 0x43, 0xb4, 0xe6, 0x61, 0xdf, 0x1f, 0x31, 0x6e, 0x95,
-	0xf3, 0xcb, 0x75, 0xea, 0x19, 0xa0, 0xbe, 0x71, 0xde, 0x28, 0xdc, 0xac, 0xee, 0x55, 0x6f, 0x55,
-	0xdf, 0xaf, 0xde, 0xae, 0xfc, 0x05, 0xa8, 0x24, 0xda, 0x95, 0x52, 0xee, 0x65, 0xeb, 0xd8, 0x47,
-	0x68, 0x33, 0xc9, 0x27, 0x96, 0x5b, 0xf4, 0x6b, 0x89, 0x9a, 0x37, 0x62, 0x54, 0xfc, 0x5e, 0x47,
-	0xe7, 0x8d, 0xd7, 0x92, 0xba, 0x2b, 0x5f, 0xa0, 0xd2, 0x41, 0xeb, 0x5e, 0x8b, 0x53, 0xeb, 0x63,
-	0xc7, 0xa5, 0xa2, 0xe8, 0x36, 0x2a, 0x2d, 0xd6, 0xce, 0xec, 0x39, 0x2e, 0x5d, 0x76, 0x08, 0x8b,
-	0x0b, 0xdc, 0x8c, 0xad, 0xf2, 0x9b, 0x8c, 0x8a, 0x07, 0x2e, 0xeb, 0x62, 0xb7, 0xe3, 0x51, 0x22,
-	0xc8, 0x1f, 0xa0, 0x22, 0x1e, 0xf9, 0x66, 0x6a, 0xc0, 0x41, 0x70, 0x6b, 0xda, 0x0b, 0xd6, 0x5f,
-	0xcb, 0xec, 0x54, 0x5b, 0x32, 0x36, 0xf0, 0xc8, 0xef, 0xcc, 0x87, 0x5e, 0x21, 0xe8, 0x0d, 0x3c,
-	0x13, 0xcf, 0xf4, 0x7a, 0xc7, 0x66, 0x6a, 0x48, 0x92, 0xd4, 0x6b, 0x2f, 0xa6, 0x4f, 0x6d, 0x4a,
-	0x5b, 0x32, 0xae, 0xe1, 0xe4, 0xde, 0x5a, 0x70, 0x29, 0x5d, 0x14, 0x3f, 0x9b, 0x59, 0x11, 0x64,
-	0x11, 0xe2, 0xbd, 0xe5, 0x42, 0x64, 0x6a, 0xd8, 0x12, 0x74, 0xad, 0x94, 0x38, 0xca, 0x03, 0xb4,
-	0x69, 0x13, 0x4f, 0xe0, 0xe2, 0xde, 0xe7, 0x96, 0x64, 0xbf, 0x24, 0x63, 0x5b, 0x32, 0xd6, 0x6d,
-	0xe2, 0xcd, 0x9f, 0xea, 0x3b, 0x3f, 0x87, 0x50, 0x46, 0x6f, 0xa2, 0xad, 0xd6, 0x0c, 0xb9, 0xdb,
-	0x5a, 0x20, 0x15, 0xb8, 0xdd, 0xdc, 0x41, 0x79, 0xc1, 0xa8, 0x5c, 0x3b, 0x09, 0x01, 0x26, 0x21,
-	0xe4, 0xa3, 0x10, 0xe6, 0x43, 0xf2, 0x49, 0x6e, 0x2d, 0xff, 0xfa, 0x6a, 0xe5, 0x07, 0x19, 0x15,
-	0x5b, 0x9c, 0xe2, 0x80, 0x5e, 0xa9, 0xf9, 0x7f, 0xab, 0xb9, 0xf5, 0x6b, 0xe3, 0xd2, 0x66, 0x35,
-	0x95, 0xb9, 0x84, 0x85, 0xaf, 0xfe, 0x86, 0xf8, 0x58, 0xf9, 0x51, 0x46, 0x25, 0x83, 0x7a, 0x2e,
-	0x26, 0x57, 0x9a, 0xbd, 0x2a, 0x9a, 0x7d, 0x2f, 0xa3, 0xf5, 0x03, 0x1a, 0x5c, 0xe9, 0xf5, 0x6a,
-	0xe8, 0xd5, 0xfc, 0x06, 0x26, 0x67, 0xaa, 0x74, 0x7a, 0xa6, 0x4a, 0x4f, 0xcf, 0x54, 0x78, 0x1c,
-	0xa9, 0xf0, 0x6d, 0xa4, 0xc2, 0x2f, 0x91, 0x0a, 0x93, 0x48, 0x85, 0xd3, 0x48, 0x85, 0xdf, 0x23,
-	0x15, 0xfe, 0x88, 0x54, 0xe9, 0x69, 0xa4, 0xc2, 0x93, 0xa9, 0x2a, 0x9d, 0x4c, 0x55, 0x98, 0x4c,
-	0x55, 0xe9, 0x74, 0xaa, 0x4a, 0x9f, 0xdf, 0xb7, 0x99, 0xf7, 0xc8, 0xd6, 0x86, 0xcc, 0x0d, 0x28,
-	0xe7, 0x58, 0x1b, 0xf8, 0xba, 0x38, 0xf4, 0x18, 0x3f, 0xaa, 0x79, 0x9c, 0x0d, 0x1d, 0x8b, 0xf2,
-	0xda, 0xdc, 0xac, 0x7b, 0x5d, 0x9b, 0xe9, 0xf4, 0x38, 0x48, 0xfe, 0x9f, 0xff, 0xf5, 0xb3, 0xee,
-	0xae, 0x8a, 0xcf, 0xe8, 0xad, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x5c, 0xbd, 0xae, 0xfb, 0x83,
-	0x0b, 0x00, 0x00,
+	// 1299 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4d, 0x6c, 0x1b, 0x45,
+	0x14, 0xde, 0xf1, 0x4f, 0x62, 0x8f, 0xe3, 0x9f, 0x2c, 0x01, 0xb6, 0xa1, 0x5a, 0x2c, 0xab, 0x20,
+	0x37, 0xb5, 0xd7, 0x89, 0xdb, 0x86, 0x62, 0xd4, 0x90, 0xd8, 0x94, 0x3a, 0xad, 0x5a, 0xaa, 0x75,
+	0x7f, 0x10, 0x6d, 0x59, 0x8d, 0x77, 0x27, 0xee, 0xaa, 0x6b, 0xef, 0x6a, 0x66, 0x1d, 0xc7, 0x20,
+	0x44, 0xc5, 0x09, 0x81, 0x04, 0x95, 0xb8, 0xf5, 0xc0, 0x89, 0x03, 0x07, 0x24, 0xee, 0x6c, 0x0f,
+	0x51, 0x25, 0x24, 0xc4, 0x29, 0xdc, 0x2a, 0x4e, 0xad, 0x73, 0x29, 0xb7, 0xaa, 0x5c, 0x2a, 0x24,
+	0x04, 0xda, 0xd9, 0xf5, 0x5f, 0x5a, 0xd4, 0x70, 0x43, 0x28, 0xb7, 0x37, 0x33, 0xef, 0xfb, 0xde,
+	0x9b, 0x37, 0xdf, 0x7b, 0xab, 0x85, 0x87, 0xd6, 0x31, 0x95, 0x74, 0xb3, 0x40, 0xd5, 0x6b, 0xb8,
+	0x89, 0x0a, 0xaa, 0x61, 0xb6, 0x35, 0x45, 0x25, 0x58, 0xc3, 0x2d, 0x5b, 0x47, 0x06, 0x2d, 0xd8,
+	0x5d, 0x0b, 0x53, 0xc9, 0x22, 0xa6, 0x6d, 0xf2, 0x2f, 0x7b, 0xce, 0x92, 0xe7, 0x2c, 0x3d, 0xe1,
+	0x3c, 0x9b, 0x6f, 0xe8, 0xf6, 0xb5, 0x76, 0x5d, 0x52, 0xcd, 0x66, 0xa1, 0x61, 0x36, 0xcc, 0x02,
+	0xc3, 0xd5, 0xdb, 0x6b, 0x6c, 0xc5, 0x16, 0xcc, 0xf2, 0xf8, 0x66, 0x5f, 0x1a, 0x0f, 0x6e, 0x5a,
+	0xb6, 0x6e, 0xb6, 0xfc, 0x60, 0xb3, 0xfb, 0xc6, 0x0f, 0x47, 0xf2, 0x98, 0xdd, 0x3f, 0x7e, 0xb4,
+	0x8e, 0x0c, 0x5d, 0x43, 0x36, 0xf6, 0x4f, 0xd3, 0x3b, 0x4e, 0x75, 0xdc, 0x51, 0xc6, 0xa8, 0x33,
+	0xdf, 0x00, 0x18, 0x5f, 0xb9, 0x54, 0xab, 0x61, 0x95, 0x60, 0xfb, 0x7c, 0xd7, 0xc2, 0x7c, 0x1e,
+	0x42, 0xa4, 0xaa, 0x98, 0x52, 0xe5, 0x3a, 0xee, 0x0a, 0x20, 0x0d, 0xb2, 0xd1, 0x72, 0xe2, 0xb1,
+	0x03, 0xc0, 0x0f, 0xbf, 0x6d, 0x06, 0xc3, 0x24, 0x28, 0xdc, 0x00, 0x72, 0xd4, 0xf3, 0x38, 0x8d,
+	0xbb, 0xfc, 0x12, 0x84, 0x94, 0x81, 0x99, 0x7b, 0x20, 0x0d, 0xb2, 0xb1, 0xe2, 0x3e, 0x69, 0xbc,
+	0x3a, 0x43, 0xf6, 0x72, 0x68, 0xcb, 0x01, 0x40, 0x8e, 0x7a, 0x90, 0xd3, 0xb8, 0x5b, 0x3a, 0xf0,
+	0x68, 0x29, 0xb8, 0x90, 0x2b, 0xde, 0x71, 0xc0, 0x2c, 0x14, 0xe0, 0xf4, 0x39, 0x62, 0x36, 0x08,
+	0x6a, 0x36, 0x91, 0xad, 0xab, 0xe9, 0xd3, 0xb8, 0x4b, 0x79, 0xf7, 0x34, 0xf3, 0x67, 0x18, 0x4e,
+	0xaf, 0x5c, 0xaa, 0xad, 0x50, 0xda, 0x6e, 0x62, 0xd9, 0x34, 0x30, 0x4b, 0xf5, 0x5d, 0x18, 0x21,
+	0xa6, 0x81, 0x15, 0x44, 0x5a, 0x7e, 0xa2, 0xc7, 0xfb, 0x89, 0x4e, 0x92, 0x70, 0x6a, 0x46, 0xb8,
+	0x91, 0x72, 0xed, 0x2c, 0x79, 0xb5, 0x78, 0xe0, 0xfd, 0x2c, 0x22, 0xad, 0x12, 0xea, 0xd0, 0x92,
+	0x8e, 0x9a, 0xa5, 0xd2, 0xc1, 0xec, 0xe5, 0xf9, 0xfc, 0xeb, 0x57, 0x3f, 0x5c, 0x28, 0x7e, 0x54,
+	0x72, 0x39, 0x0a, 0xd2, 0xdc, 0xc1, 0x03, 0xf2, 0xa4, 0x6b, 0xae, 0x90, 0x16, 0x7f, 0x06, 0xbe,
+	0x88, 0x37, 0x6c, 0x4c, 0x5a, 0xc8, 0x50, 0x74, 0x4d, 0xd1, 0xa9, 0x5f, 0x36, 0x64, 0x08, 0x41,
+	0x76, 0xc5, 0x99, 0x1d, 0x57, 0x3c, 0xd1, 0xb4, 0xec, 0x6e, 0x95, 0x93, 0x67, 0xfa, 0xb0, 0x55,
+	0x6d, 0x95, 0xbe, 0xe3, 0x63, 0xf8, 0xb3, 0x50, 0xd8, 0x41, 0x67, 0xe3, 0x16, 0x6a, 0xd9, 0x8a,
+	0xae, 0x09, 0xa1, 0xdd, 0xf3, 0x9d, 0x67, 0xa0, 0x55, 0x8d, 0x7f, 0x13, 0xf2, 0x6a, 0x9b, 0xda,
+	0x66, 0x53, 0x19, 0xa1, 0x15, 0xc2, 0xac, 0x04, 0xc9, 0x7e, 0x09, 0x26, 0x48, 0x28, 0x15, 0x10,
+	0x96, 0xab, 0x9c, 0x9c, 0xf2, 0x9c, 0x4f, 0x0c, 0xa8, 0xf8, 0x33, 0x30, 0xa5, 0xb5, 0x09, 0x72,
+	0xd3, 0x53, 0x28, 0x56, 0xcd, 0x96, 0x46, 0x85, 0x89, 0x34, 0xc8, 0xc6, 0xcb, 0x99, 0x4d, 0x07,
+	0x80, 0x5f, 0x1d, 0x10, 0x3a, 0x7a, 0x64, 0x7e, 0xfe, 0xb1, 0x03, 0xb8, 0x4f, 0x6f, 0x7b, 0x74,
+	0xd1, 0xb9, 0x49, 0x61, 0xf3, 0x97, 0x40, 0xf6, 0xe6, 0x7e, 0x39, 0xd9, 0xc7, 0xd6, 0x3c, 0x28,
+	0x5f, 0x85, 0x53, 0x14, 0x53, 0xea, 0xb2, 0xb5, 0x50, 0x13, 0x0b, 0x93, 0x2c, 0x93, 0x57, 0x5c,
+	0xaa, 0x7e, 0x36, 0x21, 0x12, 0x10, 0x96, 0x5d, 0x23, 0x49, 0xe2, 0xc5, 0xd8, 0xe5, 0x2b, 0x9d,
+	0x43, 0xc7, 0x73, 0xd2, 0x72, 0xfe, 0xea, 0x9c, 0x1c, 0xf3, 0xa1, 0x67, 0x51, 0x13, 0xf3, 0x5f,
+	0x83, 0x21, 0x95, 0x8d, 0x1a, 0x54, 0x88, 0xa4, 0x83, 0xd9, 0x58, 0xb1, 0x22, 0x3d, 0xa3, 0xdf,
+	0xa4, 0x27, 0xd4, 0x21, 0xd5, 0x3c, 0x9a, 0xf3, 0xa8, 0x41, 0x4f, 0xb4, 0x6c, 0xd2, 0x2d, 0x2f,
+	0x6e, 0xfa, 0xb9, 0x44, 0x6f, 0x81, 0x89, 0x8c, 0x9b, 0xd0, 0xc7, 0x4c, 0xd3, 0xb7, 0x40, 0x20,
+	0x95, 0x75, 0x2d, 0x78, 0x0b, 0x4c, 0xce, 0xb9, 0x12, 0xff, 0x0b, 0xf4, 0xee, 0xfd, 0x18, 0x9c,
+	0xf8, 0xec, 0x36, 0x08, 0x44, 0xb8, 0x41, 0x82, 0x2e, 0xd3, 0xec, 0x12, 0x4c, 0xed, 0x24, 0xe6,
+	0x53, 0x30, 0x38, 0xe8, 0x15, 0xd9, 0x35, 0xf9, 0x19, 0x18, 0x5e, 0x47, 0x46, 0x1b, 0xb3, 0x86,
+	0x88, 0xca, 0xde, 0xa2, 0x14, 0x38, 0x06, 0x4a, 0x53, 0x8f, 0x96, 0xa2, 0x0b, 0xb9, 0x62, 0x6e,
+	0x31, 0xf7, 0x5a, 0xee, 0x58, 0x39, 0x0d, 0x63, 0x23, 0x2f, 0xc8, 0x4f, 0x6f, 0x3a, 0x20, 0xb8,
+	0xe5, 0x80, 0x40, 0xcf, 0x01, 0xe1, 0xc3, 0xb9, 0x23, 0xb9, 0xa3, 0xa7, 0x42, 0x91, 0x40, 0x2a,
+	0x98, 0xf9, 0x2e, 0x00, 0xa7, 0x56, 0x3e, 0x68, 0x13, 0x7c, 0x6e, 0x6d, 0x83, 0x49, 0x7f, 0x0e,
+	0x46, 0x55, 0x43, 0xc7, 0x9e, 0x84, 0x3c, 0xed, 0xc7, 0xdd, 0xd7, 0x1a, 0x94, 0x5a, 0x8e, 0x78,
+	0xe7, 0xab, 0x1a, 0xbf, 0x08, 0x93, 0xb4, 0x5d, 0xa7, 0x2a, 0xd1, 0x99, 0x1e, 0x5d, 0x44, 0xe0,
+	0x69, 0x88, 0xc4, 0xa8, 0xd7, 0xaa, 0xe6, 0xc6, 0x18, 0xca, 0x34, 0xf8, 0xd4, 0x18, 0x76, 0x5f,
+	0x91, 0x2b, 0x30, 0xa9, 0x62, 0x62, 0xeb, 0x6b, 0xba, 0x8a, 0x6c, 0xac, 0xb4, 0x89, 0xc1, 0x84,
+	0x1d, 0x2d, 0x0b, 0x8f, 0x1d, 0x10, 0x1c, 0x8c, 0x8e, 0x65, 0xdf, 0xba, 0x09, 0x80, 0x9c, 0x18,
+	0x01, 0x5c, 0x20, 0x06, 0xff, 0x06, 0x8c, 0x58, 0x88, 0xd2, 0x8e, 0x49, 0x3c, 0x29, 0xef, 0x62,
+	0x8e, 0x0c, 0x00, 0x83, 0xb2, 0xb2, 0xa2, 0x65, 0x7e, 0x07, 0x30, 0xc9, 0xca, 0x35, 0x32, 0xd7,
+	0xfe, 0x6b, 0x15, 0x7b, 0x0b, 0xc6, 0xfd, 0x7c, 0xbc, 0x61, 0xe8, 0x0f, 0x82, 0x67, 0xde, 0x79,
+	0xca, 0x43, 0x79, 0xfb, 0x25, 0xf8, 0x68, 0x69, 0xd2, 0xbf, 0x77, 0xe6, 0x32, 0x4c, 0x9e, 0xac,
+	0x9c, 0xab, 0x10, 0xac, 0xbd, 0xad, 0xfb, 0x13, 0xb2, 0x0a, 0x93, 0xc3, 0x26, 0x51, 0xd6, 0x74,
+	0x03, 0xef, 0x76, 0x44, 0x27, 0x86, 0x38, 0x97, 0x2d, 0xf3, 0x7d, 0x08, 0x26, 0x4e, 0x1a, 0x66,
+	0x1d, 0x19, 0x35, 0x0b, 0xab, 0x8c, 0xfc, 0x22, 0x4c, 0xa0, 0x0e, 0x55, 0x46, 0xc6, 0x3f, 0x60,
+	0xdc, 0xd2, 0x6e, 0x9a, 0x75, 0x18, 0xb0, 0xca, 0xc9, 0x53, 0xa8, 0x43, 0x6b, 0xfd, 0x4f, 0x02,
+	0x7f, 0x05, 0x26, 0x5d, 0x5e, 0xc4, 0xda, 0x59, 0x71, 0x47, 0x32, 0x9b, 0x4d, 0xb1, 0x62, 0xf1,
+	0xdf, 0x4f, 0x81, 0x2a, 0x27, 0xc7, 0x51, 0x87, 0x0e, 0x37, 0x79, 0x15, 0x3e, 0x8f, 0x5c, 0x69,
+	0x28, 0xd6, 0xda, 0x86, 0x32, 0x22, 0x41, 0xbf, 0x30, 0xf9, 0x67, 0xc7, 0x18, 0xe9, 0xc3, 0x2a,
+	0x27, 0x3f, 0x87, 0xfc, 0x75, 0x65, 0xc8, 0xc5, 0xd7, 0xa1, 0xb7, 0xad, 0x8c, 0x3f, 0xb1, 0xf7,
+	0xed, 0x98, 0xdf, 0x5d, 0x88, 0xb1, 0x0a, 0x4d, 0x33, 0xba, 0xca, 0xc8, 0xd3, 0xf3, 0x17, 0x61,
+	0xbc, 0xa1, 0x5a, 0x0c, 0xe7, 0xbd, 0x6c, 0x68, 0x97, 0xec, 0x3b, 0x44, 0x52, 0xe5, 0xe4, 0x58,
+	0x43, 0xb5, 0xfa, 0x5b, 0xa5, 0xfd, 0x77, 0x1c, 0x20, 0xc0, 0x17, 0xe0, 0x74, 0xc5, 0x45, 0xa6,
+	0x2b, 0x43, 0x24, 0x0f, 0x8e, 0x96, 0x33, 0x30, 0xcc, 0x18, 0xf9, 0x7d, 0xee, 0x34, 0xdd, 0x72,
+	0x40, 0xb8, 0xe7, 0x80, 0xe8, 0x42, 0x6e, 0xd1, 0x13, 0xe1, 0x03, 0x07, 0x80, 0x53, 0xa1, 0x48,
+	0x38, 0x35, 0x91, 0xf9, 0x22, 0x04, 0x13, 0x15, 0x82, 0x91, 0x8d, 0xf7, 0x14, 0xf3, 0xff, 0x56,
+	0xcc, 0xf4, 0xcf, 0x4b, 0x3b, 0x66, 0x43, 0x99, 0xef, 0xcb, 0x24, 0xfa, 0xc9, 0x1f, 0xc0, 0x33,
+	0x33, 0x5f, 0x86, 0x60, 0x52, 0xc6, 0x96, 0x81, 0xd4, 0x3d, 0x45, 0xec, 0x29, 0xc2, 0x55, 0xc4,
+	0xe7, 0x21, 0x18, 0x3b, 0x89, 0xed, 0x3d, 0x35, 0xec, 0xa9, 0xa1, 0xad, 0x95, 0xbf, 0x02, 0x5b,
+	0xf7, 0x45, 0xee, 0xee, 0x7d, 0x91, 0x7b, 0x78, 0x5f, 0x04, 0x37, 0x7a, 0x22, 0xf8, 0xb6, 0x27,
+	0x82, 0x9f, 0x7a, 0x22, 0xd8, 0xea, 0x89, 0xe0, 0x6e, 0x4f, 0x04, 0xf7, 0x7a, 0x22, 0x78, 0xd0,
+	0x13, 0xb9, 0x87, 0x3d, 0x11, 0xdc, 0xdc, 0x16, 0xb9, 0xcd, 0x6d, 0x11, 0x6c, 0x6d, 0x8b, 0xdc,
+	0xdd, 0x6d, 0x91, 0x7b, 0xef, 0x42, 0xc3, 0xb4, 0xae, 0x37, 0xa4, 0x75, 0xd3, 0xb0, 0x31, 0x21,
+	0x48, 0x6a, 0xd3, 0x02, 0x33, 0xd6, 0x4c, 0xd2, 0xcc, 0x5b, 0xc4, 0x5c, 0xd7, 0x35, 0x4c, 0xf2,
+	0xfd, 0xe3, 0x82, 0x55, 0x6f, 0x98, 0x05, 0xbc, 0x61, 0xfb, 0xff, 0xc6, 0xff, 0xf4, 0xd7, 0x5f,
+	0x9f, 0x60, 0x3f, 0xca, 0x87, 0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0xac, 0x6d, 0x32, 0x49, 0x1f,
+	0x10, 0x00, 0x00,
 }
 
 func (this *AWSSecretType) Equal(that interface{}) bool {
@@ -889,6 +1134,125 @@ func (this *AWSSecretType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.SecretKey.Equal(that1.SecretKey) {
+		return false
+	}
+	return true
+}
+func (this *AWSAssumeRoleType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAssumeRoleType)
+	if !ok {
+		that2, ok := that.(AWSAssumeRoleType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.RoleArn != that1.RoleArn {
+		return false
+	}
+	if that1.ExternalId == nil {
+		if this.ExternalId != nil {
+			return false
+		}
+	} else if this.ExternalId == nil {
+		return false
+	} else if !this.ExternalId.Equal(that1.ExternalId) {
+		return false
+	}
+	if this.DurationSeconds != that1.DurationSeconds {
+		return false
+	}
+	if this.SessionName != that1.SessionName {
+		return false
+	}
+	if len(this.SessionTags) != len(that1.SessionTags) {
+		return false
+	}
+	for i := range this.SessionTags {
+		if this.SessionTags[i] != that1.SessionTags[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AWSAssumeRoleType_ExternalIdIsOptional) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAssumeRoleType_ExternalIdIsOptional)
+	if !ok {
+		that2, ok := that.(AWSAssumeRoleType_ExternalIdIsOptional)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ExternalIdIsOptional.Equal(that1.ExternalIdIsOptional) {
+		return false
+	}
+	return true
+}
+func (this *AWSAssumeRoleType_ExternalIdIsTenantId) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAssumeRoleType_ExternalIdIsTenantId)
+	if !ok {
+		that2, ok := that.(AWSAssumeRoleType_ExternalIdIsTenantId)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ExternalIdIsTenantId.Equal(that1.ExternalIdIsTenantId) {
+		return false
+	}
+	return true
+}
+func (this *AWSAssumeRoleType_CustomExternalId) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAssumeRoleType_CustomExternalId)
+	if !ok {
+		that2, ok := that.(AWSAssumeRoleType_CustomExternalId)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CustomExternalId != that1.CustomExternalId {
 		return false
 	}
 	return true
@@ -1040,6 +1404,30 @@ func (this *GlobalSpecType_AwsSecretKey) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_AwsAssumeRole) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AwsAssumeRole)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AwsAssumeRole)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsAssumeRole.Equal(that1.AwsAssumeRole) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType_AzurePfxCertificate) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1162,6 +1550,30 @@ func (this *CreateSpecType_AwsSecretKey) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AwsSecretKey.Equal(that1.AwsSecretKey) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_AwsAssumeRole) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AwsAssumeRole)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AwsAssumeRole)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsAssumeRole.Equal(that1.AwsAssumeRole) {
 		return false
 	}
 	return true
@@ -1292,6 +1704,30 @@ func (this *ReplaceSpecType_AwsSecretKey) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_AwsAssumeRole) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AwsAssumeRole)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AwsAssumeRole)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsAssumeRole.Equal(that1.AwsAssumeRole) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType_AzurePfxCertificate) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1418,6 +1854,30 @@ func (this *GetSpecType_AwsSecretKey) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_AwsAssumeRole) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AwsAssumeRole)
+	if !ok {
+		that2, ok := that.(GetSpecType_AwsAssumeRole)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AwsAssumeRole.Equal(that1.AwsAssumeRole) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType_AzurePfxCertificate) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1503,6 +1963,58 @@ func (this *AWSSecretType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AWSAssumeRoleType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&cloud_credentials.AWSAssumeRoleType{")
+	s = append(s, "RoleArn: "+fmt.Sprintf("%#v", this.RoleArn)+",\n")
+	if this.ExternalId != nil {
+		s = append(s, "ExternalId: "+fmt.Sprintf("%#v", this.ExternalId)+",\n")
+	}
+	s = append(s, "DurationSeconds: "+fmt.Sprintf("%#v", this.DurationSeconds)+",\n")
+	s = append(s, "SessionName: "+fmt.Sprintf("%#v", this.SessionName)+",\n")
+	keysForSessionTags := make([]string, 0, len(this.SessionTags))
+	for k, _ := range this.SessionTags {
+		keysForSessionTags = append(keysForSessionTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSessionTags)
+	mapStringForSessionTags := "map[string]string{"
+	for _, k := range keysForSessionTags {
+		mapStringForSessionTags += fmt.Sprintf("%#v: %#v,", k, this.SessionTags[k])
+	}
+	mapStringForSessionTags += "}"
+	if this.SessionTags != nil {
+		s = append(s, "SessionTags: "+mapStringForSessionTags+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSAssumeRoleType_ExternalIdIsOptional) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.AWSAssumeRoleType_ExternalIdIsOptional{` +
+		`ExternalIdIsOptional:` + fmt.Sprintf("%#v", this.ExternalIdIsOptional) + `}`}, ", ")
+	return s
+}
+func (this *AWSAssumeRoleType_ExternalIdIsTenantId) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.AWSAssumeRoleType_ExternalIdIsTenantId{` +
+		`ExternalIdIsTenantId:` + fmt.Sprintf("%#v", this.ExternalIdIsTenantId) + `}`}, ", ")
+	return s
+}
+func (this *AWSAssumeRoleType_CustomExternalId) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.AWSAssumeRoleType_CustomExternalId{` +
+		`CustomExternalId:` + fmt.Sprintf("%#v", this.CustomExternalId) + `}`}, ", ")
+	return s
+}
 func (this *AzurePfxType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1550,7 +2062,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_credentials.GlobalSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -1564,6 +2076,14 @@ func (this *GlobalSpecType_AwsSecretKey) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_credentials.GlobalSpecType_AwsSecretKey{` +
 		`AwsSecretKey:` + fmt.Sprintf("%#v", this.AwsSecretKey) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_AwsAssumeRole) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.GlobalSpecType_AwsAssumeRole{` +
+		`AwsAssumeRole:` + fmt.Sprintf("%#v", this.AwsAssumeRole) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_AzurePfxCertificate) GoString() string {
@@ -1594,7 +2114,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_credentials.CreateSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -1608,6 +2128,14 @@ func (this *CreateSpecType_AwsSecretKey) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_credentials.CreateSpecType_AwsSecretKey{` +
 		`AwsSecretKey:` + fmt.Sprintf("%#v", this.AwsSecretKey) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_AwsAssumeRole) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.CreateSpecType_AwsAssumeRole{` +
+		`AwsAssumeRole:` + fmt.Sprintf("%#v", this.AwsAssumeRole) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType_AzurePfxCertificate) GoString() string {
@@ -1638,7 +2166,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_credentials.ReplaceSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -1652,6 +2180,14 @@ func (this *ReplaceSpecType_AwsSecretKey) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_credentials.ReplaceSpecType_AwsSecretKey{` +
 		`AwsSecretKey:` + fmt.Sprintf("%#v", this.AwsSecretKey) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_AwsAssumeRole) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.ReplaceSpecType_AwsAssumeRole{` +
+		`AwsAssumeRole:` + fmt.Sprintf("%#v", this.AwsAssumeRole) + `}`}, ", ")
 	return s
 }
 func (this *ReplaceSpecType_AzurePfxCertificate) GoString() string {
@@ -1682,7 +2218,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_credentials.GetSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -1696,6 +2232,14 @@ func (this *GetSpecType_AwsSecretKey) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_credentials.GetSpecType_AwsSecretKey{` +
 		`AwsSecretKey:` + fmt.Sprintf("%#v", this.AwsSecretKey) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_AwsAssumeRole) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_credentials.GetSpecType_AwsAssumeRole{` +
+		`AwsAssumeRole:` + fmt.Sprintf("%#v", this.AwsAssumeRole) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_AzurePfxCertificate) GoString() string {
@@ -1772,6 +2316,137 @@ func (m *AWSSecretType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AWSAssumeRoleType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSAssumeRoleType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAssumeRoleType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SessionTags) > 0 {
+		keysForSessionTags := make([]string, 0, len(m.SessionTags))
+		for k := range m.SessionTags {
+			keysForSessionTags = append(keysForSessionTags, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForSessionTags)
+		for iNdEx := len(keysForSessionTags) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.SessionTags[string(keysForSessionTags[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForSessionTags[iNdEx])
+			copy(dAtA[i:], keysForSessionTags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForSessionTags[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.SessionName) > 0 {
+		i -= len(m.SessionName)
+		copy(dAtA[i:], m.SessionName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SessionName)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.DurationSeconds != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DurationSeconds))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.ExternalId != nil {
+		{
+			size := m.ExternalId.Size()
+			i -= size
+			if _, err := m.ExternalId.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.RoleArn) > 0 {
+		i -= len(m.RoleArn)
+		copy(dAtA[i:], m.RoleArn)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.RoleArn)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSAssumeRoleType_ExternalIdIsOptional) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAssumeRoleType_ExternalIdIsOptional) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ExternalIdIsOptional != nil {
+		{
+			size, err := m.ExternalIdIsOptional.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSAssumeRoleType_ExternalIdIsTenantId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAssumeRoleType_ExternalIdIsTenantId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ExternalIdIsTenantId != nil {
+		{
+			size, err := m.ExternalIdIsTenantId.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AWSAssumeRoleType_CustomExternalId) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAssumeRoleType_CustomExternalId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.CustomExternalId)
+	copy(dAtA[i:], m.CustomExternalId)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.CustomExternalId)))
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
+}
 func (m *AzurePfxType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2042,6 +2717,27 @@ func (m *GlobalSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_AwsAssumeRole) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AwsAssumeRole) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsAssumeRole != nil {
+		{
+			size, err := m.AwsAssumeRole.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2155,6 +2851,27 @@ func (m *CreateSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, err
 		}
 		i--
 		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_AwsAssumeRole) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AwsAssumeRole) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsAssumeRole != nil {
+		{
+			size, err := m.AwsAssumeRole.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
 	}
 	return len(dAtA) - i, nil
 }
@@ -2274,6 +2991,27 @@ func (m *ReplaceSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_AwsAssumeRole) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AwsAssumeRole) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsAssumeRole != nil {
+		{
+			size, err := m.AwsAssumeRole.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2390,6 +3128,27 @@ func (m *GetSpecType_GcpCredFile) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_AwsAssumeRole) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AwsAssumeRole) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AwsAssumeRole != nil {
+		{
+			size, err := m.AwsAssumeRole.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -2418,6 +3177,71 @@ func (m *AWSSecretType) Size() (n int) {
 	return n
 }
 
+func (m *AWSAssumeRoleType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RoleArn)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ExternalId != nil {
+		n += m.ExternalId.Size()
+	}
+	if m.DurationSeconds != 0 {
+		n += 1 + sovTypes(uint64(m.DurationSeconds))
+	}
+	l = len(m.SessionName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.SessionTags) > 0 {
+		for k, v := range m.SessionTags {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *AWSAssumeRoleType_ExternalIdIsOptional) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ExternalIdIsOptional != nil {
+		l = m.ExternalIdIsOptional.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSAssumeRoleType_ExternalIdIsTenantId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ExternalIdIsTenantId != nil {
+		l = m.ExternalIdIsTenantId.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AWSAssumeRoleType_CustomExternalId) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CustomExternalId)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
 func (m *AzurePfxType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2545,6 +3369,18 @@ func (m *GlobalSpecType_GcpCredFile) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_AwsAssumeRole) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsAssumeRole != nil {
+		l = m.AwsAssumeRole.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2601,6 +3437,18 @@ func (m *CreateSpecType_GcpCredFile) Size() (n int) {
 	_ = l
 	if m.GcpCredFile != nil {
 		l = m.GcpCredFile.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_AwsAssumeRole) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsAssumeRole != nil {
+		l = m.AwsAssumeRole.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2665,6 +3513,18 @@ func (m *ReplaceSpecType_GcpCredFile) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_AwsAssumeRole) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsAssumeRole != nil {
+		l = m.AwsAssumeRole.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2725,6 +3585,18 @@ func (m *GetSpecType_GcpCredFile) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_AwsAssumeRole) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AwsAssumeRole != nil {
+		l = m.AwsAssumeRole.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -2739,6 +3611,60 @@ func (this *AWSSecretType) String() string {
 	s := strings.Join([]string{`&AWSSecretType{`,
 		`AccessKey:` + fmt.Sprintf("%v", this.AccessKey) + `,`,
 		`SecretKey:` + strings.Replace(fmt.Sprintf("%v", this.SecretKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAssumeRoleType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForSessionTags := make([]string, 0, len(this.SessionTags))
+	for k, _ := range this.SessionTags {
+		keysForSessionTags = append(keysForSessionTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForSessionTags)
+	mapStringForSessionTags := "map[string]string{"
+	for _, k := range keysForSessionTags {
+		mapStringForSessionTags += fmt.Sprintf("%v: %v,", k, this.SessionTags[k])
+	}
+	mapStringForSessionTags += "}"
+	s := strings.Join([]string{`&AWSAssumeRoleType{`,
+		`RoleArn:` + fmt.Sprintf("%v", this.RoleArn) + `,`,
+		`ExternalId:` + fmt.Sprintf("%v", this.ExternalId) + `,`,
+		`DurationSeconds:` + fmt.Sprintf("%v", this.DurationSeconds) + `,`,
+		`SessionName:` + fmt.Sprintf("%v", this.SessionName) + `,`,
+		`SessionTags:` + mapStringForSessionTags + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAssumeRoleType_ExternalIdIsOptional) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSAssumeRoleType_ExternalIdIsOptional{`,
+		`ExternalIdIsOptional:` + strings.Replace(fmt.Sprintf("%v", this.ExternalIdIsOptional), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAssumeRoleType_ExternalIdIsTenantId) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSAssumeRoleType_ExternalIdIsTenantId{`,
+		`ExternalIdIsTenantId:` + strings.Replace(fmt.Sprintf("%v", this.ExternalIdIsTenantId), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAssumeRoleType_CustomExternalId) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSAssumeRoleType_CustomExternalId{`,
+		`CustomExternalId:` + fmt.Sprintf("%v", this.CustomExternalId) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2830,6 +3756,16 @@ func (this *GlobalSpecType_GcpCredFile) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_AwsAssumeRole) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AwsAssumeRole{`,
+		`AwsAssumeRole:` + strings.Replace(fmt.Sprintf("%v", this.AwsAssumeRole), "AWSAssumeRoleType", "AWSAssumeRoleType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2876,6 +3812,16 @@ func (this *CreateSpecType_GcpCredFile) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_GcpCredFile{`,
 		`GcpCredFile:` + strings.Replace(fmt.Sprintf("%v", this.GcpCredFile), "GCPCredFileType", "GCPCredFileType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_AwsAssumeRole) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AwsAssumeRole{`,
+		`AwsAssumeRole:` + strings.Replace(fmt.Sprintf("%v", this.AwsAssumeRole), "AWSAssumeRoleType", "AWSAssumeRoleType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2930,6 +3876,16 @@ func (this *ReplaceSpecType_GcpCredFile) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_AwsAssumeRole) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AwsAssumeRole{`,
+		`AwsAssumeRole:` + strings.Replace(fmt.Sprintf("%v", this.AwsAssumeRole), "AWSAssumeRoleType", "AWSAssumeRoleType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2976,6 +3932,16 @@ func (this *GetSpecType_GcpCredFile) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_GcpCredFile{`,
 		`GcpCredFile:` + strings.Replace(fmt.Sprintf("%v", this.GcpCredFile), "GCPCredFileType", "GCPCredFileType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AwsAssumeRole) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AwsAssumeRole{`,
+		`AwsAssumeRole:` + strings.Replace(fmt.Sprintf("%v", this.AwsAssumeRole), "AWSAssumeRoleType", "AWSAssumeRoleType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3084,6 +4050,371 @@ func (m *AWSSecretType) Unmarshal(dAtA []byte) error {
 			if err := m.SecretKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSAssumeRoleType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSAssumeRoleType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSAssumeRoleType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RoleArn", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RoleArn = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExternalIdIsOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ExternalId = &AWSAssumeRoleType_ExternalIdIsOptional{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExternalIdIsTenantId", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ExternalId = &AWSAssumeRoleType_ExternalIdIsTenantId{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomExternalId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExternalId = &AWSAssumeRoleType_CustomExternalId{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DurationSeconds", wireType)
+			}
+			m.DurationSeconds = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DurationSeconds |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SessionName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SessionName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SessionTags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SessionTags == nil {
+				m.SessionTags = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.SessionTags[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3769,6 +5100,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &GlobalSpecType_GcpCredFile{v}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsAssumeRole", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSAssumeRoleType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GlobalSpecType_AwsAssumeRole{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3961,6 +5327,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &CreateSpecType_GcpCredFile{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsAssumeRole", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSAssumeRoleType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &CreateSpecType_AwsAssumeRole{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4155,6 +5556,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Cloud = &ReplaceSpecType_GcpCredFile{v}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsAssumeRole", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSAssumeRoleType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &ReplaceSpecType_AwsAssumeRole{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4347,6 +5783,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Cloud = &GetSpecType_GcpCredFile{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AwsAssumeRole", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AWSAssumeRoleType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GetSpecType_AwsAssumeRole{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

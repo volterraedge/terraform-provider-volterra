@@ -114,6 +114,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"ip_endpoint": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -153,6 +158,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"disable": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
 									"ip_endpoint": {
 										Type:     schema.TypeString,
@@ -402,6 +412,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
 					membersMapStrToI := set.(map[string]interface{})
 
+					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+						members[i].Disable = w.(bool)
+					}
+
 					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
 						members[i].IpEndpoint = w.(string)
 					}
@@ -447,6 +461,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 				for i, set := range sl {
 					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
 					membersMapStrToI := set.(map[string]interface{})
+
+					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+						members[i].Disable = w.(bool)
+					}
 
 					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
 						members[i].IpEndpoint = w.(string)
@@ -760,6 +778,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
 					membersMapStrToI := set.(map[string]interface{})
 
+					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+						members[i].Disable = w.(bool)
+					}
+
 					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
 						members[i].IpEndpoint = w.(string)
 					}
@@ -805,6 +827,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 				for i, set := range sl {
 					members[i] = &ves_io_schema_dns_lb_pool.AddressMember{}
 					membersMapStrToI := set.(map[string]interface{})
+
+					if w, ok := membersMapStrToI["disable"]; ok && !isIntfNil(w) {
+						members[i].Disable = w.(bool)
+					}
 
 					if w, ok := membersMapStrToI["ip_endpoint"]; ok && !isIntfNil(w) {
 						members[i].IpEndpoint = w.(string)

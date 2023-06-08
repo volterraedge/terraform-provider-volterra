@@ -542,15 +542,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
-		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -700,8 +691,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
-
-	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2024,15 +2013,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
-		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -2223,8 +2203,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
-	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
-
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2326,6 +2304,14 @@ type ValidateInterface struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateInterface) DcClusterGroupConnectivityInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dc_cluster_group_connectivity_interface_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2401,6 +2387,42 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice"]; exists {
+		val := m.GetDcClusterGroupConnectivityInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDcClusterGroupConnectivityInterfaceChoice().(type) {
+	case *Interface_DcClusterGroupConnectivityInterfaceDisabled:
+		if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice.dc_cluster_group_connectivity_interface_disabled"]; exists {
+			val := m.GetDcClusterGroupConnectivityInterfaceChoice().(*Interface_DcClusterGroupConnectivityInterfaceDisabled).DcClusterGroupConnectivityInterfaceDisabled
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+				db.WithValidateField("dc_cluster_group_connectivity_interface_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Interface_DcClusterGroupConnectivityInterfaceEnabled:
+		if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice.dc_cluster_group_connectivity_interface_enabled"]; exists {
+			val := m.GetDcClusterGroupConnectivityInterfaceChoice().(*Interface_DcClusterGroupConnectivityInterfaceEnabled).DcClusterGroupConnectivityInterfaceEnabled
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+				db.WithValidateField("dc_cluster_group_connectivity_interface_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["description"]; exists {
@@ -2492,6 +2514,17 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhDcClusterGroupConnectivityInterfaceChoice := v.DcClusterGroupConnectivityInterfaceChoiceValidationRuleHandler
+	rulesDcClusterGroupConnectivityInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDcClusterGroupConnectivityInterfaceChoice(rulesDcClusterGroupConnectivityInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Interface.dc_cluster_group_connectivity_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dc_cluster_group_connectivity_interface_choice"] = vFn
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
@@ -4434,6 +4467,12 @@ func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -4585,6 +4624,33 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 
 }
 
+// GetDRefInfo for the field's type
+func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6RouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *VnConfiguration_NoV6StaticRoutes:
+
+		return nil, nil
+
+	case *VnConfiguration_StaticV6Routes:
+		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_v6_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateVnConfiguration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -4601,6 +4667,14 @@ func (v *ValidateVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules m
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVnConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_v6_route_choice")
 	}
 	return validatorFn, nil
 }
@@ -4829,6 +4903,42 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
+		val := m.GetStaticV6RouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_v6_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *VnConfiguration_NoV6StaticRoutes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.no_v6_static_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*VnConfiguration_NoV6StaticRoutes).NoV6StaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("no_v6_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VnConfiguration_StaticV6Routes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.static_v6_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*VnConfiguration_StaticV6Routes).StaticV6Routes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("static_v6_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vip"))
@@ -4874,6 +4984,17 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["static_route_choice"] = vFn
+
+	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
+	rulesStaticV6RouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStaticV6RouteChoice(rulesStaticV6RouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.static_v6_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_route_choice"] = vFn
 
 	vrhLabels := v.LabelsValidationRuleHandler
 	rulesLabels := map[string]string{
@@ -4927,6 +5048,8 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
 
 	return v
 }()
@@ -5088,7 +5211,6 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
-	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.Sw = f.GetSw()
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
@@ -5118,7 +5240,6 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
-	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.Sw = m1.Sw
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes

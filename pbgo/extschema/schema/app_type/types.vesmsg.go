@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -185,6 +187,27 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("api_groups"))
 		for idx, item := range m.GetApiGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_type"))
+		if err := fv(ctx, m.GetApiType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["attributes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attributes"))
+		for idx, item := range m.GetAttributes() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -619,6 +642,185 @@ func APIEPPDFInfoValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIEndpoint) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEndpoint) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEndpoint) DeepCopy() *APIEndpoint {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEndpoint{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEndpoint) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEndpoint) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEndpointValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEndpoint struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEndpoint) ApiEndpointPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_endpoint_path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpoint) MethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpMethod)
+		return int32(i)
+	}
+	// ves_io_schema.HttpMethod_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.HttpMethod_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for methods")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.HttpMethod, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for methods")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.HttpMethod)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.HttpMethod, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated methods")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items methods")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEndpoint) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEndpoint)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEndpoint got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_endpoint_path"))
+		if err := fv(ctx, m.GetApiEndpointPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["methods"]; exists {
+		vOpts := append(opts, db.WithValidateField("methods"))
+		if err := fv(ctx, m.GetMethods(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEndpointValidator = func() *ValidateAPIEndpoint {
+	v := &ValidateAPIEndpoint{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiEndpointPath := v.ApiEndpointPathValidationRuleHandler
+	rulesApiEndpointPath := map[string]string{
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.string.max_len":             "1024",
+		"ves.io.schema.rules.string.templated_http_path": "true",
+	}
+	vFn, err = vrhApiEndpointPath(rulesApiEndpointPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpoint.api_endpoint_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_endpoint_path"] = vFn
+
+	vrhMethods := v.MethodsValidationRuleHandler
+	rulesMethods := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.max_items":               "16",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhMethods(rulesMethods)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEndpoint.methods: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["methods"] = vFn
+
+	return v
+}()
+
+func APIEndpointValidator() db.Validator {
+	return DefaultAPIEndpointValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AuthData) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -883,6 +1085,114 @@ func AuthenticationTypeLocPairValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BuiltInSensitiveDataType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BuiltInSensitiveDataType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BuiltInSensitiveDataType) DeepCopy() *BuiltInSensitiveDataType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BuiltInSensitiveDataType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BuiltInSensitiveDataType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BuiltInSensitiveDataType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BuiltInSensitiveDataTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBuiltInSensitiveDataType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBuiltInSensitiveDataType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBuiltInSensitiveDataType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BuiltInSensitiveDataType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BuiltInSensitiveDataType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBuiltInSensitiveDataTypeValidator = func() *ValidateBuiltInSensitiveDataType {
+	v := &ValidateBuiltInSensitiveDataType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BuiltInSensitiveDataType.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func BuiltInSensitiveDataTypeValidator() db.Validator {
+	return DefaultBuiltInSensitiveDataTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BusinessLogicMarkupSetting) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -962,12 +1272,23 @@ func (v *ValidateBusinessLogicMarkupSetting) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_detection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_detection_rules"))
+		if err := fv(ctx, m.GetSensitiveDataDetectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBusinessLogicMarkupSettingValidator = func() *ValidateBusinessLogicMarkupSetting {
 	v := &ValidateBusinessLogicMarkupSetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["sensitive_data_detection_rules"] = SensitiveDataDetectionRulesValidator().Validate
 
 	return v
 }()
@@ -1122,11 +1443,907 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["features"] = vFn
 
+	v.FldValidators["business_logic_markup_setting"] = BusinessLogicMarkupSettingValidator().Validate
+
 	return v
 }()
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomDataDetectionConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomDataDetectionConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomDataDetectionConfig) DeepCopy() *CustomDataDetectionConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomDataDetectionConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomDataDetectionConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomDataDetectionConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomDataDetectionConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomDataDetectionConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomDataDetectionConfig) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.EmptyValidator().Validate, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_domain")
+	}
+	return oValidatorFn_SpecificDomain, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) PatternChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pattern_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) PatternChoiceKeyPatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return KeyPatternValidator().Validate, nil
+}
+func (v *ValidateCustomDataDetectionConfig) PatternChoiceValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ValuePatternValidator().Validate, nil
+}
+func (v *ValidateCustomDataDetectionConfig) PatternChoiceKeyValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return KeyValuePatternValidator().Validate, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) SectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for section_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) TargetChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for target_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) TargetChoiceAnyTargetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema.EmptyValidator().Validate, nil
+}
+func (v *ValidateCustomDataDetectionConfig) TargetChoiceApiEndpointTargetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return APIEndpointValidator().Validate, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) TargetChoiceBasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_BasePath, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
+	}
+	return oValidatorFn_BasePath, nil
+}
+func (v *ValidateCustomDataDetectionConfig) TargetChoiceApiGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ApiGroup, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_group")
+	}
+	return oValidatorFn_ApiGroup, nil
+}
+
+func (v *ValidateCustomDataDetectionConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomDataDetectionConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomDataDetectionConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *CustomDataDetectionConfig_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*CustomDataDetectionConfig_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_SpecificDomain:
+		if fv, exists := v.FldValidators["domain_choice.specific_domain"]; exists {
+			val := m.GetDomainChoice().(*CustomDataDetectionConfig_SpecificDomain).SpecificDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("specific_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pattern_choice"]; exists {
+		val := m.GetPatternChoice()
+		vOpts := append(opts,
+			db.WithValidateField("pattern_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPatternChoice().(type) {
+	case *CustomDataDetectionConfig_KeyPattern:
+		if fv, exists := v.FldValidators["pattern_choice.key_pattern"]; exists {
+			val := m.GetPatternChoice().(*CustomDataDetectionConfig_KeyPattern).KeyPattern
+			vOpts := append(opts,
+				db.WithValidateField("pattern_choice"),
+				db.WithValidateField("key_pattern"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_ValuePattern:
+		if fv, exists := v.FldValidators["pattern_choice.value_pattern"]; exists {
+			val := m.GetPatternChoice().(*CustomDataDetectionConfig_ValuePattern).ValuePattern
+			vOpts := append(opts,
+				db.WithValidateField("pattern_choice"),
+				db.WithValidateField("value_pattern"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_KeyValuePattern:
+		if fv, exists := v.FldValidators["pattern_choice.key_value_pattern"]; exists {
+			val := m.GetPatternChoice().(*CustomDataDetectionConfig_KeyValuePattern).KeyValuePattern
+			vOpts := append(opts,
+				db.WithValidateField("pattern_choice"),
+				db.WithValidateField("key_value_pattern"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["section_choice"]; exists {
+		val := m.GetSectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("section_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSectionChoice().(type) {
+	case *CustomDataDetectionConfig_AllSections:
+		if fv, exists := v.FldValidators["section_choice.all_sections"]; exists {
+			val := m.GetSectionChoice().(*CustomDataDetectionConfig_AllSections).AllSections
+			vOpts := append(opts,
+				db.WithValidateField("section_choice"),
+				db.WithValidateField("all_sections"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_AllRequestSections:
+		if fv, exists := v.FldValidators["section_choice.all_request_sections"]; exists {
+			val := m.GetSectionChoice().(*CustomDataDetectionConfig_AllRequestSections).AllRequestSections
+			vOpts := append(opts,
+				db.WithValidateField("section_choice"),
+				db.WithValidateField("all_request_sections"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_AllResponseSections:
+		if fv, exists := v.FldValidators["section_choice.all_response_sections"]; exists {
+			val := m.GetSectionChoice().(*CustomDataDetectionConfig_AllResponseSections).AllResponseSections
+			vOpts := append(opts,
+				db.WithValidateField("section_choice"),
+				db.WithValidateField("all_response_sections"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_CustomSections:
+		if fv, exists := v.FldValidators["section_choice.custom_sections"]; exists {
+			val := m.GetSectionChoice().(*CustomDataDetectionConfig_CustomSections).CustomSections
+			vOpts := append(opts,
+				db.WithValidateField("section_choice"),
+				db.WithValidateField("custom_sections"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["target_choice"]; exists {
+		val := m.GetTargetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("target_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTargetChoice().(type) {
+	case *CustomDataDetectionConfig_AnyTarget:
+		if fv, exists := v.FldValidators["target_choice.any_target"]; exists {
+			val := m.GetTargetChoice().(*CustomDataDetectionConfig_AnyTarget).AnyTarget
+			vOpts := append(opts,
+				db.WithValidateField("target_choice"),
+				db.WithValidateField("any_target"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_ApiEndpointTarget:
+		if fv, exists := v.FldValidators["target_choice.api_endpoint_target"]; exists {
+			val := m.GetTargetChoice().(*CustomDataDetectionConfig_ApiEndpointTarget).ApiEndpointTarget
+			vOpts := append(opts,
+				db.WithValidateField("target_choice"),
+				db.WithValidateField("api_endpoint_target"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_BasePath:
+		if fv, exists := v.FldValidators["target_choice.base_path"]; exists {
+			val := m.GetTargetChoice().(*CustomDataDetectionConfig_BasePath).BasePath
+			vOpts := append(opts,
+				db.WithValidateField("target_choice"),
+				db.WithValidateField("base_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CustomDataDetectionConfig_ApiGroup:
+		if fv, exists := v.FldValidators["target_choice.api_group"]; exists {
+			val := m.GetTargetChoice().(*CustomDataDetectionConfig_ApiGroup).ApiGroup
+			vOpts := append(opts,
+				db.WithValidateField("target_choice"),
+				db.WithValidateField("api_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetectionConfig {
+	v := &ValidateCustomDataDetectionConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDataDetectionConfig.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
+	rulesDomainChoiceAnyDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.domain_choice_any_domain: %s", err)
+		panic(errMsg)
+	}
+	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
+	rulesDomainChoiceSpecificDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFnMap["domain_choice.specific_domain"], err = vrhDomainChoiceSpecificDomain(rulesDomainChoiceSpecificDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.domain_choice_specific_domain: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
+	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
+
+	vrhPatternChoice := v.PatternChoiceValidationRuleHandler
+	rulesPatternChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPatternChoice(rulesPatternChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDataDetectionConfig.pattern_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pattern_choice"] = vFn
+
+	vrhPatternChoiceKeyPattern := v.PatternChoiceKeyPatternValidationRuleHandler
+	rulesPatternChoiceKeyPattern := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["pattern_choice.key_pattern"], err = vrhPatternChoiceKeyPattern(rulesPatternChoiceKeyPattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_key_pattern: %s", err)
+		panic(errMsg)
+	}
+	vrhPatternChoiceValuePattern := v.PatternChoiceValuePatternValidationRuleHandler
+	rulesPatternChoiceValuePattern := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["pattern_choice.value_pattern"], err = vrhPatternChoiceValuePattern(rulesPatternChoiceValuePattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_value_pattern: %s", err)
+		panic(errMsg)
+	}
+	vrhPatternChoiceKeyValuePattern := v.PatternChoiceKeyValuePatternValidationRuleHandler
+	rulesPatternChoiceKeyValuePattern := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["pattern_choice.key_value_pattern"], err = vrhPatternChoiceKeyValuePattern(rulesPatternChoiceKeyValuePattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_key_value_pattern: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["pattern_choice.key_pattern"] = vFnMap["pattern_choice.key_pattern"]
+	v.FldValidators["pattern_choice.value_pattern"] = vFnMap["pattern_choice.value_pattern"]
+	v.FldValidators["pattern_choice.key_value_pattern"] = vFnMap["pattern_choice.key_value_pattern"]
+
+	vrhSectionChoice := v.SectionChoiceValidationRuleHandler
+	rulesSectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSectionChoice(rulesSectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDataDetectionConfig.section_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["section_choice"] = vFn
+
+	vrhTargetChoice := v.TargetChoiceValidationRuleHandler
+	rulesTargetChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTargetChoice(rulesTargetChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDataDetectionConfig.target_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["target_choice"] = vFn
+
+	vrhTargetChoiceAnyTarget := v.TargetChoiceAnyTargetValidationRuleHandler
+	rulesTargetChoiceAnyTarget := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["target_choice.any_target"], err = vrhTargetChoiceAnyTarget(rulesTargetChoiceAnyTarget)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_any_target: %s", err)
+		panic(errMsg)
+	}
+	vrhTargetChoiceApiEndpointTarget := v.TargetChoiceApiEndpointTargetValidationRuleHandler
+	rulesTargetChoiceApiEndpointTarget := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["target_choice.api_endpoint_target"], err = vrhTargetChoiceApiEndpointTarget(rulesTargetChoiceApiEndpointTarget)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_api_endpoint_target: %s", err)
+		panic(errMsg)
+	}
+	vrhTargetChoiceBasePath := v.TargetChoiceBasePathValidationRuleHandler
+	rulesTargetChoiceBasePath := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFnMap["target_choice.base_path"], err = vrhTargetChoiceBasePath(rulesTargetChoiceBasePath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_base_path: %s", err)
+		panic(errMsg)
+	}
+	vrhTargetChoiceApiGroup := v.TargetChoiceApiGroupValidationRuleHandler
+	rulesTargetChoiceApiGroup := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFnMap["target_choice.api_group"], err = vrhTargetChoiceApiGroup(rulesTargetChoiceApiGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_api_group: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["target_choice.any_target"] = vFnMap["target_choice.any_target"]
+	v.FldValidators["target_choice.api_endpoint_target"] = vFnMap["target_choice.api_endpoint_target"]
+	v.FldValidators["target_choice.base_path"] = vFnMap["target_choice.base_path"]
+	v.FldValidators["target_choice.api_group"] = vFnMap["target_choice.api_group"]
+
+	v.FldValidators["section_choice.custom_sections"] = CustomSectionsValidator().Validate
+
+	return v
+}()
+
+func CustomDataDetectionConfigValidator() db.Validator {
+	return DefaultCustomDataDetectionConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomSections) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomSections) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomSections) DeepCopy() *CustomSections {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomSections{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomSections) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomSections) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomSectionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomSections struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomSections) CustomSectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpSections)
+		return int32(i)
+	}
+	// ves_io_schema.HttpSections_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.HttpSections_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_sections")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.HttpSections, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for custom_sections")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.HttpSections)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.HttpSections, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated custom_sections")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items custom_sections")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomSections) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomSections)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomSections got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["custom_sections"]; exists {
+		vOpts := append(opts, db.WithValidateField("custom_sections"))
+		if err := fv(ctx, m.GetCustomSections(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomSectionsValidator = func() *ValidateCustomSections {
+	v := &ValidateCustomSections{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCustomSections := v.CustomSectionsValidationRuleHandler
+	rulesCustomSections := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhCustomSections(rulesCustomSections)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomSections.custom_sections: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["custom_sections"] = vFn
+
+	return v
+}()
+
+func CustomSectionsValidator() db.Validator {
+	return DefaultCustomSectionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomSensitiveDataDetectionRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomSensitiveDataDetectionRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomSensitiveDataDetectionRule) DeepCopy() *CustomSensitiveDataDetectionRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomSensitiveDataDetectionRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomSensitiveDataDetectionRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomSensitiveDataDetectionRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomSensitiveDataDetectionRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomSensitiveDataDetectionRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomSensitiveDataDetectionRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomSensitiveDataDetectionRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomSensitiveDataDetectionRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomSensitiveDataDetectionRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_detection_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_detection_config"))
+		if err := fv(ctx, m.GetSensitiveDataDetectionConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_type"))
+		if err := fv(ctx, m.GetSensitiveDataType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomSensitiveDataDetectionRuleValidator = func() *ValidateCustomSensitiveDataDetectionRule {
+	v := &ValidateCustomSensitiveDataDetectionRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomSensitiveDataDetectionRule.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["sensitive_data_type"] = CustomSensitiveDataTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_detection_config"] = CustomDataDetectionConfigValidator().Validate
+
+	return v
+}()
+
+func CustomSensitiveDataDetectionRuleValidator() db.Validator {
+	return DefaultCustomSensitiveDataDetectionRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomSensitiveDataType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomSensitiveDataType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomSensitiveDataType) DeepCopy() *CustomSensitiveDataType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomSensitiveDataType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomSensitiveDataType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomSensitiveDataType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomSensitiveDataTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomSensitiveDataType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomSensitiveDataType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomSensitiveDataType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomSensitiveDataType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomSensitiveDataType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomSensitiveDataTypeValidator = func() *ValidateCustomSensitiveDataType {
+	v := &ValidateCustomSensitiveDataType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhType := v.TypeValidationRuleHandler
+	rulesType := map[string]string{
+		"ves.io.schema.rules.message.required":       "true",
+		"ves.io.schema.rules.string.max_len":         "256",
+		"ves.io.schema.rules.string.min_len":         "1",
+		"ves.io.schema.rules.string.ves_object_name": "true",
+	}
+	vFn, err = vrhType(rulesType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomSensitiveDataType.type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["type"] = vFn
+
+	return v
+}()
+
+func CustomSensitiveDataTypeValidator() db.Validator {
+	return DefaultCustomSensitiveDataTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1487,6 +2704,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["features"] = vFn
 
+	v.FldValidators["business_logic_markup_setting"] = BusinessLogicMarkupSettingValidator().Validate
+
 	return v
 }()
 
@@ -1640,11 +2859,344 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["features"] = vFn
 
+	v.FldValidators["business_logic_markup_setting"] = BusinessLogicMarkupSettingValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KeyPattern) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KeyPattern) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KeyPattern) DeepCopy() *KeyPattern {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KeyPattern{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KeyPattern) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KeyPattern) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KeyPatternValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKeyPattern struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKeyPattern) KeyPatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key_pattern")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateKeyPattern) KeyPatternExactValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExactValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_value")
+	}
+	return oValidatorFn_ExactValue, nil
+}
+func (v *ValidateKeyPattern) KeyPatternRegexValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_RegexValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for regex_value")
+	}
+	return oValidatorFn_RegexValue, nil
+}
+
+func (v *ValidateKeyPattern) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KeyPattern)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KeyPattern got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key_pattern"]; exists {
+		val := m.GetKeyPattern()
+		vOpts := append(opts,
+			db.WithValidateField("key_pattern"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetKeyPattern().(type) {
+	case *KeyPattern_ExactValue:
+		if fv, exists := v.FldValidators["key_pattern.exact_value"]; exists {
+			val := m.GetKeyPattern().(*KeyPattern_ExactValue).ExactValue
+			vOpts := append(opts,
+				db.WithValidateField("key_pattern"),
+				db.WithValidateField("exact_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *KeyPattern_RegexValue:
+		if fv, exists := v.FldValidators["key_pattern.regex_value"]; exists {
+			val := m.GetKeyPattern().(*KeyPattern_RegexValue).RegexValue
+			vOpts := append(opts,
+				db.WithValidateField("key_pattern"),
+				db.WithValidateField("regex_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKeyPatternValidator = func() *ValidateKeyPattern {
+	v := &ValidateKeyPattern{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKeyPattern := v.KeyPatternValidationRuleHandler
+	rulesKeyPattern := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhKeyPattern(rulesKeyPattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KeyPattern.key_pattern: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key_pattern"] = vFn
+
+	vrhKeyPatternExactValue := v.KeyPatternExactValueValidationRuleHandler
+	rulesKeyPatternExactValue := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["key_pattern.exact_value"], err = vrhKeyPatternExactValue(rulesKeyPatternExactValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field KeyPattern.key_pattern_exact_value: %s", err)
+		panic(errMsg)
+	}
+	vrhKeyPatternRegexValue := v.KeyPatternRegexValueValidationRuleHandler
+	rulesKeyPatternRegexValue := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+		"ves.io.schema.rules.string.regex":     "true",
+	}
+	vFnMap["key_pattern.regex_value"], err = vrhKeyPatternRegexValue(rulesKeyPatternRegexValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field KeyPattern.key_pattern_regex_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["key_pattern.exact_value"] = vFnMap["key_pattern.exact_value"]
+	v.FldValidators["key_pattern.regex_value"] = vFnMap["key_pattern.regex_value"]
+
+	return v
+}()
+
+func KeyPatternValidator() db.Validator {
+	return DefaultKeyPatternValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KeyValuePattern) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KeyValuePattern) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KeyValuePattern) DeepCopy() *KeyValuePattern {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KeyValuePattern{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KeyValuePattern) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KeyValuePattern) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KeyValuePatternValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKeyValuePattern struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKeyValuePattern) KeyPatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for key_pattern")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := KeyPatternValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateKeyValuePattern) ValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for value_pattern")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ValuePatternValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateKeyValuePattern) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KeyValuePattern)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KeyValuePattern got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key_pattern"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key_pattern"))
+		if err := fv(ctx, m.GetKeyPattern(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value_pattern"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value_pattern"))
+		if err := fv(ctx, m.GetValuePattern(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKeyValuePatternValidator = func() *ValidateKeyValuePattern {
+	v := &ValidateKeyValuePattern{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKeyPattern := v.KeyPatternValidationRuleHandler
+	rulesKeyPattern := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhKeyPattern(rulesKeyPattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KeyValuePattern.key_pattern: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key_pattern"] = vFn
+
+	vrhValuePattern := v.ValuePatternValidationRuleHandler
+	rulesValuePattern := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhValuePattern(rulesValuePattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KeyValuePattern.value_pattern: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value_pattern"] = vFn
+
+	return v
+}()
+
+func KeyValuePatternValidator() db.Validator {
+	return DefaultKeyValuePatternValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2053,6 +3605,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["features"] = vFn
+
+	v.FldValidators["business_logic_markup_setting"] = BusinessLogicMarkupSettingValidator().Validate
 
 	return v
 }()
@@ -2512,6 +4066,15 @@ func (v *ValidateSensitiveData) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["rule_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_type"))
+		if err := fv(ctx, m.GetRuleType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["section"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("section"))
@@ -2551,6 +4114,391 @@ var DefaultSensitiveDataValidator = func() *ValidateSensitiveData {
 
 func SensitiveDataValidator() db.Validator {
 	return DefaultSensitiveDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SensitiveDataDetectionRules) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SensitiveDataDetectionRules) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SensitiveDataDetectionRules) DeepCopy() *SensitiveDataDetectionRules {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SensitiveDataDetectionRules{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SensitiveDataDetectionRules) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SensitiveDataDetectionRules) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SensitiveDataDetectionRulesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSensitiveDataDetectionRules struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSensitiveDataDetectionRules) DisabledBuiltInRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for disabled_built_in_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BuiltInSensitiveDataType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BuiltInSensitiveDataTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for disabled_built_in_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BuiltInSensitiveDataType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BuiltInSensitiveDataType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated disabled_built_in_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items disabled_built_in_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSensitiveDataDetectionRules) CustomSensitiveDataDetectionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for custom_sensitive_data_detection_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CustomSensitiveDataDetectionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CustomSensitiveDataDetectionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for custom_sensitive_data_detection_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CustomSensitiveDataDetectionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CustomSensitiveDataDetectionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated custom_sensitive_data_detection_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items custom_sensitive_data_detection_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSensitiveDataDetectionRules) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SensitiveDataDetectionRules)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SensitiveDataDetectionRules got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["custom_sensitive_data_detection_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("custom_sensitive_data_detection_rules"))
+		if err := fv(ctx, m.GetCustomSensitiveDataDetectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["disabled_built_in_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("disabled_built_in_rules"))
+		if err := fv(ctx, m.GetDisabledBuiltInRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSensitiveDataDetectionRulesValidator = func() *ValidateSensitiveDataDetectionRules {
+	v := &ValidateSensitiveDataDetectionRules{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDisabledBuiltInRules := v.DisabledBuiltInRulesValidationRuleHandler
+	rulesDisabledBuiltInRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDisabledBuiltInRules(rulesDisabledBuiltInRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SensitiveDataDetectionRules.disabled_built_in_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["disabled_built_in_rules"] = vFn
+
+	vrhCustomSensitiveDataDetectionRules := v.CustomSensitiveDataDetectionRulesValidationRuleHandler
+	rulesCustomSensitiveDataDetectionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCustomSensitiveDataDetectionRules(rulesCustomSensitiveDataDetectionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SensitiveDataDetectionRules.custom_sensitive_data_detection_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["custom_sensitive_data_detection_rules"] = vFn
+
+	return v
+}()
+
+func SensitiveDataDetectionRulesValidator() db.Validator {
+	return DefaultSensitiveDataDetectionRulesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValuePattern) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValuePattern) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValuePattern) DeepCopy() *ValuePattern {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValuePattern{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValuePattern) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValuePattern) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValuePatternValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValuePattern struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValuePattern) ValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value_pattern")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateValuePattern) ValuePatternExactValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExactValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for exact_value")
+	}
+	return oValidatorFn_ExactValue, nil
+}
+func (v *ValidateValuePattern) ValuePatternRegexValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_RegexValue, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for regex_value")
+	}
+	return oValidatorFn_RegexValue, nil
+}
+
+func (v *ValidateValuePattern) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValuePattern)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValuePattern got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["value_pattern"]; exists {
+		val := m.GetValuePattern()
+		vOpts := append(opts,
+			db.WithValidateField("value_pattern"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetValuePattern().(type) {
+	case *ValuePattern_ExactValue:
+		if fv, exists := v.FldValidators["value_pattern.exact_value"]; exists {
+			val := m.GetValuePattern().(*ValuePattern_ExactValue).ExactValue
+			vOpts := append(opts,
+				db.WithValidateField("value_pattern"),
+				db.WithValidateField("exact_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ValuePattern_RegexValue:
+		if fv, exists := v.FldValidators["value_pattern.regex_value"]; exists {
+			val := m.GetValuePattern().(*ValuePattern_RegexValue).RegexValue
+			vOpts := append(opts,
+				db.WithValidateField("value_pattern"),
+				db.WithValidateField("regex_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValuePatternValidator = func() *ValidateValuePattern {
+	v := &ValidateValuePattern{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhValuePattern := v.ValuePatternValidationRuleHandler
+	rulesValuePattern := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhValuePattern(rulesValuePattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ValuePattern.value_pattern: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value_pattern"] = vFn
+
+	vrhValuePatternExactValue := v.ValuePatternExactValueValidationRuleHandler
+	rulesValuePatternExactValue := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["value_pattern.exact_value"], err = vrhValuePatternExactValue(rulesValuePatternExactValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ValuePattern.value_pattern_exact_value: %s", err)
+		panic(errMsg)
+	}
+	vrhValuePatternRegexValue := v.ValuePatternRegexValueValidationRuleHandler
+	rulesValuePatternRegexValue := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+		"ves.io.schema.rules.string.regex":     "true",
+	}
+	vFnMap["value_pattern.regex_value"], err = vrhValuePatternRegexValue(rulesValuePatternRegexValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ValuePattern.value_pattern_regex_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["value_pattern.exact_value"] = vFnMap["value_pattern.exact_value"]
+	v.FldValidators["value_pattern.regex_value"] = vFnMap["value_pattern.regex_value"]
+
+	return v
+}()
+
+func ValuePatternValidator() db.Validator {
+	return DefaultValuePatternValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

@@ -1139,11 +1139,21 @@ func resourceVolterraFleet() *schema.Resource {
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
 																		"prefixes": {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -2516,46 +2526,6 @@ func resourceVolterraFleet() *schema.Resource {
 																		},
 																	},
 																},
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
-									"openebs_enterprise": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"mayastor_pools": {
-
-													Type:     schema.TypeList,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"node": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"pool_disk_devices": {
-
-																Type: schema.TypeList,
-
-																Required: true,
-																Elem: &schema.Schema{
-																	Type: schema.TypeString,
-																},
-															},
-
-															"pool_name": {
-																Type:     schema.TypeString,
-																Optional: true,
 															},
 														},
 													},
@@ -4818,6 +4788,14 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 										for _, set := range sl {
 											autoExportCidrsMapStrToI := set.(map[string]interface{})
 
+											if w, ok := autoExportCidrsMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+												ls := make([]string, len(w.([]interface{})))
+												for i, v := range w.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												autoExportCidrs.Ipv6Prefixes = ls
+											}
+
 											if w, ok := autoExportCidrsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 												ls := make([]string, len(w.([]interface{})))
 												for i, v := range w.([]interface{}) {
@@ -6552,50 +6530,6 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := storageDevicesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-						deviceChoiceTypeFound = true
-						deviceChoiceInt := &ves_io_schema_fleet.FleetStorageDeviceType_OpenebsEnterprise{}
-						deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_fleet.StorageDeviceOpenebsEnterpriseType{}
-						storageDevices[i].DeviceChoice = deviceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["mayastor_pools"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								mayastorPools := make([]*ves_io_schema_fleet.OpenebsMayastorPoolType, len(sl))
-								deviceChoiceInt.OpenebsEnterprise.MayastorPools = mayastorPools
-								for i, set := range sl {
-									mayastorPools[i] = &ves_io_schema_fleet.OpenebsMayastorPoolType{}
-									mayastorPoolsMapStrToI := set.(map[string]interface{})
-
-									if w, ok := mayastorPoolsMapStrToI["node"]; ok && !isIntfNil(w) {
-										mayastorPools[i].Node = w.(string)
-									}
-
-									if w, ok := mayastorPoolsMapStrToI["pool_disk_devices"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										mayastorPools[i].PoolDiskDevices = ls
-									}
-
-									if w, ok := mayastorPoolsMapStrToI["pool_name"]; ok && !isIntfNil(w) {
-										mayastorPools[i].PoolName = w.(string)
 									}
 
 								}
@@ -9113,6 +9047,14 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 										for _, set := range sl {
 											autoExportCidrsMapStrToI := set.(map[string]interface{})
 
+											if w, ok := autoExportCidrsMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
+												ls := make([]string, len(w.([]interface{})))
+												for i, v := range w.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												autoExportCidrs.Ipv6Prefixes = ls
+											}
+
 											if w, ok := autoExportCidrsMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 												ls := make([]string, len(w.([]interface{})))
 												for i, v := range w.([]interface{}) {
@@ -10847,50 +10789,6 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := storageDevicesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-						deviceChoiceTypeFound = true
-						deviceChoiceInt := &ves_io_schema_fleet.FleetStorageDeviceType_OpenebsEnterprise{}
-						deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_fleet.StorageDeviceOpenebsEnterpriseType{}
-						storageDevices[i].DeviceChoice = deviceChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["mayastor_pools"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								mayastorPools := make([]*ves_io_schema_fleet.OpenebsMayastorPoolType, len(sl))
-								deviceChoiceInt.OpenebsEnterprise.MayastorPools = mayastorPools
-								for i, set := range sl {
-									mayastorPools[i] = &ves_io_schema_fleet.OpenebsMayastorPoolType{}
-									mayastorPoolsMapStrToI := set.(map[string]interface{})
-
-									if w, ok := mayastorPoolsMapStrToI["node"]; ok && !isIntfNil(w) {
-										mayastorPools[i].Node = w.(string)
-									}
-
-									if w, ok := mayastorPoolsMapStrToI["pool_disk_devices"]; ok && !isIntfNil(w) {
-										ls := make([]string, len(w.([]interface{})))
-										for i, v := range w.([]interface{}) {
-											ls[i] = v.(string)
-										}
-										mayastorPools[i].PoolDiskDevices = ls
-									}
-
-									if w, ok := mayastorPoolsMapStrToI["pool_name"]; ok && !isIntfNil(w) {
-										mayastorPools[i].PoolName = w.(string)
 									}
 
 								}

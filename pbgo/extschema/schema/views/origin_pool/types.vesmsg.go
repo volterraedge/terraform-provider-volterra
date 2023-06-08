@@ -94,6 +94,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -172,6 +178,33 @@ func (m *CreateSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *CreateSpecType_NoTls:
+
+		return nil, nil
+
+	case *CreateSpecType_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -455,6 +488,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_LbPort:
+		if fv, exists := v.FldValidators["port_choice.lb_port"]; exists {
+			val := m.GetPortChoice().(*CreateSpecType_LbPort).LbPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("lb_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -683,6 +727,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -761,6 +811,33 @@ func (m *GetSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *GetSpecType_NoTls:
+
+		return nil, nil
+
+	case *GetSpecType_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -1044,6 +1121,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_LbPort:
+		if fv, exists := v.FldValidators["port_choice.lb_port"]; exists {
+			val := m.GetPortChoice().(*GetSpecType_LbPort).LbPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("lb_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1272,6 +1360,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
@@ -1356,6 +1450,33 @@ func (m *GlobalSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *GlobalSpecType_NoTls:
+
+		return nil, nil
+
+	case *GlobalSpecType_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -1683,6 +1804,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("port_choice"),
 				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_LbPort:
+		if fv, exists := v.FldValidators["port_choice.lb_port"]; exists {
+			val := m.GetPortChoice().(*GlobalSpecType_LbPort).LbPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("lb_port"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2664,6 +2796,7 @@ var DefaultOriginPoolSubsetsValidator = func() *ValidateOriginPoolSubsets {
 
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "32",
 	}
 	vFn, err = vrhEndpointSubsets(rulesEndpointSubsets)
@@ -4858,6 +4991,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -4936,6 +5075,33 @@ func (m *ReplaceSpecType) GetOriginServersDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *ReplaceSpecType_NoTls:
+
+		return nil, nil
+
+	case *ReplaceSpecType_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -5214,6 +5380,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("port_choice"),
 				db.WithValidateField("automatic_port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_LbPort:
+		if fv, exists := v.FldValidators["port_choice.lb_port"]; exists {
+			val := m.GetPortChoice().(*ReplaceSpecType_LbPort).LbPort
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("lb_port"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5591,6 +5768,130 @@ func (m *UpstreamTlsParameters) Validate(ctx context.Context, opts ...db.Validat
 	return UpstreamTlsParametersValidator().Validate(ctx, m, opts...)
 }
 
+func (m *UpstreamTlsParameters) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMtlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMtlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServerValidationChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServerValidationChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *UpstreamTlsParameters) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetMtlsChoice().(type) {
+	case *UpstreamTlsParameters_NoMtls:
+
+		return nil, nil
+
+	case *UpstreamTlsParameters_UseMtls:
+
+		return nil, nil
+
+	case *UpstreamTlsParameters_UseMtlsObj:
+
+		vref := m.GetUseMtlsObj()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("certificate.Object")
+		dri := db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_mtls_obj",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetMtlsChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *UpstreamTlsParameters) GetMtlsChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetMtlsChoice().(type) {
+	case *UpstreamTlsParameters_NoMtls:
+
+	case *UpstreamTlsParameters_UseMtls:
+
+	case *UpstreamTlsParameters_UseMtlsObj:
+		refdType, err := d.TypeForEntryKind("", "", "certificate.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: certificate")
+		}
+
+		vref := m.GetUseMtlsObj()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "certificate.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *UpstreamTlsParameters) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServerValidationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerValidationChoice().(type) {
+	case *UpstreamTlsParameters_UseServerVerification:
+		drInfos, err := m.GetUseServerVerification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_server_verification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *UpstreamTlsParameters_SkipServerVerification:
+
+		return nil, nil
+
+	case *UpstreamTlsParameters_VolterraTrustedCa:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateUpstreamTlsParameters struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -5690,6 +5991,17 @@ func (v *ValidateUpstreamTlsParameters) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("mtls_choice"),
 				db.WithValidateField("use_mtls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParameters_UseMtlsObj:
+		if fv, exists := v.FldValidators["mtls_choice.use_mtls_obj"]; exists {
+			val := m.GetMtlsChoice().(*UpstreamTlsParameters_UseMtlsObj).UseMtlsObj
+			vOpts := append(opts,
+				db.WithValidateField("mtls_choice"),
+				db.WithValidateField("use_mtls_obj"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5874,6 +6186,7 @@ var DefaultUpstreamTlsParametersValidator = func() *ValidateUpstreamTlsParameter
 	v.FldValidators["tls_config"] = vFn
 
 	v.FldValidators["mtls_choice.use_mtls"] = TlsCertificatesTypeValidator().Validate
+	v.FldValidators["mtls_choice.use_mtls_obj"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["server_validation_choice.use_server_verification"] = UpstreamTlsValidationContextValidator().Validate
 
@@ -5921,18 +6234,92 @@ func (m *UpstreamTlsValidationContext) Validate(ctx context.Context, opts ...db.
 	return UpstreamTlsValidationContextValidator().Validate(ctx, m, opts...)
 }
 
+func (m *UpstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTrustedCaChoiceDRefInfo()
+
+}
+
+func (m *UpstreamTlsValidationContext) GetTrustedCaChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetTrustedCaChoice().(type) {
+	case *UpstreamTlsValidationContext_TrustedCa:
+
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("trusted_ca_list.Object")
+		dri := db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "trusted_ca",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetTrustedCaChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *UpstreamTlsValidationContext) GetTrustedCaChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetTrustedCaChoice().(type) {
+	case *UpstreamTlsValidationContext_TrustedCa:
+		refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
+		}
+
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "trusted_ca_list.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateUpstreamTlsValidationContext struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateUpstreamTlsValidationContext) TrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateUpstreamTlsValidationContext) TrustedCaChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_choice")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateUpstreamTlsValidationContext) TrustedCaChoiceTrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TrustedCaUrl, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_url")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_TrustedCaUrl, nil
 }
 
 func (v *ValidateUpstreamTlsValidationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -5949,11 +6336,38 @@ func (v *ValidateUpstreamTlsValidationContext) Validate(ctx context.Context, pm 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
-		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["trusted_ca_choice"]; exists {
+		val := m.GetTrustedCaChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trusted_ca_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetTrustedCaChoice().(type) {
+	case *UpstreamTlsValidationContext_TrustedCaUrl:
+		if fv, exists := v.FldValidators["trusted_ca_choice.trusted_ca_url"]; exists {
+			val := m.GetTrustedCaChoice().(*UpstreamTlsValidationContext_TrustedCaUrl).TrustedCaUrl
+			vOpts := append(opts,
+				db.WithValidateField("trusted_ca_choice"),
+				db.WithValidateField("trusted_ca_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsValidationContext_TrustedCa:
+		if fv, exists := v.FldValidators["trusted_ca_choice.trusted_ca"]; exists {
+			val := m.GetTrustedCaChoice().(*UpstreamTlsValidationContext_TrustedCa).TrustedCa
+			vOpts := append(opts,
+				db.WithValidateField("trusted_ca_choice"),
+				db.WithValidateField("trusted_ca"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5973,19 +6387,32 @@ var DefaultUpstreamTlsValidationContextValidator = func() *ValidateUpstreamTlsVa
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
-	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
+	vrhTrustedCaChoice := v.TrustedCaChoiceValidationRuleHandler
+	rulesTrustedCaChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustedCaChoice(rulesTrustedCaChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsValidationContext.trusted_ca_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_ca_choice"] = vFn
+
+	vrhTrustedCaChoiceTrustedCaUrl := v.TrustedCaChoiceTrustedCaUrlValidationRuleHandler
+	rulesTrustedCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes":      "131072",
 		"ves.io.schema.rules.string.min_bytes":      "1",
 		"ves.io.schema.rules.string.truststore_url": "true",
 	}
-	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
+	vFnMap["trusted_ca_choice.trusted_ca_url"], err = vrhTrustedCaChoiceTrustedCaUrl(rulesTrustedCaChoiceTrustedCaUrl)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsValidationContext.trusted_ca_url: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsValidationContext.trusted_ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["trusted_ca_url"] = vFn
+
+	v.FldValidators["trusted_ca_choice.trusted_ca_url"] = vFnMap["trusted_ca_choice.trusted_ca_url"]
+
+	v.FldValidators["trusted_ca_choice.trusted_ca"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -6038,6 +6465,9 @@ func (r *CreateSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case *CreateSpecType_AutomaticPort:
 		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
 
+	case *CreateSpecType_LbPort:
+		o.PortChoice = &GlobalSpecType_LbPort{LbPort: of.LbPort}
+
 	case *CreateSpecType_Port:
 		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
 
@@ -6054,6 +6484,9 @@ func (r *CreateSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_AutomaticPort:
 		r.PortChoice = &CreateSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_LbPort:
+		r.PortChoice = &CreateSpecType_LbPort{LbPort: of.LbPort}
 
 	case *GlobalSpecType_Port:
 		r.PortChoice = &CreateSpecType_Port{Port: of.Port}
@@ -6190,6 +6623,9 @@ func (r *GetSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_AutomaticPort:
 		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
 
+	case *GetSpecType_LbPort:
+		o.PortChoice = &GlobalSpecType_LbPort{LbPort: of.LbPort}
+
 	case *GetSpecType_Port:
 		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
 
@@ -6206,6 +6642,9 @@ func (r *GetSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_AutomaticPort:
 		r.PortChoice = &GetSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_LbPort:
+		r.PortChoice = &GetSpecType_LbPort{LbPort: of.LbPort}
 
 	case *GlobalSpecType_Port:
 		r.PortChoice = &GetSpecType_Port{Port: of.Port}
@@ -6342,6 +6781,9 @@ func (r *ReplaceSpecType) SetPortChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *ReplaceSpecType_AutomaticPort:
 		o.PortChoice = &GlobalSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
 
+	case *ReplaceSpecType_LbPort:
+		o.PortChoice = &GlobalSpecType_LbPort{LbPort: of.LbPort}
+
 	case *ReplaceSpecType_Port:
 		o.PortChoice = &GlobalSpecType_Port{Port: of.Port}
 
@@ -6358,6 +6800,9 @@ func (r *ReplaceSpecType) GetPortChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_AutomaticPort:
 		r.PortChoice = &ReplaceSpecType_AutomaticPort{AutomaticPort: of.AutomaticPort}
+
+	case *GlobalSpecType_LbPort:
+		r.PortChoice = &ReplaceSpecType_LbPort{LbPort: of.LbPort}
 
 	case *GlobalSpecType_Port:
 		r.PortChoice = &ReplaceSpecType_Port{Port: of.Port}

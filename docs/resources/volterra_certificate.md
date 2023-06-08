@@ -30,11 +30,10 @@ resource "volterra_certificate" "example" {
 
     secret_encoding_type = "secret_encoding_type"
 
-    // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+    // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-    clear_secret_info {
-      provider = "box-provider"
-      url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+    wingman_secret_info {
+      name = "ChargeBack-API-Key"
     }
   }
 }

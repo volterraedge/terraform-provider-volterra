@@ -160,6 +160,16 @@ func resourceVolterraNetworkPolicyRule() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"ipv6_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"prefix": {
 
 							Type: schema.TypeList,
@@ -376,6 +386,16 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
+			}
 
 			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
@@ -634,6 +654,16 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				remoteEndpointInt.Prefix.Ipv6Prefix = ls
+
+			}
 
 			if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 

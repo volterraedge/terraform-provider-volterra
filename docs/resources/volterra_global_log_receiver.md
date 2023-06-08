@@ -23,13 +23,29 @@ resource "volterra_global_log_receiver" "example" {
   // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
   ns_current = true
 
-  // One of the arguments from this list "audit_logs request_logs security_events" must be set
+  // One of the arguments from this list "request_logs security_events audit_logs" must be set
   request_logs = true
 
-  // One of the arguments from this list "kafka_receiver new_relic_receiver sumo_logic_receiver datadog_receiver splunk_receiver elastic_receiver azure_receiver s3_receiver http_receiver azure_event_hubs_receiver aws_cloud_watch_receiver" must be set
+  // One of the arguments from this list "elastic_receiver azure_event_hubs_receiver sumo_logic_receiver http_receiver datadog_receiver azure_receiver aws_cloud_watch_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver" must be set
 
-  new_relic_receiver {
-    api_key {
+  datadog_receiver {
+    batch {
+      // One of the arguments from this list "max_bytes_disabled max_bytes" must be set
+      max_bytes_disabled = true
+
+      // One of the arguments from this list "max_events_disabled max_events" must be set
+      max_events_disabled = true
+
+      // One of the arguments from this list "timeout_seconds_default timeout_seconds" must be set
+      timeout_seconds_default = true
+    }
+
+    compression {
+      // One of the arguments from this list "compression_none compression_gzip" must be set
+      compression_none = true
+    }
+
+    datadog_api_key {
       blindfold_secret_info_internal {
         decryption_provider = "value"
         location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
@@ -40,15 +56,17 @@ resource "volterra_global_log_receiver" "example" {
 
       // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      clear_secret_info {
+        provider = "box-provider"
+        url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
       }
     }
 
-    // One of the arguments from this list "us eu" must be set
-    eu = true
+    // One of the arguments from this list "endpoint site" must be set
+    site = "datadoghq.com"
+
+    // One of the arguments from this list "no_tls use_tls" must be set
+    no_tls = true
   }
 }
 
@@ -102,6 +120,8 @@ Argument Reference
 `kafka_receiver` - (Optional) Send logs to a Kafka cluster. See [Kafka Receiver ](#kafka-receiver) below for details.
 
 `new_relic_receiver` - (Optional) Send logs to NewRelic. See [New Relic Receiver ](#new-relic-receiver) below for details.
+
+`qradar_receiver` - (Optional) Send logs to IBM QRadar. See [Qradar Receiver ](#qradar-receiver) below for details.
 
 `s3_receiver` - (Optional) Send logs to an AWS S3 bucket. See [S3 Receiver ](#s3-receiver) below for details.
 
@@ -442,6 +462,20 @@ HTTP Basic Auth Password.
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
+### Qradar Receiver
+
+Send logs to IBM QRadar.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+
+`no_tls` - (Optional) Do not use TLS for the client connection (bool).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
+
+`uri` - (Required) Log Source Collector URL is the URL of the IBM QRadar Log Source Collector to send logs to, example: `http://example.com:9000` (`String`).
 
 ### Ref
 

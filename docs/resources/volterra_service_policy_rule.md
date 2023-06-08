@@ -21,19 +21,40 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_name ip_threat_category_list client_selector client_name_matcher any_client" must be set
-  any_client = true
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+  client_name = "backend.production.customer.volterra.us"
 
-  // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  // One of the arguments from this list "ip_matcher any_ip ip_prefix_list" must be set
   any_ip = true
 
   waf_action {
     // One of the arguments from this list "none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-    waf_in_monitoring_mode = true
+
+    app_firewall_detection_control {
+      exclude_attack_type_contexts {
+        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
+      }
+
+      exclude_bot_name_contexts {
+        bot_name = "Hydra"
+      }
+
+      exclude_signature_contexts {
+        context      = "context"
+        context_name = "example: user-agent for Header"
+        signature_id = "10000001"
+      }
+
+      exclude_violation_contexts {
+        context           = "context"
+        context_name      = "example: user-agent for Header"
+        exclude_violation = "VIOL_MANDATORY_HEADER"
+      }
+    }
   }
 }
 
@@ -484,10 +505,6 @@ other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
-### Max Body Size None
-
-x-displayName: "Not Configured".
-
 ### Max Cookie Count None
 
 x-displayName: "Not Configured".
@@ -533,10 +550,6 @@ x-displayName: "Not Configured".
 x-displayName: "Not Configured".
 
 ### Max Request Size None
-
-x-displayName: "Not Configured".
-
-### Max Upload File Size None
 
 x-displayName: "Not Configured".
 
@@ -630,10 +643,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value..
 
-`max_body_size_exceeds` - (Optional) x-example: "32768" (`Int`).
-
-`max_body_size_none` - (Optional) x-displayName: "Not Configured" (bool).
-
 `max_cookie_count_exceeds` - (Optional) x-example: "40" (`Int`).
 
 `max_cookie_count_none` - (Optional) x-displayName: "Not Configured" (bool).
@@ -682,10 +691,6 @@ Place limits on request based on the request attributes. The request matches if 
 
 `max_request_size_none` - (Optional) x-displayName: "Not Configured" (bool).
 
-`max_upload_file_size_exceeds` - (Optional) x-example: "1024" (`Int`).
-
-`max_upload_file_size_none` - (Optional) x-displayName: "Not Configured" (bool).
-
 `max_url_size_exceeds` - (Optional) x-example: "4096" (`Int`).
 
 `max_url_size_none` - (Optional) x-displayName: "Not Configured" (bool).
@@ -699,6 +704,8 @@ The predicate evaluates to true if the expressions in the label selector are tru
 ### Shape Protected Endpoint Action
 
 Shape Protected Endpoint Action that include application traffic type and mitigation.
+
+`allow_goodbot` - (Required) Good bot (`Bool`).
 
 `app_traffic_type` - (Required) Traffic type (`String`).
 

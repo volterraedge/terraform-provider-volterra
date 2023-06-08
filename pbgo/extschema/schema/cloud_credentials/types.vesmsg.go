@@ -25,6 +25,331 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSAssumeRoleType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSAssumeRoleType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSAssumeRoleType) DeepCopy() *AWSAssumeRoleType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSAssumeRoleType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSAssumeRoleType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSAssumeRoleType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSAssumeRoleTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSAssumeRoleType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSAssumeRoleType) ExternalIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for external_id")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) ExternalIdCustomExternalIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_CustomExternalId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_external_id")
+	}
+	return oValidatorFn_CustomExternalId, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) RoleArnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for role_arn")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) DurationSecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration_seconds")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) SessionNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for session_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) SessionTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for session_tags")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for session_tags")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for session_tags")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map session_tags")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items session_tags")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAssumeRoleType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSAssumeRoleType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSAssumeRoleType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["duration_seconds"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("duration_seconds"))
+		if err := fv(ctx, m.GetDurationSeconds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["external_id"]; exists {
+		val := m.GetExternalId()
+		vOpts := append(opts,
+			db.WithValidateField("external_id"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetExternalId().(type) {
+	case *AWSAssumeRoleType_ExternalIdIsOptional:
+		if fv, exists := v.FldValidators["external_id.external_id_is_optional"]; exists {
+			val := m.GetExternalId().(*AWSAssumeRoleType_ExternalIdIsOptional).ExternalIdIsOptional
+			vOpts := append(opts,
+				db.WithValidateField("external_id"),
+				db.WithValidateField("external_id_is_optional"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSAssumeRoleType_ExternalIdIsTenantId:
+		if fv, exists := v.FldValidators["external_id.external_id_is_tenant_id"]; exists {
+			val := m.GetExternalId().(*AWSAssumeRoleType_ExternalIdIsTenantId).ExternalIdIsTenantId
+			vOpts := append(opts,
+				db.WithValidateField("external_id"),
+				db.WithValidateField("external_id_is_tenant_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSAssumeRoleType_CustomExternalId:
+		if fv, exists := v.FldValidators["external_id.custom_external_id"]; exists {
+			val := m.GetExternalId().(*AWSAssumeRoleType_CustomExternalId).CustomExternalId
+			vOpts := append(opts,
+				db.WithValidateField("external_id"),
+				db.WithValidateField("custom_external_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["role_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("role_arn"))
+		if err := fv(ctx, m.GetRoleArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["session_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("session_name"))
+		if err := fv(ctx, m.GetSessionName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["session_tags"]; exists {
+		vOpts := append(opts, db.WithValidateField("session_tags"))
+		if err := fv(ctx, m.GetSessionTags(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
+	v := &ValidateAWSAssumeRoleType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExternalId := v.ExternalIdValidationRuleHandler
+	rulesExternalId := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhExternalId(rulesExternalId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAssumeRoleType.external_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["external_id"] = vFn
+
+	vrhExternalIdCustomExternalId := v.ExternalIdCustomExternalIdValidationRuleHandler
+	rulesExternalIdCustomExternalId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.min_len": "2",
+	}
+	vFnMap["external_id.custom_external_id"], err = vrhExternalIdCustomExternalId(rulesExternalIdCustomExternalId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AWSAssumeRoleType.external_id_custom_external_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["external_id.custom_external_id"] = vFnMap["external_id.custom_external_id"]
+
+	vrhRoleArn := v.RoleArnValidationRuleHandler
+	rulesRoleArn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "2048",
+		"ves.io.schema.rules.string.min_len":   "20",
+		"ves.io.schema.rules.string.pattern":   "^(arn:aws:iam::)([0-9]{12}:role/.*)$",
+	}
+	vFn, err = vrhRoleArn(rulesRoleArn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAssumeRoleType.role_arn: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["role_arn"] = vFn
+
+	vrhDurationSeconds := v.DurationSecondsValidationRuleHandler
+	rulesDurationSeconds := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "3600",
+		"ves.io.schema.rules.uint32.lte": "43200",
+	}
+	vFn, err = vrhDurationSeconds(rulesDurationSeconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAssumeRoleType.duration_seconds: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration_seconds"] = vFn
+
+	vrhSessionName := v.SessionNameValidationRuleHandler
+	rulesSessionName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "[\\w+=,.@-]*",
+	}
+	vFn, err = vrhSessionName(rulesSessionName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAssumeRoleType.session_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["session_name"] = vFn
+
+	vrhSessionTags := v.SessionTagsValidationRuleHandler
+	rulesSessionTags := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len":   "127",
+		"ves.io.schema.rules.map.max_pairs":             "40",
+		"ves.io.schema.rules.map.values.string.max_len": "255",
+	}
+	vFn, err = vrhSessionTags(rulesSessionTags)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAssumeRoleType.session_tags: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["session_tags"] = vFn
+
+	return v
+}()
+
+func AWSAssumeRoleTypeValidator() db.Validator {
+	return DefaultAWSAssumeRoleTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSSecretType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -812,6 +1137,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_AwsAssumeRole:
+		if fv, exists := v.FldValidators["cloud.aws_assume_role"]; exists {
+			val := m.GetCloud().(*CreateSpecType_AwsAssumeRole).AwsAssumeRole
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_assume_role"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -845,6 +1181,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
 	v.FldValidators["cloud.gcp_cred_file"] = GCPCredFileTypeValidator().Validate
+	v.FldValidators["cloud.aws_assume_role"] = AWSAssumeRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1129,6 +1466,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_AwsAssumeRole:
+		if fv, exists := v.FldValidators["cloud.aws_assume_role"]; exists {
+			val := m.GetCloud().(*GetSpecType_AwsAssumeRole).AwsAssumeRole
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_assume_role"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1162,6 +1510,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
 	v.FldValidators["cloud.gcp_cred_file"] = GCPCredFileTypeValidator().Validate
+	v.FldValidators["cloud.aws_assume_role"] = AWSAssumeRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1314,6 +1663,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_AwsAssumeRole:
+		if fv, exists := v.FldValidators["cloud.aws_assume_role"]; exists {
+			val := m.GetCloud().(*GlobalSpecType_AwsAssumeRole).AwsAssumeRole
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_assume_role"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1347,6 +1707,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
 	v.FldValidators["cloud.gcp_cred_file"] = GCPCredFileTypeValidator().Validate
+	v.FldValidators["cloud.aws_assume_role"] = AWSAssumeRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1499,6 +1860,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_AwsAssumeRole:
+		if fv, exists := v.FldValidators["cloud.aws_assume_role"]; exists {
+			val := m.GetCloud().(*ReplaceSpecType_AwsAssumeRole).AwsAssumeRole
+			vOpts := append(opts,
+				db.WithValidateField("cloud"),
+				db.WithValidateField("aws_assume_role"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1532,6 +1904,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["cloud.azure_pfx_certificate"] = AzurePfxTypeValidator().Validate
 	v.FldValidators["cloud.azure_client_secret"] = AzureSecretTypeValidator().Validate
 	v.FldValidators["cloud.gcp_cred_file"] = GCPCredFileTypeValidator().Validate
+	v.FldValidators["cloud.aws_assume_role"] = AWSAssumeRoleTypeValidator().Validate
 
 	return v
 }()
@@ -1545,6 +1918,9 @@ func (r *CreateSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.Cloud.(type) {
 	case nil:
 		o.Cloud = nil
+
+	case *CreateSpecType_AwsAssumeRole:
+		o.Cloud = &GlobalSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
 
 	case *CreateSpecType_AwsSecretKey:
 		o.Cloud = &GlobalSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}
@@ -1568,6 +1944,9 @@ func (r *CreateSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.Cloud.(type) {
 	case nil:
 		r.Cloud = nil
+
+	case *GlobalSpecType_AwsAssumeRole:
+		r.Cloud = &CreateSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
 
 	case *GlobalSpecType_AwsSecretKey:
 		r.Cloud = &CreateSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}
@@ -1626,6 +2005,9 @@ func (r *GetSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Cloud = nil
 
+	case *GetSpecType_AwsAssumeRole:
+		o.Cloud = &GlobalSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
+
 	case *GetSpecType_AwsSecretKey:
 		o.Cloud = &GlobalSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}
 
@@ -1648,6 +2030,9 @@ func (r *GetSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.Cloud.(type) {
 	case nil:
 		r.Cloud = nil
+
+	case *GlobalSpecType_AwsAssumeRole:
+		r.Cloud = &GetSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
 
 	case *GlobalSpecType_AwsSecretKey:
 		r.Cloud = &GetSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}
@@ -1706,6 +2091,9 @@ func (r *ReplaceSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.Cloud = nil
 
+	case *ReplaceSpecType_AwsAssumeRole:
+		o.Cloud = &GlobalSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
+
 	case *ReplaceSpecType_AwsSecretKey:
 		o.Cloud = &GlobalSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}
 
@@ -1728,6 +2116,9 @@ func (r *ReplaceSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.Cloud.(type) {
 	case nil:
 		r.Cloud = nil
+
+	case *GlobalSpecType_AwsAssumeRole:
+		r.Cloud = &ReplaceSpecType_AwsAssumeRole{AwsAssumeRole: of.AwsAssumeRole}
 
 	case *GlobalSpecType_AwsSecretKey:
 		r.Cloud = &ReplaceSpecType_AwsSecretKey{AwsSecretKey: of.AwsSecretKey}

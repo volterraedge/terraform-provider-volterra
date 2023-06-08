@@ -2544,11 +2544,11 @@ var APISwaggerJSON string = `{
             "description": "BIG-IP AWS Pay as You Go Image Selection",
             "title": "BIG-IP AWS PayG Image",
             "x-displayname": "BIG-IP AWS Pay as You Go Image",
-            "x-ves-oneof-field-ami_choice": "[\"AWAFPayG200Mbps\",\"AWAFPayG3Gbps\",\"BestPlusPayG200Mbps\"]",
+            "x-ves-oneof-field-ami_choice": "[\"AWAFPayG200Mbps\",\"AWAFPayG3Gbps\",\"BestPlusPayG200Mbps\",\"best_plus_payg_1gbps\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.F5BigIpAWSMarketPlaceImageType",
             "properties": {
                 "AWAFPayG200Mbps": {
-                    "description": "Exclusive with [AWAFPayG3Gbps BestPlusPayG200Mbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
@@ -2558,7 +2558,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "AWAFPayG3Gbps": {
-                    "description": "Exclusive with [AWAFPayG200Mbps BestPlusPayG200Mbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG200Mbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
@@ -2727,6 +2727,45 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "nfv_serviceF5BigIpAppStackBareMetalType": {
+            "type": "object",
+            "description": "x-displayName: \"Virtual BIG-IP on App Stack bare metal\"\nVirtual BIG-IP specification for App Stack bare metal",
+            "title": "Virtual BIG-IP on App Stack bare metal",
+            "properties": {
+                "admin_password": {
+                    "description": "x-displayName: \"Admin Password\"\nx-required\nSecret admin password for BIG-IP",
+                    "title": "Admin Password",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
+                "admin_username": {
+                    "type": "string",
+                    "description": "x-displayName: \"Admin Username\"\nx-example: \"admin\"\nx-required\nAdmin Username for BIG-IP",
+                    "title": "Admin Username"
+                },
+                "bare_metal_site": {
+                    "description": "x-displayName: \"App Stack Bare Metal Site\"\nx-required\nReference to bare metal site on which BIG-IP should be deployed",
+                    "title": "App Stack Bare Metal Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "nodes": {
+                    "type": "array",
+                    "description": "x-displayName: \"Service Nodes\"\nx-required\nSpecify how and where the service nodes are spawned",
+                    "title": "Service Nodes",
+                    "items": {
+                        "$ref": "#/definitions/nfv_serviceServiceNodesBareMetalType"
+                    }
+                },
+                "public_download_url": {
+                    "type": "string",
+                    "description": "public URL where BIG-IP image is hosted.\n\nx-displayName: \"Image URL\"\nx-example: \"https://imagepath.com/bigip_ve\"\nx-required\nPublic URL where BIG-IP VE image is hosted"
+                },
+                "ssh_key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Public SSH key\"\nx-example: \"ssh-rsa AAAAB...\"\nx-required\nPublic SSH key for accessing the BIG-IP nodes.",
+                    "title": "Public SSH key"
+                }
+            }
+        },
         "nfv_serviceForwardingServiceType": {
             "type": "object",
             "description": "Forwarding Service is a type of NFV service that processes the original packet as received from source and forwards it to the original\ndestination without modifying the destination addresses. The traffic is attracted to NFV using set of traffic selector\nrules.",
@@ -2810,6 +2849,28 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "nfv_serviceInterfaceDetails": {
+            "type": "object",
+            "description": "x-displayName: \"Interface\"\nx-required\nBIG-IP interface details",
+            "title": "BIG-IP interface details",
+            "properties": {
+                "interface": {
+                    "description": "x-displayName: \"L2 Interface\"\nx-required\nL2 Interface on Site to be connected as interface on BIG-IP",
+                    "title": "L2 Interface on Site to be connected as interface on BIG-IP",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "network_gateway": {
+                    "type": "string",
+                    "description": "x-displayName: \"Default Gateway\"\nx-example: \"10.2.3.0\"",
+                    "title": "BIG-IP Network Default Gateway"
+                },
+                "network_self_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Self IP\"\nx-example: \"10.2.3.0/24\"\nx-required\nSelf IP CIDR",
+                    "title": "BIG-IP Network Self IP"
+                }
+            }
         },
         "nfv_serviceListResponse": {
             "type": "object",
@@ -2968,28 +3029,40 @@ var APISwaggerJSON string = `{
         },
         "nfv_servicePANAWSAutoSetupType": {
             "type": "object",
-            "description": "x-displayName: \"PAN VM Series Firewall Auto Setup\"\nFor auto-setup, ssh public and pvt keys are needed.\nUsing the given config user, ssh and api access will be configured",
+            "description": "For auto-setup, ssh public and pvt keys are needed.\nUsing the given config user, ssh and api access will be configured",
             "title": "PAN VM Series Firewall Auto Setup",
+            "x-displayname": "PAN VM Series Firewall Auto Setup",
+            "x-ves-oneof-field-ssh_keys_choice": "[\"manual_ssh_keys\"]",
+            "x-ves-proto-message": "ves.io.schema.nfv_service.PANAWSAutoSetupType",
             "properties": {
                 "admin_password": {
-                    "description": "x-displayName: \"Firewall Admin Password\"\nx-required\nFirewall Admin Password",
+                    "description": " Firewall Admin Password\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Firewall Admin Password",
-                    "$ref": "#/definitions/schemaSecretType"
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Firewall Admin Password",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "admin_username": {
                     "type": "string",
-                    "description": "x-displayName: \"Firewall Admin Username\"\nx-example: \"admin\"\nx-required\nFirewall Admin Username",
-                    "title": "Firewall Admin Username"
-                },
-                "autogenerated_ssh_keys": {
-                    "description": "x-displayName: \"Autogenerated SSH Keys\"\nAutogenerated SSH Keys, users will be able to download the keys after external service is created",
-                    "title": "Autogenerated SSH Keys",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "description": " Firewall Admin Username\n\nExample: - \"admin\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Firewall Admin Username",
+                    "maxLength": 256,
+                    "x-displayname": "Firewall Admin Username",
+                    "x-ves-example": "admin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "manual_ssh_keys": {
-                    "description": "x-displayName: \"User given public and private SSH keys\"\nUser given public and private SSH keys",
+                    "description": "Exclusive with []\n User given public and private SSH keys",
                     "title": "User given public and private SSH keys",
-                    "$ref": "#/definitions/nfv_serviceSSHKeyType"
+                    "$ref": "#/definitions/nfv_serviceSSHKeyType",
+                    "x-displayname": "User given public and private SSH keys"
                 }
             }
         },
@@ -3067,13 +3140,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "tags": {
                     "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "AWS Tags",
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 }
@@ -3089,6 +3162,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-setup_options": "[\"auto_setup\",\"ssh_key\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.PaloAltoFWAWSType",
             "properties": {
+                "auto_setup": {
+                    "description": "Exclusive with [ssh_key]\n Auto Setup API Access \u0026 Users. With this firewall api access and given admin user will be auto setup",
+                    "title": "Auto Setup API Access \u0026 Users",
+                    "$ref": "#/definitions/nfv_servicePANAWSAutoSetupType",
+                    "x-displayname": "Auto Setup API Access \u0026 Users"
+                },
                 "aws_tgw_site": {
                     "description": " Select AWS transit gateway site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS Transit Gateway Site",
@@ -3169,13 +3248,13 @@ var APISwaggerJSON string = `{
                 },
                 "tags": {
                     "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 5\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
                     "title": "AWS Tags",
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "5",
+                        "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
                 },
@@ -3321,18 +3400,35 @@ var APISwaggerJSON string = `{
         },
         "nfv_serviceSSHKeyType": {
             "type": "object",
-            "description": "x-displayName: \"SSH key\"\nSSH Key includes both public and private key",
+            "description": "SSH Key includes both public and private key",
             "title": "SSH key",
+            "x-displayname": "SSH key",
+            "x-ves-proto-message": "ves.io.schema.nfv_service.SSHKeyType",
             "properties": {
                 "private_key": {
-                    "description": "x-displayName: \"Private SSH key\"\nx-required\nAuthorized Public SSH key which will be programmed on the node",
+                    "description": " Authorized Public SSH key which will be programmed on the node\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Private SSH key",
-                    "$ref": "#/definitions/schemaSecretType"
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Private SSH key",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "public_key": {
                     "type": "string",
-                    "description": "x-displayName: \"Public SSH key\"\nx-example: \"ssh-rsa AAAAB...\"\nx-required\nAuthorized Public SSH key which will be programmed on the node",
-                    "title": "Public SSH key"
+                    "description": " Authorized Public SSH key which will be programmed on the node\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Public SSH key",
+                    "minLength": 1,
+                    "maxLength": 8192,
+                    "x-displayname": "Public SSH key",
+                    "x-ves-example": "ssh-rsa AAAAB...",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         },
@@ -3359,25 +3455,25 @@ var APISwaggerJSON string = `{
                 "advertise_on_sli_vip": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable on Site local inside network, default VIP will be used",
                     "title": "Enable On Site Local Inside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Inside"
                 },
                 "advertise_on_slo_internet_vip": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable On Site Local Outside Internet VIP",
                     "title": "Enable On Site Local Outside Internet VIP",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Outside Internet VIP"
                 },
                 "advertise_on_slo_sli": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_vip]\n Enable on Site local inside and outside network, default VIP will be used",
                     "title": "Enable On Site Local Inside and Outside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Inside and Outside"
                 },
                 "advertise_on_slo_vip": {
                     "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
                     "title": "Enable On Site Local Outside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Outside"
                 },
                 "ssh_ports": {
@@ -3405,39 +3501,45 @@ var APISwaggerJSON string = `{
             "description": "HTTPS based configuration",
             "title": "HTTPS based management",
             "x-displayname": "HTTPS based management",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_internet\",\"advertise_on_internet_default_vip\",\"advertise_on_sli_vip\",\"advertise_on_slo_sli\",\"advertise_on_slo_vip\"]",
+            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_internet\",\"advertise_on_internet_default_vip\",\"advertise_on_sli_vip\",\"advertise_on_slo_internet_vip\",\"advertise_on_slo_sli\",\"advertise_on_slo_vip\"]",
             "x-ves-oneof-field-internet_choice": "[]",
             "x-ves-oneof-field-port_choice": "[\"default_https_port\",\"https_port\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.ServiceHttpsManagementType",
             "properties": {
                 "advertise_on_internet": {
-                    "description": "Exclusive with [advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_sli advertise_on_slo_vip]\n Advertise this loadbalancer on public network",
+                    "description": "Exclusive with [advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Advertise this loadbalancer on public network",
                     "title": "Enable on Internet with specific VIP",
                     "$ref": "#/definitions/viewsAdvertisePublic",
                     "x-displayname": "Enable Internet Access(Specified VIP)"
                 },
                 "advertise_on_internet_default_vip": {
-                    "description": "Exclusive with [advertise_on_internet advertise_on_sli_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable management access on internet with default VIP",
+                    "description": "Exclusive with [advertise_on_internet advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable management access on internet with default VIP",
                     "title": "Enable On Public Default VIP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable Internet Access"
                 },
                 "advertise_on_sli_vip": {
-                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable on Site local inside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable on Site local inside network, default VIP will be used",
                     "title": "Enable On Site Local Inside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Inside"
                 },
+                "advertise_on_slo_internet_vip": {
+                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable On Site Local Outside Internet VIP",
+                    "title": "Enable On Site Local Outside Internet VIP",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
+                    "x-displayname": "Enable On Site Local Outside Internet VIP"
+                },
                 "advertise_on_slo_sli": {
-                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_vip]\n Enable on Site local inside and outside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_vip]\n Enable on Site local inside and outside network, default VIP will be used",
                     "title": "Enable On Site Local Inside and Outside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Inside and Outside"
                 },
                 "advertise_on_slo_vip": {
-                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
                     "title": "Enable On Site Local Outside",
-                    "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
+                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
                     "x-displayname": "Enable On Site Local Outside"
                 },
                 "default_https_port": {
@@ -3535,6 +3637,33 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4_prefix": "true"
                     }
+                }
+            }
+        },
+        "nfv_serviceServiceNodesBareMetalType": {
+            "type": "object",
+            "description": "x-displayName: \"Service Nodes\"\nSpecification for service nodes, how and where",
+            "title": "Service Nodes in App Stack Bare Metal",
+            "properties": {
+                "external_interface": {
+                    "description": "x-displayName: \"External Interface\"",
+                    "title": "BIG-IP External interface details",
+                    "$ref": "#/definitions/nfv_serviceInterfaceDetails"
+                },
+                "internal_interface": {
+                    "description": "x-displayName: \"Internal Interface\"",
+                    "title": "BIG-IP Internal interface details",
+                    "$ref": "#/definitions/nfv_serviceInterfaceDetails"
+                },
+                "license_key": {
+                    "type": "string",
+                    "description": "x-displayName: \"License Key\"\nx-example: \"X1507-61193-79022-21602-7036987\"\nx-required\nBIG-IP VE base key",
+                    "title": "BIG-IP License Key"
+                },
+                "node_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Node Name\"\nx-example: \"node1\"\nx-required\nNode Name will be used to assign as hostname to the service",
+                    "title": "Node Name"
                 }
             }
         },
@@ -3770,7 +3899,7 @@ var APISwaggerJSON string = `{
         },
         "schemaErrorCode": {
             "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
             "title": "ErrorCode",
             "enum": [
                 "EOK",
@@ -3780,7 +3909,8 @@ var APISwaggerJSON string = `{
                 "EEXISTS",
                 "EUNKNOWN",
                 "ESERIALIZE",
-                "EINTERNAL"
+                "EINTERNAL",
+                "EPARTIAL"
             ],
             "default": "EOK",
             "x-displayname": "Error Code",
@@ -4937,51 +5067,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaviewsDownstreamTlsParamsType": {
-            "type": "object",
-            "description": "Inline TLS parameters",
-            "title": "DownstreamTlsParamsType",
-            "x-displayname": "Inline TLS Parameters",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
-            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsParamsType",
-            "properties": {
-                "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
-                    "title": "No mTLS",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "tls_certificates": {
-                    "type": "array",
-                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "tls_certificates",
-                    "minItems": 1,
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/schemaTlsCertificateType"
-                    },
-                    "x-displayname": "TLS Certificates",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                },
-                "tls_config": {
-                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
-                    "title": "TLS Config",
-                    "$ref": "#/definitions/viewsTlsConfig",
-                    "x-displayname": "TLS"
-                },
-                "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
-                    "title": "Use mTLS",
-                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -5128,6 +5213,28 @@ var APISwaggerJSON string = `{
             "default": "PROVISIONED",
             "x-displayname": "Infra State",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
+        },
+        "terraform_parametersRollbackState": {
+            "type": "string",
+            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
+            "title": "Rollback State",
+            "enum": [
+                "ROLLBACK_SUCCESSFUL",
+                "ROLLBACK_ERRORED",
+                "ROLLBACK_NOT_REQUIRED"
+            ],
+            "default": "ROLLBACK_SUCCESSFUL"
+        },
+        "terraform_parametersUpgradeState": {
+            "type": "string",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "title": "Upgrade State",
+            "enum": [
+                "UPGRADE_SUCCESSFUL",
+                "UPGRADE_ERRORED",
+                "UPGRADE_NOT_REQUIRED"
+            ],
+            "default": "UPGRADE_SUCCESSFUL"
         },
         "viewsAWSSubnetIdsType": {
             "type": "object",
@@ -5301,12 +5408,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsDownstreamTlsParamsType": {
+            "type": "object",
+            "description": "Inline TLS parameters",
+            "title": "DownstreamTlsParamsType",
+            "x-displayname": "Inline TLS Parameters",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsParamsType",
+            "properties": {
+                "no_mtls": {
+                    "description": "Exclusive with [use_mtls]\n",
+                    "title": "No mTLS",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "tls_certificates": {
+                    "type": "array",
+                    "description": " Users can add one or more certificates that share the same set of domains.\n for example, domain.com and *.domain.com - but use different signature algorithms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "tls_certificates",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaTlsCertificateType"
+                    },
+                    "x-displayname": "TLS Certificates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                },
+                "tls_config": {
+                    "description": " Configuration of TLS settings such as min/max TLS version and ciphersuites",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/viewsTlsConfig",
+                    "x-displayname": "TLS"
+                },
+                "use_mtls": {
+                    "description": "Exclusive with [no_mtls]\n",
+                    "title": "Use mTLS",
+                    "$ref": "#/definitions/viewsDownstreamTlsValidationContext",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
         "viewsDownstreamTlsValidationContext": {
             "type": "object",
             "description": "Validation context for downstream client TLS connections",
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -5324,15 +5477,12 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": " The URL for a trust store\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Trusted CA",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
+                    "x-displayname": "Inline Trusted CA List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.truststore_url": "true"

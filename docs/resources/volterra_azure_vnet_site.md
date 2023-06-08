@@ -21,7 +21,14 @@ resource "volterra_azure_vnet_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-  default_blocked_services = true
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      ssh          = true
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "azure_cred" must be set
 
@@ -38,12 +45,42 @@ resource "volterra_azure_vnet_site" "example" {
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  voltstack_cluster {
-    az_nodes {
-      azure_az  = "1"
-      disk_size = "80"
+  ingress_egress_gw_ar {
+    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
 
-      local_subnet {
+    // One of the arguments from this list "dc_cluster_group_inside_vn no_dc_cluster_group dc_cluster_group_outside_vn" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "global_network_list no_global_network" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "not_hub hub" must be set
+    not_hub = true
+
+    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
+    no_inside_static_routes = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
+    no_network_policy = true
+
+    node {
+      fault_domain = "1"
+
+      inside_subnet {
+        // One of the arguments from this list "subnet subnet_param" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+
+      node_number = "1"
+
+      outside_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -51,52 +88,24 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+
+      update_domain = "1"
     }
 
-    azure_certified_hw = "azure-byol-voltstack-combo"
-
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-
-    global_network_list {
-      global_network_connections {
-        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
-
-        slo_to_global_dr {
-          global_vn {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-
-        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-        disable_forward_proxy = true
-      }
-    }
-    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
-    no_k8s_cluster = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-
-    active_enhanced_firewall_policies {
-      enhanced_firewall_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
     // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
     no_outside_static_routes = true
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+
+      perf_mode_l3_enhanced {
+        // One of the arguments from this list "no_jumbo jumbo" must be set
+        jumbo = true
+      }
+    }
+
+    // One of the arguments from this list "sm_connection_pvt_ip sm_connection_public_ip" must be set
     sm_connection_public_ip = true
-    // One of the arguments from this list "default_storage storage_class_list" must be set
-    default_storage = true
   }
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
@@ -108,7 +117,7 @@ resource "volterra_azure_vnet_site" "example" {
       primary_ipv4 = "10.1.0.0/16"
     }
   }
-  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
   nodes_per_az = "2"
 }
 
@@ -281,7 +290,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -377,7 +386,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
 
 ### Do Not Advertise To Route Server
 
@@ -769,14 +778,6 @@ Enable/Disable offline survivability mode.
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-### Openebs Enterprise
-
-Storage class Device configuration for OpenEBS Enterprise.
-
-`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
-
-`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
-
 ### Os
 
 Operating System Details.
@@ -950,8 +951,6 @@ Add additional custom storage classes in kubernetes for site.
 List of custom storage classes.
 
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
-
-`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 

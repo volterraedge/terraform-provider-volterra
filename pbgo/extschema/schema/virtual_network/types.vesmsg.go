@@ -598,6 +598,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -652,6 +658,28 @@ func (m *CreateSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		for i := range driSet {
 			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6Routes() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStaticV6Routes() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("static_v6_routes[%v].%s", idx, dri.DRField)
 		}
 		drInfos = append(drInfos, driSet...)
 	}
@@ -725,6 +753,54 @@ func (v *ValidateCreateSpecType) StaticRoutesValidationRuleHandler(rules map[str
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items static_routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_v6_routes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*StaticV6RouteViewType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := StaticV6RouteViewTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for static_v6_routes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*StaticV6RouteViewType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*StaticV6RouteViewType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated static_v6_routes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items static_v6_routes")
 		}
 		return nil
 	}
@@ -823,6 +899,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
+		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
+		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -872,6 +956,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_routes"] = vFn
+
+	vrhStaticV6Routes := v.StaticV6RoutesValidationRuleHandler
+	rulesStaticV6Routes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "165",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhStaticV6Routes(rulesStaticV6Routes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.static_v6_routes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_routes"] = vFn
 
 	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
 
@@ -1078,6 +1174,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1136,6 +1238,28 @@ func (m *GetSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		for i := range driSet {
 			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6Routes() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStaticV6Routes() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("static_v6_routes[%v].%s", idx, dri.DRField)
 		}
 		drInfos = append(drInfos, driSet...)
 	}
@@ -1209,6 +1333,54 @@ func (v *ValidateGetSpecType) StaticRoutesValidationRuleHandler(rules map[string
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items static_routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_v6_routes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*StaticV6RouteViewType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := StaticV6RouteViewTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for static_v6_routes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*StaticV6RouteViewType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*StaticV6RouteViewType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated static_v6_routes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items static_v6_routes")
 		}
 		return nil
 	}
@@ -1318,6 +1490,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
+		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
+		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1367,6 +1547,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_routes"] = vFn
+
+	vrhStaticV6Routes := v.StaticV6RoutesValidationRuleHandler
+	rulesStaticV6Routes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "165",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhStaticV6Routes(rulesStaticV6Routes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.static_v6_routes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_routes"] = vFn
 
 	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
 
@@ -3669,6 +3861,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetStaticV6RoutesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RoutesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -3727,6 +3925,28 @@ func (m *ReplaceSpecType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
 		for i := range driSet {
 			dri := &driSet[i]
 			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetStaticV6RoutesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6Routes() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStaticV6Routes() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("static_v6_routes[%v].%s", idx, dri.DRField)
 		}
 		drInfos = append(drInfos, driSet...)
 	}
@@ -3800,6 +4020,54 @@ func (v *ValidateReplaceSpecType) StaticRoutesValidationRuleHandler(rules map[st
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items static_routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) StaticV6RoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_v6_routes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*StaticV6RouteViewType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := StaticV6RouteViewTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for static_v6_routes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*StaticV6RouteViewType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*StaticV6RouteViewType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated static_v6_routes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items static_v6_routes")
 		}
 		return nil
 	}
@@ -3909,6 +4177,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_routes"]; exists {
+		vOpts := append(opts, db.WithValidateField("static_v6_routes"))
+		if err := fv(ctx, m.GetStaticV6Routes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3958,6 +4234,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["static_routes"] = vFn
+
+	vrhStaticV6Routes := v.StaticV6RoutesValidationRuleHandler
+	rulesStaticV6Routes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "165",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhStaticV6Routes(rulesStaticV6Routes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.static_v6_routes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_routes"] = vFn
 
 	v.FldValidators["network_choice.srv6_network"] = PerSiteSrv6NetworkTypeValidator().Validate
 
@@ -4366,6 +4654,48 @@ func (v *ValidateSNATPoolType) Ipv4PrefixesValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateSNATPoolType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSNATPoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SNATPoolType)
 	if !ok {
@@ -4388,6 +4718,14 @@ func (v *ValidateSNATPoolType) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -4405,10 +4743,8 @@ var DefaultSNATPoolTypeValidator = func() *ValidateSNATPoolType {
 
 	vrhIpv4Prefixes := v.Ipv4PrefixesValidationRuleHandler
 	rulesIpv4Prefixes := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "1",
-		"ves.io.schema.rules.repeated.min_items":                "1",
 	}
 	vFn, err = vrhIpv4Prefixes(rulesIpv4Prefixes)
 	if err != nil {
@@ -4416,6 +4752,18 @@ var DefaultSNATPoolTypeValidator = func() *ValidateSNATPoolType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipv4_prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "1",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SNATPoolType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
 
 	return v
 }()
@@ -4901,6 +5249,556 @@ var DefaultStaticRouteViewTypeValidator = func() *ValidateStaticRouteViewType {
 
 func StaticRouteViewTypeValidator() db.Validator {
 	return DefaultStaticRouteViewTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StaticV6RouteViewType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StaticV6RouteViewType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StaticV6RouteViewType) DeepCopy() *StaticV6RouteViewType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StaticV6RouteViewType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StaticV6RouteViewType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StaticV6RouteViewType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StaticV6RouteViewTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *StaticV6RouteViewType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNextHopChoiceDRefInfo()
+
+}
+
+func (m *StaticV6RouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNextHopChoice().(type) {
+	case *StaticV6RouteViewType_Interface:
+
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_interface.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "interface",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *StaticV6RouteViewType_DefaultGateway:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetNextHopChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *StaticV6RouteViewType) GetNextHopChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetNextHopChoice().(type) {
+	case *StaticV6RouteViewType_Interface:
+		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+		}
+
+		vref := m.GetInterface()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "network_interface.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *StaticV6RouteViewType_DefaultGateway:
+
+	}
+
+	return entries, nil
+}
+
+type ValidateStaticV6RouteViewType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStaticV6RouteViewType) NextHopChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for next_hop_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateStaticV6RouteViewType) NextHopChoiceIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_IpAddress, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_address")
+	}
+	return oValidatorFn_IpAddress, nil
+}
+
+func (v *ValidateStaticV6RouteViewType) IpPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ip_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ip_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ip_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ip_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStaticV6RouteViewType) AttrsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.RouteAttrType)
+		return int32(i)
+	}
+	// ves_io_schema.RouteAttrType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.RouteAttrType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for attrs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.RouteAttrType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for attrs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.RouteAttrType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.RouteAttrType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated attrs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items attrs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStaticV6RouteViewType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StaticV6RouteViewType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StaticV6RouteViewType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attrs"]; exists {
+		vOpts := append(opts, db.WithValidateField("attrs"))
+		if err := fv(ctx, m.GetAttrs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ip_prefixes"))
+		if err := fv(ctx, m.GetIpPrefixes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["next_hop_choice"]; exists {
+		val := m.GetNextHopChoice()
+		vOpts := append(opts,
+			db.WithValidateField("next_hop_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNextHopChoice().(type) {
+	case *StaticV6RouteViewType_IpAddress:
+		if fv, exists := v.FldValidators["next_hop_choice.ip_address"]; exists {
+			val := m.GetNextHopChoice().(*StaticV6RouteViewType_IpAddress).IpAddress
+			vOpts := append(opts,
+				db.WithValidateField("next_hop_choice"),
+				db.WithValidateField("ip_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StaticV6RouteViewType_Interface:
+		if fv, exists := v.FldValidators["next_hop_choice.interface"]; exists {
+			val := m.GetNextHopChoice().(*StaticV6RouteViewType_Interface).Interface
+			vOpts := append(opts,
+				db.WithValidateField("next_hop_choice"),
+				db.WithValidateField("interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StaticV6RouteViewType_DefaultGateway:
+		if fv, exists := v.FldValidators["next_hop_choice.default_gateway"]; exists {
+			val := m.GetNextHopChoice().(*StaticV6RouteViewType_DefaultGateway).DefaultGateway
+			vOpts := append(opts,
+				db.WithValidateField("next_hop_choice"),
+				db.WithValidateField("default_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStaticV6RouteViewTypeValidator = func() *ValidateStaticV6RouteViewType {
+	v := &ValidateStaticV6RouteViewType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNextHopChoice := v.NextHopChoiceValidationRuleHandler
+	rulesNextHopChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNextHopChoice(rulesNextHopChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StaticV6RouteViewType.next_hop_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["next_hop_choice"] = vFn
+
+	vrhNextHopChoiceIpAddress := v.NextHopChoiceIpAddressValidationRuleHandler
+	rulesNextHopChoiceIpAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["next_hop_choice.ip_address"], err = vrhNextHopChoiceIpAddress(rulesNextHopChoiceIpAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field StaticV6RouteViewType.next_hop_choice_ip_address: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["next_hop_choice.ip_address"] = vFnMap["next_hop_choice.ip_address"]
+
+	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
+	rulesIpPrefixes := map[string]string{
+		"ves.io.schema.rules.message.required":                  "true",
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.min_items":                "1",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StaticV6RouteViewType.ip_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_prefixes"] = vFn
+
+	vrhAttrs := v.AttrsValidationRuleHandler
+	rulesAttrs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAttrs(rulesAttrs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StaticV6RouteViewType.attrs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["attrs"] = vFn
+
+	v.FldValidators["next_hop_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func StaticV6RouteViewTypeValidator() db.Validator {
+	return DefaultStaticV6RouteViewTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *StaticV6RoutesListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *StaticV6RoutesListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *StaticV6RoutesListType) DeepCopy() *StaticV6RoutesListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &StaticV6RoutesListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *StaticV6RoutesListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *StaticV6RoutesListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return StaticV6RoutesListTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *StaticV6RoutesListType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetStaticRoutesDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *StaticV6RoutesListType) GetStaticRoutesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticRoutes() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetStaticRoutes() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticRoutes() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("static_routes[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateStaticV6RoutesListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateStaticV6RoutesListType) StaticRoutesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_routes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*StaticV6RouteViewType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := StaticV6RouteViewTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for static_routes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*StaticV6RouteViewType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*StaticV6RouteViewType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated static_routes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items static_routes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateStaticV6RoutesListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*StaticV6RoutesListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *StaticV6RoutesListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["static_routes"]; exists {
+		vOpts := append(opts, db.WithValidateField("static_routes"))
+		if err := fv(ctx, m.GetStaticRoutes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultStaticV6RoutesListTypeValidator = func() *ValidateStaticV6RoutesListType {
+	v := &ValidateStaticV6RoutesListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStaticRoutes := v.StaticRoutesValidationRuleHandler
+	rulesStaticRoutes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhStaticRoutes(rulesStaticRoutes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for StaticV6RoutesListType.static_routes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_routes"] = vFn
+
+	return v
+}()
+
+func StaticV6RoutesListTypeValidator() db.Validator {
+	return DefaultStaticV6RoutesListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

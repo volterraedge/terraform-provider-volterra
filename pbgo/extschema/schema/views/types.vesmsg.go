@@ -1339,7 +1339,20 @@ func (m *DownstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetCrlChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCrlChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCrlChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTrustedCaChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTrustedCaChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -1408,18 +1421,75 @@ func (m *DownstreamTlsValidationContext) GetCrlChoiceDBEntries(ctx context.Conte
 	return entries, nil
 }
 
+func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetTrustedCaChoice().(type) {
+	case *DownstreamTlsValidationContext_TrustedCa:
+
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("trusted_ca_list.Object")
+		dri := db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "trusted_ca",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetTrustedCaChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DownstreamTlsValidationContext) GetTrustedCaChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetTrustedCaChoice().(type) {
+	case *DownstreamTlsValidationContext_TrustedCa:
+		refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
+		}
+
+		vref := m.GetTrustedCa()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "trusted_ca_list.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateDownstreamTlsValidationContext struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateDownstreamTlsValidationContext) TrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateDownstreamTlsValidationContext) TrustedCaChoiceTrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TrustedCaUrl, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_url")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_TrustedCaUrl, nil
 }
 
 func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1462,11 +1532,28 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 
 	}
 
-	if fv, exists := v.FldValidators["trusted_ca_url"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("trusted_ca_url"))
-		if err := fv(ctx, m.GetTrustedCaUrl(), vOpts...); err != nil {
-			return err
+	switch m.GetTrustedCaChoice().(type) {
+	case *DownstreamTlsValidationContext_TrustedCaUrl:
+		if fv, exists := v.FldValidators["trusted_ca_choice.trusted_ca_url"]; exists {
+			val := m.GetTrustedCaChoice().(*DownstreamTlsValidationContext_TrustedCaUrl).TrustedCaUrl
+			vOpts := append(opts,
+				db.WithValidateField("trusted_ca_choice"),
+				db.WithValidateField("trusted_ca_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DownstreamTlsValidationContext_TrustedCa:
+		if fv, exists := v.FldValidators["trusted_ca_choice.trusted_ca"]; exists {
+			val := m.GetTrustedCaChoice().(*DownstreamTlsValidationContext_TrustedCa).TrustedCa
+			vOpts := append(opts,
+				db.WithValidateField("trusted_ca_choice"),
+				db.WithValidateField("trusted_ca"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1512,21 +1599,23 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
-	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
+	vrhTrustedCaChoiceTrustedCaUrl := v.TrustedCaChoiceTrustedCaUrlValidationRuleHandler
+	rulesTrustedCaChoiceTrustedCaUrl := map[string]string{
 		"ves.io.schema.rules.string.max_bytes":      "131072",
 		"ves.io.schema.rules.string.min_bytes":      "1",
 		"ves.io.schema.rules.string.truststore_url": "true",
 	}
-	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
+	vFnMap["trusted_ca_choice.trusted_ca_url"], err = vrhTrustedCaChoiceTrustedCaUrl(rulesTrustedCaChoiceTrustedCaUrl)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsValidationContext.trusted_ca_url: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DownstreamTlsValidationContext.trusted_ca_choice_trusted_ca_url: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["trusted_ca_url"] = vFn
+
+	v.FldValidators["trusted_ca_choice.trusted_ca_url"] = vFnMap["trusted_ca_choice.trusted_ca_url"]
 
 	v.FldValidators["crl_choice.crl"] = ObjectRefTypeValidator().Validate
+
+	v.FldValidators["trusted_ca_choice.trusted_ca"] = ObjectRefTypeValidator().Validate
 
 	v.FldValidators["xfcc_header.xfcc_options"] = XfccHeaderKeysValidator().Validate
 
@@ -3686,6 +3775,48 @@ func (v *ValidatePrefixStringListType) PrefixesValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidatePrefixStringListType) Ipv6PrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ipv6_prefixes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_prefixes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_prefixes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_prefixes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidatePrefixStringListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*PrefixStringListType)
 	if !ok {
@@ -3698,6 +3829,14 @@ func (v *ValidatePrefixStringListType) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv6_prefixes"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_prefixes"))
+		if err := fv(ctx, m.GetIpv6Prefixes(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["prefixes"]; exists {
@@ -3725,10 +3864,8 @@ var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType 
 
 	vrhPrefixes := v.PrefixesValidationRuleHandler
 	rulesPrefixes := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
-		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefixes(rulesPrefixes)
@@ -3737,6 +3874,19 @@ var DefaultPrefixStringListTypeValidator = func() *ValidatePrefixStringListType 
 		panic(errMsg)
 	}
 	v.FldValidators["prefixes"] = vFn
+
+	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
+	rulesIpv6Prefixes := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.max_items":                "128",
+		"ves.io.schema.rules.repeated.unique":                   "true",
+	}
+	vFn, err = vrhIpv6Prefixes(rulesIpv6Prefixes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrefixStringListType.ipv6_prefixes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_prefixes"] = vFn
 
 	return v
 }()
@@ -4444,6 +4594,16 @@ func (v *ValidateWhereSite) IpValidationRuleHandler(rules map[string]string) (db
 	return validatorFn, nil
 }
 
+func (v *ValidateWhereSite) Ip6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*WhereSite)
 	if !ok {
@@ -4462,6 +4622,15 @@ func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("ip"))
 		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip6"))
+		if err := fv(ctx, m.GetIp6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4532,6 +4701,17 @@ var DefaultWhereSiteValidator = func() *ValidateWhereSite {
 		panic(errMsg)
 	}
 	v.FldValidators["ip"] = vFn
+
+	vrhIp6 := v.Ip6ValidationRuleHandler
+	rulesIp6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIp6(rulesIp6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSite.ip6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip6"] = vFn
 
 	return v
 }()

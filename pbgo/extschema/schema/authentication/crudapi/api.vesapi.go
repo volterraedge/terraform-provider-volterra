@@ -2872,7 +2872,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "crudapiErrorCode": {
+        "authenticationcrudapiErrorCode": {
             "type": "string",
             "enum": [
                 "EOK",
@@ -2904,7 +2904,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.crudapi.ObjectCreateRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/authenticationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2925,7 +2925,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.crudapi.ObjectDeleteRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/authenticationcrudapiErrorCode"
                 }
             }
         },
@@ -2940,7 +2940,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/authenticationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"
@@ -2967,7 +2967,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.crudapi.ObjectListRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/authenticationcrudapiErrorCode"
                 },
                 "items": {
                     "type": "array",
@@ -3046,7 +3046,7 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.authentication.crudapi.ObjectReplaceRsp",
             "properties": {
                 "err": {
-                    "$ref": "#/definitions/crudapiErrorCode"
+                    "$ref": "#/definitions/authenticationcrudapiErrorCode"
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaObjectMetaType"

@@ -32,8 +32,12 @@ resource "volterra_aws_tgw_site" "example" {
       disk_size              = "80"
 
       outside_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-        existing_subnet_id = "subnet-12345678901234567"
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
       }
 
       workload_subnet {
@@ -73,14 +77,14 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
-      // One of the arguments from this list "system_generated user_assigned" must be set
+      // One of the arguments from this list "user_assigned system_generated" must be set
       system_generated = true
     }
-    // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
+  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
@@ -175,6 +179,8 @@ Allowed VIP Port Configuration.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
 
+`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
+
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
@@ -186,6 +192,8 @@ Allowed VIP Port Configuration.
 Allowed VIP Port Configuration for Inside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
+
+`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
 
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
@@ -289,7 +297,7 @@ Use custom blocked services configuration, to list the services which need to be
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -379,6 +387,10 @@ Direct Connect Connection to Site is enabled.
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
 
+### Disable Allowed Vip Port
+
+HTTP Port (80) & HTTPS Port (443) will be disabled..
+
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -397,7 +409,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
 
 ### Domain Match
 

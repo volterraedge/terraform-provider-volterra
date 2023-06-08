@@ -808,6 +808,24 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["error_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_code"))
+		if err := fv(ctx, m.GetErrorCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["health_check_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("health_check_type"))

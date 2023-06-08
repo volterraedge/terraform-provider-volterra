@@ -21,7 +21,54 @@ resource "volterra_nfv_service" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "disable_https_management https_management" must be set
-  disable_https_management = true
+
+  https_management {
+    // One of the arguments from this list "do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local" must be set
+
+    advertise_on_slo_internet_vip {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+      no_mtls = true
+
+      tls_certificates {
+        certificate_url = "value"
+        description     = "Certificate used in production environment"
+
+        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
+
+        use_system_defaults {}
+        private_key {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+        default_security = true
+      }
+    }
+
+    domain_suffix = "foo.com"
+
+    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    do_not_advertise = true
+
+    // One of the arguments from this list "default_https_port https_port" must be set
+    default_https_port = true
+  }
 
   // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
 
@@ -35,10 +82,12 @@ resource "volterra_nfv_service" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
 
-      wingman_secret_info {
-        name = "ChargeBack-API-Key"
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
       }
     }
 
@@ -46,40 +95,26 @@ resource "volterra_nfv_service" "example" {
 
     endpoint_service {
       // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-      advertise_on_slo_ip_external = true
+      advertise_on_slo_ip = true
 
       // One of the arguments from this list "automatic_vip configured_vip" must be set
-      automatic_vip = true
+      configured_vip = "10.1.2.6/32"
 
       // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
       default_tcp_ports = true
 
       // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
-      no_udp_ports = true
+
+      custom_udp_ports {
+        ports = ["100-200"]
+      }
     }
 
     // One of the arguments from this list "market_place_image byol_image" must be set
 
-    byol_image {
-      image = "image1"
-
-      license {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-      }
+    market_place_image {
+      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
+      AWAFPayG200Mbps = true
     }
     nodes {
       aws_az_name = "us-west-2a"
@@ -106,7 +141,7 @@ resource "volterra_nfv_service" "example" {
       "key1" = "value1"
     }
   }
-  // One of the arguments from this list "enabled_ssh_access disable_ssh_access" must be set
+  // One of the arguments from this list "disable_ssh_access enabled_ssh_access" must be set
   disable_ssh_access = true
 }
 
@@ -298,6 +333,10 @@ Select AWS transit gateway site.
 Select AWS VPC site.
 
 `aws_vpc_site` - (Required) Reference to AWS VPC site. See [ref](#ref) below for details.
+
+### Best Plus Payg 1gbps
+
+F5 Best Plus with all modules in 1Gbps flavor.
 
 ### Blindfold Secret Info
 
@@ -547,6 +586,8 @@ Select the BIG-IP pay as you go image to be used for this service.
 
 `BestPlusPayG200Mbps` - (Required) F5 Best Plus with all modules (PAYG, 200mbps) (bool).
 
+`best_plus_payg_1gbps` - (Required) F5 Best Plus with all modules in 1Gbps flavor (bool).
+
 ### Medium Security
 
 TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
@@ -717,7 +758,9 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca_url` - (Required) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
 

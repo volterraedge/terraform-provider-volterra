@@ -149,10 +149,28 @@ func (v *ValidateApplyStatus) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["tf_rollback_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tf_rollback_state"))
+		if err := fv(ctx, m.GetTfRollbackState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tf_stdout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tf_stdout"))
 		if err := fv(ctx, m.GetTfStdout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tf_upgrade_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tf_upgrade_state"))
+		if err := fv(ctx, m.GetTfUpgradeState(), vOpts...); err != nil {
 			return err
 		}
 

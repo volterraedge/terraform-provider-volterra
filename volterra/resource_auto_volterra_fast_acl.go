@@ -528,6 +528,16 @@ func resourceVolterraFastAcl() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"ipv6_prefix": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
 												"prefix": {
 
 													Type: schema.TypeList,
@@ -805,6 +815,16 @@ func resourceVolterraFastAcl() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"ipv6_prefix": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
 
 												"prefix": {
 
@@ -1580,6 +1600,16 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceInt.Prefix.Ipv6Prefix = ls
+
+							}
+
 							if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 								ls := make([]string, len(v.([]interface{})))
@@ -1951,6 +1981,16 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceInt.Prefix.Ipv6Prefix = ls
+
+							}
 
 							if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
@@ -2802,6 +2842,16 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceInt.Prefix.Ipv6Prefix = ls
+
+							}
+
 							if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 
 								ls := make([]string, len(v.([]interface{})))
@@ -3173,6 +3223,16 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceInt.Prefix.Ipv6Prefix = ls
+
+							}
 
 							if v, ok := cs["prefix"]; ok && !isIntfNil(v) {
 

@@ -298,6 +298,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -390,6 +396,24 @@ func (m *CreateSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Inte
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1033,7 +1057,9 @@ var DefaultEndpointSubsetSelectorTypeValidator = func() *ValidateEndpointSubsetS
 
 	vrhKeys := v.KeysValidationRuleHandler
 	rulesKeys := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.message.required":                "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
+		"ves.io.schema.rules.repeated.max_items":              "16",
 	}
 	vFn, err = vrhKeys(rulesKeys)
 	if err != nil {
@@ -1114,6 +1140,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetHealthChecksDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetHealthChecksDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1210,6 +1242,24 @@ func (m *GetSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Interfa
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -1800,6 +1850,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1892,6 +1948,24 @@ func (m *GlobalSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Inte
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -2805,6 +2879,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetTlsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -2897,6 +2977,24 @@ func (m *ReplaceSpecType) GetHealthChecksDBEntries(ctx context.Context, d db.Int
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetTlsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTlsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "tls_parameters." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {

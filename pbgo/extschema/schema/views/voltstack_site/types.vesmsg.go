@@ -490,48 +490,6 @@ func (v *ValidateCreateSpecType) VolterraCertifiedHwValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) MasterNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for master_nodes")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_nodes")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated master_nodes")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items master_nodes")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -579,6 +537,54 @@ func (v *ValidateCreateSpecType) AddressValidationRuleHandler(rules map[string]s
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for master_node_configuration")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.MasterNode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.MasterNodeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_node_configuration")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.MasterNode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.MasterNode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated master_node_configuration")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items master_node_configuration")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -833,10 +839,22 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["master_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("master_nodes"))
-		if err := fv(ctx, m.GetMasterNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
+		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
+		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["master_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("master_nodes"))
+		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1146,20 +1164,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["volterra_certified_hw"] = vFn
 
-	vrhMasterNodes := v.MasterNodesValidationRuleHandler
-	rulesMasterNodes := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "3",
-		"ves.io.schema.rules.repeated.num_items": "1,3",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhMasterNodes(rulesMasterNodes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.master_nodes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["master_nodes"] = vFn
-
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "128",
@@ -1182,6 +1186,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	vrhMasterNodeConfiguration := v.MasterNodeConfigurationValidationRuleHandler
+	rulesMasterNodeConfiguration := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhMasterNodeConfiguration(rulesMasterNodeConfiguration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.master_node_configuration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["master_node_configuration"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -1677,48 +1693,6 @@ func (v *ValidateGetSpecType) VolterraCertifiedHwValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) MasterNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for master_nodes")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_nodes")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated master_nodes")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items master_nodes")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1786,6 +1760,54 @@ func (v *ValidateGetSpecType) AddressValidationRuleHandler(rules map[string]stri
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for master_node_configuration")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.MasterNode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.MasterNodeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_node_configuration")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.MasterNode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.MasterNode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated master_node_configuration")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items master_node_configuration")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -2040,10 +2062,22 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["master_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("master_nodes"))
-		if err := fv(ctx, m.GetMasterNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
+		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
+		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["master_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("master_nodes"))
+		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2362,20 +2396,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["volterra_certified_hw"] = vFn
 
-	vrhMasterNodes := v.MasterNodesValidationRuleHandler
-	rulesMasterNodes := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "3",
-		"ves.io.schema.rules.repeated.num_items": "1,3",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhMasterNodes(rulesMasterNodes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.master_nodes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["master_nodes"] = vFn
-
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "128",
@@ -2420,6 +2440,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	vrhMasterNodeConfiguration := v.MasterNodeConfigurationValidationRuleHandler
+	rulesMasterNodeConfiguration := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhMasterNodeConfiguration(rulesMasterNodeConfiguration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.master_node_configuration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["master_node_configuration"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -3385,48 +3417,6 @@ func (v *ValidateGlobalSpecType) VolterraCertifiedHwValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) MasterNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for master_nodes")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_nodes")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated master_nodes")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items master_nodes")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -3540,6 +3530,54 @@ func (v *ValidateGlobalSpecType) IpfabricMeshGroupValidationRuleHandler(rules ma
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items ipfabric_mesh_group")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for master_node_configuration")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.MasterNode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.MasterNodeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_node_configuration")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.MasterNode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.MasterNode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated master_node_configuration")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items master_node_configuration")
 		}
 		return nil
 	}
@@ -3813,10 +3851,22 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["master_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("master_nodes"))
-		if err := fv(ctx, m.GetMasterNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
+		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
+		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["master_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("master_nodes"))
+		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4153,20 +4203,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["volterra_certified_hw"] = vFn
 
-	vrhMasterNodes := v.MasterNodesValidationRuleHandler
-	rulesMasterNodes := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "3",
-		"ves.io.schema.rules.repeated.num_items": "1,3",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhMasterNodes(rulesMasterNodes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.master_nodes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["master_nodes"] = vFn
-
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "128",
@@ -4222,6 +4258,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ipfabric_mesh_group"] = vFn
+
+	vrhMasterNodeConfiguration := v.MasterNodeConfigurationValidationRuleHandler
+	rulesMasterNodeConfiguration := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhMasterNodeConfiguration(rulesMasterNodeConfiguration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.master_node_configuration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["master_node_configuration"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -4361,6 +4409,14 @@ type ValidateInterface struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateInterface) DcClusterGroupConnectivityInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dc_cluster_group_connectivity_interface_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateInterface) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4391,6 +4447,42 @@ func (v *ValidateInterface) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice"]; exists {
+		val := m.GetDcClusterGroupConnectivityInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDcClusterGroupConnectivityInterfaceChoice().(type) {
+	case *Interface_DcClusterGroupConnectivityInterfaceDisabled:
+		if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice.dc_cluster_group_connectivity_interface_disabled"]; exists {
+			val := m.GetDcClusterGroupConnectivityInterfaceChoice().(*Interface_DcClusterGroupConnectivityInterfaceDisabled).DcClusterGroupConnectivityInterfaceDisabled
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+				db.WithValidateField("dc_cluster_group_connectivity_interface_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Interface_DcClusterGroupConnectivityInterfaceEnabled:
+		if fv, exists := v.FldValidators["dc_cluster_group_connectivity_interface_choice.dc_cluster_group_connectivity_interface_enabled"]; exists {
+			val := m.GetDcClusterGroupConnectivityInterfaceChoice().(*Interface_DcClusterGroupConnectivityInterfaceEnabled).DcClusterGroupConnectivityInterfaceEnabled
+			vOpts := append(opts,
+				db.WithValidateField("dc_cluster_group_connectivity_interface_choice"),
+				db.WithValidateField("dc_cluster_group_connectivity_interface_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["description"]; exists {
@@ -4497,6 +4589,17 @@ var DefaultInterfaceValidator = func() *ValidateInterface {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhDcClusterGroupConnectivityInterfaceChoice := v.DcClusterGroupConnectivityInterfaceChoiceValidationRuleHandler
+	rulesDcClusterGroupConnectivityInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDcClusterGroupConnectivityInterfaceChoice(rulesDcClusterGroupConnectivityInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Interface.dc_cluster_group_connectivity_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dc_cluster_group_connectivity_interface_choice"] = vFn
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{
@@ -5172,48 +5275,6 @@ func (v *ValidateReplaceSpecType) VolterraCertifiedHwValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) MasterNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for master_nodes")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_nodes")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated master_nodes")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items master_nodes")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -5261,6 +5322,54 @@ func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MasterNodeConfigurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for master_node_configuration")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.MasterNode, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.MasterNodeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for master_node_configuration")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.MasterNode)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.MasterNode, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated master_node_configuration")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items master_node_configuration")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -5515,10 +5624,22 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["master_nodes"]; exists {
-		vOpts := append(opts, db.WithValidateField("master_nodes"))
-		if err := fv(ctx, m.GetMasterNodes(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["master_node_configuration"]; exists {
+		vOpts := append(opts, db.WithValidateField("master_node_configuration"))
+		if err := fv(ctx, m.GetMasterNodeConfiguration(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["master_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("master_nodes"))
+		for idx, item := range m.GetMasterNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5810,20 +5931,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["volterra_certified_hw"] = vFn
 
-	vrhMasterNodes := v.MasterNodesValidationRuleHandler
-	rulesMasterNodes := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "3",
-		"ves.io.schema.rules.repeated.num_items": "1,3",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhMasterNodes(rulesMasterNodes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.master_nodes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["master_nodes"] = vFn
-
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "128",
@@ -5846,6 +5953,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["address"] = vFn
+
+	vrhMasterNodeConfiguration := v.MasterNodeConfigurationValidationRuleHandler
+	rulesMasterNodeConfiguration := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "3",
+	}
+	vFn, err = vrhMasterNodeConfiguration(rulesMasterNodeConfiguration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.master_node_configuration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["master_node_configuration"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -5918,7 +6037,20 @@ func (m *SliVnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetStaticRouteChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticRouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -5949,6 +6081,33 @@ func (m *SliVnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, erro
 
 }
 
+// GetDRefInfo for the field's type
+func (m *SliVnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6RouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *SliVnConfiguration_NoV6StaticRoutes:
+
+		return nil, nil
+
+	case *SliVnConfiguration_StaticV6Routes:
+		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_v6_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateSliVnConfiguration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -5957,6 +6116,14 @@ func (v *ValidateSliVnConfiguration) StaticRouteChoiceValidationRuleHandler(rule
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSliVnConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_v6_route_choice")
 	}
 	return validatorFn, nil
 }
@@ -6011,6 +6178,42 @@ func (v *ValidateSliVnConfiguration) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
+		val := m.GetStaticV6RouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_v6_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *SliVnConfiguration_NoV6StaticRoutes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.no_v6_static_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*SliVnConfiguration_NoV6StaticRoutes).NoV6StaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("no_v6_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SliVnConfiguration_StaticV6Routes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.static_v6_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*SliVnConfiguration_StaticV6Routes).StaticV6Routes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("static_v6_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -6037,7 +6240,20 @@ var DefaultSliVnConfigurationValidator = func() *ValidateSliVnConfiguration {
 	}
 	v.FldValidators["static_route_choice"] = vFn
 
+	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
+	rulesStaticV6RouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStaticV6RouteChoice(rulesStaticV6RouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SliVnConfiguration.static_v6_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_route_choice"] = vFn
+
 	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
 
 	return v
 }()
@@ -6650,6 +6866,12 @@ func (m *VnConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -6801,6 +7023,33 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 
 }
 
+// GetDRefInfo for the field's type
+func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6RouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *VnConfiguration_NoStaticV6Routes:
+
+		return nil, nil
+
+	case *VnConfiguration_StaticV6Routes:
+		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_v6_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateVnConfiguration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -6821,51 +7070,11 @@ func (v *ValidateVnConfiguration) StaticRouteChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
-func (v *ValidateVnConfiguration) DcClusterGroupInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+func (v *ValidateVnConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for dc_cluster_group_interface")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_v6_route_choice")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dc_cluster_group_interface")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated dc_cluster_group_interface")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items dc_cluster_group_interface")
-		}
-		return nil
-	}
-
 	return validatorFn, nil
 }
 
@@ -6920,9 +7129,13 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	if fv, exists := v.FldValidators["dc_cluster_group_interface"]; exists {
+
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group_interface"))
-		if err := fv(ctx, m.GetDcClusterGroupInterface(), vOpts...); err != nil {
-			return err
+		for idx, item := range m.GetDcClusterGroupInterface() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -6975,6 +7188,42 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
+		val := m.GetStaticV6RouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_v6_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *VnConfiguration_NoStaticV6Routes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.no_static_v6_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*VnConfiguration_NoStaticV6Routes).NoStaticV6Routes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("no_static_v6_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VnConfiguration_StaticV6Routes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.static_v6_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*VnConfiguration_StaticV6Routes).StaticV6Routes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("static_v6_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -7012,21 +7261,24 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 	}
 	v.FldValidators["static_route_choice"] = vFn
 
-	vrhDcClusterGroupInterface := v.DcClusterGroupInterfaceValidationRuleHandler
-	rulesDcClusterGroupInterface := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "128",
-		"ves.io.schema.rules.repeated.unique":    "true",
+	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
+	rulesStaticV6RouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhDcClusterGroupInterface(rulesDcClusterGroupInterface)
+	vFn, err = vrhStaticV6RouteChoice(rulesStaticV6RouteChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.dc_cluster_group_interface: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.static_v6_route_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["dc_cluster_group_interface"] = vFn
+	v.FldValidators["static_v6_route_choice"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
+
+	v.FldValidators["dc_cluster_group_interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -7345,6 +7597,22 @@ func (v *ValidateVssNetworkConfiguration) NetworkPolicyChoiceValidationRuleHandl
 	return validatorFn, nil
 }
 
+func (v *ValidateVssNetworkConfiguration) SiteMeshGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_mesh_group_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateVssNetworkConfiguration) SiteMeshGroupChoiceSiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SiteToSiteTunnelIp, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
+	}
+	return oValidatorFn_SiteToSiteTunnelIp, nil
+}
+
 func (v *ValidateVssNetworkConfiguration) SloChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7388,16 +7656,6 @@ func (v *ValidateVssNetworkConfiguration) BgpPeerAddressValidationRuleHandler(ru
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateVssNetworkConfiguration) SiteToSiteTunnelIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for site_to_site_tunnel_ip")
 	}
 
 	return validatorFn, nil
@@ -7629,11 +7887,49 @@ func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 	}
 
-	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
-		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["site_mesh_group_choice"]; exists {
+		val := m.GetSiteMeshGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("site_mesh_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSiteMeshGroupChoice().(type) {
+	case *VssNetworkConfiguration_SiteToSiteTunnelIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.site_to_site_tunnel_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*VssNetworkConfiguration_SiteToSiteTunnelIp).SiteToSiteTunnelIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("site_to_site_tunnel_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VssNetworkConfiguration_SmConnectionPublicIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_public_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*VssNetworkConfiguration_SmConnectionPublicIp).SmConnectionPublicIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VssNetworkConfiguration_SmConnectionPvtIp:
+		if fv, exists := v.FldValidators["site_mesh_group_choice.sm_connection_pvt_ip"]; exists {
+			val := m.GetSiteMeshGroupChoice().(*VssNetworkConfiguration_SmConnectionPvtIp).SmConnectionPvtIp
+			vOpts := append(opts,
+				db.WithValidateField("site_mesh_group_choice"),
+				db.WithValidateField("sm_connection_pvt_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -7777,6 +8073,29 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 	}
 	v.FldValidators["network_policy_choice"] = vFn
 
+	vrhSiteMeshGroupChoice := v.SiteMeshGroupChoiceValidationRuleHandler
+	rulesSiteMeshGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteMeshGroupChoice(rulesSiteMeshGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VssNetworkConfiguration.site_mesh_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_mesh_group_choice"] = vFn
+
+	vrhSiteMeshGroupChoiceSiteToSiteTunnelIp := v.SiteMeshGroupChoiceSiteToSiteTunnelIpValidationRuleHandler
+	rulesSiteMeshGroupChoiceSiteToSiteTunnelIp := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFnMap["site_mesh_group_choice.site_to_site_tunnel_ip"], err = vrhSiteMeshGroupChoiceSiteToSiteTunnelIp(rulesSiteMeshGroupChoiceSiteToSiteTunnelIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field VssNetworkConfiguration.site_mesh_group_choice_site_to_site_tunnel_ip: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["site_mesh_group_choice.site_to_site_tunnel_ip"] = vFnMap["site_mesh_group_choice.site_to_site_tunnel_ip"]
+
 	vrhSloChoice := v.SloChoiceValidationRuleHandler
 	rulesSloChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7831,17 +8150,6 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["bgp_peer_address"] = vFn
-
-	vrhSiteToSiteTunnelIp := v.SiteToSiteTunnelIpValidationRuleHandler
-	rulesSiteToSiteTunnelIp := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFn, err = vrhSiteToSiteTunnelIp(rulesSiteToSiteTunnelIp)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for VssNetworkConfiguration.site_to_site_tunnel_ip: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["site_to_site_tunnel_ip"] = vFn
 
 	vrhTunnelDeadTimeout := v.TunnelDeadTimeoutValidationRuleHandler
 	rulesTunnelDeadTimeout := map[string]string{
@@ -8644,6 +8952,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -8679,6 +8988,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.MasterNodeConfiguration = m1.MasterNodeConfiguration
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -9073,6 +9383,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -9109,6 +9420,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.MasterNodeConfiguration = m1.MasterNodeConfiguration
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -9504,6 +9816,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -9537,6 +9850,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.MasterNodeConfiguration = m1.MasterNodeConfiguration
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode

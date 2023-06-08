@@ -21,22 +21,19 @@ resource "volterra_securemesh_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
-  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_node_configuration {
     name      = "master-0"
     public_ip = "192.168.0.156"
   }
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
   volterra_certified_hw  = ["isv-8000-series-voltmesh"]
@@ -88,8 +85,6 @@ Argument Reference
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
-
-`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -157,7 +152,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -169,11 +164,11 @@ Use custom blocked services configuration.
 
 Configure Bond Devices for this Secure Mesh site.
 
-`bond_devices` - (Required) List of bond devices for this fleet. See [Bond Devices ](#bond-devices) below for details.
+`bond_devices` - (Required) List of bond devices. See [Bond Devices ](#bond-devices) below for details.
 
 ### Bond Devices
 
-List of bond devices for this fleet.
+List of bond devices.
 
 `devices` - (Required) Ethernet devices that will make up this bond (`String`).
 
@@ -278,6 +273,14 @@ Use custom networking configuration.
 `tunnel_dead_timeout` - (Optional) When not set (== 0), a default value of 10000 msec will be used. (`Int`).
 
 `vip_vrrp_mode` - (Optional) When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP. (`String`).
+
+### Dc Cluster Group Connectivity Interface Disabled
+
+Do not use this interface to connect to DC cluster group peers. .
+
+### Dc Cluster Group Connectivity Interface Enabled
+
+Use this interface to connect to DC cluster group peers..
 
 ### Dedicated Interface
 
@@ -389,7 +392,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
 
 ### Domain Match
 
@@ -539,6 +542,10 @@ Add all interfaces belonging to this site.
 
 Configure network interfaces for this Secure Mesh site.
 
+`dc_cluster_group_connectivity_interface_disabled` - (Optional) Do not use this interface to connect to DC cluster group peers. (bool).
+
+`dc_cluster_group_connectivity_interface_enabled` - (Optional) Use this interface to connect to DC cluster group peers. (bool).
+
 `description` - (Optional) Description for this Interface (`String`).
 
 `dedicated_interface` - (Optional) Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet. See [Dedicated Interface ](#dedicated-interface) below for details.
@@ -558,10 +565,6 @@ Interface belongs to IP Fabric network.
 ### Is Primary
 
 This interface is primary.
-
-### Jumbo
-
-L3 performance mode enhancement to use jumbo frame.
 
 ### Lacp
 
@@ -637,10 +640,6 @@ No TLS interception is enabled for this network connector.
 
 Interface does not have an IPv6 Address..
 
-### No Jumbo
-
-L3 performance mode enhancement without jumbo frame.
-
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
@@ -652,6 +651,10 @@ When this feature is disabled on an existing site, the pods/services on this sit
 ### No Static Routes
 
 Static Routes disabled for site local network..
+
+### No V6 Static Routes
+
+Static IPv6 Routes disabled for site local network..
 
 ### Node Static Ip
 
@@ -682,26 +685,6 @@ Operating System Details.
 `default_os_version` - (Optional) Will assign latest available OS version (bool).
 
 `operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
-
-### Perf Mode L3 Enhanced
-
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
-
-`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
-
-`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
-
-### Perf Mode L7 Enhanced
-
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
-
-### Performance Enhancement Mode
-
-Performance Enhancement Mode to optimize for L3 or L7 networking.
-
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
-
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -775,6 +758,10 @@ Configuration for site local inside network.
 
 `static_routes` - (Optional) Manage static routes for site local network.. See [Static Routes ](#static-routes) below for details.
 
+`no_v6_static_routes` - (Optional) Static IPv6 Routes disabled for site local network. (bool).
+
+`static_v6_routes` - (Optional) Manage IPv6 static routes for site local network.. See [Static V6 Routes ](#static-v6-routes) below for details.
+
 `vip` - (Optional) Optional common virtual IP across all nodes to be used as automatic VIP. (`String`).
 
 ### Sli To Global Dr
@@ -800,6 +787,10 @@ Configuration for site local network.
 `no_static_routes` - (Optional) Static Routes disabled for site local network. (bool).
 
 `static_routes` - (Optional) Manage static routes for site local network.. See [Static Routes ](#static-routes) below for details.
+
+`no_v6_static_routes` - (Optional) Static IPv6 Routes disabled for site local network. (bool).
+
+`static_v6_routes` - (Optional) Manage IPv6 static routes for site local network.. See [Static V6 Routes ](#static-v6-routes) below for details.
 
 `vip` - (Optional) Optional common virtual IP across all nodes to be used as automatic VIP. (`String`).
 
@@ -846,6 +837,12 @@ Interface IP is configured statically.
 Manage static routes for site local network..
 
 `static_routes` - (Required) List of static routes. See [Static Routes ](#static-routes) below for details.
+
+### Static V6 Routes
+
+Manage IPv6 static routes for site local network..
+
+`static_routes` - (Required) List of IPv6 static routes. See [Static Routes ](#static-routes) below for details.
 
 ### Storage Network
 
