@@ -784,6 +784,18 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"dc_cluster_group_connectivity_interface_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"dc_cluster_group_connectivity_interface_enabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"description": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -2152,6 +2164,87 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 										},
 									},
 
+									"no_v6_static_routes": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"static_v6_routes": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"static_routes": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"attrs": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"default_gateway": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"interface": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ip_address": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"vip": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -2316,6 +2409,87 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 										},
 									},
 
+									"no_v6_static_routes": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"static_v6_routes": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"static_routes": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"attrs": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"default_gateway": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"interface": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ip_address": {
+
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"vip": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -2381,44 +2555,6 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 						"operating_system_version": {
 
 							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"performance_enhancement_mode": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"perf_mode_l3_enhanced": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"jumbo": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"no_jumbo": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"perf_mode_l7_enhanced": {
-
-							Type:     schema.TypeBool,
 							Optional: true,
 						},
 					},
@@ -3534,6 +3670,32 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 						for i, set := range sl {
 							interfaces[i] = &ves_io_schema_views_securemesh_site.Interface{}
 							interfacesMapStrToI := set.(map[string]interface{})
+
+							dcClusterGroupConnectivityInterfaceChoiceTypeFound := false
+
+							if v, ok := interfacesMapStrToI["dc_cluster_group_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !dcClusterGroupConnectivityInterfaceChoiceTypeFound {
+
+								dcClusterGroupConnectivityInterfaceChoiceTypeFound = true
+
+								if v.(bool) {
+									dcClusterGroupConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site.Interface_DcClusterGroupConnectivityInterfaceDisabled{}
+									dcClusterGroupConnectivityInterfaceChoiceInt.DcClusterGroupConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+									interfaces[i].DcClusterGroupConnectivityInterfaceChoice = dcClusterGroupConnectivityInterfaceChoiceInt
+								}
+
+							}
+
+							if v, ok := interfacesMapStrToI["dc_cluster_group_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !dcClusterGroupConnectivityInterfaceChoiceTypeFound {
+
+								dcClusterGroupConnectivityInterfaceChoiceTypeFound = true
+
+								if v.(bool) {
+									dcClusterGroupConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site.Interface_DcClusterGroupConnectivityInterfaceEnabled{}
+									dcClusterGroupConnectivityInterfaceChoiceInt.DcClusterGroupConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+									interfaces[i].DcClusterGroupConnectivityInterfaceChoice = dcClusterGroupConnectivityInterfaceChoiceInt
+								}
+
+							}
 
 							if w, ok := interfacesMapStrToI["description"]; ok && !isIntfNil(w) {
 								interfaces[i].Description = w.(string)
@@ -5525,6 +5687,124 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 					}
 
+					staticV6RouteChoiceTypeFound := false
+
+					if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+
+						if v.(bool) {
+							staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_NoV6StaticRoutes{}
+							staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+							sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+						staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_StaticV6Routes{}
+						staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+						sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+								staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+								for i, set := range sl {
+									staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+									staticRoutesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+										attrsList := []ves_io_schema.RouteAttrType{}
+										for _, j := range v.([]interface{}) {
+											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+										}
+										staticRoutes[i].Attrs = attrsList
+
+									}
+
+									if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										staticRoutes[i].IpPrefixes = ls
+									}
+
+									nextHopChoiceTypeFound := false
+
+									if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+
+										if v.(bool) {
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+											nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+										nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
+
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										nextHopChoiceInt.IpAddress = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["vip"]; ok && !isIntfNil(v) {
 
 						sliChoiceInt.SliConfig.Vip = v.(string)
@@ -5766,6 +6046,124 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 					}
 
+					staticV6RouteChoiceTypeFound := false
+
+					if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+
+						if v.(bool) {
+							staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_NoV6StaticRoutes{}
+							staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+							sloChoiceInt.SloConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+						staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_StaticV6Routes{}
+						staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+						sloChoiceInt.SloConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+								staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+								for i, set := range sl {
+									staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+									staticRoutesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+										attrsList := []ves_io_schema.RouteAttrType{}
+										for _, j := range v.([]interface{}) {
+											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+										}
+										staticRoutes[i].Attrs = attrsList
+
+									}
+
+									if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										staticRoutes[i].IpPrefixes = ls
+									}
+
+									nextHopChoiceTypeFound := false
+
+									if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+
+										if v.(bool) {
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+											nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+										nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
+
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										nextHopChoiceInt.IpAddress = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["vip"]; ok && !isIntfNil(v) {
 
 						sloChoiceInt.SloConfig.Vip = v.(string)
@@ -5874,74 +6272,6 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
 
 				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
-
-			}
-
-		}
-
-	}
-
-	//performance_enhancement_mode
-	if v, ok := d.GetOk("performance_enhancement_mode"); ok && !isIntfNil(v) {
-
-		sl := v.(*schema.Set).List()
-		performanceEnhancementMode := &ves_io_schema_views.PerformanceEnhancementModeType{}
-		createSpec.PerformanceEnhancementMode = performanceEnhancementMode
-		for _, set := range sl {
-			performanceEnhancementModeMapStrToI := set.(map[string]interface{})
-
-			perfModeChoiceTypeFound := false
-
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l3_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-				perfModeChoiceTypeFound = true
-				perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL3Enhanced{}
-				perfModeChoiceInt.PerfModeL3Enhanced = &ves_io_schema_views.L3PerformanceEnhancementType{}
-				performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					perfModeChoiceTypeFound := false
-
-					if v, ok := cs["jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_Jumbo{}
-							perfModeChoiceIntNew.Jumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-					if v, ok := cs["no_jumbo"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-						perfModeChoiceTypeFound = true
-
-						if v.(bool) {
-							perfModeChoiceIntNew := &ves_io_schema_views.L3PerformanceEnhancementType_NoJumbo{}
-							perfModeChoiceIntNew.NoJumbo = &ves_io_schema.Empty{}
-							perfModeChoiceInt.PerfModeL3Enhanced.PerfModeChoice = perfModeChoiceIntNew
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := performanceEnhancementModeMapStrToI["perf_mode_l7_enhanced"]; ok && !isIntfNil(v) && !perfModeChoiceTypeFound {
-
-				perfModeChoiceTypeFound = true
-
-				if v.(bool) {
-					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
-					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
-					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
-				}
 
 			}
 
@@ -7110,6 +7440,32 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 							interfaces[i] = &ves_io_schema_views_securemesh_site.Interface{}
 							interfacesMapStrToI := set.(map[string]interface{})
 
+							dcClusterGroupConnectivityInterfaceChoiceTypeFound := false
+
+							if v, ok := interfacesMapStrToI["dc_cluster_group_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !dcClusterGroupConnectivityInterfaceChoiceTypeFound {
+
+								dcClusterGroupConnectivityInterfaceChoiceTypeFound = true
+
+								if v.(bool) {
+									dcClusterGroupConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site.Interface_DcClusterGroupConnectivityInterfaceDisabled{}
+									dcClusterGroupConnectivityInterfaceChoiceInt.DcClusterGroupConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
+									interfaces[i].DcClusterGroupConnectivityInterfaceChoice = dcClusterGroupConnectivityInterfaceChoiceInt
+								}
+
+							}
+
+							if v, ok := interfacesMapStrToI["dc_cluster_group_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !dcClusterGroupConnectivityInterfaceChoiceTypeFound {
+
+								dcClusterGroupConnectivityInterfaceChoiceTypeFound = true
+
+								if v.(bool) {
+									dcClusterGroupConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site.Interface_DcClusterGroupConnectivityInterfaceEnabled{}
+									dcClusterGroupConnectivityInterfaceChoiceInt.DcClusterGroupConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
+									interfaces[i].DcClusterGroupConnectivityInterfaceChoice = dcClusterGroupConnectivityInterfaceChoiceInt
+								}
+
+							}
+
 							if w, ok := interfacesMapStrToI["description"]; ok && !isIntfNil(w) {
 								interfaces[i].Description = w.(string)
 							}
@@ -9100,6 +9456,124 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 					}
 
+					staticV6RouteChoiceTypeFound := false
+
+					if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+
+						if v.(bool) {
+							staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_NoV6StaticRoutes{}
+							staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+							sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+						staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_StaticV6Routes{}
+						staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+						sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+								staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+								for i, set := range sl {
+									staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+									staticRoutesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+										attrsList := []ves_io_schema.RouteAttrType{}
+										for _, j := range v.([]interface{}) {
+											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+										}
+										staticRoutes[i].Attrs = attrsList
+
+									}
+
+									if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										staticRoutes[i].IpPrefixes = ls
+									}
+
+									nextHopChoiceTypeFound := false
+
+									if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+
+										if v.(bool) {
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+											nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+										nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
+
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										nextHopChoiceInt.IpAddress = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["vip"]; ok && !isIntfNil(v) {
 
 						sliChoiceInt.SliConfig.Vip = v.(string)
@@ -9326,6 +9800,124 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 										nextHopChoiceTypeFound = true
 										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_IpAddress{}
+
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										nextHopChoiceInt.IpAddress = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					staticV6RouteChoiceTypeFound := false
+
+					if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+
+						if v.(bool) {
+							staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_NoV6StaticRoutes{}
+							staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+							sloChoiceInt.SloConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+						staticV6RouteChoiceTypeFound = true
+						staticV6RouteChoiceInt := &ves_io_schema_views_securemesh_site.VnConfiguration_StaticV6Routes{}
+						staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+						sloChoiceInt.SloConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+								staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+								for i, set := range sl {
+									staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+									staticRoutesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+										attrsList := []ves_io_schema.RouteAttrType{}
+										for _, j := range v.([]interface{}) {
+											attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+										}
+										staticRoutes[i].Attrs = attrsList
+
+									}
+
+									if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+										ls := make([]string, len(w.([]interface{})))
+										for i, v := range w.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										staticRoutes[i].IpPrefixes = ls
+									}
+
+									nextHopChoiceTypeFound := false
+
+									if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+
+										if v.(bool) {
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+											nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+										nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+										staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												nextHopChoiceInt.Interface.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+										nextHopChoiceTypeFound = true
+										nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
 
 										staticRoutes[i].NextHopChoice = nextHopChoiceInt
 

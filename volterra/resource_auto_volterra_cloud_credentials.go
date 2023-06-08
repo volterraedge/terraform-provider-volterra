@@ -60,6 +60,54 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"aws_assume_role": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"duration_seconds": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"custom_external_id": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"external_id_is_optional": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"external_id_is_tenant_id": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"role_arn": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"session_name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"session_tags": {
+							Type:     schema.TypeMap,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"aws_secret_key": {
 
 				Type:     schema.TypeSet,
@@ -739,6 +787,85 @@ func resourceVolterraCloudCredentialsCreate(d *schema.ResourceData, meta interfa
 	//cloud
 
 	cloudTypeFound := false
+
+	if v, ok := d.GetOk("aws_assume_role"); ok && !cloudTypeFound {
+
+		cloudTypeFound = true
+		cloudInt := &ves_io_schema_cloud_credentials.CreateSpecType_AwsAssumeRole{}
+		cloudInt.AwsAssumeRole = &ves_io_schema_cloud_credentials.AWSAssumeRoleType{}
+		createSpec.Cloud = cloudInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["duration_seconds"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.DurationSeconds = uint32(v.(int))
+
+			}
+
+			externalIdTypeFound := false
+
+			if v, ok := cs["custom_external_id"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+				externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_CustomExternalId{}
+
+				cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+
+				externalIdInt.CustomExternalId = v.(string)
+
+			}
+
+			if v, ok := cs["external_id_is_optional"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+
+				if v.(bool) {
+					externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_ExternalIdIsOptional{}
+					externalIdInt.ExternalIdIsOptional = &ves_io_schema.Empty{}
+					cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+				}
+
+			}
+
+			if v, ok := cs["external_id_is_tenant_id"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+
+				if v.(bool) {
+					externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_ExternalIdIsTenantId{}
+					externalIdInt.ExternalIdIsTenantId = &ves_io_schema.Empty{}
+					cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+				}
+
+			}
+
+			if v, ok := cs["role_arn"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.RoleArn = v.(string)
+
+			}
+
+			if v, ok := cs["session_name"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.SessionName = v.(string)
+
+			}
+
+			if v, ok := cs["session_tags"]; ok && !isIntfNil(v) {
+
+				ms := map[string]string{}
+				for k, v := range v.(map[string]interface{}) {
+					ms[k] = v.(string)
+				}
+				cloudInt.AwsAssumeRole.SessionTags = ms
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("aws_secret_key"); ok && !cloudTypeFound {
 
@@ -1627,6 +1754,85 @@ func resourceVolterraCloudCredentialsUpdate(d *schema.ResourceData, meta interfa
 	}
 
 	cloudTypeFound := false
+
+	if v, ok := d.GetOk("aws_assume_role"); ok && !cloudTypeFound {
+
+		cloudTypeFound = true
+		cloudInt := &ves_io_schema_cloud_credentials.ReplaceSpecType_AwsAssumeRole{}
+		cloudInt.AwsAssumeRole = &ves_io_schema_cloud_credentials.AWSAssumeRoleType{}
+		updateSpec.Cloud = cloudInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["duration_seconds"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.DurationSeconds = uint32(v.(int))
+
+			}
+
+			externalIdTypeFound := false
+
+			if v, ok := cs["custom_external_id"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+				externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_CustomExternalId{}
+
+				cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+
+				externalIdInt.CustomExternalId = v.(string)
+
+			}
+
+			if v, ok := cs["external_id_is_optional"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+
+				if v.(bool) {
+					externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_ExternalIdIsOptional{}
+					externalIdInt.ExternalIdIsOptional = &ves_io_schema.Empty{}
+					cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+				}
+
+			}
+
+			if v, ok := cs["external_id_is_tenant_id"]; ok && !isIntfNil(v) && !externalIdTypeFound {
+
+				externalIdTypeFound = true
+
+				if v.(bool) {
+					externalIdInt := &ves_io_schema_cloud_credentials.AWSAssumeRoleType_ExternalIdIsTenantId{}
+					externalIdInt.ExternalIdIsTenantId = &ves_io_schema.Empty{}
+					cloudInt.AwsAssumeRole.ExternalId = externalIdInt
+				}
+
+			}
+
+			if v, ok := cs["role_arn"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.RoleArn = v.(string)
+
+			}
+
+			if v, ok := cs["session_name"]; ok && !isIntfNil(v) {
+
+				cloudInt.AwsAssumeRole.SessionName = v.(string)
+
+			}
+
+			if v, ok := cs["session_tags"]; ok && !isIntfNil(v) {
+
+				ms := map[string]string{}
+				for k, v := range v.(map[string]interface{}) {
+					ms[k] = v.(string)
+				}
+				cloudInt.AwsAssumeRole.SessionTags = ms
+			}
+
+		}
+
+	}
 
 	if v, ok := d.GetOk("aws_secret_key"); ok && !cloudTypeFound {
 

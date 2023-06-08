@@ -252,7 +252,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -898,6 +898,12 @@ func resourceVolterraOriginPool() *schema.Resource {
 				Optional: true,
 			},
 
+			"lb_port": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"port": {
 
 				Type:     schema.TypeInt,
@@ -1126,6 +1132,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"use_mtls_obj": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"skip_server_verification": {
 
 							Type:     schema.TypeBool,
@@ -1139,7 +1168,31 @@ func resourceVolterraOriginPool() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"trusted_ca": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"trusted_ca_url": {
+
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -2474,6 +2527,18 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("lb_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+
+		if v.(bool) {
+			portChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_LbPort{}
+			portChoiceInt.LbPort = &ves_io_schema.Empty{}
+			createSpec.PortChoice = portChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
@@ -2771,6 +2836,39 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["use_mtls_obj"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+				mtlsChoiceTypeFound = true
+				mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtlsObj{}
+				mtlsChoiceInt.UseMtlsObj = &ves_io_schema_views.ObjectRefType{}
+				tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
 			serverValidationChoiceTypeFound := false
 
 			if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
@@ -2796,9 +2894,49 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCaUrl{}
+
+						serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 
@@ -4221,6 +4359,18 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("lb_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+
+		if v.(bool) {
+			portChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_LbPort{}
+			portChoiceInt.LbPort = &ves_io_schema.Empty{}
+			updateSpec.PortChoice = portChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
@@ -4516,6 +4666,39 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["use_mtls_obj"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+				mtlsChoiceTypeFound = true
+				mtlsChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_UseMtlsObj{}
+				mtlsChoiceInt.UseMtlsObj = &ves_io_schema_views.ObjectRefType{}
+				tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtlsObj.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
 			serverValidationChoiceTypeFound := false
 
 			if v, ok := cs["skip_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
@@ -4541,9 +4724,49 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						serverValidationChoiceInt.UseServerVerification.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views_origin_pool.UpstreamTlsValidationContext_TrustedCaUrl{}
+
+						serverValidationChoiceInt.UseServerVerification.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 

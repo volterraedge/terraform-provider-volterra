@@ -4767,26 +4767,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 													Optional: true,
 												},
 
-												"openebs_enterprise": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"replication": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-
-															"storage_class_size": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
-												},
-
 												"storage_class_name": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -5736,26 +5716,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 												"default_storage_class": {
 													Type:     schema.TypeBool,
 													Optional: true,
-												},
-
-												"openebs_enterprise": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"replication": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-
-															"storage_class_size": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
 												},
 
 												"storage_class_name": {
@@ -12739,35 +12699,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 								storageClasses[i].DefaultStorageClass = w.(bool)
 							}
 
-							deviceChoiceTypeFound := false
-
-							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-								deviceChoiceTypeFound = true
-								deviceChoiceInt := &ves_io_schema_views.StorageClassType_OpenebsEnterprise{}
-								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_views.StorageClassOpenebsEnterpriseType{}
-								storageClasses[i].DeviceChoice = deviceChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
-
-									}
-
-									if v, ok := cs["storage_class_size"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.StorageClassSize = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
 							if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {
 								storageClasses[i].StorageClassName = w.(string)
 							}
@@ -14097,35 +14028,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							if w, ok := storageClassesMapStrToI["default_storage_class"]; ok && !isIntfNil(w) {
 								storageClasses[i].DefaultStorageClass = w.(bool)
-							}
-
-							deviceChoiceTypeFound := false
-
-							if v, ok := storageClassesMapStrToI["openebs_enterprise"]; ok && !isIntfNil(v) && !deviceChoiceTypeFound {
-
-								deviceChoiceTypeFound = true
-								deviceChoiceInt := &ves_io_schema_views.StorageClassType_OpenebsEnterprise{}
-								deviceChoiceInt.OpenebsEnterprise = &ves_io_schema_views.StorageClassOpenebsEnterpriseType{}
-								storageClasses[i].DeviceChoice = deviceChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["replication"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.Replication = int32(v.(int))
-
-									}
-
-									if v, ok := cs["storage_class_size"]; ok && !isIntfNil(v) {
-
-										deviceChoiceInt.OpenebsEnterprise.StorageClassSize = uint32(v.(int))
-
-									}
-
-								}
-
 							}
 
 							if w, ok := storageClassesMapStrToI["storage_class_name"]; ok && !isIntfNil(w) {

@@ -1816,7 +1816,46 @@ func resourceVolterraVirtualHost() *schema.Resource {
 										Optional: true,
 									},
 
+									"trusted_ca": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"trusted_ca_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"trusted_ca_url": {
+
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -2096,7 +2135,46 @@ func resourceVolterraVirtualHost() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"trusted_ca_list": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -4557,8 +4635,64 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 						validationParams.SkipHostnameVerification = w.(bool)
 					}
 
-					if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-						validationParams.TrustedCaUrl = w.(string)
+					trustedCaChoiceTypeFound := false
+
+					if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+						validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+								for i, ps := range sl {
+
+									tclMapToStrVal := ps.(map[string]interface{})
+									trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+									trustedCaListInt[i].Kind = "trusted_ca_list"
+
+									if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Name = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+						validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 					}
 
 					if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -4876,8 +5010,64 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -7369,8 +7559,64 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 						validationParams.SkipHostnameVerification = w.(bool)
 					}
 
-					if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-						validationParams.TrustedCaUrl = w.(string)
+					trustedCaChoiceTypeFound := false
+
+					if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+						validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+								for i, ps := range sl {
+
+									tclMapToStrVal := ps.(map[string]interface{})
+									trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+									trustedCaListInt[i].Kind = "trusted_ca_list"
+
+									if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Name = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										trustedCaListInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+						validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 					}
 
 					if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -7688,8 +7934,64 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {

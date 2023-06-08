@@ -87,6 +87,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"ip6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
 												"network": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -406,11 +411,6 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
-			"listen_port": {
-				Type:     schema.TypeInt,
-				Optional: true,
-			},
-
 			"tcp": {
 
 				Type:     schema.TypeBool,
@@ -506,7 +506,36 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -655,7 +684,36 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -1000,7 +1058,36 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										Optional: true,
 									},
 
+									"trusted_ca": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"trusted_ca_url": {
+
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -1176,6 +1263,18 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 				},
 			},
 
+			"listen_port": {
+
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"port_ranges": {
+
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
 			"active_service_policies": {
 
 				Type:     schema.TypeSet,
@@ -1335,6 +1434,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+
+								choiceInt.Site.Ip6 = v.(string)
 
 							}
 
@@ -1767,14 +1872,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	//listen_port
-	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {
-
-		createSpec.ListenPort =
-			uint32(v.(int))
-
-	}
-
 	//loadbalancer_type
 
 	loadbalancerTypeTypeFound := false
@@ -1913,9 +2010,49 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -2136,9 +2273,49 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -2593,9 +2770,49 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 
@@ -2828,6 +3045,32 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 			}
 
 		}
+
+	}
+
+	//port_choice
+
+	portChoiceTypeFound := false
+
+	if v, ok := d.GetOk("listen_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_ListenPort{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.ListenPort = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_PortRanges{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 
@@ -3076,6 +3319,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
 
 								choiceInt.Site.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+
+								choiceInt.Site.Ip6 = v.(string)
 
 							}
 
@@ -3501,13 +3750,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) {
-
-		updateSpec.ListenPort =
-			uint32(v.(int))
-
-	}
-
 	loadbalancerTypeTypeFound := false
 
 	if v, ok := d.GetOk("tcp"); ok && !loadbalancerTypeTypeFound {
@@ -3644,9 +3886,49 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -3867,9 +4149,49 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+							trustedCaChoiceTypeFound := false
 
-								mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+							if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+								mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 							}
 
@@ -4324,9 +4646,49 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+					trustedCaChoiceTypeFound := false
 
-						mtlsChoiceInt.UseMtls.TrustedCaUrl = v.(string)
+					if v, ok := cs["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCa{}
+						trustedCaChoiceInt.TrustedCa = &ves_io_schema_views.ObjectRefType{}
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								trustedCaChoiceInt.TrustedCa.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+						trustedCaChoiceTypeFound = true
+						trustedCaChoiceInt := &ves_io_schema_views.DownstreamTlsValidationContext_TrustedCaUrl{}
+
+						mtlsChoiceInt.UseMtls.TrustedCaChoice = trustedCaChoiceInt
+
+						trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
 					}
 
@@ -4584,6 +4946,30 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 			}
 
 		}
+
+	}
+
+	portChoiceTypeFound := false
+
+	if v, ok := d.GetOk("listen_port"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_ListenPort{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.ListenPort = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_PortRanges{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 

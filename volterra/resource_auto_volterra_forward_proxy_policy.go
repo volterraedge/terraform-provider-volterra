@@ -507,11 +507,21 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
 												"prefixes": {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -797,11 +807,21 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
 												"prefixes": {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Optional: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -1583,6 +1603,16 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
+
+							}
+
 							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
 								ls := make([]string, len(v.([]interface{})))
@@ -2010,6 +2040,16 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
+
+							}
 
 							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
@@ -2838,6 +2878,16 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
+
+							}
+
 							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 
 								ls := make([]string, len(v.([]interface{})))
@@ -3265,6 +3315,16 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
+
+							}
 
 							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
 

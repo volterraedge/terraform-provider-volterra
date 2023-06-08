@@ -1211,18 +1211,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"max_body_size_exceeds": {
-
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
-						"max_body_size_none": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
 						"max_cookie_count_exceeds": {
 
 							Type:     schema.TypeInt,
@@ -1367,18 +1355,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
-						"max_upload_file_size_exceeds": {
-
-							Type:     schema.TypeInt,
-							Optional: true,
-						},
-
-						"max_upload_file_size_none": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
 						"max_url_size_exceeds": {
 
 							Type:     schema.TypeInt,
@@ -1430,6 +1406,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"allow_goodbot": {
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 
 						"app_traffic_type": {
 							Type:     schema.TypeString,
@@ -3391,31 +3372,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		for _, set := range sl {
 			requestConstraintsMapStrToI := set.(map[string]interface{})
 
-			maxBodySizeChoiceTypeFound := false
-
-			if v, ok := requestConstraintsMapStrToI["max_body_size_exceeds"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
-
-				maxBodySizeChoiceTypeFound = true
-				maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeExceeds{}
-
-				requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
-
-				maxBodySizeChoiceInt.MaxBodySizeExceeds = uint32(v.(int))
-
-			}
-
-			if v, ok := requestConstraintsMapStrToI["max_body_size_none"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
-
-				maxBodySizeChoiceTypeFound = true
-
-				if v.(bool) {
-					maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeNone{}
-					maxBodySizeChoiceInt.MaxBodySizeNone = &ves_io_schema.Empty{}
-					requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
-				}
-
-			}
-
 			maxCookieCountChoiceTypeFound := false
 
 			if v, ok := requestConstraintsMapStrToI["max_cookie_count_exceeds"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
@@ -3716,31 +3672,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
-			maxUploadFileSizeChoiceTypeFound := false
-
-			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_exceeds"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
-
-				maxUploadFileSizeChoiceTypeFound = true
-				maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeExceeds{}
-
-				requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
-
-				maxUploadFileSizeChoiceInt.MaxUploadFileSizeExceeds = uint32(v.(int))
-
-			}
-
-			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_none"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
-
-				maxUploadFileSizeChoiceTypeFound = true
-
-				if v.(bool) {
-					maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeNone{}
-					maxUploadFileSizeChoiceInt.MaxUploadFileSizeNone = &ves_io_schema.Empty{}
-					requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
-				}
-
-			}
-
 			maxUrlSizeChoiceTypeFound := false
 
 			if v, ok := requestConstraintsMapStrToI["max_url_size_exceeds"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
@@ -3810,6 +3741,10 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 		createSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
 		for _, set := range sl {
 			shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["allow_goodbot"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.AllowGoodbot = w.(bool)
+			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
 
@@ -5905,31 +5840,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		for _, set := range sl {
 			requestConstraintsMapStrToI := set.(map[string]interface{})
 
-			maxBodySizeChoiceTypeFound := false
-
-			if v, ok := requestConstraintsMapStrToI["max_body_size_exceeds"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
-
-				maxBodySizeChoiceTypeFound = true
-				maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeExceeds{}
-
-				requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
-
-				maxBodySizeChoiceInt.MaxBodySizeExceeds = uint32(v.(int))
-
-			}
-
-			if v, ok := requestConstraintsMapStrToI["max_body_size_none"]; ok && !isIntfNil(v) && !maxBodySizeChoiceTypeFound {
-
-				maxBodySizeChoiceTypeFound = true
-
-				if v.(bool) {
-					maxBodySizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxBodySizeNone{}
-					maxBodySizeChoiceInt.MaxBodySizeNone = &ves_io_schema.Empty{}
-					requestConstraints.MaxBodySizeChoice = maxBodySizeChoiceInt
-				}
-
-			}
-
 			maxCookieCountChoiceTypeFound := false
 
 			if v, ok := requestConstraintsMapStrToI["max_cookie_count_exceeds"]; ok && !isIntfNil(v) && !maxCookieCountChoiceTypeFound {
@@ -6230,31 +6140,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
-			maxUploadFileSizeChoiceTypeFound := false
-
-			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_exceeds"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
-
-				maxUploadFileSizeChoiceTypeFound = true
-				maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeExceeds{}
-
-				requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
-
-				maxUploadFileSizeChoiceInt.MaxUploadFileSizeExceeds = uint32(v.(int))
-
-			}
-
-			if v, ok := requestConstraintsMapStrToI["max_upload_file_size_none"]; ok && !isIntfNil(v) && !maxUploadFileSizeChoiceTypeFound {
-
-				maxUploadFileSizeChoiceTypeFound = true
-
-				if v.(bool) {
-					maxUploadFileSizeChoiceInt := &ves_io_schema_policy.RequestConstraintType_MaxUploadFileSizeNone{}
-					maxUploadFileSizeChoiceInt.MaxUploadFileSizeNone = &ves_io_schema.Empty{}
-					requestConstraints.MaxUploadFileSizeChoice = maxUploadFileSizeChoiceInt
-				}
-
-			}
-
 			maxUrlSizeChoiceTypeFound := false
 
 			if v, ok := requestConstraintsMapStrToI["max_url_size_exceeds"]; ok && !isIntfNil(v) && !maxUrlSizeChoiceTypeFound {
@@ -6321,6 +6206,10 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		updateSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
 		for _, set := range sl {
 			shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
+
+			if w, ok := shapeProtectedEndpointActionMapStrToI["allow_goodbot"]; ok && !isIntfNil(w) {
+				shapeProtectedEndpointAction.AllowGoodbot = w.(bool)
+			}
 
 			if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
 

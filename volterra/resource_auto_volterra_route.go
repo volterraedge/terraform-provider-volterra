@@ -179,6 +179,28 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
+									"incoming_port": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"port": {
+
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
+												"port_ranges": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"path": {
 
 										Type:     schema.TypeSet,
@@ -1453,6 +1475,42 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := matchMapStrToI["http_method"]; ok && !isIntfNil(v) {
 
 						match[i].HttpMethod = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+					}
+
+					if v, ok := matchMapStrToI["incoming_port"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						incomingPort := &ves_io_schema.PortMatcherType{}
+						match[i].IncomingPort = incomingPort
+						for _, set := range sl {
+							incomingPortMapStrToI := set.(map[string]interface{})
+
+							portMatchTypeFound := false
+
+							if v, ok := incomingPortMapStrToI["port"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+								portMatchInt := &ves_io_schema.PortMatcherType_Port{}
+
+								incomingPort.PortMatch = portMatchInt
+
+								portMatchInt.Port = uint32(v.(int))
+
+							}
+
+							if v, ok := incomingPortMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+								portMatchInt := &ves_io_schema.PortMatcherType_PortRanges{}
+
+								incomingPort.PortMatch = portMatchInt
+
+								portMatchInt.PortRanges = v.(string)
+
+							}
+
+						}
 
 					}
 
@@ -3110,6 +3168,42 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 					if v, ok := matchMapStrToI["http_method"]; ok && !isIntfNil(v) {
 
 						match[i].HttpMethod = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+					}
+
+					if v, ok := matchMapStrToI["incoming_port"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						incomingPort := &ves_io_schema.PortMatcherType{}
+						match[i].IncomingPort = incomingPort
+						for _, set := range sl {
+							incomingPortMapStrToI := set.(map[string]interface{})
+
+							portMatchTypeFound := false
+
+							if v, ok := incomingPortMapStrToI["port"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+								portMatchInt := &ves_io_schema.PortMatcherType_Port{}
+
+								incomingPort.PortMatch = portMatchInt
+
+								portMatchInt.Port = uint32(v.(int))
+
+							}
+
+							if v, ok := incomingPortMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+								portMatchInt := &ves_io_schema.PortMatcherType_PortRanges{}
+
+								incomingPort.PortMatch = portMatchInt
+
+								portMatchInt.PortRanges = v.(string)
+
+							}
+
+						}
 
 					}
 

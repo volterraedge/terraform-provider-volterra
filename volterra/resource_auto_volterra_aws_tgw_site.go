@@ -933,6 +933,12 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 										},
 									},
 
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"use_http_https_port": {
 
 										Type:     schema.TypeBool,
@@ -974,6 +980,12 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"disable_allowed_vip_port": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"use_http_https_port": {
@@ -3313,6 +3325,18 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -3380,6 +3404,18 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}
@@ -5627,6 +5663,18 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := allowedVipPortMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPort.PortChoice = portChoiceInt
+						}
+
+					}
+
 					if v, ok := allowedVipPortMapStrToI["use_http_https_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 						portChoiceTypeFound = true
@@ -5694,6 +5742,18 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+						}
+
+					}
+
+					if v, ok := allowedVipPortSliMapStrToI["disable_allowed_vip_port"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+
+						if v.(bool) {
+							portChoiceInt := &ves_io_schema_views.AllowedVIPPorts_DisableAllowedVipPort{}
+							portChoiceInt.DisableAllowedVipPort = &ves_io_schema.Empty{}
+							allowedVipPortSli.PortChoice = portChoiceInt
 						}
 
 					}

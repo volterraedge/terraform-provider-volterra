@@ -121,7 +121,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Required: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -303,6 +303,162 @@ func resourceVolterraCluster() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"disable_sni": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"sni": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"use_host_header_as_sni": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"cert_params": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"certificates": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"cipher_suites": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"maximum_protocol_version": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"minimum_protocol_version": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"validation_params": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"skip_hostname_verification": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"trusted_ca_list": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"trusted_ca_url": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"use_volterra_trusted_ca_url": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"verify_subject_alt_names": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
 
 						"common_params": {
 
@@ -541,7 +697,46 @@ func resourceVolterraCluster() *schema.Resource {
 													Optional: true,
 												},
 
+												"trusted_ca": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"trusted_ca_list": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:     schema.TypeString,
+																			Computed: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"trusted_ca_url": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -565,24 +760,6 @@ func resourceVolterraCluster() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"disable_sni": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"sni": {
-
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"use_host_header_as_sni": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
 						},
 					},
 				},
@@ -971,39 +1148,228 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
-			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
+			sniChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				_ = v
+			}
+
+			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+
+				tlsParameters.SniChoice = sniChoiceInt
+
+				sniChoiceInt.Sni = v.(string)
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				_ = v
+			}
+
+			tlsParamsChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+
+				tlsParamsChoiceTypeFound = true
+				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
+				tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
+				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
 				sl := v.(*schema.Set).List()
-				commonParams := &ves_io_schema.TlsParamsType{}
-				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-					commonParamsMapStrToI := set.(map[string]interface{})
+					cs := set.(map[string]interface{})
 
-					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
+					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
+						for i, ps := range sl {
+
+							cMapToStrVal := ps.(map[string]interface{})
+							certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+
+							certificatesInt[i].Kind = "certificate"
+
+							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Name = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
 							ls[i] = v.(string)
 						}
-						commonParams.CipherSuites = ls
-					}
-
-					if v, ok := commonParamsMapStrToI["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						commonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+						tlsParamsChoiceInt.CertParams.CipherSuites = ls
 
 					}
 
-					if v, ok := commonParamsMapStrToI["minimum_protocol_version"]; ok && !isIntfNil(v) {
+					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
 
-						commonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+						tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
 
 					}
 
-					if v, ok := commonParamsMapStrToI["tls_certificates"]; ok && !isIntfNil(v) {
+					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						validationParams := &ves_io_schema.TlsValidationParamsType{}
+						tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
+						for _, set := range sl {
+							validationParamsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+								validationParams.SkipHostnameVerification = w.(bool)
+							}
+
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+								validationParams.UseVolterraTrustedCaUrl = w.(bool)
+							}
+
+							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								validationParams.VerifySubjectAltNames = ls
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+
+				tlsParamsChoiceTypeFound = true
+				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
+				tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
+				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						tlsParamsChoiceInt.CommonParams.CipherSuites = ls
+
+					}
+
+					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
 						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						commonParams.TlsCertificates = tlsCertificates
+						tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
@@ -1229,15 +1595,17 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-					if w, ok := commonParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-						commonParams.TrustedCaUrl = w.(string)
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
+
 					}
 
-					if v, ok := commonParamsMapStrToI["validation_params"]; ok && !isIntfNil(v) {
+					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						commonParams.ValidationParams = validationParams
+						tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
 						for _, set := range sl {
 							validationParamsMapStrToI := set.(map[string]interface{})
 
@@ -1245,8 +1613,64 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -1265,43 +1689,6 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-				}
-
-			}
-
-			sniChoiceTypeFound := false
-
-			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-
-				if v.(bool) {
-					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
-					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
-					tlsParameters.SniChoice = sniChoiceInt
-				}
-
-			}
-
-			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
-
-				tlsParameters.SniChoice = sniChoiceInt
-
-				sniChoiceInt.Sni = v.(string)
-
-			}
-
-			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-
-				if v.(bool) {
-					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
-					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
-					tlsParameters.SniChoice = sniChoiceInt
 				}
 
 			}
@@ -1718,39 +2105,228 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
 
-			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
+			sniChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				_ = v
+			}
+
+			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
+
+				tlsParameters.SniChoice = sniChoiceInt
+
+				sniChoiceInt.Sni = v.(string)
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+				sniChoiceTypeFound = true
+				_ = v
+			}
+
+			tlsParamsChoiceTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["cert_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+
+				tlsParamsChoiceTypeFound = true
+				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CertParams{}
+				tlsParamsChoiceInt.CertParams = &ves_io_schema.UpstreamCertificateParamsType{}
+				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
 
 				sl := v.(*schema.Set).List()
-				commonParams := &ves_io_schema.TlsParamsType{}
-				tlsParameters.CommonParams = commonParams
 				for _, set := range sl {
-					commonParamsMapStrToI := set.(map[string]interface{})
+					cs := set.(map[string]interface{})
 
-					if w, ok := commonParamsMapStrToI["cipher_suites"]; ok && !isIntfNil(w) {
-						ls := make([]string, len(w.([]interface{})))
-						for i, v := range w.([]interface{}) {
+					if v, ok := cs["certificates"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
+						for i, ps := range sl {
+
+							cMapToStrVal := ps.(map[string]interface{})
+							certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+
+							certificatesInt[i].Kind = "certificate"
+
+							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Name = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								certificatesInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
 							ls[i] = v.(string)
 						}
-						commonParams.CipherSuites = ls
-					}
-
-					if v, ok := commonParamsMapStrToI["maximum_protocol_version"]; ok && !isIntfNil(v) {
-
-						commonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+						tlsParamsChoiceInt.CertParams.CipherSuites = ls
 
 					}
 
-					if v, ok := commonParamsMapStrToI["minimum_protocol_version"]; ok && !isIntfNil(v) {
+					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
 
-						commonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+						tlsParamsChoiceInt.CertParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
 
 					}
 
-					if v, ok := commonParamsMapStrToI["tls_certificates"]; ok && !isIntfNil(v) {
+					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CertParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						validationParams := &ves_io_schema.TlsValidationParamsType{}
+						tlsParamsChoiceInt.CertParams.ValidationParams = validationParams
+						for _, set := range sl {
+							validationParamsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := validationParamsMapStrToI["skip_hostname_verification"]; ok && !isIntfNil(w) {
+								validationParams.SkipHostnameVerification = w.(bool)
+							}
+
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+								validationParams.UseVolterraTrustedCaUrl = w.(bool)
+							}
+
+							if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								validationParams.VerifySubjectAltNames = ls
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) && !tlsParamsChoiceTypeFound {
+
+				tlsParamsChoiceTypeFound = true
+				tlsParamsChoiceInt := &ves_io_schema.UpstreamTlsParamsType_CommonParams{}
+				tlsParamsChoiceInt.CommonParams = &ves_io_schema.TlsParamsType{}
+				tlsParameters.TlsParamsChoice = tlsParamsChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["cipher_suites"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						tlsParamsChoiceInt.CommonParams.CipherSuites = ls
+
+					}
+
+					if v, ok := cs["maximum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.MaximumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["minimum_protocol_version"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.MinimumProtocolVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
+					}
+
+					if v, ok := cs["tls_certificates"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
 						tlsCertificates := make([]*ves_io_schema.TlsCertificateType, len(sl))
-						commonParams.TlsCertificates = tlsCertificates
+						tlsParamsChoiceInt.CommonParams.TlsCertificates = tlsCertificates
 						for i, set := range sl {
 							tlsCertificates[i] = &ves_io_schema.TlsCertificateType{}
 							tlsCertificatesMapStrToI := set.(map[string]interface{})
@@ -1976,15 +2552,17 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-					if w, ok := commonParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-						commonParams.TrustedCaUrl = w.(string)
+					if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+						tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
+
 					}
 
-					if v, ok := commonParamsMapStrToI["validation_params"]; ok && !isIntfNil(v) {
+					if v, ok := cs["validation_params"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
 						validationParams := &ves_io_schema.TlsValidationParamsType{}
-						commonParams.ValidationParams = validationParams
+						tlsParamsChoiceInt.CommonParams.ValidationParams = validationParams
 						for _, set := range sl {
 							validationParamsMapStrToI := set.(map[string]interface{})
 
@@ -1992,8 +2570,64 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 								validationParams.SkipHostnameVerification = w.(bool)
 							}
 
-							if w, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
-								validationParams.TrustedCaUrl = w.(string)
+							trustedCaChoiceTypeFound := false
+
+							if v, ok := validationParamsMapStrToI["trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCa{}
+								trustedCaChoiceInt.TrustedCa = &ves_io_schema.TrustedCAList{}
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["trusted_ca_list"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+										trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
+										for i, ps := range sl {
+
+											tclMapToStrVal := ps.(map[string]interface{})
+											trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+
+											trustedCaListInt[i].Kind = "trusted_ca_list"
+
+											if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Name = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Namespace = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Tenant = v.(string)
+											}
+
+											if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+												trustedCaListInt[i].Uid = v.(string)
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := validationParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+								trustedCaChoiceTypeFound = true
+								trustedCaChoiceInt := &ves_io_schema.TlsValidationParamsType_TrustedCaUrl{}
+
+								validationParams.TrustedCaChoice = trustedCaChoiceInt
+
+								trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
 							}
 
 							if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
@@ -2012,43 +2646,6 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-				}
-
-			}
-
-			sniChoiceTypeFound := false
-
-			if v, ok := tlsParametersMapStrToI["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-
-				if v.(bool) {
-					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_DisableSni{}
-					sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
-					tlsParameters.SniChoice = sniChoiceInt
-				}
-
-			}
-
-			if v, ok := tlsParametersMapStrToI["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-				sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_Sni{}
-
-				tlsParameters.SniChoice = sniChoiceInt
-
-				sniChoiceInt.Sni = v.(string)
-
-			}
-
-			if v, ok := tlsParametersMapStrToI["use_host_header_as_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
-
-				sniChoiceTypeFound = true
-
-				if v.(bool) {
-					sniChoiceInt := &ves_io_schema.UpstreamTlsParamsType_UseHostHeaderAsSni{}
-					sniChoiceInt.UseHostHeaderAsSni = &ves_io_schema.Empty{}
-					tlsParameters.SniChoice = sniChoiceInt
 				}
 
 			}
