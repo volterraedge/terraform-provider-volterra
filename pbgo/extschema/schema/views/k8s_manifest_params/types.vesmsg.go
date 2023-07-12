@@ -638,6 +638,15 @@ func (v *ValidateDeploymentStatusType) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["status_output"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status_output"))
+		if err := fv(ctx, m.GetStatusOutput(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

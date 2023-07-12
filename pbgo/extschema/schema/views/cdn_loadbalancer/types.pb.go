@@ -1539,7 +1539,7 @@ type CDNCustomAuthentication struct {
 	//
 	// x-displayName: "Custom Auth Config"
 	// x-example: ""
-	// Custom Authentication Configuration
+	// This is custom authentication configuration parameters. Please reach out to the support for custom authentication details.
 	CustomAuthConfig string `protobuf:"bytes,1,opt,name=custom_auth_config,json=customAuthConfig,proto3" json:"custom_auth_config,omitempty"`
 }
 

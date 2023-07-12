@@ -981,6 +981,13 @@ var CustomDataAPISwaggerJSON string = `{
                     },
                     "x-displayname": "DNS Load Balancer Pool Members Status Summary"
                 },
+                "health_check_type": {
+                    "type": "string",
+                    "description": " Health Check Type associated with the DNS Load Balancer Pool\n\nExample: - \"HTTP\"-",
+                    "title": "Health Check Type",
+                    "x-displayname": "Health Check Type",
+                    "x-ves-example": "HTTP"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the DNS Load Balancer Pool\n\nExample: - \"dns_lb_pool1\"-",

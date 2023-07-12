@@ -140,6 +140,15 @@ func (v *ValidateApplyStatus) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tf_output"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tf_output"))
@@ -537,6 +546,15 @@ func (v *ValidatePlanStatus) Validate(ctx context.Context, pm interface{}, opts 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
+			return err
 		}
 
 	}

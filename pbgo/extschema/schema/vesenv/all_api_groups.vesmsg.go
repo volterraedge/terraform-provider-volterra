@@ -1408,6 +1408,39 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcMobileIntegratorMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_mobile_integrator_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcMobileIntegratorMonitor).F5XcMobileIntegratorMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_mobile_integrator_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcMobileIntegratorUser:
+		if fv, exists := v.FldValidators["choice.f5xc_mobile_integrator_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcMobileIntegratorUser).F5XcMobileIntegratorUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_mobile_integrator_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcMobileIntegratorAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_mobile_integrator_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcMobileIntegratorAdmin).F5XcMobileIntegratorAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_mobile_integrator_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

@@ -3470,6 +3470,47 @@ var NamespaceCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "alert_policy_setAlertPolicyStatus": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.alert_policy_set.AlertPolicyStatus",
+            "properties": {
+                "policy": {
+                    "description": " Reference to Alert Policy objects to send the alert.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Alert Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Alert Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "reason": {
+                    "type": "array",
+                    "description": " A human-readable description of why this status is in the\n \"Partially Active\" or \"Inactive\" status. The value will be empty for\n \"Active\" status.",
+                    "title": "Reason",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Reason"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Staus of the alert policy\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Active\\\",\\\"Inactive\\\",\\\"Partially Active\\\"]\n",
+                    "title": "Status",
+                    "x-displayname": "Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Active\\\",\\\"Inactive\\\",\\\"Partially Active\\\"]"
+                    }
+                }
+            }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "namespaceApplicationInventoryRequest": {
             "type": "object",
             "description": "Request for inventory of application related objects",
@@ -3626,6 +3667,15 @@ var NamespaceCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "Alert Policies"
+                },
+                "alert_policies_status": {
+                    "type": "array",
+                    "description": " The status of alert policies",
+                    "title": "policy_status",
+                    "items": {
+                        "$ref": "#/definitions/alert_policy_setAlertPolicyStatus"
+                    },
+                    "x-displayname": "Alert Policies Status"
                 }
             }
         },
@@ -3819,6 +3869,15 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "HTTP Only"
                 },
+                "httplb_results": {
+                    "type": "array",
+                    "description": " List of HTTP loadbalancers",
+                    "title": "HTTP Loadbalancers",
+                    "items": {
+                        "$ref": "#/definitions/namespaceHTTPLoadbalancerResultType"
+                    },
+                    "x-displayname": "List of HTTP Loadbalancers"
+                },
                 "ip_reputation": {
                     "type": "integer",
                     "description": " Number of HTTP loadbalancers with IP Reputation configured",
@@ -3832,15 +3891,6 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Malicious User Detection",
                     "format": "int64",
                     "x-displayname": "Malicious User Detection"
-                },
-                "name": {
-                    "type": "array",
-                    "description": " List of HTTP loadbalancers",
-                    "title": "HTTP Loadbalancers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of HTTP Loadbalancers"
                 },
                 "namespace_service_policy": {
                     "type": "integer",
@@ -3876,6 +3926,99 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "WAF",
                     "format": "int64",
                     "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceHTTPLoadbalancerResultType": {
+            "type": "object",
+            "description": "HTTP Loadbalancer Inventory Results",
+            "title": "HTTPLoadbalancerResultType",
+            "x-displayname": "HTTP Loadbalancer Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerResultType",
+            "properties": {
+                "api_protection_enabled": {
+                    "description": " API Protection configured",
+                    "title": "API Protection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Protection Enabled or Disabled"
+                },
+                "bot_protection_enabled": {
+                    "description": " Bot Protection configured",
+                    "title": "Bot Protection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Bot Protection Enabled or Disabled"
+                },
+                "client_side_defense_enabled": {
+                    "description": " Client Side Defense configured",
+                    "title": "Client Side Defense Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Side Defense Enabled or Disabled"
+                },
+                "ddos_protection_enabled": {
+                    "description": " DDoS Protection configured",
+                    "title": "DDoS Protection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DDoS Protection Enabled or Disabled"
+                },
+                "http_enabled": {
+                    "description": " HTTP only loadbalancers",
+                    "title": "HTTP Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP Only Enabled or Disabled"
+                },
+                "ip_reputation_enabled": {
+                    "description": " IP Reputation configured",
+                    "title": "IP Reputation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "IP Reputation Enabled or Disabled"
+                },
+                "malicious_user_detection_enabled": {
+                    "description": " HTTP loadbalancer Malicious User Detection configured",
+                    "title": "Malicious User Detection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Malicious User Detection Enabled or Disabled"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of HTTP LB",
+                    "title": "HTTP LB Name",
+                    "x-displayname": "HTTP LB Name"
+                },
+                "namespace_service_policy_enabled": {
+                    "description": " Namespace Service Policy configured",
+                    "title": "Namespace Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Namespace Service Policy Enabled or Disabled"
+                },
+                "private_advertisement_enabled": {
+                    "description": " advertised privately configured",
+                    "title": "Private Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Private Advertisement Enabled or Disabled"
+                },
+                "public_advertisment_enabled": {
+                    "description": " advertised publicly configured",
+                    "title": "Public Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Public Advertisement Enabled or Disabled"
+                },
+                "rate_limit": {
+                    "description": " Rate Limit Status",
+                    "title": "Rate Limit Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Rate Limiting Enabled or Disabled"
+                },
+                "service_policy_enabled": {
+                    "description": " Service Policy configured ",
+                    "title": "Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Service Policy Enabled or Disabled"
+                },
+                "waf_enabled": {
+                    "description": " WAF configured",
+                    "title": "WAF Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "WAF Enabled or Disabled"
                 }
             }
         },
@@ -4228,15 +4371,6 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Inventory of TCP Loadbalancers",
             "x-ves-proto-message": "ves.io.schema.namespace.TCPLoadbalancerInventoryType",
             "properties": {
-                "name": {
-                    "type": "array",
-                    "description": " List of TCP loadbalancers",
-                    "title": "TCP Loadbalancers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of TCP Loadbalancers"
-                },
                 "namespace_service_policy": {
                     "type": "integer",
                     "description": " Number of TCP loadbalancers with Namespace Service Policy configured",
@@ -4265,12 +4399,72 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Service Policy"
                 },
+                "tcplb_results": {
+                    "type": "array",
+                    "description": " List of TCP loadbalancers",
+                    "title": "TCP Loadbalancers",
+                    "items": {
+                        "$ref": "#/definitions/namespaceTCPLoadbalancerResultType"
+                    },
+                    "x-displayname": "List of TCP Loadbalancers"
+                },
                 "tls_encryption": {
                     "type": "integer",
                     "description": " Number of TCP loadbalancers with TLS Encryption configured",
                     "title": "TLS Encryption",
                     "format": "int64",
                     "x-displayname": "TLS Encryption"
+                }
+            }
+        },
+        "namespaceTCPLoadbalancerResultType": {
+            "type": "object",
+            "description": "TCP Loadbalancer Inventory Results",
+            "title": "TCPLoadbalancerResultType",
+            "x-displayname": "TCP Loadbalancer Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.TCPLoadbalancerResultType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of TCP LB",
+                    "title": "TCP LB Name",
+                    "x-displayname": "TCP LB Name"
+                },
+                "namespace_service_policy": {
+                    "description": " Namespace Service Policy configured",
+                    "title": "Namespace Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Namespace Service Policy"
+                },
+                "private_advertisement": {
+                    "description": " advertised privately configured",
+                    "title": "Private Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Private Advertisement Enabled or Disabled"
+                },
+                "public_advertisment": {
+                    "description": " advertised publicly configured",
+                    "title": "Public Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Public Advertisement Enabled or Disabled"
+                },
+                "rate_limit": {
+                    "description": " Rate Limit Status",
+                    "title": "Rate Limit Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Rate Limiting Enabled or Disabled"
+                },
+                "service_policy": {
+                    "description": " xService Policy configured",
+                    "title": "Service Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Service Policy Enabled or Disabled"
+                },
+                "tls_encryption": {
+                    "description": " TLS Encryption configured",
+                    "title": "TLS Encryption Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "TLS Encryption Enabled or Disabled"
                 }
             }
         },

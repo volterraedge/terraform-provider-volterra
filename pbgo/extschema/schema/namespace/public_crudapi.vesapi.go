@@ -1984,7 +1984,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the namespace",
                     "title": "spec",
-                    "$ref": "#/definitions/namespaceCreateSpecType",
+                    "$ref": "#/definitions/schemanamespaceCreateSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2002,7 +2002,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the namespace",
                     "title": "spec",
-                    "$ref": "#/definitions/namespaceGetSpecType",
+                    "$ref": "#/definitions/schemanamespaceGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "system_metadata": {
@@ -2012,13 +2012,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "System Metadata"
                 }
             }
-        },
-        "namespaceCreateSpecType": {
-            "type": "object",
-            "description": "Creates a new namespace. Name of the object is name of the name space.",
-            "title": "Create namespace",
-            "x-displayname": "Create Namespace",
-            "x-ves-proto-message": "ves.io.schema.namespace.CreateSpecType"
         },
         "namespaceGetResponse": {
             "type": "object",
@@ -2041,7 +2034,7 @@ var APISwaggerJSON string = `{
                 },
                 "object": {
                     "title": "object",
-                    "$ref": "#/definitions/namespaceObject",
+                    "$ref": "#/definitions/schemanamespaceObject",
                     "x-displayname": "Object",
                     "x-ves-deprecated": "Replaced by 'spec"
                 },
@@ -2063,7 +2056,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the namespace",
                     "title": "spec",
-                    "$ref": "#/definitions/namespaceGetSpecType",
+                    "$ref": "#/definitions/schemanamespaceGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -2071,7 +2064,7 @@ var APISwaggerJSON string = `{
                     "description": "The status reported by different services for this configuration object",
                     "title": "status",
                     "items": {
-                        "$ref": "#/definitions/namespaceStatusObject"
+                        "$ref": "#/definitions/schemanamespaceStatusObject"
                     },
                     "x-displayname": "Status"
                 },
@@ -2096,43 +2089,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_REFERRING_OBJECTS"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "namespaceGetSpecType": {
-            "type": "object",
-            "description": "This is the read representation of the namespace object.",
-            "title": "Get namespace",
-            "x-displayname": "Get Namespace",
-            "x-ves-proto-message": "ves.io.schema.namespace.GetSpecType"
-        },
-        "namespaceGlobalSpecType": {
-            "type": "object",
-            "description": "This is the shape of the namespace representation in the database at Global Controller",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.namespace.GlobalSpecType",
-            "properties": {
-                "allow_advertise_on_public": {
-                    "description": " Config choice to allow advertisement on the public.",
-                    "$ref": "#/definitions/namespacePublicAdvertiseChoice",
-                    "x-displayname": "Allow advertisement on public."
-                },
-                "proxy_sub_ca_latest_version": {
-                    "type": "integer",
-                    "description": " SubCA version which is the latest and will be used for proxy feature.",
-                    "title": "Proxy Sub CA Version",
-                    "format": "int64",
-                    "x-displayname": "Proxy Sub CA Version"
-                },
-                "proxy_sub_cas": {
-                    "type": "array",
-                    "description": " Array of SubCAs, the latest one will be used for proxy feature.",
-                    "title": "Proxy Sub CAs",
-                    "items": {
-                        "$ref": "#/definitions/namespaceSubCA"
-                    },
-                    "x-displayname": "Proxy Sub CAs"
-                }
-            }
         },
         "namespaceListResponse": {
             "type": "object",
@@ -2190,7 +2146,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/namespaceGetSpecType",
+                    "$ref": "#/definitions/schemanamespaceGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2222,7 +2178,7 @@ var APISwaggerJSON string = `{
                 "object": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
                     "title": "object",
-                    "$ref": "#/definitions/namespaceObject",
+                    "$ref": "#/definitions/schemanamespaceObject",
                     "x-displayname": "Object"
                 },
                 "owner_view": {
@@ -2236,7 +2192,7 @@ var APISwaggerJSON string = `{
                     "description": " The status reported by different services for this configuration object",
                     "title": "status",
                     "items": {
-                        "$ref": "#/definitions/namespaceStatusObject"
+                        "$ref": "#/definitions/schemanamespaceStatusObject"
                     },
                     "x-displayname": "Status"
                 },
@@ -2259,33 +2215,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "namespaceObject": {
-            "type": "object",
-            "description": "namespace object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.namespace.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the namespace",
-                    "title": "spec",
-                    "$ref": "#/definitions/namespaceSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -2318,7 +2247,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the namespace",
                     "title": "spec",
-                    "$ref": "#/definitions/namespaceReplaceSpecType",
+                    "$ref": "#/definitions/schemanamespaceReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2326,61 +2255,6 @@ var APISwaggerJSON string = `{
         "namespaceReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.namespace.ReplaceResponse"
-        },
-        "namespaceReplaceSpecType": {
-            "type": "object",
-            "description": "Replaces attributes of a namespace including its metadata like labels, description etc.",
-            "title": "Replace namespace",
-            "x-displayname": "Replace Namespace",
-            "x-ves-proto-message": "ves.io.schema.namespace.ReplaceSpecType"
-        },
-        "namespaceSpecType": {
-            "type": "object",
-            "description": "Shape of the namespace specification",
-            "title": "SpecType",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.namespace.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "description": " gc_spec holds the attributes of a namespace object as present in global controller",
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/namespaceGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
-        },
-        "namespaceStatusObject": {
-            "type": "object",
-            "description": "Most recently observed status of object.",
-            "title": "StatusObject",
-            "x-displayname": "Status",
-            "x-ves-proto-message": "ves.io.schema.namespace.StatusObject",
-            "properties": {
-                "conditions": {
-                    "type": "array",
-                    "description": " Conditions represent the normalized status values for configuration object.",
-                    "title": "Conditions",
-                    "items": {
-                        "$ref": "#/definitions/schemaConditionType"
-                    },
-                    "x-displayname": "Conditions"
-                },
-                "metadata": {
-                    "description": " Standard status's metadata.",
-                    "title": "Metadata",
-                    "$ref": "#/definitions/schemaStatusMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "object_refs": {
-                    "type": "array",
-                    "description": " A namespace direct reference.",
-                    "title": "ObjectRefs",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Config Object"
-                }
-            }
         },
         "namespaceSubCA": {
             "type": "object",
@@ -3363,6 +3237,132 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
                     "title": "Name"
+                }
+            }
+        },
+        "schemanamespaceCreateSpecType": {
+            "type": "object",
+            "description": "Creates a new namespace. Name of the object is name of the name space.",
+            "title": "Create namespace",
+            "x-displayname": "Create Namespace",
+            "x-ves-proto-message": "ves.io.schema.namespace.CreateSpecType"
+        },
+        "schemanamespaceGetSpecType": {
+            "type": "object",
+            "description": "This is the read representation of the namespace object.",
+            "title": "Get namespace",
+            "x-displayname": "Get Namespace",
+            "x-ves-proto-message": "ves.io.schema.namespace.GetSpecType"
+        },
+        "schemanamespaceGlobalSpecType": {
+            "type": "object",
+            "description": "This is the shape of the namespace representation in the database at Global Controller",
+            "title": "GlobalSpecType",
+            "x-displayname": "Global Specification",
+            "x-ves-proto-message": "ves.io.schema.namespace.GlobalSpecType",
+            "properties": {
+                "allow_advertise_on_public": {
+                    "description": " Config choice to allow advertisement on the public.",
+                    "$ref": "#/definitions/namespacePublicAdvertiseChoice",
+                    "x-displayname": "Allow advertisement on public."
+                },
+                "proxy_sub_ca_latest_version": {
+                    "type": "integer",
+                    "description": " SubCA version which is the latest and will be used for proxy feature.",
+                    "title": "Proxy Sub CA Version",
+                    "format": "int64",
+                    "x-displayname": "Proxy Sub CA Version"
+                },
+                "proxy_sub_cas": {
+                    "type": "array",
+                    "description": " Array of SubCAs, the latest one will be used for proxy feature.",
+                    "title": "Proxy Sub CAs",
+                    "items": {
+                        "$ref": "#/definitions/namespaceSubCA"
+                    },
+                    "x-displayname": "Proxy Sub CAs"
+                }
+            }
+        },
+        "schemanamespaceObject": {
+            "type": "object",
+            "description": "namespace object",
+            "title": "Object",
+            "x-displayname": "Object",
+            "x-ves-proto-message": "ves.io.schema.namespace.Object",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the namespace",
+                    "title": "spec",
+                    "$ref": "#/definitions/schemanamespaceSpecType",
+                    "x-displayname": "Spec"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "schemanamespaceReplaceSpecType": {
+            "type": "object",
+            "description": "Replaces attributes of a namespace including its metadata like labels, description etc.",
+            "title": "Replace namespace",
+            "x-displayname": "Replace Namespace",
+            "x-ves-proto-message": "ves.io.schema.namespace.ReplaceSpecType"
+        },
+        "schemanamespaceSpecType": {
+            "type": "object",
+            "description": "Shape of the namespace specification",
+            "title": "SpecType",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.namespace.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "description": " gc_spec holds the attributes of a namespace object as present in global controller",
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/schemanamespaceGlobalSpecType",
+                    "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "schemanamespaceStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of object.",
+            "title": "StatusObject",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.namespace.StatusObject",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions represent the normalized status values for configuration object.",
+                    "title": "Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata.",
+                    "title": "Metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " A namespace direct reference.",
+                    "title": "ObjectRefs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
                 }
             }
         }

@@ -542,6 +542,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -691,6 +700,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -1232,6 +1243,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -1408,6 +1428,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -2013,6 +2035,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -2202,6 +2233,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3266,6 +3299,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
+		if err := fv(ctx, m.GetPerformanceEnhancementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sw"))
@@ -3415,6 +3457,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	return v
 }()
@@ -5211,6 +5255,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.Sw = f.GetSw()
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
@@ -5240,6 +5285,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.Sw = m1.Sw
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes
@@ -5406,6 +5452,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -5436,6 +5483,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
@@ -5603,6 +5651,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.Sw = f.GetSw()
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
 	m.WorkerNodes = f.GetWorkerNodes()
@@ -5632,6 +5681,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.Sw = m1.Sw
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw
 	f.WorkerNodes = m1.WorkerNodes

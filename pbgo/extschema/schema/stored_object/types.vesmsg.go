@@ -184,6 +184,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_MobileIntegrator:
+		if fv, exists := v.FldValidators["object_attributes.mobile_integrator"]; exists {
+			val := m.GetObjectAttributes().(*GlobalSpecType_MobileIntegrator).MobileIntegrator
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_integrator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -265,6 +276,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["content_hash"] = vFn
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 
 	return v
 }()

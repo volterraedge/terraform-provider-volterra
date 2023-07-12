@@ -3241,7 +3241,7 @@ var APISwaggerJSON string = `{
                 },
                 "idle_timeout": {
                     "type": "integer",
-                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n The stream is terminated with a HTTP 408 (Request Timeout) error code if no upstream response header has been\n received, otherwise the stream is reset.\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 3600000\n",
+                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n The stream is terminated with a HTTP 504 (Gateway Timeout) error code if no upstream response header has been\n received, otherwise the stream is reset.\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 3600000\n",
                     "title": "Idle timeout",
                     "format": "int64",
                     "x-displayname": "Idle Timeout",
@@ -3777,7 +3777,8 @@ var APISwaggerJSON string = `{
                 "SKIP_PROCESSING_MUM",
                 "SKIP_PROCESSING_IP_REPUTATION",
                 "SKIP_PROCESSING_API_PROTECTION",
-                "SKIP_PROCESSING_OAS_VALIDATION"
+                "SKIP_PROCESSING_OAS_VALIDATION",
+                "SKIP_PROCESSING_DDOS_PROTECTION"
             ],
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
@@ -4523,6 +4524,7 @@ var APISwaggerJSON string = `{
             "description": "Settings for all endpoints validation",
             "title": "OpenAPI Validation All Endpoints Settings",
             "x-displayname": "All Endpoints",
+            "x-ves-oneof-field-oversized_body_choice": "[\"oversized_body_fail_validation\",\"oversized_body_skip_validation\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings",
             "properties": {
                 "fall_through_mode": {
@@ -4534,6 +4536,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "oversized_body_fail_validation": {
+                    "description": "Exclusive with [oversized_body_skip_validation]\n Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb)",
+                    "title": "Fail the validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fail Body Validation"
+                },
+                "oversized_body_skip_validation": {
+                    "description": "Exclusive with [oversized_body_fail_validation]\n Skip body validation when the body length is too long to verify (default 64Kb)",
+                    "title": "Skip validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Body Validation"
                 },
                 "validation_mode": {
                     "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4552,9 +4566,22 @@ var APISwaggerJSON string = `{
             "description": "x-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
             "title": "Validation Mode",
             "x-displayname": "Validation Mode",
+            "x-ves-oneof-field-response_validation_mode_choice": "[\"response_validation_mode_active\",\"skip_response_validation\"]",
             "x-ves-oneof-field-validation_mode_choice": "[\"skip_validation\",\"validation_mode_active\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationMode",
             "properties": {
+                "response_validation_mode_active": {
+                    "description": "Exclusive with [skip_response_validation]\n Enforce OpenAPI validation processing for this event",
+                    "title": "Validate",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationModeActiveResponse",
+                    "x-displayname": "Validate"
+                },
+                "skip_response_validation": {
+                    "description": "Exclusive with [response_validation_mode_active]\n Skip OpenAPI validation processing for this event",
+                    "title": "Skip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip"
+                },
                 "skip_validation": {
                     "description": "Exclusive with [validation_mode_active]\n Skip OpenAPI validation processing for this event",
                     "title": "Skip",
@@ -4571,8 +4598,8 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerOpenApiValidationModeActive": {
             "type": "object",
-            "description": "Validation Mode properties",
-            "title": "Open API Validation Mode Active",
+            "description": "Validation mode properties of request",
+            "title": "Open API Validation Mode Active For Request",
             "x-displayname": "Open API Validation Mode Active",
             "x-ves-oneof-field-validation_enforcement_type": "[\"enforcement_block\",\"enforcement_report\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActive",
@@ -4591,7 +4618,7 @@ var APISwaggerJSON string = `{
                 },
                 "request_validation_properties": {
                     "type": "array",
-                    "description": " List of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [7]\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Request Validation Properties",
                     "minItems": 1,
                     "items": {
@@ -4602,6 +4629,47 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[7]",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerOpenApiValidationModeActiveResponse": {
+            "type": "object",
+            "description": "Validation mode properties of response",
+            "title": "Open API Validation Mode Active For Response",
+            "x-displayname": "Open API Validation Mode Active",
+            "x-ves-oneof-field-validation_enforcement_type": "[\"enforcement_block\",\"enforcement_report\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActiveResponse",
+            "properties": {
+                "enforcement_block": {
+                    "description": "Exclusive with [enforcement_report]\n Block the response, trigger an API security event",
+                    "title": "Block",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Block"
+                },
+                "enforcement_report": {
+                    "description": "Exclusive with [enforcement_block]\n Allow the response, trigger an API security event",
+                    "title": "Report",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Report"
+                },
+                "response_validation_properties": {
+                    "type": "array",
+                    "description": " List of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.in: [2,4,5,7]\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Response Validation Properties",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    },
+                    "x-displayname": "Response Validation Properties",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.in": "[2,4,5,7]",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4743,7 +4811,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -4753,8 +4821,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 }
             }
@@ -4856,7 +4925,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -4866,8 +4935,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "server_name": {
@@ -5002,7 +5072,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -5012,8 +5082,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "server_name": {
@@ -5385,10 +5456,10 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerRouteTypeDirectResponse": {
             "type": "object",
-            "description": "A direct response route matches on patch and/or HTTP method and responds directly to the matching traffic",
+            "description": "A direct response route matches on path, incoming header, incoming port and/or HTTP method\nand responds directly to the matching traffic",
             "title": "RouteTypeDirectResponse",
             "x-displayname": "Direct Response Route",
-            "x-ves-displayorder": "2,1,4,3",
+            "x-ves-displayorder": "2,1,4,5,3",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeDirectResponse",
             "properties": {
                 "headers": {
@@ -5411,6 +5482,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaHttpMethod",
                     "x-displayname": "HTTP Method"
                 },
+                "incoming_port": {
+                    "description": " The port on which the request is received",
+                    "title": "incoming_port",
+                    "$ref": "#/definitions/ioschemaPortMatcherType",
+                    "x-displayname": "Match LB port"
+                },
                 "path": {
                     "description": " URI path of route",
                     "title": "path",
@@ -5427,10 +5504,10 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerRouteTypeRedirect": {
             "type": "object",
-            "description": "A redirect route matches on patch and/or HTTP method and redirects the matching traffic to a different URL",
+            "description": "A redirect route matches on path, incoming header, incoming port and/or HTTP method\nand redirects the matching traffic to a different URL",
             "title": "RouteTypeRedirect",
             "x-displayname": "Redirect Route",
-            "x-ves-displayorder": "2,1,4,3",
+            "x-ves-displayorder": "2,1,4,5,3",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeRedirect",
             "properties": {
                 "headers": {
@@ -5453,6 +5530,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaHttpMethod",
                     "x-displayname": "HTTP Method"
                 },
+                "incoming_port": {
+                    "description": " The port on which the request is received",
+                    "title": "incoming_port",
+                    "$ref": "#/definitions/ioschemaPortMatcherType",
+                    "x-displayname": "Match LB port"
+                },
                 "path": {
                     "description": " URI path of route",
                     "title": "path",
@@ -5469,10 +5552,10 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerRouteTypeSimple": {
             "type": "object",
-            "description": "A simple route matches on path and/or HTTP method and forwards the matching traffic to the associated pools",
+            "description": "A simple route matches on path, incoming header, incoming port and/or HTTP method\nand forwards the matching traffic to the associated pools",
             "title": "RouteTypeSimple",
             "x-displayname": "Simple Route",
-            "x-ves-displayorder": "2,1,9,3,4,8",
+            "x-ves-displayorder": "2,1,9,10,3,4,8",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.RouteTypeSimple",
             "properties": {
@@ -5523,6 +5606,12 @@ var APISwaggerJSON string = `{
                     "title": "http_method",
                     "$ref": "#/definitions/schemaHttpMethod",
                     "x-displayname": "HTTP Method"
+                },
+                "incoming_port": {
+                    "description": " The port on which the request is received",
+                    "title": "incoming_port",
+                    "$ref": "#/definitions/ioschemaPortMatcherType",
+                    "x-displayname": "Match LB port"
                 },
                 "origin_pools": {
                     "type": "array",
@@ -5862,16 +5951,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "actions": {
                     "type": "array",
-                    "description": " Actions that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Actions that should be taken when client identifier matches the rule\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "actions",
-                    "maxItems": 5,
+                    "maxItems": 10,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerClientSrcRuleAction"
                     },
                     "x-displayname": "Actions",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.enum.defined_only": "true",
-                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.max_items": "10",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -6059,6 +6148,7 @@ var APISwaggerJSON string = `{
             "description": "Define API groups, base paths, or API endpoints and their OpenAPI validation modes.\n Any other api-endpoint not listed will act according to \"Fall Through Mode\".",
             "title": "ValidateApiBySpecRule",
             "x-displayname": "Custom List",
+            "x-ves-oneof-field-oversized_body_choice": "[\"oversized_body_fail_validation\",\"oversized_body_skip_validation\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ValidateApiBySpecRule",
             "properties": {
                 "fall_through_mode": {
@@ -6086,6 +6176,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "15",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
+                },
+                "oversized_body_fail_validation": {
+                    "description": "Exclusive with [oversized_body_skip_validation]\n Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb)",
+                    "title": "Fail the validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fail Body Validation"
+                },
+                "oversized_body_skip_validation": {
+                    "description": "Exclusive with [oversized_body_fail_validation]\n Skip body validation when the body length is too long to verify (default 64Kb)",
+                    "title": "Skip validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Body Validation"
                 }
             }
         },
@@ -6273,6 +6375,48 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_bytes": "256",
                         "ves.io.schema.rules.string.min_bytes": "1",
                         "ves.io.schema.rules.string.regex": "true"
+                    }
+                }
+            }
+        },
+        "ioschemaPortMatcherType": {
+            "type": "object",
+            "description": "Port match of the request can be a range or a specific port",
+            "title": "PortMatcherType",
+            "x-displayname": "Port to Match",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-port_match": "[\"no_port_match\",\"port\",\"port_ranges\"]",
+            "x-ves-proto-message": "ves.io.schema.PortMatcherType",
+            "properties": {
+                "no_port_match": {
+                    "description": "Exclusive with [port port_ranges]\n Disable matching of ports",
+                    "title": "disable port Match",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No Port match"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "Exclusive with [no_port_match port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "6443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [no_port_match port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
+                    "title": "port_range",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "x-displayname": "Port range",
+                    "x-ves-example": "8080-8191",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.port_range": "true"
                     }
                 }
             }
@@ -6578,8 +6722,9 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public IP address and site information",
             "title": "OriginServerPrivateIP",
             "x-displayname": "IP address on given Sites",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "10,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
+            "x-ves-oneof-field-private_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
@@ -6590,13 +6735,11 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
@@ -6667,18 +6810,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with public IP address",
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "2",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Public IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
-                    "x-displayname": "Public IP",
+                    "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 }
@@ -6786,18 +6928,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with IP on Virtual Network",
             "title": "OriginServerVirtualNetworkIP",
             "x-displayname": "IP address Virtual Network",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "10,2",
+            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "IP",
-                    "x-displayname": "IP",
+                    "description": "Exclusive with [ipv6]\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IPV4",
+                    "x-displayname": "IPV4",
                     "x-ves-example": "1.1.1.1",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
@@ -6877,7 +7018,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -6889,7 +7030,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
+                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -6928,7 +7069,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
+                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable MTLS With Inline Certificate"
@@ -8739,19 +8880,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.BotDefenseJavascriptInjectionType",
             "properties": {
                 "javascript_location": {
-                    "description": " Defines where perform the Bot Defense Javascript Injection in HTML page.",
+                    "description": " Select the location where you would like to insert the Javascript tag(s).",
                     "title": "javascript_location",
                     "$ref": "#/definitions/schemarouteJavaScriptLocation",
-                    "x-displayname": "JavaScript Location"
+                    "x-displayname": "JavaScript Tag Location"
                 },
-                "js_download_path": {
-                    "type": "string",
-                    "description": " Web client will fetch F5 Client Java Script from this path.\n This path must not conflict with any other website/application paths.\n\n If not specified, default to ‘/common.js’.\n\nExample: - \"/common.js\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n",
-                    "title": "js_download_path",
-                    "x-displayname": "Web Client JavaScript Path",
-                    "x-ves-example": "/common.js",
+                "javascript_tags": {
+                    "type": "array",
+                    "description": " Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "javascript_tags",
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/routeJavaScriptTag"
+                    },
+                    "x-displayname": "JavaScript Tags",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.http_path": "true"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -8886,6 +9035,44 @@ var APISwaggerJSON string = `{
                     "title": "terminal",
                     "format": "boolean",
                     "x-displayname": "Terminal"
+                }
+            }
+        },
+        "routeJavaScriptTag": {
+            "type": "object",
+            "description": "JavaScript URL and attributes",
+            "title": "JavaScriptTag",
+            "x-displayname": "JavaScript Tag",
+            "x-ves-proto-message": "ves.io.schema.route.JavaScriptTag",
+            "properties": {
+                "javascript_url": {
+                    "type": "string",
+                    "description": " Please enter the full URL (include domain and path), or relative path.\n\nExample: - \"https://www.example.com/login/common.js?single\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 2048\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "JavaScriptURL",
+                    "minLength": 1,
+                    "maxLength": 2048,
+                    "x-displayname": "URL",
+                    "x-ves-example": "https://www.example.com/login/common.js?single",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "2048",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "tag_attributes": {
+                    "type": "array",
+                    "description": " Add the tag attributes you want to include in your Javascript tag.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "TagAttributes",
+                    "maxItems": 9,
+                    "items": {
+                        "$ref": "#/definitions/routeTagAttribute"
+                    },
+                    "x-displayname": "Tag Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "9",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -9025,6 +9212,51 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Retain All Parameters"
                 }
             }
+        },
+        "routeTagAttribute": {
+            "type": "object",
+            "description": "Attribute for JavaScript tag",
+            "title": "TagAttribute",
+            "x-displayname": "Tag Attribute",
+            "x-ves-proto-message": "ves.io.schema.route.TagAttribute",
+            "properties": {
+                "javascript_tag": {
+                    "description": " Select from one of the predefined tag attibutes.\n\nExample: - \"ID\"-",
+                    "title": "JavaScriptTags",
+                    "$ref": "#/definitions/routeTagAttributeName",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ID"
+                },
+                "tag_value": {
+                    "type": "string",
+                    "description": " Add the tag attribute value.\n\nExample: - \"_imp_apg_dip_\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1024\n",
+                    "title": "TagValue",
+                    "maxLength": 1024,
+                    "x-displayname": "Value",
+                    "x-ves-example": "_imp_apg_dip_",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1024"
+                    }
+                }
+            }
+        },
+        "routeTagAttributeName": {
+            "type": "string",
+            "description": "Select from one of the predefined tag attributes.\n",
+            "title": "TagAttributeName",
+            "enum": [
+                "JS_ATTR_ID",
+                "JS_ATTR_CID",
+                "JS_ATTR_CN",
+                "JS_ATTR_API_DOMAIN",
+                "JS_ATTR_API_URL",
+                "JS_ATTR_API_PATH",
+                "JS_ATTR_ASYNC",
+                "JS_ATTR_DEFER"
+            ],
+            "default": "JS_ATTR_ID",
+            "x-displayname": "Tag Attribute Name",
+            "x-ves-proto-enum": "ves.io.schema.route.TagAttributeName"
         },
         "routeWebsocketConfigType": {
             "type": "object",
@@ -10483,7 +10715,7 @@ var APISwaggerJSON string = `{
         },
         "schemaOpenApiValidationProperties": {
             "type": "string",
-            "description": "List of required properties to validate against the OpenAPI spec\n\nValidate that all query parameters are according to the OpenAPI specification\nValidate that all path parameters are according to the OpenAPI specification\nValidate that the content type of the request is according to the OpenAPI specification\nValidate that all cookies are according to the OpenAPI specification\nValidate that all HTTP headers are according to the OpenAPI specification\nValidate that the request body is according to the OpenAPI specification\nValidate that the security schema is according to the OpenAPI specification",
+            "description": "List of required properties to validate against the OpenAPI spec\n\nValidate that all query parameters are according to the OpenAPI specification\nValidate that all path parameters are according to the OpenAPI specification\nValidate that the content type of the request is according to the OpenAPI specification\nValidate that all cookies are according to the OpenAPI specification\nValidate that all HTTP headers are according to the OpenAPI specification\nValidate that the body is according to the OpenAPI specification\nValidate that the security schema is according to the OpenAPI specification\nValidate that the response code is according to the OpenAPI specification",
             "title": "OpenApiValidationProperties",
             "enum": [
                 "PROPERTY_QUERY_PARAMETERS",
@@ -10492,7 +10724,8 @@ var APISwaggerJSON string = `{
                 "PROPERTY_COOKIE_PARAMETERS",
                 "PROPERTY_HTTP_HEADERS",
                 "PROPERTY_HTTP_BODY",
-                "PROPERTY_SECURITY_SCHEMA"
+                "PROPERTY_SECURITY_SCHEMA",
+                "PROPERTY_RESPONSE_CODE"
             ],
             "default": "PROPERTY_QUERY_PARAMETERS",
             "x-displayname": "OpenAPI Validation Properties",
@@ -12148,16 +12381,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
-                "ip6": {
-                    "type": "string",
-                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6 address on the site",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
                 "network": {
                     "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SiteNetwork",
@@ -12261,23 +12484,39 @@ var APISwaggerJSON string = `{
             "description": "Parameters to advertise on a given virtual network",
             "title": "WhereVirtualNetwork",
             "x-displayname": "Virtual Network",
-            "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-displayorder": "1,2,10",
+            "x-ves-oneof-field-v6_vip_choice": "[\"default_v6_vip\",\"specific_v6_vip\"]",
+            "x-ves-oneof-field-vip_choice": "[\"default_v4_vip\",\"specific_v4_vip\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereVirtualNetwork",
             "properties": {
-                "default_vip": {
-                    "description": "Exclusive with [specific_vip]\n Use the default VIP, system allocated or configured in the virtual network",
-                    "title": "Default VIP for VoltADN Private Network",
+                "default_v4_vip": {
+                    "description": "Exclusive with [specific_v4_vip]\n Use the default VIP, system allocated or configured in the virtual network",
+                    "title": "Default VIP for Virtual Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default VIP"
                 },
-                "specific_vip": {
+                "default_v6_vip": {
+                    "description": "Exclusive with [specific_v6_vip]\n Use the default VIP, system allocated or configured in the virtual network",
+                    "title": "Default V6 VIP for virtual Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default V6 VIP"
+                },
+                "specific_v4_vip": {
                     "type": "string",
-                    "description": "Exclusive with [default_vip]\n Use given IP address as VIP on VoltADN private Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": "Exclusive with [default_v4_vip]\n Use given IP address as VIP on virtual Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Specific VIP",
                     "x-displayname": "Specific VIP",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "specific_v6_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_v6_vip]\n Use given IPV6 address as VIP on virtual Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Specific V6 VIP",
+                    "x-displayname": "Specific V6 VIP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "virtual_network": {

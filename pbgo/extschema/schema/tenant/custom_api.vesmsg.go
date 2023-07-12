@@ -1720,6 +1720,84 @@ func StatusResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SupportInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SupportInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SupportInfo) DeepCopy() *SupportInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SupportInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SupportInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SupportInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SupportInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSupportInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSupportInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SupportInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SupportInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["support_email_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("support_email_address"))
+		if err := fv(ctx, m.GetSupportEmailAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSupportInfoValidator = func() *ValidateSupportInfo {
+	v := &ValidateSupportInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SupportInfoValidator() db.Validator {
+	return DefaultSupportInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *TenantSettingsResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

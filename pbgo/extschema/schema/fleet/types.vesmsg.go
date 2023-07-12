@@ -1314,6 +1314,14 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) SriovInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sriov_interface_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1927,6 +1935,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sriov_interface_choice"]; exists {
+		val := m.GetSriovInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sriov_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSriovInterfaceChoice().(type) {
+	case *CreateSpecType_DefaultSriovInterface:
+		if fv, exists := v.FldValidators["sriov_interface_choice.default_sriov_interface"]; exists {
+			val := m.GetSriovInterfaceChoice().(*CreateSpecType_DefaultSriovInterface).DefaultSriovInterface
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("default_sriov_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SriovInterfaces:
+		if fv, exists := v.FldValidators["sriov_interface_choice.sriov_interfaces"]; exists {
+			val := m.GetSriovInterfaceChoice().(*CreateSpecType_SriovInterfaces).SriovInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("sriov_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -2223,6 +2267,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSriovInterfaceChoice := v.SriovInterfaceChoiceValidationRuleHandler
+	rulesSriovInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSriovInterfaceChoice(rulesSriovInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.sriov_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sriov_interface_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2378,6 +2433,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["interface_choice.device_list"] = FleetDeviceListTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["sriov_interface_choice.sriov_interfaces"] = SriovInterfacesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = FleetStorageClassListTypeValidator().Validate
 
@@ -6998,6 +7055,14 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) SriovInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sriov_interface_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7611,6 +7676,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["sriov_interface_choice"]; exists {
+		val := m.GetSriovInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sriov_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSriovInterfaceChoice().(type) {
+	case *GetSpecType_DefaultSriovInterface:
+		if fv, exists := v.FldValidators["sriov_interface_choice.default_sriov_interface"]; exists {
+			val := m.GetSriovInterfaceChoice().(*GetSpecType_DefaultSriovInterface).DefaultSriovInterface
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("default_sriov_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SriovInterfaces:
+		if fv, exists := v.FldValidators["sriov_interface_choice.sriov_interfaces"]; exists {
+			val := m.GetSriovInterfaceChoice().(*GetSpecType_SriovInterfaces).SriovInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("sriov_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -7907,6 +8008,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSriovInterfaceChoice := v.SriovInterfaceChoiceValidationRuleHandler
+	rulesSriovInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSriovInterfaceChoice(rulesSriovInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.sriov_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sriov_interface_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8062,6 +8174,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["interface_choice.device_list"] = FleetDeviceListTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["sriov_interface_choice.sriov_interfaces"] = SriovInterfacesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = FleetStorageClassListTypeValidator().Validate
 
@@ -9019,6 +9133,14 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SriovInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sriov_interface_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) StorageClassChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -9930,6 +10052,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sriov_interface_choice"]; exists {
+		val := m.GetSriovInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sriov_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSriovInterfaceChoice().(type) {
+	case *GlobalSpecType_DefaultSriovInterface:
+		if fv, exists := v.FldValidators["sriov_interface_choice.default_sriov_interface"]; exists {
+			val := m.GetSriovInterfaceChoice().(*GlobalSpecType_DefaultSriovInterface).DefaultSriovInterface
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("default_sriov_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SriovInterfaces:
+		if fv, exists := v.FldValidators["sriov_interface_choice.sriov_interfaces"]; exists {
+			val := m.GetSriovInterfaceChoice().(*GlobalSpecType_SriovInterfaces).SriovInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("sriov_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_class_choice"]; exists {
 		val := m.GetStorageClassChoice()
 		vOpts := append(opts,
@@ -10235,6 +10393,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSriovInterfaceChoice := v.SriovInterfaceChoiceValidationRuleHandler
+	rulesSriovInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSriovInterfaceChoice(rulesSriovInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.sriov_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sriov_interface_choice"] = vFn
+
 	vrhStorageClassChoice := v.StorageClassChoiceValidationRuleHandler
 	rulesStorageClassChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -10435,6 +10604,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["interface_choice.interface_list"] = FleetInterfaceListTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["sriov_interface_choice.sriov_interfaces"] = SriovInterfacesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = FleetStorageClassListTypeValidator().Validate
 
@@ -13168,6 +13339,287 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SriovInterface) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SriovInterface) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SriovInterface) DeepCopy() *SriovInterface {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SriovInterface{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SriovInterface) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SriovInterface) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SriovInterfaceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSriovInterface struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSriovInterface) InterfaceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for interface_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSriovInterface) NumberOfVfsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for number_of_vfs")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSriovInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SriovInterface)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SriovInterface got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interface_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("interface_name"))
+		if err := fv(ctx, m.GetInterfaceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["number_of_vfs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("number_of_vfs"))
+		if err := fv(ctx, m.GetNumberOfVfs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSriovInterfaceValidator = func() *ValidateSriovInterface {
+	v := &ValidateSriovInterface{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterfaceName := v.InterfaceNameValidationRuleHandler
+	rulesInterfaceName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInterfaceName(rulesInterfaceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SriovInterface.interface_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface_name"] = vFn
+
+	vrhNumberOfVfs := v.NumberOfVfsValidationRuleHandler
+	rulesNumberOfVfs := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNumberOfVfs(rulesNumberOfVfs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SriovInterface.number_of_vfs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["number_of_vfs"] = vFn
+
+	return v
+}()
+
+func SriovInterfaceValidator() db.Validator {
+	return DefaultSriovInterfaceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SriovInterfacesListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SriovInterfacesListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SriovInterfacesListType) DeepCopy() *SriovInterfacesListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SriovInterfacesListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SriovInterfacesListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SriovInterfacesListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SriovInterfacesListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSriovInterfacesListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSriovInterfacesListType) SriovInterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for sriov_interface")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SriovInterface, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SriovInterfaceValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for sriov_interface")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SriovInterface)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SriovInterface, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated sriov_interface")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items sriov_interface")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSriovInterfacesListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SriovInterfacesListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SriovInterfacesListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sriov_interface"]; exists {
+		vOpts := append(opts, db.WithValidateField("sriov_interface"))
+		if err := fv(ctx, m.GetSriovInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSriovInterfacesListTypeValidator = func() *ValidateSriovInterfacesListType {
+	v := &ValidateSriovInterfacesListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSriovInterface := v.SriovInterfaceValidationRuleHandler
+	rulesSriovInterface := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhSriovInterface(rulesSriovInterface)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SriovInterfacesListType.sriov_interface: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sriov_interface"] = vFn
+
+	return v
+}()
+
+func SriovInterfacesListTypeValidator() db.Validator {
+	return DefaultSriovInterfacesListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -17598,6 +18050,41 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSriovInterfaceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SriovInterfaceChoice.(type) {
+	case nil:
+		o.SriovInterfaceChoice = nil
+
+	case *CreateSpecType_DefaultSriovInterface:
+		o.SriovInterfaceChoice = &GlobalSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *CreateSpecType_SriovInterfaces:
+		o.SriovInterfaceChoice = &GlobalSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSriovInterfaceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SriovInterfaceChoice.(type) {
+	case nil:
+		r.SriovInterfaceChoice = nil
+
+	case *GlobalSpecType_DefaultSriovInterface:
+		r.SriovInterfaceChoice = &CreateSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *GlobalSpecType_SriovInterfaces:
+		r.SriovInterfaceChoice = &CreateSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetStorageClassChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.StorageClassChoice.(type) {
 	case nil:
@@ -17831,6 +18318,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.GetSriovInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
@@ -17869,6 +18357,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	m1.SetSriovInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)
@@ -18031,6 +18520,41 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &GetSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSriovInterfaceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SriovInterfaceChoice.(type) {
+	case nil:
+		o.SriovInterfaceChoice = nil
+
+	case *GetSpecType_DefaultSriovInterface:
+		o.SriovInterfaceChoice = &GlobalSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *GetSpecType_SriovInterfaces:
+		o.SriovInterfaceChoice = &GlobalSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSriovInterfaceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SriovInterfaceChoice.(type) {
+	case nil:
+		r.SriovInterfaceChoice = nil
+
+	case *GlobalSpecType_DefaultSriovInterface:
+		r.SriovInterfaceChoice = &GetSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *GlobalSpecType_SriovInterfaces:
+		r.SriovInterfaceChoice = &GetSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -18272,6 +18796,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideVirtualNetwork = f.GetOutsideVirtualNetwork()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.GetSriovInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageClassChoiceFromGlobalSpecType(f)
 	m.GetStorageDeviceChoiceFromGlobalSpecType(f)
 	m.GetStorageInterfaceChoiceFromGlobalSpecType(f)
@@ -18310,6 +18835,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideVirtualNetwork = m1.OutsideVirtualNetwork
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	m1.SetSriovInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageClassChoiceToGlobalSpecType(f)
 	m1.SetStorageDeviceChoiceToGlobalSpecType(f)
 	m1.SetStorageInterfaceChoiceToGlobalSpecType(f)

@@ -2753,10 +2753,8 @@ var APISwaggerJSON string = `{
         },
         "ioschemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -2968,26 +2966,21 @@ var APISwaggerJSON string = `{
         },
         "schemaNetworkingStackType": {
             "type": "object",
-            "description": "Type of networking stack",
+            "description": "x-displayName: \"Networking Stack\"\nType of networking stack",
             "title": "NetworkingStackType",
-            "x-displayname": "Networking Stack",
-            "x-ves-oneof-field-choice": "[\"dual\",\"ipv4\",\"ipv6\"]",
-            "x-ves-proto-message": "ves.io.schema.NetworkingStackType",
             "properties": {
                 "dual": {
-                    "description": "Exclusive with [ipv4 ipv6]\n Supports both IPv4 and IPv6",
+                    "description": "x-displayName: \"Dual\"\nSupports both IPv4 and IPv6",
                     "title": "Dual",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Dual"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "ipv4": {
-                    "description": "Exclusive with [dual ipv6]\n Supports only IPv4",
+                    "description": "x-displayName: \"IPv4\"\nSupports only IPv4",
                     "title": "IPv4",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "IPv4"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "ipv6": {
-                    "description": "Exclusive with [dual ipv4]\n x-displaName: \"IPv6\"\n Supports only IPv6",
+                    "description": "x-displaName: \"IPv6\"\nSupports only IPv6",
                     "title": "IPv6",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -3710,12 +3703,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
-                },
-                "site_network_stack": {
-                    "description": " Site (CE) networking stack type",
-                    "title": "Site (CE) Networking Stack Type",
-                    "$ref": "#/definitions/schemaNetworkingStackType",
-                    "x-displayname": "Site (CE) Networking Stack Type"
                 },
                 "state": {
                     "description": " State of the tenant.",

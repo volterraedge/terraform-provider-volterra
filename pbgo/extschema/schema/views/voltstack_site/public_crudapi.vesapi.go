@@ -2362,17 +2362,26 @@ var APISwaggerJSON string = `{
             "title": "PeerExternal",
             "x-displayname": "External BGP Peer",
             "x-ves-displayorder": "1,2,10,11,20",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"address_ipv6\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [address_ipv6 default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "address",
                     "x-displayname": "Peer Address",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "address_ipv6": {
+                    "type": "string",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer ipv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPV6 address",
+                    "x-displayname": "Peer IPV6 Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "asn": {
@@ -2389,13 +2398,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
+                    "description": "Exclusive with [address address_ipv6 from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address address_ipv6 default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Address From Site Object"
@@ -2426,7 +2435,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address address_ipv6 default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
@@ -2437,7 +2446,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address address_ipv6 default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",
@@ -3469,6 +3478,59 @@ var APISwaggerJSON string = `{
                     "title": "Flash Blade",
                     "$ref": "#/definitions/fleetFlashBladeType",
                     "x-displayname": "Flash Blade"
+                }
+            }
+        },
+        "fleetSriovInterface": {
+            "type": "object",
+            "description": "Single Root I/O Virtualization interfaces configured explicitly\nBy default no SR-IOV interface is assigned to the fleet",
+            "title": "SriovInterface specifies the configuration fo SR-IOV interfaces and how many virtual functions it has",
+            "x-displayname": "SR-IOV Interfaces",
+            "x-ves-proto-message": "ves.io.schema.fleet.SriovInterface",
+            "properties": {
+                "interface_name": {
+                    "type": "string",
+                    "description": " Name for SR-IOV physical interface\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "interface_name",
+                    "x-displayname": "Name for physical interface",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "number_of_vfs": {
+                    "type": "integer",
+                    "description": " Number of virtual functions\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "number_of_vfs",
+                    "format": "int64",
+                    "x-displayname": "Number of virtual functions",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "fleetSriovInterfacesListType": {
+            "type": "object",
+            "description": "List of all custom SR-IOV interfaces configuration",
+            "title": "Custom SR-IOV interfaces Configuration List",
+            "x-displayname": "Custom SR-IOV interfaces Configuration List",
+            "x-ves-proto-message": "ves.io.schema.fleet.SriovInterfacesListType",
+            "properties": {
+                "sriov_interface": {
+                    "type": "array",
+                    "description": " Use custom SR-IOV interfaces Configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Custom SR-IOV interfaces Configuration",
+                    "items": {
+                        "$ref": "#/definitions/fleetSriovInterface"
+                    },
+                    "x-displayname": "Custom SR-IOV interfaces Configuration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4520,6 +4582,89 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceDHCPIPV6NetworkType": {
+            "type": "object",
+            "description": "x-displayName: \"DHCPIPV6NetworkType\"\nDHCP IPV6 network type configuration",
+            "title": "DHCPIPV6NetworkType",
+            "properties": {
+                "network_prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Network Prefix\"\nx-example: \"2001::0/64\"\nNetwork Prefix to be used for IPV6 address auto configuration",
+                    "title": "Network Prefix"
+                },
+                "network_prefix_allocator": {
+                    "description": "x-displayName: \"Prefix Allocator a Fleet\"\nNetwork Prefix for a Fleet is derived from address allocator rules.\nPrefix length from address allocator scheme is used to calculate offsets",
+                    "title": "Network Prefix for a Fleet",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "pools": {
+                    "type": "array",
+                    "description": "x-displayName: \"DHCP Pools\"\nList of non overlapping ip address ranges.",
+                    "title": "DHCP pools",
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6PoolType"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6PoolType": {
+            "type": "object",
+            "description": "x-displayName: \"DHCP IPV6 Range\"\nDHCP IPV6 pool is a range of IP addresses (start ip and end ip).",
+            "title": "DHCP IPV6 Range",
+            "properties": {
+                "end_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Ending IPV6\"\nx-example: \"2001::200\"\nEnding IPV6 address of the pool range.\nIn case of address allocator, offset is derived based on network prefix.",
+                    "title": "End IP"
+                },
+                "exclude": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Exclude\"\nIf exclude is true, IP addresses are not assigned from this range.",
+                    "title": "Exclude",
+                    "format": "boolean"
+                },
+                "start_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Starting IPV6\"\nx-example: \"2001::1\"\nStarting IPV6 address of the pool range.\nIn case of address allocator, offset is derived based on network prefix.\n2001::1 with prefix length of 64, start offset is 5",
+                    "title": "Start IPV6"
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6StatefulServer": {
+            "type": "object",
+            "description": "x-displayName: \"DHCPIPV6 Stateful Server\"",
+            "title": "DHCPIPV6StatefulServer",
+            "properties": {
+                "automatic_from_end": {
+                    "description": "x-displayName: \"Automatic End\"\nAssign automatically from End of the first network in the list",
+                    "title": "Automatic End",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "automatic_from_start": {
+                    "description": "x-displayName: \"Automatic Start\"\nAssign automatically from start of the first network in the list",
+                    "title": "Automatic Start",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "dhcp_networks": {
+                    "type": "array",
+                    "description": "x-displayName: \"DHCP IPV6 Networks\"\nx-required\nList of networks from which DHCP server can allocate ip addresses",
+                    "title": "DHCP IPV6 Networks",
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6NetworkType"
+                    }
+                },
+                "fixed_ip_map": {
+                    "type": "object",
+                    "description": "x-displayName: \"Fixed MAC address to IPV6 Assignments\"\nx-example: \"value\"\nFixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address",
+                    "title": "Fixed IPV6 Assignments"
+                },
+                "interface_ip_map": {
+                    "description": "x-displayName: \"Configured\"\nConfigured address for every node",
+                    "title": "Configured Address",
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPV6Type"
+                }
+            }
+        },
         "network_interfaceDHCPInterfaceIPType": {
             "type": "object",
             "description": "Map of Interface IP assignments per node",
@@ -4539,6 +4684,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.max_pairs": "64",
                         "ves.io.schema.rules.map.values.string.ipv4": "true"
                     }
+                }
+            }
+        },
+        "network_interfaceDHCPInterfaceIPV6Type": {
+            "type": "object",
+            "description": "x-displayName: \"Interface IPV6 Assignments\"\nMap of Interface IPV6 assignments per node",
+            "title": "Interface IPV6 Assignments",
+            "properties": {
+                "interface_ip_map": {
+                    "type": "object",
+                    "description": "x-displayName: \"Site:Node to IPV6 Mapping\"\nx-example: \"value\"\nMap of Site:Node to IPV6 address.",
+                    "title": "Site:Node to IPV6 mapping"
                 }
             }
         },
@@ -4878,7 +5035,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -4949,7 +5106,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No IPv6 Address"
@@ -5003,7 +5160,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
+                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IP"
@@ -5030,6 +5187,99 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "4095"
                     }
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigRouterType": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6AutoConfigRouterType\"",
+            "title": "IPV6AutoConfigRouterType",
+            "properties": {
+                "dns_config": {
+                    "description": "x-displayName: \"DNS Information\"\nDns information that needs to added in the RouterAdvetisement",
+                    "title": "Dns Information",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsConfig"
+                },
+                "network_prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Network Prefix\"\nx-example: \"2001::0/64\"\nNework prefix that is used as Prefix information",
+                    "title": "Prefix Info"
+                },
+                "stateful": {
+                    "description": "x-displayName: \"StateFul DHCPIPV6 server\"\nUse stateful dhcp server which provides the IPV6 address to clients\nworks along with Router Advertisement' Managed flag",
+                    "title": "Stateful DHCP IPV6 server",
+                    "$ref": "#/definitions/network_interfaceDHCPIPV6StatefulServer"
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigType": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6AutoConfigType\"",
+            "title": "IPV6AutoConfigType",
+            "properties": {
+                "host": {
+                    "description": "x-displayName: \"Auto Config Host\"\nSystem behaves like Auto config host and receives the auto configuration parameters from other\nauto configuration routers",
+                    "title": "host",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "router": {
+                    "description": "x-displayName: \"Auto Config Router\"\nSystem behaves like Auto config Router and provides auto config parameters",
+                    "title": "router",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigRouterType"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsConfig": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6DnsConfig\"",
+            "title": "IPV6DnsConfig",
+            "properties": {
+                "configured_list": {
+                    "description": "x-displayName: \"Configured Address List\"\nConfigured address outside network range - external dns server",
+                    "title": "Configured Address List",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsList"
+                },
+                "local_dns": {
+                    "description": "x-displayName: \"Local Dns Address\"\nChoose the address from the network prefix range as dns server",
+                    "title": "Local Dns Address",
+                    "$ref": "#/definitions/network_interfaceIPV6LocalDnsAddress"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsList": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6DnsList\"",
+            "title": "IPV6DnsList",
+            "properties": {
+                "dns_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Dns List\"\nx-required\nx-example: \"2001::11\"\nList of IPV6 Addresses acting as Dns servers",
+                    "title": "Dns List",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "network_interfaceIPV6LocalDnsAddress": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6LocalDnsAddress\"",
+            "title": "IPV6LocalDnsAddress",
+            "properties": {
+                "configured_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"Configured Address\"\nx-example: \"2001::10\"\nConfigured address from the network prefix is chosen as dns server",
+                    "title": "Configured Address"
+                },
+                "first_address": {
+                    "description": "x-displayName: \"First Address of Network\"\nFirst usable address from the network prefix is chosen as dns server",
+                    "title": "First Address",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "last_address": {
+                    "description": "x-displayName: \"Last Address of Network\"\nLast usable address from the network prefix is chosen as dns server",
+                    "title": "Last Address",
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -6829,6 +7079,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
+            "x-ves-oneof-field-sriov_interface_choice": "[\"default_sriov_interface\",\"sriov_interfaces\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
             "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
             "x-ves-oneof-field-vm_choice": "[\"disable_vm\",\"enable_vm\"]",
@@ -6883,6 +7134,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [custom_network_config]\n Use default networking configuration based on certified hardware.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Network Configuration"
+                },
+                "default_sriov_interface": {
+                    "description": "Exclusive with [sriov_interfaces]\n Disable Single Root I/O Virtualization interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable SR-IOV interfaces"
                 },
                 "default_storage_config": {
                     "description": "Exclusive with [custom_storage_config]\n Use default storage configuration",
@@ -6979,6 +7235,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
                 },
+                "sriov_interfaces": {
+                    "description": "Exclusive with [default_sriov_interface]\n Use custom Single Root I/O Virtualization interfaces",
+                    "$ref": "#/definitions/fleetSriovInterfacesListType",
+                    "x-displayname": "Custom SR-IOV interfaces Configuration"
+                },
                 "sw": {
                     "description": " F5XC Software Details",
                     "title": "F5XC Software",
@@ -7031,6 +7292,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
+            "x-ves-oneof-field-sriov_interface_choice": "[\"default_sriov_interface\",\"sriov_interfaces\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
             "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
             "x-ves-oneof-field-vm_choice": "[\"disable_vm\",\"enable_vm\"]",
@@ -7085,6 +7347,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [custom_network_config]\n Use default networking configuration based on certified hardware.",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Network Configuration"
+                },
+                "default_sriov_interface": {
+                    "description": "Exclusive with [sriov_interfaces]\n Disable Single Root I/O Virtualization interfaces",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable SR-IOV interfaces"
                 },
                 "default_storage_config": {
                     "description": "Exclusive with [custom_storage_config]\n Use default storage configuration",
@@ -7191,6 +7458,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
                 },
+                "sriov_interfaces": {
+                    "description": "Exclusive with [default_sriov_interface]\n Use custom Single Root I/O Virtualization interfaces",
+                    "$ref": "#/definitions/fleetSriovInterfacesListType",
+                    "x-displayname": "Custom SR-IOV interfaces Configuration"
+                },
                 "usb_policy": {
                     "description": "Exclusive with [allow_all_usb deny_all_usb]\n Allow only specific USB devices",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -7247,6 +7519,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-local_control_plane_choice": "[\"local_control_plane\",\"no_local_control_plane\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
+            "x-ves-oneof-field-sriov_interface_choice": "[\"default_sriov_interface\",\"sriov_interfaces\"]",
             "x-ves-oneof-field-storage_cfg_choice": "[\"custom_storage_config\",\"default_storage_config\"]",
             "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
             "x-ves-oneof-field-vm_choice": "[\"disable_vm\",\"enable_vm\"]",
@@ -7310,6 +7583,12 @@ var APISwaggerJSON string = `{
                     "title": "Default Network Configuration",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Network Configuration"
+                },
+                "default_sriov_interface": {
+                    "description": "Exclusive with [sriov_interfaces]\n Disable Single Root I/O Virtualization interfaces",
+                    "title": "Default SR-IOV interfaces Configuration",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable SR-IOV interfaces"
                 },
                 "default_storage_config": {
                     "description": "Exclusive with [custom_storage_config]\n Use default storage configuration",
@@ -7439,6 +7718,12 @@ var APISwaggerJSON string = `{
                     "title": "Operating System",
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
+                },
+                "sriov_interfaces": {
+                    "description": "Exclusive with [default_sriov_interface]\n Use custom Single Root I/O Virtualization interfaces",
+                    "title": "Custom SR-IOV interfaces Configuration",
+                    "$ref": "#/definitions/fleetSriovInterfacesListType",
+                    "x-displayname": "Custom SR-IOV interfaces Configuration"
                 },
                 "sw": {
                     "description": " F5XC Software Details",

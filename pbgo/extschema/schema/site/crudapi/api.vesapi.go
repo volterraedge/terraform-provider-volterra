@@ -3709,16 +3709,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
-                "inside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "inside_vip_v6",
-                    "x-displayname": "Inside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
                 "ipsec_ssl_nodes_fqdn": {
                     "type": "array",
                     "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
@@ -3833,16 +3823,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "outside_vip_v6",
-                    "x-displayname": "Outside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "phobos_list": {
@@ -3988,12 +3968,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
                     }
                 },
-                "vip_selection": {
-                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
-                    "title": "vip_selection",
-                    "$ref": "#/definitions/siteVIPSelection",
-                    "x-displayname": "VIP Selection"
-                },
                 "vip_vrrp_mode": {
                     "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
                     "title": "vip_vrrp_mode",
@@ -4080,27 +4054,39 @@ var APISwaggerJSON string = `{
             "properties": {
                 "express_route_circuit_id": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Circuit ID\"\nExpress Route Circuit ID"
+                    "description": " Express Route Circuit ID",
+                    "title": "Express Route Circuit ID",
+                    "x-displayname": "Express Route Circuit ID"
                 },
                 "express_route_circuit_name": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Circuit Name\"\nExpress Route Circuit Name"
+                    "description": " Express Route Circuit Name",
+                    "title": "Express Route Circuit Name",
+                    "x-displayname": "Express Route Circuit Name"
                 },
                 "express_route_circuit_state": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Circuit Provisioning State\"\nExpress Route Provisioning State"
+                    "description": " Express Route Provisioning State",
+                    "title": "Express Route Provisioning State",
+                    "x-displayname": "Express Route Circuit Provisioning State"
                 },
                 "express_route_connection_name": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Connection Name\"\nExpress Route Connection Name"
+                    "description": " Express Route Connection Name",
+                    "title": "Express Route Connection Name",
+                    "x-displayname": "Express Route Connection Name"
                 },
                 "express_route_connection_status": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Connection Status\"\nExpress Route Connection Status"
+                    "description": " Express Route Connection Status",
+                    "title": "Express Route Connection Status",
+                    "x-displayname": "Express Route Connection Status"
                 },
                 "peering": {
-                    "title": "x-displayName: \"Express Route Private Peering Status\"\nExpress Route Private Peering Status",
-                    "$ref": "#/definitions/siteExpressRoutePeeringStatusType"
+                    "description": " Express Route Private Peering Status",
+                    "title": "Express Route Private Peering Status",
+                    "$ref": "#/definitions/siteExpressRoutePeeringStatusType",
+                    "x-displayname": "Express Route Private Peering Status"
                 }
             }
         },
@@ -4110,18 +4096,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "propagated_routes_from_azure_express_route": {
                     "type": "array",
-                    "title": "x-displayName: \"Propagated Routes from Azure Express Route\"\nPropagated Routes from Azure Express Route",
+                    "description": " Propagated Routes from Azure Express Route",
+                    "title": "Propagated Routes from Azure Express Route",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Propagated Routes from Azure Express Route"
                 },
                 "route_server_status": {
-                    "title": "x-displayName: \"Route Server State\"\nRoute Server State",
-                    "$ref": "#/definitions/siteRouteServerStatusType"
+                    "description": " Route Server State",
+                    "title": "Route Server State",
+                    "$ref": "#/definitions/siteRouteServerStatusType",
+                    "x-displayname": "Route Server State"
                 },
                 "vnet_gateway_status": {
-                    "title": "x-displayName: \"VNET Gateway State\"\nVNET Gateway State",
-                    "$ref": "#/definitions/siteVnetGatewayStatusType"
+                    "description": " VNET Gateway State",
+                    "title": "VNET Gateway State",
+                    "$ref": "#/definitions/siteVnetGatewayStatusType",
+                    "x-displayname": "VNET Gateway State"
                 }
             }
         },
@@ -4130,15 +4122,19 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.site.AzureHubSpokeVnetPeeringStatusInfo",
             "properties": {
                 "hub_vnet": {
-                    "title": "x-displayName: \"Hub VNETs\"\nHub VNETs",
-                    "$ref": "#/definitions/siteAzureVNetToVnetPeeringStatus"
+                    "description": " Hub VNETs",
+                    "title": "Hub VNETS",
+                    "$ref": "#/definitions/siteAzureVNetToVnetPeeringStatus",
+                    "x-displayname": "Hub VNETs"
                 },
                 "spoke_vnets": {
                     "type": "array",
-                    "title": "x-displayName: \"Spoke VNETs\"\nSpoke VNETs",
+                    "description": " Spoke VNETs",
+                    "title": "Spoke VNETs",
                     "items": {
                         "$ref": "#/definitions/siteAzureVNetToVnetPeeringStatus"
-                    }
+                    },
+                    "x-displayname": "Spoke VNETs"
                 }
             }
         },
@@ -4148,18 +4144,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "peers": {
                     "type": "array",
-                    "title": "x-displayName: \"Peers\"\nPeers",
+                    "description": " Peers",
+                    "title": "Peers",
                     "items": {
                         "$ref": "#/definitions/siteAzureVnetPeeringStateType"
-                    }
+                    },
+                    "x-displayname": "Peers"
                 },
                 "route_association_state": {
                     "type": "string",
-                    "title": "x-displayName: \"Route association State\"\nRemote Route association State"
+                    "description": " Remote Route association State",
+                    "title": "Remote Route association State",
+                    "x-displayname": "Route association State"
                 },
                 "vnet_info": {
-                    "title": "x-displayName: \"Azure VNET Info\"\nAzure VNET Info",
-                    "$ref": "#/definitions/viewsAzureVnetType"
+                    "description": " Azure VNET Info",
+                    "title": "Azure VNET Info",
+                    "$ref": "#/definitions/viewsAzureVnetType",
+                    "x-displayname": "Azure VNET Info"
                 }
             }
         },
@@ -4169,19 +4171,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "peering_state": {
                     "type": "string",
-                    "title": "x-displayName: \"Azure VNET Peering State\"\nAzure VNET Peering State"
+                    "description": " Azure VNET Peering State",
+                    "title": "Azure VNET Peering State",
+                    "x-displayname": "Azure VNET Peering State"
                 },
                 "peering_sync_level": {
                     "type": "string",
-                    "title": "x-displayName: \"Azure VNET Peering Sync Level\"\nAzure VNET Peering Sync Level"
+                    "description": " Azure VNET Peering Sync Level",
+                    "title": "Azure VNET Peering Sync Level",
+                    "x-displayname": "Azure VNET Peering Sync Level"
                 },
                 "provisioning_state": {
                     "type": "string",
-                    "title": "x-displayName: \"Provisioning State\"\nProvisioning State"
+                    "description": " Provisioning State",
+                    "title": "Provisioning State",
+                    "x-displayname": "Provisioning State"
                 },
                 "remote_vnet_id": {
                     "type": "string",
-                    "title": "x-displayName: \"Remote VNET ID\"\nRemote VNET ID"
+                    "description": " Remote VNET ID",
+                    "title": "Remote VNET ID",
+                    "x-displayname": "Remote VNET ID"
                 }
             }
         },
@@ -4412,13 +4422,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CPUs",
                     "x-ves-example": "4"
                 },
-                "flags": {
-                    "type": "string",
-                    "description": " CPU flags\n\nExample: - \"value\"-",
-                    "title": "flags",
-                    "x-displayname": "Cpu Flags",
-                    "x-ves-example": "value"
-                },
                 "model": {
                     "type": "string",
                     "description": " CPU model\n\nExample: - \"value\"-",
@@ -4527,7 +4530,7 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": " Amazon side address",
                     "title": "Amazon side address",
-                    "x-displayname": "Amazon side address "
+                    "x-displayname": "Amazon side address"
                 },
                 "asn": {
                     "type": "integer",
@@ -4655,23 +4658,33 @@ var APISwaggerJSON string = `{
             "properties": {
                 "azure_asn": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Azure ASN\"\nExpress Route Azure ASN"
+                    "description": " Express Route Azure ASN",
+                    "title": "Express Route Azure ASN",
+                    "x-displayname": "Express Route Azure ASN"
                 },
                 "peer_asn": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Peer ASN\"\nExpress Route Peer ASN"
+                    "description": " Express Route Peer ASN",
+                    "title": "Express Route Peer ASN",
+                    "x-displayname": "Express Route Peer ASN"
                 },
                 "peering_type": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Peering Type\"\nExpress Route Peering Type"
+                    "description": " Express Route Peering Type",
+                    "title": "Express Route Peering Type",
+                    "x-displayname": "Express Route Peering Type"
                 },
                 "provisioningState": {
                     "type": "string",
-                    "title": "x-displayName: \"Provisioning Status\"\nProvisioning Status"
+                    "description": " Provisioning Status",
+                    "title": "Provisioning Status",
+                    "x-displayname": "Provisioning Status"
                 },
                 "state": {
                     "type": "string",
-                    "title": "x-displayName: \"Express Route Peering Status\"\nExpress Route Peering Status"
+                    "description": " Express Route Peering Status",
+                    "title": "Express Route Peering Status",
+                    "x-displayname": "Express Route Peering Status"
                 }
             }
         },
@@ -4715,7 +4728,7 @@ var APISwaggerJSON string = `{
                 "condition": {
                     "type": "array",
                     "description": " Map of fleet conditions",
-                    "title": "conditiom",
+                    "title": "condition",
                     "items": {
                         "$ref": "#/definitions/siteFleetCondition"
                     },
@@ -5190,7 +5203,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "message": {
                     "type": "string",
-                    "description": " provides more detailed decription of current phase",
+                    "description": " provides more detailed description of current phase",
                     "title": "Message",
                     "x-displayname": "Message"
                 },
@@ -5460,15 +5473,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "peerIP": {
                     "type": "string",
-                    "title": "x-displayName: \"Route Server Peer IP\"\nRoute Server Peer IP"
+                    "description": " Route Server Peer IP",
+                    "title": "Route Server Peer IP",
+                    "x-displayname": "Route Server Peer IP"
                 },
                 "peer_asn": {
                     "type": "string",
-                    "title": "x-displayName: \"Route Server Peer ASN\"\nRoute Server Peer ASN"
+                    "description": " Route Server Peer ASN",
+                    "title": "Route Server Peer ASN",
+                    "x-displayname": "Route Server Peer ASN"
                 },
                 "provisioningState": {
                     "type": "string",
-                    "title": "x-displayName: \"Provisioning Status\"\nProvisioning Status"
+                    "description": " Provisioning Status",
+                    "title": "Provisioning Status",
+                    "x-displayname": "Provisioning Status"
                 }
             }
         },
@@ -5478,14 +5497,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "peers": {
                     "type": "array",
-                    "title": "x-displayName: \"Route Server Peering State\"\nRoute Server Peering State",
+                    "description": " Route Server Peering State",
+                    "title": "Route Server Peering State",
                     "items": {
                         "$ref": "#/definitions/siteRouteServerPeeringStatusType"
-                    }
+                    },
+                    "x-displayname": "Route Server Peering State"
                 },
                 "route_server_name": {
                     "type": "string",
-                    "title": "x-displayName: \"Route Server Name\"\nRoute Server Name"
+                    "description": " Route Server Name",
+                    "title": "Route Server Name",
+                    "x-displayname": "Route Server Name"
                 }
             }
         },
@@ -5651,7 +5674,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of site object",
             "title": "Site Status Object",
             "x-displayname": "Status",
-            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20",
+            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22",
             "x-ves-proto-message": "ves.io.schema.site.StatusObject",
             "properties": {
                 "certified_hardware": {
@@ -5680,7 +5703,7 @@ var APISwaggerJSON string = `{
                     "description": " Deployment status",
                     "title": "Deployment status",
                     "$ref": "#/definitions/terraform_parametersDeploymentStatusType",
-                    "x-displayname": "Deployment status"
+                    "x-displayname": "Deployment Status"
                 },
                 "direct_connect_status": {
                     "description": " Direct Connect Status",
@@ -5711,7 +5734,7 @@ var APISwaggerJSON string = `{
                     "description": " HW information about node in the site",
                     "title": "Hardware information",
                     "$ref": "#/definitions/siteOsInfo",
-                    "x-displayname": "Hardware Info"
+                    "x-displayname": "Hardware Information"
                 },
                 "internet_VIP_status": {
                     "description": " Provides AWS Internet NLB VIP Status",
@@ -5786,7 +5809,7 @@ var APISwaggerJSON string = `{
                     "description": " VolterraSoftware status shows deployment status of last version in site and available\n version for upgrade.",
                     "title": "Software Status",
                     "$ref": "#/definitions/siteVolterraSoftwareStatus",
-                    "x-displayname": "software status"
+                    "x-displayname": "Software Status"
                 }
             }
         },
@@ -6089,16 +6112,14 @@ var APISwaggerJSON string = `{
         },
         "siteVIPSelection": {
             "type": "string",
-            "description": "VIP type to choose from IPv4/IPv6/both if different VIPs are available\n",
+            "description": "x-displayName: \"VIP Selection\"\nVIP type to choose from IPv4/IPv6/both if different VIPs are available\n\n - VIP_SELECTION_IPV4_IPV6: x-displayName: \"Select both IPv4 and IPv6 VIPs\"\n - VIP_SELECTION_IPV4: x-displayName: \"Select IPv4 VIP only\"\n - VIP_SELECTION_IPV6: x-displayName: \"Select IPv6 VIP only\"",
             "title": "VIP Selection",
             "enum": [
                 "VIP_SELECTION_IPV4_IPV6",
                 "VIP_SELECTION_IPV4",
                 "VIP_SELECTION_IPV6"
             ],
-            "default": "VIP_SELECTION_IPV4_IPV6",
-            "x-displayname": "VIP Selection",
-            "x-ves-proto-enum": "ves.io.schema.site.VIPSelection"
+            "default": "VIP_SELECTION_IPV4_IPV6"
         },
         "siteVTRPState": {
             "type": "string",
@@ -6241,22 +6262,30 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_status": {
                     "type": "array",
-                    "title": "x-displayName: \"Azure Express Route Circuit Connection Status\"\nAzure Express Route Circuit Connection Status",
+                    "description": " Azure Express Route Circuit Connection Status",
+                    "title": "Azure Express Route Circuit Connection Status",
                     "items": {
                         "$ref": "#/definitions/siteAzureExpressRouteCircuitStatusType"
-                    }
+                    },
+                    "x-displayname": "Azure Express Route Circuit Connection Status"
                 },
                 "vgw_id": {
                     "type": "string",
-                    "title": "x-displayName: \"VNET Gateway ID\"\nVNET Gateway ID"
+                    "description": " VNET Gateway ID",
+                    "title": "VNET Gateway ID",
+                    "x-displayname": "VNET Gateway ID"
                 },
                 "vgw_name": {
                     "type": "string",
-                    "title": "x-displayName: \"VNET Gateway Name\"\nVNET Gateway Name"
+                    "description": " VNET Gateway Name",
+                    "title": "VNET Gateway Name",
+                    "x-displayname": "VNET Gateway Name"
                 },
                 "vgw_state": {
                     "type": "string",
-                    "title": "x-displayName: \"VNET Gateway State\"\nVNET Gateway State"
+                    "description": " VNET Gateway State",
+                    "title": "VNET Gateway State",
+                    "x-displayname": "VNET Gateway State"
                 }
             }
         },
@@ -6279,6 +6308,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteDeploymentState",
                     "x-displayname": "Deployment State"
                 },
+                "last_installed_version": {
+                    "type": "string",
+                    "description": " last installed version represent last volterra software version that has successfully deployed in the site.",
+                    "title": "last_installed_version",
+                    "x-displayname": "Last Installed Version"
+                },
                 "nonconforming_state": {
                     "type": "string",
                     "description": " If nonconforming state is not empty, then current deployed SW version is nonconforming. Site should be upgrade to available version.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -6288,12 +6323,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
-                },
-                "running_version": {
-                    "type": "string",
-                    "description": " running version represent volterra software version currently running in the site.",
-                    "title": "running_version",
-                    "x-displayname": "Running Version"
                 }
             }
         },
@@ -6311,8 +6340,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "description": "Terraform state during apply stage",
-            "title": "Apply Stage State",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
@@ -6322,7 +6350,7 @@ var APISwaggerJSON string = `{
                 "APPLY_PLAN_ERRORED"
             ],
             "default": "APPLIED",
-            "x-displayname": "Apply Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.ApplyStageState"
         },
         "terraform_parametersApplyStatus": {
@@ -6368,6 +6396,13 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Modification Timestamp"
                 },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                },
                 "tf_output": {
                     "type": "string",
                     "description": " The value of an \"output\" variable from the terraform state file.\n\nExample: - \"value\"-",
@@ -6409,21 +6444,19 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "description": "Terraform state during destroy stage",
-            "title": "Destroy Stage State",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
                 "DESTROYING"
             ],
             "default": "DESTROYED",
-            "x-displayname": "Destroy Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.DestroyStageState"
         },
         "terraform_parametersInfraState": {
             "type": "string",
-            "description": "Infrastructure state of the view provisioning",
-            "title": "Infra State",
+            "title": "- PROVISIONED: x-displayName: \"Provisioned\"\n - TIMED_OUT: x-displayName: \"Timed out\"\n - ERRORED: x-displayName: \"Errored\"\n - PROVISIONING: x-displayName: \"Provisioning\"",
             "enum": [
                 "PROVISIONED",
                 "TIMED_OUT",
@@ -6431,12 +6464,12 @@ var APISwaggerJSON string = `{
                 "PROVISIONING"
             ],
             "default": "PROVISIONED",
-            "x-displayname": "Infra State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
         },
         "terraform_parametersPlanStageState": {
             "type": "string",
-            "description": "Terraform state during plan stage",
+            "description": "Terraform state during plan stage\n",
             "title": "Plan Stage State",
             "enum": [
                 "PLANNING",
@@ -6481,6 +6514,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/terraform_parametersPlanStageState",
                     "x-displayname": "Plan State"
                 },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                },
                 "tf_plan_output": {
                     "type": "string",
                     "description": " Terraform \"plan\" command output. Terraform performs a refresh, unless explicitly disabled, and then\n determines what actions are necessary to achieve the desired state specified in the configuration files.\n\nExample: - \"value\"-",
@@ -6492,8 +6532,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersRollbackState": {
             "type": "string",
-            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
-            "title": "Rollback State",
+            "title": "- ROLLBACK_SUCCESSFUL: x-displayName: \"Rollback successful\"\n - ROLLBACK_ERRORED: x-displayName: \"Rollback errored\"\n - ROLLBACK_NOT_REQUIRED: x-displayName: \"Rollback not required\"",
             "enum": [
                 "ROLLBACK_SUCCESSFUL",
                 "ROLLBACK_ERRORED",
@@ -6503,7 +6542,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersUpgradeState": {
             "type": "string",
-            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade\n\n - UPGRADE_SUCCESSFUL: x-displayName: \"Upgrade successful\"\n - UPGRADE_ERRORED: x-displayName: \"Upgrade errored\"\n - UPGRADE_NOT_REQUIRED: x-displayName: \"Upgrade not required\"",
             "title": "Upgrade State",
             "enum": [
                 "UPGRADE_SUCCESSFUL",

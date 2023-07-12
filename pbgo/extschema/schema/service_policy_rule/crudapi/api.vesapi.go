@@ -3623,7 +3623,7 @@ var APISwaggerJSON string = `{
         },
         "policyOasValidationActionType": {
             "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation Action Type\n\n - OAS_NONE: OAS_NONE\n\nx-displayName: \"No Operation\"\nAllow the request (don't validate OpenAPI specification)\n - OAS_REPORT_VIOLATION: OAS_REPORT_VIOLATION\n\nx-displayName: \"Report Violation\"\nIf OpenAPI violation occurs, allow the request and report it (API security event)\n - OAS_BLOCK_VIOLATION: OAS_BLOCK_VIOLATION\n\nx-displayName: \"Block Violation\"\nIf OpenAPI violation occurs, block the request and report it (API security event)\n - OAS_BLOCK: OAS_BLOCK\n\nx-displayName: \"Block\"\nblock the request and report it (API security event)\n - OAS_REPORT: OAS_REPORT\n\nx-displayName: \"Report\"\nallow the request and report it (API security event)",
+            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation Action Type\n\n - OAS_NONE: OAS_NONE\n\nx-displayName: \"No Operation\"\nAllow the request/response (don't validate OpenAPI specification)\n - OAS_REPORT_VIOLATION: OAS_REPORT_VIOLATION\n\nx-displayName: \"Report Violation\"\nIf OpenAPI violation occurs, allow the request/response and report it (API security event)\n - OAS_BLOCK_VIOLATION: OAS_BLOCK_VIOLATION\n\nx-displayName: \"Block Violation\"\nIf OpenAPI violation occurs, block the request/response and report it (API security event)\n - OAS_BLOCK: OAS_BLOCK\n\nx-displayName: \"Block\"\nblock the request/response and report it (API security event)\n - OAS_REPORT: OAS_REPORT\n\nx-displayName: \"Report\"\nallow the request/response and report it (API security event)",
             "title": "OpenAPI Validation Action",
             "enum": [
                 "OAS_NONE",
@@ -3639,15 +3639,28 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation configuration",
             "title": "OpenAPI Validation Action",
             "properties": {
+                "oas_response_validation_action": {
+                    "description": "x-displayName: \"OpenAPI Response Validation Action\"\nx-required\nThe action to perform if OpenAPI response validation fails",
+                    "title": "OpenApi Response Validation Action",
+                    "$ref": "#/definitions/policyOasValidationActionType"
+                },
                 "oas_validation_action": {
-                    "description": "x-displayName: \"OpenAPI Validation Action\"\nx-required\nThe action to perform if OpenAPI validation fails",
-                    "title": "OpenApi Validation Action",
+                    "description": "x-displayName: \"OpenAPI Request Validation Action\"\nx-required\nThe action to perform if OpenAPI request validation fails (or if set by fall through rule)",
+                    "title": "OpenApi Request Validation Action",
                     "$ref": "#/definitions/policyOasValidationActionType"
                 },
                 "request_properties_selection": {
                     "type": "array",
                     "description": "x-displayName: \"Request Properties Selection\"\nList of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)",
                     "title": "Request Properties Selection",
+                    "items": {
+                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    }
+                },
+                "response_properties_selection": {
+                    "type": "array",
+                    "description": "x-displayName: \"Response Properties Selection\"\nList of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger)",
+                    "title": "Response Properties Selection",
                     "items": {
                         "$ref": "#/definitions/schemaOpenApiValidationProperties"
                     }
@@ -4723,7 +4736,7 @@ var APISwaggerJSON string = `{
         },
         "schemaOpenApiValidationProperties": {
             "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the request body is according to the OpenAPI specification\n - PROPERTY_SECURITY_SCHEMA: x-displayName: \"Security Schema\"\nValidate that the security schema is according to the OpenAPI specification",
+            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the body is according to the OpenAPI specification\n - PROPERTY_SECURITY_SCHEMA: x-displayName: \"Security Schema\"\nValidate that the security schema is according to the OpenAPI specification\n - PROPERTY_RESPONSE_CODE: x-displayName: \"Response Code\"\nValidate that the response code is according to the OpenAPI specification",
             "title": "OpenApiValidationProperties",
             "enum": [
                 "PROPERTY_QUERY_PARAMETERS",
@@ -4732,7 +4745,8 @@ var APISwaggerJSON string = `{
                 "PROPERTY_COOKIE_PARAMETERS",
                 "PROPERTY_HTTP_HEADERS",
                 "PROPERTY_HTTP_BODY",
-                "PROPERTY_SECURITY_SCHEMA"
+                "PROPERTY_SECURITY_SCHEMA",
+                "PROPERTY_RESPONSE_CODE"
             ],
             "default": "PROPERTY_QUERY_PARAMETERS"
         },

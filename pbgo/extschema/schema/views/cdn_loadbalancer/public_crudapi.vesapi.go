@@ -2224,7 +2224,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "custom_auth_config": {
                     "type": "string",
-                    "description": " Custom Authentication Configuration\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n",
+                    "description": " This is custom authentication configuration parameters. Please reach out to the support for custom authentication details.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n",
                     "title": "custom_auth_config",
                     "maxLength": 4096,
                     "x-displayname": "Custom Auth Config",
@@ -2354,6 +2354,7 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNLoadbalancerDeploymentStatus": {
             "type": "string",
+            "description": "Deployment status\n",
             "title": "CDN LoadBalancer Deployment status",
             "enum": [
                 "CDN_LB_STATUS_CREATED",
@@ -2367,23 +2368,36 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNLoadbalancerStatus": {
             "type": "object",
+            "description": "CDN LoadBalancer Status",
             "title": "CDNLoadBalancer status",
-            "x-displayname": "CDN LoadBalancer status",
+            "x-displayname": "CDN LoadBalancer Status",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNLoadbalancerStatus",
             "properties": {
                 "cfg_version": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " Cfg version",
+                    "title": "Cfg Version",
+                    "format": "int64",
+                    "x-displayname": "Cfg Version"
                 },
                 "cp_version": {
                     "type": "integer",
-                    "format": "int64"
+                    "description": " CP version",
+                    "title": "CP Version",
+                    "format": "int64",
+                    "x-displayname": "CP Version"
                 },
                 "deployment_status": {
-                    "$ref": "#/definitions/cdn_loadbalancerCDNLoadbalancerDeploymentStatus"
+                    "description": " Deployment status",
+                    "title": "Deployment Status",
+                    "$ref": "#/definitions/cdn_loadbalancerCDNLoadbalancerDeploymentStatus",
+                    "x-displayname": "Deployment Status"
                 },
                 "error_msg": {
-                    "type": "string"
+                    "type": "string",
+                    "description": " Error message",
+                    "title": "Error Message",
+                    "x-displayname": "Error Message"
                 }
             }
         },
@@ -3075,7 +3089,8 @@ var APISwaggerJSON string = `{
                 "status": {
                     "description": " Status of CDN loadbalancer deployment on Lilac GC",
                     "title": "status",
-                    "$ref": "#/definitions/cdn_loadbalancerCDNLoadbalancerStatus"
+                    "$ref": "#/definitions/cdn_loadbalancerCDNLoadbalancerStatus",
+                    "x-displayname": "CDN LoadBalancer Status"
                 }
             }
         },
@@ -3108,7 +3123,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -3118,8 +3133,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 }
             }
@@ -3180,18 +3196,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with public IP address",
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "2",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Public IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
-                    "x-displayname": "Public IP",
+                    "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 }
@@ -3256,7 +3271,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -3268,7 +3283,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
+                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -3307,7 +3322,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
+                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable MTLS With Inline Certificate"
@@ -3720,9 +3735,17 @@ var APISwaggerJSON string = `{
             "description": "JWT token Authentication",
             "title": "JwtTokenAuthOptions",
             "x-displayname": "JWT Token Authentication",
+            "x-ves-displayorder": "1,7,2",
             "x-ves-oneof-field-token_source": "[\"bearer_token\",\"cookie\",\"header\",\"query_param\"]",
             "x-ves-proto-message": "ves.io.schema.policy.JwtTokenAuthOptions",
             "properties": {
+                "backup_key": {
+                    "description": " Backup JWT Key - If specified is also checked in addition to the primary secret key\n\nExample: - \"{!\u003c=,d_]b[UFX78T\"-",
+                    "title": "backup_key",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Backup Key",
+                    "x-ves-example": "{!\u003c=,d_]b[UFX78T"
+                },
                 "bearer_token": {
                     "description": "Exclusive with [cookie header query_param]\n Token is found in the Bearer-Token",
                     "title": "Bearer-Token",
@@ -3748,11 +3771,15 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Query-Param"
                 },
                 "secret_key": {
-                    "description": " Secret Key for JWT\n\nExample: - \"{!\u003c=,d_]b[UFX78T\"-",
+                    "description": " Secret Key for JWT\n\nExample: - \"{!\u003c=,d_]b[UFX78T\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "secret_key",
                     "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Secret Key",
-                    "x-ves-example": "{!\u003c=,d_]b[UFX78T"
+                    "x-ves-example": "{!\u003c=,d_]b[UFX78T",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

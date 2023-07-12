@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -1444,6 +1445,113 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HealthCheckInfoType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HealthCheckInfoType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HealthCheckInfoType) DeepCopy() *HealthCheckInfoType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HealthCheckInfoType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HealthCheckInfoType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HealthCheckInfoType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HealthCheckInfoTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHealthCheckInfoType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHealthCheckInfoType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HealthCheckInfoType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HealthCheckInfoType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["health_check"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check"))
+		if err := fv(ctx, m.GetHealthCheck(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_status"))
+		if err := fv(ctx, m.GetHealthStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_status_failure_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_status_failure_details"))
+		if err := fv(ctx, m.GetHealthStatusFailureDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_status_failure_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_status_failure_reason"))
+		if err := fv(ctx, m.GetHealthStatusFailureReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHealthCheckInfoTypeValidator = func() *ValidateHealthCheckInfoType {
+	v := &ValidateHealthCheckInfoType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["health_check"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func HealthCheckInfoTypeValidator() db.Validator {
+	return DefaultHealthCheckInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *K8SInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2151,6 +2259,18 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["health_check_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_details"))
+		for idx, item := range m.GetHealthCheckDetails() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["health_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("health_status"))
@@ -2193,6 +2313,8 @@ var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 	v.FldValidators["allocated_ip"] = ves_io_schema.Ipv6AddressTypeValidator().Validate
 
 	v.FldValidators["discovered_info"] = DiscoveredInfoTypeValidator().Validate
+
+	v.FldValidators["health_check_details"] = HealthCheckInfoTypeValidator().Validate
 
 	return v
 }()

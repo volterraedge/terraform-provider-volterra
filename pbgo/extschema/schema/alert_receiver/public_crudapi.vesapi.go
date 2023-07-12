@@ -2187,6 +2187,23 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "alert_receiverAuthorization": {
+            "type": "object",
+            "description": "x-displayName: \"Authorization Config\"\nAuthorization header configuration.",
+            "title": "Authorization Configuration",
+            "properties": {
+                "auth_type_bearer": {
+                    "description": "x-displayName: \"Bearer authentication type\"\nSets the authentication type.",
+                    "title": "Bearer authentication type",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "credentials": {
+                    "description": "x-displayName: \"Credentials\"\nx-required\nSets the credentials.",
+                    "title": "Credentials",
+                    "$ref": "#/definitions/schemaSecretType"
+                }
+            }
+        },
         "alert_receiverCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2237,31 +2254,31 @@ var APISwaggerJSON string = `{
             "description": "Creates a new Alert Receiver object",
             "title": "Create Alert Receiver",
             "x-displayname": "Create Alert Receiver",
-            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\"]",
+            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\",\"webhook\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.CreateSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms webhook]\n Send alert notifications as Email",
                     "$ref": "#/definitions/alert_receiverEmailConfig",
                     "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms webhook]\n Send alert notifications to OpsGenie",
                     "$ref": "#/definitions/alert_receiverOpsGenieConfig",
                     "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms webhook]\n Send alert notifications to PagerDuty",
                     "$ref": "#/definitions/alert_receiverPagerDutyConfig",
                     "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms webhook]\n Send alert notifications to Slack",
                     "$ref": "#/definitions/alert_receiverSlackConfig",
                     "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack webhook]\n Send alert notifications as SMS",
                     "$ref": "#/definitions/alert_receiverSMSConfig",
                     "x-displayname": "SMS"
                 }
@@ -2397,31 +2414,31 @@ var APISwaggerJSON string = `{
             "description": "Get the Alert Receiver object",
             "title": "Get Alert Receiver",
             "x-displayname": "Get Alert Receiver",
-            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\"]",
+            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\",\"webhook\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.GetSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms webhook]\n Send alert notifications as Email",
                     "$ref": "#/definitions/alert_receiverEmailConfig",
                     "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms webhook]\n Send alert notifications to OpsGenie",
                     "$ref": "#/definitions/alert_receiverOpsGenieConfig",
                     "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms webhook]\n Send alert notifications to PagerDuty",
                     "$ref": "#/definitions/alert_receiverPagerDutyConfig",
                     "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms webhook]\n Send alert notifications to Slack",
                     "$ref": "#/definitions/alert_receiverSlackConfig",
                     "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack webhook]\n Send alert notifications as SMS",
                     "$ref": "#/definitions/alert_receiverSMSConfig",
                     "x-displayname": "SMS"
                 }
@@ -2432,38 +2449,94 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Alert Receiver object",
             "title": "Specification for Alert Receiver",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\"]",
+            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\",\"webhook\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.GlobalSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms webhook]\n Send alert notifications as Email",
                     "title": "Email",
                     "$ref": "#/definitions/alert_receiverEmailConfig",
                     "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms webhook]\n Send alert notifications to OpsGenie",
                     "title": "OpsGenie",
                     "$ref": "#/definitions/alert_receiverOpsGenieConfig",
                     "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms webhook]\n Send alert notifications to PagerDuty",
                     "title": "PagerDuty",
                     "$ref": "#/definitions/alert_receiverPagerDutyConfig",
                     "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms webhook]\n Send alert notifications to Slack",
                     "title": "Slack",
                     "$ref": "#/definitions/alert_receiverSlackConfig",
                     "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack webhook]\n Send alert notifications as SMS",
                     "title": "SMS",
                     "$ref": "#/definitions/alert_receiverSMSConfig",
                     "x-displayname": "SMS"
+                }
+            }
+        },
+        "alert_receiverHTTPConfig": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP Configuration\"\nConfiguration for HTTP endpoint",
+            "title": "HTTP Configuration",
+            "properties": {
+                "auth_config": {
+                    "description": "x-displayName: \"Authorization Config\"\nAuthorization header configuration",
+                    "title": "Authorization Config",
+                    "$ref": "#/definitions/alert_receiverAuthorization"
+                },
+                "basic_auth": {
+                    "description": "x-displayName: \"Basic Authorization\"\nUse HTTP Basic Auth for authorization to the HTTP(s) server",
+                    "title": "Basic Authorization",
+                    "$ref": "#/definitions/alert_receiverHttpBasicAuth"
+                },
+                "enable_http2": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Enable HTTP2\"\nx-example: \"value\"\nWhether to enable HTTP2.",
+                    "title": "Enable HTTP2",
+                    "format": "boolean"
+                },
+                "follow_redirects": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Follow Redirects\"\nx-example: \"value\"\nConfigure whether HTTP requests follow HTTP 3xx redirects.",
+                    "title": "Follow Redirects",
+                    "format": "boolean"
+                },
+                "no_authorization": {
+                    "description": "x-displayName: \"No Authorization\"\nDo not use authorization to the HTTP(s) server",
+                    "title": "No Authorization",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "tls_config": {
+                    "description": "x-displayName: \"TLS Config\"\nx-required\nConfigures the TLS settings.",
+                    "title": "TLS Config",
+                    "$ref": "#/definitions/alert_receiverTLSConfig"
+                }
+            }
+        },
+        "alert_receiverHttpBasicAuth": {
+            "type": "object",
+            "description": "x-displayName: \"Basic Authorization Credentials\"\nAuthorization parameters to access HTPP alert Receiver Endpoint.",
+            "title": "HTTP Basic Authorization",
+            "properties": {
+                "password": {
+                    "description": "x-displayName: \"Password\"\nx-required\nHTTP Basic Auth Password",
+                    "title": "password",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
+                "user_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"User Name\"\nx-example: \"Joe\"\nx-required\nHTTP Basic Auth User Name",
+                    "title": "username"
                 }
             }
         },
@@ -2714,31 +2787,31 @@ var APISwaggerJSON string = `{
             "description": "Replaces the content of an Alert Receiver object",
             "title": "Replace Alert Receiver",
             "x-displayname": "Replace Alert Receiver",
-            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\"]",
+            "x-ves-oneof-field-receiver": "[\"email\",\"opsgenie\",\"pagerduty\",\"slack\",\"sms\",\"webhook\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.ReplaceSpecType",
             "properties": {
                 "email": {
-                    "description": "Exclusive with [opsgenie pagerduty slack sms]\n Send alert notifications as Email",
+                    "description": "Exclusive with [opsgenie pagerduty slack sms webhook]\n Send alert notifications as Email",
                     "$ref": "#/definitions/alert_receiverEmailConfig",
                     "x-displayname": "Email"
                 },
                 "opsgenie": {
-                    "description": "Exclusive with [email pagerduty slack sms]\n Send alert notifications to OpsGenie",
+                    "description": "Exclusive with [email pagerduty slack sms webhook]\n Send alert notifications to OpsGenie",
                     "$ref": "#/definitions/alert_receiverOpsGenieConfig",
                     "x-displayname": "OpsGenie"
                 },
                 "pagerduty": {
-                    "description": "Exclusive with [email opsgenie slack sms]\n Send alert notifications to PagerDuty",
+                    "description": "Exclusive with [email opsgenie slack sms webhook]\n Send alert notifications to PagerDuty",
                     "$ref": "#/definitions/alert_receiverPagerDutyConfig",
                     "x-displayname": "PagerDuty"
                 },
                 "slack": {
-                    "description": "Exclusive with [email opsgenie pagerduty sms]\n Send alert notifications to Slack",
+                    "description": "Exclusive with [email opsgenie pagerduty sms webhook]\n Send alert notifications to Slack",
                     "$ref": "#/definitions/alert_receiverSlackConfig",
                     "x-displayname": "Slack"
                 },
                 "sms": {
-                    "description": "Exclusive with [email opsgenie pagerduty slack]\n Send alert notifications as SMS",
+                    "description": "Exclusive with [email opsgenie pagerduty slack webhook]\n Send alert notifications as SMS",
                     "$ref": "#/definitions/alert_receiverSMSConfig",
                     "x-displayname": "SMS"
                 }
@@ -2839,6 +2912,65 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "alert_receiverTLSConfig": {
+            "type": "object",
+            "description": "x-displayName: \"TLS Config\"\nConfigures the token request's TLS settings.",
+            "title": "TLS Config",
+            "properties": {
+                "ca_cert": {
+                    "type": "string",
+                    "description": "x-displayName: \"CA Cert\"\nx-example: \"value\"\nx-required\nCA certificate to validate the server certificate with.",
+                    "title": "CA Cert"
+                },
+                "client_cert": {
+                    "type": "string",
+                    "description": "x-displayName: \"Client Cert\"\nx-example: \"value\"\nx-required\nCert for client cert authentication to the server.",
+                    "title": "Client Cert"
+                },
+                "client_key": {
+                    "description": "x-displayName: \"Client Key\"\nx-required\nKey for client cert authentication to the server.",
+                    "title": "Client Key",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
+                "max_version": {
+                    "description": "x-displayName: \"Max Version\"\nx-example: \"value\"\nMaximum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS\n1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).\nIf unset, Prometheus will use Go default maximum version, which is TLS 1.3.",
+                    "title": "Max Version",
+                    "$ref": "#/definitions/schemaTlsProtocol"
+                },
+                "min_version": {
+                    "description": "x-displayName: \"Min Version\"\nx-example: \"value\"\nMinimum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS\n1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).\nIf unset, Prometheus will use Go default minimum version, which is TLS 1.2.",
+                    "title": "Min Version",
+                    "$ref": "#/definitions/schemaTlsProtocol"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Server Name\"\nx-example: \"value\"\nx-required\nServerName extension to indicate the name of the server.",
+                    "title": "Server Name"
+                }
+            }
+        },
+        "alert_receiverWebhookConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Webhook Config\"\nWebhook configuration to send alert notifications",
+            "title": "Webhook Config",
+            "properties": {
+                "http_config": {
+                    "description": "x-displayName: \"HTTP Configuration\"\nx-required\nConfiguration for HTTP endpoint",
+                    "title": "HTTP Configuration",
+                    "$ref": "#/definitions/alert_receiverHTTPConfig"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "x-displayName: \"Webhook URL\"\nx-example: \"value\"\nx-required\nURL to send API requests to",
+                    "title": "URL"
+                }
+            }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -3731,6 +3863,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "VTRP Stale"
                 }
             }
+        },
+        "schemaTlsProtocol": {
+            "type": "string",
+            "description": "x-displayName: \"TLS Protocol\"\nTlsProtocol is enumeration of supported TLS versions\n\n - TLS_AUTO: x-displayName: \"Automatic\"\nF5 Distributed Cloud will choose the optimal TLS version.\n - TLSv1_0: x-displayName: \"TLSv1.0\"\n - TLSv1_1: x-displayName: \"TLSv1.1\"\n - TLSv1_2: x-displayName: \"TLSv1.2\"\n - TLSv1_3: x-displayName: \"TLSv1.3\"",
+            "title": "TlsProtocol",
+            "enum": [
+                "TLS_AUTO",
+                "TLSv1_0",
+                "TLSv1_1",
+                "TLSv1_2",
+                "TLSv1_3"
+            ],
+            "default": "TLS_AUTO"
         },
         "schemaVaultSecretInfoType": {
             "type": "object",

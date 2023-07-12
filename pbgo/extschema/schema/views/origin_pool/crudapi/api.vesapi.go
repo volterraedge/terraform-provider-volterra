@@ -3270,8 +3270,9 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public IP address and site information",
             "title": "OriginServerPrivateIP",
             "x-displayname": "IP address on given Sites",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "10,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
+            "x-ves-oneof-field-private_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
@@ -3282,13 +3283,11 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
@@ -3359,18 +3358,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with public IP address",
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "2",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " Public IP address\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
-                    "x-displayname": "Public IP",
+                    "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 }
@@ -3478,18 +3476,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with IP on Virtual Network",
             "title": "OriginServerVirtualNetworkIP",
             "x-displayname": "IP address Virtual Network",
-            "x-ves-displayorder": "1,2",
+            "x-ves-displayorder": "10,2",
+            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\",\"ipv6\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": " IP address\n\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "IP",
-                    "x-displayname": "IP",
+                    "description": "Exclusive with [ipv6]\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IPV4",
+                    "x-displayname": "IPV4",
                     "x-ves-example": "1.1.1.1",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
@@ -3580,7 +3577,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -3592,7 +3589,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
+                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -3631,7 +3628,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
+                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable MTLS With Inline Certificate"

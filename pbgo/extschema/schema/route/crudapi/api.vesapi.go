@@ -2869,12 +2869,18 @@ var APISwaggerJSON string = `{
             "title": "PortMatcherType",
             "x-displayname": "Port to Match",
             "x-ves-displayorder": "3",
-            "x-ves-oneof-field-port_match": "[\"port\",\"port_ranges\"]",
+            "x-ves-oneof-field-port_match": "[\"no_port_match\",\"port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.PortMatcherType",
             "properties": {
+                "no_port_match": {
+                    "description": "Exclusive with [port port_ranges]\n Disable matching of ports",
+                    "title": "disable port Match",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Port match"
+                },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [no_port_match port_ranges]\n Exact Port to match\n\nExample: - \"6443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "port",
                     "format": "int64",
                     "x-displayname": "Port",
@@ -2885,7 +2891,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
+                    "description": "Exclusive with [no_port_match port]\n Port range to match\n\nExample: - \"8080-8191\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range: true\n",
                     "title": "port_range",
                     "minLength": 1,
                     "maxLength": 32,
@@ -2978,19 +2984,27 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.route.BotDefenseJavascriptInjectionType",
             "properties": {
                 "javascript_location": {
-                    "description": " Defines where perform the Bot Defense Javascript Injection in HTML page.",
+                    "description": " Select the location where you would like to insert the Javascript tag(s).",
                     "title": "javascript_location",
                     "$ref": "#/definitions/routeJavaScriptLocation",
-                    "x-displayname": "JavaScript Location"
+                    "x-displayname": "JavaScript Tag Location"
                 },
-                "js_download_path": {
-                    "type": "string",
-                    "description": " Web client will fetch F5 Client Java Script from this path.\n This path must not conflict with any other website/application paths.\n\n If not specified, default to ‘/common.js’.\n\nExample: - \"/common.js\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n",
-                    "title": "js_download_path",
-                    "x-displayname": "Web Client JavaScript Path",
-                    "x-ves-example": "/common.js",
+                "javascript_tags": {
+                    "type": "array",
+                    "description": " Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "javascript_tags",
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/routeJavaScriptTag"
+                    },
+                    "x-displayname": "JavaScript Tags",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.http_path": "true"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -3174,6 +3188,44 @@ var APISwaggerJSON string = `{
             "default": "AFTER_HEAD",
             "x-displayname": "JavaScript Location",
             "x-ves-proto-enum": "ves.io.schema.route.JavaScriptLocation"
+        },
+        "routeJavaScriptTag": {
+            "type": "object",
+            "description": "JavaScript URL and attributes",
+            "title": "JavaScriptTag",
+            "x-displayname": "JavaScript Tag",
+            "x-ves-proto-message": "ves.io.schema.route.JavaScriptTag",
+            "properties": {
+                "javascript_url": {
+                    "type": "string",
+                    "description": " Please enter the full URL (include domain and path), or relative path.\n\nExample: - \"https://www.example.com/login/common.js?single\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 2048\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "JavaScriptURL",
+                    "minLength": 1,
+                    "maxLength": 2048,
+                    "x-displayname": "URL",
+                    "x-ves-example": "https://www.example.com/login/common.js?single",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "2048",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "tag_attributes": {
+                    "type": "array",
+                    "description": " Add the tag attributes you want to include in your Javascript tag.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 9\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "TagAttributes",
+                    "maxItems": 9,
+                    "items": {
+                        "$ref": "#/definitions/routeTagAttribute"
+                    },
+                    "x-displayname": "Tag Attributes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "9",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
         },
         "routeMirrorPolicyType": {
             "type": "object",
@@ -3748,6 +3800,51 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "routeTagAttribute": {
+            "type": "object",
+            "description": "Attribute for JavaScript tag",
+            "title": "TagAttribute",
+            "x-displayname": "Tag Attribute",
+            "x-ves-proto-message": "ves.io.schema.route.TagAttribute",
+            "properties": {
+                "javascript_tag": {
+                    "description": " Select from one of the predefined tag attibutes.\n\nExample: - \"ID\"-",
+                    "title": "JavaScriptTags",
+                    "$ref": "#/definitions/routeTagAttributeName",
+                    "x-displayname": "Name",
+                    "x-ves-example": "ID"
+                },
+                "tag_value": {
+                    "type": "string",
+                    "description": " Add the tag attribute value.\n\nExample: - \"_imp_apg_dip_\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1024\n",
+                    "title": "TagValue",
+                    "maxLength": 1024,
+                    "x-displayname": "Value",
+                    "x-ves-example": "_imp_apg_dip_",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1024"
+                    }
+                }
+            }
+        },
+        "routeTagAttributeName": {
+            "type": "string",
+            "description": "Select from one of the predefined tag attributes.\n",
+            "title": "TagAttributeName",
+            "enum": [
+                "JS_ATTR_ID",
+                "JS_ATTR_CID",
+                "JS_ATTR_CN",
+                "JS_ATTR_API_DOMAIN",
+                "JS_ATTR_API_URL",
+                "JS_ATTR_API_PATH",
+                "JS_ATTR_ASYNC",
+                "JS_ATTR_DEFER"
+            ],
+            "default": "JS_ATTR_ID",
+            "x-displayname": "Tag Attribute Name",
+            "x-ves-proto-enum": "ves.io.schema.route.TagAttributeName"
         },
         "routeWebsocketConfigType": {
             "type": "object",
@@ -4449,10 +4546,10 @@ var APISwaggerJSON string = `{
         },
         "schemaRouteMatch": {
             "type": "object",
-            "description": "Route Match can be specified to match four things\n1. In case of HTTP \"path\" specifies URI part URL (path excluding hostname) in request.\n2. List of headers  to match in incoming request.\n3. Query parameters (key, value) in the request. (Not the Query expression)\n4. HTTP method",
+            "description": "Route Match can be specified to match five things\n1. In case of HTTP \"path\" specifies URI part URL (path excluding hostname) in request.\n2. List of headers  to match in incoming request.\n3. Query parameters (key, value) in the request. (Not the Query expression)\n4. HTTP method\n5. The port on which the request is received",
             "title": "RouteMatch",
             "x-displayname": "Match",
-            "x-ves-displayorder": "4,1,3,2",
+            "x-ves-displayorder": "4,1,3,2,5",
             "x-ves-proto-message": "ves.io.schema.RouteMatch",
             "properties": {
                 "headers": {

@@ -27,42 +27,86 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // ServiceChoice enumerates all the service-framework based services in a VES environment
 type ServiceChoice struct {
 	// Types that are valid to be assigned to Choice:
+	//	*ServiceChoice_Aipconnector
 	//	*ServiceChoice_Akar
+	//	*ServiceChoice_AkarReadonly
+	//	*ServiceChoice_AkarDnsdomain
 	//	*ServiceChoice_Ares
+	//	*ServiceChoice_Aspen
 	//	*ServiceChoice_Asterix
 	//	*ServiceChoice_Athena
 	//	*ServiceChoice_Automatix
 	//	*ServiceChoice_Barracute
+	//	*ServiceChoice_Bdbewaf
+	//	*ServiceChoice_Bfdp
+	//	*ServiceChoice_Bifrost
 	//	*ServiceChoice_Blindfold
 	//	*ServiceChoice_Bolt
+	//	*ServiceChoice_Brmalerts
+	//	*ServiceChoice_Cdnconnectorsvc
 	//	*ServiceChoice_Charmander
 	//	*ServiceChoice_Charmandercar
+	//	*ServiceChoice_ClientSideDefense
+	//	*ServiceChoice_Conprof
+	//	*ServiceChoice_Doscontroller
 	//	*ServiceChoice_Drogon
+	//	*ServiceChoice_Dymo
 	//	*ServiceChoice_Eywa
+	//	*ServiceChoice_EywaReadonly
+	//	*ServiceChoice_Eywaprime
+	//	*ServiceChoice_EywaprimeReadonly
+	//	*ServiceChoice_Ganges
 	//	*ServiceChoice_Griffin
+	//	*ServiceChoice_Hellas
+	//	*ServiceChoice_Iapetus
 	//	*ServiceChoice_Identityauthority
+	//	*ServiceChoice_Ipp
+	//	*ServiceChoice_Ippdev
+	//	*ServiceChoice_Ippprom
+	//	*ServiceChoice_Josef
+	//	*ServiceChoice_Kcdmux
+	//	*ServiceChoice_KcdmuxReadonly
 	//	*ServiceChoice_Keypr
+	//	*ServiceChoice_LilacEdge
+	//	*ServiceChoice_Mars
 	//	*ServiceChoice_Maurice
+	//	*ServiceChoice_Minerva
+	//	*ServiceChoice_Nfvsvc
+	//	*ServiceChoice_Nmsconnector
+	//	*ServiceChoice_Nmsproxy
 	//	*ServiceChoice_Obelix
 	//	*ServiceChoice_Ocspmule
+	//	*ServiceChoice_Olympus
 	//	*ServiceChoice_Opera
+	//	*ServiceChoice_Phobos
 	//	*ServiceChoice_Pikachu
+	//	*ServiceChoice_Piku
 	//	*ServiceChoice_Pkifactory
+	//	*ServiceChoice_Pluto
+	//	*ServiceChoice_Ponos
+	//	*ServiceChoice_Prism
+	//	*ServiceChoice_Prismprime
+	//	*ServiceChoice_Prometheus
+	//	*ServiceChoice_Protekti
 	//	*ServiceChoice_Rakar
+	//	*ServiceChoice_Rolex
+	//	*ServiceChoice_Scim
+	//	*ServiceChoice_Sed
+	//	*ServiceChoice_Sentinel
+	//	*ServiceChoice_Spectrum
 	//	*ServiceChoice_SiteConsole
+	//	*ServiceChoice_Streak
+	//	*ServiceChoice_Tpmauthority
+	//	*ServiceChoice_Trafficactioner
 	//	*ServiceChoice_Vega
+	//	*ServiceChoice_Ver
+	//	*ServiceChoice_ViaApiService
+	//	*ServiceChoice_Viaconnector
 	//	*ServiceChoice_Voucher
 	//	*ServiceChoice_Vpm
 	//	*ServiceChoice_Vulpix
 	//	*ServiceChoice_Warden
 	//	*ServiceChoice_Wingman
-	//	*ServiceChoice_Shape
-	//	*ServiceChoice_Hellas
-	//	*ServiceChoice_Nfvsvc
-	//	*ServiceChoice_Scim
-	//	*ServiceChoice_LilacEdge
-	//	*ServiceChoice_Doscontroller
-	//	*ServiceChoice_Minerva
 	Choice isServiceChoice_Choice `protobuf_oneof:"choice"`
 }
 
@@ -105,11 +149,23 @@ type isServiceChoice_Choice interface {
 	Size() int
 }
 
+type ServiceChoice_Aipconnector struct {
+	Aipconnector bool `protobuf:"varint,39,opt,name=aipconnector,proto3,oneof" json:"aipconnector,omitempty"`
+}
 type ServiceChoice_Akar struct {
 	Akar bool `protobuf:"varint,1,opt,name=akar,proto3,oneof" json:"akar,omitempty"`
 }
+type ServiceChoice_AkarReadonly struct {
+	AkarReadonly bool `protobuf:"varint,40,opt,name=akar_readonly,json=akarReadonly,proto3,oneof" json:"akar_readonly,omitempty"`
+}
+type ServiceChoice_AkarDnsdomain struct {
+	AkarDnsdomain bool `protobuf:"varint,41,opt,name=akar_dnsdomain,json=akarDnsdomain,proto3,oneof" json:"akar_dnsdomain,omitempty"`
+}
 type ServiceChoice_Ares struct {
 	Ares bool `protobuf:"varint,2,opt,name=ares,proto3,oneof" json:"ares,omitempty"`
+}
+type ServiceChoice_Aspen struct {
+	Aspen bool `protobuf:"varint,42,opt,name=aspen,proto3,oneof" json:"aspen,omitempty"`
 }
 type ServiceChoice_Asterix struct {
 	Asterix bool `protobuf:"varint,4,opt,name=asterix,proto3,oneof" json:"asterix,omitempty"`
@@ -123,11 +179,26 @@ type ServiceChoice_Automatix struct {
 type ServiceChoice_Barracute struct {
 	Barracute bool `protobuf:"varint,8,opt,name=barracute,proto3,oneof" json:"barracute,omitempty"`
 }
+type ServiceChoice_Bdbewaf struct {
+	Bdbewaf bool `protobuf:"varint,44,opt,name=bdbewaf,proto3,oneof" json:"bdbewaf,omitempty"`
+}
+type ServiceChoice_Bfdp struct {
+	Bfdp bool `protobuf:"varint,45,opt,name=bfdp,proto3,oneof" json:"bfdp,omitempty"`
+}
+type ServiceChoice_Bifrost struct {
+	Bifrost bool `protobuf:"varint,46,opt,name=bifrost,proto3,oneof" json:"bifrost,omitempty"`
+}
 type ServiceChoice_Blindfold struct {
 	Blindfold bool `protobuf:"varint,9,opt,name=blindfold,proto3,oneof" json:"blindfold,omitempty"`
 }
 type ServiceChoice_Bolt struct {
 	Bolt bool `protobuf:"varint,10,opt,name=bolt,proto3,oneof" json:"bolt,omitempty"`
+}
+type ServiceChoice_Brmalerts struct {
+	Brmalerts bool `protobuf:"varint,47,opt,name=brmalerts,proto3,oneof" json:"brmalerts,omitempty"`
+}
+type ServiceChoice_Cdnconnectorsvc struct {
+	Cdnconnectorsvc bool `protobuf:"varint,48,opt,name=cdnconnectorsvc,proto3,oneof" json:"cdnconnectorsvc,omitempty"`
 }
 type ServiceChoice_Charmander struct {
 	Charmander bool `protobuf:"varint,11,opt,name=charmander,proto3,oneof" json:"charmander,omitempty"`
@@ -135,23 +206,89 @@ type ServiceChoice_Charmander struct {
 type ServiceChoice_Charmandercar struct {
 	Charmandercar bool `protobuf:"varint,12,opt,name=charmandercar,proto3,oneof" json:"charmandercar,omitempty"`
 }
+type ServiceChoice_ClientSideDefense struct {
+	ClientSideDefense bool `protobuf:"varint,49,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
+}
+type ServiceChoice_Conprof struct {
+	Conprof bool `protobuf:"varint,92,opt,name=conprof,proto3,oneof" json:"conprof,omitempty"`
+}
+type ServiceChoice_Doscontroller struct {
+	Doscontroller bool `protobuf:"varint,50,opt,name=doscontroller,proto3,oneof" json:"doscontroller,omitempty"`
+}
 type ServiceChoice_Drogon struct {
 	Drogon bool `protobuf:"varint,13,opt,name=drogon,proto3,oneof" json:"drogon,omitempty"`
+}
+type ServiceChoice_Dymo struct {
+	Dymo bool `protobuf:"varint,91,opt,name=dymo,proto3,oneof" json:"dymo,omitempty"`
 }
 type ServiceChoice_Eywa struct {
 	Eywa bool `protobuf:"varint,14,opt,name=eywa,proto3,oneof" json:"eywa,omitempty"`
 }
+type ServiceChoice_EywaReadonly struct {
+	EywaReadonly bool `protobuf:"varint,51,opt,name=eywa_readonly,json=eywaReadonly,proto3,oneof" json:"eywa_readonly,omitempty"`
+}
+type ServiceChoice_Eywaprime struct {
+	Eywaprime bool `protobuf:"varint,52,opt,name=eywaprime,proto3,oneof" json:"eywaprime,omitempty"`
+}
+type ServiceChoice_EywaprimeReadonly struct {
+	EywaprimeReadonly bool `protobuf:"varint,53,opt,name=eywaprime_readonly,json=eywaprimeReadonly,proto3,oneof" json:"eywaprime_readonly,omitempty"`
+}
+type ServiceChoice_Ganges struct {
+	Ganges bool `protobuf:"varint,54,opt,name=ganges,proto3,oneof" json:"ganges,omitempty"`
+}
 type ServiceChoice_Griffin struct {
 	Griffin bool `protobuf:"varint,15,opt,name=griffin,proto3,oneof" json:"griffin,omitempty"`
+}
+type ServiceChoice_Hellas struct {
+	Hellas bool `protobuf:"varint,33,opt,name=hellas,proto3,oneof" json:"hellas,omitempty"`
+}
+type ServiceChoice_Iapetus struct {
+	Iapetus bool `protobuf:"varint,55,opt,name=iapetus,proto3,oneof" json:"iapetus,omitempty"`
 }
 type ServiceChoice_Identityauthority struct {
 	Identityauthority bool `protobuf:"varint,16,opt,name=identityauthority,proto3,oneof" json:"identityauthority,omitempty"`
 }
+type ServiceChoice_Ipp struct {
+	Ipp bool `protobuf:"varint,56,opt,name=ipp,proto3,oneof" json:"ipp,omitempty"`
+}
+type ServiceChoice_Ippdev struct {
+	Ippdev bool `protobuf:"varint,59,opt,name=ippdev,proto3,oneof" json:"ippdev,omitempty"`
+}
+type ServiceChoice_Ippprom struct {
+	Ippprom bool `protobuf:"varint,62,opt,name=ippprom,proto3,oneof" json:"ippprom,omitempty"`
+}
+type ServiceChoice_Josef struct {
+	Josef bool `protobuf:"varint,65,opt,name=josef,proto3,oneof" json:"josef,omitempty"`
+}
+type ServiceChoice_Kcdmux struct {
+	Kcdmux bool `protobuf:"varint,66,opt,name=kcdmux,proto3,oneof" json:"kcdmux,omitempty"`
+}
+type ServiceChoice_KcdmuxReadonly struct {
+	KcdmuxReadonly bool `protobuf:"varint,67,opt,name=kcdmux_readonly,json=kcdmuxReadonly,proto3,oneof" json:"kcdmux_readonly,omitempty"`
+}
 type ServiceChoice_Keypr struct {
 	Keypr bool `protobuf:"varint,17,opt,name=keypr,proto3,oneof" json:"keypr,omitempty"`
 }
+type ServiceChoice_LilacEdge struct {
+	LilacEdge bool `protobuf:"varint,36,opt,name=lilac_edge,json=lilacEdge,proto3,oneof" json:"lilac_edge,omitempty"`
+}
+type ServiceChoice_Mars struct {
+	Mars bool `protobuf:"varint,68,opt,name=mars,proto3,oneof" json:"mars,omitempty"`
+}
 type ServiceChoice_Maurice struct {
 	Maurice bool `protobuf:"varint,18,opt,name=maurice,proto3,oneof" json:"maurice,omitempty"`
+}
+type ServiceChoice_Minerva struct {
+	Minerva bool `protobuf:"varint,69,opt,name=minerva,proto3,oneof" json:"minerva,omitempty"`
+}
+type ServiceChoice_Nfvsvc struct {
+	Nfvsvc bool `protobuf:"varint,34,opt,name=nfvsvc,proto3,oneof" json:"nfvsvc,omitempty"`
+}
+type ServiceChoice_Nmsconnector struct {
+	Nmsconnector bool `protobuf:"varint,70,opt,name=nmsconnector,proto3,oneof" json:"nmsconnector,omitempty"`
+}
+type ServiceChoice_Nmsproxy struct {
+	Nmsproxy bool `protobuf:"varint,71,opt,name=nmsproxy,proto3,oneof" json:"nmsproxy,omitempty"`
 }
 type ServiceChoice_Obelix struct {
 	Obelix bool `protobuf:"varint,19,opt,name=obelix,proto3,oneof" json:"obelix,omitempty"`
@@ -159,23 +296,83 @@ type ServiceChoice_Obelix struct {
 type ServiceChoice_Ocspmule struct {
 	Ocspmule bool `protobuf:"varint,20,opt,name=ocspmule,proto3,oneof" json:"ocspmule,omitempty"`
 }
+type ServiceChoice_Olympus struct {
+	Olympus bool `protobuf:"varint,72,opt,name=olympus,proto3,oneof" json:"olympus,omitempty"`
+}
 type ServiceChoice_Opera struct {
 	Opera bool `protobuf:"varint,21,opt,name=opera,proto3,oneof" json:"opera,omitempty"`
+}
+type ServiceChoice_Phobos struct {
+	Phobos bool `protobuf:"varint,73,opt,name=phobos,proto3,oneof" json:"phobos,omitempty"`
 }
 type ServiceChoice_Pikachu struct {
 	Pikachu bool `protobuf:"varint,22,opt,name=pikachu,proto3,oneof" json:"pikachu,omitempty"`
 }
+type ServiceChoice_Piku struct {
+	Piku bool `protobuf:"varint,74,opt,name=piku,proto3,oneof" json:"piku,omitempty"`
+}
 type ServiceChoice_Pkifactory struct {
 	Pkifactory bool `protobuf:"varint,23,opt,name=pkifactory,proto3,oneof" json:"pkifactory,omitempty"`
+}
+type ServiceChoice_Pluto struct {
+	Pluto bool `protobuf:"varint,75,opt,name=pluto,proto3,oneof" json:"pluto,omitempty"`
+}
+type ServiceChoice_Ponos struct {
+	Ponos bool `protobuf:"varint,76,opt,name=ponos,proto3,oneof" json:"ponos,omitempty"`
+}
+type ServiceChoice_Prism struct {
+	Prism bool `protobuf:"varint,77,opt,name=prism,proto3,oneof" json:"prism,omitempty"`
+}
+type ServiceChoice_Prismprime struct {
+	Prismprime bool `protobuf:"varint,78,opt,name=prismprime,proto3,oneof" json:"prismprime,omitempty"`
+}
+type ServiceChoice_Prometheus struct {
+	Prometheus bool `protobuf:"varint,88,opt,name=prometheus,proto3,oneof" json:"prometheus,omitempty"`
+}
+type ServiceChoice_Protekti struct {
+	Protekti bool `protobuf:"varint,79,opt,name=protekti,proto3,oneof" json:"protekti,omitempty"`
 }
 type ServiceChoice_Rakar struct {
 	Rakar bool `protobuf:"varint,24,opt,name=rakar,proto3,oneof" json:"rakar,omitempty"`
 }
+type ServiceChoice_Rolex struct {
+	Rolex bool `protobuf:"varint,80,opt,name=rolex,proto3,oneof" json:"rolex,omitempty"`
+}
+type ServiceChoice_Scim struct {
+	Scim bool `protobuf:"varint,35,opt,name=scim,proto3,oneof" json:"scim,omitempty"`
+}
+type ServiceChoice_Sed struct {
+	Sed bool `protobuf:"varint,81,opt,name=sed,proto3,oneof" json:"sed,omitempty"`
+}
+type ServiceChoice_Sentinel struct {
+	Sentinel bool `protobuf:"varint,82,opt,name=sentinel,proto3,oneof" json:"sentinel,omitempty"`
+}
+type ServiceChoice_Spectrum struct {
+	Spectrum bool `protobuf:"varint,83,opt,name=spectrum,proto3,oneof" json:"spectrum,omitempty"`
+}
 type ServiceChoice_SiteConsole struct {
 	SiteConsole bool `protobuf:"varint,25,opt,name=site_console,json=siteConsole,proto3,oneof" json:"site_console,omitempty"`
 }
+type ServiceChoice_Streak struct {
+	Streak bool `protobuf:"varint,84,opt,name=streak,proto3,oneof" json:"streak,omitempty"`
+}
+type ServiceChoice_Tpmauthority struct {
+	Tpmauthority bool `protobuf:"varint,87,opt,name=tpmauthority,proto3,oneof" json:"tpmauthority,omitempty"`
+}
+type ServiceChoice_Trafficactioner struct {
+	Trafficactioner bool `protobuf:"varint,85,opt,name=trafficactioner,proto3,oneof" json:"trafficactioner,omitempty"`
+}
 type ServiceChoice_Vega struct {
 	Vega bool `protobuf:"varint,26,opt,name=vega,proto3,oneof" json:"vega,omitempty"`
+}
+type ServiceChoice_Ver struct {
+	Ver bool `protobuf:"varint,86,opt,name=ver,proto3,oneof" json:"ver,omitempty"`
+}
+type ServiceChoice_ViaApiService struct {
+	ViaApiService bool `protobuf:"varint,89,opt,name=via_api_service,json=viaApiService,proto3,oneof" json:"via_api_service,omitempty"`
+}
+type ServiceChoice_Viaconnector struct {
+	Viaconnector bool `protobuf:"varint,90,opt,name=viaconnector,proto3,oneof" json:"viaconnector,omitempty"`
 }
 type ServiceChoice_Voucher struct {
 	Voucher bool `protobuf:"varint,27,opt,name=voucher,proto3,oneof" json:"voucher,omitempty"`
@@ -192,70 +389,100 @@ type ServiceChoice_Warden struct {
 type ServiceChoice_Wingman struct {
 	Wingman bool `protobuf:"varint,31,opt,name=wingman,proto3,oneof" json:"wingman,omitempty"`
 }
-type ServiceChoice_Shape struct {
-	Shape bool `protobuf:"varint,32,opt,name=shape,proto3,oneof" json:"shape,omitempty"`
-}
-type ServiceChoice_Hellas struct {
-	Hellas bool `protobuf:"varint,33,opt,name=hellas,proto3,oneof" json:"hellas,omitempty"`
-}
-type ServiceChoice_Nfvsvc struct {
-	Nfvsvc bool `protobuf:"varint,34,opt,name=nfvsvc,proto3,oneof" json:"nfvsvc,omitempty"`
-}
-type ServiceChoice_Scim struct {
-	Scim bool `protobuf:"varint,35,opt,name=scim,proto3,oneof" json:"scim,omitempty"`
-}
-type ServiceChoice_LilacEdge struct {
-	LilacEdge bool `protobuf:"varint,36,opt,name=lilac_edge,json=lilacEdge,proto3,oneof" json:"lilac_edge,omitempty"`
-}
-type ServiceChoice_Doscontroller struct {
-	Doscontroller bool `protobuf:"varint,37,opt,name=doscontroller,proto3,oneof" json:"doscontroller,omitempty"`
-}
-type ServiceChoice_Minerva struct {
-	Minerva bool `protobuf:"varint,38,opt,name=minerva,proto3,oneof" json:"minerva,omitempty"`
-}
 
+func (*ServiceChoice_Aipconnector) isServiceChoice_Choice()      {}
 func (*ServiceChoice_Akar) isServiceChoice_Choice()              {}
+func (*ServiceChoice_AkarReadonly) isServiceChoice_Choice()      {}
+func (*ServiceChoice_AkarDnsdomain) isServiceChoice_Choice()     {}
 func (*ServiceChoice_Ares) isServiceChoice_Choice()              {}
+func (*ServiceChoice_Aspen) isServiceChoice_Choice()             {}
 func (*ServiceChoice_Asterix) isServiceChoice_Choice()           {}
 func (*ServiceChoice_Athena) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Automatix) isServiceChoice_Choice()         {}
 func (*ServiceChoice_Barracute) isServiceChoice_Choice()         {}
+func (*ServiceChoice_Bdbewaf) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Bfdp) isServiceChoice_Choice()              {}
+func (*ServiceChoice_Bifrost) isServiceChoice_Choice()           {}
 func (*ServiceChoice_Blindfold) isServiceChoice_Choice()         {}
 func (*ServiceChoice_Bolt) isServiceChoice_Choice()              {}
+func (*ServiceChoice_Brmalerts) isServiceChoice_Choice()         {}
+func (*ServiceChoice_Cdnconnectorsvc) isServiceChoice_Choice()   {}
 func (*ServiceChoice_Charmander) isServiceChoice_Choice()        {}
 func (*ServiceChoice_Charmandercar) isServiceChoice_Choice()     {}
+func (*ServiceChoice_ClientSideDefense) isServiceChoice_Choice() {}
+func (*ServiceChoice_Conprof) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Doscontroller) isServiceChoice_Choice()     {}
 func (*ServiceChoice_Drogon) isServiceChoice_Choice()            {}
+func (*ServiceChoice_Dymo) isServiceChoice_Choice()              {}
 func (*ServiceChoice_Eywa) isServiceChoice_Choice()              {}
+func (*ServiceChoice_EywaReadonly) isServiceChoice_Choice()      {}
+func (*ServiceChoice_Eywaprime) isServiceChoice_Choice()         {}
+func (*ServiceChoice_EywaprimeReadonly) isServiceChoice_Choice() {}
+func (*ServiceChoice_Ganges) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Griffin) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Hellas) isServiceChoice_Choice()            {}
+func (*ServiceChoice_Iapetus) isServiceChoice_Choice()           {}
 func (*ServiceChoice_Identityauthority) isServiceChoice_Choice() {}
+func (*ServiceChoice_Ipp) isServiceChoice_Choice()               {}
+func (*ServiceChoice_Ippdev) isServiceChoice_Choice()            {}
+func (*ServiceChoice_Ippprom) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Josef) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Kcdmux) isServiceChoice_Choice()            {}
+func (*ServiceChoice_KcdmuxReadonly) isServiceChoice_Choice()    {}
 func (*ServiceChoice_Keypr) isServiceChoice_Choice()             {}
+func (*ServiceChoice_LilacEdge) isServiceChoice_Choice()         {}
+func (*ServiceChoice_Mars) isServiceChoice_Choice()              {}
 func (*ServiceChoice_Maurice) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Minerva) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Nfvsvc) isServiceChoice_Choice()            {}
+func (*ServiceChoice_Nmsconnector) isServiceChoice_Choice()      {}
+func (*ServiceChoice_Nmsproxy) isServiceChoice_Choice()          {}
 func (*ServiceChoice_Obelix) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Ocspmule) isServiceChoice_Choice()          {}
+func (*ServiceChoice_Olympus) isServiceChoice_Choice()           {}
 func (*ServiceChoice_Opera) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Phobos) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Pikachu) isServiceChoice_Choice()           {}
+func (*ServiceChoice_Piku) isServiceChoice_Choice()              {}
 func (*ServiceChoice_Pkifactory) isServiceChoice_Choice()        {}
+func (*ServiceChoice_Pluto) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Ponos) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Prism) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Prismprime) isServiceChoice_Choice()        {}
+func (*ServiceChoice_Prometheus) isServiceChoice_Choice()        {}
+func (*ServiceChoice_Protekti) isServiceChoice_Choice()          {}
 func (*ServiceChoice_Rakar) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Rolex) isServiceChoice_Choice()             {}
+func (*ServiceChoice_Scim) isServiceChoice_Choice()              {}
+func (*ServiceChoice_Sed) isServiceChoice_Choice()               {}
+func (*ServiceChoice_Sentinel) isServiceChoice_Choice()          {}
+func (*ServiceChoice_Spectrum) isServiceChoice_Choice()          {}
 func (*ServiceChoice_SiteConsole) isServiceChoice_Choice()       {}
+func (*ServiceChoice_Streak) isServiceChoice_Choice()            {}
+func (*ServiceChoice_Tpmauthority) isServiceChoice_Choice()      {}
+func (*ServiceChoice_Trafficactioner) isServiceChoice_Choice()   {}
 func (*ServiceChoice_Vega) isServiceChoice_Choice()              {}
+func (*ServiceChoice_Ver) isServiceChoice_Choice()               {}
+func (*ServiceChoice_ViaApiService) isServiceChoice_Choice()     {}
+func (*ServiceChoice_Viaconnector) isServiceChoice_Choice()      {}
 func (*ServiceChoice_Voucher) isServiceChoice_Choice()           {}
 func (*ServiceChoice_Vpm) isServiceChoice_Choice()               {}
 func (*ServiceChoice_Vulpix) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Warden) isServiceChoice_Choice()            {}
 func (*ServiceChoice_Wingman) isServiceChoice_Choice()           {}
-func (*ServiceChoice_Shape) isServiceChoice_Choice()             {}
-func (*ServiceChoice_Hellas) isServiceChoice_Choice()            {}
-func (*ServiceChoice_Nfvsvc) isServiceChoice_Choice()            {}
-func (*ServiceChoice_Scim) isServiceChoice_Choice()              {}
-func (*ServiceChoice_LilacEdge) isServiceChoice_Choice()         {}
-func (*ServiceChoice_Doscontroller) isServiceChoice_Choice()     {}
-func (*ServiceChoice_Minerva) isServiceChoice_Choice()           {}
 
 func (m *ServiceChoice) GetChoice() isServiceChoice_Choice {
 	if m != nil {
 		return m.Choice
 	}
 	return nil
+}
+
+func (m *ServiceChoice) GetAipconnector() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Aipconnector); ok {
+		return x.Aipconnector
+	}
+	return false
 }
 
 func (m *ServiceChoice) GetAkar() bool {
@@ -265,9 +492,30 @@ func (m *ServiceChoice) GetAkar() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetAkarReadonly() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_AkarReadonly); ok {
+		return x.AkarReadonly
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetAkarDnsdomain() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_AkarDnsdomain); ok {
+		return x.AkarDnsdomain
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetAres() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Ares); ok {
 		return x.Ares
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetAspen() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Aspen); ok {
+		return x.Aspen
 	}
 	return false
 }
@@ -300,6 +548,27 @@ func (m *ServiceChoice) GetBarracute() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetBdbewaf() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Bdbewaf); ok {
+		return x.Bdbewaf
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetBfdp() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Bfdp); ok {
+		return x.Bfdp
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetBifrost() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Bifrost); ok {
+		return x.Bifrost
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetBlindfold() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Blindfold); ok {
 		return x.Blindfold
@@ -310,6 +579,20 @@ func (m *ServiceChoice) GetBlindfold() bool {
 func (m *ServiceChoice) GetBolt() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Bolt); ok {
 		return x.Bolt
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetBrmalerts() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Brmalerts); ok {
+		return x.Brmalerts
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetCdnconnectorsvc() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Cdnconnectorsvc); ok {
+		return x.Cdnconnectorsvc
 	}
 	return false
 }
@@ -328,9 +611,37 @@ func (m *ServiceChoice) GetCharmandercar() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetClientSideDefense() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_ClientSideDefense); ok {
+		return x.ClientSideDefense
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetConprof() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Conprof); ok {
+		return x.Conprof
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetDoscontroller() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Doscontroller); ok {
+		return x.Doscontroller
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetDrogon() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Drogon); ok {
 		return x.Drogon
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetDymo() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Dymo); ok {
+		return x.Dymo
 	}
 	return false
 }
@@ -342,9 +653,51 @@ func (m *ServiceChoice) GetEywa() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetEywaReadonly() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_EywaReadonly); ok {
+		return x.EywaReadonly
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetEywaprime() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Eywaprime); ok {
+		return x.Eywaprime
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetEywaprimeReadonly() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_EywaprimeReadonly); ok {
+		return x.EywaprimeReadonly
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetGanges() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ganges); ok {
+		return x.Ganges
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetGriffin() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Griffin); ok {
 		return x.Griffin
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetHellas() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Hellas); ok {
+		return x.Hellas
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetIapetus() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Iapetus); ok {
+		return x.Iapetus
 	}
 	return false
 }
@@ -356,6 +709,48 @@ func (m *ServiceChoice) GetIdentityauthority() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetIpp() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ipp); ok {
+		return x.Ipp
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetIppdev() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ippdev); ok {
+		return x.Ippdev
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetIppprom() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ippprom); ok {
+		return x.Ippprom
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetJosef() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Josef); ok {
+		return x.Josef
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetKcdmux() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Kcdmux); ok {
+		return x.Kcdmux
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetKcdmuxReadonly() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_KcdmuxReadonly); ok {
+		return x.KcdmuxReadonly
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetKeypr() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Keypr); ok {
 		return x.Keypr
@@ -363,9 +758,51 @@ func (m *ServiceChoice) GetKeypr() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetLilacEdge() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_LilacEdge); ok {
+		return x.LilacEdge
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetMars() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Mars); ok {
+		return x.Mars
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetMaurice() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Maurice); ok {
 		return x.Maurice
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetMinerva() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Minerva); ok {
+		return x.Minerva
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetNfvsvc() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Nfvsvc); ok {
+		return x.Nfvsvc
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetNmsconnector() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Nmsconnector); ok {
+		return x.Nmsconnector
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetNmsproxy() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Nmsproxy); ok {
+		return x.Nmsproxy
 	}
 	return false
 }
@@ -384,9 +821,23 @@ func (m *ServiceChoice) GetOcspmule() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetOlympus() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Olympus); ok {
+		return x.Olympus
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetOpera() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Opera); ok {
 		return x.Opera
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPhobos() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Phobos); ok {
+		return x.Phobos
 	}
 	return false
 }
@@ -398,9 +849,58 @@ func (m *ServiceChoice) GetPikachu() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetPiku() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Piku); ok {
+		return x.Piku
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetPkifactory() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Pkifactory); ok {
 		return x.Pkifactory
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPluto() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Pluto); ok {
+		return x.Pluto
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPonos() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ponos); ok {
+		return x.Ponos
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPrism() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Prism); ok {
+		return x.Prism
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPrismprime() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Prismprime); ok {
+		return x.Prismprime
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetPrometheus() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Prometheus); ok {
+		return x.Prometheus
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetProtekti() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Protekti); ok {
+		return x.Protekti
 	}
 	return false
 }
@@ -412,6 +912,41 @@ func (m *ServiceChoice) GetRakar() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetRolex() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Rolex); ok {
+		return x.Rolex
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetScim() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Scim); ok {
+		return x.Scim
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetSed() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Sed); ok {
+		return x.Sed
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetSentinel() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Sentinel); ok {
+		return x.Sentinel
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetSpectrum() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Spectrum); ok {
+		return x.Spectrum
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetSiteConsole() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_SiteConsole); ok {
 		return x.SiteConsole
@@ -419,9 +954,51 @@ func (m *ServiceChoice) GetSiteConsole() bool {
 	return false
 }
 
+func (m *ServiceChoice) GetStreak() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Streak); ok {
+		return x.Streak
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetTpmauthority() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Tpmauthority); ok {
+		return x.Tpmauthority
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetTrafficactioner() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Trafficactioner); ok {
+		return x.Trafficactioner
+	}
+	return false
+}
+
 func (m *ServiceChoice) GetVega() bool {
 	if x, ok := m.GetChoice().(*ServiceChoice_Vega); ok {
 		return x.Vega
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetVer() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Ver); ok {
+		return x.Ver
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetViaApiService() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_ViaApiService); ok {
+		return x.ViaApiService
+	}
+	return false
+}
+
+func (m *ServiceChoice) GetViaconnector() bool {
+	if x, ok := m.GetChoice().(*ServiceChoice_Viaconnector); ok {
+		return x.Viaconnector
 	}
 	return false
 }
@@ -461,94 +1038,89 @@ func (m *ServiceChoice) GetWingman() bool {
 	return false
 }
 
-func (m *ServiceChoice) GetShape() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Shape); ok {
-		return x.Shape
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetHellas() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Hellas); ok {
-		return x.Hellas
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetNfvsvc() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Nfvsvc); ok {
-		return x.Nfvsvc
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetScim() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Scim); ok {
-		return x.Scim
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetLilacEdge() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_LilacEdge); ok {
-		return x.LilacEdge
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetDoscontroller() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Doscontroller); ok {
-		return x.Doscontroller
-	}
-	return false
-}
-
-func (m *ServiceChoice) GetMinerva() bool {
-	if x, ok := m.GetChoice().(*ServiceChoice_Minerva); ok {
-		return x.Minerva
-	}
-	return false
-}
-
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ServiceChoice) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
+		(*ServiceChoice_Aipconnector)(nil),
 		(*ServiceChoice_Akar)(nil),
+		(*ServiceChoice_AkarReadonly)(nil),
+		(*ServiceChoice_AkarDnsdomain)(nil),
 		(*ServiceChoice_Ares)(nil),
+		(*ServiceChoice_Aspen)(nil),
 		(*ServiceChoice_Asterix)(nil),
 		(*ServiceChoice_Athena)(nil),
 		(*ServiceChoice_Automatix)(nil),
 		(*ServiceChoice_Barracute)(nil),
+		(*ServiceChoice_Bdbewaf)(nil),
+		(*ServiceChoice_Bfdp)(nil),
+		(*ServiceChoice_Bifrost)(nil),
 		(*ServiceChoice_Blindfold)(nil),
 		(*ServiceChoice_Bolt)(nil),
+		(*ServiceChoice_Brmalerts)(nil),
+		(*ServiceChoice_Cdnconnectorsvc)(nil),
 		(*ServiceChoice_Charmander)(nil),
 		(*ServiceChoice_Charmandercar)(nil),
+		(*ServiceChoice_ClientSideDefense)(nil),
+		(*ServiceChoice_Conprof)(nil),
+		(*ServiceChoice_Doscontroller)(nil),
 		(*ServiceChoice_Drogon)(nil),
+		(*ServiceChoice_Dymo)(nil),
 		(*ServiceChoice_Eywa)(nil),
+		(*ServiceChoice_EywaReadonly)(nil),
+		(*ServiceChoice_Eywaprime)(nil),
+		(*ServiceChoice_EywaprimeReadonly)(nil),
+		(*ServiceChoice_Ganges)(nil),
 		(*ServiceChoice_Griffin)(nil),
+		(*ServiceChoice_Hellas)(nil),
+		(*ServiceChoice_Iapetus)(nil),
 		(*ServiceChoice_Identityauthority)(nil),
+		(*ServiceChoice_Ipp)(nil),
+		(*ServiceChoice_Ippdev)(nil),
+		(*ServiceChoice_Ippprom)(nil),
+		(*ServiceChoice_Josef)(nil),
+		(*ServiceChoice_Kcdmux)(nil),
+		(*ServiceChoice_KcdmuxReadonly)(nil),
 		(*ServiceChoice_Keypr)(nil),
+		(*ServiceChoice_LilacEdge)(nil),
+		(*ServiceChoice_Mars)(nil),
 		(*ServiceChoice_Maurice)(nil),
+		(*ServiceChoice_Minerva)(nil),
+		(*ServiceChoice_Nfvsvc)(nil),
+		(*ServiceChoice_Nmsconnector)(nil),
+		(*ServiceChoice_Nmsproxy)(nil),
 		(*ServiceChoice_Obelix)(nil),
 		(*ServiceChoice_Ocspmule)(nil),
+		(*ServiceChoice_Olympus)(nil),
 		(*ServiceChoice_Opera)(nil),
+		(*ServiceChoice_Phobos)(nil),
 		(*ServiceChoice_Pikachu)(nil),
+		(*ServiceChoice_Piku)(nil),
 		(*ServiceChoice_Pkifactory)(nil),
+		(*ServiceChoice_Pluto)(nil),
+		(*ServiceChoice_Ponos)(nil),
+		(*ServiceChoice_Prism)(nil),
+		(*ServiceChoice_Prismprime)(nil),
+		(*ServiceChoice_Prometheus)(nil),
+		(*ServiceChoice_Protekti)(nil),
 		(*ServiceChoice_Rakar)(nil),
+		(*ServiceChoice_Rolex)(nil),
+		(*ServiceChoice_Scim)(nil),
+		(*ServiceChoice_Sed)(nil),
+		(*ServiceChoice_Sentinel)(nil),
+		(*ServiceChoice_Spectrum)(nil),
 		(*ServiceChoice_SiteConsole)(nil),
+		(*ServiceChoice_Streak)(nil),
+		(*ServiceChoice_Tpmauthority)(nil),
+		(*ServiceChoice_Trafficactioner)(nil),
 		(*ServiceChoice_Vega)(nil),
+		(*ServiceChoice_Ver)(nil),
+		(*ServiceChoice_ViaApiService)(nil),
+		(*ServiceChoice_Viaconnector)(nil),
 		(*ServiceChoice_Voucher)(nil),
 		(*ServiceChoice_Vpm)(nil),
 		(*ServiceChoice_Vulpix)(nil),
 		(*ServiceChoice_Warden)(nil),
 		(*ServiceChoice_Wingman)(nil),
-		(*ServiceChoice_Shape)(nil),
-		(*ServiceChoice_Hellas)(nil),
-		(*ServiceChoice_Nfvsvc)(nil),
-		(*ServiceChoice_Scim)(nil),
-		(*ServiceChoice_LilacEdge)(nil),
-		(*ServiceChoice_Doscontroller)(nil),
-		(*ServiceChoice_Minerva)(nil),
 	}
 }
 
@@ -561,64 +1133,227 @@ func init() {
 }
 
 var fileDescriptor_30eccf2b87cfc541 = []byte{
-	// 902 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x95, 0xcb, 0x6e, 0xdb, 0x46,
-	0x17, 0xc7, 0x45, 0x7f, 0x32, 0x65, 0x1f, 0x5b, 0xbe, 0xc8, 0xce, 0xe7, 0x93, 0xa4, 0x65, 0x53,
-	0x57, 0xa9, 0x03, 0x01, 0x92, 0x0a, 0x18, 0x0d, 0xd0, 0x4d, 0x03, 0xd8, 0x08, 0x5a, 0xb4, 0xbb,
-	0x74, 0xd7, 0x8d, 0x31, 0xa2, 0x46, 0xe2, 0x40, 0x24, 0x87, 0x18, 0x5e, 0x2c, 0xed, 0xf2, 0x08,
-	0x7d, 0x8c, 0x3e, 0x03, 0xf9, 0x02, 0x5d, 0x7a, 0x99, 0x65, 0x2d, 0x77, 0xd1, 0x65, 0x1e, 0xa1,
-	0xe0, 0x5c, 0xa4, 0x91, 0xe1, 0xdd, 0xfc, 0x7f, 0xe7, 0x7f, 0x0e, 0x67, 0xce, 0x70, 0x66, 0xe0,
-	0xa2, 0xa0, 0xe9, 0x80, 0xf1, 0x61, 0xea, 0x07, 0x34, 0x22, 0xc3, 0x82, 0xa6, 0x34, 0x2e, 0x86,
-	0x24, 0x0c, 0x6f, 0x52, 0x2a, 0x0a, 0xe6, 0xd3, 0x74, 0x90, 0x08, 0x9e, 0xf1, 0xce, 0xa9, 0x32,
-	0x0e, 0x94, 0x71, 0xa0, 0x8c, 0x2f, 0xce, 0x9f, 0x4c, 0xe7, 0x49, 0xc6, 0x78, 0xac, 0x33, 0xcf,
-	0xff, 0x69, 0x43, 0xfb, 0x37, 0x55, 0xec, 0x3a, 0xe0, 0xcc, 0xa7, 0x9d, 0x2e, 0x34, 0xc9, 0x8c,
-	0x08, 0x74, 0x5e, 0x39, 0x6f, 0x76, 0xae, 0x0e, 0xca, 0x0a, 0x41, 0x91, 0xce, 0xd6, 0x4f, 0xd7,
-	0x3f, 0x37, 0x3e, 0xa8, 0x71, 0xed, 0x12, 0x34, 0xc5, 0xad, 0x0d, 0x97, 0xa0, 0x69, 0x67, 0xeb,
-	0xc3, 0x7b, 0xe9, 0xaa, 0xc7, 0x7d, 0x68, 0x91, 0x34, 0xa3, 0x82, 0xcd, 0xb1, 0x29, 0x8d, 0xc7,
-	0x65, 0x85, 0xed, 0x15, 0xd4, 0x15, 0x57, 0xb2, 0x07, 0x2e, 0xc9, 0x02, 0x1a, 0x13, 0x74, 0xa5,
-	0xfb, 0xa8, 0xac, 0x70, 0xdf, 0x30, 0x6d, 0x36, 0xea, 0x12, 0x76, 0x49, 0x9e, 0xf1, 0x88, 0x64,
-	0x6c, 0x8e, 0x2d, 0x69, 0x3f, 0x29, 0x2b, 0x3c, 0xb4, 0xb0, 0xce, 0xb0, 0xc0, 0x25, 0xec, 0x8e,
-	0x88, 0x10, 0xc4, 0xcf, 0x33, 0x8a, 0x3b, 0x76, 0xd2, 0x0a, 0x9b, 0xa4, 0x35, 0xa8, 0x93, 0x42,
-	0x16, 0x8f, 0x27, 0x3c, 0x1c, 0xe3, 0xee, 0x46, 0x92, 0xc1, 0xab, 0xa4, 0x15, 0xe8, 0x42, 0x73,
-	0xc4, 0xc3, 0x0c, 0xc1, 0xee, 0x4f, 0x4d, 0x4c, 0x17, 0xe5, 0xf8, 0x2d, 0x80, 0x1f, 0x10, 0x11,
-	0x91, 0x78, 0x4c, 0x05, 0xee, 0x49, 0xef, 0x69, 0x59, 0xe1, 0x91, 0xcd, 0x75, 0x86, 0x4d, 0xde,
-	0x41, 0x7b, 0xad, 0x7c, 0x22, 0x70, 0x5f, 0xa6, 0x9e, 0x95, 0x15, 0x9e, 0x3c, 0x0a, 0xe9, 0xec,
-	0x47, 0xb0, 0x07, 0xee, 0x58, 0xf0, 0x29, 0x8f, 0xb1, 0x6d, 0x77, 0x5a, 0x31, 0xd3, 0x69, 0xad,
-	0xba, 0xd0, 0xa4, 0x8b, 0x5b, 0x82, 0x07, 0xf6, 0x52, 0x6a, 0x62, 0x96, 0x22, 0xc7, 0x7d, 0x68,
-	0x4d, 0x05, 0x9b, 0x4c, 0x58, 0x8c, 0x87, 0xf6, 0x56, 0x6b, 0x68, 0xb6, 0xda, 0xc8, 0x5f, 0xe1,
-	0x98, 0x8d, 0x69, 0x9c, 0xb1, 0x6c, 0x41, 0xf2, 0x2c, 0xe0, 0x82, 0x65, 0x0b, 0x3c, 0x92, 0x89,
-	0x2f, 0xcb, 0x0a, 0xcf, 0x9e, 0x08, 0xeb, 0x12, 0x4f, 0x04, 0x2e, 0x60, 0x7b, 0x46, 0x17, 0x89,
-	0xc0, 0x63, 0x59, 0xe0, 0xb0, 0xac, 0x70, 0x4f, 0x23, 0x9d, 0xa4, 0x45, 0x1f, 0x5a, 0x11, 0xc9,
-	0x05, 0xf3, 0x29, 0x76, 0xec, 0x49, 0x6a, 0x68, 0x26, 0x69, 0x64, 0x0f, 0x5c, 0x3e, 0xa2, 0x21,
-	0x9b, 0xe3, 0x89, 0xdd, 0x25, 0xc5, 0xf4, 0x8f, 0x6e, 0xd4, 0x77, 0xb0, 0xc3, 0xfd, 0x34, 0x89,
-	0xf2, 0x90, 0xe2, 0xa9, 0x74, 0x77, 0xca, 0x0a, 0x0f, 0xd6, 0x54, 0x17, 0x5f, 0xeb, 0x21, 0x6c,
-	0xf3, 0x84, 0x0a, 0x82, 0xcf, 0xac, 0xcd, 0x53, 0xa8, 0xf6, 0xd6, 0xf5, 0x3b, 0x5b, 0xd7, 0xf5,
-	0x37, 0x34, 0xec, 0x43, 0x2b, 0x61, 0x33, 0xe2, 0x07, 0x39, 0xfe, 0xdf, 0x9e, 0xbd, 0x86, 0x66,
-	0xf6, 0x46, 0xbe, 0x05, 0x48, 0x66, 0x6c, 0x42, 0xfc, 0x8c, 0x8b, 0x05, 0x9e, 0xd9, 0x3f, 0xd7,
-	0x9a, 0x9b, 0x9f, 0xcb, 0x22, 0x17, 0xb0, 0x2d, 0xe4, 0x0d, 0x80, 0x76, 0x37, 0x85, 0xba, 0x02,
-	0xe4, 0x9a, 0xb5, 0xf8, 0x11, 0xf6, 0x53, 0x96, 0xd1, 0x1b, 0x9f, 0xc7, 0x29, 0x0f, 0x29, 0x3e,
-	0x97, 0xfe, 0xe7, 0x65, 0x85, 0xcf, 0x60, 0xaf, 0x8e, 0x5c, 0xab, 0x80, 0xb5, 0x92, 0x0d, 0xfc,
-	0x06, 0x9a, 0x05, 0x9d, 0x12, 0x7c, 0x61, 0xb5, 0x4b, 0x12, 0x2b, 0x41, 0xe9, 0x3e, 0xb4, 0x0a,
-	0x9e, 0xfb, 0x01, 0x15, 0xf8, 0xd2, 0x5e, 0xb9, 0x86, 0x7a, 0x5a, 0x2b, 0xf9, 0x1a, 0xfe, 0x57,
-	0x24, 0x11, 0x7e, 0x61, 0x59, 0x6b, 0x60, 0x95, 0x95, 0xb2, 0x07, 0x6e, 0x91, 0x87, 0x09, 0x9b,
-	0xe3, 0x97, 0xf6, 0xf6, 0x2a, 0x66, 0x0e, 0x81, 0x56, 0x3d, 0x70, 0x6f, 0x89, 0x18, 0xd3, 0x18,
-	0x3d, 0xdb, 0xab, 0x98, 0xf1, 0x6a, 0xf5, 0x3d, 0xb4, 0x6e, 0x59, 0x3c, 0x8d, 0x48, 0x8c, 0x5f,
-	0x59, 0x2d, 0x31, 0xf0, 0xd1, 0xe6, 0xae, 0xf0, 0x05, 0x6c, 0xa7, 0x01, 0x49, 0x28, 0xbe, 0xb2,
-	0xfb, 0x2e, 0x91, 0xf9, 0x8b, 0x95, 0xe8, 0x81, 0x1b, 0xd0, 0x30, 0x24, 0x29, 0x7e, 0x6d, 0xcf,
-	0x45, 0x31, 0x5d, 0xd5, 0xa8, 0x1e, 0xb8, 0xf1, 0xa4, 0x48, 0x0b, 0x1f, 0xcf, 0x6d, 0xaf, 0x62,
-	0xc6, 0xab, 0x55, 0x17, 0x9a, 0xa9, 0xcf, 0x22, 0xfc, 0xc6, 0x3e, 0xe8, 0x35, 0x31, 0x07, 0x5d,
-	0x8e, 0x7f, 0x00, 0x08, 0x59, 0x48, 0xfc, 0x1b, 0x3a, 0x9e, 0x52, 0xec, 0x4a, 0x2f, 0x96, 0x15,
-	0x9e, 0x6a, 0xde, 0xaf, 0xb9, 0xb5, 0xbe, 0x5d, 0x49, 0xdf, 0xd7, 0xf0, 0x1d, 0xb4, 0xc7, 0x3c,
-	0xf5, 0x79, 0x9c, 0x09, 0x1e, 0x86, 0x54, 0xe0, 0x6b, 0xfb, 0xda, 0xda, 0x08, 0x99, 0x6b, 0x6b,
-	0x13, 0xd6, 0xe7, 0x97, 0xc5, 0x54, 0x14, 0x04, 0xbf, 0xdd, 0x38, 0xbf, 0x0a, 0xae, 0xce, 0xaf,
-	0x92, 0x57, 0x3b, 0xe0, 0xfa, 0xf2, 0x51, 0xbb, 0xfa, 0xe8, 0xdc, 0xdd, 0x7b, 0x8d, 0x4f, 0xf7,
-	0x5e, 0xe3, 0xf3, 0xbd, 0xe7, 0x7c, 0x5c, 0x7a, 0xce, 0x9f, 0x4b, 0xcf, 0xf9, 0x6b, 0xe9, 0x39,
-	0x77, 0x4b, 0xcf, 0xf9, 0x7b, 0xe9, 0x39, 0xff, 0x2e, 0xbd, 0xc6, 0xe7, 0xa5, 0xe7, 0xfc, 0xf1,
-	0xe0, 0x35, 0xee, 0x1e, 0xbc, 0xc6, 0xa7, 0x07, 0xaf, 0xf1, 0xfb, 0x2f, 0x53, 0x9e, 0xcc, 0xa6,
-	0x83, 0x82, 0x87, 0x19, 0x15, 0x82, 0x0c, 0xf2, 0x74, 0x28, 0x07, 0x13, 0x2e, 0xa2, 0x7e, 0x22,
-	0x78, 0xc1, 0xc6, 0x54, 0xf4, 0x4d, 0x78, 0x98, 0x8c, 0xa6, 0x7c, 0x48, 0xe7, 0x99, 0x7e, 0x70,
-	0x37, 0xde, 0xdd, 0x91, 0x2b, 0x1f, 0xdc, 0xcb, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0x72, 0xef,
-	0x19, 0x2a, 0xd5, 0x07, 0x00, 0x00,
+	// 3508 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x59, 0xcb, 0x93, 0x1b, 0x37,
+	0x7a, 0x27, 0xad, 0x79, 0x48, 0xb0, 0x1e, 0xf6, 0xf8, 0xb1, 0xb0, 0x6c, 0x8f, 0x61, 0x79, 0x77,
+	0x25, 0xd9, 0x9a, 0x99, 0xb5, 0xbd, 0xf2, 0x33, 0xab, 0x15, 0x87, 0xe4, 0x3c, 0x24, 0x8d, 0xcc,
+	0x25, 0x47, 0x2f, 0x3b, 0xf1, 0x04, 0xec, 0x06, 0x49, 0x68, 0xba, 0x81, 0x0e, 0x80, 0xe6, 0x0c,
+	0x55, 0xae, 0xd4, 0x5e, 0x73, 0x4b, 0xe5, 0x92, 0xaa, 0x1c, 0x92, 0x1c, 0xf3, 0x37, 0x74, 0xff,
+	0x03, 0x39, 0xba, 0x72, 0xda, 0x63, 0x2c, 0x5f, 0x72, 0xf4, 0x9f, 0x90, 0xc2, 0x87, 0x7e, 0x80,
+	0x33, 0xba, 0xa4, 0x2a, 0x27, 0xb2, 0x7f, 0xf8, 0xf0, 0xc3, 0xd7, 0xc0, 0xf7, 0xc2, 0xd7, 0xe8,
+	0xea, 0x94, 0xe9, 0x75, 0x2e, 0x37, 0x74, 0x30, 0x61, 0x31, 0xdd, 0x98, 0x32, 0xcd, 0xc4, 0x74,
+	0x83, 0x46, 0xd1, 0x81, 0x66, 0x6a, 0xca, 0x03, 0xa6, 0xd7, 0x13, 0x25, 0x8d, 0x5c, 0x79, 0xdd,
+	0x09, 0xae, 0x3b, 0xc1, 0x75, 0x27, 0x78, 0xf9, 0xca, 0x0b, 0xa7, 0xcb, 0xc4, 0x70, 0x29, 0x8a,
+	0x99, 0x57, 0xfe, 0xeb, 0x4b, 0x74, 0x61, 0xe0, 0xc8, 0xda, 0x13, 0xc9, 0x03, 0xb6, 0xf2, 0x4f,
+	0x4d, 0x74, 0x9e, 0xf2, 0x24, 0x90, 0x42, 0xb0, 0xc0, 0x48, 0x85, 0xaf, 0x92, 0xe6, 0xb5, 0xb3,
+	0x9b, 0x51, 0x96, 0xe3, 0xc9, 0xfc, 0xc8, 0xca, 0x4b, 0xdb, 0xed, 0xcb, 0xfb, 0x7b, 0x3c, 0x50,
+	0xb2, 0xd0, 0x87, 0xa8, 0x54, 0x08, 0x2e, 0xc6, 0x44, 0x0a, 0x62, 0x26, 0x8c, 0x6c, 0xb7, 0xc9,
+	0xd1, 0x84, 0x07, 0x13, 0x42, 0xa3, 0x48, 0x1e, 0x69, 0x42, 0x13, 0xae, 0x89, 0x91, 0x24, 0x90,
+	0x71, 0x9c, 0x0a, 0x1e, 0x50, 0xc3, 0xc8, 0x11, 0x37, 0x13, 0xd2, 0xda, 0xed, 0x91, 0x56, 0x6f,
+	0x97, 0x14, 0x3c, 0x3b, 0x8d, 0xfe, 0xfc, 0x4a, 0xdf, 0xa2, 0x05, 0x7a, 0x48, 0x15, 0x6e, 0x82,
+	0x2e, 0x9d, 0x2c, 0xc7, 0xb7, 0x1d, 0x02, 0x3a, 0xfc, 0xbe, 0x9c, 0xca, 0x14, 0x19, 0x49, 0x45,
+	0x12, 0x25, 0x8f, 0x67, 0x84, 0x8a, 0x90, 0x48, 0x33, 0x61, 0x8a, 0x04, 0x52, 0x8c, 0xf8, 0x38,
+	0x55, 0xd4, 0xbe, 0x39, 0x91, 0xc3, 0xa7, 0x2c, 0x30, 0x7a, 0xa7, 0xd1, 0x77, 0x0c, 0x4f, 0xd0,
+	0x05, 0xfb, 0x7b, 0xa0, 0x18, 0x0d, 0xa5, 0x88, 0x66, 0xf8, 0x1a, 0x2c, 0xf2, 0x49, 0x96, 0xe3,
+	0xf5, 0x13, 0x43, 0xb0, 0xda, 0x5b, 0xf6, 0x69, 0xcd, 0x3e, 0x12, 0xc5, 0x92, 0x88, 0x07, 0x94,
+	0xc8, 0x11, 0xb1, 0x72, 0xa0, 0xf6, 0x21, 0x55, 0xfd, 0x52, 0xbc, 0x8f, 0x2e, 0xc2, 0xfc, 0x50,
+	0xe8, 0x50, 0xc6, 0x94, 0x0b, 0x7c, 0x1d, 0xb8, 0xaf, 0x67, 0x39, 0xfe, 0xcd, 0xc9, 0x31, 0x20,
+	0xbf, 0x64, 0x31, 0xd2, 0xb9, 0x3f, 0x20, 0x0e, 0xdc, 0x69, 0xf4, 0x41, 0x85, 0x4e, 0x25, 0xb5,
+	0x8f, 0x16, 0xa8, 0x62, 0x1a, 0xbf, 0x04, 0x4c, 0xb7, 0xb2, 0x1c, 0x7f, 0xe5, 0x90, 0x95, 0x97,
+	0xfa, 0xdd, 0xcb, 0xeb, 0x2d, 0xa2, 0x64, 0x6a, 0xec, 0x19, 0x94, 0x67, 0xc2, 0xc4, 0x98, 0x0b,
+	0x06, 0x1b, 0xc3, 0x8e, 0x83, 0x09, 0xb5, 0x8f, 0x63, 0x90, 0x62, 0x6e, 0x13, 0xec, 0xdc, 0x3e,
+	0x5a, 0xa4, 0x3a, 0x61, 0x02, 0x7f, 0x08, 0xb4, 0x5f, 0x65, 0x39, 0xfe, 0xac, 0x80, 0x2c, 0xef,
+	0xca, 0x4b, 0xed, 0xee, 0xe5, 0xdf, 0xb4, 0x12, 0x4e, 0x06, 0x09, 0x0b, 0xf8, 0xc8, 0x1e, 0x9d,
+	0xdd, 0xcb, 0xae, 0x18, 0x49, 0x15, 0xb0, 0x98, 0x09, 0xe3, 0x9d, 0x5d, 0x31, 0x6f, 0x1b, 0x2d,
+	0x53, 0x6d, 0x98, 0xe2, 0xc7, 0x78, 0x01, 0x58, 0x3f, 0xca, 0x72, 0x7c, 0xb5, 0x02, 0xe1, 0x7d,
+	0x71, 0x87, 0x1a, 0x4a, 0xee, 0x31, 0xaa, 0xc0, 0x6e, 0xea, 0x83, 0xdc, 0x69, 0xf4, 0x2b, 0xc1,
+	0xbb, 0x68, 0x89, 0x9a, 0x09, 0x13, 0x14, 0x2f, 0x01, 0xcf, 0xc7, 0x59, 0x8e, 0xd7, 0x4a, 0x0c,
+	0x68, 0xde, 0x6b, 0x45, 0x4c, 0x19, 0xb2, 0x47, 0x05, 0x1d, 0x57, 0x07, 0x6e, 0x7f, 0x8c, 0x92,
+	0x51, 0x04, 0x6c, 0xa5, 0xf8, 0x6d, 0x74, 0x8e, 0xa6, 0x46, 0xc6, 0xd4, 0xf0, 0x63, 0xbc, 0x0c,
+	0x7c, 0x24, 0xcb, 0xf1, 0x3b, 0x1e, 0x0c, 0x94, 0x2f, 0x3f, 0x6a, 0x6d, 0x95, 0x84, 0x3b, 0x8d,
+	0xbe, 0x37, 0x3a, 0x43, 0xe7, 0x86, 0x54, 0x29, 0x1a, 0xa4, 0x86, 0xe1, 0xb3, 0xc0, 0xf0, 0x24,
+	0xcb, 0xf1, 0x03, 0x0f, 0x06, 0x86, 0xce, 0x1d, 0x39, 0xb4, 0xb6, 0x18, 0x30, 0xad, 0xc1, 0x1a,
+	0x85, 0x54, 0x31, 0x8d, 0xf8, 0x33, 0x46, 0x0c, 0x13, 0x54, 0x18, 0x92, 0x6a, 0x3a, 0x66, 0x24,
+	0xb4, 0x5b, 0x60, 0xc7, 0x29, 0x09, 0x29, 0x8b, 0xad, 0xef, 0x48, 0xb7, 0x0b, 0x84, 0x1b, 0xbb,
+	0x74, 0x4d, 0xfb, 0x2f, 0x4d, 0xb4, 0x3c, 0x0c, 0x87, 0xec, 0x88, 0x8e, 0xf0, 0x0d, 0x58, 0xf9,
+	0xef, 0xb3, 0x1c, 0x3f, 0xab, 0x40, 0xbb, 0xae, 0x3d, 0x2b, 0xb0, 0x85, 0xe0, 0x51, 0xab, 0xd5,
+	0xfb, 0x8a, 0xdc, 0xdf, 0xde, 0xbd, 0xff, 0x98, 0xb4, 0x92, 0x84, 0xf4, 0x94, 0x34, 0x2c, 0x30,
+	0xe4, 0xda, 0xd6, 0x4d, 0xb2, 0xb9, 0xbb, 0xbd, 0xb6, 0xdb, 0x23, 0x8f, 0x5a, 0x5b, 0xd7, 0x7d,
+	0x0b, 0xa1, 0x82, 0x46, 0xb3, 0x67, 0xf6, 0x28, 0x8c, 0xa2, 0xa3, 0x11, 0x0f, 0x40, 0xb1, 0x98,
+	0x9a, 0x60, 0x62, 0x41, 0x6a, 0x0c, 0x0d, 0x0e, 0x89, 0xe6, 0x63, 0x41, 0x4d, 0xaa, 0xc0, 0x80,
+	0xaa, 0xb5, 0xaf, 0xa3, 0x85, 0xe1, 0x28, 0x4c, 0xf0, 0x1a, 0x28, 0xf6, 0x5a, 0x96, 0xe3, 0x4b,
+	0x0e, 0x81, 0xdd, 0x38, 0xb3, 0xbf, 0xd9, 0xb1, 0xe6, 0x06, 0xc0, 0x63, 0xb4, 0x3c, 0xe4, 0x23,
+	0x25, 0xb5, 0xc1, 0xeb, 0x20, 0xfd, 0x57, 0x59, 0x8e, 0xbf, 0xa8, 0x40, 0x98, 0x70, 0xbd, 0x45,
+	0x86, 0x8a, 0x87, 0x63, 0x46, 0x46, 0x4a, 0xc6, 0x64, 0x2a, 0x23, 0xc3, 0x94, 0xa2, 0x2e, 0x88,
+	0x70, 0x61, 0x24, 0xb8, 0x89, 0x7d, 0x02, 0x25, 0x8a, 0x99, 0xf6, 0x14, 0x22, 0x2e, 0xc2, 0x91,
+	0x8c, 0x42, 0x7c, 0x0e, 0xb8, 0x6f, 0x66, 0x39, 0xfe, 0xd8, 0x83, 0x81, 0x9d, 0x0c, 0x58, 0xa0,
+	0x98, 0x29, 0xf7, 0xc4, 0x1a, 0xb3, 0x7d, 0x53, 0x77, 0xe0, 0xd6, 0x9e, 0x61, 0xe3, 0xab, 0x29,
+	0x37, 0xd1, 0xc2, 0x50, 0x46, 0x06, 0x23, 0x60, 0x7c, 0x2f, 0xcb, 0xf1, 0xdb, 0x0e, 0x71, 0x5e,
+	0x0b, 0x56, 0x6c, 0x8d, 0x77, 0x50, 0x1a, 0xaf, 0x1b, 0x7c, 0x8a, 0xce, 0x0d, 0xed, 0x99, 0x33,
+	0x65, 0x34, 0xde, 0x80, 0xb9, 0x77, 0xb2, 0x1c, 0x6f, 0x79, 0x30, 0x10, 0xdc, 0x6c, 0xa7, 0xda,
+	0xc8, 0x98, 0x29, 0xb2, 0x45, 0x03, 0x70, 0x04, 0x18, 0xb3, 0x81, 0x65, 0xb3, 0xbf, 0x67, 0x8d,
+	0x28, 0x4c, 0x03, 0xfb, 0x2c, 0xc8, 0xe3, 0x36, 0x49, 0x22, 0x6a, 0x46, 0x52, 0xc5, 0xa0, 0x62,
+	0xc5, 0x93, 0xa0, 0x4b, 0x41, 0x28, 0xaa, 0x98, 0xa9, 0xa7, 0x01, 0xfe, 0x9d, 0x17, 0x2e, 0x4f,
+	0x0e, 0xba, 0x3d, 0x6e, 0x97, 0x08, 0x29, 0xb2, 0x00, 0x58, 0x41, 0xbb, 0x73, 0xdf, 0xae, 0xf9,
+	0x14, 0x8c, 0x25, 0xe2, 0x11, 0x0d, 0xae, 0xef, 0x34, 0xfa, 0xa7, 0x18, 0xb6, 0x10, 0x0a, 0x26,
+	0x54, 0xc5, 0x54, 0x84, 0x4c, 0xe1, 0x97, 0x61, 0xb1, 0x5f, 0x67, 0x39, 0x26, 0x3e, 0x0e, 0xeb,
+	0x5c, 0x1c, 0xf4, 0xbb, 0x76, 0xab, 0xc7, 0x8a, 0xc6, 0x31, 0xec, 0x8f, 0x2f, 0x31, 0x44, 0x17,
+	0xea, 0xa7, 0x80, 0x2a, 0x7c, 0xde, 0x0b, 0x42, 0xf3, 0x43, 0xc0, 0xf6, 0xbe, 0x65, 0x6b, 0xfb,
+	0x30, 0xd1, 0x3c, 0x64, 0xf0, 0x5b, 0x05, 0xa1, 0x13, 0xf3, 0xfe, 0xb5, 0x89, 0x5e, 0x0b, 0x22,
+	0xce, 0x84, 0x39, 0xb0, 0xb2, 0x07, 0x21, 0x1b, 0x31, 0xa1, 0x19, 0xfe, 0xd8, 0xcb, 0x6e, 0x2f,
+	0x12, 0x80, 0x05, 0xf7, 0x7a, 0x90, 0x51, 0xca, 0x88, 0x0a, 0xd9, 0xcc, 0x9e, 0xd2, 0x43, 0x19,
+	0x99, 0xb6, 0x14, 0x5a, 0x46, 0xcc, 0xfa, 0x2c, 0x0d, 0xc0, 0xd5, 0x07, 0x13, 0x9a, 0xb0, 0xab,
+	0x9a, 0x38, 0xb6, 0x35, 0xcb, 0x46, 0x0a, 0x36, 0x6b, 0x23, 0xd6, 0x5c, 0x5f, 0x75, 0x63, 0x03,
+	0x1e, 0xb2, 0x4e, 0xb1, 0xce, 0x0c, 0x2d, 0x07, 0x52, 0x24, 0x4a, 0x8e, 0xf0, 0x5f, 0x83, 0x4e,
+	0x7f, 0x93, 0xe5, 0xf8, 0x49, 0x05, 0x3a, 0xcf, 0xee, 0x77, 0x2f, 0x6f, 0xb5, 0xa5, 0x30, 0x5c,
+	0xa4, 0x32, 0xd5, 0xf6, 0x8c, 0x46, 0x3c, 0xb2, 0x9a, 0x40, 0xda, 0x63, 0xca, 0x5a, 0x05, 0x15,
+	0x56, 0x45, 0xeb, 0xc7, 0x9a, 0x83, 0x05, 0xb5, 0x7b, 0x0f, 0x6e, 0x90, 0x98, 0xc5, 0x52, 0xcd,
+	0x88, 0xb4, 0x39, 0xd2, 0xf0, 0xd8, 0xee, 0x50, 0x45, 0xfd, 0x6f, 0x4d, 0x74, 0x21, 0x94, 0xba,
+	0x0e, 0x97, 0xf8, 0x13, 0xd0, 0xe0, 0x28, 0xcb, 0xb1, 0x3e, 0x31, 0x04, 0xfb, 0xf1, 0xbd, 0x6f,
+	0x2c, 0x74, 0x3c, 0x56, 0x6c, 0x4c, 0x21, 0xe7, 0x74, 0x3a, 0x72, 0x40, 0x34, 0x0b, 0x52, 0xc5,
+	0xcd, 0x8c, 0xb0, 0x29, 0x13, 0xc6, 0x85, 0xbe, 0x31, 0x13, 0x4c, 0x39, 0x99, 0x32, 0x90, 0x06,
+	0x4e, 0x3a, 0xe6, 0x86, 0x8f, 0x5d, 0x36, 0x49, 0x64, 0xc4, 0x03, 0x0e, 0x41, 0xe5, 0xc4, 0xa2,
+	0x0c, 0x2d, 0x85, 0x4a, 0x8e, 0xa5, 0xc0, 0x17, 0x40, 0xb3, 0xbb, 0x59, 0x8e, 0xb7, 0x4b, 0x0c,
+	0x54, 0xfa, 0xb2, 0xb4, 0x2e, 0xbb, 0x44, 0xaa, 0x6d, 0x12, 0x50, 0x8c, 0x1a, 0x16, 0x92, 0xc3,
+	0x2f, 0x74, 0x99, 0xf3, 0x8b, 0x48, 0x62, 0x11, 0x9a, 0xf0, 0x3a, 0xd3, 0x94, 0x44, 0x8f, 0xd0,
+	0x42, 0x38, 0x8b, 0x25, 0xfe, 0x0e, 0x16, 0x69, 0x65, 0x39, 0xfe, 0x83, 0x43, 0xca, 0xdd, 0x87,
+	0x3c, 0x78, 0x7d, 0x8f, 0x19, 0xc5, 0x03, 0x4d, 0x92, 0x54, 0x4f, 0xd6, 0xc6, 0xd4, 0xb0, 0x23,
+	0x3a, 0x2b, 0x8a, 0x8e, 0xa2, 0xfc, 0x88, 0x99, 0x99, 0xb0, 0x14, 0xd2, 0x2b, 0x4c, 0xa7, 0x68,
+	0x81, 0xcd, 0x8e, 0x28, 0xbe, 0xe8, 0x69, 0x0f, 0x08, 0xe8, 0xfe, 0xf5, 0x03, 0xab, 0x2f, 0x0d,
+	0x02, 0x99, 0x0a, 0x43, 0xe2, 0x2a, 0x04, 0xdd, 0x20, 0x0f, 0x5a, 0x7b, 0x37, 0x88, 0x14, 0x6b,
+	0x43, 0x49, 0x55, 0x08, 0x9b, 0x27, 0xc2, 0xf9, 0x72, 0xc6, 0x2e, 0x01, 0x44, 0x0f, 0xd1, 0x05,
+	0xfb, 0x5b, 0x97, 0x31, 0x9f, 0xc2, 0x5a, 0x1b, 0x59, 0x8e, 0x3f, 0x3a, 0x31, 0x04, 0x8b, 0xbe,
+	0x69, 0x21, 0x62, 0x21, 0xe2, 0xd7, 0x32, 0xb6, 0x86, 0xb1, 0x23, 0x55, 0x0d, 0xf3, 0x0f, 0x4d,
+	0x74, 0xce, 0x02, 0x89, 0xe2, 0x31, 0xc3, 0xbf, 0x07, 0x52, 0x9e, 0xe5, 0x98, 0x79, 0xb0, 0xab,
+	0x04, 0xbb, 0xe5, 0x23, 0xd1, 0xdc, 0xd8, 0x10, 0x0d, 0x35, 0x60, 0x0c, 0x59, 0x9c, 0x04, 0x51,
+	0x0a, 0xbf, 0xf6, 0x05, 0x26, 0x2c, 0x4a, 0x34, 0x61, 0x82, 0x0e, 0x23, 0x46, 0x06, 0x94, 0x6a,
+	0xd8, 0x36, 0x2b, 0xfc, 0xb0, 0x0c, 0xf2, 0x7e, 0x88, 0xab, 0x97, 0x79, 0x8a, 0x56, 0xaa, 0x87,
+	0xfa, 0x45, 0x6f, 0x82, 0x4e, 0x5f, 0x66, 0x39, 0xbe, 0xf9, 0xa2, 0x71, 0x50, 0xee, 0xed, 0x5a,
+	0xb9, 0x53, 0xe5, 0x9b, 0xf5, 0xc7, 0x6a, 0x5a, 0xf5, 0xde, 0xb7, 0xd0, 0xd2, 0x98, 0x8a, 0x31,
+	0xd3, 0xf8, 0x33, 0x2f, 0xb0, 0x15, 0x58, 0x95, 0x63, 0x2f, 0x6e, 0x45, 0xf2, 0x88, 0x04, 0xd6,
+	0x4a, 0x6d, 0x54, 0xb4, 0xb6, 0x54, 0x48, 0xec, 0xa2, 0xe5, 0xb1, 0xe2, 0xa3, 0x11, 0x17, 0xf8,
+	0x12, 0x10, 0xac, 0x65, 0x39, 0xbe, 0x5e, 0x81, 0xa0, 0xd5, 0xe5, 0x01, 0x37, 0xac, 0xaa, 0x5a,
+	0xb6, 0x52, 0x01, 0x89, 0x88, 0x46, 0xdc, 0xcc, 0xac, 0x7f, 0x96, 0xa2, 0x3f, 0xa0, 0xa5, 0x09,
+	0x8b, 0x22, 0xaa, 0xf1, 0xfb, 0xc0, 0x34, 0xcc, 0x72, 0xfc, 0x7d, 0x89, 0x81, 0x49, 0xf6, 0xf6,
+	0x65, 0x22, 0x23, 0x39, 0x9e, 0x79, 0x35, 0x4f, 0x51, 0x7a, 0x27, 0xce, 0x2f, 0x6c, 0xdd, 0x5d,
+	0x88, 0x0c, 0xa9, 0x66, 0x21, 0xe1, 0x02, 0x82, 0x05, 0x38, 0x9e, 0x91, 0x24, 0x92, 0x01, 0x8d,
+	0xca, 0x6a, 0x05, 0x5c, 0xb0, 0xe4, 0x1f, 0xa1, 0x65, 0x4e, 0x13, 0x66, 0x52, 0x8d, 0x3f, 0xf7,
+	0x32, 0x58, 0x09, 0x56, 0x81, 0xe9, 0x53, 0x3f, 0x28, 0x24, 0x9e, 0x37, 0xd6, 0xfe, 0x40, 0x5c,
+	0xaa, 0x02, 0x23, 0x50, 0x69, 0xe4, 0xca, 0x87, 0x92, 0x67, 0x86, 0x5e, 0xe5, 0x21, 0x13, 0x86,
+	0x9b, 0x19, 0x4d, 0xcd, 0x44, 0xda, 0x10, 0x82, 0x5f, 0x81, 0x15, 0x77, 0xb3, 0x1c, 0x77, 0x5f,
+	0x30, 0x0c, 0x9b, 0x78, 0x63, 0xb7, 0x80, 0x6d, 0x82, 0x99, 0x72, 0xcd, 0xa5, 0x28, 0x3d, 0xa5,
+	0x76, 0xa5, 0x32, 0xbd, 0xd9, 0xb3, 0x3e, 0x4d, 0xb3, 0x87, 0xce, 0xf0, 0x24, 0xc1, 0x5f, 0x78,
+	0x86, 0x64, 0x01, 0xa0, 0xff, 0x70, 0x67, 0x7f, 0xbf, 0x47, 0x46, 0xdc, 0x1a, 0xa6, 0x0d, 0x2c,
+	0x21, 0xbc, 0x5f, 0x99, 0x0a, 0xb8, 0xdd, 0x6d, 0x9d, 0xb8, 0x0a, 0x62, 0xa7, 0xd1, 0x87, 0x69,
+	0xdf, 0xa1, 0x25, 0x9e, 0x24, 0x21, 0x9b, 0xe2, 0xaf, 0xbd, 0x40, 0x52, 0x60, 0x40, 0xba, 0xd1,
+	0x61, 0x53, 0x16, 0xc9, 0x04, 0x54, 0xe3, 0x42, 0x1b, 0x08, 0xda, 0xe0, 0x05, 0x4c, 0x43, 0x94,
+	0x84, 0x42, 0x9d, 0xc1, 0x6d, 0x89, 0x27, 0x89, 0x3d, 0x8e, 0x62, 0xfa, 0x1d, 0xb4, 0xcc, 0x93,
+	0xc4, 0xee, 0x29, 0xbe, 0x05, 0xec, 0xeb, 0x59, 0x8e, 0x3f, 0xac, 0x40, 0x67, 0xed, 0xbd, 0x7a,
+	0xcb, 0x2b, 0x76, 0x39, 0x22, 0xbb, 0xbd, 0x1e, 0x81, 0x2d, 0x2f, 0x64, 0x3b, 0x68, 0xf1, 0xa9,
+	0xd4, 0x6c, 0x84, 0x5b, 0xc0, 0x74, 0x23, 0xcb, 0xf1, 0xb5, 0x02, 0x72, 0x3c, 0xad, 0xea, 0x45,
+	0xad, 0x6e, 0x41, 0x24, 0xd3, 0x90, 0x68, 0x23, 0x15, 0x1d, 0x43, 0x9d, 0xef, 0x24, 0x6f, 0xa1,
+	0xa5, 0xc3, 0x20, 0x8c, 0xd3, 0x63, 0xbc, 0xe9, 0x7b, 0x8a, 0xc3, 0x80, 0x67, 0xa5, 0xc3, 0xf6,
+	0xd2, 0x63, 0xe0, 0xb8, 0xcb, 0x66, 0xed, 0x48, 0xd2, 0x43, 0xfb, 0x46, 0x85, 0x04, 0x45, 0x97,
+	0xdc, 0xbf, 0xda, 0xa5, 0xdb, 0x40, 0xf4, 0x59, 0x96, 0xe3, 0x4f, 0x4e, 0x0d, 0x3a, 0xcd, 0x4e,
+	0x05, 0x2e, 0xfb, 0x7e, 0x4e, 0x72, 0xa7, 0xd1, 0xbf, 0xe8, 0xfe, 0x79, 0xce, 0xbc, 0x78, 0xc8,
+	0x66, 0x89, 0xc2, 0xaf, 0x02, 0xf1, 0x6f, 0xb3, 0x1c, 0x5f, 0x29, 0x20, 0xa0, 0x7b, 0xe3, 0x2e,
+	0x9b, 0x79, 0xb5, 0x1f, 0x19, 0xcc, 0xb4, 0x61, 0x36, 0xf8, 0x14, 0x32, 0xdf, 0x20, 0x04, 0x65,
+	0xd0, 0x01, 0x0b, 0xc7, 0x0c, 0xff, 0xda, 0xdb, 0x77, 0x87, 0xaf, 0x59, 0xbc, 0x4a, 0x10, 0xaf,
+	0xdf, 0xb3, 0x18, 0x54, 0x51, 0x50, 0xdb, 0x27, 0x11, 0x15, 0x76, 0xbf, 0xce, 0x81, 0x6c, 0xd7,
+	0x8a, 0x0a, 0xb4, 0x10, 0x53, 0xa5, 0x71, 0x07, 0xa8, 0x1e, 0x67, 0x39, 0xde, 0x77, 0x48, 0xe5,
+	0x4e, 0x9d, 0xd2, 0x9d, 0x9c, 0xbb, 0x4a, 0x41, 0x36, 0xb7, 0x7b, 0xa5, 0x6f, 0x25, 0xd4, 0x25,
+	0xdc, 0x0d, 0x3d, 0x13, 0x50, 0x2f, 0x96, 0x09, 0x8e, 0xda, 0xcb, 0xb8, 0x2e, 0x4f, 0x0d, 0x12,
+	0x10, 0xb0, 0x6e, 0xa1, 0xe5, 0x98, 0xa6, 0x8a, 0x07, 0x0c, 0xaf, 0xc0, 0x92, 0x1f, 0x66, 0x39,
+	0xfe, 0x6d, 0x05, 0xc2, 0x26, 0xfc, 0xea, 0x61, 0x8f, 0xb4, 0xc2, 0x98, 0x6b, 0xeb, 0x42, 0xf3,
+	0x97, 0xa7, 0x4a, 0xee, 0x36, 0x5a, 0x8e, 0xb9, 0x60, 0x6a, 0x4a, 0x71, 0xd7, 0x3b, 0xec, 0x12,
+	0x04, 0x9e, 0x57, 0xfb, 0x2c, 0x91, 0x0a, 0xac, 0xb8, 0xf6, 0xba, 0x4a, 0xe2, 0x1e, 0x5a, 0x12,
+	0xa3, 0xa9, 0xad, 0x4e, 0xaf, 0x78, 0xf7, 0xec, 0x02, 0x83, 0xed, 0x23, 0xdd, 0x63, 0xc3, 0x94,
+	0xa0, 0x51, 0x39, 0x5d, 0x93, 0x0e, 0x4b, 0x22, 0x39, 0x83, 0xa3, 0xb9, 0x23, 0x87, 0xd6, 0x76,
+	0x0a, 0xf9, 0x7f, 0x6e, 0xa2, 0xf3, 0x22, 0xd6, 0x75, 0xb7, 0x62, 0x0b, 0x48, 0xff, 0x2e, 0xcb,
+	0x71, 0x3c, 0x3f, 0x02, 0xaa, 0x3d, 0x71, 0x97, 0x21, 0xff, 0xa4, 0x53, 0x1b, 0x82, 0xa9, 0x26,
+	0xb4, 0xaa, 0x80, 0xd7, 0x48, 0x5d, 0x15, 0x73, 0x61, 0x98, 0x1a, 0x51, 0x7b, 0x0c, 0xcc, 0x1c,
+	0x31, 0x26, 0xc8, 0xd6, 0xcd, 0xc7, 0x6d, 0x08, 0x2e, 0xf7, 0xf7, 0x06, 0x94, 0x0e, 0xc8, 0x90,
+	0x06, 0x87, 0x4c, 0x84, 0x36, 0x6f, 0xce, 0x2d, 0x77, 0x1f, 0x9d, 0x15, 0xb1, 0x86, 0xaa, 0x00,
+	0x6f, 0x83, 0x52, 0xbf, 0xcb, 0x72, 0x7c, 0xa3, 0x46, 0x41, 0xa1, 0x77, 0x9c, 0x42, 0x5e, 0xa0,
+	0xd2, 0xa0, 0x10, 0x48, 0xec, 0x34, 0xfa, 0xb5, 0xf4, 0x00, 0x2d, 0xc9, 0x21, 0x8b, 0xf8, 0x31,
+	0x7e, 0xcd, 0x0b, 0x53, 0x05, 0x36, 0x77, 0xef, 0x7b, 0xaf, 0xca, 0xa2, 0x70, 0x2d, 0xd9, 0x15,
+	0x65, 0x7c, 0x22, 0x5d, 0xb8, 0xe8, 0xd9, 0xed, 0x2b, 0xa6, 0x1d, 0xa0, 0xb3, 0x32, 0xd0, 0x49,
+	0x9c, 0x46, 0x0c, 0xbf, 0xee, 0xc5, 0xaa, 0x0a, 0x05, 0x25, 0xd7, 0x5a, 0xd6, 0xcc, 0x26, 0x4a,
+	0x0a, 0x5b, 0x74, 0x7e, 0xd3, 0x1e, 0xf4, 0x88, 0x62, 0x3a, 0x91, 0xb6, 0xa0, 0x8d, 0x29, 0x17,
+	0x86, 0xda, 0xb3, 0xf5, 0x0e, 0xbb, 0x9e, 0xce, 0xd0, 0xb2, 0x8c, 0x66, 0x71, 0x92, 0x6a, 0xbc,
+	0xe3, 0x85, 0xf2, 0x12, 0x04, 0xfa, 0xcf, 0xda, 0x10, 0x57, 0xaa, 0xfc, 0xe4, 0x67, 0xa6, 0x2a,
+	0xb3, 0x7a, 0x11, 0xb7, 0x68, 0x2d, 0x59, 0xa3, 0x2a, 0x69, 0xb6, 0xd0, 0xa2, 0x4c, 0x98, 0xa2,
+	0xf8, 0x0d, 0xcf, 0x35, 0x1d, 0x34, 0x57, 0xba, 0xbd, 0x51, 0x6d, 0x4d, 0xcf, 0xd6, 0x9a, 0x33,
+	0xd2, 0x1a, 0xbb, 0xab, 0x5e, 0x21, 0xdb, 0x41, 0x4b, 0xc9, 0x44, 0x0e, 0xa5, 0xc6, 0xbb, 0x9e,
+	0x97, 0x14, 0x18, 0x30, 0xe0, 0x8a, 0xa1, 0x5f, 0xf4, 0x59, 0xea, 0xd7, 0x2e, 0xe5, 0xfe, 0x80,
+	0x96, 0x13, 0x7e, 0x48, 0x83, 0x49, 0x8a, 0xdf, 0x04, 0x9a, 0xf7, 0xb3, 0x1c, 0xbf, 0x5b, 0x81,
+	0xf5, 0x8d, 0xa8, 0xed, 0xfa, 0x14, 0xad, 0xde, 0xae, 0x7d, 0x99, 0x72, 0x78, 0x17, 0x2d, 0x24,
+	0xfc, 0x30, 0xc5, 0x77, 0x60, 0xee, 0xa7, 0x59, 0x8e, 0x37, 0x1c, 0x02, 0x0a, 0x7c, 0x90, 0x4c,
+	0x66, 0x9a, 0xdb, 0x64, 0xed, 0x17, 0xb6, 0x13, 0x2a, 0x42, 0x9b, 0xf3, 0xb9, 0x20, 0xed, 0x2e,
+	0xb8, 0x3d, 0x4c, 0x88, 0x11, 0x4a, 0x0e, 0xf9, 0x88, 0xda, 0x1d, 0x9c, 0xe1, 0x5f, 0x79, 0xd5,
+	0xa7, 0x87, 0xbb, 0x1b, 0xe8, 0x66, 0xca, 0xa3, 0x90, 0x04, 0x70, 0x0f, 0x25, 0xbd, 0xbb, 0xbb,
+	0x64, 0xc2, 0x99, 0xa2, 0x2a, 0x98, 0x70, 0xe6, 0x12, 0x76, 0xcc, 0x85, 0xcb, 0x4c, 0x4c, 0x19,
+	0xd7, 0x01, 0x82, 0xf8, 0xe2, 0x13, 0xf5, 0xd1, 0x62, 0x12, 0xa5, 0x46, 0xe2, 0xbb, 0x7e, 0x17,
+	0x09, 0x20, 0x77, 0xdd, 0xdc, 0x67, 0x11, 0x8b, 0x99, 0x51, 0xb3, 0xb9, 0xbc, 0x12, 0x17, 0xf5,
+	0xb4, 0x5d, 0x65, 0xc8, 0x23, 0x7b, 0xa1, 0xb1, 0x47, 0xe2, 0xe6, 0xb5, 0xd1, 0x62, 0x22, 0x85,
+	0xd4, 0xf8, 0x9e, 0xd7, 0x43, 0x72, 0x50, 0x15, 0x2b, 0xdf, 0x2c, 0x2b, 0x72, 0x1b, 0xb0, 0xd2,
+	0xc4, 0x6f, 0x45, 0x39, 0xc1, 0x2f, 0xd1, 0x62, 0xa2, 0xb8, 0x8e, 0xf1, 0x9e, 0x77, 0x1e, 0x0e,
+	0x02, 0xc5, 0x5e, 0x19, 0xdd, 0x3c, 0x0e, 0xe0, 0x02, 0xbf, 0xed, 0xca, 0x79, 0x98, 0x0a, 0xc3,
+	0x6d, 0x84, 0xe0, 0x8f, 0xab, 0x7f, 0xef, 0x7b, 0xf3, 0x3d, 0xdc, 0x75, 0x8c, 0x7a, 0xf6, 0x99,
+	0x00, 0x00, 0x1b, 0x53, 0x0f, 0xef, 0x5b, 0xe1, 0x32, 0x25, 0xe3, 0xc7, 0x5e, 0xe0, 0xf3, 0x70,
+	0x17, 0x10, 0xbc, 0x6a, 0xc9, 0xed, 0x4b, 0xe9, 0x03, 0xae, 0xc0, 0xf0, 0xe5, 0x43, 0x74, 0x36,
+	0x51, 0xd2, 0xb0, 0x43, 0xc3, 0xf1, 0x37, 0xc0, 0xb9, 0x95, 0xe5, 0x78, 0xb3, 0x46, 0x81, 0xf1,
+	0x93, 0x22, 0x92, 0xbb, 0x34, 0x34, 0xb7, 0xf1, 0xad, 0x40, 0xaa, 0x54, 0x93, 0xe3, 0xb2, 0x31,
+	0xe4, 0xa5, 0x8d, 0x9a, 0xe3, 0x16, 0x5a, 0x54, 0xd0, 0x7c, 0xc5, 0x7e, 0xee, 0x54, 0xae, 0xfb,
+	0xda, 0xef, 0x5e, 0x7e, 0xe3, 0x1e, 0x94, 0x8e, 0x50, 0xca, 0xb6, 0xfd, 0xa4, 0x51, 0xc8, 0xfc,
+	0x2d, 0x5a, 0x54, 0x32, 0x62, 0xc7, 0xb8, 0x07, 0xf3, 0x77, 0xb2, 0x1c, 0x77, 0x0a, 0x08, 0xf4,
+	0xfb, 0xdc, 0xaf, 0x1b, 0xcb, 0x70, 0x52, 0xde, 0xe2, 0xd6, 0xac, 0x1c, 0x89, 0x69, 0x92, 0x94,
+	0xb7, 0x5c, 0x16, 0xdb, 0x54, 0xc0, 0x40, 0xc9, 0x82, 0xe5, 0x4f, 0x68, 0x41, 0x07, 0x3c, 0xc6,
+	0x1f, 0xc0, 0x02, 0x5f, 0x67, 0x39, 0xfe, 0xdc, 0x21, 0xc0, 0xff, 0x91, 0x4b, 0xe6, 0xae, 0xb1,
+	0x61, 0xb3, 0xe3, 0x5a, 0x07, 0x3a, 0xa9, 0xa4, 0xaa, 0x1b, 0xe7, 0x9a, 0x3e, 0x6e, 0xe2, 0x33,
+	0x74, 0x46, 0xb3, 0x10, 0xff, 0x09, 0x18, 0x47, 0x59, 0x8e, 0x87, 0x00, 0x00, 0xe1, 0x23, 0x68,
+	0x79, 0xaf, 0x9d, 0xec, 0x79, 0xf3, 0xff, 0x63, 0xcf, 0x5b, 0x4f, 0x68, 0xc2, 0x4e, 0x74, 0xbd,
+	0x61, 0x8d, 0x2e, 0x3a, 0xab, 0xad, 0x66, 0x82, 0x45, 0xb8, 0x0f, 0x0a, 0x5c, 0xcd, 0x72, 0xfc,
+	0x41, 0x8d, 0x82, 0x16, 0xaf, 0x89, 0x22, 0x49, 0xce, 0x5b, 0x6d, 0x2d, 0x74, 0x1b, 0x9d, 0x85,
+	0xc0, 0xaf, 0xd2, 0x18, 0x0f, 0x80, 0xe6, 0x4a, 0x96, 0xe3, 0xd5, 0x1a, 0x75, 0x71, 0xc8, 0x46,
+	0x91, 0xb9, 0xce, 0x55, 0x3d, 0x7e, 0x0f, 0x9d, 0xd7, 0xdc, 0xb0, 0x83, 0xc0, 0xb5, 0x38, 0xf0,
+	0x5b, 0x9e, 0x32, 0x2f, 0xdb, 0x91, 0xa2, 0xf7, 0x51, 0x85, 0xd7, 0xf3, 0x60, 0x04, 0x85, 0xf8,
+	0x4e, 0xa3, 0x3f, 0x27, 0xd4, 0x45, 0x4b, 0xda, 0x28, 0x46, 0x0f, 0xf1, 0xbe, 0xe7, 0xc9, 0x05,
+	0xe6, 0x3a, 0xeb, 0x03, 0x43, 0x8d, 0xbd, 0x25, 0x14, 0x1d, 0x05, 0xe9, 0xf7, 0x73, 0x4a, 0xc1,
+	0xef, 0xd0, 0x79, 0x93, 0xc4, 0xf5, 0x0d, 0xe1, 0x91, 0xd7, 0xe3, 0x9b, 0x1b, 0x01, 0xca, 0x77,
+	0x4f, 0x5c, 0x4a, 0xea, 0xfb, 0xc1, 0x7e, 0x6f, 0xcf, 0x9a, 0xd0, 0xfc, 0x14, 0x89, 0x2e, 0x15,
+	0x7d, 0x4f, 0x0a, 0x0e, 0xc7, 0x14, 0x7e, 0x00, 0xfc, 0xed, 0x2c, 0xc7, 0x7f, 0x3c, 0x35, 0x08,
+	0xf6, 0x7f, 0xad, 0x35, 0xa8, 0x7a, 0xee, 0x34, 0x9c, 0xda, 0xe8, 0xa8, 0xc1, 0x98, 0x5c, 0x40,
+	0xb3, 0x67, 0x1d, 0x2a, 0x7a, 0x14, 0xd9, 0xd5, 0x4e, 0x11, 0xfc, 0x11, 0x2d, 0x4c, 0xd9, 0x98,
+	0xe2, 0xcb, 0xde, 0x77, 0x01, 0x40, 0xea, 0x94, 0xd5, 0x9e, 0x73, 0x5f, 0xfb, 0x1e, 0x0f, 0xbb,
+	0x7d, 0x6b, 0xa8, 0x20, 0xf6, 0x35, 0x3a, 0x33, 0x65, 0x0a, 0x3f, 0xf4, 0x8e, 0xc6, 0x02, 0x75,
+	0x2d, 0x5a, 0xe5, 0x2b, 0x5b, 0x77, 0x42, 0xd2, 0x82, 0x53, 0x06, 0xa1, 0x1f, 0xd0, 0xa5, 0x29,
+	0xa7, 0x07, 0x34, 0xe1, 0xe5, 0x17, 0x25, 0xfc, 0x04, 0x88, 0xfa, 0x59, 0x8e, 0xef, 0x9f, 0x1a,
+	0x74, 0xee, 0xba, 0x03, 0xa9, 0x46, 0x93, 0x76, 0xff, 0x41, 0xc7, 0xf5, 0x23, 0x5c, 0xce, 0x68,
+	0xf5, 0x76, 0xdd, 0x45, 0xfe, 0x9b, 0xa1, 0x95, 0xa7, 0x43, 0x6e, 0xef, 0xb1, 0xe5, 0x09, 0xae,
+	0xef, 0x34, 0xfa, 0x17, 0xa6, 0x9c, 0xb6, 0x12, 0x5e, 0x1c, 0xc9, 0xca, 0xbf, 0x37, 0xd1, 0xf9,
+	0x29, 0xa7, 0x75, 0xed, 0xf6, 0x2d, 0xac, 0xfd, 0x2c, 0xcb, 0xf1, 0x74, 0x7e, 0x04, 0x16, 0x1e,
+	0xfe, 0xff, 0x7c, 0x69, 0xaa, 0xfd, 0xed, 0xb4, 0xb2, 0xd6, 0x1e, 0xe6, 0xd6, 0xfd, 0x1e, 0x2d,
+	0x4f, 0x65, 0x1a, 0x4c, 0x98, 0xc2, 0x6f, 0x83, 0x72, 0x9b, 0x59, 0x8e, 0x6f, 0x55, 0x20, 0x9c,
+	0xff, 0x46, 0x15, 0x47, 0x5a, 0xc6, 0xde, 0xde, 0xa4, 0x6b, 0x72, 0x54, 0x5d, 0xb0, 0xb2, 0x35,
+	0xc9, 0xc5, 0xd3, 0xb2, 0x47, 0x50, 0xcd, 0xbf, 0x8d, 0xce, 0x4c, 0x93, 0x18, 0xbf, 0xe3, 0x5d,
+	0xbf, 0x2c, 0x50, 0x9d, 0xde, 0x5b, 0x75, 0xbd, 0x52, 0x34, 0x44, 0x8a, 0x52, 0xd1, 0x1d, 0x61,
+	0x12, 0xaf, 0xb4, 0xd0, 0xd2, 0x34, 0x8d, 0x12, 0x7e, 0x8c, 0xdf, 0xf5, 0x4c, 0xa0, 0xc0, 0xdc,
+	0xdd, 0xc6, 0xf5, 0xbb, 0x44, 0x48, 0xa6, 0x9c, 0x1d, 0x79, 0xf3, 0x4b, 0xa1, 0x1f, 0xd0, 0xd2,
+	0x11, 0x55, 0x21, 0x13, 0x78, 0xd5, 0x6f, 0x2f, 0x38, 0x0c, 0x28, 0x7a, 0x2d, 0x61, 0xef, 0x91,
+	0x65, 0x19, 0x59, 0xee, 0x9f, 0x99, 0x50, 0x43, 0x12, 0xa6, 0xb8, 0x0c, 0x6d, 0x41, 0x12, 0xcd,
+	0x48, 0x30, 0x61, 0xc1, 0xa1, 0x5b, 0x6c, 0x14, 0xd1, 0xb1, 0x26, 0x53, 0xaa, 0xb8, 0x2d, 0x1a,
+	0xab, 0xdd, 0xe0, 0x5a, 0xa7, 0xae, 0xbd, 0x50, 0xf0, 0x6f, 0xa3, 0xe5, 0x23, 0x2e, 0xc6, 0x31,
+	0x15, 0xf8, 0x3d, 0xff, 0x2b, 0x51, 0x01, 0xce, 0x95, 0x6f, 0xaf, 0x0c, 0x4a, 0x9a, 0x81, 0xdb,
+	0x54, 0xbb, 0x97, 0x85, 0xe0, 0xe6, 0x59, 0xb4, 0x14, 0xc0, 0x27, 0xcc, 0xcd, 0x3f, 0x37, 0x7f,
+	0xfc, 0x69, 0xb5, 0xf1, 0x97, 0x9f, 0x56, 0x1b, 0xbf, 0xfc, 0xb4, 0xda, 0xfc, 0xf3, 0xf3, 0xd5,
+	0xe6, 0x7f, 0x3c, 0x5f, 0x6d, 0xfe, 0xe7, 0xf3, 0xd5, 0xe6, 0x8f, 0xcf, 0x57, 0x9b, 0xff, 0xfd,
+	0x7c, 0xb5, 0xf9, 0x3f, 0xcf, 0x57, 0x1b, 0xbf, 0x3c, 0x5f, 0x6d, 0xfe, 0xe3, 0xcf, 0xab, 0x8d,
+	0x1f, 0x7f, 0x5e, 0x6d, 0xfc, 0xe5, 0xe7, 0xd5, 0xc6, 0xb7, 0x77, 0xc6, 0x32, 0x39, 0x1c, 0xaf,
+	0x97, 0x1f, 0x1a, 0xd6, 0x53, 0xbd, 0x01, 0x7f, 0xec, 0xb6, 0xaf, 0x41, 0xec, 0x08, 0x99, 0x5a,
+	0x2b, 0x87, 0x37, 0x92, 0xe1, 0x58, 0x6e, 0xb0, 0x63, 0x53, 0x7c, 0x5e, 0x9d, 0xfb, 0xca, 0x3a,
+	0x5c, 0x82, 0xcf, 0xab, 0x9f, 0xfe, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4b, 0xf3, 0x9d, 0x8b,
+	0xc3, 0x1d, 0x00, 0x00,
 }
 
 func (this *ServiceChoice) Equal(that interface{}) bool {
@@ -651,6 +1386,30 @@ func (this *ServiceChoice) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Aipconnector) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Aipconnector)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Aipconnector)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Aipconnector != that1.Aipconnector {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Akar) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -675,6 +1434,54 @@ func (this *ServiceChoice_Akar) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_AkarReadonly) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_AkarReadonly)
+	if !ok {
+		that2, ok := that.(ServiceChoice_AkarReadonly)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AkarReadonly != that1.AkarReadonly {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_AkarDnsdomain) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_AkarDnsdomain)
+	if !ok {
+		that2, ok := that.(ServiceChoice_AkarDnsdomain)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AkarDnsdomain != that1.AkarDnsdomain {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Ares) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -695,6 +1502,30 @@ func (this *ServiceChoice_Ares) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Ares != that1.Ares {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Aspen) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Aspen)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Aspen)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Aspen != that1.Aspen {
 		return false
 	}
 	return true
@@ -795,6 +1626,78 @@ func (this *ServiceChoice_Barracute) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Bdbewaf) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Bdbewaf)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Bdbewaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Bdbewaf != that1.Bdbewaf {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Bfdp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Bfdp)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Bfdp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Bfdp != that1.Bfdp {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Bifrost) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Bifrost)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Bifrost)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Bifrost != that1.Bifrost {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Blindfold) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -839,6 +1742,54 @@ func (this *ServiceChoice_Bolt) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Bolt != that1.Bolt {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Brmalerts) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Brmalerts)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Brmalerts)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Brmalerts != that1.Brmalerts {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Cdnconnectorsvc) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Cdnconnectorsvc)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Cdnconnectorsvc)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Cdnconnectorsvc != that1.Cdnconnectorsvc {
 		return false
 	}
 	return true
@@ -891,6 +1842,78 @@ func (this *ServiceChoice_Charmandercar) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_ClientSideDefense) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_ClientSideDefense)
+	if !ok {
+		that2, ok := that.(ServiceChoice_ClientSideDefense)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ClientSideDefense != that1.ClientSideDefense {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Conprof) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Conprof)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Conprof)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Conprof != that1.Conprof {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Doscontroller) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Doscontroller)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Doscontroller)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Doscontroller != that1.Doscontroller {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Drogon) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -911,6 +1934,30 @@ func (this *ServiceChoice_Drogon) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Drogon != that1.Drogon {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Dymo) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Dymo)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Dymo)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Dymo != that1.Dymo {
 		return false
 	}
 	return true
@@ -939,6 +1986,102 @@ func (this *ServiceChoice_Eywa) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_EywaReadonly) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_EywaReadonly)
+	if !ok {
+		that2, ok := that.(ServiceChoice_EywaReadonly)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.EywaReadonly != that1.EywaReadonly {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Eywaprime) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Eywaprime)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Eywaprime)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Eywaprime != that1.Eywaprime {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_EywaprimeReadonly) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_EywaprimeReadonly)
+	if !ok {
+		that2, ok := that.(ServiceChoice_EywaprimeReadonly)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.EywaprimeReadonly != that1.EywaprimeReadonly {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Ganges) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ganges)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ganges)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ganges != that1.Ganges {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Griffin) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -959,6 +2102,54 @@ func (this *ServiceChoice_Griffin) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Griffin != that1.Griffin {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Hellas) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Hellas)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Hellas)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Hellas != that1.Hellas {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Iapetus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Iapetus)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Iapetus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Iapetus != that1.Iapetus {
 		return false
 	}
 	return true
@@ -987,6 +2178,150 @@ func (this *ServiceChoice_Identityauthority) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Ipp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ipp)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ipp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ipp != that1.Ipp {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Ippdev) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ippdev)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ippdev)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ippdev != that1.Ippdev {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Ippprom) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ippprom)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ippprom)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ippprom != that1.Ippprom {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Josef) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Josef)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Josef)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Josef != that1.Josef {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Kcdmux) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Kcdmux)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Kcdmux)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Kcdmux != that1.Kcdmux {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_KcdmuxReadonly) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_KcdmuxReadonly)
+	if !ok {
+		that2, ok := that.(ServiceChoice_KcdmuxReadonly)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.KcdmuxReadonly != that1.KcdmuxReadonly {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Keypr) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1011,6 +2346,54 @@ func (this *ServiceChoice_Keypr) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_LilacEdge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_LilacEdge)
+	if !ok {
+		that2, ok := that.(ServiceChoice_LilacEdge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.LilacEdge != that1.LilacEdge {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Mars) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Mars)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Mars)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Mars != that1.Mars {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Maurice) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1031,6 +2414,102 @@ func (this *ServiceChoice_Maurice) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Maurice != that1.Maurice {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Minerva) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Minerva)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Minerva)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Minerva != that1.Minerva {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Nfvsvc) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Nfvsvc)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Nfvsvc)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Nfvsvc != that1.Nfvsvc {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Nmsconnector) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Nmsconnector)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Nmsconnector)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Nmsconnector != that1.Nmsconnector {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Nmsproxy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Nmsproxy)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Nmsproxy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Nmsproxy != that1.Nmsproxy {
 		return false
 	}
 	return true
@@ -1083,6 +2562,30 @@ func (this *ServiceChoice_Ocspmule) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Olympus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Olympus)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Olympus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Olympus != that1.Olympus {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Opera) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1103,6 +2606,30 @@ func (this *ServiceChoice_Opera) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Opera != that1.Opera {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Phobos) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Phobos)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Phobos)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Phobos != that1.Phobos {
 		return false
 	}
 	return true
@@ -1131,6 +2658,30 @@ func (this *ServiceChoice_Pikachu) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Piku) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Piku)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Piku)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Piku != that1.Piku {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Pkifactory) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1151,6 +2702,150 @@ func (this *ServiceChoice_Pkifactory) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Pkifactory != that1.Pkifactory {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Pluto) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Pluto)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Pluto)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Pluto != that1.Pluto {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Ponos) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ponos)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ponos)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ponos != that1.Ponos {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Prism) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Prism)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Prism)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Prism != that1.Prism {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Prismprime) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Prismprime)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Prismprime)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Prismprime != that1.Prismprime {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Prometheus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Prometheus)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Prometheus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Prometheus != that1.Prometheus {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Protekti) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Protekti)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Protekti)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Protekti != that1.Protekti {
 		return false
 	}
 	return true
@@ -1179,6 +2874,126 @@ func (this *ServiceChoice_Rakar) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Rolex) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Rolex)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Rolex)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Rolex != that1.Rolex {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Scim) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Scim)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Scim)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Scim != that1.Scim {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Sed) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Sed)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Sed)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Sed != that1.Sed {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Sentinel) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Sentinel)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Sentinel)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Sentinel != that1.Sentinel {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Spectrum) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Spectrum)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Spectrum)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Spectrum != that1.Spectrum {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_SiteConsole) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1203,6 +3018,78 @@ func (this *ServiceChoice_SiteConsole) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ServiceChoice_Streak) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Streak)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Streak)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Streak != that1.Streak {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Tpmauthority) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Tpmauthority)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Tpmauthority)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Tpmauthority != that1.Tpmauthority {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Trafficactioner) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Trafficactioner)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Trafficactioner)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Trafficactioner != that1.Trafficactioner {
+		return false
+	}
+	return true
+}
 func (this *ServiceChoice_Vega) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1223,6 +3110,78 @@ func (this *ServiceChoice_Vega) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Vega != that1.Vega {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Ver) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Ver)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Ver)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ver != that1.Ver {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_ViaApiService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_ViaApiService)
+	if !ok {
+		that2, ok := that.(ServiceChoice_ViaApiService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ViaApiService != that1.ViaApiService {
+		return false
+	}
+	return true
+}
+func (this *ServiceChoice_Viaconnector) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ServiceChoice_Viaconnector)
+	if !ok {
+		that2, ok := that.(ServiceChoice_Viaconnector)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Viaconnector != that1.Viaconnector {
 		return false
 	}
 	return true
@@ -1347,185 +3306,25 @@ func (this *ServiceChoice_Wingman) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ServiceChoice_Shape) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Shape)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Shape)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Shape != that1.Shape {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_Hellas) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Hellas)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Hellas)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Hellas != that1.Hellas {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_Nfvsvc) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Nfvsvc)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Nfvsvc)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Nfvsvc != that1.Nfvsvc {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_Scim) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Scim)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Scim)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Scim != that1.Scim {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_LilacEdge) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_LilacEdge)
-	if !ok {
-		that2, ok := that.(ServiceChoice_LilacEdge)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.LilacEdge != that1.LilacEdge {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_Doscontroller) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Doscontroller)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Doscontroller)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Doscontroller != that1.Doscontroller {
-		return false
-	}
-	return true
-}
-func (this *ServiceChoice_Minerva) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ServiceChoice_Minerva)
-	if !ok {
-		that2, ok := that.(ServiceChoice_Minerva)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Minerva != that1.Minerva {
-		return false
-	}
-	return true
-}
 func (this *ServiceChoice) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 40)
+	s := make([]string, 0, 84)
 	s = append(s, "&vesenv.ServiceChoice{")
 	if this.Choice != nil {
 		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *ServiceChoice_Aipconnector) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Aipconnector{` +
+		`Aipconnector:` + fmt.Sprintf("%#v", this.Aipconnector) + `}`}, ", ")
+	return s
 }
 func (this *ServiceChoice_Akar) GoString() string {
 	if this == nil {
@@ -1535,12 +3334,36 @@ func (this *ServiceChoice_Akar) GoString() string {
 		`Akar:` + fmt.Sprintf("%#v", this.Akar) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_AkarReadonly) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_AkarReadonly{` +
+		`AkarReadonly:` + fmt.Sprintf("%#v", this.AkarReadonly) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_AkarDnsdomain) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_AkarDnsdomain{` +
+		`AkarDnsdomain:` + fmt.Sprintf("%#v", this.AkarDnsdomain) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Ares) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Ares{` +
 		`Ares:` + fmt.Sprintf("%#v", this.Ares) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Aspen) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Aspen{` +
+		`Aspen:` + fmt.Sprintf("%#v", this.Aspen) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Asterix) GoString() string {
@@ -1575,6 +3398,30 @@ func (this *ServiceChoice_Barracute) GoString() string {
 		`Barracute:` + fmt.Sprintf("%#v", this.Barracute) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Bdbewaf) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Bdbewaf{` +
+		`Bdbewaf:` + fmt.Sprintf("%#v", this.Bdbewaf) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Bfdp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Bfdp{` +
+		`Bfdp:` + fmt.Sprintf("%#v", this.Bfdp) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Bifrost) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Bifrost{` +
+		`Bifrost:` + fmt.Sprintf("%#v", this.Bifrost) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Blindfold) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1589,6 +3436,22 @@ func (this *ServiceChoice_Bolt) GoString() string {
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Bolt{` +
 		`Bolt:` + fmt.Sprintf("%#v", this.Bolt) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Brmalerts) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Brmalerts{` +
+		`Brmalerts:` + fmt.Sprintf("%#v", this.Brmalerts) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Cdnconnectorsvc) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Cdnconnectorsvc{` +
+		`Cdnconnectorsvc:` + fmt.Sprintf("%#v", this.Cdnconnectorsvc) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Charmander) GoString() string {
@@ -1607,12 +3470,44 @@ func (this *ServiceChoice_Charmandercar) GoString() string {
 		`Charmandercar:` + fmt.Sprintf("%#v", this.Charmandercar) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_ClientSideDefense) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_ClientSideDefense{` +
+		`ClientSideDefense:` + fmt.Sprintf("%#v", this.ClientSideDefense) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Conprof) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Conprof{` +
+		`Conprof:` + fmt.Sprintf("%#v", this.Conprof) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Doscontroller) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Doscontroller{` +
+		`Doscontroller:` + fmt.Sprintf("%#v", this.Doscontroller) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Drogon) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Drogon{` +
 		`Drogon:` + fmt.Sprintf("%#v", this.Drogon) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Dymo) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Dymo{` +
+		`Dymo:` + fmt.Sprintf("%#v", this.Dymo) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Eywa) GoString() string {
@@ -1623,12 +3518,60 @@ func (this *ServiceChoice_Eywa) GoString() string {
 		`Eywa:` + fmt.Sprintf("%#v", this.Eywa) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_EywaReadonly) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_EywaReadonly{` +
+		`EywaReadonly:` + fmt.Sprintf("%#v", this.EywaReadonly) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Eywaprime) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Eywaprime{` +
+		`Eywaprime:` + fmt.Sprintf("%#v", this.Eywaprime) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_EywaprimeReadonly) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_EywaprimeReadonly{` +
+		`EywaprimeReadonly:` + fmt.Sprintf("%#v", this.EywaprimeReadonly) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Ganges) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ganges{` +
+		`Ganges:` + fmt.Sprintf("%#v", this.Ganges) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Griffin) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Griffin{` +
 		`Griffin:` + fmt.Sprintf("%#v", this.Griffin) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Hellas) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Hellas{` +
+		`Hellas:` + fmt.Sprintf("%#v", this.Hellas) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Iapetus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Iapetus{` +
+		`Iapetus:` + fmt.Sprintf("%#v", this.Iapetus) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Identityauthority) GoString() string {
@@ -1639,6 +3582,54 @@ func (this *ServiceChoice_Identityauthority) GoString() string {
 		`Identityauthority:` + fmt.Sprintf("%#v", this.Identityauthority) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Ipp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ipp{` +
+		`Ipp:` + fmt.Sprintf("%#v", this.Ipp) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Ippdev) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ippdev{` +
+		`Ippdev:` + fmt.Sprintf("%#v", this.Ippdev) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Ippprom) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ippprom{` +
+		`Ippprom:` + fmt.Sprintf("%#v", this.Ippprom) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Josef) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Josef{` +
+		`Josef:` + fmt.Sprintf("%#v", this.Josef) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Kcdmux) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Kcdmux{` +
+		`Kcdmux:` + fmt.Sprintf("%#v", this.Kcdmux) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_KcdmuxReadonly) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_KcdmuxReadonly{` +
+		`KcdmuxReadonly:` + fmt.Sprintf("%#v", this.KcdmuxReadonly) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Keypr) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1647,12 +3638,60 @@ func (this *ServiceChoice_Keypr) GoString() string {
 		`Keypr:` + fmt.Sprintf("%#v", this.Keypr) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_LilacEdge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_LilacEdge{` +
+		`LilacEdge:` + fmt.Sprintf("%#v", this.LilacEdge) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Mars) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Mars{` +
+		`Mars:` + fmt.Sprintf("%#v", this.Mars) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Maurice) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Maurice{` +
 		`Maurice:` + fmt.Sprintf("%#v", this.Maurice) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Minerva) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Minerva{` +
+		`Minerva:` + fmt.Sprintf("%#v", this.Minerva) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Nfvsvc) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Nfvsvc{` +
+		`Nfvsvc:` + fmt.Sprintf("%#v", this.Nfvsvc) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Nmsconnector) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Nmsconnector{` +
+		`Nmsconnector:` + fmt.Sprintf("%#v", this.Nmsconnector) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Nmsproxy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Nmsproxy{` +
+		`Nmsproxy:` + fmt.Sprintf("%#v", this.Nmsproxy) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Obelix) GoString() string {
@@ -1671,12 +3710,28 @@ func (this *ServiceChoice_Ocspmule) GoString() string {
 		`Ocspmule:` + fmt.Sprintf("%#v", this.Ocspmule) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Olympus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Olympus{` +
+		`Olympus:` + fmt.Sprintf("%#v", this.Olympus) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Opera) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Opera{` +
 		`Opera:` + fmt.Sprintf("%#v", this.Opera) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Phobos) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Phobos{` +
+		`Phobos:` + fmt.Sprintf("%#v", this.Phobos) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Pikachu) GoString() string {
@@ -1687,12 +3742,68 @@ func (this *ServiceChoice_Pikachu) GoString() string {
 		`Pikachu:` + fmt.Sprintf("%#v", this.Pikachu) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Piku) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Piku{` +
+		`Piku:` + fmt.Sprintf("%#v", this.Piku) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Pkifactory) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Pkifactory{` +
 		`Pkifactory:` + fmt.Sprintf("%#v", this.Pkifactory) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Pluto) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Pluto{` +
+		`Pluto:` + fmt.Sprintf("%#v", this.Pluto) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Ponos) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ponos{` +
+		`Ponos:` + fmt.Sprintf("%#v", this.Ponos) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Prism) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Prism{` +
+		`Prism:` + fmt.Sprintf("%#v", this.Prism) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Prismprime) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Prismprime{` +
+		`Prismprime:` + fmt.Sprintf("%#v", this.Prismprime) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Prometheus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Prometheus{` +
+		`Prometheus:` + fmt.Sprintf("%#v", this.Prometheus) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Protekti) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Protekti{` +
+		`Protekti:` + fmt.Sprintf("%#v", this.Protekti) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Rakar) GoString() string {
@@ -1703,6 +3814,46 @@ func (this *ServiceChoice_Rakar) GoString() string {
 		`Rakar:` + fmt.Sprintf("%#v", this.Rakar) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Rolex) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Rolex{` +
+		`Rolex:` + fmt.Sprintf("%#v", this.Rolex) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Scim) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Scim{` +
+		`Scim:` + fmt.Sprintf("%#v", this.Scim) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Sed) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Sed{` +
+		`Sed:` + fmt.Sprintf("%#v", this.Sed) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Sentinel) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Sentinel{` +
+		`Sentinel:` + fmt.Sprintf("%#v", this.Sentinel) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Spectrum) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Spectrum{` +
+		`Spectrum:` + fmt.Sprintf("%#v", this.Spectrum) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_SiteConsole) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1711,12 +3862,60 @@ func (this *ServiceChoice_SiteConsole) GoString() string {
 		`SiteConsole:` + fmt.Sprintf("%#v", this.SiteConsole) + `}`}, ", ")
 	return s
 }
+func (this *ServiceChoice_Streak) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Streak{` +
+		`Streak:` + fmt.Sprintf("%#v", this.Streak) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Tpmauthority) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Tpmauthority{` +
+		`Tpmauthority:` + fmt.Sprintf("%#v", this.Tpmauthority) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Trafficactioner) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Trafficactioner{` +
+		`Trafficactioner:` + fmt.Sprintf("%#v", this.Trafficactioner) + `}`}, ", ")
+	return s
+}
 func (this *ServiceChoice_Vega) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Vega{` +
 		`Vega:` + fmt.Sprintf("%#v", this.Vega) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Ver) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Ver{` +
+		`Ver:` + fmt.Sprintf("%#v", this.Ver) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_ViaApiService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_ViaApiService{` +
+		`ViaApiService:` + fmt.Sprintf("%#v", this.ViaApiService) + `}`}, ", ")
+	return s
+}
+func (this *ServiceChoice_Viaconnector) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&vesenv.ServiceChoice_Viaconnector{` +
+		`Viaconnector:` + fmt.Sprintf("%#v", this.Viaconnector) + `}`}, ", ")
 	return s
 }
 func (this *ServiceChoice_Voucher) GoString() string {
@@ -1757,62 +3956,6 @@ func (this *ServiceChoice_Wingman) GoString() string {
 	}
 	s := strings.Join([]string{`&vesenv.ServiceChoice_Wingman{` +
 		`Wingman:` + fmt.Sprintf("%#v", this.Wingman) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Shape) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Shape{` +
-		`Shape:` + fmt.Sprintf("%#v", this.Shape) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Hellas) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Hellas{` +
-		`Hellas:` + fmt.Sprintf("%#v", this.Hellas) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Nfvsvc) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Nfvsvc{` +
-		`Nfvsvc:` + fmt.Sprintf("%#v", this.Nfvsvc) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Scim) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Scim{` +
-		`Scim:` + fmt.Sprintf("%#v", this.Scim) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_LilacEdge) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_LilacEdge{` +
-		`LilacEdge:` + fmt.Sprintf("%#v", this.LilacEdge) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Doscontroller) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Doscontroller{` +
-		`Doscontroller:` + fmt.Sprintf("%#v", this.Doscontroller) + `}`}, ", ")
-	return s
-}
-func (this *ServiceChoice_Minerva) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&vesenv.ServiceChoice_Minerva{` +
-		`Minerva:` + fmt.Sprintf("%#v", this.Minerva) + `}`}, ", ")
 	return s
 }
 func valueToGoStringAllServices(v interface{}, typ string) string {
@@ -2380,25 +4523,6 @@ func (m *ServiceChoice_Wingman) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	dAtA[i] = 0xf8
 	return len(dAtA) - i, nil
 }
-func (m *ServiceChoice_Shape) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceChoice_Shape) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i--
-	if m.Shape {
-		dAtA[i] = 1
-	} else {
-		dAtA[i] = 0
-	}
-	i--
-	dAtA[i] = 0x2
-	i--
-	dAtA[i] = 0x80
-	return len(dAtA) - i, nil
-}
 func (m *ServiceChoice_Hellas) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -2475,6 +4599,196 @@ func (m *ServiceChoice_LilacEdge) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	dAtA[i] = 0xa0
 	return len(dAtA) - i, nil
 }
+func (m *ServiceChoice_Aipconnector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Aipconnector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Aipconnector {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_AkarReadonly) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_AkarReadonly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.AkarReadonly {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_AkarDnsdomain) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_AkarDnsdomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.AkarDnsdomain {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Aspen) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Aspen) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Aspen {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Bdbewaf) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Bdbewaf) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Bdbewaf {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Bfdp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Bfdp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Bfdp {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Bifrost) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Bifrost) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Bifrost {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Brmalerts) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Brmalerts) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Brmalerts {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x2
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Cdnconnectorsvc) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Cdnconnectorsvc) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Cdnconnectorsvc {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_ClientSideDefense) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_ClientSideDefense) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.ClientSideDefense {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
+}
 func (m *ServiceChoice_Doscontroller) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -2489,9 +4803,237 @@ func (m *ServiceChoice_Doscontroller) MarshalToSizedBuffer(dAtA []byte) (int, er
 		dAtA[i] = 0
 	}
 	i--
-	dAtA[i] = 0x2
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_EywaReadonly) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_EywaReadonly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.EywaReadonly {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Eywaprime) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Eywaprime) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Eywaprime {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_EywaprimeReadonly) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_EywaprimeReadonly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.EywaprimeReadonly {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
 	i--
 	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ganges) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ganges) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ganges {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Iapetus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Iapetus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Iapetus {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ipp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ipp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ipp {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ippdev) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ippdev) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ippdev {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ippprom) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ippprom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ippprom {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x3
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Josef) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Josef) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Josef {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Kcdmux) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Kcdmux) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Kcdmux {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_KcdmuxReadonly) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_KcdmuxReadonly) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.KcdmuxReadonly {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Mars) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Mars) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Mars {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xa0
 	return len(dAtA) - i, nil
 }
 func (m *ServiceChoice_Minerva) MarshalTo(dAtA []byte) (int, error) {
@@ -2508,9 +5050,446 @@ func (m *ServiceChoice_Minerva) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0
 	}
 	i--
-	dAtA[i] = 0x2
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Nmsconnector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Nmsconnector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Nmsconnector {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
 	i--
 	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Nmsproxy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Nmsproxy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Nmsproxy {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Olympus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Olympus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Olympus {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Phobos) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Phobos) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Phobos {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Piku) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Piku) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Piku {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Pluto) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Pluto) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Pluto {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ponos) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ponos) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ponos {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xe0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Prism) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Prism) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Prism {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xe8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Prismprime) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Prismprime) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Prismprime {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xf0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Protekti) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Protekti) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Protekti {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x4
+	i--
+	dAtA[i] = 0xf8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Rolex) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Rolex) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Rolex {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0x80
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Sed) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Sed) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Sed {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0x88
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Sentinel) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Sentinel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Sentinel {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0x90
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Spectrum) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Spectrum) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Spectrum {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0x98
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Streak) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Streak) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Streak {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xa0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Trafficactioner) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Trafficactioner) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Trafficactioner {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xa8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Ver) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Ver) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Ver {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xb0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Tpmauthority) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Tpmauthority) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Tpmauthority {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xb8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Prometheus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Prometheus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Prometheus {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xc0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_ViaApiService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_ViaApiService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.ViaApiService {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xc8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Viaconnector) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Viaconnector) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Viaconnector {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xd0
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Dymo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Dymo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Dymo {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
+}
+func (m *ServiceChoice_Conprof) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceChoice_Conprof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i--
+	if m.Conprof {
+		dAtA[i] = 1
+	} else {
+		dAtA[i] = 0
+	}
+	i--
+	dAtA[i] = 0x5
+	i--
+	dAtA[i] = 0xe0
 	return len(dAtA) - i, nil
 }
 func encodeVarintAllServices(dAtA []byte, offset int, v uint64) int {
@@ -2797,15 +5776,6 @@ func (m *ServiceChoice_Wingman) Size() (n int) {
 	n += 3
 	return n
 }
-func (m *ServiceChoice_Shape) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	n += 3
-	return n
-}
 func (m *ServiceChoice_Hellas) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2842,6 +5812,96 @@ func (m *ServiceChoice_LilacEdge) Size() (n int) {
 	n += 3
 	return n
 }
+func (m *ServiceChoice_Aipconnector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_AkarReadonly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_AkarDnsdomain) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Aspen) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Bdbewaf) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Bfdp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Bifrost) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Brmalerts) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Cdnconnectorsvc) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_ClientSideDefense) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
 func (m *ServiceChoice_Doscontroller) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2851,7 +5911,322 @@ func (m *ServiceChoice_Doscontroller) Size() (n int) {
 	n += 3
 	return n
 }
+func (m *ServiceChoice_EywaReadonly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Eywaprime) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_EywaprimeReadonly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ganges) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Iapetus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ipp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ippdev) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ippprom) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Josef) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Kcdmux) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_KcdmuxReadonly) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Mars) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
 func (m *ServiceChoice_Minerva) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Nmsconnector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Nmsproxy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Olympus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Phobos) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Piku) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Pluto) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ponos) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Prism) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Prismprime) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Protekti) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Rolex) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Sed) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Sentinel) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Spectrum) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Streak) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Trafficactioner) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Ver) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Tpmauthority) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Prometheus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_ViaApiService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Viaconnector) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Dymo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 3
+	return n
+}
+func (m *ServiceChoice_Conprof) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3167,16 +6542,6 @@ func (this *ServiceChoice_Wingman) String() string {
 	}, "")
 	return s
 }
-func (this *ServiceChoice_Shape) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ServiceChoice_Shape{`,
-		`Shape:` + fmt.Sprintf("%v", this.Shape) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ServiceChoice_Hellas) String() string {
 	if this == nil {
 		return "nil"
@@ -3217,6 +6582,106 @@ func (this *ServiceChoice_LilacEdge) String() string {
 	}, "")
 	return s
 }
+func (this *ServiceChoice_Aipconnector) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Aipconnector{`,
+		`Aipconnector:` + fmt.Sprintf("%v", this.Aipconnector) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_AkarReadonly) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_AkarReadonly{`,
+		`AkarReadonly:` + fmt.Sprintf("%v", this.AkarReadonly) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_AkarDnsdomain) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_AkarDnsdomain{`,
+		`AkarDnsdomain:` + fmt.Sprintf("%v", this.AkarDnsdomain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Aspen) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Aspen{`,
+		`Aspen:` + fmt.Sprintf("%v", this.Aspen) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Bdbewaf) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Bdbewaf{`,
+		`Bdbewaf:` + fmt.Sprintf("%v", this.Bdbewaf) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Bfdp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Bfdp{`,
+		`Bfdp:` + fmt.Sprintf("%v", this.Bfdp) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Bifrost) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Bifrost{`,
+		`Bifrost:` + fmt.Sprintf("%v", this.Bifrost) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Brmalerts) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Brmalerts{`,
+		`Brmalerts:` + fmt.Sprintf("%v", this.Brmalerts) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Cdnconnectorsvc) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Cdnconnectorsvc{`,
+		`Cdnconnectorsvc:` + fmt.Sprintf("%v", this.Cdnconnectorsvc) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_ClientSideDefense) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_ClientSideDefense{`,
+		`ClientSideDefense:` + fmt.Sprintf("%v", this.ClientSideDefense) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ServiceChoice_Doscontroller) String() string {
 	if this == nil {
 		return "nil"
@@ -3227,12 +6692,362 @@ func (this *ServiceChoice_Doscontroller) String() string {
 	}, "")
 	return s
 }
+func (this *ServiceChoice_EywaReadonly) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_EywaReadonly{`,
+		`EywaReadonly:` + fmt.Sprintf("%v", this.EywaReadonly) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Eywaprime) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Eywaprime{`,
+		`Eywaprime:` + fmt.Sprintf("%v", this.Eywaprime) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_EywaprimeReadonly) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_EywaprimeReadonly{`,
+		`EywaprimeReadonly:` + fmt.Sprintf("%v", this.EywaprimeReadonly) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ganges) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ganges{`,
+		`Ganges:` + fmt.Sprintf("%v", this.Ganges) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Iapetus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Iapetus{`,
+		`Iapetus:` + fmt.Sprintf("%v", this.Iapetus) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ipp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ipp{`,
+		`Ipp:` + fmt.Sprintf("%v", this.Ipp) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ippdev) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ippdev{`,
+		`Ippdev:` + fmt.Sprintf("%v", this.Ippdev) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ippprom) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ippprom{`,
+		`Ippprom:` + fmt.Sprintf("%v", this.Ippprom) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Josef) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Josef{`,
+		`Josef:` + fmt.Sprintf("%v", this.Josef) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Kcdmux) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Kcdmux{`,
+		`Kcdmux:` + fmt.Sprintf("%v", this.Kcdmux) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_KcdmuxReadonly) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_KcdmuxReadonly{`,
+		`KcdmuxReadonly:` + fmt.Sprintf("%v", this.KcdmuxReadonly) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Mars) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Mars{`,
+		`Mars:` + fmt.Sprintf("%v", this.Mars) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ServiceChoice_Minerva) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ServiceChoice_Minerva{`,
 		`Minerva:` + fmt.Sprintf("%v", this.Minerva) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Nmsconnector) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Nmsconnector{`,
+		`Nmsconnector:` + fmt.Sprintf("%v", this.Nmsconnector) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Nmsproxy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Nmsproxy{`,
+		`Nmsproxy:` + fmt.Sprintf("%v", this.Nmsproxy) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Olympus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Olympus{`,
+		`Olympus:` + fmt.Sprintf("%v", this.Olympus) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Phobos) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Phobos{`,
+		`Phobos:` + fmt.Sprintf("%v", this.Phobos) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Piku) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Piku{`,
+		`Piku:` + fmt.Sprintf("%v", this.Piku) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Pluto) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Pluto{`,
+		`Pluto:` + fmt.Sprintf("%v", this.Pluto) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ponos) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ponos{`,
+		`Ponos:` + fmt.Sprintf("%v", this.Ponos) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Prism) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Prism{`,
+		`Prism:` + fmt.Sprintf("%v", this.Prism) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Prismprime) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Prismprime{`,
+		`Prismprime:` + fmt.Sprintf("%v", this.Prismprime) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Protekti) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Protekti{`,
+		`Protekti:` + fmt.Sprintf("%v", this.Protekti) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Rolex) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Rolex{`,
+		`Rolex:` + fmt.Sprintf("%v", this.Rolex) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Sed) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Sed{`,
+		`Sed:` + fmt.Sprintf("%v", this.Sed) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Sentinel) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Sentinel{`,
+		`Sentinel:` + fmt.Sprintf("%v", this.Sentinel) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Spectrum) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Spectrum{`,
+		`Spectrum:` + fmt.Sprintf("%v", this.Spectrum) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Streak) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Streak{`,
+		`Streak:` + fmt.Sprintf("%v", this.Streak) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Trafficactioner) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Trafficactioner{`,
+		`Trafficactioner:` + fmt.Sprintf("%v", this.Trafficactioner) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Ver) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Ver{`,
+		`Ver:` + fmt.Sprintf("%v", this.Ver) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Tpmauthority) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Tpmauthority{`,
+		`Tpmauthority:` + fmt.Sprintf("%v", this.Tpmauthority) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Prometheus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Prometheus{`,
+		`Prometheus:` + fmt.Sprintf("%v", this.Prometheus) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_ViaApiService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_ViaApiService{`,
+		`ViaApiService:` + fmt.Sprintf("%v", this.ViaApiService) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Viaconnector) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Viaconnector{`,
+		`Viaconnector:` + fmt.Sprintf("%v", this.Viaconnector) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Dymo) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Dymo{`,
+		`Dymo:` + fmt.Sprintf("%v", this.Dymo) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ServiceChoice_Conprof) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ServiceChoice_Conprof{`,
+		`Conprof:` + fmt.Sprintf("%v", this.Conprof) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3883,27 +7698,6 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := bool(v != 0)
 			m.Choice = &ServiceChoice_Wingman{b}
-		case 32:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Shape", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAllServices
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			b := bool(v != 0)
-			m.Choice = &ServiceChoice_Shape{b}
 		case 33:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Hellas", wireType)
@@ -3988,7 +7782,217 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := bool(v != 0)
 			m.Choice = &ServiceChoice_LilacEdge{b}
-		case 37:
+		case 39:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aipconnector", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Aipconnector{b}
+		case 40:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AkarReadonly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_AkarReadonly{b}
+		case 41:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AkarDnsdomain", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_AkarDnsdomain{b}
+		case 42:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Aspen", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Aspen{b}
+		case 44:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Bdbewaf", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Bdbewaf{b}
+		case 45:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Bfdp", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Bfdp{b}
+		case 46:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Bifrost", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Bifrost{b}
+		case 47:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Brmalerts", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Brmalerts{b}
+		case 48:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cdnconnectorsvc", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Cdnconnectorsvc{b}
+		case 49:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSideDefense", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_ClientSideDefense{b}
+		case 50:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Doscontroller", wireType)
 			}
@@ -4009,7 +8013,259 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := bool(v != 0)
 			m.Choice = &ServiceChoice_Doscontroller{b}
-		case 38:
+		case 51:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EywaReadonly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_EywaReadonly{b}
+		case 52:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Eywaprime", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Eywaprime{b}
+		case 53:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EywaprimeReadonly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_EywaprimeReadonly{b}
+		case 54:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ganges", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ganges{b}
+		case 55:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Iapetus", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Iapetus{b}
+		case 56:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipp", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ipp{b}
+		case 59:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ippdev", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ippdev{b}
+		case 62:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ippprom", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ippprom{b}
+		case 65:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Josef", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Josef{b}
+		case 66:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Kcdmux", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Kcdmux{b}
+		case 67:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KcdmuxReadonly", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_KcdmuxReadonly{b}
+		case 68:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mars", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Mars{b}
+		case 69:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Minerva", wireType)
 			}
@@ -4030,6 +8286,489 @@ func (m *ServiceChoice) Unmarshal(dAtA []byte) error {
 			}
 			b := bool(v != 0)
 			m.Choice = &ServiceChoice_Minerva{b}
+		case 70:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nmsconnector", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Nmsconnector{b}
+		case 71:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Nmsproxy", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Nmsproxy{b}
+		case 72:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Olympus", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Olympus{b}
+		case 73:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Phobos", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Phobos{b}
+		case 74:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Piku", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Piku{b}
+		case 75:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pluto", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Pluto{b}
+		case 76:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ponos", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ponos{b}
+		case 77:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Prism", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Prism{b}
+		case 78:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Prismprime", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Prismprime{b}
+		case 79:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Protekti", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Protekti{b}
+		case 80:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rolex", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Rolex{b}
+		case 81:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sed", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Sed{b}
+		case 82:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sentinel", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Sentinel{b}
+		case 83:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Spectrum", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Spectrum{b}
+		case 84:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Streak", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Streak{b}
+		case 85:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Trafficactioner", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Trafficactioner{b}
+		case 86:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ver", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Ver{b}
+		case 87:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tpmauthority", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Tpmauthority{b}
+		case 88:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Prometheus", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Prometheus{b}
+		case 89:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViaApiService", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_ViaApiService{b}
+		case 90:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Viaconnector", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Viaconnector{b}
+		case 91:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Dymo", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Dymo{b}
+		case 92:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Conprof", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowAllServices
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			b := bool(v != 0)
+			m.Choice = &ServiceChoice_Conprof{b}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipAllServices(dAtA[iNdEx:])

@@ -64,11 +64,49 @@ type ValidateBotDefenseJavascriptInjectionType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateBotDefenseJavascriptInjectionType) JsDownloadPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateBotDefenseJavascriptInjectionType) JavascriptTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for js_download_path")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for javascript_tags")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*JavaScriptTag, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := JavaScriptTagValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for javascript_tags")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*JavaScriptTag)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*JavaScriptTag, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated javascript_tags")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items javascript_tags")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -97,10 +135,9 @@ func (v *ValidateBotDefenseJavascriptInjectionType) Validate(ctx context.Context
 
 	}
 
-	if fv, exists := v.FldValidators["js_download_path"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("js_download_path"))
-		if err := fv(ctx, m.GetJsDownloadPath(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["javascript_tags"]; exists {
+		vOpts := append(opts, db.WithValidateField("javascript_tags"))
+		if err := fv(ctx, m.GetJavascriptTags(), vOpts...); err != nil {
 			return err
 		}
 
@@ -121,16 +158,19 @@ var DefaultBotDefenseJavascriptInjectionTypeValidator = func() *ValidateBotDefen
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhJsDownloadPath := v.JsDownloadPathValidationRuleHandler
-	rulesJsDownloadPath := map[string]string{
-		"ves.io.schema.rules.string.http_path": "true",
+	vrhJavascriptTags := v.JavascriptTagsValidationRuleHandler
+	rulesJavascriptTags := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "5",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
-	vFn, err = vrhJsDownloadPath(rulesJsDownloadPath)
+	vFn, err = vrhJavascriptTags(rulesJavascriptTags)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseJavascriptInjectionType.js_download_path: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseJavascriptInjectionType.javascript_tags: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["js_download_path"] = vFn
+	v.FldValidators["javascript_tags"] = vFn
 
 	return v
 }()
@@ -1408,6 +1448,183 @@ var DefaultHashPolicyTypeValidator = func() *ValidateHashPolicyType {
 
 func HashPolicyTypeValidator() db.Validator {
 	return DefaultHashPolicyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *JavaScriptTag) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JavaScriptTag) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *JavaScriptTag) DeepCopy() *JavaScriptTag {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JavaScriptTag{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JavaScriptTag) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JavaScriptTag) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JavaScriptTagValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJavaScriptTag struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJavaScriptTag) JavascriptUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for javascript_url")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateJavaScriptTag) TagAttributesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tag_attributes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*TagAttribute, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := TagAttributeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tag_attributes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*TagAttribute)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*TagAttribute, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tag_attributes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tag_attributes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateJavaScriptTag) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JavaScriptTag)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JavaScriptTag got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["javascript_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("javascript_url"))
+		if err := fv(ctx, m.GetJavascriptUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tag_attributes"]; exists {
+		vOpts := append(opts, db.WithValidateField("tag_attributes"))
+		if err := fv(ctx, m.GetTagAttributes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJavaScriptTagValidator = func() *ValidateJavaScriptTag {
+	v := &ValidateJavaScriptTag{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhJavascriptUrl := v.JavascriptUrlValidationRuleHandler
+	rulesJavascriptUrl := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "2048",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFn, err = vrhJavascriptUrl(rulesJavascriptUrl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JavaScriptTag.javascript_url: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["javascript_url"] = vFn
+
+	vrhTagAttributes := v.TagAttributesValidationRuleHandler
+	rulesTagAttributes := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "9",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhTagAttributes(rulesTagAttributes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JavaScriptTag.tag_attributes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tag_attributes"] = vFn
+
+	return v
+}()
+
+func JavaScriptTagValidator() db.Validator {
+	return DefaultJavaScriptTagValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4072,6 +4289,122 @@ var DefaultSpdyConfigTypeValidator = func() *ValidateSpdyConfigType {
 
 func SpdyConfigTypeValidator() db.Validator {
 	return DefaultSpdyConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TagAttribute) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TagAttribute) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TagAttribute) DeepCopy() *TagAttribute {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TagAttribute{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TagAttribute) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TagAttribute) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TagAttributeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTagAttribute struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTagAttribute) TagValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tag_value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTagAttribute) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TagAttribute)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TagAttribute got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["javascript_tag"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("javascript_tag"))
+		if err := fv(ctx, m.GetJavascriptTag(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tag_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tag_value"))
+		if err := fv(ctx, m.GetTagValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTagAttributeValidator = func() *ValidateTagAttribute {
+	v := &ValidateTagAttribute{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTagValue := v.TagValueValidationRuleHandler
+	rulesTagValue := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "1024",
+	}
+	vFn, err = vrhTagValue(rulesTagValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TagAttribute.tag_value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tag_value"] = vFn
+
+	return v
+}()
+
+func TagAttributeValidator() db.Validator {
+	return DefaultTagAttributeValidator
 }
 
 // augmented methods on protoc/std generated struct

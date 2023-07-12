@@ -584,6 +584,16 @@ func (v *ValidateAddressMember) PriorityValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateAddressMember) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAddressMember) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AddressMember)
 	if !ok {
@@ -611,6 +621,15 @@ func (v *ValidateAddressMember) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("ip_endpoint"))
 		if err := fv(ctx, m.GetIpEndpoint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -685,6 +704,17 @@ var DefaultAddressMemberValidator = func() *ValidateAddressMember {
 	}
 	v.FldValidators["priority"] = vFn
 
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AddressMember.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
 	return v
 }()
 
@@ -753,6 +783,16 @@ func (v *ValidateCNAMEMember) RatioValidationRuleHandler(rules map[string]string
 	return validatorFn, nil
 }
 
+func (v *ValidateCNAMEMember) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCNAMEMember) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CNAMEMember)
 	if !ok {
@@ -780,6 +820,15 @@ func (v *ValidateCNAMEMember) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("final_translation"))
 		if err := fv(ctx, m.GetFinalTranslation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -832,6 +881,17 @@ var DefaultCNAMEMemberValidator = func() *ValidateCNAMEMember {
 		panic(errMsg)
 	}
 	v.FldValidators["ratio"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CNAMEMember.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
 
 	return v
 }()
@@ -2167,6 +2227,16 @@ func (v *ValidateMXMember) RatioValidationRuleHandler(rules map[string]string) (
 	return validatorFn, nil
 }
 
+func (v *ValidateMXMember) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateMXMember) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*MXMember)
 	if !ok {
@@ -2185,6 +2255,15 @@ func (v *ValidateMXMember) Validate(ctx context.Context, pm interface{}, opts ..
 
 		vOpts := append(opts, db.WithValidateField("domain"))
 		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2258,6 +2337,17 @@ var DefaultMXMemberValidator = func() *ValidateMXMember {
 		panic(errMsg)
 	}
 	v.FldValidators["ratio"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MXMember.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
 
 	return v
 }()

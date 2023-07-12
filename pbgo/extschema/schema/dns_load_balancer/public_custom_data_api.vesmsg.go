@@ -529,6 +529,15 @@ func (v *ValidateDNSLBPoolHealthStatusListResponseItem) Validate(ctx context.Con
 
 	}
 
+	if fv, exists := v.FldValidators["health_check_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_type"))
+		if err := fv(ctx, m.GetHealthCheckType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))

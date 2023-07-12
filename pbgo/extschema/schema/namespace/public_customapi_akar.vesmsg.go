@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_alert_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -354,7 +355,20 @@ func (m *GetActiveAlertPoliciesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetAlertPoliciesDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAlertPoliciesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAlertPoliciesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetAlertPoliciesStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAlertPoliciesStatusDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -413,6 +427,28 @@ func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesDBEntries(ctx context.C
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (m *GetActiveAlertPoliciesResponse) GetAlertPoliciesStatusDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAlertPoliciesStatus() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAlertPoliciesStatus() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAlertPoliciesStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("alert_policies_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateGetActiveAlertPoliciesResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -443,6 +479,18 @@ func (v *ValidateGetActiveAlertPoliciesResponse) Validate(ctx context.Context, p
 
 	}
 
+	if fv, exists := v.FldValidators["alert_policies_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("alert_policies_status"))
+		for idx, item := range m.GetAlertPoliciesStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -451,6 +499,8 @@ var DefaultGetActiveAlertPoliciesResponseValidator = func() *ValidateGetActiveAl
 	v := &ValidateGetActiveAlertPoliciesResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["alert_policies"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["alert_policies_status"] = ves_io_schema_alert_policy_set.AlertPolicyStatusValidator().Validate
 
 	return v
 }()
@@ -1411,6 +1461,18 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["httplb_results"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("httplb_results"))
+		for idx, item := range m.GetHttplbResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ip_reputation"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ip_reputation"))
@@ -1425,18 +1487,6 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 		vOpts := append(opts, db.WithValidateField("malicious_user_detection"))
 		if err := fv(ctx, m.GetMaliciousUserDetection(), vOpts...); err != nil {
 			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		for idx, item := range m.GetName() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
 		}
 
 	}
@@ -1498,6 +1548,201 @@ var DefaultHTTPLoadbalancerInventoryTypeValidator = func() *ValidateHTTPLoadbala
 
 func HTTPLoadbalancerInventoryTypeValidator() db.Validator {
 	return DefaultHTTPLoadbalancerInventoryTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HTTPLoadbalancerResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HTTPLoadbalancerResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HTTPLoadbalancerResultType) DeepCopy() *HTTPLoadbalancerResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HTTPLoadbalancerResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HTTPLoadbalancerResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HTTPLoadbalancerResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HTTPLoadbalancerResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHTTPLoadbalancerResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HTTPLoadbalancerResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HTTPLoadbalancerResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_protection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_enabled"))
+		if err := fv(ctx, m.GetApiProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_protection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_protection_enabled"))
+		if err := fv(ctx, m.GetBotProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_side_defense_enabled"))
+		if err := fv(ctx, m.GetClientSideDefenseEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_protection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_protection_enabled"))
+		if err := fv(ctx, m.GetDdosProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_enabled"))
+		if err := fv(ctx, m.GetHttpEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_reputation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_reputation_enabled"))
+		if err := fv(ctx, m.GetIpReputationEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malicious_user_detection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malicious_user_detection_enabled"))
+		if err := fv(ctx, m.GetMaliciousUserDetectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_service_policy_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_service_policy_enabled"))
+		if err := fv(ctx, m.GetNamespaceServicePolicyEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_advertisement_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_advertisement_enabled"))
+		if err := fv(ctx, m.GetPrivateAdvertisementEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_advertisment_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("public_advertisment_enabled"))
+		if err := fv(ctx, m.GetPublicAdvertismentEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rate_limit"))
+		if err := fv(ctx, m.GetRateLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_policy_enabled"))
+		if err := fv(ctx, m.GetServicePolicyEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_enabled"))
+		if err := fv(ctx, m.GetWafEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHTTPLoadbalancerResultTypeValidator = func() *ValidateHTTPLoadbalancerResultType {
+	v := &ValidateHTTPLoadbalancerResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HTTPLoadbalancerResultTypeValidator() db.Validator {
+	return DefaultHTTPLoadbalancerResultTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2987,18 +3232,6 @@ func (v *ValidateTCPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("name"))
-		for idx, item := range m.GetName() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
@@ -3035,6 +3268,18 @@ func (v *ValidateTCPLoadbalancerInventoryType) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["tcplb_results"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tcplb_results"))
+		for idx, item := range m.GetTcplbResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_encryption"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_encryption"))
@@ -3056,6 +3301,138 @@ var DefaultTCPLoadbalancerInventoryTypeValidator = func() *ValidateTCPLoadbalanc
 
 func TCPLoadbalancerInventoryTypeValidator() db.Validator {
 	return DefaultTCPLoadbalancerInventoryTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TCPLoadbalancerResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TCPLoadbalancerResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TCPLoadbalancerResultType) DeepCopy() *TCPLoadbalancerResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TCPLoadbalancerResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TCPLoadbalancerResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TCPLoadbalancerResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TCPLoadbalancerResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTCPLoadbalancerResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTCPLoadbalancerResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TCPLoadbalancerResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TCPLoadbalancerResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
+		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_advertisement"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_advertisement"))
+		if err := fv(ctx, m.GetPrivateAdvertisement(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_advertisment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("public_advertisment"))
+		if err := fv(ctx, m.GetPublicAdvertisment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rate_limit"))
+		if err := fv(ctx, m.GetRateLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_policy"))
+		if err := fv(ctx, m.GetServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_encryption"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_encryption"))
+		if err := fv(ctx, m.GetTlsEncryption(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTCPLoadbalancerResultTypeValidator = func() *ValidateTCPLoadbalancerResultType {
+	v := &ValidateTCPLoadbalancerResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TCPLoadbalancerResultTypeValidator() db.Validator {
+	return DefaultTCPLoadbalancerResultTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

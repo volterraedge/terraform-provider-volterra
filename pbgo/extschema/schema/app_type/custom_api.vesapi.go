@@ -3028,9 +3028,16 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "API EP Authentication Type and Location Pair",
             "x-ves-proto-message": "ves.io.schema.app_type.AuthenticationTypeLocPair",
             "properties": {
+                "auth_type": {
+                    "type": "string",
+                    "description": " The detected authentication type by string format\n\nExample: - \"Basic\"-",
+                    "title": "auth_type",
+                    "x-displayname": "Authentication Type",
+                    "x-ves-example": "Basic"
+                },
                 "location": {
                     "description": " The detected authentication location",
-                    "title": "type",
+                    "title": "location",
                     "$ref": "#/definitions/app_typeAuthenticationLocation",
                     "x-displayname": "Authentication Location"
                 },

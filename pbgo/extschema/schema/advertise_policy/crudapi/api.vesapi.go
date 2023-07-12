@@ -2585,10 +2585,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Optional. VIP to advertise.\n You can not specify this if where contains a site or virtual site of type REGIONAL_EDGE or public network\n If not specified and \"where\" is specified with site or virtual site option,\n inside_vip or outside_vip specified in the site object will be used based on the network type.\n If inside_vip/outside_vip is not configured in the site object, system use interface ip in the respected networks.\n\nExample: - \"10.1.2.3\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": " Optional. VIP to advertise.\n You can not specify this if where contains a site or virtual site of type REGIONAL_EDGE or public network\n If not specified and \"where\" is specified with site or virtual site option,\n inside_vip or outside_vip specified in the site object will be used based on the network type.\n If inside_vip/outside_vip is not configured in the site object, system use interface ip in the respected networks.\n\nExample: - \"10.1.2.3/2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
                     "title": "address",
                     "x-displayname": "VIP",
-                    "x-ves-example": "10.1.2.3",
+                    "x-ves-example": "10.1.2.3/2001::1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
                     }
@@ -2606,7 +2606,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -2616,8 +2616,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "1024",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "protocol": {

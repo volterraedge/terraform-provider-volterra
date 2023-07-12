@@ -4495,6 +4495,10 @@ func (m *JwtTokenAuthOptions) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting JwtTokenAuthOptions.secret_key")
 	}
 
+	if err := m.GetBackupKey().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting JwtTokenAuthOptions.backup_key")
+	}
+
 	return nil
 }
 
@@ -4529,6 +4533,27 @@ type ValidateJwtTokenAuthOptions struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateJwtTokenAuthOptions) SecretKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for secret_key")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateJwtTokenAuthOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*JwtTokenAuthOptions)
 	if !ok {
@@ -4541,6 +4566,15 @@ func (v *ValidateJwtTokenAuthOptions) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["backup_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("backup_key"))
+		if err := fv(ctx, m.GetBackupKey(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["secret_key"]; exists {
@@ -4607,11 +4641,30 @@ func (v *ValidateJwtTokenAuthOptions) Validate(ctx context.Context, pm interface
 var DefaultJwtTokenAuthOptionsValidator = func() *ValidateJwtTokenAuthOptions {
 	v := &ValidateJwtTokenAuthOptions{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSecretKey := v.SecretKeyValidationRuleHandler
+	rulesSecretKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSecretKey(rulesSecretKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JwtTokenAuthOptions.secret_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["secret_key"] = vFn
+
 	v.FldValidators["token_source.header"] = HttpHeaderNameValidator().Validate
 	v.FldValidators["token_source.cookie"] = HttpCookieNameValidator().Validate
 	v.FldValidators["token_source.query_param"] = HttpQueryParameterNameValidator().Validate
 
-	v.FldValidators["secret_key"] = ves_io_schema.SecretTypeValidator().Validate
+	v.FldValidators["backup_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()
@@ -5493,6 +5546,70 @@ func (v *ValidateOpenApiValidationAction) OasValidationActionValidationRuleHandl
 	return validatorFn, nil
 }
 
+func (v *ValidateOpenApiValidationAction) ResponsePropertiesSelectionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.OpenApiValidationProperties)
+		return int32(i)
+	}
+	// ves_io_schema.OpenApiValidationProperties_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.OpenApiValidationProperties_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for response_properties_selection")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.OpenApiValidationProperties, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_properties_selection")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.OpenApiValidationProperties)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.OpenApiValidationProperties, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_properties_selection")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_properties_selection")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationAction) OasResponseValidationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(OasValidationActionType)
+		return int32(i)
+	}
+	// OasValidationActionType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, OasValidationActionType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for oas_response_validation_action")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOpenApiValidationAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OpenApiValidationAction)
 	if !ok {
@@ -5507,6 +5624,15 @@ func (v *ValidateOpenApiValidationAction) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["oas_response_validation_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("oas_response_validation_action"))
+		if err := fv(ctx, m.GetOasResponseValidationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["oas_validation_action"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("oas_validation_action"))
@@ -5519,6 +5645,14 @@ func (v *ValidateOpenApiValidationAction) Validate(ctx context.Context, pm inter
 	if fv, exists := v.FldValidators["request_properties_selection"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_properties_selection"))
 		if err := fv(ctx, m.GetRequestPropertiesSelection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_properties_selection"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_properties_selection"))
+		if err := fv(ctx, m.GetResponsePropertiesSelection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5542,6 +5676,7 @@ var DefaultOpenApiValidationActionValidator = func() *ValidateOpenApiValidationA
 	vrhRequestPropertiesSelection := v.RequestPropertiesSelectionValidationRuleHandler
 	rulesRequestPropertiesSelection := map[string]string{
 		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[7]",
 		"ves.io.schema.rules.repeated.unique":                  "true",
 	}
 	vFn, err = vrhRequestPropertiesSelection(rulesRequestPropertiesSelection)
@@ -5562,6 +5697,32 @@ var DefaultOpenApiValidationActionValidator = func() *ValidateOpenApiValidationA
 		panic(errMsg)
 	}
 	v.FldValidators["oas_validation_action"] = vFn
+
+	vrhResponsePropertiesSelection := v.ResponsePropertiesSelectionValidationRuleHandler
+	rulesResponsePropertiesSelection := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.in":           "[2,4,5,7]",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhResponsePropertiesSelection(rulesResponsePropertiesSelection)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationAction.response_properties_selection: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_properties_selection"] = vFn
+
+	vrhOasResponseValidationAction := v.OasResponseValidationActionValidationRuleHandler
+	rulesOasResponseValidationAction := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.in":           "[0,1,2]",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhOasResponseValidationAction(rulesOasResponseValidationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationAction.oas_response_validation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["oas_response_validation_action"] = vFn
 
 	return v
 }()
