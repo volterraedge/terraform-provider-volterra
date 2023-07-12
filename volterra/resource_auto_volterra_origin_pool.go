@@ -599,11 +599,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"ip": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"inside_network": {
 
 										Type:     schema.TypeBool,
@@ -613,6 +608,18 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"outside_network": {
 
 										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ip": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ipv6": {
+
+										Type:     schema.TypeString,
 										Optional: true,
 									},
 
@@ -786,6 +793,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"ip": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ipv6": {
+
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -815,11 +829,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"ip": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"virtual_network": {
 
 										Type:     schema.TypeSet,
@@ -841,6 +850,18 @@ func resourceVolterraOriginPool() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"ip": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ipv6": {
+
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 								},
 							},
@@ -2128,12 +2149,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-						choiceInt.PrivateIp.Ip = v.(string)
-
-					}
-
 					networkChoiceTypeFound := false
 
 					if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
@@ -2157,6 +2172,30 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 							networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 							choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
 						}
+
+					}
+
+					privateIpChoiceTypeFound := false
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
+
+						privateIpChoiceTypeFound = true
+						privateIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Ip{}
+
+						choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
+
+						privateIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
+
+						privateIpChoiceTypeFound = true
+						privateIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Ipv6{}
+
+						choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
+
+						privateIpChoiceInt.Ipv6 = v.(string)
 
 					}
 
@@ -2382,9 +2421,27 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+					publicIpChoiceTypeFound := false
 
-						choiceInt.PublicIp.Ip = v.(string)
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+						publicIpChoiceTypeFound = true
+						publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ip{}
+
+						choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+						publicIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+						publicIpChoiceTypeFound = true
+						publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ipv6{}
+
+						choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+						publicIpChoiceInt.Ipv6 = v.(string)
 
 					}
 
@@ -2424,12 +2481,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-						choiceInt.VnPrivateIp.Ip = v.(string)
-
-					}
-
 					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -2449,6 +2500,30 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 								virtualNetworkInt.Tenant = val.(string)
 							}
 						}
+
+					}
+
+					virtualNetworkIpChoiceTypeFound := false
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !virtualNetworkIpChoiceTypeFound {
+
+						virtualNetworkIpChoiceTypeFound = true
+						virtualNetworkIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP_Ip{}
+
+						choiceInt.VnPrivateIp.VirtualNetworkIpChoice = virtualNetworkIpChoiceInt
+
+						virtualNetworkIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !virtualNetworkIpChoiceTypeFound {
+
+						virtualNetworkIpChoiceTypeFound = true
+						virtualNetworkIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP_Ipv6{}
+
+						choiceInt.VnPrivateIp.VirtualNetworkIpChoice = virtualNetworkIpChoiceInt
+
+						virtualNetworkIpChoiceInt.Ipv6 = v.(string)
 
 					}
 
@@ -3962,12 +4037,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-						choiceInt.PrivateIp.Ip = v.(string)
-
-					}
-
 					networkChoiceTypeFound := false
 
 					if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
@@ -3991,6 +4060,30 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 							networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 							choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
 						}
+
+					}
+
+					privateIpChoiceTypeFound := false
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
+
+						privateIpChoiceTypeFound = true
+						privateIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Ip{}
+
+						choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
+
+						privateIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
+
+						privateIpChoiceTypeFound = true
+						privateIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Ipv6{}
+
+						choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
+
+						privateIpChoiceInt.Ipv6 = v.(string)
 
 					}
 
@@ -4216,9 +4309,27 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+					publicIpChoiceTypeFound := false
 
-						choiceInt.PublicIp.Ip = v.(string)
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+						publicIpChoiceTypeFound = true
+						publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ip{}
+
+						choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+						publicIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+						publicIpChoiceTypeFound = true
+						publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ipv6{}
+
+						choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+						publicIpChoiceInt.Ipv6 = v.(string)
 
 					}
 
@@ -4258,12 +4369,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) {
-
-						choiceInt.VnPrivateIp.Ip = v.(string)
-
-					}
-
 					if v, ok := cs["virtual_network"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -4283,6 +4388,30 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 								virtualNetworkInt.Tenant = val.(string)
 							}
 						}
+
+					}
+
+					virtualNetworkIpChoiceTypeFound := false
+
+					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !virtualNetworkIpChoiceTypeFound {
+
+						virtualNetworkIpChoiceTypeFound = true
+						virtualNetworkIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP_Ip{}
+
+						choiceInt.VnPrivateIp.VirtualNetworkIpChoice = virtualNetworkIpChoiceInt
+
+						virtualNetworkIpChoiceInt.Ip = v.(string)
+
+					}
+
+					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !virtualNetworkIpChoiceTypeFound {
+
+						virtualNetworkIpChoiceTypeFound = true
+						virtualNetworkIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerVirtualNetworkIP_Ipv6{}
+
+						choiceInt.VnPrivateIp.VirtualNetworkIpChoice = virtualNetworkIpChoiceInt
+
+						virtualNetworkIpChoiceInt.Ipv6 = v.(string)
 
 					}
 

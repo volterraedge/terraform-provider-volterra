@@ -135,6 +135,41 @@ func resourceVolterraDnsZone() *schema.Resource {
 										},
 									},
 
+									"afsdb_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"values": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"hostname": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"subtype": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"alias_record": {
 
 										Type:     schema.TypeSet,
@@ -195,7 +230,207 @@ func resourceVolterraDnsZone() *schema.Resource {
 										},
 									},
 
+									"cds_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"values": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"sha1_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sha256_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sha384_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ds_key_algorithm": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"key_tag": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"cname_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ds_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"values": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"sha1_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sha256_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"sha384_digest": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ds_key_algorithm": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"key_tag": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"eui48_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"value": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"eui64_record": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
@@ -253,6 +488,91 @@ func resourceVolterraDnsZone() *schema.Resource {
 										},
 									},
 
+									"loc_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"values": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"altitude": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+
+															"horizontal_precision": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+
+															"latitude_degree": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"latitude_hemisphere": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"latitude_minute": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"latitude_second": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+
+															"location_diameter": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+
+															"longitude_degree": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"longitude_hemisphere": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"longitude_minute": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"longitude_second": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+
+															"vertical_precision": {
+																Type:     schema.TypeFloat,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"mx_record": {
 
 										Type:     schema.TypeSet,
@@ -279,6 +599,61 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"priority": {
 																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"naptr_record": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"values": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"flags": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"order": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"preference": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"regexp": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"replacement": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"service": {
+																Type:     schema.TypeString,
 																Optional: true,
 															},
 														},
@@ -530,6 +905,41 @@ func resourceVolterraDnsZone() *schema.Resource {
 													},
 												},
 
+												"afsdb_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"values": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"hostname": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"subtype": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"alias_record": {
 
 													Type:     schema.TypeSet,
@@ -590,7 +1000,207 @@ func resourceVolterraDnsZone() *schema.Resource {
 													},
 												},
 
+												"cds_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"values": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"sha1_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"sha256_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"sha384_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"ds_key_algorithm": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"key_tag": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"cname_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"value": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"ds_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"values": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"sha1_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"sha256_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"sha384_digest": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"ds_key_algorithm": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"key_tag": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"eui48_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"value": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"eui64_record": {
 
 													Type:     schema.TypeSet,
 													Optional: true,
@@ -648,6 +1258,91 @@ func resourceVolterraDnsZone() *schema.Resource {
 													},
 												},
 
+												"loc_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"values": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"altitude": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+
+																		"horizontal_precision": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+
+																		"latitude_degree": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"latitude_hemisphere": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"latitude_minute": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"latitude_second": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+
+																		"location_diameter": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+
+																		"longitude_degree": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"longitude_hemisphere": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"longitude_minute": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"longitude_second": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+
+																		"vertical_precision": {
+																			Type:     schema.TypeFloat,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
 												"mx_record": {
 
 													Type:     schema.TypeSet,
@@ -674,6 +1369,61 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"priority": {
 																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"naptr_record": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"values": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"flags": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"order": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"preference": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+
+																		"regexp": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"replacement": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"service": {
+																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
 																	},
@@ -1172,6 +1922,50 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+						typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+								typeRecordSetInt.AfsdbRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+										values[i].Hostname = w.(string)
+									}
+
+									if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+										values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -1245,6 +2039,115 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+						typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.CdsRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+								typeRecordSetInt.CdsRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									digestChoiceTypeFound := false
+
+									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+										values[i].KeyTag = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -1265,6 +2168,169 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								typeRecordSetInt.CnameRecord.Value = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+						typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.DsRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+								typeRecordSetInt.DsRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									digestChoiceTypeFound := false
+
+									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+										values[i].KeyTag = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+						typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui48Record.Name = v.(string)
+
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui48Record.Value = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+						typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui64Record.Name = v.(string)
+
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui64Record.Value = v.(string)
 
 							}
 
@@ -1315,6 +2381,92 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+						typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.LocRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+								typeRecordSetInt.LocRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.LOCValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+										values[i].Altitude = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+										values[i].HorizontalPrecision = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+										values[i].LatitudeDegree = int32(w.(int))
+									}
+
+									if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+										values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+										values[i].LatitudeMinute = int32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+										values[i].LatitudeSecond = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+										values[i].LocationDiameter = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+										values[i].LongitudeDegree = int32(w.(int))
+									}
+
+									if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+										values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+										values[i].LongitudeMinute = int32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+										values[i].LongitudeSecond = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+										values[i].VerticalPrecision = float32(w.(float64))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -1347,6 +2499,64 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
 										values[i].Priority = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+						typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+								typeRecordSetInt.NaptrRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+										values[i].Flags = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+										values[i].Order = uint32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+										values[i].Preference = uint32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+										values[i].Regexp = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+										values[i].Replacement = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+										values[i].Service = w.(string)
 									}
 
 								}
@@ -1646,6 +2856,50 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+								typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+										typeRecordSetInt.AfsdbRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+												values[i].Hostname = w.(string)
+											}
+
+											if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+												values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -1719,6 +2973,115 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+								typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.CdsRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+										typeRecordSetInt.CdsRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											digestChoiceTypeFound := false
+
+											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+												values[i].KeyTag = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -1739,6 +3102,169 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 									if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 										typeRecordSetInt.CnameRecord.Value = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+								typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.DsRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+										typeRecordSetInt.DsRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											digestChoiceTypeFound := false
+
+											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+												values[i].KeyTag = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+								typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui48Record.Name = v.(string)
+
+									}
+
+									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui48Record.Value = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+								typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui64Record.Name = v.(string)
+
+									}
+
+									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui64Record.Value = v.(string)
 
 									}
 
@@ -1789,6 +3315,92 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+								typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.LocRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+										typeRecordSetInt.LocRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.LOCValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+												values[i].Altitude = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+												values[i].HorizontalPrecision = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+												values[i].LatitudeDegree = int32(w.(int))
+											}
+
+											if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+												values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+												values[i].LatitudeMinute = int32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+												values[i].LatitudeSecond = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+												values[i].LocationDiameter = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+												values[i].LongitudeDegree = int32(w.(int))
+											}
+
+											if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+												values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+												values[i].LongitudeMinute = int32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+												values[i].LongitudeSecond = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+												values[i].VerticalPrecision = float32(w.(float64))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -1821,6 +3433,64 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
 												values[i].Priority = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+								typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+										typeRecordSetInt.NaptrRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+												values[i].Flags = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+												values[i].Order = uint32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+												values[i].Preference = uint32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+												values[i].Regexp = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+												values[i].Replacement = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+												values[i].Service = w.(string)
 											}
 
 										}
@@ -2446,6 +4116,50 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+						typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+								typeRecordSetInt.AfsdbRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+										values[i].Hostname = w.(string)
+									}
+
+									if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+										values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -2519,6 +4233,115 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+						typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.CdsRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+								typeRecordSetInt.CdsRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									digestChoiceTypeFound := false
+
+									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+										values[i].KeyTag = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -2539,6 +4362,169 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 							if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 								typeRecordSetInt.CnameRecord.Value = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+						typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.DsRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+								typeRecordSetInt.DsRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									digestChoiceTypeFound := false
+
+									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+										digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+										digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+										digestChoiceTypeFound = true
+										digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+										digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+										values[i].DigestChoice = digestChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+												digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+										values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+										values[i].KeyTag = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+						typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui48Record.Name = v.(string)
+
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui48Record.Value = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+						typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui64Record.Name = v.(string)
+
+							}
+
+							if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.Eui64Record.Value = v.(string)
 
 							}
 
@@ -2589,6 +4575,92 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
+					if v, ok := defaultRrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+						typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.LocRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+								typeRecordSetInt.LocRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.LOCValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+										values[i].Altitude = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+										values[i].HorizontalPrecision = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+										values[i].LatitudeDegree = int32(w.(int))
+									}
+
+									if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+										values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+										values[i].LatitudeMinute = int32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+										values[i].LatitudeSecond = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+										values[i].LocationDiameter = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+										values[i].LongitudeDegree = int32(w.(int))
+									}
+
+									if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+										values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+									}
+
+									if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+										values[i].LongitudeMinute = int32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+										values[i].LongitudeSecond = float32(w.(float64))
+									}
+
+									if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+										values[i].VerticalPrecision = float32(w.(float64))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := defaultRrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 						typeRecordSetTypeFound = true
@@ -2621,6 +4693,64 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 									if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
 										values[i].Priority = uint32(w.(int))
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := defaultRrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+						typeRecordSetTypeFound = true
+						typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+						typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+						defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+							}
+
+							if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+								typeRecordSetInt.NaptrRecord.Values = values
+								for i, set := range sl {
+									values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+									valuesMapStrToI := set.(map[string]interface{})
+
+									if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+										values[i].Flags = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+										values[i].Order = uint32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+										values[i].Preference = uint32(w.(int))
+									}
+
+									if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+										values[i].Regexp = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+										values[i].Replacement = w.(string)
+									}
+
+									if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+										values[i].Service = w.(string)
 									}
 
 								}
@@ -2920,6 +5050,50 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
+								typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.AfsdbRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.AFSDBRecordValue, len(sl))
+										typeRecordSetInt.AfsdbRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.AFSDBRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["hostname"]; ok && !isIntfNil(w) {
+												values[i].Hostname = w.(string)
+											}
+
+											if v, ok := valuesMapStrToI["subtype"]; ok && !isIntfNil(v) {
+
+												values[i].Subtype = ves_io_schema_dns_zone.AFSDBRecordSubtype(ves_io_schema_dns_zone.AFSDBRecordSubtype_value[v.(string)])
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -2993,6 +5167,115 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
+								typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.CdsRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+										typeRecordSetInt.CdsRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											digestChoiceTypeFound := false
+
+											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+												values[i].KeyTag = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -3013,6 +5296,169 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 									if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 										typeRecordSetInt.CnameRecord.Value = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
+								typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.DsRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+										typeRecordSetInt.DsRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											digestChoiceTypeFound := false
+
+											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+												digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+												digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+												digestChoiceTypeFound = true
+												digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+												digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+												values[i].DigestChoice = digestChoiceInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+														digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+												values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+												values[i].KeyTag = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
+								typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui48Record.Name = v.(string)
+
+									}
+
+									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui48Record.Value = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
+								typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui64Record.Name = v.(string)
+
+									}
+
+									if v, ok := cs["value"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.Eui64Record.Value = v.(string)
 
 									}
 
@@ -3063,6 +5509,92 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 							}
 
+							if v, ok := rrSetMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
+								typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.LocRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.LOCValue, len(sl))
+										typeRecordSetInt.LocRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.LOCValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["altitude"]; ok && !isIntfNil(w) {
+												values[i].Altitude = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["horizontal_precision"]; ok && !isIntfNil(w) {
+												values[i].HorizontalPrecision = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["latitude_degree"]; ok && !isIntfNil(w) {
+												values[i].LatitudeDegree = int32(w.(int))
+											}
+
+											if v, ok := valuesMapStrToI["latitude_hemisphere"]; ok && !isIntfNil(v) {
+
+												values[i].LatitudeHemisphere = ves_io_schema_dns_zone.LatitudeHemisphere(ves_io_schema_dns_zone.LatitudeHemisphere_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["latitude_minute"]; ok && !isIntfNil(w) {
+												values[i].LatitudeMinute = int32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["latitude_second"]; ok && !isIntfNil(w) {
+												values[i].LatitudeSecond = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["location_diameter"]; ok && !isIntfNil(w) {
+												values[i].LocationDiameter = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["longitude_degree"]; ok && !isIntfNil(w) {
+												values[i].LongitudeDegree = int32(w.(int))
+											}
+
+											if v, ok := valuesMapStrToI["longitude_hemisphere"]; ok && !isIntfNil(v) {
+
+												values[i].LongitudeHemisphere = ves_io_schema_dns_zone.LongitudeHemisphere(ves_io_schema_dns_zone.LongitudeHemisphere_value[v.(string)])
+
+											}
+
+											if w, ok := valuesMapStrToI["longitude_minute"]; ok && !isIntfNil(w) {
+												values[i].LongitudeMinute = int32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["longitude_second"]; ok && !isIntfNil(w) {
+												values[i].LongitudeSecond = float32(w.(float64))
+											}
+
+											if w, ok := valuesMapStrToI["vertical_precision"]; ok && !isIntfNil(w) {
+												values[i].VerticalPrecision = float32(w.(float64))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
 							if v, ok := rrSetMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 
 								typeRecordSetTypeFound = true
@@ -3095,6 +5627,64 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 											if w, ok := valuesMapStrToI["priority"]; ok && !isIntfNil(w) {
 												values[i].Priority = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := rrSetMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
+								typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
+								rrSet[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										typeRecordSetInt.NaptrRecord.Name = v.(string)
+
+									}
+
+									if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										values := make([]*ves_io_schema_dns_zone.NAPTRValue, len(sl))
+										typeRecordSetInt.NaptrRecord.Values = values
+										for i, set := range sl {
+											values[i] = &ves_io_schema_dns_zone.NAPTRValue{}
+											valuesMapStrToI := set.(map[string]interface{})
+
+											if w, ok := valuesMapStrToI["flags"]; ok && !isIntfNil(w) {
+												values[i].Flags = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["order"]; ok && !isIntfNil(w) {
+												values[i].Order = uint32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["preference"]; ok && !isIntfNil(w) {
+												values[i].Preference = uint32(w.(int))
+											}
+
+											if w, ok := valuesMapStrToI["regexp"]; ok && !isIntfNil(w) {
+												values[i].Regexp = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["replacement"]; ok && !isIntfNil(w) {
+												values[i].Replacement = w.(string)
+											}
+
+											if w, ok := valuesMapStrToI["service"]; ok && !isIntfNil(w) {
+												values[i].Service = w.(string)
 											}
 
 										}

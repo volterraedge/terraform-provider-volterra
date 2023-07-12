@@ -15,17 +15,18 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bigip_apm "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm"
 	ves_io_schema_nfv_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
-// resourceVolterraNfvService is implementation of Volterra's NfvService resources
-func resourceVolterraNfvService() *schema.Resource {
+// resourceVolterraApm is implementation of Volterra's Apm resources
+func resourceVolterraApm() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceVolterraNfvServiceCreate,
-		Read:   resourceVolterraNfvServiceRead,
-		Update: resourceVolterraNfvServiceUpdate,
-		Delete: resourceVolterraNfvServiceDelete,
+		Create: resourceVolterraApmCreate,
+		Read:   resourceVolterraApmRead,
+		Update: resourceVolterraApmUpdate,
+		Delete: resourceVolterraApmDelete,
 
 		Schema: map[string]*schema.Schema{
 
@@ -59,12 +60,6 @@ func resourceVolterraNfvService() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-			},
-
-			"disable_https_management": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
 			},
 
 			"https_management": {
@@ -1684,886 +1679,14 @@ func resourceVolterraNfvService() *schema.Resource {
 				},
 			},
 
-			"f5_big_ip_aws_service": {
+			"aws_site_type_choice": {
 
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"admin_password": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"blindfold_secret_info_internal": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"location": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"blindfold_secret_info": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"location": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"clear_secret_info": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"url": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"vault_secret_info": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"location": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"provider": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"wingman_secret_info": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"admin_username": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"endpoint_service": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"advertise_on_slo_ip": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"advertise_on_slo_ip_external": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"disable_advertise_on_slo_ip": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"automatic_vip": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"configured_vip": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"custom_tcp_ports": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"ports": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
-									},
-
-									"default_tcp_ports": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"http_port": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"https_port": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"no_tcp_ports": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"custom_udp_ports": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"ports": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
-									},
-
-									"no_udp_ports": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"byol_image": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"image": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"license": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"blindfold_secret_info_internal": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"blindfold_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"clear_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"url": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"vault_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"wingman_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"market_place_image": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"awaf_pay_g200_mbps": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"awaf_pay_g3_gbps": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"best_plus_pay_g200_mbps": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"best_plus_payg_1gbps": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"nodes": {
-
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"aws_az_name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"mgmt_subnet": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"existing_subnet_id": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"subnet_param": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"ipv4": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"ipv6": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
-									"reserved_mgmt_subnet": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"node_name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"automatic_prefix": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"tunnel_prefix": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"aws_tgw_site_params": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"aws_tgw_site": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"aws_vpc_site_params": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"aws_vpc_site": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"ssh_key": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"tags": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"palo_alto_fw_service": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"pan_ami_bundle1": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"pan_ami_bundle2": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"aws_tgw_site": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"instance_type": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"disable_panaroma": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"panorama_server": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"authorization_key": {
-
-										Type:     schema.TypeSet,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"blindfold_secret_info_internal": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"blindfold_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"clear_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"url": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"vault_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"location": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"provider": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"wingman_secret_info": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
-									"device_group_name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"server": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"template_stack_name": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"service_nodes": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"nodes": {
-
-										Type:     schema.TypeList,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"aws_az_name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"mgmt_subnet": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"existing_subnet_id": {
-
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"subnet_param": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"ipv4": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"ipv6": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-														},
-													},
-												},
-
-												"reserved_mgmt_subnet": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"node_name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"auto_setup": {
+						"apm_aws_site": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
@@ -2710,144 +1833,187 @@ func resourceVolterraNfvService() *schema.Resource {
 										Optional: true,
 									},
 
-									"autogenerated_ssh_keys": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"manual_ssh_keys": {
+									"aws_tgw_site": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"private_key": {
+												"aws_tgw_site": {
 
 													Type:     schema.TypeSet,
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:     schema.TypeSet,
+															"name": {
+																Type:     schema.TypeString,
 																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 
-																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
+									"endpoint_service": {
 
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
 
-																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
+												"advertise_on_slo_ip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"advertise_on_slo_ip_external": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"disable_advertise_on_slo_ip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"automatic_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"configured_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"custom_tcp_ports": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ports": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
 																},
 															},
+														},
+													},
+												},
 
-															"secret_encoding_type": {
+												"default_tcp_ports": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"http_port": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"https_port": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"no_tcp_ports": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"custom_udp_ports": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ports": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"no_udp_ports": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"nodes": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"aws_az_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"mgmt_subnet": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"existing_subnet_id": {
+
 																Type:     schema.TypeString,
 																Optional: true,
 															},
 
-															"blindfold_secret_info": {
+															"subnet_param": {
 
 																Type:     schema.TypeSet,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
-																		"decryption_provider": {
+																		"ipv4": {
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
 
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"clear_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"url": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
+																		"ipv6": {
 																			Type:     schema.TypeString,
 																			Optional: true,
 																		},
@@ -2858,67 +2024,230 @@ func resourceVolterraNfvService() *schema.Resource {
 													},
 												},
 
-												"public_key": {
+												"reserved_mgmt_subnet": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"node_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"automatic_prefix": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"tunnel_prefix": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
 											},
 										},
 									},
+
+									"ssh_key": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"tags": {
+										Type:     schema.TypeMap,
+										Optional: true,
+									},
 								},
 							},
 						},
 
-						"ssh_key": {
-
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-
-						"tags": {
-							Type:     schema.TypeMap,
-							Optional: true,
-						},
-
-						"version": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
-			},
-
-			"disable_ssh_access": {
-
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
-
-			"enabled_ssh_access": {
-
-				Type:     schema.TypeSet,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"advertise_on_public": {
+						"market_place_image": {
 
 							Type:     schema.TypeSet,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"public_ip": {
+									"best_plus_pay_g200_mbps": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"best_plus_payg_1gbps": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"baremetal_site_type_choice": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"f5_bare_metal_site": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"admin_password": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"kind": {
-													Type:     schema.TypeString,
-													Computed: true,
+												"blindfold_secret_info_internal": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"location": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"store_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
+
+												"secret_encoding_type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"blindfold_secret_info": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"location": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"store_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"clear_secret_info": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"url": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"location": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"secret_encoding": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"version": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"admin_username": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"bare_metal_site": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
 
 												"name": {
 													Type:     schema.TypeString,
@@ -2935,54 +2264,120 @@ func resourceVolterraNfvService() *schema.Resource {
 											},
 										},
 									},
-								},
-							},
-						},
 
-						"advertise_on_public_default_vip": {
+									"nodes": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
 
-						"advertise_on_sli": {
+												"external_interface": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
 
-						"advertise_on_slo": {
+															"interface": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
 
-						"advertise_on_slo_internet_vip": {
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
 
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
+															"network_gateway": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
 
-						"advertise_on_slo_sli": {
+															"network_self_ip": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
 
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
+												"internal_interface": {
 
-						"node_ssh_ports": {
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
 
-							Type:     schema.TypeList,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
+															"interface": {
 
-									"node_name": {
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"network_gateway": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_self_ip": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"license_key": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"node_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"public_download_url": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
 
-									"ssh_port": {
-										Type:     schema.TypeInt,
+									"ssh_key": {
+										Type:     schema.TypeString,
 										Optional: true,
 									},
 								},
@@ -2995,13 +2390,13 @@ func resourceVolterraNfvService() *schema.Resource {
 	}
 }
 
-// resourceVolterraNfvServiceCreate creates NfvService resource
-func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) error {
+// resourceVolterraApmCreate creates Apm resource
+func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 
 	createMeta := &ves_io_schema.ObjectCreateMetaType{}
-	createSpec := &ves_io_schema_nfv_service.CreateSpecType{}
-	createReq := &ves_io_schema_nfv_service.CreateRequest{
+	createSpec := &ves_io_schema_bigip_apm.CreateSpecType{}
+	createReq := &ves_io_schema_bigip_apm.CreateRequest{
 		Metadata: createMeta,
 		Spec:     createSpec,
 	}
@@ -3052,22 +2447,10 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 	httpManagementChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_https_management"); ok && !httpManagementChoiceTypeFound {
-
-		httpManagementChoiceTypeFound = true
-
-		if v.(bool) {
-			httpManagementChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_DisableHttpsManagement{}
-			httpManagementChoiceInt.DisableHttpsManagement = &ves_io_schema.Empty{}
-			createSpec.HttpManagementChoice = httpManagementChoiceInt
-		}
-
-	}
-
 	if v, ok := d.GetOk("https_management"); ok && !httpManagementChoiceTypeFound {
 
 		httpManagementChoiceTypeFound = true
-		httpManagementChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_HttpsManagement{}
+		httpManagementChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_HttpsManagement{}
 		httpManagementChoiceInt.HttpsManagement = &ves_io_schema_nfv_service.ServiceHttpsManagementType{}
 		createSpec.HttpManagementChoice = httpManagementChoiceInt
 
@@ -5224,1256 +4607,34 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	//service_provider_choice
+	//site_type_choice
 
-	serviceProviderChoiceTypeFound := false
+	siteTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("f5_big_ip_aws_service"); ok && !serviceProviderChoiceTypeFound {
+	if v, ok := d.GetOk("aws_site_type_choice"); ok && !siteTypeChoiceTypeFound {
 
-		serviceProviderChoiceTypeFound = true
-		serviceProviderChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_F5BigIpAwsService{}
-		serviceProviderChoiceInt.F5BigIpAwsService = &ves_io_schema_nfv_service.F5BigIpAWSType{}
-		createSpec.ServiceProviderChoice = serviceProviderChoiceInt
+		siteTypeChoiceTypeFound = true
+		siteTypeChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_AwsSiteTypeChoice{}
+		siteTypeChoiceInt.AwsSiteTypeChoice = &ves_io_schema_bigip_apm.AWSSiteTypeChoice{}
+		createSpec.SiteTypeChoice = siteTypeChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["admin_password"]; ok && !isIntfNil(v) {
+			if v, ok := cs["apm_aws_site"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				adminPassword := &ves_io_schema.SecretType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.AdminPassword = adminPassword
+				apmAwsSite := &ves_io_schema_bigip_apm.APMBigIpAWSType{}
+				siteTypeChoiceInt.AwsSiteTypeChoice.ApmAwsSite = apmAwsSite
 				for _, set := range sl {
-					adminPasswordMapStrToI := set.(map[string]interface{})
+					apmAwsSiteMapStrToI := set.(map[string]interface{})
 
-					if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-						adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-						for _, set := range sl {
-							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.Location = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.StoreProvider = w.(string)
-							}
-
-						}
-
-					}
-
-					if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-						adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-					}
-
-					secretInfoOneofTypeFound := false
-
-					if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := adminPasswordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-							}
-
-						}
-
-					}
-
-					if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-							}
-
-						}
-
-					}
-
-					if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-						secretInfoOneofTypeFound = true
-						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-						adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["admin_username"]; ok && !isIntfNil(v) {
-
-				serviceProviderChoiceInt.F5BigIpAwsService.AdminUsername = v.(string)
-
-			}
-
-			if v, ok := cs["endpoint_service"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				endpointService := &ves_io_schema_nfv_service.EndpointServiceType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.EndpointService = endpointService
-				for _, set := range sl {
-					endpointServiceMapStrToI := set.(map[string]interface{})
-
-					externalVipChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_AdvertiseOnSloIp{}
-							externalVipChoiceInt.AdvertiseOnSloIp = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip_external"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_AdvertiseOnSloIpExternal{}
-							externalVipChoiceInt.AdvertiseOnSloIpExternal = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["disable_advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_DisableAdvertiseOnSloIp{}
-							externalVipChoiceInt.DisableAdvertiseOnSloIp = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					insideVipChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["automatic_vip"]; ok && !isIntfNil(v) && !insideVipChoiceTypeFound {
-
-						insideVipChoiceTypeFound = true
-
-						if v.(bool) {
-							insideVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_AutomaticVip{}
-							insideVipChoiceInt.AutomaticVip = &ves_io_schema.Empty{}
-							endpointService.InsideVipChoice = insideVipChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["configured_vip"]; ok && !isIntfNil(v) && !insideVipChoiceTypeFound {
-
-						insideVipChoiceTypeFound = true
-						insideVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_ConfiguredVip{}
-
-						endpointService.InsideVipChoice = insideVipChoiceInt
-
-						insideVipChoiceInt.ConfiguredVip = v.(string)
-
-					}
-
-					tcpPortChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["custom_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-						tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_CustomTcpPorts{}
-						tcpPortChoiceInt.CustomTcpPorts = &ves_io_schema.PortRangesType{}
-						endpointService.TcpPortChoice = tcpPortChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								tcpPortChoiceInt.CustomTcpPorts.Ports = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["default_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_DefaultTcpPorts{}
-							tcpPortChoiceInt.DefaultTcpPorts = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["http_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_HttpPort{}
-							tcpPortChoiceInt.HttpPort = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["https_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_HttpsPort{}
-							tcpPortChoiceInt.HttpsPort = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["no_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_NoTcpPorts{}
-							tcpPortChoiceInt.NoTcpPorts = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					udpPortChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["custom_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
-
-						udpPortChoiceTypeFound = true
-						udpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_CustomUdpPorts{}
-						udpPortChoiceInt.CustomUdpPorts = &ves_io_schema.PortRangesType{}
-						endpointService.UdpPortChoice = udpPortChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								udpPortChoiceInt.CustomUdpPorts.Ports = ls
-
-							}
-
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["no_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
-
-						udpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							udpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceType_NoUdpPorts{}
-							udpPortChoiceInt.NoUdpPorts = &ves_io_schema.Empty{}
-							endpointService.UdpPortChoice = udpPortChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			imageChoiceTypeFound := false
-
-			if v, ok := cs["byol_image"]; ok && !isIntfNil(v) && !imageChoiceTypeFound {
-
-				imageChoiceTypeFound = true
-				imageChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSType_ByolImage{}
-				imageChoiceInt.ByolImage = &ves_io_schema_nfv_service.F5BigIpAWSBYOLImageType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.ImageChoice = imageChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["image"]; ok && !isIntfNil(v) {
-
-						imageChoiceInt.ByolImage.Image = v.(string)
-
-					}
-
-					if v, ok := cs["license"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						license := &ves_io_schema.SecretType{}
-						imageChoiceInt.ByolImage.License = license
-						for _, set := range sl {
-							licenseMapStrToI := set.(map[string]interface{})
-
-							if v, ok := licenseMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								license.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-									}
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.Location = w.(string)
-									}
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := licenseMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								license.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							secretInfoOneofTypeFound := false
-
-							if v, ok := licenseMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-								license.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-									}
-
-									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-									}
-
-									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := licenseMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-								license.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-									}
-
-									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := licenseMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								license.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-									}
-
-									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-									}
-
-									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-									}
-
-									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							if v, ok := licenseMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								license.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["market_place_image"]; ok && !isIntfNil(v) && !imageChoiceTypeFound {
-
-				imageChoiceTypeFound = true
-				imageChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSType_MarketPlaceImage{}
-				imageChoiceInt.MarketPlaceImage = &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.ImageChoice = imageChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					amiChoiceTypeFound := false
-
-					if v, ok := cs["AWAFPayG200Mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-						amiChoiceTypeFound = true
-
-						if v.(bool) {
-							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_AWAFPayG200Mbps{}
-							amiChoiceInt.AWAFPayG200Mbps = &ves_io_schema.Empty{}
-							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["AWAFPayG3Gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-						amiChoiceTypeFound = true
-
-						if v.(bool) {
-							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_AWAFPayG3Gbps{}
-							amiChoiceInt.AWAFPayG3Gbps = &ves_io_schema.Empty{}
-							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["BestPlusPayG200Mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-						amiChoiceTypeFound = true
-
-						if v.(bool) {
-							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_BestPlusPayG200Mbps{}
-							amiChoiceInt.BestPlusPayG200Mbps = &ves_io_schema.Empty{}
-							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["best_plus_payg_1gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-						amiChoiceTypeFound = true
-
-						if v.(bool) {
-							amiChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSMarketPlaceImageType_BestPlusPayg_1Gbps{}
-							amiChoiceInt.BestPlusPayg_1Gbps = &ves_io_schema.Empty{}
-							imageChoiceInt.MarketPlaceImage.AmiChoice = amiChoiceInt
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["nodes"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				nodes := make([]*ves_io_schema_nfv_service.ServiceNodesAWSType, len(sl))
-				serviceProviderChoiceInt.F5BigIpAwsService.Nodes = nodes
-				for i, set := range sl {
-					nodes[i] = &ves_io_schema_nfv_service.ServiceNodesAWSType{}
-					nodesMapStrToI := set.(map[string]interface{})
-
-					if w, ok := nodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-						nodes[i].AwsAzName = w.(string)
-					}
-
-					mgmtSubnetChoiceTypeFound := false
-
-					if v, ok := nodesMapStrToI["mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
-
-						mgmtSubnetChoiceTypeFound = true
-						mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_MgmtSubnet{}
-						mgmtSubnetChoiceInt.MgmtSubnet = &ves_io_schema_views.CloudSubnetType{}
-						nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-								mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
-
-								choiceInt.ExistingSubnetId = v.(string)
-
-							}
-
-							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-								mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv4 = v.(string)
-
-									}
-
-									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-										choiceInt.SubnetParam.Ipv6 = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := nodesMapStrToI["reserved_mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
-
-						mgmtSubnetChoiceTypeFound = true
-
-						if v.(bool) {
-							mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_ReservedMgmtSubnet{}
-							mgmtSubnetChoiceInt.ReservedMgmtSubnet = &ves_io_schema.Empty{}
-							nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
-						}
-
-					}
-
-					if w, ok := nodesMapStrToI["node_name"]; ok && !isIntfNil(w) {
-						nodes[i].NodeName = w.(string)
-					}
-
-					tunnelPrefixChoiceTypeFound := false
-
-					if v, ok := nodesMapStrToI["automatic_prefix"]; ok && !isIntfNil(v) && !tunnelPrefixChoiceTypeFound {
-
-						tunnelPrefixChoiceTypeFound = true
-
-						if v.(bool) {
-							tunnelPrefixChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_AutomaticPrefix{}
-							tunnelPrefixChoiceInt.AutomaticPrefix = &ves_io_schema.Empty{}
-							nodes[i].TunnelPrefixChoice = tunnelPrefixChoiceInt
-						}
-
-					}
-
-					if v, ok := nodesMapStrToI["tunnel_prefix"]; ok && !isIntfNil(v) && !tunnelPrefixChoiceTypeFound {
-
-						tunnelPrefixChoiceTypeFound = true
-						tunnelPrefixChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_TunnelPrefix{}
-
-						nodes[i].TunnelPrefixChoice = tunnelPrefixChoiceInt
-
-						tunnelPrefixChoiceInt.TunnelPrefix = v.(string)
-
-					}
-
-				}
-
-			}
-
-			siteTypeChoiceTypeFound := false
-
-			if v, ok := cs["aws_tgw_site_params"]; ok && !isIntfNil(v) && !siteTypeChoiceTypeFound {
-
-				siteTypeChoiceTypeFound = true
-				siteTypeChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSType_AwsTgwSiteParams{}
-				siteTypeChoiceInt.AwsTgwSiteParams = &ves_io_schema_nfv_service.F5BigIpAWSTGWSiteType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.SiteTypeChoice = siteTypeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["aws_tgw_site"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						awsTgwSiteInt := &ves_io_schema_views.ObjectRefType{}
-						siteTypeChoiceInt.AwsTgwSiteParams.AwsTgwSite = awsTgwSiteInt
-
-						for _, set := range sl {
-							atsMapToStrVal := set.(map[string]interface{})
-							if val, ok := atsMapToStrVal["name"]; ok && !isIntfNil(v) {
-								awsTgwSiteInt.Name = val.(string)
-							}
-							if val, ok := atsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								awsTgwSiteInt.Namespace = val.(string)
-							}
-
-							if val, ok := atsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								awsTgwSiteInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["aws_vpc_site_params"]; ok && !isIntfNil(v) && !siteTypeChoiceTypeFound {
-
-				siteTypeChoiceTypeFound = true
-				siteTypeChoiceInt := &ves_io_schema_nfv_service.F5BigIpAWSType_AwsVpcSiteParams{}
-				siteTypeChoiceInt.AwsVpcSiteParams = &ves_io_schema_nfv_service.F5BigIpAWSVPCSiteType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.SiteTypeChoice = siteTypeChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["aws_vpc_site"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						awsVpcSiteInt := &ves_io_schema_views.ObjectRefType{}
-						siteTypeChoiceInt.AwsVpcSiteParams.AwsVpcSite = awsVpcSiteInt
-
-						for _, set := range sl {
-							avsMapToStrVal := set.(map[string]interface{})
-							if val, ok := avsMapToStrVal["name"]; ok && !isIntfNil(v) {
-								awsVpcSiteInt.Name = val.(string)
-							}
-							if val, ok := avsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								awsVpcSiteInt.Namespace = val.(string)
-							}
-
-							if val, ok := avsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								awsVpcSiteInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["ssh_key"]; ok && !isIntfNil(v) {
-
-				serviceProviderChoiceInt.F5BigIpAwsService.SshKey = v.(string)
-
-			}
-
-			if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				serviceProviderChoiceInt.F5BigIpAwsService.Tags = ms
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("palo_alto_fw_service"); ok && !serviceProviderChoiceTypeFound {
-
-		serviceProviderChoiceTypeFound = true
-		serviceProviderChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_PaloAltoFwService{}
-		serviceProviderChoiceInt.PaloAltoFwService = &ves_io_schema_nfv_service.PaloAltoFWAWSType{}
-		createSpec.ServiceProviderChoice = serviceProviderChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			amiChoiceTypeFound := false
-
-			if v, ok := cs["pan_ami_bundle1"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-				amiChoiceTypeFound = true
-
-				if v.(bool) {
-					amiChoiceInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_PanAmiBundle1{}
-					amiChoiceInt.PanAmiBundle1 = &ves_io_schema.Empty{}
-					serviceProviderChoiceInt.PaloAltoFwService.AmiChoice = amiChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["pan_ami_bundle2"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
-
-				amiChoiceTypeFound = true
-
-				if v.(bool) {
-					amiChoiceInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_PanAmiBundle2{}
-					amiChoiceInt.PanAmiBundle2 = &ves_io_schema.Empty{}
-					serviceProviderChoiceInt.PaloAltoFwService.AmiChoice = amiChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["aws_tgw_site"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				awsTgwSiteInt := &ves_io_schema_views.ObjectRefType{}
-				serviceProviderChoiceInt.PaloAltoFwService.AwsTgwSite = awsTgwSiteInt
-
-				for _, set := range sl {
-					atsMapToStrVal := set.(map[string]interface{})
-					if val, ok := atsMapToStrVal["name"]; ok && !isIntfNil(v) {
-						awsTgwSiteInt.Name = val.(string)
-					}
-					if val, ok := atsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-						awsTgwSiteInt.Namespace = val.(string)
-					}
-
-					if val, ok := atsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-						awsTgwSiteInt.Tenant = val.(string)
-					}
-				}
-
-			}
-
-			if v, ok := cs["instance_type"]; ok && !isIntfNil(v) {
-
-				serviceProviderChoiceInt.PaloAltoFwService.InstanceType = ves_io_schema_nfv_service.PaloAltoFWAWSInstanceType(ves_io_schema_nfv_service.PaloAltoFWAWSInstanceType_value[v.(string)])
-
-			}
-
-			panaromaConnectionTypeFound := false
-
-			if v, ok := cs["disable_panaroma"]; ok && !isIntfNil(v) && !panaromaConnectionTypeFound {
-
-				panaromaConnectionTypeFound = true
-
-				if v.(bool) {
-					panaromaConnectionInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_DisablePanaroma{}
-					panaromaConnectionInt.DisablePanaroma = &ves_io_schema.Empty{}
-					serviceProviderChoiceInt.PaloAltoFwService.PanaromaConnection = panaromaConnectionInt
-				}
-
-			}
-
-			if v, ok := cs["panorama_server"]; ok && !isIntfNil(v) && !panaromaConnectionTypeFound {
-
-				panaromaConnectionTypeFound = true
-				panaromaConnectionInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_PanoramaServer{}
-				panaromaConnectionInt.PanoramaServer = &ves_io_schema_nfv_service.PanoramaServerType{}
-				serviceProviderChoiceInt.PaloAltoFwService.PanaromaConnection = panaromaConnectionInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["authorization_key"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						authorizationKey := &ves_io_schema.SecretType{}
-						panaromaConnectionInt.PanoramaServer.AuthorizationKey = authorizationKey
-						for _, set := range sl {
-							authorizationKeyMapStrToI := set.(map[string]interface{})
-
-							if v, ok := authorizationKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.(*schema.Set).List()
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								authorizationKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-									}
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.Location = w.(string)
-									}
-
-									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := authorizationKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								authorizationKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							secretInfoOneofTypeFound := false
-
-							if v, ok := authorizationKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-								authorizationKey.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-									}
-
-									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-									}
-
-									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := authorizationKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-								authorizationKey.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-									}
-
-									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := authorizationKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								authorizationKey.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-									}
-
-									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-									}
-
-									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-									}
-
-									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-									}
-
-								}
-
-							}
-
-							if v, ok := authorizationKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								authorizationKey.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-					if v, ok := cs["device_group_name"]; ok && !isIntfNil(v) {
-
-						panaromaConnectionInt.PanoramaServer.DeviceGroupName = v.(string)
-
-					}
-
-					if v, ok := cs["server"]; ok && !isIntfNil(v) {
-
-						panaromaConnectionInt.PanoramaServer.Server = v.(string)
-
-					}
-
-					if v, ok := cs["template_stack_name"]; ok && !isIntfNil(v) {
-
-						panaromaConnectionInt.PanoramaServer.TemplateStackName = v.(string)
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["service_nodes"]; ok && !isIntfNil(v) {
-
-				sl := v.(*schema.Set).List()
-				serviceNodes := &ves_io_schema_nfv_service.PaloAltoAzNodesAWSType{}
-				serviceProviderChoiceInt.PaloAltoFwService.ServiceNodes = serviceNodes
-				for _, set := range sl {
-					serviceNodesMapStrToI := set.(map[string]interface{})
-
-					if v, ok := serviceNodesMapStrToI["nodes"]; ok && !isIntfNil(v) {
-
-						sl := v.([]interface{})
-						nodes := make([]*ves_io_schema_nfv_service.PaloAltoServiceNodesAWSType, len(sl))
-						serviceNodes.Nodes = nodes
-						for i, set := range sl {
-							nodes[i] = &ves_io_schema_nfv_service.PaloAltoServiceNodesAWSType{}
-							nodesMapStrToI := set.(map[string]interface{})
-
-							if w, ok := nodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-								nodes[i].AwsAzName = w.(string)
-							}
-
-							mgmtSubnetChoiceTypeFound := false
-
-							if v, ok := nodesMapStrToI["mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
-
-								mgmtSubnetChoiceTypeFound = true
-								mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.PaloAltoServiceNodesAWSType_MgmtSubnet{}
-								mgmtSubnetChoiceInt.MgmtSubnet = &ves_io_schema_views.CloudSubnetType{}
-								nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									choiceTypeFound := false
-
-									if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-										choiceTypeFound = true
-										choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
-
-										mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
-
-										choiceInt.ExistingSubnetId = v.(string)
-
-									}
-
-									if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-										choiceTypeFound = true
-										choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
-										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
-										mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-												choiceInt.SubnetParam.Ipv4 = v.(string)
-
-											}
-
-											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-												choiceInt.SubnetParam.Ipv6 = v.(string)
-
-											}
-
-										}
-
-									}
-
-								}
-
-							}
-
-							if v, ok := nodesMapStrToI["reserved_mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
-
-								mgmtSubnetChoiceTypeFound = true
-
-								if v.(bool) {
-									mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.PaloAltoServiceNodesAWSType_ReservedMgmtSubnet{}
-									mgmtSubnetChoiceInt.ReservedMgmtSubnet = &ves_io_schema.Empty{}
-									nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
-								}
-
-							}
-
-							if w, ok := nodesMapStrToI["node_name"]; ok && !isIntfNil(w) {
-								nodes[i].NodeName = w.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			setupOptionsTypeFound := false
-
-			if v, ok := cs["auto_setup"]; ok && !isIntfNil(v) && !setupOptionsTypeFound {
-
-				setupOptionsTypeFound = true
-				setupOptionsInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_AutoSetup{}
-				setupOptionsInt.AutoSetup = &ves_io_schema_nfv_service.PANAWSAutoSetupType{}
-				serviceProviderChoiceInt.PaloAltoFwService.SetupOptions = setupOptionsInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["admin_password"]; ok && !isIntfNil(v) {
+					if v, ok := apmAwsSiteMapStrToI["admin_password"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
 						adminPassword := &ves_io_schema.SecretType{}
-						setupOptionsInt.AutoSetup.AdminPassword = adminPassword
+						apmAwsSite.AdminPassword = adminPassword
 						for _, set := range sl {
 							adminPasswordMapStrToI := set.(map[string]interface{})
 
@@ -6639,196 +4800,292 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
-					if v, ok := cs["admin_username"]; ok && !isIntfNil(v) {
-
-						setupOptionsInt.AutoSetup.AdminUsername = v.(string)
-
+					if w, ok := apmAwsSiteMapStrToI["admin_username"]; ok && !isIntfNil(w) {
+						apmAwsSite.AdminUsername = w.(string)
 					}
 
-					sshKeysChoiceTypeFound := false
+					if v, ok := apmAwsSiteMapStrToI["aws_tgw_site"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["autogenerated_ssh_keys"]; ok && !isIntfNil(v) && !sshKeysChoiceTypeFound {
+						sl := v.(*schema.Set).List()
+						awsTgwSite := &ves_io_schema_nfv_service.F5BigIpAWSTGWSiteType{}
+						apmAwsSite.AwsTgwSite = awsTgwSite
+						for _, set := range sl {
+							awsTgwSiteMapStrToI := set.(map[string]interface{})
 
-						sshKeysChoiceTypeFound = true
+							if v, ok := awsTgwSiteMapStrToI["aws_tgw_site"]; ok && !isIntfNil(v) {
 
-						if v.(bool) {
-							sshKeysChoiceInt := &ves_io_schema_nfv_service.PANAWSAutoSetupType_AutogeneratedSshKeys{}
-							sshKeysChoiceInt.AutogeneratedSshKeys = &ves_io_schema.Empty{}
-							setupOptionsInt.AutoSetup.SshKeysChoice = sshKeysChoiceInt
+								sl := v.(*schema.Set).List()
+								awsTgwSiteInt := &ves_io_schema_views.ObjectRefType{}
+								awsTgwSite.AwsTgwSite = awsTgwSiteInt
+
+								for _, set := range sl {
+									atsMapToStrVal := set.(map[string]interface{})
+									if val, ok := atsMapToStrVal["name"]; ok && !isIntfNil(v) {
+										awsTgwSiteInt.Name = val.(string)
+									}
+									if val, ok := atsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										awsTgwSiteInt.Namespace = val.(string)
+									}
+
+									if val, ok := atsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										awsTgwSiteInt.Tenant = val.(string)
+									}
+								}
+
+							}
+
 						}
 
 					}
 
-					if v, ok := cs["manual_ssh_keys"]; ok && !isIntfNil(v) && !sshKeysChoiceTypeFound {
-
-						sshKeysChoiceTypeFound = true
-						sshKeysChoiceInt := &ves_io_schema_nfv_service.PANAWSAutoSetupType_ManualSshKeys{}
-						sshKeysChoiceInt.ManualSshKeys = &ves_io_schema_nfv_service.SSHKeyType{}
-						setupOptionsInt.AutoSetup.SshKeysChoice = sshKeysChoiceInt
+					if v, ok := apmAwsSiteMapStrToI["endpoint_service"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
+						endpointService := &ves_io_schema_bigip_apm.EndpointServiceType{}
+						apmAwsSite.EndpointService = endpointService
 						for _, set := range sl {
-							cs := set.(map[string]interface{})
+							endpointServiceMapStrToI := set.(map[string]interface{})
 
-							if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+							externalVipChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
+
+								externalVipChoiceTypeFound = true
+
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_AdvertiseOnSloIp{}
+									externalVipChoiceInt.AdvertiseOnSloIp = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip_external"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
+
+								externalVipChoiceTypeFound = true
+
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_AdvertiseOnSloIpExternal{}
+									externalVipChoiceInt.AdvertiseOnSloIpExternal = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["disable_advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
+
+								externalVipChoiceTypeFound = true
+
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_DisableAdvertiseOnSloIp{}
+									externalVipChoiceInt.DisableAdvertiseOnSloIp = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
+								}
+
+							}
+
+							insideVipChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["automatic_vip"]; ok && !isIntfNil(v) && !insideVipChoiceTypeFound {
+
+								insideVipChoiceTypeFound = true
+
+								if v.(bool) {
+									insideVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_AutomaticVip{}
+									insideVipChoiceInt.AutomaticVip = &ves_io_schema.Empty{}
+									endpointService.InsideVipChoice = insideVipChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["configured_vip"]; ok && !isIntfNil(v) && !insideVipChoiceTypeFound {
+
+								insideVipChoiceTypeFound = true
+								insideVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_ConfiguredVip{}
+
+								endpointService.InsideVipChoice = insideVipChoiceInt
+
+								insideVipChoiceInt.ConfiguredVip = v.(string)
+
+							}
+
+							tcpPortChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["custom_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+								tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_CustomTcpPorts{}
+								tcpPortChoiceInt.CustomTcpPorts = &ves_io_schema.PortRangesType{}
+								endpointService.TcpPortChoice = tcpPortChoiceInt
 
 								sl := v.(*schema.Set).List()
-								privateKey := &ves_io_schema.SecretType{}
-								sshKeysChoiceInt.ManualSshKeys.PrivateKey = privateKey
 								for _, set := range sl {
-									privateKeyMapStrToI := set.(map[string]interface{})
+									cs := set.(map[string]interface{})
 
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+									if v, ok := cs["ports"]; ok && !isIntfNil(v) {
 
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
 										}
+										tcpPortChoiceInt.CustomTcpPorts.Ports = ls
 
 									}
 
-									if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+								}
 
-										privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+							}
+
+							if v, ok := endpointServiceMapStrToI["default_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_DefaultTcpPorts{}
+									tcpPortChoiceInt.DefaultTcpPorts = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["http_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_HttpPort{}
+									tcpPortChoiceInt.HttpPort = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["https_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_HttpsPort{}
+									tcpPortChoiceInt.HttpsPort = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["no_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_NoTcpPorts{}
+									tcpPortChoiceInt.NoTcpPorts = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							udpPortChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["custom_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
+
+								udpPortChoiceTypeFound = true
+								udpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_CustomUdpPorts{}
+								udpPortChoiceInt.CustomUdpPorts = &ves_io_schema.PortRangesType{}
+								endpointService.UdpPortChoice = udpPortChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										udpPortChoiceInt.CustomUdpPorts.Ports = ls
 
 									}
 
-									secretInfoOneofTypeFound := false
+								}
 
-									if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+							}
 
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
+							if v, ok := endpointServiceMapStrToI["no_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
+
+								udpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									udpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceType_NoUdpPorts{}
+									udpPortChoiceInt.NoUdpPorts = &ves_io_schema.Empty{}
+									endpointService.UdpPortChoice = udpPortChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := apmAwsSiteMapStrToI["nodes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						nodes := make([]*ves_io_schema_nfv_service.ServiceNodesAWSType, len(sl))
+						apmAwsSite.Nodes = nodes
+						for i, set := range sl {
+							nodes[i] = &ves_io_schema_nfv_service.ServiceNodesAWSType{}
+							nodesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := nodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
+								nodes[i].AwsAzName = w.(string)
+							}
+
+							mgmtSubnetChoiceTypeFound := false
+
+							if v, ok := nodesMapStrToI["mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
+
+								mgmtSubnetChoiceTypeFound = true
+								mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_MgmtSubnet{}
+								mgmtSubnetChoiceInt.MgmtSubnet = &ves_io_schema_views.CloudSubnetType{}
+								nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									choiceTypeFound := false
+
+									if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+										mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
+
+										choiceInt.ExistingSubnetId = v.(string)
+
+									}
+
+									if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+										choiceTypeFound = true
+										choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+										choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+										mgmtSubnetChoiceInt.MgmtSubnet.Choice = choiceInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
 											cs := set.(map[string]interface{})
 
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+												choiceInt.SubnetParam.Ipv4 = v.(string)
 
 											}
 
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										privateKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+												choiceInt.SubnetParam.Ipv6 = v.(string)
 
 											}
 
@@ -6840,9 +5097,44 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := cs["public_key"]; ok && !isIntfNil(v) {
+							if v, ok := nodesMapStrToI["reserved_mgmt_subnet"]; ok && !isIntfNil(v) && !mgmtSubnetChoiceTypeFound {
 
-								sshKeysChoiceInt.ManualSshKeys.PublicKey = v.(string)
+								mgmtSubnetChoiceTypeFound = true
+
+								if v.(bool) {
+									mgmtSubnetChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_ReservedMgmtSubnet{}
+									mgmtSubnetChoiceInt.ReservedMgmtSubnet = &ves_io_schema.Empty{}
+									nodes[i].MgmtSubnetChoice = mgmtSubnetChoiceInt
+								}
+
+							}
+
+							if w, ok := nodesMapStrToI["node_name"]; ok && !isIntfNil(w) {
+								nodes[i].NodeName = w.(string)
+							}
+
+							tunnelPrefixChoiceTypeFound := false
+
+							if v, ok := nodesMapStrToI["automatic_prefix"]; ok && !isIntfNil(v) && !tunnelPrefixChoiceTypeFound {
+
+								tunnelPrefixChoiceTypeFound = true
+
+								if v.(bool) {
+									tunnelPrefixChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_AutomaticPrefix{}
+									tunnelPrefixChoiceInt.AutomaticPrefix = &ves_io_schema.Empty{}
+									nodes[i].TunnelPrefixChoice = tunnelPrefixChoiceInt
+								}
+
+							}
+
+							if v, ok := nodesMapStrToI["tunnel_prefix"]; ok && !isIntfNil(v) && !tunnelPrefixChoiceTypeFound {
+
+								tunnelPrefixChoiceTypeFound = true
+								tunnelPrefixChoiceInt := &ves_io_schema_nfv_service.ServiceNodesAWSType_TunnelPrefix{}
+
+								nodes[i].TunnelPrefixChoice = tunnelPrefixChoiceInt
+
+								tunnelPrefixChoiceInt.TunnelPrefix = v.(string)
 
 							}
 
@@ -6850,100 +5142,57 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if w, ok := apmAwsSiteMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
+						apmAwsSite.SshKey = w.(string)
+					}
+
+					if w, ok := apmAwsSiteMapStrToI["tags"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
+						}
+						apmAwsSite.Tags = ms
+					}
+
 				}
 
 			}
 
-			if v, ok := cs["ssh_key"]; ok && !isIntfNil(v) && !setupOptionsTypeFound {
+			licenseTypeTypeFound := false
 
-				setupOptionsTypeFound = true
-				setupOptionsInt := &ves_io_schema_nfv_service.PaloAltoFWAWSType_SshKey{}
+			if v, ok := cs["market_place_image"]; ok && !isIntfNil(v) && !licenseTypeTypeFound {
 
-				serviceProviderChoiceInt.PaloAltoFwService.SetupOptions = setupOptionsInt
-
-				setupOptionsInt.SshKey = v.(string)
-
-			}
-
-			if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				serviceProviderChoiceInt.PaloAltoFwService.Tags = ms
-			}
-
-			if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-				serviceProviderChoiceInt.PaloAltoFwService.Version = v.(string)
-
-			}
-
-		}
-
-	}
-
-	//ssh_management_choice
-
-	sshManagementChoiceTypeFound := false
-
-	if v, ok := d.GetOk("disable_ssh_access"); ok && !sshManagementChoiceTypeFound {
-
-		sshManagementChoiceTypeFound = true
-
-		if v.(bool) {
-			sshManagementChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_DisableSshAccess{}
-			sshManagementChoiceInt.DisableSshAccess = &ves_io_schema.Empty{}
-			createSpec.SshManagementChoice = sshManagementChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("enabled_ssh_access"); ok && !sshManagementChoiceTypeFound {
-
-		sshManagementChoiceTypeFound = true
-		sshManagementChoiceInt := &ves_io_schema_nfv_service.CreateSpecType_EnabledSshAccess{}
-		sshManagementChoiceInt.EnabledSshAccess = &ves_io_schema_nfv_service.SSHManagementType{}
-		createSpec.SshManagementChoice = sshManagementChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			advertiseChoiceTypeFound := false
-
-			if v, ok := cs["advertise_on_public"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-				advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnPublic{}
-				advertiseChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-				sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
+				licenseTypeTypeFound = true
+				licenseTypeInt := &ves_io_schema_bigip_apm.AWSSiteTypeChoice_MarketPlaceImage{}
+				licenseTypeInt.MarketPlaceImage = &ves_io_schema_bigip_apm.AWSMarketPlaceImageTypeAPMaaS{}
+				siteTypeChoiceInt.AwsSiteTypeChoice.LicenseType = licenseTypeInt
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
+					amiChoiceTypeFound := false
 
-						sl := v.(*schema.Set).List()
-						publicIp := &ves_io_schema_views.ObjectRefType{}
-						advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-						for _, set := range sl {
-							publicIpMapStrToI := set.(map[string]interface{})
+					if v, ok := cs["BestPlusPayG200Mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
 
-							if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-								publicIp.Name = w.(string)
-							}
+						amiChoiceTypeFound = true
 
-							if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-								publicIp.Namespace = w.(string)
-							}
+						if v.(bool) {
+							amiChoiceInt := &ves_io_schema_bigip_apm.AWSMarketPlaceImageTypeAPMaaS_BestPlusPayG200Mbps{}
+							amiChoiceInt.BestPlusPayG200Mbps = &ves_io_schema.Empty{}
+							licenseTypeInt.MarketPlaceImage.AmiChoice = amiChoiceInt
+						}
 
-							if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-								publicIp.Tenant = w.(string)
-							}
+					}
 
+					if v, ok := cs["best_plus_payg_1gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
+
+						amiChoiceTypeFound = true
+
+						if v.(bool) {
+							amiChoiceInt := &ves_io_schema_bigip_apm.AWSMarketPlaceImageTypeAPMaaS_BestPlusPayg_1Gbps{}
+							amiChoiceInt.BestPlusPayg_1Gbps = &ves_io_schema.Empty{}
+							licenseTypeInt.MarketPlaceImage.AmiChoice = amiChoiceInt
 						}
 
 					}
@@ -6952,81 +5201,336 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := cs["advertise_on_public_default_vip"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
+		}
 
-				advertiseChoiceTypeFound = true
+	}
 
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnPublicDefaultVip{}
-					advertiseChoiceInt.AdvertiseOnPublicDefaultVip = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
+	if v, ok := d.GetOk("baremetal_site_type_choice"); ok && !siteTypeChoiceTypeFound {
 
-			}
+		siteTypeChoiceTypeFound = true
+		siteTypeChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_BaremetalSiteTypeChoice{}
+		siteTypeChoiceInt.BaremetalSiteTypeChoice = &ves_io_schema_bigip_apm.F5BigIpAppStackBareMetalTypeChoice{}
+		createSpec.SiteTypeChoice = siteTypeChoiceInt
 
-			if v, ok := cs["advertise_on_sli"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
 
-				advertiseChoiceTypeFound = true
+			if v, ok := cs["f5_bare_metal_site"]; ok && !isIntfNil(v) {
 
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSli{}
-					advertiseChoiceInt.AdvertiseOnSli = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
+				sl := v.(*schema.Set).List()
+				f5BareMetalSite := &ves_io_schema_nfv_service.F5BigIpAppStackBareMetalType{}
+				siteTypeChoiceInt.BaremetalSiteTypeChoice.F5BareMetalSite = f5BareMetalSite
+				for _, set := range sl {
+					f5BareMetalSiteMapStrToI := set.(map[string]interface{})
 
-			}
+					if v, ok := f5BareMetalSiteMapStrToI["admin_password"]; ok && !isIntfNil(v) {
 
-			if v, ok := cs["advertise_on_slo"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
+						sl := v.(*schema.Set).List()
+						adminPassword := &ves_io_schema.SecretType{}
+						f5BareMetalSite.AdminPassword = adminPassword
+						for _, set := range sl {
+							adminPasswordMapStrToI := set.(map[string]interface{})
 
-				advertiseChoiceTypeFound = true
+							if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSlo{}
-					advertiseChoiceInt.AdvertiseOnSlo = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
+								sl := v.(*schema.Set).List()
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
-			}
+									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+									}
 
-			if v, ok := cs["advertise_on_slo_internet_vip"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
+									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+										blindfoldSecretInfoInternal.Location = w.(string)
+									}
 
-				advertiseChoiceTypeFound = true
+									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+									}
 
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSloInternetVip{}
-					advertiseChoiceInt.AdvertiseOnSloInternetVip = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
+								}
 
-			}
+							}
 
-			if v, ok := cs["advertise_on_slo_sli"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
+							if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
 
-				advertiseChoiceTypeFound = true
+								adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
 
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSloSli{}
-					advertiseChoiceInt.AdvertiseOnSloSli = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
+							}
 
-			}
+							secretInfoOneofTypeFound := false
 
-			if v, ok := cs["node_ssh_ports"]; ok && !isIntfNil(v) {
+							if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
-				sl := v.([]interface{})
-				nodeSshPorts := make([]*ves_io_schema_nfv_service.SSHManagementNodePorts, len(sl))
-				sshManagementChoiceInt.EnabledSshAccess.NodeSshPorts = nodeSshPorts
-				for i, set := range sl {
-					nodeSshPorts[i] = &ves_io_schema_nfv_service.SSHManagementNodePorts{}
-					nodeSshPortsMapStrToI := set.(map[string]interface{})
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+								secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
 
-					if w, ok := nodeSshPortsMapStrToI["node_name"]; ok && !isIntfNil(w) {
-						nodeSshPorts[i].NodeName = w.(string)
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+									}
+
+									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+									}
+
+									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+								secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+									}
+
+									if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+									}
+
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+									}
+
+									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+									}
+
+									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+									}
+
+									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+									}
+
+									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+									}
+
+								}
+
+							}
+
+							if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								adminPassword.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
 					}
 
-					if w, ok := nodeSshPortsMapStrToI["ssh_port"]; ok && !isIntfNil(w) {
-						nodeSshPorts[i].SshPort = uint32(w.(int))
+					if w, ok := f5BareMetalSiteMapStrToI["admin_username"]; ok && !isIntfNil(w) {
+						f5BareMetalSite.AdminUsername = w.(string)
+					}
+
+					if v, ok := f5BareMetalSiteMapStrToI["bare_metal_site"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bareMetalSiteInt := &ves_io_schema_views.ObjectRefType{}
+						f5BareMetalSite.BareMetalSite = bareMetalSiteInt
+
+						for _, set := range sl {
+							bmsMapToStrVal := set.(map[string]interface{})
+							if val, ok := bmsMapToStrVal["name"]; ok && !isIntfNil(v) {
+								bareMetalSiteInt.Name = val.(string)
+							}
+							if val, ok := bmsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								bareMetalSiteInt.Namespace = val.(string)
+							}
+
+							if val, ok := bmsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								bareMetalSiteInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+					if v, ok := f5BareMetalSiteMapStrToI["nodes"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						nodes := make([]*ves_io_schema_nfv_service.ServiceNodesBareMetalType, len(sl))
+						f5BareMetalSite.Nodes = nodes
+						for i, set := range sl {
+							nodes[i] = &ves_io_schema_nfv_service.ServiceNodesBareMetalType{}
+							nodesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := nodesMapStrToI["external_interface"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								externalInterface := &ves_io_schema_nfv_service.InterfaceDetails{}
+								nodes[i].ExternalInterface = externalInterface
+								for _, set := range sl {
+									externalInterfaceMapStrToI := set.(map[string]interface{})
+
+									if v, ok := externalInterfaceMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										intfInt := &ves_io_schema_views.ObjectRefType{}
+										externalInterface.Interface = intfInt
+
+										for _, set := range sl {
+											iMapToStrVal := set.(map[string]interface{})
+											if val, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+												intfInt.Name = val.(string)
+											}
+											if val, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												intfInt.Namespace = val.(string)
+											}
+
+											if val, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												intfInt.Tenant = val.(string)
+											}
+										}
+
+									}
+
+									if w, ok := externalInterfaceMapStrToI["network_gateway"]; ok && !isIntfNil(w) {
+										externalInterface.NetworkGateway = w.(string)
+									}
+
+									if w, ok := externalInterfaceMapStrToI["network_self_ip"]; ok && !isIntfNil(w) {
+										externalInterface.NetworkSelfIp = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := nodesMapStrToI["internal_interface"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								internalInterface := &ves_io_schema_nfv_service.InterfaceDetails{}
+								nodes[i].InternalInterface = internalInterface
+								for _, set := range sl {
+									internalInterfaceMapStrToI := set.(map[string]interface{})
+
+									if v, ok := internalInterfaceMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										intfInt := &ves_io_schema_views.ObjectRefType{}
+										internalInterface.Interface = intfInt
+
+										for _, set := range sl {
+											iMapToStrVal := set.(map[string]interface{})
+											if val, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+												intfInt.Name = val.(string)
+											}
+											if val, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+												intfInt.Namespace = val.(string)
+											}
+
+											if val, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+												intfInt.Tenant = val.(string)
+											}
+										}
+
+									}
+
+									if w, ok := internalInterfaceMapStrToI["network_gateway"]; ok && !isIntfNil(w) {
+										internalInterface.NetworkGateway = w.(string)
+									}
+
+									if w, ok := internalInterfaceMapStrToI["network_self_ip"]; ok && !isIntfNil(w) {
+										internalInterface.NetworkSelfIp = w.(string)
+									}
+
+								}
+
+							}
+
+							if w, ok := nodesMapStrToI["license_key"]; ok && !isIntfNil(w) {
+								nodes[i].LicenseKey = w.(string)
+							}
+
+							if w, ok := nodesMapStrToI["node_name"]; ok && !isIntfNil(w) {
+								nodes[i].NodeName = w.(string)
+							}
+
+						}
+
+					}
+
+					if w, ok := f5BareMetalSiteMapStrToI["public_download_url"]; ok && !isIntfNil(w) {
+						f5BareMetalSite.PublicDownloadUrl = w.(string)
+					}
+
+					if w, ok := f5BareMetalSiteMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
+						f5BareMetalSite.SshKey = w.(string)
 					}
 
 				}
@@ -7037,35 +5541,35 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	log.Printf("[DEBUG] Creating Volterra NfvService object with struct: %+v", createReq)
+	log.Printf("[DEBUG] Creating Volterra Apm object with struct: %+v", createReq)
 
-	createNfvServiceResp, err := client.CreateObject(context.Background(), ves_io_schema_nfv_service.ObjectType, createReq)
+	createApmResp, err := client.CreateObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, createReq)
 	if err != nil {
-		return fmt.Errorf("error creating NfvService: %s", err)
+		return fmt.Errorf("error creating Apm: %s", err)
 	}
-	d.SetId(createNfvServiceResp.GetObjSystemMetadata().GetUid())
+	d.SetId(createApmResp.GetObjSystemMetadata().GetUid())
 
-	return resourceVolterraNfvServiceRead(d, meta)
+	return resourceVolterraApmRead(d, meta)
 }
 
-func resourceVolterraNfvServiceRead(d *schema.ResourceData, meta interface{}) error {
+func resourceVolterraApmRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	name := d.Get("name").(string)
 	namespace := d.Get("namespace").(string)
 
-	resp, err := client.GetObject(context.Background(), ves_io_schema_nfv_service.ObjectType, namespace, name)
+	resp, err := client.GetObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, namespace, name)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] NfvService %s no longer exists", d.Id())
+			log.Printf("[INFO] Apm %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("Error finding Volterra NfvService %q: %s", d.Id(), err)
+		return fmt.Errorf("Error finding Volterra Apm %q: %s", d.Id(), err)
 	}
-	return setNfvServiceFields(client, d, resp)
+	return setApmFields(client, d, resp)
 }
 
-func setNfvServiceFields(client *APIClient, d *schema.ResourceData, resp vesapi.GetObjectResponse) error {
+func setApmFields(client *APIClient, d *schema.ResourceData, resp vesapi.GetObjectResponse) error {
 	metadata := resp.GetObjMetadata()
 
 	d.Set("annotations", metadata.GetAnnotations())
@@ -7083,13 +5587,13 @@ func setNfvServiceFields(client *APIClient, d *schema.ResourceData, resp vesapi.
 	return nil
 }
 
-// resourceVolterraNfvServiceUpdate updates NfvService resource
-func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) error {
+// resourceVolterraApmUpdate updates Apm resource
+func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 
 	updateMeta := &ves_io_schema.ObjectReplaceMetaType{}
-	updateSpec := &ves_io_schema_nfv_service.ReplaceSpecType{}
-	updateReq := &ves_io_schema_nfv_service.ReplaceRequest{
+	updateSpec := &ves_io_schema_bigip_apm.ReplaceSpecType{}
+	updateReq := &ves_io_schema_bigip_apm.ReplaceRequest{
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
@@ -7137,22 +5641,10 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 	httpManagementChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_https_management"); ok && !httpManagementChoiceTypeFound {
-
-		httpManagementChoiceTypeFound = true
-
-		if v.(bool) {
-			httpManagementChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_DisableHttpsManagement{}
-			httpManagementChoiceInt.DisableHttpsManagement = &ves_io_schema.Empty{}
-			updateSpec.HttpManagementChoice = httpManagementChoiceInt
-		}
-
-	}
-
 	if v, ok := d.GetOk("https_management"); ok && !httpManagementChoiceTypeFound {
 
 		httpManagementChoiceTypeFound = true
-		httpManagementChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_HttpsManagement{}
+		httpManagementChoiceInt := &ves_io_schema_bigip_apm.ReplaceSpecType_HttpsManagement{}
 		httpManagementChoiceInt.HttpsManagement = &ves_io_schema_nfv_service.ServiceHttpsManagementType{}
 		updateSpec.HttpManagementChoice = httpManagementChoiceInt
 
@@ -9309,160 +7801,184 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	serviceProviderChoiceTypeFound := false
+	siteTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("f5_big_ip_aws_service"); ok && !serviceProviderChoiceTypeFound {
+	if v, ok := d.GetOk("aws_site_type_choice"); ok && !siteTypeChoiceTypeFound {
 
-		serviceProviderChoiceTypeFound = true
-		serviceProviderChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_F5BigIpAwsService{}
-		serviceProviderChoiceInt.F5BigIpAwsService = &ves_io_schema_nfv_service.F5BigIpAWSReplaceType{}
-		updateSpec.ServiceProviderChoice = serviceProviderChoiceInt
+		siteTypeChoiceTypeFound = true
+		siteTypeChoiceInt := &ves_io_schema_bigip_apm.ReplaceSpecType_AwsSiteTypeChoice{}
+		siteTypeChoiceInt.AwsSiteTypeChoice = &ves_io_schema_bigip_apm.AWSSiteTypeChoiceReplaceType{}
+		updateSpec.SiteTypeChoice = siteTypeChoiceInt
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
-			if v, ok := cs["endpoint_service"]; ok && !isIntfNil(v) {
+			if v, ok := cs["apm_aws_site"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				endpointService := &ves_io_schema_nfv_service.EndpointServiceReplaceType{}
-				serviceProviderChoiceInt.F5BigIpAwsService.EndpointService = endpointService
+				apmAwsSite := &ves_io_schema_bigip_apm.APMBigIpAWSReplaceType{}
+				siteTypeChoiceInt.AwsSiteTypeChoice.ApmAwsSite = apmAwsSite
 				for _, set := range sl {
-					endpointServiceMapStrToI := set.(map[string]interface{})
+					apmAwsSiteMapStrToI := set.(map[string]interface{})
 
-					externalVipChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_AdvertiseOnSloIp{}
-							externalVipChoiceInt.AdvertiseOnSloIp = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip_external"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_AdvertiseOnSloIpExternal{}
-							externalVipChoiceInt.AdvertiseOnSloIpExternal = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["disable_advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
-
-						externalVipChoiceTypeFound = true
-
-						if v.(bool) {
-							externalVipChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_DisableAdvertiseOnSloIp{}
-							externalVipChoiceInt.DisableAdvertiseOnSloIp = &ves_io_schema.Empty{}
-							endpointService.ExternalVipChoice = externalVipChoiceInt
-						}
-
-					}
-
-					tcpPortChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["custom_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-						tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_CustomTcpPorts{}
-						tcpPortChoiceInt.CustomTcpPorts = &ves_io_schema.PortRangesType{}
-						endpointService.TcpPortChoice = tcpPortChoiceInt
+					if v, ok := apmAwsSiteMapStrToI["endpoint_service"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
+						endpointService := &ves_io_schema_bigip_apm.EndpointServiceReplaceType{}
+						apmAwsSite.EndpointService = endpointService
 						for _, set := range sl {
-							cs := set.(map[string]interface{})
+							endpointServiceMapStrToI := set.(map[string]interface{})
 
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+							externalVipChoiceTypeFound := false
 
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+							if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
+
+								externalVipChoiceTypeFound = true
+
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_AdvertiseOnSloIp{}
+									externalVipChoiceInt.AdvertiseOnSloIp = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
 								}
-								tcpPortChoiceInt.CustomTcpPorts.Ports = ls
 
 							}
 
-						}
+							if v, ok := endpointServiceMapStrToI["advertise_on_slo_ip_external"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
 
-					}
+								externalVipChoiceTypeFound = true
 
-					if v, ok := endpointServiceMapStrToI["default_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_DefaultTcpPorts{}
-							tcpPortChoiceInt.DefaultTcpPorts = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["http_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_HttpPort{}
-							tcpPortChoiceInt.HttpPort = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["https_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_HttpsPort{}
-							tcpPortChoiceInt.HttpsPort = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					if v, ok := endpointServiceMapStrToI["no_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
-
-						tcpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							tcpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_NoTcpPorts{}
-							tcpPortChoiceInt.NoTcpPorts = &ves_io_schema.Empty{}
-							endpointService.TcpPortChoice = tcpPortChoiceInt
-						}
-
-					}
-
-					udpPortChoiceTypeFound := false
-
-					if v, ok := endpointServiceMapStrToI["custom_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
-
-						udpPortChoiceTypeFound = true
-						udpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_CustomUdpPorts{}
-						udpPortChoiceInt.CustomUdpPorts = &ves_io_schema.PortRangesType{}
-						endpointService.UdpPortChoice = udpPortChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ports"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_AdvertiseOnSloIpExternal{}
+									externalVipChoiceInt.AdvertiseOnSloIpExternal = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
 								}
-								udpPortChoiceInt.CustomUdpPorts.Ports = ls
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["disable_advertise_on_slo_ip"]; ok && !isIntfNil(v) && !externalVipChoiceTypeFound {
+
+								externalVipChoiceTypeFound = true
+
+								if v.(bool) {
+									externalVipChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_DisableAdvertiseOnSloIp{}
+									externalVipChoiceInt.DisableAdvertiseOnSloIp = &ves_io_schema.Empty{}
+									endpointService.ExternalVipChoice = externalVipChoiceInt
+								}
+
+							}
+
+							tcpPortChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["custom_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+								tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_CustomTcpPorts{}
+								tcpPortChoiceInt.CustomTcpPorts = &ves_io_schema.PortRangesType{}
+								endpointService.TcpPortChoice = tcpPortChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										tcpPortChoiceInt.CustomTcpPorts.Ports = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["default_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_DefaultTcpPorts{}
+									tcpPortChoiceInt.DefaultTcpPorts = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["http_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_HttpPort{}
+									tcpPortChoiceInt.HttpPort = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["https_port"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_HttpsPort{}
+									tcpPortChoiceInt.HttpsPort = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["no_tcp_ports"]; ok && !isIntfNil(v) && !tcpPortChoiceTypeFound {
+
+								tcpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									tcpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_NoTcpPorts{}
+									tcpPortChoiceInt.NoTcpPorts = &ves_io_schema.Empty{}
+									endpointService.TcpPortChoice = tcpPortChoiceInt
+								}
+
+							}
+
+							udpPortChoiceTypeFound := false
+
+							if v, ok := endpointServiceMapStrToI["custom_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
+
+								udpPortChoiceTypeFound = true
+								udpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_CustomUdpPorts{}
+								udpPortChoiceInt.CustomUdpPorts = &ves_io_schema.PortRangesType{}
+								endpointService.UdpPortChoice = udpPortChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										udpPortChoiceInt.CustomUdpPorts.Ports = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := endpointServiceMapStrToI["no_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
+
+								udpPortChoiceTypeFound = true
+
+								if v.(bool) {
+									udpPortChoiceInt := &ves_io_schema_bigip_apm.EndpointServiceReplaceType_NoUdpPorts{}
+									udpPortChoiceInt.NoUdpPorts = &ves_io_schema.Empty{}
+									endpointService.UdpPortChoice = udpPortChoiceInt
+								}
 
 							}
 
@@ -9470,200 +7986,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
-					if v, ok := endpointServiceMapStrToI["no_udp_ports"]; ok && !isIntfNil(v) && !udpPortChoiceTypeFound {
-
-						udpPortChoiceTypeFound = true
-
-						if v.(bool) {
-							udpPortChoiceInt := &ves_io_schema_nfv_service.EndpointServiceReplaceType_NoUdpPorts{}
-							udpPortChoiceInt.NoUdpPorts = &ves_io_schema.Empty{}
-							endpointService.UdpPortChoice = udpPortChoiceInt
+					if w, ok := apmAwsSiteMapStrToI["tags"]; ok && !isIntfNil(w) {
+						ms := map[string]string{}
+						for k, v := range w.(map[string]interface{}) {
+							ms[k] = v.(string)
 						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				serviceProviderChoiceInt.F5BigIpAwsService.Tags = ms
-			}
-
-		}
-
-	}
-
-	if v, ok := d.GetOk("palo_alto_fw_service"); ok && !serviceProviderChoiceTypeFound {
-
-		serviceProviderChoiceTypeFound = true
-		serviceProviderChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_PaloAltoFwService{}
-		serviceProviderChoiceInt.PaloAltoFwService = &ves_io_schema_nfv_service.PaloAltoFWAWSReplaceType{}
-		updateSpec.ServiceProviderChoice = serviceProviderChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-				ms := map[string]string{}
-				for k, v := range v.(map[string]interface{}) {
-					ms[k] = v.(string)
-				}
-				serviceProviderChoiceInt.PaloAltoFwService.Tags = ms
-			}
-
-		}
-
-	}
-
-	sshManagementChoiceTypeFound := false
-
-	if v, ok := d.GetOk("disable_ssh_access"); ok && !sshManagementChoiceTypeFound {
-
-		sshManagementChoiceTypeFound = true
-
-		if v.(bool) {
-			sshManagementChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_DisableSshAccess{}
-			sshManagementChoiceInt.DisableSshAccess = &ves_io_schema.Empty{}
-			updateSpec.SshManagementChoice = sshManagementChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("enabled_ssh_access"); ok && !sshManagementChoiceTypeFound {
-
-		sshManagementChoiceTypeFound = true
-		sshManagementChoiceInt := &ves_io_schema_nfv_service.ReplaceSpecType_EnabledSshAccess{}
-		sshManagementChoiceInt.EnabledSshAccess = &ves_io_schema_nfv_service.SSHManagementType{}
-		updateSpec.SshManagementChoice = sshManagementChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			advertiseChoiceTypeFound := false
-
-			if v, ok := cs["advertise_on_public"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-				advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnPublic{}
-				advertiseChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-				sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						publicIp := &ves_io_schema_views.ObjectRefType{}
-						advertiseChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-						for _, set := range sl {
-							publicIpMapStrToI := set.(map[string]interface{})
-
-							if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-								publicIp.Name = w.(string)
-							}
-
-							if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-								publicIp.Namespace = w.(string)
-							}
-
-							if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-								publicIp.Tenant = w.(string)
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := cs["advertise_on_public_default_vip"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnPublicDefaultVip{}
-					advertiseChoiceInt.AdvertiseOnPublicDefaultVip = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["advertise_on_sli"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSli{}
-					advertiseChoiceInt.AdvertiseOnSli = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["advertise_on_slo"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSlo{}
-					advertiseChoiceInt.AdvertiseOnSlo = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["advertise_on_slo_internet_vip"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSloInternetVip{}
-					advertiseChoiceInt.AdvertiseOnSloInternetVip = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["advertise_on_slo_sli"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-				advertiseChoiceTypeFound = true
-
-				if v.(bool) {
-					advertiseChoiceInt := &ves_io_schema_nfv_service.SSHManagementType_AdvertiseOnSloSli{}
-					advertiseChoiceInt.AdvertiseOnSloSli = &ves_io_schema.Empty{}
-					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["node_ssh_ports"]; ok && !isIntfNil(v) {
-
-				sl := v.([]interface{})
-				nodeSshPorts := make([]*ves_io_schema_nfv_service.SSHManagementNodePorts, len(sl))
-				sshManagementChoiceInt.EnabledSshAccess.NodeSshPorts = nodeSshPorts
-				for i, set := range sl {
-					nodeSshPorts[i] = &ves_io_schema_nfv_service.SSHManagementNodePorts{}
-					nodeSshPortsMapStrToI := set.(map[string]interface{})
-
-					if w, ok := nodeSshPortsMapStrToI["node_name"]; ok && !isIntfNil(w) {
-						nodeSshPorts[i].NodeName = w.(string)
-					}
-
-					if w, ok := nodeSshPortsMapStrToI["ssh_port"]; ok && !isIntfNil(w) {
-						nodeSshPorts[i].SshPort = uint32(w.(int))
+						apmAwsSite.Tags = ms
 					}
 
 				}
@@ -9674,31 +8002,37 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	log.Printf("[DEBUG] Updating Volterra NfvService obj with struct: %+v", updateReq)
+	if v, ok := d.GetOk("baremetal_site_type_choice"); ok && !siteTypeChoiceTypeFound {
 
-	err := client.ReplaceObject(context.Background(), ves_io_schema_nfv_service.ObjectType, updateReq)
+		siteTypeChoiceTypeFound = true
+		_ = v
+	}
+
+	log.Printf("[DEBUG] Updating Volterra Apm obj with struct: %+v", updateReq)
+
+	err := client.ReplaceObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, updateReq)
 	if err != nil {
-		return fmt.Errorf("error updating NfvService: %s", err)
+		return fmt.Errorf("error updating Apm: %s", err)
 	}
 
-	return resourceVolterraNfvServiceRead(d, meta)
+	return resourceVolterraApmRead(d, meta)
 }
 
-func resourceVolterraNfvServiceDelete(d *schema.ResourceData, meta interface{}) error {
+func resourceVolterraApmDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	name := d.Get("name").(string)
 	namespace := d.Get("namespace").(string)
 
-	_, err := client.GetObject(context.Background(), ves_io_schema_nfv_service.ObjectType, namespace, name)
+	_, err := client.GetObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, namespace, name)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
-			log.Printf("[INFO] NfvService %s no longer exists", d.Id())
+			log.Printf("[INFO] Apm %s no longer exists", d.Id())
 			d.SetId("")
 			return nil
 		}
-		return fmt.Errorf("Error finding Volterra NfvService before deleting %q: %s", d.Id(), err)
+		return fmt.Errorf("Error finding Volterra Apm before deleting %q: %s", d.Id(), err)
 	}
 
-	log.Printf("[DEBUG] Deleting Volterra NfvService obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_nfv_service.ObjectType, namespace, name)
+	log.Printf("[DEBUG] Deleting Volterra Apm obj with name %+v in namespace %+v", name, namespace)
+	return client.DeleteObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, namespace, name)
 }

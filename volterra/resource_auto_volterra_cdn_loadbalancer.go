@@ -872,6 +872,141 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"backup_key": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"blindfold_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"store_provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"clear_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"url": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"location": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"provider": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"secret_encoding": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"version": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
 															"secret_key": {
 
 																Type:     schema.TypeSet,
@@ -1242,6 +1377,13 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"ip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"ipv6": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -2769,6 +2911,176 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									if v, ok := cs["backup_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										backupKey := &ves_io_schema.SecretType{}
+										authOptionsInt.Jwt.BackupKey = backupKey
+										for _, set := range sl {
+											backupKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := backupKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												backupKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												backupKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := backupKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["secret_key"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
@@ -3243,9 +3555,27 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+							publicIpChoiceTypeFound := false
 
-								choiceInt.PublicIp.Ip = v.(string)
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+								publicIpChoiceTypeFound = true
+								publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ip{}
+
+								choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+								publicIpChoiceInt.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+								publicIpChoiceTypeFound = true
+								publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ipv6{}
+
+								choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+								publicIpChoiceInt.Ipv6 = v.(string)
 
 							}
 
@@ -4976,6 +5306,176 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								for _, set := range sl {
 									cs := set.(map[string]interface{})
 
+									if v, ok := cs["backup_key"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										backupKey := &ves_io_schema.SecretType{}
+										authOptionsInt.Jwt.BackupKey = backupKey
+										for _, set := range sl {
+											backupKeyMapStrToI := set.(map[string]interface{})
+
+											if v, ok := backupKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+												backupKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+												for _, set := range sl {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+												backupKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											secretInfoOneofTypeFound := false
+
+											if v, ok := backupKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+												secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+												secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+												secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+
+											}
+
+											if v, ok := backupKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+												secretInfoOneofTypeFound = true
+												secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+												secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+												backupKey.SecretInfoOneof = secretInfoOneofInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["secret_key"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
@@ -5449,9 +5949,27 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+							publicIpChoiceTypeFound := false
 
-								choiceInt.PublicIp.Ip = v.(string)
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+								publicIpChoiceTypeFound = true
+								publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ip{}
+
+								choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+								publicIpChoiceInt.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !publicIpChoiceTypeFound {
+
+								publicIpChoiceTypeFound = true
+								publicIpChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPublicIP_Ipv6{}
+
+								choiceInt.PublicIp.PublicIpChoice = publicIpChoiceInt
+
+								publicIpChoiceInt.Ipv6 = v.(string)
 
 							}
 

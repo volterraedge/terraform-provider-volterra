@@ -1447,11 +1447,11 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv4Prefixes = []string{w.(string)}
+										nodeSnatPool[key.(string)].Ipv4Prefixes = nil
 									}
 
 									if w, ok := nodeSnatPoolStaticMap["ipv6_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv6Prefixes = []string{w.(string)}
+										nodeSnatPool[key.(string)].Ipv6Prefixes = nil
 									}
 
 									// break after one loop
@@ -2435,11 +2435,11 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv4Prefixes = []string{w.(string)}
+										nodeSnatPool[key.(string)].Ipv4Prefixes = nil
 									}
 
 									if w, ok := nodeSnatPoolStaticMap["ipv6_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv6Prefixes = []string{w.(string)}
+										nodeSnatPool[key.(string)].Ipv6Prefixes = nil
 									}
 
 									// break after one loop

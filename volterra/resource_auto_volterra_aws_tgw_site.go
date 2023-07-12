@@ -4844,6 +4844,53 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		for _, set := range sl {
 			awsParametersMapStrToI := set.(map[string]interface{})
 
+			deploymentTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
+
+				deploymentTypeFound = true
+
+				if v.(bool) {
+					deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_Assisted{}
+					deploymentInt.Assisted = &ves_io_schema.Empty{}
+					awsParameters.Deployment = deploymentInt
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["aws_cred"]; ok && !isIntfNil(v) && !deploymentTypeFound {
+
+				deploymentTypeFound = true
+				deploymentInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_AwsCred{}
+				deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
+				awsParameters.Deployment = deploymentInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+						deploymentInt.AwsCred.Name = v.(string)
+
+					}
+
+					if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+						deploymentInt.AwsCred.Namespace = v.(string)
+
+					}
+
+					if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+						deploymentInt.AwsCred.Tenant = v.(string)
+
+					}
+
+				}
+
+			}
+
 			internetVipChoiceTypeFound := false
 
 			if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
