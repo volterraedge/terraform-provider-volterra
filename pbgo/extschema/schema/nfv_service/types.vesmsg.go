@@ -53,10 +53,6 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.f5_big_ip_aws_service")
 	}
 
-	if err := m.GetEnabledSshAccess().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting CreateSpecType.enabled_ssh_access")
-	}
-
 	return nil
 }
 
@@ -3177,7 +3173,7 @@ var DefaultF5BigIpAppStackBareMetalTypeValidator = func() *ValidateF5BigIpAppSta
 	vrhNodes := v.NodesValidationRuleHandler
 	rulesNodes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "2",
+		"ves.io.schema.rules.repeated.max_items": "1",
 		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhNodes(rulesNodes)
@@ -3312,10 +3308,6 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.f5_big_ip_aws_service")
-	}
-
-	if err := m.GetEnabledSshAccess().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting GetSpecType.enabled_ssh_access")
 	}
 
 	return nil
@@ -3522,6 +3514,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
+		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3785,10 +3786,6 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetF5BigIpAwsService().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.f5_big_ip_aws_service")
-	}
-
-	if err := m.GetEnabledSshAccess().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting GlobalSpecType.enabled_ssh_access")
 	}
 
 	if err := m.GetF5BigIpBareMetalType().Redact(ctx); err != nil {
@@ -4629,6 +4626,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
+		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fleet"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("fleet"))
@@ -4769,6 +4775,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_type"))
+		if err := fv(ctx, m.GetServiceType(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6751,10 +6766,6 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.f5_big_ip_aws_service")
 	}
 
-	if err := m.GetEnabledSshAccess().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting ReplaceSpecType.enabled_ssh_access")
-	}
-
 	return nil
 }
 
@@ -7239,38 +7250,154 @@ func SSHKeyTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SSHManagementNodePorts) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SSHManagementNodePorts) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SSHManagementNodePorts) DeepCopy() *SSHManagementNodePorts {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SSHManagementNodePorts{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SSHManagementNodePorts) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SSHManagementNodePorts) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SSHManagementNodePortsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSSHManagementNodePorts struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSSHManagementNodePorts) NodeNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for node_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHManagementNodePorts) SshPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHManagementNodePorts) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SSHManagementNodePorts)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SSHManagementNodePorts got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_name"))
+		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_port"))
+		if err := fv(ctx, m.GetSshPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSSHManagementNodePortsValidator = func() *ValidateSSHManagementNodePorts {
+	v := &ValidateSSHManagementNodePorts{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNodeName := v.NodeNameValidationRuleHandler
+	rulesNodeName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhNodeName(rulesNodeName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHManagementNodePorts.node_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["node_name"] = vFn
+
+	vrhSshPort := v.SshPortValidationRuleHandler
+	rulesSshPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1024",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhSshPort(rulesSshPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHManagementNodePorts.ssh_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_port"] = vFn
+
+	return v
+}()
+
+func SSHManagementNodePortsValidator() db.Validator {
+	return DefaultSSHManagementNodePortsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SSHManagementType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *SSHManagementType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
-}
-
-// Redact squashes sensitive info in m (in-place)
-func (m *SSHManagementType) Redact(ctx context.Context) error {
-	// clear fields with confidential option set (at message or field level)
-	if m == nil {
-		return nil
-	}
-
-	if err := m.GetAdvertiseOnSloInternetVip().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting SSHManagementType.advertise_on_slo_internet_vip")
-	}
-
-	if err := m.GetAdvertiseOnSliVip().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting SSHManagementType.advertise_on_sli_vip")
-	}
-
-	if err := m.GetAdvertiseOnSloVip().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting SSHManagementType.advertise_on_slo_vip")
-	}
-
-	if err := m.GetAdvertiseOnSloSli().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting SSHManagementType.advertise_on_slo_sli")
-	}
-
-	return nil
 }
 
 func (m *SSHManagementType) DeepCopy() *SSHManagementType {
@@ -7331,48 +7458,20 @@ func (m *SSHManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return drInfos, err
 
 	case *SSHManagementType_AdvertiseOnSloInternetVip:
-		drInfos, err := m.GetAdvertiseOnSloInternetVip().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAdvertiseOnSloInternetVip().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "advertise_on_slo_internet_vip." + dri.DRField
-		}
-		return drInfos, err
 
-	case *SSHManagementType_AdvertiseOnSliVip:
-		drInfos, err := m.GetAdvertiseOnSliVip().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAdvertiseOnSliVip().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "advertise_on_sli_vip." + dri.DRField
-		}
-		return drInfos, err
+		return nil, nil
 
-	case *SSHManagementType_AdvertiseOnSloVip:
-		drInfos, err := m.GetAdvertiseOnSloVip().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAdvertiseOnSloVip().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "advertise_on_slo_vip." + dri.DRField
-		}
-		return drInfos, err
+	case *SSHManagementType_AdvertiseOnSli:
+
+		return nil, nil
+
+	case *SSHManagementType_AdvertiseOnSlo:
+
+		return nil, nil
 
 	case *SSHManagementType_AdvertiseOnSloSli:
-		drInfos, err := m.GetAdvertiseOnSloSli().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAdvertiseOnSloSli().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "advertise_on_slo_sli." + dri.DRField
-		}
-		return drInfos, err
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -7384,16 +7483,19 @@ type ValidateSSHManagementType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSSHManagementType) SshPortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSSHManagementType) NodeSshPortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	itemRules := db.GetRepUint32ItemRules(rules)
-	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ssh_ports")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for node_ssh_ports")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []uint32, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*SSHManagementNodePorts, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SSHManagementNodePortsValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -7401,24 +7503,27 @@ func (v *ValidateSSHManagementType) SshPortsValidationRuleHandler(rules map[stri
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ssh_ports")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for node_ssh_ports")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]uint32)
+		elems, ok := val.([]*SSHManagementNodePorts)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []uint32, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*SSHManagementNodePorts, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated ssh_ports")
+			return errors.Wrap(err, "repeated node_ssh_ports")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items ssh_ports")
+			return errors.Wrap(err, "items node_ssh_ports")
 		}
 		return nil
 	}
@@ -7474,23 +7579,23 @@ func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-	case *SSHManagementType_AdvertiseOnSliVip:
-		if fv, exists := v.FldValidators["advertise_choice.advertise_on_sli_vip"]; exists {
-			val := m.GetAdvertiseChoice().(*SSHManagementType_AdvertiseOnSliVip).AdvertiseOnSliVip
+	case *SSHManagementType_AdvertiseOnSli:
+		if fv, exists := v.FldValidators["advertise_choice.advertise_on_sli"]; exists {
+			val := m.GetAdvertiseChoice().(*SSHManagementType_AdvertiseOnSli).AdvertiseOnSli
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
-				db.WithValidateField("advertise_on_sli_vip"),
+				db.WithValidateField("advertise_on_sli"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *SSHManagementType_AdvertiseOnSloVip:
-		if fv, exists := v.FldValidators["advertise_choice.advertise_on_slo_vip"]; exists {
-			val := m.GetAdvertiseChoice().(*SSHManagementType_AdvertiseOnSloVip).AdvertiseOnSloVip
+	case *SSHManagementType_AdvertiseOnSlo:
+		if fv, exists := v.FldValidators["advertise_choice.advertise_on_slo"]; exists {
+			val := m.GetAdvertiseChoice().(*SSHManagementType_AdvertiseOnSlo).AdvertiseOnSlo
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
-				db.WithValidateField("advertise_on_slo_vip"),
+				db.WithValidateField("advertise_on_slo"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7510,9 +7615,9 @@ func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["ssh_ports"]; exists {
-		vOpts := append(opts, db.WithValidateField("ssh_ports"))
-		if err := fv(ctx, m.GetSshPorts(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["node_ssh_ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("node_ssh_ports"))
+		if err := fv(ctx, m.GetNodeSshPorts(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7533,24 +7638,19 @@ var DefaultSSHManagementTypeValidator = func() *ValidateSSHManagementType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhSshPorts := v.SshPortsValidationRuleHandler
-	rulesSshPorts := map[string]string{
-		"ves.io.schema.rules.message.required":          "true",
-		"ves.io.schema.rules.repeated.items.uint32.lte": "65535",
-		"ves.io.schema.rules.repeated.max_items":        "2",
+	vrhNodeSshPorts := v.NodeSshPortsValidationRuleHandler
+	rulesNodeSshPorts := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "2",
 	}
-	vFn, err = vrhSshPorts(rulesSshPorts)
+	vFn, err = vrhNodeSshPorts(rulesNodeSshPorts)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHManagementType.ssh_ports: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHManagementType.node_ssh_ports: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ssh_ports"] = vFn
+	v.FldValidators["node_ssh_ports"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
-	v.FldValidators["advertise_choice.advertise_on_slo_internet_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
-	v.FldValidators["advertise_choice.advertise_on_sli_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
-	v.FldValidators["advertise_choice.advertise_on_slo_vip"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
-	v.FldValidators["advertise_choice.advertise_on_slo_sli"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 
 	return v
 }()
@@ -7758,6 +7858,14 @@ type ValidateServiceHttpsManagementType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateServiceHttpsManagementType) AdvertiseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for advertise_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServiceHttpsManagementType) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7796,6 +7904,16 @@ func (v *ValidateServiceHttpsManagementType) Validate(ctx context.Context, pm in
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["advertise_choice"]; exists {
+		val := m.GetAdvertiseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("advertise_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAdvertiseChoice().(type) {
@@ -7986,6 +8104,17 @@ var DefaultServiceHttpsManagementTypeValidator = func() *ValidateServiceHttpsMan
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhAdvertiseChoice := v.AdvertiseChoiceValidationRuleHandler
+	rulesAdvertiseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAdvertiseChoice(rulesAdvertiseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceHttpsManagementType.advertise_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["advertise_choice"] = vFn
 
 	vrhPortChoice := v.PortChoiceValidationRuleHandler
 	rulesPortChoice := map[string]string{
@@ -9213,6 +9342,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.Commands = f.GetCommands()
+	m.FinalizerTimestamp = f.GetFinalizerTimestamp()
 	m.GetHttpManagementChoiceFromGlobalSpecType(f)
 	m.GetServiceProviderChoiceFromGlobalSpecType(f)
 	m.GetServiceTypeChoiceFromGlobalSpecType(f)
@@ -9235,6 +9365,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Commands = m1.Commands
+	f.FinalizerTimestamp = m1.FinalizerTimestamp
 	m1.SetHttpManagementChoiceToGlobalSpecType(f)
 	m1.SetServiceProviderChoiceToGlobalSpecType(f)
 	m1.SetServiceTypeChoiceToGlobalSpecType(f)

@@ -9004,7 +9004,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhSshKey := v.SshKeyValidationRuleHandler
 	rulesSshKey := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -10534,6 +10535,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -10735,6 +10745,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -11016,7 +11035,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhSshKey := v.SshKeyValidationRuleHandler
 	rulesSshKey := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -11892,6 +11912,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -12102,6 +12131,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("ssh_key"))
 		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12410,7 +12448,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhSshKey := v.SshKeyValidationRuleHandler
 	rulesSshKey := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -12709,6 +12748,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDeploymentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDeploymentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -12723,6 +12768,65 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	return drInfos, nil
 
+}
+
+func (m *ReplaceSpecType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *ReplaceSpecType_AzureCred:
+
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "azure_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetDeployment().(type) {
+	case *ReplaceSpecType_AzureCred:
+		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+		}
+
+		vref := m.GetAzureCred()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cloud_credentials.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -12866,6 +12970,14 @@ func (v *ValidateReplaceSpecType) BlockedServicesChoiceValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for deployment")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -12990,6 +13102,31 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["deployment"]; exists {
+		val := m.GetDeployment()
+		vOpts := append(opts,
+			db.WithValidateField("deployment"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDeployment().(type) {
+	case *ReplaceSpecType_AzureCred:
+		if fv, exists := v.FldValidators["deployment.azure_cred"]; exists {
+			val := m.GetDeployment().(*ReplaceSpecType_AzureCred).AzureCred
+			vOpts := append(opts,
+				db.WithValidateField("deployment"),
+				db.WithValidateField("azure_cred"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -13192,6 +13329,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["blocked_services_choice"] = vFn
 
+	vrhDeployment := v.DeploymentValidationRuleHandler
+	rulesDeployment := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDeployment(rulesDeployment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.deployment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["deployment"] = vFn
+
 	vrhLogsReceiverChoice := v.LogsReceiverChoiceValidationRuleHandler
 	rulesLogsReceiverChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -13261,6 +13409,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["address"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
+
+	v.FldValidators["deployment.azure_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -15522,6 +15672,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Coordinates = f.GetCoordinates()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
+	m.ErrorDescription = f.GetErrorDescription()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -15531,6 +15682,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
+	m.SuggestedAction = f.GetSuggestedAction()
 	m.Tags = f.GetTags()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
@@ -15560,6 +15712,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Coordinates = m1.Coordinates
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
+	f.ErrorDescription = m1.ErrorDescription
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -15569,6 +15722,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
+	f.SuggestedAction = m1.SuggestedAction
 	f.Tags = m1.Tags
 	f.UserModificationTimestamp = m1.UserModificationTimestamp
 	f.VipParamsPerAz = m1.VipParamsPerAz
@@ -15619,6 +15773,35 @@ func (r *ReplaceSpecType) GetBlockedServicesChoiceFromGlobalSpecType(o *GlobalSp
 
 	case *GlobalSpecType_DefaultBlockedServices:
 		r.BlockedServicesChoice = &ReplaceSpecType_DefaultBlockedServices{DefaultBlockedServices: of.DefaultBlockedServices}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetDeploymentToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Deployment.(type) {
+	case nil:
+		o.Deployment = nil
+
+	case *ReplaceSpecType_AzureCred:
+		o.Deployment = &GlobalSpecType_AzureCred{AzureCred: of.AzureCred}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetDeploymentFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Deployment.(type) {
+	case nil:
+		r.Deployment = nil
+
+	case *GlobalSpecType_AzureCred:
+		r.Deployment = &ReplaceSpecType_AzureCred{AzureCred: of.AzureCred}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -15822,6 +16005,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.GetSiteTypeFromGlobalSpecType(f)
@@ -15846,6 +16030,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	m1.SetSiteTypeToGlobalSpecType(f)

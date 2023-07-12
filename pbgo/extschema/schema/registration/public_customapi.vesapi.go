@@ -3033,13 +3033,6 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "CPUs",
                     "x-ves-example": "4"
                 },
-                "flags": {
-                    "type": "string",
-                    "description": " CPU flags\n\nExample: - \"value\"-",
-                    "title": "flags",
-                    "x-displayname": "Cpu Flags",
-                    "x-ves-example": "value"
-                },
                 "model": {
                     "type": "string",
                     "description": " CPU model\n\nExample: - \"value\"-",

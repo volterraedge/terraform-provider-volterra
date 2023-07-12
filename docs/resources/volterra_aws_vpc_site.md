@@ -33,45 +33,35 @@ resource "volterra_aws_vpc_site" "example" {
   }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
-
-  // One of the arguments from this list "egress_virtual_private_gateway egress_gateway_default egress_nat_gw" must be set
-
-  egress_nat_gw {
-    // One of the arguments from this list "nat_gw_id" must be set
-    nat_gw_id = "nat_gw_id"
-  }
-  instance_type = ["a1.xlarge"]
+  // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
+  egress_gateway_default = true
+  instance_type          = ["a1.xlarge"]
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
   disable_internet_vip = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
-  ingress_egress_gw {
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+
+  ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "disable_allowed_vip_port use_http_port use_https_port use_http_https_port custom_ports" must be set
-      disable_allowed_vip_port = true
-    }
-
-    allowed_vip_port_sli {
       // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_port use_https_port use_http_https_port" must be set
-
-      custom_ports {
-        port_ranges = "80, 8080-8085"
-      }
+      use_https_port = true
     }
 
-    aws_certified_hw = "aws-byol-multi-nic-voltmesh"
+    aws_certified_hw = "aws-byol-voltmesh"
 
     az_nodes {
       aws_az_name = "us-west-2a"
+      disk_size   = "80"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
-      reserved_inside_subnet = true
-      disk_size              = "80"
-
-      outside_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
@@ -79,73 +69,14 @@ resource "volterra_aws_vpc_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      workload_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
     }
 
-    // One of the arguments from this list "dc_cluster_group_outside_vn dc_cluster_group_inside_vn no_dc_cluster_group" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-
-    global_network_list {
-      global_network_connections {
-        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
-
-        sli_to_global_dr {
-          global_vn {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-
-        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-
-        enable_forward_proxy {
-          connection_timeout   = "4000"
-          max_connect_attempts = "3"
-
-          // One of the arguments from this list "no_interception tls_intercept" must be set
-          no_interception = true
-
-          white_listed_ports = ["[22, 9400]"]
-
-          white_listed_prefixes = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
-        }
-      }
-    }
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
-
-    active_network_policies {
-      network_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
     performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
       perf_mode_l7_enhanced = true
     }
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
   }
+  ssh_key = ["ssh-rsa AAAAB..."]
   // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
   nodes_per_az = "2"
 }
@@ -217,7 +148,7 @@ Argument Reference
 
 `voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
-`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 

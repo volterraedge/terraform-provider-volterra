@@ -124,6 +124,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"priority": {
 										Type:     schema.TypeInt,
 										Optional: true,
@@ -169,6 +174,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"priority": {
 										Type:     schema.TypeInt,
 										Optional: true,
@@ -209,6 +219,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"ratio": {
 										Type:     schema.TypeInt,
 										Optional: true,
@@ -240,6 +255,11 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"domain": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"name": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -420,6 +440,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 						members[i].IpEndpoint = w.(string)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
 						members[i].Priority = uint32(w.(int))
 					}
@@ -470,6 +494,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 						members[i].IpEndpoint = w.(string)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
 						members[i].Priority = uint32(w.(int))
 					}
@@ -514,6 +542,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 						members[i].FinalTranslation = w.(bool)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
 						members[i].Ratio = uint32(w.(int))
 					}
@@ -554,6 +586,10 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
 						members[i].Domain = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
 					}
 
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
@@ -786,6 +822,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 						members[i].IpEndpoint = w.(string)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
 						members[i].Priority = uint32(w.(int))
 					}
@@ -836,6 +876,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 						members[i].IpEndpoint = w.(string)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
 						members[i].Priority = uint32(w.(int))
 					}
@@ -880,6 +924,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 						members[i].FinalTranslation = w.(bool)
 					}
 
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
 					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
 						members[i].Ratio = uint32(w.(int))
 					}
@@ -920,6 +968,10 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 					if w, ok := membersMapStrToI["domain"]; ok && !isIntfNil(w) {
 						members[i].Domain = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
 					}
 
 					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {

@@ -1366,7 +1366,7 @@ var CustomAPISwaggerJSON string = `{
             "title": "CreateObjectRequest",
             "x-displayname": "Create Object Request",
             "x-ves-oneof-field-contents": "[\"bytes_value\",\"string_value\"]",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.CreateObjectRequest",
             "properties": {
                 "bytes_value": {
@@ -1401,8 +1401,14 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512"
                     }
                 },
+                "mobile_integrator": {
+                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "title": "mobile_integrator",
+                    "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-integrator"
+                },
                 "mobile_sdk": {
-                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -1435,21 +1441,21 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
                 },
                 "object_type": {
                     "type": "string",
-                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\"]\n",
+                    "description": " Type of the stored_object\n\nExample: - \"swagger\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\", \\\"mobile-integrator\\\"]\n",
                     "title": "object_type",
                     "x-displayname": "Object Type",
                     "x-ves-example": "swagger",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\"]"
+                        "ves.io.schema.rules.string.in": "[\\\"swagger\\\", \\\"generic\\\", \\\"big-object\\\", \\\"mobile-sdk\\\", \\\"mobile-integrator\\\"]"
                     }
                 },
                 "string_value": {
@@ -1573,11 +1579,17 @@ var CustomAPISwaggerJSON string = `{
             "description": "A descriptor for list response item.",
             "title": "ListItemDescriptor",
             "x-displayname": "List Item Descriptor",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
             "properties": {
+                "mobile_integrator": {
+                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "title": "mobile_integrator",
+                    "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-integrator"
+                },
                 "mobile_sdk": {
-                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -1589,7 +1601,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Object Name"
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
@@ -1627,6 +1639,39 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/stored_objectListItemDescriptor"
                     },
                     "x-displayname": "Stored Object Descriptors"
+                }
+            }
+        },
+        "stored_objectMobileIntegratorAttributes": {
+            "type": "object",
+            "description": "Describes attributes specific to object type - mobile-integrator",
+            "title": "MobileIntegratorAttributes",
+            "x-displayname": "mobile-integrator attributes",
+            "x-ves-proto-message": "ves.io.schema.stored_object.MobileIntegratorAttributes",
+            "properties": {
+                "os_type": {
+                    "description": " Select the Operating System type for mobile integrator release.\n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "os_type",
+                    "$ref": "#/definitions/stored_objectOSType",
+                    "x-displayname": "Operating System type",
+                    "x-ves-example": "IOS",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "release_version": {
+                    "type": "string",
+                    "description": " Version of mobile integrator release\n\nExample: - \"v.4.2.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "release_version",
+                    "maxLength": 32,
+                    "x-displayname": "mobile integrator release version",
+                    "x-ves-example": "v.4.2.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
                 }
             }
         },
@@ -1722,7 +1767,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "Response for Get, Create APIs",
             "title": "StoredObjectDescriptor",
             "x-displayname": "Object Metadata Response",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.StoredObjectDescriptor",
             "properties": {
                 "creation_timestamp": {
@@ -1746,8 +1791,14 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512"
                     }
                 },
+                "mobile_integrator": {
+                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "title": "mobile_integrator",
+                    "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-integrator"
+                },
                 "mobile_sdk": {
-                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -1773,7 +1824,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"

@@ -2589,6 +2589,7 @@ var APISwaggerJSON string = `{
                 "TIMESERIES_ANOMALY",
                 "SHAPE_SECURITY",
                 "SECURITY_CSD",
+                "CDN",
                 "SYNTHETIC_MONITORS",
                 "TLS"
             ],

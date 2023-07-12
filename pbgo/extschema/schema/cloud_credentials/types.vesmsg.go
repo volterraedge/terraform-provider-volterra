@@ -318,8 +318,10 @@ var DefaultAWSAssumeRoleTypeValidator = func() *ValidateAWSAssumeRoleType {
 
 	vrhSessionName := v.SessionNameValidationRuleHandler
 	rulesSessionName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "[\\w+=,.@-]*",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "2",
+		"ves.io.schema.rules.string.pattern":   "[\\w+=,.@-]*",
 	}
 	vFn, err = vrhSessionName(rulesSessionName)
 	if err != nil {

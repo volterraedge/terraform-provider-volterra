@@ -20,7 +20,7 @@ resource "volterra_http_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_custom do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
   do_not_advertise = true
 
   // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
@@ -32,8 +32,49 @@ resource "volterra_http_loadbalancer" "example" {
       tenant    = "acmecorp"
     }
 
-    // One of the arguments from this list "validation_disabled validation_all_spec_endpoints validation_custom_list" must be set
-    validation_disabled = true
+    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
+
+    validation_custom_list {
+      fall_through_mode {
+        // One of the arguments from this list "fall_through_mode_allow fall_through_mode_custom" must be set
+        fall_through_mode_allow = true
+      }
+
+      open_api_validation_rules {
+        // One of the arguments from this list "api_endpoint base_path api_group" must be set
+
+        api_endpoint {
+          methods = ["GET"]
+          path    = "/api/v1/login"
+        }
+
+        // One of the arguments from this list "any_domain specific_domain" must be set
+        any_domain = true
+
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        validation_mode {
+          // One of the arguments from this list "skip_response_validation response_validation_mode_active" must be set
+          skip_response_validation = true
+
+          // One of the arguments from this list "skip_validation validation_mode_active" must be set
+
+          validation_mode_active {
+            request_validation_properties = ["request_validation_properties"]
+
+            // One of the arguments from this list "enforcement_block enforcement_report" must be set
+            enforcement_report = true
+          }
+        }
+      }
+
+      // One of the arguments from this list "oversized_body_skip_validation oversized_body_fail_validation" must be set
+      oversized_body_skip_validation = true
+    }
   }
 
   // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
@@ -57,13 +98,19 @@ resource "volterra_http_loadbalancer" "example" {
           // One of the arguments from this list "key_pattern value_pattern key_value_pattern" must be set
 
           value_pattern {
-            // One of the arguments from this list "regex_value exact_value" must be set
+            // One of the arguments from this list "exact_value regex_value" must be set
             exact_value = "x-volt-header"
           }
           // One of the arguments from this list "all_response_sections custom_sections all_sections all_request_sections" must be set
           all_sections = true
-          // One of the arguments from this list "api_endpoint_target base_path api_group any_target" must be set
-          any_target = true
+
+          // One of the arguments from this list "any_target api_endpoint_target base_path api_group" must be set
+
+          api_endpoint_target {
+            api_endpoint_path = "/endpoint1"
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
         }
 
         sensitive_data_type {
@@ -77,23 +124,155 @@ resource "volterra_http_loadbalancer" "example" {
     }
   }
 
-  // One of the arguments from this list "captcha_challenge policy_based_challenge no_challenge enable_challenge js_challenge" must be set
+  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
 
-  js_challenge {
-    cookie_expiry   = "1000"
-    custom_page     = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-    js_script_delay = "1000"
+  policy_based_challenge {
+    // One of the arguments from this list "default_captcha_challenge_parameters captcha_challenge_parameters" must be set
+
+    captcha_challenge_parameters {
+      cookie_expiry = "1000"
+      custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+    }
+
+    // One of the arguments from this list "always_enable_captcha_challenge no_challenge always_enable_js_challenge" must be set
+    no_challenge = true
+
+    // One of the arguments from this list "default_js_challenge_parameters js_challenge_parameters" must be set
+    default_js_challenge_parameters = true
+
+    // One of the arguments from this list "default_mitigation_settings malicious_user_mitigation" must be set
+
+    malicious_user_mitigation {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+    rule_list {
+      rules {
+        metadata {
+          description = "Virtual Host for acmecorp website"
+          disable     = true
+          name        = "acmecorp-web"
+        }
+
+        spec {
+          arg_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+
+            name = "name"
+          }
+
+          // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
+          any_asn = true
+
+          body_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+
+            transformers = ["transformers"]
+          }
+
+          // One of the arguments from this list "disable_challenge enable_javascript_challenge enable_captcha_challenge" must be set
+          disable_challenge = true
+
+          // One of the arguments from this list "any_client client_name client_selector client_name_matcher" must be set
+          any_client = true
+
+          cookie_matchers {
+            invert_matcher = true
+
+            // One of the arguments from this list "item presence check_present check_not_present" must be set
+            presence = true
+
+            name = "Session"
+          }
+
+          domain_matcher {
+            exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+            regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
+          }
+
+          expiration_timestamp = "0001-01-01T00:00:00Z"
+
+          headers {
+            invert_matcher = true
+
+            // One of the arguments from this list "presence check_present check_not_present item" must be set
+            presence = true
+
+            name = "Accept-Encoding"
+          }
+
+          http_method {
+            invert_matcher = true
+
+            methods = ["['GET', 'POST', 'DELETE']"]
+          }
+
+          // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+
+          ip_prefix_list {
+            invert_match = true
+
+            ip_prefixes = ["192.168.20.0/24"]
+
+            ipv6_prefixes = ["fd48:fa09:d9d4::/48"]
+          }
+          path {
+            exact_values = ["['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']"]
+
+            prefix_values = ["['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']"]
+
+            regex_values = ["['^/api/web/namespaces/abc/users/([a-z]([-a-z0-9]*[a-z0-9])?)$', '/api/data/namespaces/proj404/virtual_hosts/([a-z]([-a-z0-9]*[a-z0-9])?)$']"]
+
+            suffix_values = ["['.exe', '.shtml', '.wmz']"]
+
+            transformers = ["transformers"]
+          }
+          query_params {
+            invert_matcher = true
+            key            = "sourceid"
+
+            // One of the arguments from this list "check_present check_not_present item presence" must be set
+            presence = true
+          }
+          tls_fingerprint_matcher {
+            classes = ["classes"]
+
+            exact_values = ["['ed6dfd54b01ebe31b7a65b88abfa7297', '16efcf0e00504ddfedde13bfea997952', 'de364c46b0dfc283b5e38c79ceae3f8f']"]
+
+            excluded_values = ["['fb00055a1196aeea8d1bc609885ba953', 'b386946a5a44d1ddcc843bc75336dfce']"]
+          }
+        }
+      }
+    }
+    // One of the arguments from this list "default_temporary_blocking_parameters temporary_user_blocking" must be set
+    default_temporary_blocking_parameters = true
   }
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
+    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
-  random = true
+
+  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+
+  ring_hash {
+    hash_policy {
+      // One of the arguments from this list "header_name cookie source_ip" must be set
+      header_name = "host"
+
+      terminal = true
+    }
+  }
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
@@ -1124,7 +1303,11 @@ Use the default subset provided here. Select endpoints matching default subset..
 
 Use default parameters.
 
-### Default Vip
+### Default V4 Vip
+
+Use the default VIP, system allocated or configured in the virtual network.
+
+### Default V6 Vip
 
 Use the default VIP, system allocated or configured in the virtual network.
 
@@ -1139,6 +1322,8 @@ A direct response route matches on path and/or HTTP method and responds directly
 `headers` - (Optional) List of (key, value) headers. See [Headers ](#headers) below for details.
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
+
+`incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
 
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
@@ -1330,11 +1515,11 @@ List of subset class. Subsets class is defined using list of keys. Every unique 
 
 ### Enforcement Block
 
-Block the request, trigger an API security event.
+Block the response, trigger an API security event.
 
 ### Enforcement Report
 
-Allow the request, trigger an API security event.
+Allow the response, trigger an API security event.
 
 ### Exclude Attack Type Contexts
 
@@ -1690,6 +1875,16 @@ Ignore Samesite attribute.
 
 Ignore secure attribute.
 
+### Incoming Port
+
+The port on which the request is received.
+
+`no_port_match` - (Optional) Disable matching of ports (bool).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
 ### Inline Rate Limiter
 
 Specify rate values for the rule..
@@ -1986,6 +2181,10 @@ Disable panic threshold. Only healthy endpoints are considered for load balancin
 
 Do not apply additional rate limiter policies..
 
+### No Port Match
+
+Disable matching of ports.
+
 ### No Tls
 
 x-displayName: "Disable".
@@ -2098,6 +2297,14 @@ healthy load balancing set. Outlier detection is a form of passive health checki
 
 Outside network on the site.
 
+### Oversized Body Fail Validation
+
+Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb).
+
+### Oversized Body Skip Validation
+
+Skip body validation when the body length is too long to verify (default 64Kb).
+
 ### Pass Through
 
 Pass existing server header as is. If server header is absent, a new header is not appended..
@@ -2190,11 +2397,13 @@ List of Origin Pools.
 
 Specify origin server with private or public IP address and site information.
 
-`ip` - (Required) IP address (`String`).
-
 `inside_network` - (Optional) Inside network on the site (bool).
 
 `outside_network` - (Optional) Outside network on the site (bool).
+
+`ip` - (Optional) Private IPV4 address (`String`).
+
+`ipv6` - (Optional) Private IPV6 address (`String`).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
@@ -2310,7 +2519,9 @@ Note: We recommend enabling Secure and HttpOnly attributes along with cookie tam
 
 Specify origin server with public IP.
 
-`ip` - (Required) Public IP address (`String`).
+`ip` - (Optional) Public IPV4 address (`String`).
+
+`ipv6` - (Optional) Public IPV6 address (`String`).
 
 ### Public Name
 
@@ -2374,6 +2585,8 @@ A redirect route matches on path and/or HTTP method and redirects the matching t
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
 
+`incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
+
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
 `route_redirect` - (Optional) Send redirect response. See [Route Redirect ](#route-redirect) below for details.
@@ -2429,6 +2642,16 @@ Headers specified at this level are applied after headers from matched Route are
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
 
 `value` - (Optional) Value of the HTTP header. (`String`).
+
+### Response Validation Mode Active
+
+Enforce OpenAPI validation processing for this event.
+
+`response_validation_properties` - (Required) List of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger) (`List of Strings`).
+
+`enforcement_block` - (Optional) Block the response, trigger an API security event (bool).
+
+`enforcement_report` - (Optional) Allow the response, trigger an API security event (bool).
 
 ### Retain All Params
 
@@ -2702,6 +2925,8 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
 
+`incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
+
 `origin_pools` - (Optional) Origin Pools for this route. See [Origin Pools ](#origin-pools) below for details.
 
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
@@ -2728,7 +2953,7 @@ Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 
-`ip6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
 
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
@@ -2749,6 +2974,10 @@ x-displayName: "Skip".
 ### Skip Processing
 
 Skip both WAF and Bot Defense processing for clients matching this rule..
+
+### Skip Response Validation
+
+Skip OpenAPI validation processing for this event.
 
 ### Skip Server Verification
 
@@ -2964,6 +3193,10 @@ Any other end-points not listed will act according to "Fall Through Mode".
 
 `fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode ](#fall-through-mode) below for details.
 
+`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
+
+`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
+
 `validation_mode` - (Required) When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger). See [Validation Mode ](#validation-mode) below for details.
 
 ### Validation Custom List
@@ -2974,6 +3207,10 @@ Any other end-points not listed will act according to "Fall Through Mode".
 
 `open_api_validation_rules` - (Required) x-displayName: "Validation List". See [Open Api Validation Rules ](#open-api-validation-rules) below for details.
 
+`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
+
+`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
+
 ### Validation Disabled
 
 Don't run OpenAPI validation.
@@ -2981,6 +3218,10 @@ Don't run OpenAPI validation.
 ### Validation Mode
 
 When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger).
+
+`response_validation_mode_active` - (Optional) Enforce OpenAPI validation processing for this event. See [Response Validation Mode Active ](#response-validation-mode-active) below for details.
+
+`skip_response_validation` - (Optional) Skip OpenAPI validation processing for this event (bool).
 
 `skip_validation` - (Optional) Skip OpenAPI validation processing for this event (bool).
 
@@ -3026,9 +3267,13 @@ x-displayName: "Profile View".
 
 Advertise on a virtual network.
 
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
 
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
+
+`default_v4_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+
+`specific_v4_vip` - (Optional) Use given IP address as VIP on virtual Network (`String`).
 
 `virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
@@ -3056,9 +3301,11 @@ Advertise on vK8s Service Network on RE..
 
 Specify origin server IP address on virtual network other than inside or outside network.
 
-`ip` - (Required) IP address (`String`).
-
 `virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
+
+`ip` - (Optional) IPV4 address (`String`).
+
+`ipv6` - (Optional) IPV6 address (`String`).
 
 ### Vn Private Name
 

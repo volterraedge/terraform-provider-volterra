@@ -255,6 +255,17 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *CreateObjectRequest_MobileIntegrator:
+		if fv, exists := v.FldValidators["object_attributes.mobile_integrator"]; exists {
+			val := m.GetObjectAttributes().(*CreateObjectRequest_MobileIntegrator).MobileIntegrator
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_integrator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -318,7 +329,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -364,6 +375,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	v.FldValidators["description"] = vFn
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 
 	return v
 }()
@@ -656,7 +668,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -938,7 +950,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1237,6 +1249,17 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *ListItemDescriptor_MobileIntegrator:
+		if fv, exists := v.FldValidators["object_attributes.mobile_integrator"]; exists {
+			val := m.GetObjectAttributes().(*ListItemDescriptor_MobileIntegrator).MobileIntegrator
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_integrator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1269,6 +1292,7 @@ var DefaultListItemDescriptorValidator = func() *ValidateListItemDescriptor {
 	v := &ValidateListItemDescriptor{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 
 	v.FldValidators["versions"] = VersionDescriptorValidator().Validate
 
@@ -1437,7 +1461,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\"]",
+		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1546,6 +1570,151 @@ var DefaultListObjectsResponseValidator = func() *ValidateListObjectsResponse {
 
 func ListObjectsResponseValidator() db.Validator {
 	return DefaultListObjectsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MobileIntegratorAttributes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MobileIntegratorAttributes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MobileIntegratorAttributes) DeepCopy() *MobileIntegratorAttributes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MobileIntegratorAttributes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MobileIntegratorAttributes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MobileIntegratorAttributes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MobileIntegratorAttributesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMobileIntegratorAttributes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMobileIntegratorAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(OSType)
+		return int32(i)
+	}
+	// OSType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, OSType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for os_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileIntegratorAttributes) ReleaseVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for release_version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileIntegratorAttributes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MobileIntegratorAttributes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MobileIntegratorAttributes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["os_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os_type"))
+		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["release_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("release_version"))
+		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMobileIntegratorAttributesValidator = func() *ValidateMobileIntegratorAttributes {
+	v := &ValidateMobileIntegratorAttributes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOsType := v.OsTypeValidationRuleHandler
+	rulesOsType := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhOsType(rulesOsType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileIntegratorAttributes.os_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["os_type"] = vFn
+
+	vrhReleaseVersion := v.ReleaseVersionValidationRuleHandler
+	rulesReleaseVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len":   "32",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhReleaseVersion(rulesReleaseVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileIntegratorAttributes.release_version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["release_version"] = vFn
+
+	return v
+}()
+
+func MobileIntegratorAttributesValidator() db.Validator {
+	return DefaultMobileIntegratorAttributesValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2031,6 +2200,17 @@ func (v *ValidateStoredObjectDescriptor) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *StoredObjectDescriptor_MobileIntegrator:
+		if fv, exists := v.FldValidators["object_attributes.mobile_integrator"]; exists {
+			val := m.GetObjectAttributes().(*StoredObjectDescriptor_MobileIntegrator).MobileIntegrator
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_integrator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2134,6 +2314,7 @@ var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescrip
 	v.FldValidators["version"] = vFn
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
 
 	return v
 }()

@@ -645,6 +645,93 @@ func ConstraintLengthValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DateRangeOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DateRangeOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DateRangeOptions) DeepCopy() *DateRangeOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DateRangeOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DateRangeOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DateRangeOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DateRangeOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDateRangeOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDateRangeOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DateRangeOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DateRangeOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_days"))
+		if err := fv(ctx, m.GetMaxDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["min_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_days"))
+		if err := fv(ctx, m.GetMinDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDateRangeOptionsValidator = func() *ValidateDateRangeOptions {
+	v := &ValidateDateRangeOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DateRangeOptionsValidator() db.Validator {
+	return DefaultDateRangeOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DisplayElements) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

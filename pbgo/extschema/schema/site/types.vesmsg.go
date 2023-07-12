@@ -11184,19 +11184,19 @@ func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["nonconforming_state"]; exists {
+	if fv, exists := v.FldValidators["last_installed_version"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
-		if err := fv(ctx, m.GetNonconformingState(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("last_installed_version"))
+		if err := fv(ctx, m.GetLastInstalledVersion(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["running_version"]; exists {
+	if fv, exists := v.FldValidators["nonconforming_state"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("running_version"))
-		if err := fv(ctx, m.GetRunningVersion(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
+		if err := fv(ctx, m.GetNonconformingState(), vOpts...); err != nil {
 			return err
 		}
 

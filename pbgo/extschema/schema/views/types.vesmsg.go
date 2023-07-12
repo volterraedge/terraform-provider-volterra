@@ -4594,11 +4594,11 @@ func (v *ValidateWhereSite) IpValidationRuleHandler(rules map[string]string) (db
 	return validatorFn, nil
 }
 
-func (v *ValidateWhereSite) Ip6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateWhereSite) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ip6")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
 	}
 
 	return validatorFn, nil
@@ -4627,10 +4627,10 @@ func (v *ValidateWhereSite) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
-	if fv, exists := v.FldValidators["ip6"]; exists {
+	if fv, exists := v.FldValidators["ipv6"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("ip6"))
-		if err := fv(ctx, m.GetIp6(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4702,16 +4702,16 @@ var DefaultWhereSiteValidator = func() *ValidateWhereSite {
 	}
 	v.FldValidators["ip"] = vFn
 
-	vrhIp6 := v.Ip6ValidationRuleHandler
-	rulesIp6 := map[string]string{
+	vrhIpv6 := v.Ipv6ValidationRuleHandler
+	rulesIpv6 := map[string]string{
 		"ves.io.schema.rules.string.ipv6": "true",
 	}
-	vFn, err = vrhIp6(rulesIp6)
+	vFn, err = vrhIpv6(rulesIpv6)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSite.ip6: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSite.ipv6: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ip6"] = vFn
+	v.FldValidators["ipv6"] = vFn
 
 	return v
 }()
@@ -5589,20 +5589,20 @@ type ValidateWhereVirtualNetwork struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateWhereVirtualNetwork) VipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateWhereVirtualNetwork) V6VipChoiceSpecificV6VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificV6Vip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for vip_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_v6_vip")
 	}
-	return validatorFn, nil
+	return oValidatorFn_SpecificV6Vip, nil
 }
 
-func (v *ValidateWhereVirtualNetwork) VipChoiceSpecificVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_SpecificVip, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateWhereVirtualNetwork) VipChoiceSpecificV4VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificV4Vip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_vip")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_v4_vip")
 	}
-	return oValidatorFn_SpecificVip, nil
+	return oValidatorFn_SpecificV4Vip, nil
 }
 
 func (v *ValidateWhereVirtualNetwork) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -5640,34 +5640,50 @@ func (v *ValidateWhereVirtualNetwork) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["vip_choice"]; exists {
-		val := m.GetVipChoice()
-		vOpts := append(opts,
-			db.WithValidateField("vip_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetVipChoice().(type) {
-	case *WhereVirtualNetwork_DefaultVip:
-		if fv, exists := v.FldValidators["vip_choice.default_vip"]; exists {
-			val := m.GetVipChoice().(*WhereVirtualNetwork_DefaultVip).DefaultVip
+	switch m.GetV6VipChoice().(type) {
+	case *WhereVirtualNetwork_DefaultV6Vip:
+		if fv, exists := v.FldValidators["v6_vip_choice.default_v6_vip"]; exists {
+			val := m.GetV6VipChoice().(*WhereVirtualNetwork_DefaultV6Vip).DefaultV6Vip
 			vOpts := append(opts,
-				db.WithValidateField("vip_choice"),
-				db.WithValidateField("default_vip"),
+				db.WithValidateField("v6_vip_choice"),
+				db.WithValidateField("default_v6_vip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *WhereVirtualNetwork_SpecificVip:
-		if fv, exists := v.FldValidators["vip_choice.specific_vip"]; exists {
-			val := m.GetVipChoice().(*WhereVirtualNetwork_SpecificVip).SpecificVip
+	case *WhereVirtualNetwork_SpecificV6Vip:
+		if fv, exists := v.FldValidators["v6_vip_choice.specific_v6_vip"]; exists {
+			val := m.GetV6VipChoice().(*WhereVirtualNetwork_SpecificV6Vip).SpecificV6Vip
+			vOpts := append(opts,
+				db.WithValidateField("v6_vip_choice"),
+				db.WithValidateField("specific_v6_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetVipChoice().(type) {
+	case *WhereVirtualNetwork_DefaultV4Vip:
+		if fv, exists := v.FldValidators["vip_choice.default_v4_vip"]; exists {
+			val := m.GetVipChoice().(*WhereVirtualNetwork_DefaultV4Vip).DefaultV4Vip
 			vOpts := append(opts,
 				db.WithValidateField("vip_choice"),
-				db.WithValidateField("specific_vip"),
+				db.WithValidateField("default_v4_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereVirtualNetwork_SpecificV4Vip:
+		if fv, exists := v.FldValidators["vip_choice.specific_v4_vip"]; exists {
+			val := m.GetVipChoice().(*WhereVirtualNetwork_SpecificV4Vip).SpecificV4Vip
+			vOpts := append(opts,
+				db.WithValidateField("vip_choice"),
+				db.WithValidateField("specific_v4_vip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5700,28 +5716,29 @@ var DefaultWhereVirtualNetworkValidator = func() *ValidateWhereVirtualNetwork {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhVipChoice := v.VipChoiceValidationRuleHandler
-	rulesVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
+	vrhV6VipChoiceSpecificV6Vip := v.V6VipChoiceSpecificV6VipValidationRuleHandler
+	rulesV6VipChoiceSpecificV6Vip := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
 	}
-	vFn, err = vrhVipChoice(rulesVipChoice)
+	vFnMap["v6_vip_choice.specific_v6_vip"], err = vrhV6VipChoiceSpecificV6Vip(rulesV6VipChoiceSpecificV6Vip)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualNetwork.vip_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["vip_choice"] = vFn
-
-	vrhVipChoiceSpecificVip := v.VipChoiceSpecificVipValidationRuleHandler
-	rulesVipChoiceSpecificVip := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
-	}
-	vFnMap["vip_choice.specific_vip"], err = vrhVipChoiceSpecificVip(rulesVipChoiceSpecificVip)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereVirtualNetwork.vip_choice_specific_vip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereVirtualNetwork.v6_vip_choice_specific_v6_vip: %s", err)
 		panic(errMsg)
 	}
 
-	v.FldValidators["vip_choice.specific_vip"] = vFnMap["vip_choice.specific_vip"]
+	v.FldValidators["v6_vip_choice.specific_v6_vip"] = vFnMap["v6_vip_choice.specific_v6_vip"]
+
+	vrhVipChoiceSpecificV4Vip := v.VipChoiceSpecificV4VipValidationRuleHandler
+	rulesVipChoiceSpecificV4Vip := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["vip_choice.specific_v4_vip"], err = vrhVipChoiceSpecificV4Vip(rulesVipChoiceSpecificV4Vip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereVirtualNetwork.vip_choice_specific_v4_vip: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vip_choice.specific_v4_vip"] = vFnMap["vip_choice.specific_v4_vip"]
 
 	vrhVirtualNetwork := v.VirtualNetworkValidationRuleHandler
 	rulesVirtualNetwork := map[string]string{

@@ -1051,6 +1051,15 @@ func (v *ValidateAuthenticationTypeLocPair) Validate(ctx context.Context, pm int
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["auth_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("auth_type"))
+		if err := fv(ctx, m.GetAuthType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["location"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("location"))

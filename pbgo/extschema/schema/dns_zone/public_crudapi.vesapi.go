@@ -2187,6 +2187,51 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "dns_zoneAFSDBRecordSubtype": {
+            "type": "string",
+            "description": "AFS Volume Location Server or DCE Authentication Server.\n\n - NONE: NONE\n\n - AFSVolumeLocationServer: AFS Volume Location Server\n\n - DCEAuthenticationServer: DCE Authentication Server\n",
+            "title": "AFSDB Record Subtype",
+            "enum": [
+                "NONE",
+                "AFSVolumeLocationServer",
+                "DCEAuthenticationServer"
+            ],
+            "default": "NONE",
+            "x-displayname": "AFSDB Record Subtype",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.AFSDBRecordSubtype"
+        },
+        "dns_zoneAFSDBRecordValue": {
+            "type": "object",
+            "title": "AFSDBRecordValue",
+            "x-displayname": "AFSDBRecordValue",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.AFSDBRecordValue",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Server name of the AFS cell database server or the DCE name server.\n\nExample: - \"mail.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "Hostname",
+                    "x-displayname": "Hostname",
+                    "x-ves-example": "mail.example.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
+                "subtype": {
+                    "description": " AFSDB Record Subtype.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Subtype",
+                    "$ref": "#/definitions/dns_zoneAFSDBRecordSubtype",
+                    "x-displayname": "Subtype",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "dns_zoneCertificationAuthorityAuthorization": {
             "type": "object",
             "title": "CertificationAuthorityAuthorization",
@@ -2334,6 +2379,43 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneDNSAFSDBRecord": {
+            "type": "object",
+            "description": "DNS AFSDB Record",
+            "title": "DNSAFSDBRecord",
+            "x-displayname": "DNS AFSDB Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSAFSDBRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "AFSDB Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneAFSDBRecordValue"
+                    },
+                    "x-displayname": "AFSDB Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
         "dns_zoneDNSAResourceRecord": {
             "type": "object",
             "description": "A Records",
@@ -2424,6 +2506,42 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneDNSCDSRecord": {
+            "type": "object",
+            "description": "DNS CDS Record",
+            "title": "DNSCDSRecord",
+            "x-displayname": "DNS CDS Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSCDSRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "DS Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneDSRecordValue"
+                    },
+                    "x-displayname": "DS Value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
         "dns_zoneDNSCNAMEResourceRecord": {
             "type": "object",
             "title": "DNSCNAMEResourceRecord",
@@ -2456,6 +2574,42 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneDNSDSRecord": {
+            "type": "object",
+            "description": "DNS DS Record",
+            "title": "DNSDSRecord",
+            "x-displayname": "DNS DS Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSDSRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "DS Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneDSRecordValue"
+                    },
+                    "x-displayname": "DS Value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
         "dns_zoneDNSDeploymentStatus": {
             "type": "string",
             "description": "Deployment Status of DNS Zone\n\nDNS Zone is successfully deployed and active\nDeployment of DNS Zone is pending\nDNS Zone has been disabled.\nDNS Zone deployment encountered an error.",
@@ -2469,6 +2623,76 @@ var APISwaggerJSON string = `{
             "default": "DNS_ZONE_ACTIVE",
             "x-displayname": "DNS Zone Deployment Status",
             "x-ves-proto-enum": "ves.io.schema.dns_zone.DNSDeploymentStatus"
+        },
+        "dns_zoneDNSEUI48ResourceRecord": {
+            "type": "object",
+            "description": "DNS EUI48 Record",
+            "title": "DNSEUI48ResourceRecord",
+            "x-displayname": "DNS EUI48 Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSEUI48ResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "value": {
+                    "type": "string",
+                    "description": "\nExample: - \"01-23-45-67-89-ab\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 17\n  ves.io.schema.rules.string.min_len: 17\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$\n",
+                    "title": "EUI48 Identifier",
+                    "minLength": 17,
+                    "maxLength": 17,
+                    "x-displayname": "EUI48 Identifier",
+                    "x-ves-example": "01-23-45-67-89-ab",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "17",
+                        "ves.io.schema.rules.string.min_len": "17",
+                        "ves.io.schema.rules.string.pattern": "^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$"
+                    }
+                }
+            }
+        },
+        "dns_zoneDNSEUI64ResourceRecord": {
+            "type": "object",
+            "description": "DNS EUI64 Record",
+            "title": "DNSEUI64ResourceRecord",
+            "x-displayname": "DNS EUI64 Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSEUI64ResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "value": {
+                    "type": "string",
+                    "description": "\nExample: - \"01-23-45-67-89-ab-cd-ef\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 23\n  ves.io.schema.rules.string.min_len: 23\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){7}([0-9A-Fa-f]{2})$\n",
+                    "title": "EUI64 Identifier",
+                    "minLength": 23,
+                    "maxLength": 23,
+                    "x-displayname": "EUI64 Identifier",
+                    "x-ves-example": "01-23-45-67-89-ab-cd-ef",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "23",
+                        "ves.io.schema.rules.string.min_len": "23",
+                        "ves.io.schema.rules.string.pattern": "^([0-9A-Fa-f]{2}-){7}([0-9A-Fa-f]{2})$"
+                    }
+                }
+            }
         },
         "dns_zoneDNSLBResourceRecord": {
             "type": "object",
@@ -2491,6 +2715,43 @@ var APISwaggerJSON string = `{
                     "title": "DNS LB Record",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "DNS Load Balancer Record"
+                }
+            }
+        },
+        "dns_zoneDNSLOCResourceRecord": {
+            "type": "object",
+            "description": "DNS LOC Record",
+            "title": "DNSLOCResourceRecord",
+            "x-displayname": "DNS LOC Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSLOCResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"32 7 19 S 116 2 25 E 10m\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "LOC Values",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneLOCValue"
+                    },
+                    "x-displayname": "LOC Value",
+                    "x-ves-example": "32 7 19 S 116 2 25 E 10m",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -2523,6 +2784,43 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                }
+            }
+        },
+        "dns_zoneDNSNAPTRResourceRecord": {
+            "type": "object",
+            "description": "DNS NAPTR Record",
+            "title": "DNSNAPTRResourceRecord",
+            "x-displayname": "DNS NAPTR Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DNSNAPTRResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "NAPTR Values",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneNAPTRValue"
+                    },
+                    "x-displayname": "NAPTR Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 }
             }
@@ -2759,6 +3057,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneDSKeyAlgorithm": {
+            "type": "string",
+            "description": "DS key value must be compatible with the specified algorithm.\n\n - UNSPECIFIED: UNSPECIFIED\n\n - RSASHA1: RSASHA1\n\n - RSASHA1NSEC3SHA1: RSASHA1-NSEC3-SHA1\n\n - RSASHA256: RSASHA256\n\n - RSASHA512: RSASHA512\n\n - ECDSAP256SHA256: ECDSAP256SHA256\n\n - ECDSAP384SHA384: ECDSAP384SHA384\n\n - ED25519: ED25519\n\n - ED448: ED448\n",
+            "title": "DS Key Algorithm",
+            "enum": [
+                "UNSPECIFIED",
+                "RSASHA1",
+                "RSASHA1NSEC3SHA1",
+                "RSASHA256",
+                "RSASHA512",
+                "ECDSAP256SHA256",
+                "ECDSAP384SHA384",
+                "ED25519",
+                "ED448"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "DS Key algorithm",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.DSKeyAlgorithm"
+        },
         "dns_zoneDSRecord": {
             "type": "object",
             "description": "DNSSEC Record details",
@@ -2835,6 +3152,58 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.lte": "2147483647"
                     }
+                }
+            }
+        },
+        "dns_zoneDSRecordValue": {
+            "type": "object",
+            "title": "DSRecordValue",
+            "x-displayname": "DSRecordValue",
+            "x-ves-oneof-field-digest_choice": "[\"sha1_digest\",\"sha256_digest\",\"sha384_digest\"]",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DSRecordValue",
+            "properties": {
+                "ds_key_algorithm": {
+                    "description": " DS key value must be compatible with the specified algorithm.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "DS Key Algorithm",
+                    "$ref": "#/definitions/dns_zoneDSKeyAlgorithm",
+                    "x-displayname": "DS Key algorithm",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "key_tag": {
+                    "type": "integer",
+                    "description": " A short numeric value which can help quickly identify the referenced DNSKEY-record.\n\nExample: - \"15228\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65536\n",
+                    "title": "Key Tag",
+                    "format": "int64",
+                    "x-displayname": "Key Tag",
+                    "x-ves-example": "15228",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65536"
+                    }
+                },
+                "sha1_digest": {
+                    "description": "Exclusive with [sha256_digest sha384_digest]\n",
+                    "title": "SHA1 Digest",
+                    "$ref": "#/definitions/dns_zoneSHA1Digest",
+                    "x-displayname": "SHA1Digest"
+                },
+                "sha256_digest": {
+                    "description": "Exclusive with [sha1_digest sha384_digest]\n",
+                    "title": "SHA256 Digest",
+                    "$ref": "#/definitions/dns_zoneSHA256Digest",
+                    "x-displayname": "SHA256Digest"
+                },
+                "sha384_digest": {
+                    "description": "Exclusive with [sha1_digest sha256_digest]\n",
+                    "title": "SHA384 Digest",
+                    "$ref": "#/definitions/dns_zoneSHA384Digest",
+                    "x-displayname": "SHA384Digest"
                 }
             }
         },
@@ -3015,6 +3384,174 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneLOCValue": {
+            "type": "object",
+            "title": "LOCValue",
+            "x-displayname": "LOCValue",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.LOCValue",
+            "properties": {
+                "altitude": {
+                    "type": "number",
+                    "description": " Altitude in meters\n\nExample: - \"20.3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -100000.00\n  ves.io.schema.rules.float.lte: 42849672.95\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Altitude",
+                    "format": "float",
+                    "x-displayname": "Altitude",
+                    "x-ves-example": "20.3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "-100000.00",
+                        "ves.io.schema.rules.float.lte": "42849672.95",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "horizontal_precision": {
+                    "type": "number",
+                    "description": " Horizontal Precision in meters\n\nExample: - \"12.71\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: 0.0\n  ves.io.schema.rules.float.lte: 90000000.00\n",
+                    "title": "Horizontal Precision",
+                    "format": "float",
+                    "x-displayname": "Horizontal Precision",
+                    "x-ves-example": "12.71",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "0.0",
+                        "ves.io.schema.rules.float.lte": "90000000.00"
+                    }
+                },
+                "latitude_degree": {
+                    "type": "integer",
+                    "description": " Latitude degree, an integer between 0 and 90, including 0 and 90\n\nExample: - \"51\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n  ves.io.schema.rules.int32.lte: 90\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Latitude degree",
+                    "format": "int32",
+                    "x-displayname": "Latitude degree",
+                    "x-ves-example": "51",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0",
+                        "ves.io.schema.rules.int32.lte": "90",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "latitude_hemisphere": {
+                    "description": " Latitude hemisphere, N or S\n\nExample: - \"N\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Latitude hemisphere",
+                    "$ref": "#/definitions/dns_zoneLatitudeHemisphere",
+                    "x-displayname": "Latitude hemisphere",
+                    "x-ves-example": "N",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "latitude_minute": {
+                    "type": "integer",
+                    "description": " Latitude minute, an integer between 0 and 59, including 0 and 59\n\nExample: - \"30\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n  ves.io.schema.rules.int32.lte: 59\n",
+                    "title": "Latitude minute",
+                    "format": "int32",
+                    "x-displayname": "Latitude minute",
+                    "x-ves-example": "30",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0",
+                        "ves.io.schema.rules.int32.lte": "59"
+                    }
+                },
+                "latitude_second": {
+                    "type": "number",
+                    "description": " Latitude second, an decimal between 0 and 59.999, including 0 and 59.999\n\nExample: - \"12.000\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: 0.0\n  ves.io.schema.rules.float.lte: 59.999\n",
+                    "title": "Latitude second",
+                    "format": "float",
+                    "x-displayname": "Latitude second",
+                    "x-ves-example": "12.000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "0.0",
+                        "ves.io.schema.rules.float.lte": "59.999"
+                    }
+                },
+                "location_diameter": {
+                    "type": "number",
+                    "description": " Diameter of a sphere enclosing the described entity, in meters\n\nExample: - \"12.03\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: 0.0\n  ves.io.schema.rules.float.lte: 90000000.00\n",
+                    "title": "Size",
+                    "format": "float",
+                    "x-displayname": "Size",
+                    "x-ves-example": "12.03",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "0.0",
+                        "ves.io.schema.rules.float.lte": "90000000.00"
+                    }
+                },
+                "longitude_degree": {
+                    "type": "integer",
+                    "description": " Longitude degree, an integer between 0 and 180, including 0 and 180\n\nExample: - \"51\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n  ves.io.schema.rules.int32.lte: 180\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Longitude degree",
+                    "format": "int32",
+                    "x-displayname": "Longitude degree",
+                    "x-ves-example": "51",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0",
+                        "ves.io.schema.rules.int32.lte": "180",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "longitude_hemisphere": {
+                    "description": " Longitude hemisphere, E or W\n\nExample: - \"E\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Longitude hemisphere",
+                    "$ref": "#/definitions/dns_zoneLongitudeHemisphere",
+                    "x-displayname": "Longitude hemisphere",
+                    "x-ves-example": "E",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "longitude_minute": {
+                    "type": "integer",
+                    "description": " Longitude minute, an integer between 0 and 59, including 0 and 59\n\nExample: - \"30\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n  ves.io.schema.rules.int32.lte: 59\n",
+                    "title": "Longitude minute",
+                    "format": "int32",
+                    "x-displayname": "Longitude minute",
+                    "x-ves-example": "30",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0",
+                        "ves.io.schema.rules.int32.lte": "59"
+                    }
+                },
+                "longitude_second": {
+                    "type": "number",
+                    "description": " Longitude second, an decimal between 0 and 59.999, including 0 and 59.999\n\nExample: - \"12.000\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: 0.0\n  ves.io.schema.rules.float.lte: 59.999\n",
+                    "title": "Longitude second",
+                    "format": "float",
+                    "x-displayname": "Longitude second",
+                    "x-ves-example": "12.000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "0.0",
+                        "ves.io.schema.rules.float.lte": "59.999"
+                    }
+                },
+                "vertical_precision": {
+                    "type": "number",
+                    "description": " Vertical Precision in meters\n\nExample: - \"12.71m\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: 0.0\n  ves.io.schema.rules.float.lte: 90000000.00\n",
+                    "title": "Vertical Precision",
+                    "format": "float",
+                    "x-displayname": "Vertical Precision",
+                    "x-ves-example": "12.71m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "0.0",
+                        "ves.io.schema.rules.float.lte": "90000000.00"
+                    }
+                }
+            }
+        },
+        "dns_zoneLatitudeHemisphere": {
+            "type": "string",
+            "description": "Latitude hemisphere can only be N or S\n\n - N: North Hemisphere\n\n - S: South Hemisphere\n",
+            "title": "Latitude Hemisphere",
+            "enum": [
+                "N",
+                "S"
+            ],
+            "default": "N",
+            "x-displayname": "Latitude hemisphere",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.LatitudeHemisphere"
+        },
         "dns_zoneListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -3143,6 +3680,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneLongitudeHemisphere": {
+            "type": "string",
+            "description": "Longitude hemisphere can only be E or W\n\n - E: East Hemisphere\n\n - W: West Hemisphere\n",
+            "title": "Longitude Hemisphere",
+            "enum": [
+                "E",
+                "W"
+            ],
+            "default": "E",
+            "x-displayname": "Longitude hemisphere",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.LongitudeHemisphere"
+        },
         "dns_zoneMailExchanger": {
             "type": "object",
             "title": "MailExchanger",
@@ -3169,6 +3718,85 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "dns_zoneNAPTRValue": {
+            "type": "object",
+            "title": "NAPTRValue",
+            "x-displayname": "NAPTRValue",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.NAPTRValue",
+            "properties": {
+                "flags": {
+                    "type": "string",
+                    "description": " Flag to control aspects of the rewriting and interpretation of the fields in the record. At this time only four flags, S/A/U/P, are defined.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^(S|s|A|a|U|u|P|p)$\n",
+                    "title": "Flags",
+                    "maxLength": 255,
+                    "x-displayname": "Flags",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "255",
+                        "ves.io.schema.rules.string.pattern": "^(S|s|A|a|U|u|P|p)$"
+                    }
+                },
+                "order": {
+                    "type": "integer",
+                    "description": " Order in which the NAPTR records must be processed. A lower number indicates a higher preference.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Order",
+                    "format": "int64",
+                    "x-displayname": "Order",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "preference": {
+                    "type": "integer",
+                    "description": " Preference when records have the same order. A lower number indicates a higher preference.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Preference",
+                    "format": "int64",
+                    "x-displayname": "Preference",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "regexp": {
+                    "type": "string",
+                    "description": " Regular expression to construct the next domain name to lookup.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n",
+                    "title": "Regular Expression",
+                    "maxLength": 255,
+                    "x-displayname": "Regular Expression",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "255"
+                    }
+                },
+                "replacement": {
+                    "type": "string",
+                    "description": " The next NAME to query for NAPTR, SRV, or address records depending on the value of the flags field.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "Replacement",
+                    "x-displayname": "Replacement",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
+                "service": {
+                    "type": "string",
+                    "description": " Specifies the service(s) available down this rewrite path.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^([A-Za-z][A-Za-z0-9]{0,31}(\\\\+[A-Za-z][A-Za-z0-9]{0,31})*$|^$)\n",
+                    "title": "Protocol Resolution Service",
+                    "maxLength": 255,
+                    "x-displayname": "Protocol Resolution Service",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "255",
+                        "ves.io.schema.rules.string.pattern": "^([A-Za-z][A-Za-z0-9]{0,31}(\\\\+[A-Za-z][A-Za-z0-9]{0,31})*$|^$)"
                     }
                 }
             }
@@ -3213,6 +3841,12 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "title": "Administrator",
                     "x-displayname": "Administrator"
+                },
+                "allow_http_lb_managed_records": {
+                    "type": "boolean",
+                    "title": "Allow HTTP Load Balancer Managed Records",
+                    "format": "boolean",
+                    "x-displayname": "Allow HTTP Load Balancer Managed Records"
                 },
                 "default_rr_set_group": {
                     "type": "array",
@@ -3274,6 +3908,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-soa_record_parameters_choice": "[\"default_soa_parameters\",\"soa_parameters\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.PrimaryDNSCreateSpecType",
             "properties": {
+                "allow_http_lb_managed_records": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
                 "default_rr_set_group": {
                     "type": "array",
                     "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
@@ -3321,6 +3959,10 @@ var APISwaggerJSON string = `{
                 "admin": {
                     "type": "string"
                 },
+                "allow_http_lb_managed_records": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
                 "default_rr_set_group": {
                     "type": "array",
                     "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
@@ -3366,65 +4008,107 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "RRSet is a set of Resource Record Sets for specific type",
             "x-displayname": "Resource Record Set",
-            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"alias_record\",\"caa_record\",\"cname_record\",\"lb_record\",\"mx_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"txt_record\"]",
+            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"afsdb_record\",\"alias_record\",\"caa_record\",\"cds_record\",\"cname_record\",\"ds_record\",\"eui48_record\",\"eui64_record\",\"lb_record\",\"loc_record\",\"mx_record\",\"naptr_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"txt_record\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.RRSet",
             "properties": {
                 "a_record": {
-                    "description": "Exclusive with [aaaa_record alias_record caa_record cname_record lb_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "A Record",
                     "$ref": "#/definitions/dns_zoneDNSAResourceRecord",
                     "x-displayname": "A"
                 },
                 "aaaa_record": {
-                    "description": "Exclusive with [a_record alias_record caa_record cname_record lb_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "AAAA Record",
                     "$ref": "#/definitions/dns_zoneDNSAAAAResourceRecord",
                     "x-displayname": "AAAA"
                 },
+                "afsdb_record": {
+                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "AFSDB Record",
+                    "$ref": "#/definitions/dns_zoneDNSAFSDBRecord",
+                    "x-displayname": "AFSDB"
+                },
                 "alias_record": {
-                    "description": "Exclusive with [a_record aaaa_record caa_record cname_record lb_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "ALIAS Record",
                     "$ref": "#/definitions/dns_zoneDNSAliasResourceRecord",
                     "x-displayname": "ALIAS"
                 },
                 "caa_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record cname_record lb_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "CAA Record",
                     "$ref": "#/definitions/dns_zoneDNSCAAResourceRecord",
                     "x-displayname": "CAA"
                 },
+                "cds_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "CDS Record",
+                    "$ref": "#/definitions/dns_zoneDNSCDSRecord",
+                    "x-displayname": "CDS"
+                },
                 "cname_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record lb_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "CNAME Record",
                     "$ref": "#/definitions/dns_zoneDNSCNAMEResourceRecord",
                     "x-displayname": "CNAME"
                 },
+                "ds_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "DS Record",
+                    "$ref": "#/definitions/dns_zoneDNSDSRecord",
+                    "x-displayname": "DS"
+                },
+                "eui48_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "EUI48 Record",
+                    "$ref": "#/definitions/dns_zoneDNSEUI48ResourceRecord",
+                    "x-displayname": "EUI48"
+                },
+                "eui64_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "EUI64 Record",
+                    "$ref": "#/definitions/dns_zoneDNSEUI64ResourceRecord",
+                    "x-displayname": "EUI64"
+                },
                 "lb_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "DNS LB Record",
                     "$ref": "#/definitions/dns_zoneDNSLBResourceRecord",
                     "x-displayname": "DNS Load Balancer"
                 },
+                "loc_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "LOC Record",
+                    "$ref": "#/definitions/dns_zoneDNSLOCResourceRecord",
+                    "x-displayname": "LOC"
+                },
                 "mx_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record naptr_record ns_record ptr_record srv_record txt_record]\n",
                     "title": "MX Record",
                     "$ref": "#/definitions/dns_zoneDNSMXResourceRecord",
                     "x-displayname": "MX"
                 },
+                "naptr_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "title": "NAPTR Record",
+                    "$ref": "#/definitions/dns_zoneDNSNAPTRResourceRecord",
+                    "x-displayname": "NAPTR"
+                },
                 "ns_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record mx_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ptr_record srv_record txt_record]\n",
                     "title": "NS Record",
                     "$ref": "#/definitions/dns_zoneDNSNSResourceRecord",
                     "x-displayname": "NS"
                 },
                 "ptr_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record mx_record ns_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record srv_record txt_record]\n",
                     "title": "PTR Record",
                     "$ref": "#/definitions/dns_zoneDNSPTRResourceRecord",
                     "x-displayname": "PTR"
                 },
                 "srv_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record mx_record ns_record ptr_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record txt_record]\n",
                     "title": "SRV Record",
                     "$ref": "#/definitions/dns_zoneDNSSRVResourceRecord",
                     "x-displayname": "SRV"
@@ -3442,7 +4126,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "txt_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cname_record lb_record mx_record ns_record ptr_record srv_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record]\n",
                     "title": "TXT Record",
                     "$ref": "#/definitions/dns_zoneDNSTXTResourceRecord",
                     "x-displayname": "TXT"
@@ -3522,6 +4206,75 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [primary]\n Secondary DNS",
                     "$ref": "#/definitions/dns_zoneSecondaryDNSCreateSpecType",
                     "x-displayname": "Secondary DNS Configuration"
+                }
+            }
+        },
+        "dns_zoneSHA1Digest": {
+            "type": "object",
+            "title": "SHA1 Digest",
+            "x-displayname": "SHA1 Digest",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SHA1Digest",
+            "properties": {
+                "digest": {
+                    "type": "string",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "title": "Digest",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "x-displayname": "Digest",
+                    "x-ves-example": "addf120b430021c36c232c99ef8d926aea2acd6b",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "40",
+                        "ves.io.schema.rules.string.min_len": "40"
+                    }
+                }
+            }
+        },
+        "dns_zoneSHA256Digest": {
+            "type": "object",
+            "title": "SHA256 Digest",
+            "x-displayname": "SHA256 Digest",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SHA256Digest",
+            "properties": {
+                "digest": {
+                    "type": "string",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "title": "Digest",
+                    "minLength": 64,
+                    "maxLength": 64,
+                    "x-displayname": "Digest",
+                    "x-ves-example": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "64"
+                    }
+                }
+            }
+        },
+        "dns_zoneSHA384Digest": {
+            "type": "object",
+            "title": "SHA384 Digest",
+            "x-displayname": "SHA384 Digest",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SHA384Digest",
+            "properties": {
+                "digest": {
+                    "type": "string",
+                    "description": " The 'digest' is the DS key and the actual contents of the DS record. \n\nExample: - \"b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 96\n  ves.io.schema.rules.string.min_len: 96\n",
+                    "title": "Digest",
+                    "minLength": 96,
+                    "maxLength": 96,
+                    "x-displayname": "Digest",
+                    "x-ves-example": "b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "96",
+                        "ves.io.schema.rules.string.min_len": "96"
+                    }
                 }
             }
         },

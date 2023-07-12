@@ -3313,7 +3313,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of stored_object in the storage backend",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.GlobalSpecType",
             "properties": {
                 "content_format": {
@@ -3323,8 +3323,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Content Format",
                     "x-ves-example": "json, yaml, js, html"
                 },
+                "mobile_integrator": {
+                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "title": "mobile_integrator",
+                    "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-integrator"
+                },
                 "mobile_sdk": {
-                    "description": "Exclusive with [no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -3340,7 +3346,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
@@ -3364,6 +3370,39 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "stored_objectMobileIntegratorAttributes": {
+            "type": "object",
+            "description": "Describes attributes specific to object type - mobile-integrator",
+            "title": "MobileIntegratorAttributes",
+            "x-displayname": "mobile-integrator attributes",
+            "x-ves-proto-message": "ves.io.schema.stored_object.MobileIntegratorAttributes",
+            "properties": {
+                "os_type": {
+                    "description": " Select the Operating System type for mobile integrator release.\n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "os_type",
+                    "$ref": "#/definitions/stored_objectOSType",
+                    "x-displayname": "Operating System type",
+                    "x-ves-example": "IOS",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "release_version": {
+                    "type": "string",
+                    "description": " Version of mobile integrator release\n\nExample: - \"v.4.2.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "release_version",
+                    "maxLength": 32,
+                    "x-displayname": "mobile integrator release version",
+                    "x-ves-example": "v.4.2.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.not_empty": "true"
                     }
                 }
             }

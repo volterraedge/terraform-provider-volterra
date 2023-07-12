@@ -20,16 +20,16 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  advertise_on_public_default_vip = true
+  // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
+  do_not_advertise = true
 
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random" must be set
-  hash_policy_choice_random = true
+  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
+  hash_policy_choice_round_robin = true
 
-  // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
+  // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
   tcp = true
 
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
@@ -192,7 +192,11 @@ Custom selection of TLS versions and cipher suites.
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
-### Default Vip
+### Default V4 Vip
+
+Use the default VIP, system allocated or configured in the virtual network.
+
+### Default V6 Vip
 
 Use the default VIP, system allocated or configured in the virtual network.
 
@@ -262,7 +266,7 @@ Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 
-`ip6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
 
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
@@ -380,9 +384,13 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Advertise on a virtual network.
 
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
 
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
+
+`default_v4_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+
+`specific_v4_vip` - (Optional) Use given IP address as VIP on virtual Network (`String`).
 
 `virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 

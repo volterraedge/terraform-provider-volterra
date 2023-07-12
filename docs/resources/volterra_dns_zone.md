@@ -36,12 +36,14 @@ resource "volterra_dns_zone" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      vault_secret_info {
+        key             = "key_pem"
+        location        = "v1/data/vhost_key"
+        provider        = "vault-vh-provider"
+        secret_encoding = "secret_encoding"
+        version         = "1"
       }
     }
   }
@@ -88,6 +90,14 @@ x-displayName: "AAAA".
 
 `values` - (Required) x-required (`String`).
 
+### Afsdb Record
+
+x-displayName: "AFSDB".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Alias Record
 
 x-displayName: "ALIAS".
@@ -124,6 +134,14 @@ x-displayName: "CAA".
 
 `values` - (Optional) x-displayName: "CAA Record Value". See [Values ](#values) below for details.
 
+### Cds Record
+
+x-displayName: "CDS".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
@@ -150,15 +168,29 @@ default_rr_set_group.
 
 `aaaa_record` - (Optional) x-displayName: "AAAA". See [Aaaa Record ](#aaaa-record) below for details.
 
+`afsdb_record` - (Optional) x-displayName: "AFSDB". See [Afsdb Record ](#afsdb-record) below for details.
+
 `alias_record` - (Optional) x-displayName: "ALIAS". See [Alias Record ](#alias-record) below for details.
 
 `caa_record` - (Optional) x-displayName: "CAA". See [Caa Record ](#caa-record) below for details.
 
+`cds_record` - (Optional) x-displayName: "CDS". See [Cds Record ](#cds-record) below for details.
+
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
+
+`ds_record` - (Optional) x-displayName: "DS". See [Ds Record ](#ds-record) below for details.
+
+`eui48_record` - (Optional) x-displayName: "EUI48". See [Eui48 Record ](#eui48-record) below for details.
+
+`eui64_record` - (Optional) x-displayName: "EUI64". See [Eui64 Record ](#eui64-record) below for details.
 
 `lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
 
+`loc_record` - (Optional) x-displayName: "LOC". See [Loc Record ](#loc-record) below for details.
+
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
+
+`naptr_record` - (Optional) x-displayName: "NAPTR". See [Naptr Record ](#naptr-record) below for details.
 
 `ns_record` - (Optional) x-displayName: "NS". See [Ns Record ](#ns-record) below for details.
 
@@ -184,9 +216,33 @@ dnssec_mode.
 
 `enable` - (Optional) DNSSEC enable. See [Enable ](#enable) below for details.
 
+### Ds Record
+
+x-displayName: "DS".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Enable
 
 DNSSEC enable.
+
+### Eui48 Record
+
+x-displayName: "EUI48".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`value` - (Required) x-required (`String`).
+
+### Eui64 Record
+
+x-displayName: "EUI64".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`value` - (Required) x-required (`String`).
 
 ### Lb Record
 
@@ -195,6 +251,14 @@ x-displayName: "DNS Load Balancer".
 `name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
 
 `value` - (Optional) x-displayName: "DNS Load Balancer Record". See [ref](#ref) below for details.
+
+### Loc Record
+
+x-displayName: "LOC".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
 
 ### Metadata
 
@@ -211,6 +275,14 @@ x-required.
 x-displayName: "MX".
 
 `name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
+### Naptr Record
+
+x-displayName: "NAPTR".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -266,15 +338,29 @@ Collection of DNS resource record sets.
 
 `aaaa_record` - (Optional) x-displayName: "AAAA". See [Aaaa Record ](#aaaa-record) below for details.
 
+`afsdb_record` - (Optional) x-displayName: "AFSDB". See [Afsdb Record ](#afsdb-record) below for details.
+
 `alias_record` - (Optional) x-displayName: "ALIAS". See [Alias Record ](#alias-record) below for details.
 
 `caa_record` - (Optional) x-displayName: "CAA". See [Caa Record ](#caa-record) below for details.
 
+`cds_record` - (Optional) x-displayName: "CDS". See [Cds Record ](#cds-record) below for details.
+
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
+
+`ds_record` - (Optional) x-displayName: "DS". See [Ds Record ](#ds-record) below for details.
+
+`eui48_record` - (Optional) x-displayName: "EUI48". See [Eui48 Record ](#eui48-record) below for details.
+
+`eui64_record` - (Optional) x-displayName: "EUI64". See [Eui64 Record ](#eui64-record) below for details.
 
 `lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
 
+`loc_record` - (Optional) x-displayName: "LOC". See [Loc Record ](#loc-record) below for details.
+
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
+
+`naptr_record` - (Optional) x-displayName: "NAPTR". See [Naptr Record ](#naptr-record) below for details.
 
 `ns_record` - (Optional) x-displayName: "NS". See [Ns Record ](#ns-record) below for details.
 
@@ -352,13 +438,11 @@ x-displayName: "TXT".
 
 ### Values
 
-x-displayName: "CAA Record Value".
+x-required.
 
-`flags` - (Optional) x-example: "0" (`Int`).
+`hostname` - (Required) Server name of the AFS cell database server or the DCE name server. (`String`).
 
-`tag` - (Optional) x-example: "issue" (`String`).
-
-`value` - (Optional) x-example: "value" (`String`).
+`subtype` - (Required) AFSDB Record Subtype. (`String`).
 
 ### Vault Secret Info
 

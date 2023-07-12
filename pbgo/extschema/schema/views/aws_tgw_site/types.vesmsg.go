@@ -2142,6 +2142,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -2209,6 +2218,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
 		if err := fv(ctx, m.GetSiteState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3049,6 +3067,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -3134,6 +3161,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
 		if err := fv(ctx, m.GetSiteToSiteTunnelIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3481,6 +3517,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAwsParametersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAwsParametersDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -3500,6 +3542,24 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAwsParameters() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetAwsParameters().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetAwsParameters().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "aws_parameters." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -4380,8 +4440,90 @@ func (m *ServicesVPCReplaceType) Validate(ctx context.Context, opts ...db.Valida
 	return ServicesVPCReplaceTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ServicesVPCReplaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDeploymentDRefInfo()
+
+}
+
+func (m *ServicesVPCReplaceType) GetDeploymentDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDeployment().(type) {
+	case *ServicesVPCReplaceType_AwsCred:
+
+		vref := m.GetAwsCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "aws_cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *ServicesVPCReplaceType_Assisted:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetDeploymentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ServicesVPCReplaceType) GetDeploymentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetDeployment().(type) {
+	case *ServicesVPCReplaceType_AwsCred:
+		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+		}
+
+		vref := m.GetAwsCred()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cloud_credentials.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *ServicesVPCReplaceType_Assisted:
+
+	}
+
+	return entries, nil
+}
+
 type ValidateServicesVPCReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServicesVPCReplaceType) DeploymentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for deployment")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateServicesVPCReplaceType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4427,6 +4569,42 @@ func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["deployment"]; exists {
+		val := m.GetDeployment()
+		vOpts := append(opts,
+			db.WithValidateField("deployment"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDeployment().(type) {
+	case *ServicesVPCReplaceType_AwsCred:
+		if fv, exists := v.FldValidators["deployment.aws_cred"]; exists {
+			val := m.GetDeployment().(*ServicesVPCReplaceType_AwsCred).AwsCred
+			vOpts := append(opts,
+				db.WithValidateField("deployment"),
+				db.WithValidateField("aws_cred"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_Assisted:
+		if fv, exists := v.FldValidators["deployment.assisted"]; exists {
+			val := m.GetDeployment().(*ServicesVPCReplaceType_Assisted).Assisted
+			vOpts := append(opts,
+				db.WithValidateField("deployment"),
+				db.WithValidateField("assisted"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
@@ -4527,6 +4705,17 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhDeployment := v.DeploymentValidationRuleHandler
+	rulesDeployment := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDeployment(rulesDeployment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.deployment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["deployment"] = vFn
+
 	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
 	rulesInternetVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4572,6 +4761,8 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 
 	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
 	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
+
+	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -5237,7 +5428,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	vrhSshKey := v.SshKeyValidationRuleHandler
 	rulesSshKey := map[string]string{
-		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -6880,11 +7072,13 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Coordinates = f.GetCoordinates()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
+	m.ErrorDescription = f.GetErrorDescription()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.SiteState = f.GetSiteState()
+	m.SuggestedAction = f.GetSuggestedAction()
 	m.Tags = f.GetTags()
 	m.TgwInfo = f.GetTgwInfo()
 	m.TgwSecurity = f.GetTgwSecurity()
@@ -6917,11 +7111,13 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Coordinates = m1.Coordinates
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
+	f.ErrorDescription = m1.ErrorDescription
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.SiteState = m1.SiteState
+	f.SuggestedAction = m1.SuggestedAction
 	f.Tags = m1.Tags
 	f.TgwInfo = m1.TgwInfo
 	f.TgwSecurity = m1.TgwSecurity
@@ -7125,6 +7321,41 @@ func (m *ReplaceSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 }
 
 // create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetDeploymentToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.Deployment.(type) {
+	case nil:
+		o.Deployment = nil
+
+	case *ServicesVPCReplaceType_Assisted:
+		o.Deployment = &ServicesVPCType_Assisted{Assisted: of.Assisted}
+
+	case *ServicesVPCReplaceType_AwsCred:
+		o.Deployment = &ServicesVPCType_AwsCred{AwsCred: of.AwsCred}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetDeploymentFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.Deployment.(type) {
+	case nil:
+		r.Deployment = nil
+
+	case *ServicesVPCType_Assisted:
+		r.Deployment = &ServicesVPCReplaceType_Assisted{Assisted: of.Assisted}
+
+	case *ServicesVPCType_AwsCred:
+		r.Deployment = &ServicesVPCReplaceType_AwsCred{AwsCred: of.AwsCred}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
 func (r *ServicesVPCReplaceType) SetInternetVipChoiceToServicesVPCType(o *ServicesVPCType) error {
 	switch of := r.InternetVipChoice.(type) {
 	case nil:
@@ -7204,6 +7435,7 @@ func (m *ServicesVPCReplaceType) fromServicesVPCType(f *ServicesVPCType, withDee
 	if f == nil {
 		return
 	}
+	m.GetDeploymentFromServicesVPCType(f)
 	m.GetInternetVipChoiceFromServicesVPCType(f)
 	m.GetWorkerNodesFromServicesVPCType(f)
 }
@@ -7223,6 +7455,7 @@ func (m *ServicesVPCReplaceType) toServicesVPCType(f *ServicesVPCType, withDeepC
 	}
 	_ = m1
 
+	m1.SetDeploymentToServicesVPCType(f)
 	m1.SetInternetVipChoiceToServicesVPCType(f)
 	m1.SetWorkerNodesToServicesVPCType(f)
 }

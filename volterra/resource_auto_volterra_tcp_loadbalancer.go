@@ -87,7 +87,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
-												"ip6": {
+												"ipv6": {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -135,13 +135,25 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"default_vip": {
+												"default_v6_vip": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
-												"specific_vip": {
+												"specific_v6_vip": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"default_v4_vip": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"specific_v4_vip": {
 
 													Type:     schema.TypeString,
 													Optional: true,
@@ -1437,9 +1449,9 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
-								choiceInt.Site.Ip6 = v.(string)
+								choiceInt.Site.Ipv6 = v.(string)
 
 							}
 
@@ -1488,28 +1500,53 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							v6VipChoiceTypeFound := false
+
+							if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+								v6VipChoiceTypeFound = true
+
+								if v.(bool) {
+									v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
+									v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
+									choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+								v6VipChoiceTypeFound = true
+								v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
+
+								choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+
+								v6VipChoiceInt.SpecificV6Vip = v.(string)
+
+							}
+
 							vipChoiceTypeFound := false
 
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["default_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV4Vip{}
+									vipChoiceInt.DefaultV4Vip = &ves_io_schema.Empty{}
 									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
 
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["specific_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV4Vip{}
 
 								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
-								vipChoiceInt.SpecificVip = v.(string)
+								vipChoiceInt.SpecificV4Vip = v.(string)
 
 							}
 
@@ -3322,9 +3359,9 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["ip6"]; ok && !isIntfNil(v) {
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
 
-								choiceInt.Site.Ip6 = v.(string)
+								choiceInt.Site.Ipv6 = v.(string)
 
 							}
 
@@ -3373,28 +3410,53 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							v6VipChoiceTypeFound := false
+
+							if v, ok := cs["default_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+								v6VipChoiceTypeFound = true
+
+								if v.(bool) {
+									v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV6Vip{}
+									v6VipChoiceInt.DefaultV6Vip = &ves_io_schema.Empty{}
+									choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["specific_v6_vip"]; ok && !isIntfNil(v) && !v6VipChoiceTypeFound {
+
+								v6VipChoiceTypeFound = true
+								v6VipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV6Vip{}
+
+								choiceInt.VirtualNetwork.V6VipChoice = v6VipChoiceInt
+
+								v6VipChoiceInt.SpecificV6Vip = v.(string)
+
+							}
+
 							vipChoiceTypeFound := false
 
-							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["default_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
-									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV4Vip{}
+									vipChoiceInt.DefaultV4Vip = &ves_io_schema.Empty{}
 									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
 
-							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["specific_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV4Vip{}
 
 								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
-								vipChoiceInt.SpecificVip = v.(string)
+								vipChoiceInt.SpecificV4Vip = v.(string)
 
 							}
 

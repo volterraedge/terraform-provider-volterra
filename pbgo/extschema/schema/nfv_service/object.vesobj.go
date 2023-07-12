@@ -1292,6 +1292,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["k8s_deployment_status_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("k8s_deployment_status_type"))
+		if err := fv(ctx, e.GetK8SDeploymentStatusType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))

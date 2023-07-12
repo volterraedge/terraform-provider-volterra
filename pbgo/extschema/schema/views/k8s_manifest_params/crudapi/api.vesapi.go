@@ -2947,10 +2947,24 @@ var APISwaggerJSON string = `{
         "k8s_manifest_paramsDeployStatus": {
             "type": "string",
             "enum": [
-                "SUCCESS",
-                "FAILURE"
+                "RUNNING",
+                "STOPPED",
+                "PROVISIONING",
+                "STARTING",
+                "PAUSED",
+                "STOPPING",
+                "TERMINATING",
+                "CRASHLOOP_BACKOFF",
+                "MIGRATING",
+                "UNKNOWN",
+                "ERROR_RUN_SCHEDULABLE",
+                "ERR_IMAGE_PULL",
+                "IMAGE_PULL_BACKOFF",
+                "ERROR_PVC_NOTFOUND",
+                "DATA_VOLUME_ERROR",
+                "WAITING_FOR_VOLUME_BINDING"
             ],
-            "default": "SUCCESS",
+            "default": "RUNNING",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.k8s_manifest_params.DeployStatus"
         },
@@ -2963,6 +2977,12 @@ var APISwaggerJSON string = `{
                     "title": "Status",
                     "$ref": "#/definitions/k8s_manifest_paramsDeployStatus",
                     "x-displayname": "Status"
+                },
+                "status_output": {
+                    "type": "string",
+                    "description": " Status Output",
+                    "title": "Status Output",
+                    "x-displayname": "Status Output"
                 }
             }
         },

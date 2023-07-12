@@ -22,7 +22,19 @@ resource "volterra_route" "example" {
 
   routes {
     // One of the arguments from this list "inherited_bot_defense_javascript_injection bot_defense_javascript_injection" must be set
-    inherited_bot_defense_javascript_injection = true
+
+    bot_defense_javascript_injection {
+      javascript_location = "javascript_location"
+
+      javascript_tags {
+        javascript_url = "https://www.example.com/login/common.js?single"
+
+        tag_attributes {
+          javascript_tag = "ID"
+          tag_value      = "_imp_apg_dip_"
+        }
+      }
+    }
 
     bot_defense_javascript_injection_inline_mode {
       element_selector = "value"
@@ -45,19 +57,19 @@ resource "volterra_route" "example" {
       http_method = "http_method"
 
       incoming_port {
-        // One of the arguments from this list "port port_ranges" must be set
+        // One of the arguments from this list "port port_ranges no_port_match" must be set
         port = "6443"
       }
 
       path {
-        // One of the arguments from this list "prefix path regex" must be set
+        // One of the arguments from this list "path regex prefix" must be set
         prefix = "/register/"
       }
 
       query_params {
         key = "assignee_username"
 
-        // One of the arguments from this list "regex exact" must be set
+        // One of the arguments from this list "exact regex" must be set
         exact = "exact"
       }
     }
@@ -82,20 +94,103 @@ resource "volterra_route" "example" {
 
     response_headers_to_remove = ["host"]
 
-    // One of the arguments from this list "route_direct_response route_destination route_redirect" must be set
+    // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_redirect {
-      host_redirect  = "one.ves.io"
-      port_redirect  = "8443"
-      proto_redirect = "https"
+    route_destination {
+      buffer_policy {
+        disabled          = true
+        max_request_bytes = "2048"
+        max_request_time  = "30"
+      }
 
-      // One of the arguments from this list "strip_query_params all_params retain_all_params remove_all_params replace_params" must be set
-      replace_params = "replace_params"
+      // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
+      retract_cluster = true
 
-      // One of the arguments from this list "path_redirect prefix_rewrite" must be set
-      path_redirect = "/api/register"
+      cors_policy {
+        allow_credentials = true
+        allow_headers     = "value"
+        allow_methods     = "GET"
 
-      response_code = "303"
+        allow_origin = ["value"]
+
+        allow_origin_regex = ["value"]
+        disabled           = true
+        expose_headers     = "value"
+        max_age            = "value"
+        maximum_age        = "-1"
+      }
+
+      destinations {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        endpoint_subsets = {
+          "key1" = "value1"
+        }
+
+        priority = "1"
+        weight   = "10"
+      }
+
+      endpoint_subsets = {
+        "key1" = "value1"
+      }
+
+      hash_policy {
+        // One of the arguments from this list "header_name cookie source_ip" must be set
+        header_name = "host"
+
+        terminal = true
+      }
+
+      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
+      host_rewrite = "one.volterra.com"
+
+      mirror_policy {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        percent {
+          denominator = "denominator"
+          numerator   = "5"
+        }
+      }
+
+      prefix_rewrite = "/"
+      priority       = "priority"
+
+      retry_policy {
+        back_off {
+          base_interval = "5"
+          max_interval  = "60"
+        }
+
+        num_retries     = "3"
+        per_try_timeout = "1000"
+
+        retriable_status_codes = ["403"]
+
+        retry_condition = ["5xx"]
+        retry_on        = "5xx"
+      }
+
+      spdy_config {
+        use_spdy = true
+      }
+
+      timeout = "2000"
+
+      web_socket_config {
+        idle_timeout         = "2000"
+        max_connect_attempts = "5"
+        use_websocket        = true
+      }
     }
     service_policy {
       // One of the arguments from this list "disable context_extensions" must be set
@@ -185,9 +280,9 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 Configuration for Bot Defense Javascript Injection.
 
-`javascript_location` - (Optional) Defines where perform the Bot Defense Javascript Injection in HTML page. (`String`).
+`javascript_location` - (Optional) Select the location where you would like to insert the Javascript tag(s). (`String`).
 
-`js_download_path` - (Optional) If not specified, default to ‘/common.js’. (`String`).
+`javascript_tags` - (Required) Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first.. See [Javascript Tags ](#javascript-tags) below for details.
 
 ### Bot Defense Javascript Injection Inline Mode
 
@@ -333,6 +428,8 @@ Ignore secure attribute.
 
 The port on which the request is received.
 
+`no_port_match` - (Optional) Disable matching of ports (bool).
+
 `port` - (Optional) Exact Port to match (`Int`).
 
 `port_ranges` - (Optional) Port range to match (`String`).
@@ -344,6 +441,14 @@ Any Application Firewall configuration that was configured on a higher level wil
 ### Inherited Bot Defense Javascript Injection
 
 Hence no custom configuration is applied on the route.
+
+### Javascript Tags
+
+Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first..
+
+`javascript_url` - (Required) Please enter the full URL (include domain and path), or relative path. (`String`).
+
+`tag_attributes` - (Optional) Add the tag attributes you want to include in your Javascript tag.. See [Tag Attributes ](#tag-attributes) below for details.
 
 ### Match
 
@@ -366,6 +471,10 @@ useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
 `cluster` - (Required) referred here must be present.. See [ref](#ref) below for details.
 
 `percent` - (Optional) Percentage of requests to be mirrored. See [Percent ](#percent) below for details.
+
+### No Port Match
+
+Disable matching of ports.
 
 ### Path
 
@@ -610,6 +719,14 @@ SPDY configuration for each route.
 Specifies the list of query params to be removed. Not supported.
 
 `query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
+
+### Tag Attributes
+
+Add the tag attributes you want to include in your Javascript tag..
+
+`javascript_tag` - (Optional) Select from one of the predefined tag attibutes. (`String`).
+
+`tag_value` - (Optional) Add the tag attribute value. (`String`).
 
 ### Vault Secret Info
 

@@ -32,7 +32,7 @@ resource "volterra_aws_tgw_site" "example" {
       disk_size              = "80"
 
       outside_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -76,16 +76,17 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    new_tgw {
-      // One of the arguments from this list "user_assigned system_generated" must be set
-      system_generated = true
+    existing_tgw {
+      tgw_asn           = "64500"
+      tgw_id            = "tgw-12345678901234567"
+      volterra_site_asn = "64501"
     }
     // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
     nodes_per_az = "2"
   }
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
-  default_blocked_services = true
+  block_all_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
@@ -239,7 +240,7 @@ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 
 `vpc_id` - (Optional) Existing VPC ID (`String`).
 
-`ssh_key` - (Optional) Public SSH key for accessing nodes of the site. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing nodes of the site. (`String`).
 
 `existing_tgw` - (Optional) Information about existing TGW. See [Existing Tgw ](#existing-tgw) below for details.
 

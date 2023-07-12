@@ -561,6 +561,42 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
+			"default_sriov_interface": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"sriov_interfaces": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"sriov_interface": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"interface_name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"number_of_vfs": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"default_storage_class": {
 
 				Type:     schema.TypeBool,
@@ -4020,6 +4056,58 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
 					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
 					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	//sriov_interface_choice
+
+	sriovInterfaceChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_sriov_interface"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+
+		if v.(bool) {
+			sriovInterfaceChoiceInt := &ves_io_schema_fleet.CreateSpecType_DefaultSriovInterface{}
+			sriovInterfaceChoiceInt.DefaultSriovInterface = &ves_io_schema.Empty{}
+			createSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("sriov_interfaces"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+		sriovInterfaceChoiceInt := &ves_io_schema_fleet.CreateSpecType_SriovInterfaces{}
+		sriovInterfaceChoiceInt.SriovInterfaces = &ves_io_schema_fleet.SriovInterfacesListType{}
+		createSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["sriov_interface"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				sriovInterface := make([]*ves_io_schema_fleet.SriovInterface, len(sl))
+				sriovInterfaceChoiceInt.SriovInterfaces.SriovInterface = sriovInterface
+				for i, set := range sl {
+					sriovInterface[i] = &ves_io_schema_fleet.SriovInterface{}
+					sriovInterfaceMapStrToI := set.(map[string]interface{})
+
+					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
+						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfs = uint32(w.(int))
+					}
+
 				}
 
 			}

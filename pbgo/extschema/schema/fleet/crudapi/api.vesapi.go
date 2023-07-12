@@ -2740,6 +2740,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
                     "title": "address"
                 },
+                "address_ipv6": {
+                    "type": "string",
+                    "description": "x-displayName: \"Peer IPV6 Address\"\nSpecify peer ipv6 address.",
+                    "title": "IPV6 address"
+                },
                 "asn": {
                     "type": "integer",
                     "description": "x-displayName: \"ASN\"\nx-example: \"64512\"\nx-required\nAutonomous System Number for BGP peer",
@@ -4190,6 +4195,59 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/schemafleetGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "fleetSriovInterface": {
+            "type": "object",
+            "description": "Single Root I/O Virtualization interfaces configured explicitly\nBy default no SR-IOV interface is assigned to the fleet",
+            "title": "SriovInterface specifies the configuration fo SR-IOV interfaces and how many virtual functions it has",
+            "x-displayname": "SR-IOV Interfaces",
+            "x-ves-proto-message": "ves.io.schema.fleet.SriovInterface",
+            "properties": {
+                "interface_name": {
+                    "type": "string",
+                    "description": " Name for SR-IOV physical interface\n\nExample: - \"eth0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "interface_name",
+                    "x-displayname": "Name for physical interface",
+                    "x-ves-example": "eth0",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "number_of_vfs": {
+                    "type": "integer",
+                    "description": " Number of virtual functions\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "number_of_vfs",
+                    "format": "int64",
+                    "x-displayname": "Number of virtual functions",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "fleetSriovInterfacesListType": {
+            "type": "object",
+            "description": "List of all custom SR-IOV interfaces configuration",
+            "title": "Custom SR-IOV interfaces Configuration List",
+            "x-displayname": "Custom SR-IOV interfaces Configuration List",
+            "x-ves-proto-message": "ves.io.schema.fleet.SriovInterfacesListType",
+            "properties": {
+                "sriov_interface": {
+                    "type": "array",
+                    "description": " Use custom SR-IOV interfaces Configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Custom SR-IOV interfaces Configuration",
+                    "items": {
+                        "$ref": "#/definitions/fleetSriovInterface"
+                    },
+                    "x-displayname": "Custom SR-IOV interfaces Configuration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -6166,6 +6224,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
             "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-sriov_interface_choice": "[\"default_sriov_interface\",\"sriov_interfaces\"]",
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
             "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
             "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
@@ -6216,6 +6275,12 @@ var APISwaggerJSON string = `{
                     "title": "No Interfaces",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Interface Config"
+                },
+                "default_sriov_interface": {
+                    "description": "Exclusive with [sriov_interfaces]\n Disable Single Root I/O Virtualization interfaces",
+                    "title": "Default SR-IOV interfaces Configuration",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable SR-IOV interfaces"
                 },
                 "default_storage_class": {
                     "description": "Exclusive with [storage_class_list]\n Use only default storage class in kubernetes",
@@ -6419,6 +6484,12 @@ var APISwaggerJSON string = `{
                     "title": "Performance Enhancement Choice",
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
+                },
+                "sriov_interfaces": {
+                    "description": "Exclusive with [default_sriov_interface]\n Use custom Single Root I/O Virtualization interfaces",
+                    "title": "Custom SR-IOV interfaces Configuration",
+                    "$ref": "#/definitions/fleetSriovInterfacesListType",
+                    "x-displayname": "Custom SR-IOV interfaces Configuration"
                 },
                 "storage_class_list": {
                     "description": "Exclusive with [default_storage_class]\n Add additional custom storage classes in kubernetes for this fleet",

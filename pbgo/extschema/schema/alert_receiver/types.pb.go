@@ -307,6 +307,484 @@ func (m *SMSConfig) GetContactNumber() string {
 	return ""
 }
 
+// Webhook Config
+//
+// x-displayName: "Webhook Config"
+// Webhook configuration to send alert notifications
+type WebhookConfig struct {
+	// URL
+	//
+	// x-displayName: "Webhook URL"
+	// x-example: "value"
+	// x-required
+	// URL to send API requests to
+	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	// HTTP Configuration
+	//
+	// x-displayName: "HTTP Configuration"
+	// x-required
+	// Configuration for HTTP endpoint
+	HttpConfig *HTTPConfig `protobuf:"bytes,3,opt,name=http_config,json=httpConfig,proto3" json:"http_config,omitempty"`
+}
+
+func (m *WebhookConfig) Reset()      { *m = WebhookConfig{} }
+func (*WebhookConfig) ProtoMessage() {}
+func (*WebhookConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{5}
+}
+func (m *WebhookConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *WebhookConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *WebhookConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebhookConfig.Merge(m, src)
+}
+func (m *WebhookConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *WebhookConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_WebhookConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WebhookConfig proto.InternalMessageInfo
+
+func (m *WebhookConfig) GetUrl() string {
+	if m != nil {
+		return m.Url
+	}
+	return ""
+}
+
+func (m *WebhookConfig) GetHttpConfig() *HTTPConfig {
+	if m != nil {
+		return m.HttpConfig
+	}
+	return nil
+}
+
+// HTTP Configuration
+//
+// x-displayName: "HTTP Configuration"
+// Configuration for HTTP endpoint
+type HTTPConfig struct {
+	// HTTP Authorization header
+	//
+	// x-displayName: "Authorization"
+	// x-required
+	// HTTP Authorization header controls how to authorize to the HTTP endpoint
+	//
+	// Types that are valid to be assigned to AuthChoice:
+	//	*HTTPConfig_NoAuthorization
+	//	*HTTPConfig_BasicAuth
+	//	*HTTPConfig_AuthConfig
+	AuthChoice isHTTPConfig_AuthChoice `protobuf_oneof:"auth_choice"`
+	// Enable HTTP2
+	//
+	// x-displayName: "Enable HTTP2"
+	// x-example: "value"
+	// Whether to enable HTTP2.
+	EnableHttp2 bool `protobuf:"varint,4,opt,name=enable_http2,json=enableHttp2,proto3" json:"enable_http2,omitempty"`
+	// Follow Redirects
+	//
+	// x-displayName: "Follow Redirects"
+	// x-example: "value"
+	// Configure whether HTTP requests follow HTTP 3xx redirects.
+	FollowRedirects bool `protobuf:"varint,5,opt,name=follow_redirects,json=followRedirects,proto3" json:"follow_redirects,omitempty"`
+	// TLS Config
+	//
+	// x-displayName: "TLS Config"
+	// x-required
+	// Configures the TLS settings.
+	TlsConfig *TLSConfig `protobuf:"bytes,6,opt,name=tls_config,json=tlsConfig,proto3" json:"tls_config,omitempty"`
+}
+
+func (m *HTTPConfig) Reset()      { *m = HTTPConfig{} }
+func (*HTTPConfig) ProtoMessage() {}
+func (*HTTPConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{6}
+}
+func (m *HTTPConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HTTPConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HTTPConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HTTPConfig.Merge(m, src)
+}
+func (m *HTTPConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *HTTPConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_HTTPConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HTTPConfig proto.InternalMessageInfo
+
+type isHTTPConfig_AuthChoice interface {
+	isHTTPConfig_AuthChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type HTTPConfig_NoAuthorization struct {
+	NoAuthorization *schema.Empty `protobuf:"bytes,7,opt,name=no_authorization,json=noAuthorization,proto3,oneof" json:"no_authorization,omitempty"`
+}
+type HTTPConfig_BasicAuth struct {
+	BasicAuth *HttpBasicAuth `protobuf:"bytes,2,opt,name=basic_auth,json=basicAuth,proto3,oneof" json:"basic_auth,omitempty"`
+}
+type HTTPConfig_AuthConfig struct {
+	AuthConfig *Authorization `protobuf:"bytes,8,opt,name=auth_config,json=authConfig,proto3,oneof" json:"auth_config,omitempty"`
+}
+
+func (*HTTPConfig_NoAuthorization) isHTTPConfig_AuthChoice() {}
+func (*HTTPConfig_BasicAuth) isHTTPConfig_AuthChoice()       {}
+func (*HTTPConfig_AuthConfig) isHTTPConfig_AuthChoice()      {}
+
+func (m *HTTPConfig) GetAuthChoice() isHTTPConfig_AuthChoice {
+	if m != nil {
+		return m.AuthChoice
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetNoAuthorization() *schema.Empty {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_NoAuthorization); ok {
+		return x.NoAuthorization
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetBasicAuth() *HttpBasicAuth {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_BasicAuth); ok {
+		return x.BasicAuth
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetAuthConfig() *Authorization {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthConfig); ok {
+		return x.AuthConfig
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetEnableHttp2() bool {
+	if m != nil {
+		return m.EnableHttp2
+	}
+	return false
+}
+
+func (m *HTTPConfig) GetFollowRedirects() bool {
+	if m != nil {
+		return m.FollowRedirects
+	}
+	return false
+}
+
+func (m *HTTPConfig) GetTlsConfig() *TLSConfig {
+	if m != nil {
+		return m.TlsConfig
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*HTTPConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*HTTPConfig_NoAuthorization)(nil),
+		(*HTTPConfig_BasicAuth)(nil),
+		(*HTTPConfig_AuthConfig)(nil),
+	}
+}
+
+// TLS Config
+//
+// x-displayName: "TLS Config"
+// Configures the token request's TLS settings.
+type TLSConfig struct {
+	// CA Cert
+	//
+	// x-displayName: "CA Cert"
+	// x-example: "value"
+	// x-required
+	// CA certificate to validate the server certificate with.
+	CaCert string `protobuf:"bytes,1,opt,name=ca_cert,json=caCert,proto3" json:"ca_cert,omitempty"`
+	// Client Cert
+	//
+	// x-displayName: "Client Cert"
+	// x-example: "value"
+	// x-required
+	// Cert for client cert authentication to the server.
+	ClientCert string `protobuf:"bytes,2,opt,name=client_cert,json=clientCert,proto3" json:"client_cert,omitempty"`
+	// Client Key
+	//
+	// x-displayName: "Client Key"
+	// x-required
+	// Key for client cert authentication to the server.
+	ClientKey *schema.SecretType `protobuf:"bytes,3,opt,name=client_key,json=clientKey,proto3" json:"client_key,omitempty"`
+	// Server Name
+	//
+	// x-displayName: "Server Name"
+	// x-example: "value"
+	// x-required
+	// ServerName extension to indicate the name of the server.
+	ServerName string `protobuf:"bytes,4,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
+	// Min Version
+	//
+	// x-displayName: "Min Version"
+	// x-example: "value"
+	// Minimum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS
+	// 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).
+	// If unset, Prometheus will use Go default minimum version, which is TLS 1.2.
+	MinVersion schema.TlsProtocol `protobuf:"varint,5,opt,name=min_version,json=minVersion,proto3,enum=ves.io.schema.TlsProtocol" json:"min_version,omitempty"`
+	// Max Version
+	//
+	// x-displayName: "Max Version"
+	// x-example: "value"
+	// Maximum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS
+	// 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).
+	// If unset, Prometheus will use Go default maximum version, which is TLS 1.3.
+	MaxVersion schema.TlsProtocol `protobuf:"varint,6,opt,name=max_version,json=maxVersion,proto3,enum=ves.io.schema.TlsProtocol" json:"max_version,omitempty"`
+}
+
+func (m *TLSConfig) Reset()      { *m = TLSConfig{} }
+func (*TLSConfig) ProtoMessage() {}
+func (*TLSConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{7}
+}
+func (m *TLSConfig) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TLSConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *TLSConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TLSConfig.Merge(m, src)
+}
+func (m *TLSConfig) XXX_Size() int {
+	return m.Size()
+}
+func (m *TLSConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_TLSConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TLSConfig proto.InternalMessageInfo
+
+func (m *TLSConfig) GetCaCert() string {
+	if m != nil {
+		return m.CaCert
+	}
+	return ""
+}
+
+func (m *TLSConfig) GetClientCert() string {
+	if m != nil {
+		return m.ClientCert
+	}
+	return ""
+}
+
+func (m *TLSConfig) GetClientKey() *schema.SecretType {
+	if m != nil {
+		return m.ClientKey
+	}
+	return nil
+}
+
+func (m *TLSConfig) GetServerName() string {
+	if m != nil {
+		return m.ServerName
+	}
+	return ""
+}
+
+func (m *TLSConfig) GetMinVersion() schema.TlsProtocol {
+	if m != nil {
+		return m.MinVersion
+	}
+	return schema.TLS_AUTO
+}
+
+func (m *TLSConfig) GetMaxVersion() schema.TlsProtocol {
+	if m != nil {
+		return m.MaxVersion
+	}
+	return schema.TLS_AUTO
+}
+
+// Authorization Configuration
+//
+// x-displayName: "Authorization Config"
+// Authorization header configuration.
+type Authorization struct {
+	// Authentication Type
+	//
+	// x-displayName: "Authentication Type"
+	// x-required
+	// Sets the authentication type.
+	//
+	// Types that are valid to be assigned to AuthType:
+	//	*Authorization_AuthTypeBearer
+	AuthType isAuthorization_AuthType `protobuf_oneof:"auth_type"`
+	// Credentials
+	//
+	// x-displayName: "Credentials"
+	// x-required
+	// Sets the credentials.
+	Credentials *schema.SecretType `protobuf:"bytes,2,opt,name=credentials,proto3" json:"credentials,omitempty"`
+}
+
+func (m *Authorization) Reset()      { *m = Authorization{} }
+func (*Authorization) ProtoMessage() {}
+func (*Authorization) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{8}
+}
+func (m *Authorization) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Authorization) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Authorization) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Authorization.Merge(m, src)
+}
+func (m *Authorization) XXX_Size() int {
+	return m.Size()
+}
+func (m *Authorization) XXX_DiscardUnknown() {
+	xxx_messageInfo_Authorization.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Authorization proto.InternalMessageInfo
+
+type isAuthorization_AuthType interface {
+	isAuthorization_AuthType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type Authorization_AuthTypeBearer struct {
+	AuthTypeBearer *schema.Empty `protobuf:"bytes,4,opt,name=auth_type_bearer,json=authTypeBearer,proto3,oneof" json:"auth_type_bearer,omitempty"`
+}
+
+func (*Authorization_AuthTypeBearer) isAuthorization_AuthType() {}
+
+func (m *Authorization) GetAuthType() isAuthorization_AuthType {
+	if m != nil {
+		return m.AuthType
+	}
+	return nil
+}
+
+func (m *Authorization) GetAuthTypeBearer() *schema.Empty {
+	if x, ok := m.GetAuthType().(*Authorization_AuthTypeBearer); ok {
+		return x.AuthTypeBearer
+	}
+	return nil
+}
+
+func (m *Authorization) GetCredentials() *schema.SecretType {
+	if m != nil {
+		return m.Credentials
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Authorization) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*Authorization_AuthTypeBearer)(nil),
+	}
+}
+
+// HTTP Basic Authorization
+//
+// x-displayName: "Basic Authorization Credentials"
+// Authorization parameters to access HTPP alert Receiver Endpoint.
+type HttpBasicAuth struct {
+	// username
+	//
+	// x-displayName: "User Name"
+	// x-example: "Joe"
+	// x-required
+	// HTTP Basic Auth User Name
+	UserName string `protobuf:"bytes,1,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
+	// password
+	//
+	// x-displayName: "Password"
+	// x-required
+	// HTTP Basic Auth Password
+	Password *schema.SecretType `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+}
+
+func (m *HttpBasicAuth) Reset()      { *m = HttpBasicAuth{} }
+func (*HttpBasicAuth) ProtoMessage() {}
+func (*HttpBasicAuth) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{9}
+}
+func (m *HttpBasicAuth) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HttpBasicAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HttpBasicAuth) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpBasicAuth.Merge(m, src)
+}
+func (m *HttpBasicAuth) XXX_Size() int {
+	return m.Size()
+}
+func (m *HttpBasicAuth) XXX_DiscardUnknown() {
+	xxx_messageInfo_HttpBasicAuth.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HttpBasicAuth proto.InternalMessageInfo
+
+func (m *HttpBasicAuth) GetUserName() string {
+	if m != nil {
+		return m.UserName
+	}
+	return ""
+}
+
+func (m *HttpBasicAuth) GetPassword() *schema.SecretType {
+	if m != nil {
+		return m.Password
+	}
+	return nil
+}
+
 // Specification for Alert Receiver
 //
 // x-displayName: "Specification"
@@ -324,13 +802,14 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_Opsgenie
 	//	*GlobalSpecType_Email
 	//	*GlobalSpecType_Sms
+	//	*GlobalSpecType_Webhook
 	Receiver isGlobalSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{5}
+	return fileDescriptor_ca1466d8d1f67094, []int{10}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -377,12 +856,16 @@ type GlobalSpecType_Email struct {
 type GlobalSpecType_Sms struct {
 	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
+type GlobalSpecType_Webhook struct {
+	Webhook *WebhookConfig `protobuf:"bytes,7,opt,name=webhook,proto3,oneof" json:"webhook,omitempty"`
+}
 
 func (*GlobalSpecType_Slack) isGlobalSpecType_Receiver()     {}
 func (*GlobalSpecType_Pagerduty) isGlobalSpecType_Receiver() {}
 func (*GlobalSpecType_Opsgenie) isGlobalSpecType_Receiver()  {}
 func (*GlobalSpecType_Email) isGlobalSpecType_Receiver()     {}
 func (*GlobalSpecType_Sms) isGlobalSpecType_Receiver()       {}
+func (*GlobalSpecType_Webhook) isGlobalSpecType_Receiver()   {}
 
 func (m *GlobalSpecType) GetReceiver() isGlobalSpecType_Receiver {
 	if m != nil {
@@ -426,6 +909,13 @@ func (m *GlobalSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
+func (m *GlobalSpecType) GetWebhook() *WebhookConfig {
+	if x, ok := m.GetReceiver().(*GlobalSpecType_Webhook); ok {
+		return x.Webhook
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -434,6 +924,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_Opsgenie)(nil),
 		(*GlobalSpecType_Email)(nil),
 		(*GlobalSpecType_Sms)(nil),
+		(*GlobalSpecType_Webhook)(nil),
 	}
 }
 
@@ -448,13 +939,14 @@ type CreateSpecType struct {
 	//	*CreateSpecType_Opsgenie
 	//	*CreateSpecType_Email
 	//	*CreateSpecType_Sms
+	//	*CreateSpecType_Webhook
 	Receiver isCreateSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{6}
+	return fileDescriptor_ca1466d8d1f67094, []int{11}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -501,12 +993,16 @@ type CreateSpecType_Email struct {
 type CreateSpecType_Sms struct {
 	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
+type CreateSpecType_Webhook struct {
+	Webhook *WebhookConfig `protobuf:"bytes,6,opt,name=webhook,proto3,oneof" json:"webhook,omitempty"`
+}
 
 func (*CreateSpecType_Slack) isCreateSpecType_Receiver()     {}
 func (*CreateSpecType_Pagerduty) isCreateSpecType_Receiver() {}
 func (*CreateSpecType_Opsgenie) isCreateSpecType_Receiver()  {}
 func (*CreateSpecType_Email) isCreateSpecType_Receiver()     {}
 func (*CreateSpecType_Sms) isCreateSpecType_Receiver()       {}
+func (*CreateSpecType_Webhook) isCreateSpecType_Receiver()   {}
 
 func (m *CreateSpecType) GetReceiver() isCreateSpecType_Receiver {
 	if m != nil {
@@ -550,6 +1046,13 @@ func (m *CreateSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
+func (m *CreateSpecType) GetWebhook() *WebhookConfig {
+	if x, ok := m.GetReceiver().(*CreateSpecType_Webhook); ok {
+		return x.Webhook
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -558,6 +1061,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_Opsgenie)(nil),
 		(*CreateSpecType_Email)(nil),
 		(*CreateSpecType_Sms)(nil),
+		(*CreateSpecType_Webhook)(nil),
 	}
 }
 
@@ -572,13 +1076,14 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_Opsgenie
 	//	*ReplaceSpecType_Email
 	//	*ReplaceSpecType_Sms
+	//	*ReplaceSpecType_Webhook
 	Receiver isReplaceSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{7}
+	return fileDescriptor_ca1466d8d1f67094, []int{12}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -625,12 +1130,16 @@ type ReplaceSpecType_Email struct {
 type ReplaceSpecType_Sms struct {
 	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
+type ReplaceSpecType_Webhook struct {
+	Webhook *WebhookConfig `protobuf:"bytes,6,opt,name=webhook,proto3,oneof" json:"webhook,omitempty"`
+}
 
 func (*ReplaceSpecType_Slack) isReplaceSpecType_Receiver()     {}
 func (*ReplaceSpecType_Pagerduty) isReplaceSpecType_Receiver() {}
 func (*ReplaceSpecType_Opsgenie) isReplaceSpecType_Receiver()  {}
 func (*ReplaceSpecType_Email) isReplaceSpecType_Receiver()     {}
 func (*ReplaceSpecType_Sms) isReplaceSpecType_Receiver()       {}
+func (*ReplaceSpecType_Webhook) isReplaceSpecType_Receiver()   {}
 
 func (m *ReplaceSpecType) GetReceiver() isReplaceSpecType_Receiver {
 	if m != nil {
@@ -674,6 +1183,13 @@ func (m *ReplaceSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetWebhook() *WebhookConfig {
+	if x, ok := m.GetReceiver().(*ReplaceSpecType_Webhook); ok {
+		return x.Webhook
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -682,6 +1198,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_Opsgenie)(nil),
 		(*ReplaceSpecType_Email)(nil),
 		(*ReplaceSpecType_Sms)(nil),
+		(*ReplaceSpecType_Webhook)(nil),
 	}
 }
 
@@ -696,13 +1213,14 @@ type GetSpecType struct {
 	//	*GetSpecType_Opsgenie
 	//	*GetSpecType_Email
 	//	*GetSpecType_Sms
+	//	*GetSpecType_Webhook
 	Receiver isGetSpecType_Receiver `protobuf_oneof:"receiver"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{8}
+	return fileDescriptor_ca1466d8d1f67094, []int{13}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -749,12 +1267,16 @@ type GetSpecType_Email struct {
 type GetSpecType_Sms struct {
 	Sms *SMSConfig `protobuf:"bytes,5,opt,name=sms,proto3,oneof" json:"sms,omitempty"`
 }
+type GetSpecType_Webhook struct {
+	Webhook *WebhookConfig `protobuf:"bytes,6,opt,name=webhook,proto3,oneof" json:"webhook,omitempty"`
+}
 
 func (*GetSpecType_Slack) isGetSpecType_Receiver()     {}
 func (*GetSpecType_Pagerduty) isGetSpecType_Receiver() {}
 func (*GetSpecType_Opsgenie) isGetSpecType_Receiver()  {}
 func (*GetSpecType_Email) isGetSpecType_Receiver()     {}
 func (*GetSpecType_Sms) isGetSpecType_Receiver()       {}
+func (*GetSpecType_Webhook) isGetSpecType_Receiver()   {}
 
 func (m *GetSpecType) GetReceiver() isGetSpecType_Receiver {
 	if m != nil {
@@ -798,6 +1320,13 @@ func (m *GetSpecType) GetSms() *SMSConfig {
 	return nil
 }
 
+func (m *GetSpecType) GetWebhook() *WebhookConfig {
+	if x, ok := m.GetReceiver().(*GetSpecType_Webhook); ok {
+		return x.Webhook
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -806,6 +1335,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_Opsgenie)(nil),
 		(*GetSpecType_Email)(nil),
 		(*GetSpecType_Sms)(nil),
+		(*GetSpecType_Webhook)(nil),
 	}
 }
 
@@ -815,6 +1345,11 @@ func init() {
 	proto.RegisterType((*OpsGenieConfig)(nil), "ves.io.schema.alert_receiver.OpsGenieConfig")
 	proto.RegisterType((*EmailConfig)(nil), "ves.io.schema.alert_receiver.EmailConfig")
 	proto.RegisterType((*SMSConfig)(nil), "ves.io.schema.alert_receiver.SMSConfig")
+	proto.RegisterType((*WebhookConfig)(nil), "ves.io.schema.alert_receiver.WebhookConfig")
+	proto.RegisterType((*HTTPConfig)(nil), "ves.io.schema.alert_receiver.HTTPConfig")
+	proto.RegisterType((*TLSConfig)(nil), "ves.io.schema.alert_receiver.TLSConfig")
+	proto.RegisterType((*Authorization)(nil), "ves.io.schema.alert_receiver.Authorization")
+	proto.RegisterType((*HttpBasicAuth)(nil), "ves.io.schema.alert_receiver.HttpBasicAuth")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.alert_receiver.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.alert_receiver.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.alert_receiver.ReplaceSpecType")
@@ -826,52 +1361,88 @@ func init() {
 }
 
 var fileDescriptor_ca1466d8d1f67094 = []byte{
-	// 710 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0xcf, 0x4f, 0x13, 0x5b,
-	0x14, 0xc7, 0xe7, 0x32, 0x6d, 0x69, 0x6f, 0xdf, 0x2b, 0xef, 0x4d, 0xc8, 0x4b, 0x29, 0x64, 0x1e,
-	0x69, 0x4c, 0xc4, 0x84, 0xce, 0x00, 0xc6, 0x04, 0x35, 0x21, 0x5a, 0x34, 0x34, 0x18, 0xd4, 0x4c,
-	0x5d, 0x69, 0xb4, 0xde, 0x0e, 0x87, 0xe9, 0x84, 0xe9, 0xdc, 0xf1, 0xce, 0x9d, 0x62, 0x35, 0x26,
-	0xc6, 0xa5, 0x71, 0xc1, 0xd2, 0x44, 0xff, 0x00, 0xff, 0x06, 0xd9, 0xb0, 0x34, 0xae, 0xba, 0x64,
-	0x29, 0xc3, 0x46, 0x77, 0xac, 0x5d, 0x99, 0xf9, 0x51, 0xec, 0x10, 0x03, 0xb8, 0x31, 0x2c, 0xd8,
-	0xcd, 0x99, 0xf3, 0x3d, 0xe7, 0x7b, 0xce, 0xfd, 0xdc, 0xc5, 0xc5, 0x53, 0x1d, 0x70, 0x15, 0x93,
-	0xaa, 0xae, 0xde, 0x82, 0x36, 0x51, 0x89, 0x05, 0x8c, 0x37, 0x18, 0xe8, 0x60, 0x76, 0x80, 0xa9,
-	0xbc, 0xeb, 0x80, 0xab, 0x38, 0x8c, 0x72, 0x2a, 0x4d, 0x44, 0x4a, 0x25, 0x52, 0x2a, 0x49, 0x65,
-	0xa9, 0x62, 0x98, 0xbc, 0xe5, 0x35, 0x15, 0x9d, 0xb6, 0x55, 0x83, 0x1a, 0x54, 0x0d, 0x8b, 0x9a,
-	0xde, 0x5a, 0x18, 0x85, 0x41, 0xf8, 0x15, 0x35, 0x2b, 0x8d, 0x27, 0x6d, 0xa9, 0xc3, 0x4d, 0x6a,
-	0xc7, 0x4e, 0xa5, 0xb1, 0x64, 0x72, 0x60, 0x88, 0xd2, 0x44, 0x32, 0xd5, 0x21, 0x96, 0xb9, 0x4a,
-	0x38, 0xc4, 0xd9, 0xc9, 0x43, 0x59, 0x13, 0x36, 0x1a, 0x89, 0xd6, 0xe5, 0x0d, 0x9c, 0xaf, 0x5b,
-	0x44, 0x5f, 0x5f, 0xa4, 0xf6, 0x9a, 0x69, 0x48, 0xb3, 0x58, 0xf4, 0x98, 0x55, 0x44, 0x93, 0x68,
-	0x2a, 0x3f, 0x37, 0xa6, 0x24, 0x37, 0xac, 0x83, 0xce, 0x80, 0xdf, 0xeb, 0x3a, 0x50, 0x4d, 0xf5,
-	0xb6, 0x10, 0xd2, 0x02, 0xad, 0x74, 0x09, 0x0f, 0xeb, 0x2d, 0x62, 0xdb, 0x60, 0x15, 0x87, 0x26,
-	0xd1, 0x54, 0xae, 0x3a, 0xfe, 0xf1, 0xdb, 0xb6, 0xf8, 0x1f, 0x1b, 0x9d, 0x93, 0x1e, 0x3d, 0x20,
-	0x95, 0x67, 0x33, 0x95, 0xcb, 0x95, 0xc6, 0xc3, 0xe7, 0xb3, 0xd3, 0xf3, 0x33, 0x2f, 0xce, 0x69,
-	0x7d, 0x6d, 0xf9, 0x09, 0x1e, 0xb9, 0x4b, 0x0c, 0x60, 0x37, 0x3c, 0xde, 0x8d, 0xcd, 0xaf, 0xe1,
-	0x3c, 0xa3, 0x1e, 0x37, 0x6d, 0xa3, 0xb1, 0x0e, 0xdd, 0x93, 0x0e, 0x81, 0xe3, 0x9a, 0x5b, 0xd0,
-	0x95, 0x26, 0xa2, 0xf1, 0xa3, 0x39, 0x70, 0x30, 0x47, 0x9a, 0x89, 0x9b, 0xf1, 0xa4, 0xe5, 0x16,
-	0x2e, 0xdc, 0x71, 0xdc, 0x25, 0xb0, 0x4d, 0x88, 0x1d, 0xe7, 0xf1, 0x30, 0x71, 0xcc, 0xdf, 0x71,
-	0xcb, 0x10, 0xc7, 0x3c, 0xde, 0x49, 0xc1, 0xf9, 0x9b, 0x6d, 0x62, 0x5a, 0xb1, 0xcd, 0xff, 0x38,
-	0x0d, 0x41, 0x18, 0x9a, 0xe4, 0xaa, 0xb9, 0x40, 0x9e, 0x62, 0x43, 0x8f, 0x91, 0x16, 0xfd, 0x2f,
-	0x2f, 0xe0, 0x5c, 0x7d, 0xa5, 0x7e, 0xc0, 0xa0, 0xa0, 0x53, 0x9b, 0x13, 0x9d, 0x37, 0x6c, 0xaf,
-	0xdd, 0x04, 0x16, 0x97, 0xf5, 0x5d, 0xb6, 0x87, 0x90, 0xf6, 0x77, 0xac, 0xb8, 0x1d, 0x0a, 0xca,
-	0xaf, 0x45, 0x5c, 0x58, 0xb2, 0x68, 0x93, 0x58, 0x75, 0x07, 0xf4, 0x60, 0x5c, 0xe9, 0x3a, 0x4e,
-	0xbb, 0x01, 0xd8, 0x78, 0xb1, 0x0b, 0xca, 0x51, 0xb7, 0x55, 0x19, 0xb8, 0x03, 0x35, 0x41, 0x8b,
-	0x2a, 0xa5, 0x15, 0x9c, 0x73, 0x02, 0x44, 0xab, 0x1e, 0xef, 0x86, 0x9b, 0xe6, 0xe7, 0x2a, 0x47,
-	0xb7, 0x39, 0x44, 0xb4, 0x26, 0x68, 0x3f, 0x3b, 0x48, 0xcb, 0x38, 0x4b, 0x1d, 0xd7, 0x08, 0x8e,
-	0xbf, 0x28, 0x86, 0xdd, 0xa6, 0x8f, 0xee, 0x96, 0x84, 0x55, 0x13, 0xb4, 0x83, 0xfa, 0x60, 0xbb,
-	0xe8, 0x44, 0x53, 0x27, 0xd9, 0x6e, 0x80, 0x45, 0xb0, 0x5d, 0x58, 0x29, 0x5d, 0xc5, 0xa2, 0xdb,
-	0x76, 0x8b, 0xe9, 0xb0, 0xc1, 0xf9, 0x63, 0x8e, 0xa7, 0x0f, 0xa7, 0x26, 0x68, 0x41, 0x55, 0x75,
-	0x14, 0x67, 0xfb, 0x49, 0x29, 0xbb, 0xbd, 0x85, 0x50, 0x6f, 0x0b, 0x65, 0x96, 0x53, 0xd9, 0xcc,
-	0x3f, 0xc3, 0xe5, 0x77, 0x22, 0x2e, 0x2c, 0x32, 0x20, 0x1c, 0xce, 0x60, 0xfc, 0x09, 0x18, 0x57,
-	0xfe, 0xfd, 0xbc, 0x70, 0xe8, 0xf6, 0x57, 0x8b, 0x03, 0x7c, 0xfe, 0x7a, 0xf5, 0x1d, 0x1d, 0x44,
-	0xe5, 0xf7, 0x22, 0x1e, 0xd1, 0xc0, 0xb1, 0x88, 0x7e, 0x86, 0xe7, 0x14, 0xe2, 0x79, 0x2b, 0xe2,
-	0xfc, 0x12, 0xf0, 0x33, 0x34, 0xa7, 0x0e, 0x4d, 0xf5, 0x0d, 0xea, 0xed, 0xca, 0xc2, 0xce, 0xae,
-	0x2c, 0xec, 0xef, 0xca, 0xe8, 0xa5, 0x2f, 0xa3, 0x0f, 0xbe, 0x8c, 0x3e, 0xf9, 0x32, 0xea, 0xf9,
-	0x32, 0xda, 0xf1, 0x65, 0xf4, 0xc5, 0x97, 0xd1, 0x57, 0x5f, 0x16, 0xf6, 0x7d, 0x19, 0x6d, 0xee,
-	0xc9, 0x42, 0x6f, 0x4f, 0x16, 0x76, 0xf6, 0x64, 0xe1, 0xbe, 0x66, 0x50, 0x67, 0xdd, 0x50, 0x3a,
-	0xd4, 0xe2, 0xc0, 0x18, 0x51, 0x3c, 0x57, 0x0d, 0x3f, 0xd6, 0x28, 0x6b, 0x57, 0x1c, 0x46, 0x3b,
-	0xe6, 0x2a, 0xb0, 0x4a, 0x3f, 0xad, 0x3a, 0x4d, 0x83, 0xaa, 0xf0, 0x94, 0xc7, 0xcf, 0x96, 0x5f,
-	0x3e, 0xc5, 0x9a, 0x99, 0xf0, 0x01, 0x73, 0xf1, 0x47, 0x00, 0x00, 0x00, 0xff, 0xff, 0x1f, 0x51,
-	0x9e, 0x1f, 0xb1, 0x09, 0x00, 0x00,
+	// 1290 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6f, 0x1b, 0xc5,
+	0x1b, 0xde, 0xb1, 0x37, 0xfe, 0xf3, 0x6e, 0x93, 0xb8, 0xab, 0xea, 0x27, 0x37, 0x8d, 0xb6, 0xf9,
+	0x59, 0x48, 0xb8, 0xa9, 0xff, 0xb4, 0xa6, 0x2d, 0xa5, 0x95, 0xa2, 0xc6, 0xa5, 0xd4, 0x84, 0xb6,
+	0x54, 0x9b, 0x08, 0x24, 0x10, 0x2c, 0xb3, 0xeb, 0x89, 0xbd, 0xca, 0xee, 0xce, 0x32, 0x3b, 0x76,
+	0xe2, 0x22, 0x50, 0x85, 0x38, 0x72, 0xa8, 0x90, 0xe0, 0x03, 0x70, 0x42, 0x7c, 0x00, 0x90, 0x70,
+	0x0f, 0x39, 0x22, 0x4e, 0x39, 0xf6, 0x48, 0x9d, 0x0b, 0xdc, 0x2a, 0xc4, 0xa1, 0xe2, 0x84, 0x66,
+	0x77, 0xed, 0xda, 0x01, 0x92, 0xf4, 0xd2, 0x53, 0x6e, 0x3b, 0x33, 0xcf, 0xf3, 0xbe, 0xcf, 0xcc,
+	0x3c, 0xf3, 0xbe, 0xb2, 0xa1, 0xd8, 0x25, 0x41, 0xc5, 0xa6, 0xd5, 0xc0, 0x6a, 0x13, 0x17, 0x57,
+	0xb1, 0x43, 0x18, 0x37, 0x18, 0xb1, 0x88, 0xdd, 0x25, 0xac, 0xca, 0x7b, 0x3e, 0x09, 0x2a, 0x3e,
+	0xa3, 0x9c, 0xaa, 0xf3, 0x11, 0xb2, 0x12, 0x21, 0x2b, 0x93, 0xc8, 0xb9, 0x72, 0xcb, 0xe6, 0xed,
+	0x8e, 0x59, 0xb1, 0xa8, 0x5b, 0x6d, 0xd1, 0x16, 0xad, 0x86, 0x24, 0xb3, 0xb3, 0x1e, 0x8e, 0xc2,
+	0x41, 0xf8, 0x15, 0x05, 0x9b, 0x3b, 0x35, 0x99, 0x96, 0xfa, 0xdc, 0xa6, 0x5e, 0x9c, 0x69, 0xee,
+	0xe4, 0xe4, 0xe2, 0x98, 0x88, 0xb9, 0xf9, 0xc9, 0xa5, 0x2e, 0x76, 0xec, 0x26, 0xe6, 0x24, 0x5e,
+	0x5d, 0xd8, 0xb3, 0x6a, 0x93, 0x4d, 0x63, 0x22, 0x74, 0x61, 0x13, 0x94, 0x55, 0x07, 0x5b, 0x1b,
+	0xd7, 0xa9, 0xb7, 0x6e, 0xb7, 0xd4, 0xf3, 0x90, 0xec, 0x30, 0x27, 0x8f, 0x16, 0x50, 0x51, 0xa9,
+	0x9d, 0xac, 0x4c, 0xee, 0x70, 0x95, 0x58, 0x8c, 0xf0, 0xb5, 0x9e, 0x4f, 0xea, 0xf2, 0x4e, 0x1f,
+	0x21, 0x5d, 0x60, 0xd5, 0x8b, 0x90, 0xb6, 0xda, 0xd8, 0xf3, 0x88, 0x93, 0x4f, 0x2c, 0xa0, 0x62,
+	0xb6, 0x7e, 0xea, 0xa7, 0xdf, 0xb7, 0x93, 0xff, 0x63, 0x27, 0x6a, 0xea, 0x87, 0xef, 0xe3, 0xf2,
+	0xbd, 0x73, 0xe5, 0xd7, 0xca, 0xc6, 0x07, 0x9f, 0x9c, 0x2f, 0x5d, 0x3e, 0xf7, 0xe9, 0x4b, 0xfa,
+	0x10, 0x5b, 0xf8, 0x18, 0x66, 0xef, 0xe2, 0x16, 0x61, 0xaf, 0x77, 0x78, 0x2f, 0x4e, 0x7e, 0x0d,
+	0x14, 0x46, 0x3b, 0xdc, 0xf6, 0x5a, 0xc6, 0x06, 0xe9, 0x1d, 0x56, 0x04, 0xc4, 0x9c, 0xb7, 0x48,
+	0x4f, 0x9d, 0x8f, 0xe4, 0x47, 0x3a, 0x40, 0xe8, 0x98, 0x62, 0xc9, 0x07, 0xb1, 0xd2, 0x42, 0x1b,
+	0x66, 0xde, 0xf6, 0x83, 0x9b, 0xc4, 0xb3, 0x49, 0x9c, 0xf1, 0x32, 0xa4, 0xb1, 0x6f, 0x3f, 0x4f,
+	0xb6, 0x14, 0xf6, 0xed, 0x83, 0x33, 0x55, 0x40, 0xb9, 0xe1, 0x62, 0xdb, 0x89, 0xd3, 0x9c, 0x86,
+	0x29, 0x22, 0x86, 0x61, 0x92, 0x6c, 0x3d, 0x2b, 0xe0, 0x32, 0x4b, 0x7c, 0x84, 0xf4, 0x68, 0xbe,
+	0xb0, 0x04, 0xd9, 0xd5, 0xdb, 0xab, 0xa3, 0x3b, 0x98, 0xb1, 0xa8, 0xc7, 0xb1, 0xc5, 0x0d, 0xaf,
+	0xe3, 0x9a, 0x84, 0xc5, 0xb4, 0x61, 0x96, 0xed, 0x04, 0xd2, 0xa7, 0x63, 0xc4, 0x9d, 0x10, 0x50,
+	0xf8, 0x0c, 0xa6, 0xdf, 0x25, 0x66, 0x9b, 0xd2, 0xe1, 0x3d, 0xce, 0x3f, 0xbb, 0xc7, 0x7f, 0xca,
+	0x53, 0xdf, 0x04, 0xa5, 0xcd, 0xb9, 0x6f, 0x58, 0x21, 0x38, 0x9f, 0x0c, 0xb7, 0x5e, 0xac, 0xec,
+	0xe7, 0xe7, 0x4a, 0x63, 0x6d, 0xed, 0x6e, 0x14, 0x5c, 0x07, 0x41, 0x8e, 0xbe, 0x57, 0xe4, 0x4c,
+	0x22, 0x97, 0x2c, 0xfc, 0x98, 0x04, 0x78, 0x06, 0x50, 0x97, 0x21, 0xe7, 0x51, 0x03, 0x77, 0x78,
+	0x9b, 0x32, 0xfb, 0x1e, 0x16, 0x7e, 0xcb, 0xa7, 0xc3, 0x24, 0x27, 0xf6, 0x24, 0xb9, 0xe1, 0xfa,
+	0xbc, 0xd7, 0x90, 0xf4, 0x59, 0x8f, 0x2e, 0x8f, 0xc3, 0xd5, 0x5b, 0x00, 0x26, 0x0e, 0x6c, 0x2b,
+	0x8c, 0x12, 0x1e, 0xb3, 0x52, 0x3b, 0x7b, 0x80, 0x42, 0xce, 0xfd, 0xba, 0xe0, 0x88, 0x48, 0x0d,
+	0x49, 0xcf, 0x9a, 0xc3, 0x81, 0x7a, 0x07, 0x14, 0x11, 0x67, 0xb8, 0xe1, 0xcc, 0x61, 0xc2, 0x4d,
+	0xe8, 0x69, 0x48, 0x3a, 0x88, 0x08, 0xf1, 0x06, 0xff, 0x0f, 0xc7, 0x88, 0x87, 0x4d, 0x87, 0x18,
+	0xe2, 0x28, 0x6a, 0x79, 0x79, 0x01, 0x15, 0x33, 0xba, 0x12, 0xcd, 0x09, 0x1d, 0x35, 0xf5, 0x0c,
+	0xe4, 0xd6, 0xa9, 0xe3, 0xd0, 0x4d, 0x83, 0x91, 0xa6, 0xcd, 0x88, 0xc5, 0x83, 0xfc, 0x54, 0x08,
+	0x9b, 0x8d, 0xe6, 0xf5, 0xe1, 0xb4, 0xfa, 0x06, 0x00, 0x77, 0x82, 0xa1, 0xb8, 0x54, 0x28, 0xee,
+	0xe5, 0xfd, 0xc5, 0xad, 0xdd, 0x8a, 0xdd, 0xa2, 0x67, 0xb9, 0x13, 0x44, 0x9f, 0x57, 0xe0, 0x8f,
+	0xa5, 0xf4, 0xf9, 0xd2, 0xa5, 0xd2, 0x85, 0xd2, 0xc5, 0xfa, 0xc2, 0x70, 0xc7, 0x6d, 0x6a, 0x5b,
+	0x44, 0x3d, 0xbe, 0xdd, 0x47, 0x69, 0x61, 0xe0, 0x41, 0x1f, 0x4d, 0xbd, 0x5a, 0xaa, 0x95, 0x2e,
+	0xaf, 0xc8, 0x19, 0x94, 0x4b, 0x14, 0xfe, 0x4c, 0x40, 0x76, 0x14, 0x4c, 0x5d, 0x86, 0xb4, 0x85,
+	0x0d, 0x8b, 0x30, 0x1e, 0x5b, 0xa7, 0xf8, 0xb4, 0x8f, 0xe4, 0x6f, 0x1f, 0x22, 0xc5, 0x27, 0x6e,
+	0x69, 0xc1, 0xc4, 0x01, 0xb9, 0x74, 0x41, 0xb8, 0x29, 0xc5, 0xe4, 0xe2, 0xfd, 0xfb, 0x99, 0x31,
+	0x63, 0xa5, 0x2c, 0x7c, 0x9d, 0x30, 0x2e, 0xbc, 0x65, 0x39, 0x36, 0xf1, 0x78, 0x14, 0x26, 0xf1,
+	0x9c, 0x61, 0x20, 0x22, 0x87, 0xa1, 0x96, 0x20, 0x1e, 0x85, 0x0f, 0x34, 0x79, 0xb8, 0x07, 0x9a,
+	0x8d, 0x28, 0xe2, 0x8d, 0x9e, 0x06, 0x25, 0x20, 0xac, 0x4b, 0x98, 0xe1, 0x61, 0x97, 0x84, 0x97,
+	0x94, 0xd5, 0x21, 0x9a, 0xba, 0x83, 0x5d, 0xa2, 0x5e, 0x05, 0xc5, 0xb5, 0x3d, 0xa3, 0x4b, 0x58,
+	0x20, 0x2c, 0x2a, 0xae, 0x67, 0xa6, 0x36, 0xb7, 0x27, 0xc3, 0x9a, 0x13, 0xdc, 0x15, 0xa5, 0xd2,
+	0xa2, 0x8e, 0x0e, 0xae, 0xed, 0xbd, 0x13, 0xa1, 0x43, 0x32, 0xde, 0x1a, 0x91, 0x53, 0x87, 0x20,
+	0xe3, 0xad, 0x98, 0x5c, 0xf8, 0x01, 0xc1, 0xf4, 0xa4, 0xe1, 0xaf, 0x41, 0x2e, 0xbc, 0x30, 0x51,
+	0xdc, 0x0d, 0x93, 0x60, 0x46, 0x58, 0xa8, 0xf8, 0xbf, 0xdf, 0xcc, 0x8c, 0xc0, 0x87, 0x3b, 0x0f,
+	0xd1, 0xea, 0x32, 0x28, 0x16, 0x23, 0x4d, 0xe2, 0x71, 0x1b, 0x3b, 0x41, 0xfc, 0x66, 0x0e, 0x3c,
+	0xaf, 0x71, 0x4e, 0x7d, 0x0e, 0xb2, 0x23, 0x11, 0xea, 0xf4, 0x76, 0x1f, 0x09, 0x4c, 0x72, 0xd0,
+	0x47, 0xe8, 0xc2, 0x8a, 0x9c, 0x49, 0xe6, 0xe4, 0xc2, 0x16, 0x4c, 0x4f, 0xbc, 0x33, 0x75, 0x11,
+	0xb2, 0x9d, 0x60, 0x78, 0xc4, 0x91, 0x69, 0xa6, 0x9f, 0xf6, 0x91, 0x14, 0xd7, 0xb8, 0xfc, 0x35,
+	0x3d, 0x23, 0xd6, 0xe3, 0xf3, 0xce, 0xf8, 0x38, 0x08, 0x36, 0x29, 0x6b, 0x1e, 0x56, 0xde, 0x88,
+	0x50, 0xf8, 0x42, 0x86, 0x99, 0x9b, 0x0e, 0x35, 0xb1, 0xb3, 0xea, 0x13, 0x4b, 0x40, 0xd4, 0x65,
+	0x98, 0x0a, 0x44, 0xf3, 0x8a, 0x8b, 0xf7, 0x99, 0xfd, 0xdf, 0xcc, 0x58, 0x9f, 0x6b, 0x48, 0x7a,
+	0xc4, 0x54, 0x6f, 0x43, 0xd6, 0x17, 0x6d, 0xa8, 0xd9, 0xe1, 0xbd, 0x58, 0x53, 0x79, 0xff, 0x30,
+	0x7b, 0xba, 0x96, 0x28, 0x34, 0xa3, 0x08, 0xea, 0x0a, 0x64, 0xa8, 0x1f, 0xb4, 0x44, 0x8b, 0x89,
+	0x0d, 0x5b, 0xda, 0x3f, 0xda, 0x64, 0x43, 0x6a, 0x48, 0xfa, 0x88, 0x2f, 0x76, 0x17, 0x75, 0x0d,
+	0xf9, 0x30, 0xbb, 0x1b, 0xeb, 0x37, 0x62, 0x77, 0x21, 0x53, 0xbd, 0x0a, 0xc9, 0xc0, 0x8d, 0xea,
+	0xce, 0x81, 0x25, 0x65, 0xd4, 0x80, 0x1a, 0x92, 0x2e, 0x58, 0xea, 0x16, 0xa4, 0x37, 0xa3, 0xa6,
+	0x12, 0x17, 0xef, 0x03, 0x0a, 0xe6, 0x44, 0x07, 0xaa, 0x57, 0xbf, 0x7f, 0x88, 0xce, 0x2e, 0x26,
+	0x2d, 0xc6, 0x17, 0xd3, 0x01, 0xc7, 0x2d, 0xdb, 0x6b, 0x2d, 0xca, 0x3e, 0xa3, 0xcd, 0xc5, 0x63,
+	0x01, 0x5d, 0xe7, 0x26, 0xf6, 0x36, 0x0c, 0x97, 0x58, 0x8b, 0xe9, 0x75, 0xd2, 0x64, 0xd8, 0xf5,
+	0x1b, 0x92, 0x3e, 0x4c, 0x57, 0x3f, 0x01, 0x99, 0x61, 0x54, 0x35, 0xb3, 0xdd, 0x47, 0x68, 0xa7,
+	0x8f, 0x52, 0x2b, 0x72, 0x26, 0x95, 0x4b, 0x17, 0xbe, 0x96, 0x61, 0xe6, 0x3a, 0x23, 0x98, 0x93,
+	0x23, 0x1b, 0xbc, 0x68, 0x1b, 0xa4, 0x5e, 0xa8, 0x0d, 0xae, 0x1c, 0xff, 0x65, 0x69, 0xcf, 0x8b,
+	0xaf, 0xe7, 0xc7, 0x9c, 0x71, 0xec, 0xf3, 0xbf, 0xd0, 0x68, 0x54, 0xf8, 0x46, 0x86, 0x59, 0x9d,
+	0xf8, 0x0e, 0xb6, 0x8e, 0x8c, 0x71, 0x64, 0x8c, 0x31, 0x63, 0x7c, 0x25, 0x83, 0x72, 0x93, 0xf0,
+	0x23, 0x53, 0x1c, 0x99, 0x62, 0x34, 0xaa, 0x7f, 0x89, 0x76, 0x1e, 0x6b, 0xd2, 0xa3, 0xc7, 0x9a,
+	0xf4, 0xe4, 0xb1, 0x86, 0xee, 0x0f, 0x34, 0xf4, 0xdd, 0x40, 0x43, 0x3f, 0x0f, 0x34, 0xb4, 0x33,
+	0xd0, 0xd0, 0xa3, 0x81, 0x86, 0x7e, 0x1d, 0x68, 0xe8, 0xb7, 0x81, 0x26, 0x3d, 0x19, 0x68, 0xe8,
+	0xc1, 0xae, 0x26, 0xed, 0xec, 0x6a, 0xd2, 0xa3, 0x5d, 0x4d, 0x7a, 0x4f, 0x6f, 0x51, 0x7f, 0xa3,
+	0x55, 0xe9, 0x52, 0x87, 0x13, 0xc6, 0x70, 0xa5, 0x13, 0x54, 0xc3, 0x8f, 0x75, 0xca, 0xdc, 0xb2,
+	0xcf, 0x68, 0xd7, 0x6e, 0x12, 0x56, 0x1e, 0x2e, 0x57, 0x7d, 0xb3, 0x45, 0xab, 0x64, 0x8b, 0xc7,
+	0x3f, 0xc1, 0xff, 0xf5, 0x6f, 0x05, 0x33, 0x15, 0xfe, 0x18, 0x7f, 0xe5, 0xef, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0xa8, 0xf0, 0xc1, 0x98, 0x7d, 0x10, 0x00, 0x00,
 }
 
 func (this *SlackConfig) Equal(that interface{}) bool {
@@ -999,6 +1570,267 @@ func (this *SMSConfig) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ContactNumber != that1.ContactNumber {
+		return false
+	}
+	return true
+}
+func (this *WebhookConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebhookConfig)
+	if !ok {
+		that2, ok := that.(WebhookConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Url != that1.Url {
+		return false
+	}
+	if !this.HttpConfig.Equal(that1.HttpConfig) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig)
+	if !ok {
+		that2, ok := that.(HTTPConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AuthChoice == nil {
+		if this.AuthChoice != nil {
+			return false
+		}
+	} else if this.AuthChoice == nil {
+		return false
+	} else if !this.AuthChoice.Equal(that1.AuthChoice) {
+		return false
+	}
+	if this.EnableHttp2 != that1.EnableHttp2 {
+		return false
+	}
+	if this.FollowRedirects != that1.FollowRedirects {
+		return false
+	}
+	if !this.TlsConfig.Equal(that1.TlsConfig) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_NoAuthorization) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_NoAuthorization)
+	if !ok {
+		that2, ok := that.(HTTPConfig_NoAuthorization)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoAuthorization.Equal(that1.NoAuthorization) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_BasicAuth) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_BasicAuth)
+	if !ok {
+		that2, ok := that.(HTTPConfig_BasicAuth)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BasicAuth.Equal(that1.BasicAuth) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_AuthConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_AuthConfig)
+	if !ok {
+		that2, ok := that.(HTTPConfig_AuthConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthConfig.Equal(that1.AuthConfig) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfig) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfig)
+	if !ok {
+		that2, ok := that.(TLSConfig)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CaCert != that1.CaCert {
+		return false
+	}
+	if this.ClientCert != that1.ClientCert {
+		return false
+	}
+	if !this.ClientKey.Equal(that1.ClientKey) {
+		return false
+	}
+	if this.ServerName != that1.ServerName {
+		return false
+	}
+	if this.MinVersion != that1.MinVersion {
+		return false
+	}
+	if this.MaxVersion != that1.MaxVersion {
+		return false
+	}
+	return true
+}
+func (this *Authorization) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Authorization)
+	if !ok {
+		that2, ok := that.(Authorization)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AuthType == nil {
+		if this.AuthType != nil {
+			return false
+		}
+	} else if this.AuthType == nil {
+		return false
+	} else if !this.AuthType.Equal(that1.AuthType) {
+		return false
+	}
+	if !this.Credentials.Equal(that1.Credentials) {
+		return false
+	}
+	return true
+}
+func (this *Authorization_AuthTypeBearer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Authorization_AuthTypeBearer)
+	if !ok {
+		that2, ok := that.(Authorization_AuthTypeBearer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AuthTypeBearer.Equal(that1.AuthTypeBearer) {
+		return false
+	}
+	return true
+}
+func (this *HttpBasicAuth) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HttpBasicAuth)
+	if !ok {
+		that2, ok := that.(HttpBasicAuth)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.UserName != that1.UserName {
+		return false
+	}
+	if !this.Password.Equal(that1.Password) {
 		return false
 	}
 	return true
@@ -1153,6 +1985,30 @@ func (this *GlobalSpecType_Sms) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_Webhook) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Webhook)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Webhook)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Webhook.Equal(that1.Webhook) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1299,6 +2155,30 @@ func (this *CreateSpecType_Sms) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Sms.Equal(that1.Sms) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_Webhook) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Webhook)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Webhook)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Webhook.Equal(that1.Webhook) {
 		return false
 	}
 	return true
@@ -1453,6 +2333,30 @@ func (this *ReplaceSpecType_Sms) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_Webhook) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Webhook)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Webhook)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Webhook.Equal(that1.Webhook) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1603,6 +2507,30 @@ func (this *GetSpecType_Sms) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_Webhook) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Webhook)
+	if !ok {
+		that2, ok := that.(GetSpecType_Webhook)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Webhook.Equal(that1.Webhook) {
+		return false
+	}
+	return true
+}
 func (this *SlackConfig) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1662,11 +2590,118 @@ func (this *SMSConfig) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *WebhookConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&alert_receiver.WebhookConfig{")
+	s = append(s, "Url: "+fmt.Sprintf("%#v", this.Url)+",\n")
+	if this.HttpConfig != nil {
+		s = append(s, "HttpConfig: "+fmt.Sprintf("%#v", this.HttpConfig)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&alert_receiver.HTTPConfig{")
+	if this.AuthChoice != nil {
+		s = append(s, "AuthChoice: "+fmt.Sprintf("%#v", this.AuthChoice)+",\n")
+	}
+	s = append(s, "EnableHttp2: "+fmt.Sprintf("%#v", this.EnableHttp2)+",\n")
+	s = append(s, "FollowRedirects: "+fmt.Sprintf("%#v", this.FollowRedirects)+",\n")
+	if this.TlsConfig != nil {
+		s = append(s, "TlsConfig: "+fmt.Sprintf("%#v", this.TlsConfig)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HTTPConfig_NoAuthorization) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_NoAuthorization{` +
+		`NoAuthorization:` + fmt.Sprintf("%#v", this.NoAuthorization) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_BasicAuth) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_BasicAuth{` +
+		`BasicAuth:` + fmt.Sprintf("%#v", this.BasicAuth) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_AuthConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_AuthConfig{` +
+		`AuthConfig:` + fmt.Sprintf("%#v", this.AuthConfig) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfig) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&alert_receiver.TLSConfig{")
+	s = append(s, "CaCert: "+fmt.Sprintf("%#v", this.CaCert)+",\n")
+	s = append(s, "ClientCert: "+fmt.Sprintf("%#v", this.ClientCert)+",\n")
+	if this.ClientKey != nil {
+		s = append(s, "ClientKey: "+fmt.Sprintf("%#v", this.ClientKey)+",\n")
+	}
+	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
+	s = append(s, "MinVersion: "+fmt.Sprintf("%#v", this.MinVersion)+",\n")
+	s = append(s, "MaxVersion: "+fmt.Sprintf("%#v", this.MaxVersion)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Authorization) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&alert_receiver.Authorization{")
+	if this.AuthType != nil {
+		s = append(s, "AuthType: "+fmt.Sprintf("%#v", this.AuthType)+",\n")
+	}
+	if this.Credentials != nil {
+		s = append(s, "Credentials: "+fmt.Sprintf("%#v", this.Credentials)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Authorization_AuthTypeBearer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.Authorization_AuthTypeBearer{` +
+		`AuthTypeBearer:` + fmt.Sprintf("%#v", this.AuthTypeBearer) + `}`}, ", ")
+	return s
+}
+func (this *HttpBasicAuth) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&alert_receiver.HttpBasicAuth{")
+	s = append(s, "UserName: "+fmt.Sprintf("%#v", this.UserName)+",\n")
+	if this.Password != nil {
+		s = append(s, "Password: "+fmt.Sprintf("%#v", this.Password)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&alert_receiver.GlobalSpecType{")
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
@@ -1714,11 +2749,19 @@ func (this *GlobalSpecType_Sms) GoString() string {
 		`Sms:` + fmt.Sprintf("%#v", this.Sms) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_Webhook) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.GlobalSpecType_Webhook{` +
+		`Webhook:` + fmt.Sprintf("%#v", this.Webhook) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&alert_receiver.CreateSpecType{")
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
@@ -1766,11 +2809,19 @@ func (this *CreateSpecType_Sms) GoString() string {
 		`Sms:` + fmt.Sprintf("%#v", this.Sms) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_Webhook) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.CreateSpecType_Webhook{` +
+		`Webhook:` + fmt.Sprintf("%#v", this.Webhook) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&alert_receiver.ReplaceSpecType{")
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
@@ -1818,11 +2869,19 @@ func (this *ReplaceSpecType_Sms) GoString() string {
 		`Sms:` + fmt.Sprintf("%#v", this.Sms) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_Webhook) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.ReplaceSpecType_Webhook{` +
+		`Webhook:` + fmt.Sprintf("%#v", this.Webhook) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&alert_receiver.GetSpecType{")
 	if this.Receiver != nil {
 		s = append(s, "Receiver: "+fmt.Sprintf("%#v", this.Receiver)+",\n")
@@ -1868,6 +2927,14 @@ func (this *GetSpecType_Sms) GoString() string {
 	}
 	s := strings.Join([]string{`&alert_receiver.GetSpecType_Sms{` +
 		`Sms:` + fmt.Sprintf("%#v", this.Sms) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Webhook) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.GetSpecType_Webhook{` +
+		`Webhook:` + fmt.Sprintf("%#v", this.Webhook) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -2064,6 +3131,348 @@ func (m *SMSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *WebhookConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WebhookConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebhookConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HttpConfig != nil {
+		{
+			size, err := m.HttpConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Url) > 0 {
+		i -= len(m.Url)
+		copy(dAtA[i:], m.Url)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Url)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HTTPConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AuthChoice != nil {
+		{
+			size := m.AuthChoice.Size()
+			i -= size
+			if _, err := m.AuthChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.TlsConfig != nil {
+		{
+			size, err := m.TlsConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.FollowRedirects {
+		i--
+		if m.FollowRedirects {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.EnableHttp2 {
+		i--
+		if m.EnableHttp2 {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HTTPConfig_BasicAuth) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_BasicAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BasicAuth != nil {
+		{
+			size, err := m.BasicAuth.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_NoAuthorization) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_NoAuthorization) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoAuthorization != nil {
+		{
+			size, err := m.NoAuthorization.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_AuthConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_AuthConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthConfig != nil {
+		{
+			size, err := m.AuthConfig.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfig) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TLSConfig) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxVersion != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxVersion))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.MinVersion != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MinVersion))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.ServerName) > 0 {
+		i -= len(m.ServerName)
+		copy(dAtA[i:], m.ServerName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ClientKey != nil {
+		{
+			size, err := m.ClientKey.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ClientCert) > 0 {
+		i -= len(m.ClientCert)
+		copy(dAtA[i:], m.ClientCert)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientCert)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CaCert) > 0 {
+		i -= len(m.CaCert)
+		copy(dAtA[i:], m.CaCert)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CaCert)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Authorization) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Authorization) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Authorization) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AuthType != nil {
+		{
+			size := m.AuthType.Size()
+			i -= size
+			if _, err := m.AuthType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Credentials != nil {
+		{
+			size, err := m.Credentials.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Authorization_AuthTypeBearer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Authorization_AuthTypeBearer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AuthTypeBearer != nil {
+		{
+			size, err := m.AuthTypeBearer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HttpBasicAuth) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HttpBasicAuth) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpBasicAuth) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Password != nil {
+		{
+			size, err := m.Password.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.UserName) > 0 {
+		i -= len(m.UserName)
+		copy(dAtA[i:], m.UserName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.UserName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2198,6 +3607,27 @@ func (m *GlobalSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_Webhook) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Webhook) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Webhook != nil {
+		{
+			size, err := m.Webhook.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2338,6 +3768,27 @@ func (m *CreateSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_Webhook) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Webhook) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Webhook != nil {
+		{
+			size, err := m.Webhook.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2472,6 +3923,27 @@ func (m *ReplaceSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_Webhook) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Webhook) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Webhook != nil {
+		{
+			size, err := m.Webhook.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
 	}
 	return len(dAtA) - i, nil
 }
@@ -2612,6 +4084,27 @@ func (m *GetSpecType_Sms) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_Webhook) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Webhook) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Webhook != nil {
+		{
+			size, err := m.Webhook.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -2700,6 +4193,157 @@ func (m *SMSConfig) Size() (n int) {
 	return n
 }
 
+func (m *WebhookConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Url)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HttpConfig != nil {
+		l = m.HttpConfig.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *HTTPConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthChoice != nil {
+		n += m.AuthChoice.Size()
+	}
+	if m.EnableHttp2 {
+		n += 2
+	}
+	if m.FollowRedirects {
+		n += 2
+	}
+	if m.TlsConfig != nil {
+		l = m.TlsConfig.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *HTTPConfig_BasicAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BasicAuth != nil {
+		l = m.BasicAuth.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_NoAuthorization) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoAuthorization != nil {
+		l = m.NoAuthorization.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_AuthConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthConfig != nil {
+		l = m.AuthConfig.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfig) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CaCert)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ClientCert)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ClientKey != nil {
+		l = m.ClientKey.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ServerName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MinVersion != 0 {
+		n += 1 + sovTypes(uint64(m.MinVersion))
+	}
+	if m.MaxVersion != 0 {
+		n += 1 + sovTypes(uint64(m.MaxVersion))
+	}
+	return n
+}
+
+func (m *Authorization) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Credentials != nil {
+		l = m.Credentials.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AuthType != nil {
+		n += m.AuthType.Size()
+	}
+	return n
+}
+
+func (m *Authorization_AuthTypeBearer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AuthTypeBearer != nil {
+		l = m.AuthTypeBearer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HttpBasicAuth) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.UserName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Password != nil {
+		l = m.Password.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2768,6 +4412,18 @@ func (m *GlobalSpecType_Sms) Size() (n int) {
 	_ = l
 	if m.Sms != nil {
 		l = m.Sms.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_Webhook) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Webhook != nil {
+		l = m.Webhook.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2844,6 +4500,18 @@ func (m *CreateSpecType_Sms) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_Webhook) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Webhook != nil {
+		l = m.Webhook.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2912,6 +4580,18 @@ func (m *ReplaceSpecType_Sms) Size() (n int) {
 	_ = l
 	if m.Sms != nil {
 		l = m.Sms.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_Webhook) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Webhook != nil {
+		l = m.Webhook.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2988,6 +4668,18 @@ func (m *GetSpecType_Sms) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_Webhook) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Webhook != nil {
+		l = m.Webhook.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -3044,6 +4736,107 @@ func (this *SMSConfig) String() string {
 	}
 	s := strings.Join([]string{`&SMSConfig{`,
 		`ContactNumber:` + fmt.Sprintf("%v", this.ContactNumber) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *WebhookConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&WebhookConfig{`,
+		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
+		`HttpConfig:` + strings.Replace(this.HttpConfig.String(), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig{`,
+		`AuthChoice:` + fmt.Sprintf("%v", this.AuthChoice) + `,`,
+		`EnableHttp2:` + fmt.Sprintf("%v", this.EnableHttp2) + `,`,
+		`FollowRedirects:` + fmt.Sprintf("%v", this.FollowRedirects) + `,`,
+		`TlsConfig:` + strings.Replace(this.TlsConfig.String(), "TLSConfig", "TLSConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_BasicAuth) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_BasicAuth{`,
+		`BasicAuth:` + strings.Replace(fmt.Sprintf("%v", this.BasicAuth), "HttpBasicAuth", "HttpBasicAuth", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_NoAuthorization) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_NoAuthorization{`,
+		`NoAuthorization:` + strings.Replace(fmt.Sprintf("%v", this.NoAuthorization), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_AuthConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_AuthConfig{`,
+		`AuthConfig:` + strings.Replace(fmt.Sprintf("%v", this.AuthConfig), "Authorization", "Authorization", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfig) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfig{`,
+		`CaCert:` + fmt.Sprintf("%v", this.CaCert) + `,`,
+		`ClientCert:` + fmt.Sprintf("%v", this.ClientCert) + `,`,
+		`ClientKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientKey), "SecretType", "schema.SecretType", 1) + `,`,
+		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
+		`MinVersion:` + fmt.Sprintf("%v", this.MinVersion) + `,`,
+		`MaxVersion:` + fmt.Sprintf("%v", this.MaxVersion) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Authorization) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Authorization{`,
+		`Credentials:` + strings.Replace(fmt.Sprintf("%v", this.Credentials), "SecretType", "schema.SecretType", 1) + `,`,
+		`AuthType:` + fmt.Sprintf("%v", this.AuthType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Authorization_AuthTypeBearer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Authorization_AuthTypeBearer{`,
+		`AuthTypeBearer:` + strings.Replace(fmt.Sprintf("%v", this.AuthTypeBearer), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HttpBasicAuth) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HttpBasicAuth{`,
+		`UserName:` + fmt.Sprintf("%v", this.UserName) + `,`,
+		`Password:` + strings.Replace(fmt.Sprintf("%v", this.Password), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3108,6 +4901,16 @@ func (this *GlobalSpecType_Sms) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_Webhook) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Webhook{`,
+		`Webhook:` + strings.Replace(fmt.Sprintf("%v", this.Webhook), "WebhookConfig", "WebhookConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3164,6 +4967,16 @@ func (this *CreateSpecType_Sms) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_Sms{`,
 		`Sms:` + strings.Replace(fmt.Sprintf("%v", this.Sms), "SMSConfig", "SMSConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_Webhook) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Webhook{`,
+		`Webhook:` + strings.Replace(fmt.Sprintf("%v", this.Webhook), "WebhookConfig", "WebhookConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3228,6 +5041,16 @@ func (this *ReplaceSpecType_Sms) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_Webhook) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Webhook{`,
+		`Webhook:` + strings.Replace(fmt.Sprintf("%v", this.Webhook), "WebhookConfig", "WebhookConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3284,6 +5107,16 @@ func (this *GetSpecType_Sms) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_Sms{`,
 		`Sms:` + strings.Replace(fmt.Sprintf("%v", this.Sms), "SMSConfig", "SMSConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Webhook) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Webhook{`,
+		`Webhook:` + strings.Replace(fmt.Sprintf("%v", this.Webhook), "WebhookConfig", "WebhookConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3829,6 +5662,829 @@ func (m *SMSConfig) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *WebhookConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WebhookConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WebhookConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Url = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpConfig == nil {
+				m.HttpConfig = &HTTPConfig{}
+			}
+			if err := m.HttpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HTTPConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HTTPConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HTTPConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BasicAuth", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &HttpBasicAuth{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_BasicAuth{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableHttp2", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.EnableHttp2 = bool(v != 0)
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FollowRedirects", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.FollowRedirects = bool(v != 0)
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TlsConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TlsConfig == nil {
+				m.TlsConfig = &TLSConfig{}
+			}
+			if err := m.TlsConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoAuthorization", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_NoAuthorization{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Authorization{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_AuthConfig{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TLSConfig) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TLSConfig: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TLSConfig: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaCert", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CaCert = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCert", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientCert = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientKey", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClientKey == nil {
+				m.ClientKey = &schema.SecretType{}
+			}
+			if err := m.ClientKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServerName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServerName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MinVersion", wireType)
+			}
+			m.MinVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MinVersion |= schema.TlsProtocol(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxVersion", wireType)
+			}
+			m.MaxVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxVersion |= schema.TlsProtocol(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Authorization) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Authorization: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Authorization: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Credentials", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Credentials == nil {
+				m.Credentials = &schema.SecretType{}
+			}
+			if err := m.Credentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthTypeBearer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthType = &Authorization_AuthTypeBearer{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HttpBasicAuth) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HttpBasicAuth: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HttpBasicAuth: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Password", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Password == nil {
+				m.Password = &schema.SecretType{}
+			}
+			if err := m.Password.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4032,6 +6688,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GlobalSpecType_Sms{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Webhook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &WebhookConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GlobalSpecType_Webhook{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4261,6 +6952,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &CreateSpecType_Sms{v}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Webhook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &WebhookConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &CreateSpecType_Webhook{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4489,6 +7215,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Receiver = &ReplaceSpecType_Sms{v}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Webhook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &WebhookConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &ReplaceSpecType_Webhook{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4716,6 +7477,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Receiver = &GetSpecType_Sms{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Webhook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &WebhookConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Receiver = &GetSpecType_Webhook{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

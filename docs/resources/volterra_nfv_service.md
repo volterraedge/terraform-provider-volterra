@@ -21,54 +21,7 @@ resource "volterra_nfv_service" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "disable_https_management https_management" must be set
-
-  https_management {
-    // One of the arguments from this list "do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local" must be set
-
-    advertise_on_slo_internet_vip {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
-
-      tls_certificates {
-        certificate_url = "value"
-        description     = "Certificate used in production environment"
-
-        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
-
-        use_system_defaults {}
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-          blindfold_secret_info {
-            decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-        default_security = true
-      }
-    }
-
-    domain_suffix = "foo.com"
-
-    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
-    do_not_advertise = true
-
-    // One of the arguments from this list "default_https_port https_port" must be set
-    default_https_port = true
-  }
+  disable_https_management = true
 
   // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
 
@@ -82,12 +35,14 @@ resource "volterra_nfv_service" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      vault_secret_info {
+        key             = "key_pem"
+        location        = "v1/data/vhost_key"
+        provider        = "vault-vh-provider"
+        secret_encoding = "secret_encoding"
+        version         = "1"
       }
     }
 
@@ -95,26 +50,40 @@ resource "volterra_nfv_service" "example" {
 
     endpoint_service {
       // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-      advertise_on_slo_ip = true
+      advertise_on_slo_ip_external = true
 
       // One of the arguments from this list "automatic_vip configured_vip" must be set
-      configured_vip = "10.1.2.6/32"
+      automatic_vip = true
 
-      // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
+      // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
       default_tcp_ports = true
 
       // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
-
-      custom_udp_ports {
-        ports = ["100-200"]
-      }
+      no_udp_ports = true
     }
 
-    // One of the arguments from this list "market_place_image byol_image" must be set
+    // One of the arguments from this list "byol_image market_place_image" must be set
 
-    market_place_image {
-      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
-      AWAFPayG200Mbps = true
+    byol_image {
+      image = "image1"
+
+      license {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+        blindfold_secret_info {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+      }
     }
     nodes {
       aws_az_name = "us-west-2a"
@@ -127,10 +96,10 @@ resource "volterra_nfv_service" "example" {
       automatic_prefix = true
     }
 
-    // One of the arguments from this list "aws_tgw_site_params aws_vpc_site_params" must be set
+    // One of the arguments from this list "aws_vpc_site_params aws_tgw_site_params" must be set
 
-    aws_tgw_site_params {
-      aws_tgw_site {
+    aws_vpc_site_params {
+      aws_vpc_site {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -226,6 +195,10 @@ Advertise this loadbalancer on public network.
 
 Enable management access on internet with default VIP.
 
+### Advertise On Sli
+
+Enable on Site local inside network, default VIP will be used.
+
 ### Advertise On Sli Vip
 
 Enable on Site local inside network, default VIP will be used.
@@ -237,6 +210,10 @@ Enable on Site local inside network, default VIP will be used.
 `tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+
+### Advertise On Slo
+
+Enable on Site local outside network, default VIP will be used.
 
 ### Advertise On Slo Internet Vip
 
@@ -446,15 +423,15 @@ Enable SSH access to nodes.
 
 `advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (bool).
 
-`advertise_on_sli_vip` - (Optional) Enable on Site local inside network, default VIP will be used. See [Advertise On Sli Vip ](#advertise-on-sli-vip) below for details.
+`advertise_on_sli` - (Optional) Enable on Site local inside network, default VIP will be used (bool).
 
-`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP. See [Advertise On Slo Internet Vip ](#advertise-on-slo-internet-vip) below for details.
+`advertise_on_slo` - (Optional) Enable on Site local outside network, default VIP will be used (bool).
 
-`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used. See [Advertise On Slo Sli ](#advertise-on-slo-sli) below for details.
+`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP (bool).
 
-`advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise On Slo Vip ](#advertise-on-slo-vip) below for details.
+`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used (bool).
 
-`ssh_ports` - (Required) Enter TCP port per node (`Int`).
+`node_ssh_ports` - (Required) Enter TCP port and node name per node. See [Node Ssh Ports ](#node-ssh-ports) below for details.
 
 ### Endpoint Service
 
@@ -616,11 +593,19 @@ do not select tcp ports.
 
 do not select udp ports.
 
+### Node Ssh Ports
+
+Enter TCP port and node name per node.
+
+`node_name` - (Required) Node name will be used to match a particular node with the desired TCP port (`String`).
+
+`ssh_port` - (Required) Enter TCP port per node (`Int`).
+
 ### Nodes
 
 Specify how and where the service nodes are spawned.
 
-`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. It is recommended that AZ is one of the AZ for sites (`String`).
+`aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
 
 `mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet ](#mgmt-subnet) below for details.
 

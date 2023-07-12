@@ -2250,13 +2250,17 @@ var APISwaggerJSON string = `{
                 },
                 "session_name": {
                     "type": "string",
-                    "description": " Use the role session name to uniquely identify a session, which will\n be used for deploy, monitor from F5XC console\n\nExample: - \"cloud-f5xc-deployment\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: [\\\\w+=,.@-]*\n",
+                    "description": " Use the role session name to uniquely identify a session, which will\n be used for deploy, monitor from F5XC console\n\nExample: - \"cloud-f5xc-deployment\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 2\n  ves.io.schema.rules.string.pattern: [\\\\w+=,.@-]*\n",
                     "title": "Role Session Name",
+                    "minLength": 2,
                     "maxLength": 64,
                     "x-displayname": "Role Session Name",
                     "x-ves-example": "cloud-f5xc-deployment",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "2",
                         "ves.io.schema.rules.string.pattern": "[\\\\w+=,.@-]*"
                     }
                 },

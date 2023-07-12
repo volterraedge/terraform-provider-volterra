@@ -5426,8 +5426,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "description": "Terraform state during apply stage",
-            "title": "Apply Stage State",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
@@ -5437,7 +5436,7 @@ var APISwaggerJSON string = `{
                 "APPLY_PLAN_ERRORED"
             ],
             "default": "APPLIED",
-            "x-displayname": "Apply Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.ApplyStageState"
         },
         "terraform_parametersApplyStatus": {
@@ -5483,6 +5482,13 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Modification Timestamp"
                 },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                },
                 "tf_output": {
                     "type": "string",
                     "description": " The value of an \"output\" variable from the terraform state file.\n\nExample: - \"value\"-",
@@ -5524,21 +5530,19 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "description": "Terraform state during destroy stage",
-            "title": "Destroy Stage State",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
                 "DESTROYING"
             ],
             "default": "DESTROYED",
-            "x-displayname": "Destroy Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.DestroyStageState"
         },
         "terraform_parametersInfraState": {
             "type": "string",
-            "description": "Infrastructure state of the view provisioning",
-            "title": "Infra State",
+            "title": "- PROVISIONED: x-displayName: \"Provisioned\"\n - TIMED_OUT: x-displayName: \"Timed out\"\n - ERRORED: x-displayName: \"Errored\"\n - PROVISIONING: x-displayName: \"Provisioning\"",
             "enum": [
                 "PROVISIONED",
                 "TIMED_OUT",
@@ -5546,12 +5550,12 @@ var APISwaggerJSON string = `{
                 "PROVISIONING"
             ],
             "default": "PROVISIONED",
-            "x-displayname": "Infra State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
         },
         "terraform_parametersPlanStageState": {
             "type": "string",
-            "description": "Terraform state during plan stage",
+            "description": "Terraform state during plan stage\n",
             "title": "Plan Stage State",
             "enum": [
                 "PLANNING",
@@ -5596,6 +5600,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/terraform_parametersPlanStageState",
                     "x-displayname": "Plan State"
                 },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                },
                 "tf_plan_output": {
                     "type": "string",
                     "description": " Terraform \"plan\" command output. Terraform performs a refresh, unless explicitly disabled, and then\n determines what actions are necessary to achieve the desired state specified in the configuration files.\n\nExample: - \"value\"-",
@@ -5607,8 +5618,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersRollbackState": {
             "type": "string",
-            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
-            "title": "Rollback State",
+            "title": "- ROLLBACK_SUCCESSFUL: x-displayName: \"Rollback successful\"\n - ROLLBACK_ERRORED: x-displayName: \"Rollback errored\"\n - ROLLBACK_NOT_REQUIRED: x-displayName: \"Rollback not required\"",
             "enum": [
                 "ROLLBACK_SUCCESSFUL",
                 "ROLLBACK_ERRORED",
@@ -5618,7 +5628,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersUpgradeState": {
             "type": "string",
-            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade\n\n - UPGRADE_SUCCESSFUL: x-displayName: \"Upgrade successful\"\n - UPGRADE_ERRORED: x-displayName: \"Upgrade errored\"\n - UPGRADE_NOT_REQUIRED: x-displayName: \"Upgrade not required\"",
             "title": "Upgrade State",
             "enum": [
                 "UPGRADE_SUCCESSFUL",
@@ -6459,6 +6469,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "4095"
                     }
                 },
+                "error_description": {
+                    "type": "string",
+                    "description": " Description of error on site\n\nExample: - \"value\"-",
+                    "title": "error_description \n \nx-displayName: \"Error Description\"\nx-example: \"value\"\nDescription of error on site",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "value"
+                },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_egress_gw_ar ingress_gw ingress_gw_ar voltstack_cluster voltstack_cluster_ar]\n Two interface site is useful when site is used as ingress/egress gateway to the VNet.",
                     "title": "Ingress/Egress Gateway on Recommended Region",
@@ -6553,14 +6570,23 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n",
                     "title": "Public SSH key",
                     "maxLength": 8192,
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "8192"
                     }
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
                 },
                 "sw": {
                     "description": " F5XC Software Details",

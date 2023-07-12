@@ -847,10 +847,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -1927,10 +1928,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -3094,10 +3096,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -4472,10 +4475,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {

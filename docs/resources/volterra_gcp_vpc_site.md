@@ -32,49 +32,31 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
-  ingress_egress_gw {
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group_outside_vn dc_cluster_group_inside_vn" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-    gcp_certified_hw = "gcp-byol-multi-nic-voltmesh"
+  ingress_gw {
+    gcp_certified_hw = "gcp-byol-voltmesh"
 
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-
-    global_network_list {
-      global_network_connections {
-        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
-
-        sli_to_global_dr {
-          global_vn {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-
-        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-        disable_forward_proxy = true
-      }
-    }
-    inside_network {
+    local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      new_network {
+        name = "network1"
       }
     }
-    // One of the arguments from this list "inside_static_routes no_inside_static_routes" must be set
-    no_inside_static_routes = true
-    inside_subnet {
+
+    local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
       new_subnet {
@@ -83,40 +65,14 @@ resource "volterra_gcp_vpc_site" "example" {
       }
     }
 
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-
-    active_enhanced_firewall_policies {
-      enhanced_firewall_policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
     node_number = "1"
-    outside_network {
-      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
-      }
-    }
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
-    outside_subnet {
-      // One of the arguments from this list "new_subnet existing_subnet" must be set
-
-      new_subnet {
-        primary_ipv4 = "10.1.0.0/16"
-        subnet_name  = "subnet1-in-network1"
-      }
-    }
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
       perf_mode_l7_enhanced = true
     }
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
   }
+  ssh_key = ["ssh-rsa AAAAB..."]
 }
 
 ```
@@ -176,7 +132,7 @@ Argument Reference
 
 `voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
-`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 

@@ -4269,16 +4269,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
                 },
-                "ip6": {
-                    "type": "string",
-                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6 address on the site",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
                 "network": {
                     "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "SiteNetwork",
@@ -4382,23 +4372,39 @@ var APISwaggerJSON string = `{
             "description": "Parameters to advertise on a given virtual network",
             "title": "WhereVirtualNetwork",
             "x-displayname": "Virtual Network",
-            "x-ves-displayorder": "1,2",
-            "x-ves-oneof-field-vip_choice": "[\"default_vip\",\"specific_vip\"]",
+            "x-ves-displayorder": "1,2,10",
+            "x-ves-oneof-field-v6_vip_choice": "[\"default_v6_vip\",\"specific_v6_vip\"]",
+            "x-ves-oneof-field-vip_choice": "[\"default_v4_vip\",\"specific_v4_vip\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereVirtualNetwork",
             "properties": {
-                "default_vip": {
-                    "description": "Exclusive with [specific_vip]\n Use the default VIP, system allocated or configured in the virtual network",
-                    "title": "Default VIP for VoltADN Private Network",
+                "default_v4_vip": {
+                    "description": "Exclusive with [specific_v4_vip]\n Use the default VIP, system allocated or configured in the virtual network",
+                    "title": "Default VIP for Virtual Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default VIP"
                 },
-                "specific_vip": {
+                "default_v6_vip": {
+                    "description": "Exclusive with [specific_v6_vip]\n Use the default VIP, system allocated or configured in the virtual network",
+                    "title": "Default V6 VIP for virtual Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default V6 VIP"
+                },
+                "specific_v4_vip": {
                     "type": "string",
-                    "description": "Exclusive with [default_vip]\n Use given IP address as VIP on VoltADN private Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "description": "Exclusive with [default_v4_vip]\n Use given IP address as VIP on virtual Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Specific VIP",
                     "x-displayname": "Specific VIP",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "specific_v6_vip": {
+                    "type": "string",
+                    "description": "Exclusive with [default_v6_vip]\n Use given IPV6 address as VIP on virtual Network\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Specific V6 VIP",
+                    "x-displayname": "Specific V6 VIP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "virtual_network": {
@@ -4602,7 +4608,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
@@ -4611,8 +4617,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -4809,7 +4816,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
@@ -4818,8 +4825,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -5038,7 +5046,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
@@ -5048,8 +5056,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "retract_cluster": {
@@ -5258,7 +5267,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
@@ -5267,8 +5276,9 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.port_range_list": "true"
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "retract_cluster": {

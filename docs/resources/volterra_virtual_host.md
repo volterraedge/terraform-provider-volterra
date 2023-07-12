@@ -20,8 +20,12 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
-  no_challenge = true
+  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
+
+  captcha_challenge {
+    cookie_expiry = "1000"
+    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  }
 }
 
 ```
@@ -169,7 +173,7 @@ OpenAPI specification settings.
 
 `disable_open_api_validation` - (Optional) No OpenApi Validation configuration for this VH (bool).
 
-`enable_open_api_validation` - (Optional) OpenApi Validation configuration object (bool).
+`enable_open_api_validation` - (Optional) OpenApi Validation configuration object. See [Enable Open Api Validation ](#enable-open-api-validation) below for details.
 
 ### App Firewall
 
@@ -465,6 +469,10 @@ x-displayName: "Enable".
 
 OpenApi Validation configuration object.
 
+`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
+
+`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
+
 ### Enable Tampering Protection
 
 x-displayName: "Enable".
@@ -512,6 +520,14 @@ Configure Javascript challenge on Virtual Host.
 HMAC configured using KMS_KEY.
 
 `auth_hmac_kms` - (Optional) HMAC configured using the KMS_KEY reference. See [ref](#ref) below for details.
+
+### Oversized Body Fail Validation
+
+Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb).
+
+### Oversized Body Skip Validation
+
+Skip body validation when the body length is too long to verify (default 64Kb).
 
 ### Prim Key
 

@@ -3569,14 +3569,27 @@ func (v *ValidateOriginServerPrivateIP) NetworkChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginServerPrivateIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerPrivateIP) PrivateIpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_ip_choice")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateOriginServerPrivateIP) PrivateIpChoiceIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_Ip, nil
+}
+func (v *ValidateOriginServerPrivateIP) PrivateIpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
 }
 
 func (v *ValidateOriginServerPrivateIP) SiteLocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3614,15 +3627,6 @@ func (v *ValidateOriginServerPrivateIP) Validate(ctx context.Context, pm interfa
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ip"))
-		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["network_choice"]; exists {
 		val := m.GetNetworkChoice()
 		vOpts := append(opts,
@@ -3651,6 +3655,42 @@ func (v *ValidateOriginServerPrivateIP) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("network_choice"),
 				db.WithValidateField("outside_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_ip_choice"]; exists {
+		val := m.GetPrivateIpChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_ip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateIpChoice().(type) {
+	case *OriginServerPrivateIP_Ip:
+		if fv, exists := v.FldValidators["private_ip_choice.ip"]; exists {
+			val := m.GetPrivateIpChoice().(*OriginServerPrivateIP_Ip).Ip
+			vOpts := append(opts,
+				db.WithValidateField("private_ip_choice"),
+				db.WithValidateField("ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerPrivateIP_Ipv6:
+		if fv, exists := v.FldValidators["private_ip_choice.ipv6"]; exists {
+			val := m.GetPrivateIpChoice().(*OriginServerPrivateIP_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("private_ip_choice"),
+				db.WithValidateField("ipv6"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3694,17 +3734,38 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 	}
 	v.FldValidators["network_choice"] = vFn
 
-	vrhIp := v.IpValidationRuleHandler
-	rulesIp := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ipv4":      "true",
+	vrhPrivateIpChoice := v.PrivateIpChoiceValidationRuleHandler
+	rulesPrivateIpChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhIp(rulesIp)
+	vFn, err = vrhPrivateIpChoice(rulesPrivateIpChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPrivateIP.ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPrivateIP.private_ip_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ip"] = vFn
+	v.FldValidators["private_ip_choice"] = vFn
+
+	vrhPrivateIpChoiceIp := v.PrivateIpChoiceIpValidationRuleHandler
+	rulesPrivateIpChoiceIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["private_ip_choice.ip"], err = vrhPrivateIpChoiceIp(rulesPrivateIpChoiceIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerPrivateIP.private_ip_choice_ip: %s", err)
+		panic(errMsg)
+	}
+	vrhPrivateIpChoiceIpv6 := v.PrivateIpChoiceIpv6ValidationRuleHandler
+	rulesPrivateIpChoiceIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["private_ip_choice.ipv6"], err = vrhPrivateIpChoiceIpv6(rulesPrivateIpChoiceIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerPrivateIP.private_ip_choice_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["private_ip_choice.ip"] = vFnMap["private_ip_choice.ip"]
+	v.FldValidators["private_ip_choice.ipv6"] = vFnMap["private_ip_choice.ipv6"]
 
 	vrhSiteLocator := v.SiteLocatorValidationRuleHandler
 	rulesSiteLocator := map[string]string{
@@ -3995,14 +4056,27 @@ type ValidateOriginServerPublicIP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateOriginServerPublicIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerPublicIP) PublicIpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for public_ip_choice")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateOriginServerPublicIP) PublicIpChoiceIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_Ip, nil
+}
+func (v *ValidateOriginServerPublicIP) PublicIpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
 }
 
 func (v *ValidateOriginServerPublicIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -4019,11 +4093,38 @@ func (v *ValidateOriginServerPublicIP) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ip"))
-		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["public_ip_choice"]; exists {
+		val := m.GetPublicIpChoice()
+		vOpts := append(opts,
+			db.WithValidateField("public_ip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPublicIpChoice().(type) {
+	case *OriginServerPublicIP_Ip:
+		if fv, exists := v.FldValidators["public_ip_choice.ip"]; exists {
+			val := m.GetPublicIpChoice().(*OriginServerPublicIP_Ip).Ip
+			vOpts := append(opts,
+				db.WithValidateField("public_ip_choice"),
+				db.WithValidateField("ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerPublicIP_Ipv6:
+		if fv, exists := v.FldValidators["public_ip_choice.ipv6"]; exists {
+			val := m.GetPublicIpChoice().(*OriginServerPublicIP_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("public_ip_choice"),
+				db.WithValidateField("ipv6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4043,17 +4144,38 @@ var DefaultOriginServerPublicIPValidator = func() *ValidateOriginServerPublicIP 
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhIp := v.IpValidationRuleHandler
-	rulesIp := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ipv4":      "true",
+	vrhPublicIpChoice := v.PublicIpChoiceValidationRuleHandler
+	rulesPublicIpChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhIp(rulesIp)
+	vFn, err = vrhPublicIpChoice(rulesPublicIpChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPublicIP.ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPublicIP.public_ip_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ip"] = vFn
+	v.FldValidators["public_ip_choice"] = vFn
+
+	vrhPublicIpChoiceIp := v.PublicIpChoiceIpValidationRuleHandler
+	rulesPublicIpChoiceIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["public_ip_choice.ip"], err = vrhPublicIpChoiceIp(rulesPublicIpChoiceIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerPublicIP.public_ip_choice_ip: %s", err)
+		panic(errMsg)
+	}
+	vrhPublicIpChoiceIpv6 := v.PublicIpChoiceIpv6ValidationRuleHandler
+	rulesPublicIpChoiceIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["public_ip_choice.ipv6"], err = vrhPublicIpChoiceIpv6(rulesPublicIpChoiceIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerPublicIP.public_ip_choice_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["public_ip_choice.ip"] = vFnMap["public_ip_choice.ip"]
+	v.FldValidators["public_ip_choice.ipv6"] = vFnMap["public_ip_choice.ipv6"]
 
 	return v
 }()
@@ -4608,14 +4730,27 @@ type ValidateOriginServerVirtualNetworkIP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateOriginServerVirtualNetworkIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateOriginServerVirtualNetworkIP) VirtualNetworkIpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for virtual_network_ip_choice")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateOriginServerVirtualNetworkIP) VirtualNetworkIpChoiceIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_Ip, nil
+}
+func (v *ValidateOriginServerVirtualNetworkIP) VirtualNetworkIpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
 }
 
 func (v *ValidateOriginServerVirtualNetworkIP) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4653,20 +4788,47 @@ func (v *ValidateOriginServerVirtualNetworkIP) Validate(ctx context.Context, pm 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["ip"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ip"))
-		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
 		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_network_ip_choice"]; exists {
+		val := m.GetVirtualNetworkIpChoice()
+		vOpts := append(opts,
+			db.WithValidateField("virtual_network_ip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVirtualNetworkIpChoice().(type) {
+	case *OriginServerVirtualNetworkIP_Ip:
+		if fv, exists := v.FldValidators["virtual_network_ip_choice.ip"]; exists {
+			val := m.GetVirtualNetworkIpChoice().(*OriginServerVirtualNetworkIP_Ip).Ip
+			vOpts := append(opts,
+				db.WithValidateField("virtual_network_ip_choice"),
+				db.WithValidateField("ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerVirtualNetworkIP_Ipv6:
+		if fv, exists := v.FldValidators["virtual_network_ip_choice.ipv6"]; exists {
+			val := m.GetVirtualNetworkIpChoice().(*OriginServerVirtualNetworkIP_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("virtual_network_ip_choice"),
+				db.WithValidateField("ipv6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4686,17 +4848,38 @@ var DefaultOriginServerVirtualNetworkIPValidator = func() *ValidateOriginServerV
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhIp := v.IpValidationRuleHandler
-	rulesIp := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ipv4":      "true",
+	vrhVirtualNetworkIpChoice := v.VirtualNetworkIpChoiceValidationRuleHandler
+	rulesVirtualNetworkIpChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhIp(rulesIp)
+	vFn, err = vrhVirtualNetworkIpChoice(rulesVirtualNetworkIpChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkIP.ip: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerVirtualNetworkIP.virtual_network_ip_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ip"] = vFn
+	v.FldValidators["virtual_network_ip_choice"] = vFn
+
+	vrhVirtualNetworkIpChoiceIp := v.VirtualNetworkIpChoiceIpValidationRuleHandler
+	rulesVirtualNetworkIpChoiceIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["virtual_network_ip_choice.ip"], err = vrhVirtualNetworkIpChoiceIp(rulesVirtualNetworkIpChoiceIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerVirtualNetworkIP.virtual_network_ip_choice_ip: %s", err)
+		panic(errMsg)
+	}
+	vrhVirtualNetworkIpChoiceIpv6 := v.VirtualNetworkIpChoiceIpv6ValidationRuleHandler
+	rulesVirtualNetworkIpChoiceIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["virtual_network_ip_choice.ipv6"], err = vrhVirtualNetworkIpChoiceIpv6(rulesVirtualNetworkIpChoiceIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerVirtualNetworkIP.virtual_network_ip_choice_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["virtual_network_ip_choice.ip"] = vFnMap["virtual_network_ip_choice.ip"]
+	v.FldValidators["virtual_network_ip_choice.ipv6"] = vFnMap["virtual_network_ip_choice.ipv6"]
 
 	vrhVirtualNetwork := v.VirtualNetworkValidationRuleHandler
 	rulesVirtualNetwork := map[string]string{

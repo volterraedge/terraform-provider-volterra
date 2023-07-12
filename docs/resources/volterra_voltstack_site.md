@@ -20,16 +20,16 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
   default_blocked_services = true
 
-  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
   no_k8s_cluster = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
@@ -43,16 +43,14 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
 
-  // One of the arguments from this list "custom_storage_config default_storage_config" must be set
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+  default_sriov_interface = true
+
+  // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
 
-  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
-
-  usb_policy {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+  deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
 
@@ -118,6 +116,10 @@ Argument Reference
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (bool).
+
+`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interfaces ](#sriov-interfaces) below for details.
 
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
@@ -254,6 +256,12 @@ Configuration will apply to given device on all nodes of the site..
 Static IP configuration for a specific node.
 
 `interface_ip_map` - (Optional) Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map ](#interface-ip-map) below for details.
+
+### Configured List
+
+Configured address outside network range - external dns server.
+
+`dns_list` - (Required) List of IPV6 Addresses acting as Dns servers (`String`).
 
 ### Coordinates
 
@@ -485,6 +493,14 @@ This is the default behavior if no choice is selected..
 
 Matches DNS port 53.
 
+### Dns Config
+
+Dns information that needs to added in the RouterAdvetisement.
+
+`configured_list` - (Optional) Configured address outside network range - external dns server. See [Configured List ](#configured-list) below for details.
+
+`local_dns` - (Optional) Choose the address from the network prefix range as dns server. See [Local Dns ](#local-dns) below for details.
+
 ### Domain Match
 
 Domain value or regular expression to match.
@@ -548,6 +564,8 @@ Ethernet interface configuration..
 `static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
+
+`ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Auto Config ](#ipv6-auto-config) below for details.
 
 `no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
 
@@ -620,6 +638,10 @@ Global network connections.
 List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
+
+### Host
+
+auto configuration routers.
 
 ### Hpe Storage
 
@@ -709,6 +731,14 @@ Configure network interfaces for this App Stack site.
 
 Interface belongs to IP Fabric network.
 
+### Ipv6 Auto Config
+
+Configuration corresponding to IPV6 auto configuration.
+
+`host` - (Optional) auto configuration routers (bool).
+
+`router` - (Optional) System behaves like Auto config Router and provides auto config parameters. See [Router ](#router) below for details.
+
 ### Is Primary
 
 This interface is primary.
@@ -732,6 +762,16 @@ Site Local control plane is enabled.
 `inside_vn` - (Optional) Local control plane will work on inside network (bool).
 
 `outside_vn` - (Optional) Local control plane will work on outside network (bool).
+
+### Local Dns
+
+Choose the address from the network prefix range as dns server.
+
+`configured_address` - (Optional) Configured address from the network prefix is chosen as dns server (`String`).
+
+`first_address` - (Optional) First usable address from the network prefix is chosen as dns server (bool).
+
+`last_address` - (Optional) Last usable address from the network prefix is chosen as dns server (bool).
 
 ### Loopback Interface
 
@@ -923,6 +963,16 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Router
+
+System behaves like Auto config Router and provides auto config parameters.
+
+`network_prefix` - (Optional) Nework prefix that is used as Prefix information (`String`).
+
+`stateful` - (Optional) works along with Router Advertisement' Managed flag. See [Stateful ](#stateful) below for details.
+
+`dns_config` - (Optional) Dns information that needs to added in the RouterAdvetisement. See [Dns Config ](#dns-config) below for details.
+
 ### Same As Dgw
 
 DNS server address is same as default gateway address.
@@ -987,9 +1037,37 @@ which are part of the site mesh group.
 
 creating ipsec between two sites which are part of the site mesh group.
 
+### Sriov Interface
+
+Use custom SR-IOV interfaces Configuration.
+
+`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
+
+`number_of_vfs` - (Required) Number of virtual functions (`Int`).
+
+### Sriov Interfaces
+
+Use custom Single Root I/O Virtualization interfaces.
+
+`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interface ](#sriov-interface) below for details.
+
 ### Ssh
 
 Matches ssh port 22.
+
+### Stateful
+
+works along with Router Advertisement' Managed flag.
+
+`dhcp_networks` - (Required) List of networks from which DHCP server can allocate ip addresses. See [Dhcp Networks ](#dhcp-networks) below for details.
+
+`fixed_ip_map` - (Optional) Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address (`String`).
+
+`automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (bool).
+
+`automatic_from_start` - (Optional) Assign automatically from start of the first network in the list (bool).
+
+`interface_ip_map` - (Optional) Configured address for every node. See [Interface Ip Map ](#interface-ip-map) below for details.
 
 ### Static Ip
 
@@ -1088,6 +1166,8 @@ Configure storage interface for this App Stack site.
 `static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
+
+`ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Auto Config ](#ipv6-auto-config) below for details.
 
 `no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
 

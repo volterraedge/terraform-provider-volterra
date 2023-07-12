@@ -133,8 +133,24 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"enable_open_api_validation": {
 
-							Type:     schema.TypeBool,
+							Type:     schema.TypeSet,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"oversized_body_fail_validation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"oversized_body_skip_validation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -2479,11 +2495,40 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiSpecMapStrToI["enable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
 
 				openApiValidationChoiceTypeFound = true
+				openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
+				openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema_virtual_host.OpenApiValidationSettings{}
+				apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
 
-				if v.(bool) {
-					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
-					openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema.Empty{}
-					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					oversizedBodyChoiceTypeFound := false
+
+					if v, ok := cs["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+						oversizedBodyChoiceTypeFound = true
+
+						if v.(bool) {
+							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+						oversizedBodyChoiceTypeFound = true
+
+						if v.(bool) {
+							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
 				}
 
 			}
@@ -5445,11 +5490,40 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiSpecMapStrToI["enable_open_api_validation"]; ok && !isIntfNil(v) && !openApiValidationChoiceTypeFound {
 
 				openApiValidationChoiceTypeFound = true
+				openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
+				openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema_virtual_host.OpenApiValidationSettings{}
+				apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
 
-				if v.(bool) {
-					openApiValidationChoiceInt := &ves_io_schema_virtual_host.ApiSpec_EnableOpenApiValidation{}
-					openApiValidationChoiceInt.EnableOpenApiValidation = &ves_io_schema.Empty{}
-					apiSpec.OpenApiValidationChoice = openApiValidationChoiceInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					oversizedBodyChoiceTypeFound := false
+
+					if v, ok := cs["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+						oversizedBodyChoiceTypeFound = true
+
+						if v.(bool) {
+							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+						oversizedBodyChoiceTypeFound = true
+
+						if v.(bool) {
+							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
 				}
 
 			}

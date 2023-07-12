@@ -23,30 +23,49 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "dc_cluster_group_inside no_dc_cluster_group dc_cluster_group" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
 
+  enable_vgpu {
+    feature_type   = "feature_type"
+    server_address = "gridlicense1.example.com"
+    server_port    = "7070"
+  }
   // One of the arguments from this list "interface_list default_config device_list" must be set
+  default_config = true
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 
-  interface_list {
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+
+  sriov_interfaces {
+    sriov_interface {
+      interface_name = "eth0"
+      number_of_vfs  = "3"
+    }
+  }
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
+  default_storage_class = true
+  // One of the arguments from this list "storage_device_list no_storage_device" must be set
+  no_storage_device = true
+
+  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+
+  storage_interface_list {
     interfaces {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
   }
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
-  // One of the arguments from this list "default_storage_class storage_class_list" must be set
-  default_storage_class = true
-  // One of the arguments from this list "no_storage_device storage_device_list" must be set
-  no_storage_device = true
-  // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-  no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
@@ -117,6 +136,10 @@ Argument Reference
 `outside_virtual_network` - (Optional) Default outside (site local) virtual network for the fleet. See [ref](#ref) below for details.
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
+`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (bool).
+
+`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interfaces ](#sriov-interfaces) below for details.
 
 `default_storage_class` - (Optional) Use only default storage class in kubernetes (bool).
 
@@ -365,6 +388,20 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Sriov Interface
+
+Use custom SR-IOV interfaces Configuration.
+
+`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
+
+`number_of_vfs` - (Required) Number of virtual functions (`Int`).
+
+### Sriov Interfaces
+
+Use custom Single Root I/O Virtualization interfaces.
+
+`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interface ](#sriov-interface) below for details.
 
 ### Ssh
 

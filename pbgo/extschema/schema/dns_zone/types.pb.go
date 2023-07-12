@@ -4,6 +4,7 @@
 package dns_zone
 
 import (
+	encoding_binary "encoding/binary"
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -30,6 +31,178 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// DS Key Algorithm
+//
+// x-displayName: "DS Key algorithm"
+// DS key value must be compatible with the specified algorithm.
+type DSKeyAlgorithm int32
+
+const (
+	// UNSPECIFIED
+	//
+	// x-displayName: "UNSPECIFIED"
+	UNSPECIFIED DSKeyAlgorithm = 0
+	// RSASHA1
+	//
+	// x-displayName: "RSA/SHA-1"
+	RSASHA1 DSKeyAlgorithm = 5
+	// RSASHA1-NSEC3-SHA1
+	//
+	// x-displayName: "RSASHA1-NSEC3-SHA1"
+	RSASHA1NSEC3SHA1 DSKeyAlgorithm = 7
+	// RSASHA256
+	//
+	// x-displayName: "RSA/SHA-256"
+	RSASHA256 DSKeyAlgorithm = 8
+	// RSASHA512
+	//
+	// x-displayName: "RSA/SHA-512"
+	RSASHA512 DSKeyAlgorithm = 10
+	// ECDSAP256SHA256
+	//
+	// x-displayName: "ECDSA Curve P-256 with SHA-256"
+	ECDSAP256SHA256 DSKeyAlgorithm = 13
+	// ECDSAP384SHA384
+	//
+	// x-displayName: "ECDSA Curve P-384 with SHA-384"
+	ECDSAP384SHA384 DSKeyAlgorithm = 14
+	// ED25519
+	//
+	// x-displayName: "Ed25519"
+	ED25519 DSKeyAlgorithm = 15
+	// ED448
+	//
+	// x-displayName: "Ed448"
+	ED448 DSKeyAlgorithm = 16
+)
+
+var DSKeyAlgorithm_name = map[int32]string{
+	0:  "UNSPECIFIED",
+	5:  "RSASHA1",
+	7:  "RSASHA1NSEC3SHA1",
+	8:  "RSASHA256",
+	10: "RSASHA512",
+	13: "ECDSAP256SHA256",
+	14: "ECDSAP384SHA384",
+	15: "ED25519",
+	16: "ED448",
+}
+
+var DSKeyAlgorithm_value = map[string]int32{
+	"UNSPECIFIED":      0,
+	"RSASHA1":          5,
+	"RSASHA1NSEC3SHA1": 7,
+	"RSASHA256":        8,
+	"RSASHA512":        10,
+	"ECDSAP256SHA256":  13,
+	"ECDSAP384SHA384":  14,
+	"ED25519":          15,
+	"ED448":            16,
+}
+
+func (DSKeyAlgorithm) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{0}
+}
+
+// AFSDB Record Subtype
+//
+// x-displayName: "AFSDB Record Subtype"
+// AFS Volume Location Server or DCE Authentication Server.
+type AFSDBRecordSubtype int32
+
+const (
+	// NONE
+	//
+	// x-displayName: "NONE"
+	NONE AFSDBRecordSubtype = 0
+	// AFS Volume Location Server
+	//
+	// x-displayName: "AFS Volume Location Server"
+	AFSVolumeLocationServer AFSDBRecordSubtype = 1
+	// DCE Authentication Server
+	//
+	// x-displayName: "DCE Authentication Server"
+	DCEAuthenticationServer AFSDBRecordSubtype = 2
+)
+
+var AFSDBRecordSubtype_name = map[int32]string{
+	0: "NONE",
+	1: "AFSVolumeLocationServer",
+	2: "DCEAuthenticationServer",
+}
+
+var AFSDBRecordSubtype_value = map[string]int32{
+	"NONE":                    0,
+	"AFSVolumeLocationServer": 1,
+	"DCEAuthenticationServer": 2,
+}
+
+func (AFSDBRecordSubtype) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{1}
+}
+
+// Latitude Hemisphere
+//
+// x-displayName: "Latitude hemisphere"
+// Latitude hemisphere can only be N or S
+type LatitudeHemisphere int32
+
+const (
+	// North Hemisphere
+	//
+	// x-displayName: "N"
+	N LatitudeHemisphere = 0
+	// South Hemisphere
+	//
+	// x-displayName: "S"
+	S LatitudeHemisphere = 1
+)
+
+var LatitudeHemisphere_name = map[int32]string{
+	0: "N",
+	1: "S",
+}
+
+var LatitudeHemisphere_value = map[string]int32{
+	"N": 0,
+	"S": 1,
+}
+
+func (LatitudeHemisphere) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{2}
+}
+
+// Longitude Hemisphere
+//
+// x-displayName: "Longitude hemisphere"
+// Longitude hemisphere can only be E or W
+type LongitudeHemisphere int32
+
+const (
+	// East Hemisphere
+	//
+	// x-displayName: "E"
+	E LongitudeHemisphere = 0
+	// West Hemisphere
+	//
+	// x-displayName: "W"
+	W LongitudeHemisphere = 1
+)
+
+var LongitudeHemisphere_name = map[int32]string{
+	0: "E",
+	1: "W",
+}
+
+var LongitudeHemisphere_value = map[string]int32{
+	"E": 0,
+	"W": 1,
+}
+
+func (LongitudeHemisphere) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{3}
+}
 
 // TSIG Key Algorithm
 //
@@ -83,7 +256,7 @@ var TSIGKeyAlgorithm_value = map[string]int32{
 }
 
 func (TSIGKeyAlgorithm) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{0}
+	return fileDescriptor_ad554e1b0b937441, []int{4}
 }
 
 // Primary DNS Configuration
@@ -429,6 +602,13 @@ type RRSet struct {
 	//	*RRSet_SrvRecord
 	//	*RRSet_TxtRecord
 	//	*RRSet_LbRecord
+	//	*RRSet_NaptrRecord
+	//	*RRSet_DsRecord
+	//	*RRSet_CdsRecord
+	//	*RRSet_AfsdbRecord
+	//	*RRSet_Eui48Record
+	//	*RRSet_Eui64Record
+	//	*RRSet_LocRecord
 	TypeRecordSet isRRSet_TypeRecordSet `protobuf_oneof:"type_record_set"`
 }
 
@@ -500,6 +680,27 @@ type RRSet_TxtRecord struct {
 type RRSet_LbRecord struct {
 	LbRecord *DNSLBResourceRecord `protobuf:"bytes,23,opt,name=lb_record,json=lbRecord,proto3,oneof" json:"lb_record,omitempty"`
 }
+type RRSet_NaptrRecord struct {
+	NaptrRecord *DNSNAPTRResourceRecord `protobuf:"bytes,24,opt,name=naptr_record,json=naptrRecord,proto3,oneof" json:"naptr_record,omitempty"`
+}
+type RRSet_DsRecord struct {
+	DsRecord *DNSDSRecord `protobuf:"bytes,25,opt,name=ds_record,json=dsRecord,proto3,oneof" json:"ds_record,omitempty"`
+}
+type RRSet_CdsRecord struct {
+	CdsRecord *DNSCDSRecord `protobuf:"bytes,26,opt,name=cds_record,json=cdsRecord,proto3,oneof" json:"cds_record,omitempty"`
+}
+type RRSet_AfsdbRecord struct {
+	AfsdbRecord *DNSAFSDBRecord `protobuf:"bytes,27,opt,name=afsdb_record,json=afsdbRecord,proto3,oneof" json:"afsdb_record,omitempty"`
+}
+type RRSet_Eui48Record struct {
+	Eui48Record *DNSEUI48ResourceRecord `protobuf:"bytes,28,opt,name=eui48_record,json=eui48Record,proto3,oneof" json:"eui48_record,omitempty"`
+}
+type RRSet_Eui64Record struct {
+	Eui64Record *DNSEUI64ResourceRecord `protobuf:"bytes,29,opt,name=eui64_record,json=eui64Record,proto3,oneof" json:"eui64_record,omitempty"`
+}
+type RRSet_LocRecord struct {
+	LocRecord *DNSLOCResourceRecord `protobuf:"bytes,30,opt,name=loc_record,json=locRecord,proto3,oneof" json:"loc_record,omitempty"`
+}
 
 func (*RRSet_ARecord) isRRSet_TypeRecordSet()     {}
 func (*RRSet_AaaaRecord) isRRSet_TypeRecordSet()  {}
@@ -512,6 +713,13 @@ func (*RRSet_PtrRecord) isRRSet_TypeRecordSet()   {}
 func (*RRSet_SrvRecord) isRRSet_TypeRecordSet()   {}
 func (*RRSet_TxtRecord) isRRSet_TypeRecordSet()   {}
 func (*RRSet_LbRecord) isRRSet_TypeRecordSet()    {}
+func (*RRSet_NaptrRecord) isRRSet_TypeRecordSet() {}
+func (*RRSet_DsRecord) isRRSet_TypeRecordSet()    {}
+func (*RRSet_CdsRecord) isRRSet_TypeRecordSet()   {}
+func (*RRSet_AfsdbRecord) isRRSet_TypeRecordSet() {}
+func (*RRSet_Eui48Record) isRRSet_TypeRecordSet() {}
+func (*RRSet_Eui64Record) isRRSet_TypeRecordSet() {}
+func (*RRSet_LocRecord) isRRSet_TypeRecordSet()   {}
 
 func (m *RRSet) GetTypeRecordSet() isRRSet_TypeRecordSet {
 	if m != nil {
@@ -604,6 +812,55 @@ func (m *RRSet) GetLbRecord() *DNSLBResourceRecord {
 	return nil
 }
 
+func (m *RRSet) GetNaptrRecord() *DNSNAPTRResourceRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_NaptrRecord); ok {
+		return x.NaptrRecord
+	}
+	return nil
+}
+
+func (m *RRSet) GetDsRecord() *DNSDSRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_DsRecord); ok {
+		return x.DsRecord
+	}
+	return nil
+}
+
+func (m *RRSet) GetCdsRecord() *DNSCDSRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_CdsRecord); ok {
+		return x.CdsRecord
+	}
+	return nil
+}
+
+func (m *RRSet) GetAfsdbRecord() *DNSAFSDBRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_AfsdbRecord); ok {
+		return x.AfsdbRecord
+	}
+	return nil
+}
+
+func (m *RRSet) GetEui48Record() *DNSEUI48ResourceRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_Eui48Record); ok {
+		return x.Eui48Record
+	}
+	return nil
+}
+
+func (m *RRSet) GetEui64Record() *DNSEUI64ResourceRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_Eui64Record); ok {
+		return x.Eui64Record
+	}
+	return nil
+}
+
+func (m *RRSet) GetLocRecord() *DNSLOCResourceRecord {
+	if x, ok := m.GetTypeRecordSet().(*RRSet_LocRecord); ok {
+		return x.LocRecord
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*RRSet) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -618,6 +875,13 @@ func (*RRSet) XXX_OneofWrappers() []interface{} {
 		(*RRSet_SrvRecord)(nil),
 		(*RRSet_TxtRecord)(nil),
 		(*RRSet_LbRecord)(nil),
+		(*RRSet_NaptrRecord)(nil),
+		(*RRSet_DsRecord)(nil),
+		(*RRSet_CdsRecord)(nil),
+		(*RRSet_AfsdbRecord)(nil),
+		(*RRSet_Eui48Record)(nil),
+		(*RRSet_Eui64Record)(nil),
+		(*RRSet_LocRecord)(nil),
 	}
 }
 
@@ -1484,6 +1748,1069 @@ func (m *DNSLBResourceRecord) GetValue() *views.ObjectRefType {
 	return nil
 }
 
+// DNSNAPTRResourceRecord
+//
+// x-displayName: "DNS NAPTR Record"
+// DNS NAPTR Record
+type DNSNAPTRResourceRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// NAPTR Values
+	//
+	// x-displayName: "NAPTR Value"
+	// x-example: "values"
+	// x-required
+	Values []*NAPTRValue `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *DNSNAPTRResourceRecord) Reset()      { *m = DNSNAPTRResourceRecord{} }
+func (*DNSNAPTRResourceRecord) ProtoMessage() {}
+func (*DNSNAPTRResourceRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{18}
+}
+func (m *DNSNAPTRResourceRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSNAPTRResourceRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSNAPTRResourceRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSNAPTRResourceRecord.Merge(m, src)
+}
+func (m *DNSNAPTRResourceRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSNAPTRResourceRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSNAPTRResourceRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSNAPTRResourceRecord proto.InternalMessageInfo
+
+func (m *DNSNAPTRResourceRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSNAPTRResourceRecord) GetValues() []*NAPTRValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// NAPTRValue
+//
+// x-displayName: "NAPTRValue"
+type NAPTRValue struct {
+	// Order
+	//
+	// x-displayName: "Order"
+	// x-example: "10"
+	// x-required
+	// Order in which the NAPTR records must be processed. A lower number indicates a higher preference.
+	Order uint32 `protobuf:"varint,1,opt,name=order,proto3" json:"order,omitempty"`
+	// Preference
+	//
+	// x-displayName: "Preference"
+	// x-example: "10"
+	// x-required
+	// Preference when records have the same order. A lower number indicates a higher preference.
+	Preference uint32 `protobuf:"varint,2,opt,name=preference,proto3" json:"preference,omitempty"`
+	// Flags
+	//
+	// x-displayName: "Flags"
+	// x-example: ""
+	// x-required
+	// Flag to control aspects of the rewriting and interpretation of the fields in the record. At this time only four flags, S/A/U/P, are defined.
+	Flags string `protobuf:"bytes,3,opt,name=flags,proto3" json:"flags,omitempty"`
+	// Protocol Resolution Service
+	//
+	// x-displayName: "Protocol Resolution Service"
+	// x-example: ""
+	// Specifies the service(s) available down this rewrite path.
+	Service string `protobuf:"bytes,4,opt,name=service,proto3" json:"service,omitempty"`
+	// Regular Expression
+	//
+	// x-displayName: "Regular Expression"
+	// x-example: ""
+	// Regular expression to construct the next domain name to lookup.
+	Regexp string `protobuf:"bytes,5,opt,name=regexp,proto3" json:"regexp,omitempty"`
+	// Replacement
+	//
+	// x-displayName: "Replacement"
+	// x-example: ""
+	// The next NAME to query for NAPTR, SRV, or address records depending on the value of the flags field.
+	Replacement string `protobuf:"bytes,6,opt,name=replacement,proto3" json:"replacement,omitempty"`
+}
+
+func (m *NAPTRValue) Reset()      { *m = NAPTRValue{} }
+func (*NAPTRValue) ProtoMessage() {}
+func (*NAPTRValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{19}
+}
+func (m *NAPTRValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NAPTRValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NAPTRValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NAPTRValue.Merge(m, src)
+}
+func (m *NAPTRValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *NAPTRValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_NAPTRValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NAPTRValue proto.InternalMessageInfo
+
+func (m *NAPTRValue) GetOrder() uint32 {
+	if m != nil {
+		return m.Order
+	}
+	return 0
+}
+
+func (m *NAPTRValue) GetPreference() uint32 {
+	if m != nil {
+		return m.Preference
+	}
+	return 0
+}
+
+func (m *NAPTRValue) GetFlags() string {
+	if m != nil {
+		return m.Flags
+	}
+	return ""
+}
+
+func (m *NAPTRValue) GetService() string {
+	if m != nil {
+		return m.Service
+	}
+	return ""
+}
+
+func (m *NAPTRValue) GetRegexp() string {
+	if m != nil {
+		return m.Regexp
+	}
+	return ""
+}
+
+func (m *NAPTRValue) GetReplacement() string {
+	if m != nil {
+		return m.Replacement
+	}
+	return ""
+}
+
+// DNSDSRecord
+//
+// x-displayName: "DNS DS Record"
+// DNS DS Record
+type DNSDSRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// DS Value
+	//
+	// x-displayName: "DS Value"
+	// x-required
+	Values []*DSRecordValue `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *DNSDSRecord) Reset()      { *m = DNSDSRecord{} }
+func (*DNSDSRecord) ProtoMessage() {}
+func (*DNSDSRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{20}
+}
+func (m *DNSDSRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSDSRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSDSRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSDSRecord.Merge(m, src)
+}
+func (m *DNSDSRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSDSRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSDSRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSDSRecord proto.InternalMessageInfo
+
+func (m *DNSDSRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSDSRecord) GetValues() []*DSRecordValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// DNSCDSRecord
+//
+// x-displayName: "DNS CDS Record"
+// DNS CDS Record
+type DNSCDSRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// DS Value
+	//
+	// x-displayName: "DS Value"
+	// x-required
+	Values []*DSRecordValue `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *DNSCDSRecord) Reset()      { *m = DNSCDSRecord{} }
+func (*DNSCDSRecord) ProtoMessage() {}
+func (*DNSCDSRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{21}
+}
+func (m *DNSCDSRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSCDSRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSCDSRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSCDSRecord.Merge(m, src)
+}
+func (m *DNSCDSRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSCDSRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSCDSRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSCDSRecord proto.InternalMessageInfo
+
+func (m *DNSCDSRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSCDSRecord) GetValues() []*DSRecordValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// DSRecordValue
+//
+// x-displayName: "DSRecordValue"
+type DSRecordValue struct {
+	// Key Tag
+	//
+	// x-displayName: "Key Tag"
+	// x-example: "15228"
+	// x-required
+	// A short numeric value which can help quickly identify the referenced DNSKEY-record.
+	KeyTag uint32 `protobuf:"varint,1,opt,name=key_tag,json=keyTag,proto3" json:"key_tag,omitempty"`
+	// DS Key Algorithm
+	//
+	// x-displayName: "DS Key algorithm"
+	// x-required
+	// DS key value must be compatible with the specified algorithm.
+	DsKeyAlgorithm DSKeyAlgorithm `protobuf:"varint,2,opt,name=ds_key_algorithm,json=dsKeyAlgorithm,proto3,enum=ves.io.schema.dns_zone.DSKeyAlgorithm" json:"ds_key_algorithm,omitempty"`
+	// Digest
+	//
+	// x-displayName: "Digest"
+	// x-required
+	//
+	// Types that are valid to be assigned to DigestChoice:
+	//	*DSRecordValue_Sha1Digest
+	//	*DSRecordValue_Sha256Digest
+	//	*DSRecordValue_Sha384Digest
+	DigestChoice isDSRecordValue_DigestChoice `protobuf_oneof:"digest_choice"`
+}
+
+func (m *DSRecordValue) Reset()      { *m = DSRecordValue{} }
+func (*DSRecordValue) ProtoMessage() {}
+func (*DSRecordValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{22}
+}
+func (m *DSRecordValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DSRecordValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DSRecordValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DSRecordValue.Merge(m, src)
+}
+func (m *DSRecordValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *DSRecordValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_DSRecordValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DSRecordValue proto.InternalMessageInfo
+
+type isDSRecordValue_DigestChoice interface {
+	isDSRecordValue_DigestChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DSRecordValue_Sha1Digest struct {
+	Sha1Digest *SHA1Digest `protobuf:"bytes,4,opt,name=sha1_digest,json=sha1Digest,proto3,oneof" json:"sha1_digest,omitempty"`
+}
+type DSRecordValue_Sha256Digest struct {
+	Sha256Digest *SHA256Digest `protobuf:"bytes,5,opt,name=sha256_digest,json=sha256Digest,proto3,oneof" json:"sha256_digest,omitempty"`
+}
+type DSRecordValue_Sha384Digest struct {
+	Sha384Digest *SHA384Digest `protobuf:"bytes,6,opt,name=sha384_digest,json=sha384Digest,proto3,oneof" json:"sha384_digest,omitempty"`
+}
+
+func (*DSRecordValue_Sha1Digest) isDSRecordValue_DigestChoice()   {}
+func (*DSRecordValue_Sha256Digest) isDSRecordValue_DigestChoice() {}
+func (*DSRecordValue_Sha384Digest) isDSRecordValue_DigestChoice() {}
+
+func (m *DSRecordValue) GetDigestChoice() isDSRecordValue_DigestChoice {
+	if m != nil {
+		return m.DigestChoice
+	}
+	return nil
+}
+
+func (m *DSRecordValue) GetKeyTag() uint32 {
+	if m != nil {
+		return m.KeyTag
+	}
+	return 0
+}
+
+func (m *DSRecordValue) GetDsKeyAlgorithm() DSKeyAlgorithm {
+	if m != nil {
+		return m.DsKeyAlgorithm
+	}
+	return UNSPECIFIED
+}
+
+func (m *DSRecordValue) GetSha1Digest() *SHA1Digest {
+	if x, ok := m.GetDigestChoice().(*DSRecordValue_Sha1Digest); ok {
+		return x.Sha1Digest
+	}
+	return nil
+}
+
+func (m *DSRecordValue) GetSha256Digest() *SHA256Digest {
+	if x, ok := m.GetDigestChoice().(*DSRecordValue_Sha256Digest); ok {
+		return x.Sha256Digest
+	}
+	return nil
+}
+
+func (m *DSRecordValue) GetSha384Digest() *SHA384Digest {
+	if x, ok := m.GetDigestChoice().(*DSRecordValue_Sha384Digest); ok {
+		return x.Sha384Digest
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DSRecordValue) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DSRecordValue_Sha1Digest)(nil),
+		(*DSRecordValue_Sha256Digest)(nil),
+		(*DSRecordValue_Sha384Digest)(nil),
+	}
+}
+
+// SHA1 Digest
+//
+// x-displayName: "SHA1 Digest"
+type SHA1Digest struct {
+	// Digest
+	//
+	// x-displayName: "Digest"
+	// x-example: "addf120b430021c36c232c99ef8d926aea2acd6b"
+	// x-required
+	// The 'digest' is the DS key and the actual contents of the DS record.
+	Digest string `protobuf:"bytes,1,opt,name=digest,proto3" json:"digest,omitempty"`
+}
+
+func (m *SHA1Digest) Reset()      { *m = SHA1Digest{} }
+func (*SHA1Digest) ProtoMessage() {}
+func (*SHA1Digest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{23}
+}
+func (m *SHA1Digest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SHA1Digest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SHA1Digest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SHA1Digest.Merge(m, src)
+}
+func (m *SHA1Digest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SHA1Digest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SHA1Digest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SHA1Digest proto.InternalMessageInfo
+
+func (m *SHA1Digest) GetDigest() string {
+	if m != nil {
+		return m.Digest
+	}
+	return ""
+}
+
+// SHA256 Digest
+//
+// x-displayName: "SHA256 Digest"
+type SHA256Digest struct {
+	// Digest
+	//
+	// x-displayName: "Digest"
+	// x-example: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+	// x-required
+	// The 'digest' is the DS key and the actual contents of the DS record.
+	Digest string `protobuf:"bytes,2,opt,name=digest,proto3" json:"digest,omitempty"`
+}
+
+func (m *SHA256Digest) Reset()      { *m = SHA256Digest{} }
+func (*SHA256Digest) ProtoMessage() {}
+func (*SHA256Digest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{24}
+}
+func (m *SHA256Digest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SHA256Digest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SHA256Digest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SHA256Digest.Merge(m, src)
+}
+func (m *SHA256Digest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SHA256Digest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SHA256Digest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SHA256Digest proto.InternalMessageInfo
+
+func (m *SHA256Digest) GetDigest() string {
+	if m != nil {
+		return m.Digest
+	}
+	return ""
+}
+
+// SHA384 Digest
+//
+// x-displayName: "SHA384 Digest"
+type SHA384Digest struct {
+	// Digest
+	//
+	// x-displayName: "Digest"
+	// x-example: "b4a9b28d142d91968ca232b95dfca771ee66f99924148b85026dfa686f6288d0edbfa71c98a798fda71e130f48e8f0f8"
+	// x-required
+	// The 'digest' is the DS key and the actual contents of the DS record.
+	Digest string `protobuf:"bytes,2,opt,name=digest,proto3" json:"digest,omitempty"`
+}
+
+func (m *SHA384Digest) Reset()      { *m = SHA384Digest{} }
+func (*SHA384Digest) ProtoMessage() {}
+func (*SHA384Digest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{25}
+}
+func (m *SHA384Digest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SHA384Digest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SHA384Digest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SHA384Digest.Merge(m, src)
+}
+func (m *SHA384Digest) XXX_Size() int {
+	return m.Size()
+}
+func (m *SHA384Digest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SHA384Digest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SHA384Digest proto.InternalMessageInfo
+
+func (m *SHA384Digest) GetDigest() string {
+	if m != nil {
+		return m.Digest
+	}
+	return ""
+}
+
+// DNSAFSDBRecord
+//
+// x-displayName: "DNS AFSDB Record"
+// DNS AFSDB Record
+type DNSAFSDBRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// AFSDB Value
+	//
+	// x-displayName: "AFSDB Value"
+	// x-example: "values"
+	// x-required
+	Values []*AFSDBRecordValue `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *DNSAFSDBRecord) Reset()      { *m = DNSAFSDBRecord{} }
+func (*DNSAFSDBRecord) ProtoMessage() {}
+func (*DNSAFSDBRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{26}
+}
+func (m *DNSAFSDBRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSAFSDBRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSAFSDBRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSAFSDBRecord.Merge(m, src)
+}
+func (m *DNSAFSDBRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSAFSDBRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSAFSDBRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSAFSDBRecord proto.InternalMessageInfo
+
+func (m *DNSAFSDBRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSAFSDBRecord) GetValues() []*AFSDBRecordValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// AFSDBRecordValue
+//
+// x-displayName: "AFSDBRecordValue"
+type AFSDBRecordValue struct {
+	// Subtype
+	//
+	// x-displayName: "Subtype"
+	// x-example: "1"
+	// x-required
+	// AFSDB Record Subtype.
+	Subtype AFSDBRecordSubtype `protobuf:"varint,1,opt,name=subtype,proto3,enum=ves.io.schema.dns_zone.AFSDBRecordSubtype" json:"subtype,omitempty"`
+	// Hostname
+	//
+	// x-displayName: "Hostname"
+	// x-example: "mail.example.com"
+	// x-required
+	// Server name of the AFS cell database server or the DCE name server.
+	Hostname string `protobuf:"bytes,2,opt,name=hostname,proto3" json:"hostname,omitempty"`
+}
+
+func (m *AFSDBRecordValue) Reset()      { *m = AFSDBRecordValue{} }
+func (*AFSDBRecordValue) ProtoMessage() {}
+func (*AFSDBRecordValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{27}
+}
+func (m *AFSDBRecordValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AFSDBRecordValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AFSDBRecordValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AFSDBRecordValue.Merge(m, src)
+}
+func (m *AFSDBRecordValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *AFSDBRecordValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_AFSDBRecordValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AFSDBRecordValue proto.InternalMessageInfo
+
+func (m *AFSDBRecordValue) GetSubtype() AFSDBRecordSubtype {
+	if m != nil {
+		return m.Subtype
+	}
+	return NONE
+}
+
+func (m *AFSDBRecordValue) GetHostname() string {
+	if m != nil {
+		return m.Hostname
+	}
+	return ""
+}
+
+// DNSEUI48ResourceRecord
+//
+// x-displayName: "DNS EUI48 Record"
+// DNS EUI48 Record
+type DNSEUI48ResourceRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// EUI48 Identifier
+	//
+	// x-displayName: "EUI48 Identifier"
+	// x-example: "01-23-45-67-89-ab"
+	// x-required
+	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *DNSEUI48ResourceRecord) Reset()      { *m = DNSEUI48ResourceRecord{} }
+func (*DNSEUI48ResourceRecord) ProtoMessage() {}
+func (*DNSEUI48ResourceRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{28}
+}
+func (m *DNSEUI48ResourceRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSEUI48ResourceRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSEUI48ResourceRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSEUI48ResourceRecord.Merge(m, src)
+}
+func (m *DNSEUI48ResourceRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSEUI48ResourceRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSEUI48ResourceRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSEUI48ResourceRecord proto.InternalMessageInfo
+
+func (m *DNSEUI48ResourceRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSEUI48ResourceRecord) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// DNSEUI64ResourceRecord
+//
+// x-displayName: "DNS EUI64 Record"
+// DNS EUI64 Record
+type DNSEUI64ResourceRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// EUI64 Identifier
+	//
+	// x-displayName: "EUI64 Identifier"
+	// x-example: "01-23-45-67-89-ab-cd-ef"
+	// x-required
+	Value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *DNSEUI64ResourceRecord) Reset()      { *m = DNSEUI64ResourceRecord{} }
+func (*DNSEUI64ResourceRecord) ProtoMessage() {}
+func (*DNSEUI64ResourceRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{29}
+}
+func (m *DNSEUI64ResourceRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSEUI64ResourceRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSEUI64ResourceRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSEUI64ResourceRecord.Merge(m, src)
+}
+func (m *DNSEUI64ResourceRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSEUI64ResourceRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSEUI64ResourceRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSEUI64ResourceRecord proto.InternalMessageInfo
+
+func (m *DNSEUI64ResourceRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSEUI64ResourceRecord) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// DNSLOCResourceRecord
+//
+// x-displayName: "DNS LOC Record"
+// DNS LOC Record
+type DNSLOCResourceRecord struct {
+	// Record Name
+	//
+	// x-displayName: "Record Name (Excluding Domain name)"
+	// x-example: "www or mail or * or ww* or *ab"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// LOC Values
+	//
+	// x-displayName: "LOC Value"
+	// x-example: "32 7 19 S 116 2 25 E 10m"
+	// x-required
+	Values []*LOCValue `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *DNSLOCResourceRecord) Reset()      { *m = DNSLOCResourceRecord{} }
+func (*DNSLOCResourceRecord) ProtoMessage() {}
+func (*DNSLOCResourceRecord) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{30}
+}
+func (m *DNSLOCResourceRecord) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DNSLOCResourceRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DNSLOCResourceRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DNSLOCResourceRecord.Merge(m, src)
+}
+func (m *DNSLOCResourceRecord) XXX_Size() int {
+	return m.Size()
+}
+func (m *DNSLOCResourceRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DNSLOCResourceRecord.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DNSLOCResourceRecord proto.InternalMessageInfo
+
+func (m *DNSLOCResourceRecord) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *DNSLOCResourceRecord) GetValues() []*LOCValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// LOCValue
+//
+// x-displayName: "LOCValue"
+type LOCValue struct {
+	// Latitude degree
+	//
+	// x-displayName: "Latitude degree"
+	// x-example: "51"
+	// x-required
+	// Latitude degree, an integer between 0 and 90, including 0 and 90
+	LatitudeDegree int32 `protobuf:"varint,1,opt,name=latitude_degree,json=latitudeDegree,proto3" json:"latitude_degree,omitempty"`
+	// Latitude minute
+	//
+	// x-displayName: "Latitude minute"
+	// x-example: "30"
+	// Latitude minute, an integer between 0 and 59, including 0 and 59
+	LatitudeMinute int32 `protobuf:"varint,2,opt,name=latitude_minute,json=latitudeMinute,proto3" json:"latitude_minute,omitempty"`
+	// Latitude second
+	//
+	// x-displayName: "Latitude second"
+	// x-example: "12.000"
+	// Latitude second, an decimal between 0 and 59.999, including 0 and 59.999
+	LatitudeSecond float32 `protobuf:"fixed32,3,opt,name=latitude_second,json=latitudeSecond,proto3" json:"latitude_second,omitempty"`
+	// Latitude hemisphere
+	//
+	// x-displayName: "Latitude hemisphere"
+	// x-example: "N"
+	// x-required
+	// Latitude hemisphere, N or S
+	LatitudeHemisphere LatitudeHemisphere `protobuf:"varint,4,opt,name=latitude_hemisphere,json=latitudeHemisphere,proto3,enum=ves.io.schema.dns_zone.LatitudeHemisphere" json:"latitude_hemisphere,omitempty"`
+	// Longitude degree
+	//
+	// x-displayName: "Longitude degree"
+	// x-example: "51"
+	// x-required
+	// Longitude degree, an integer between 0 and 180, including 0 and 180
+	LongitudeDegree int32 `protobuf:"varint,5,opt,name=longitude_degree,json=longitudeDegree,proto3" json:"longitude_degree,omitempty"`
+	// Longitude minute
+	//
+	// x-displayName: "Longitude minute"
+	// x-example: "30"
+	// Longitude minute, an integer between 0 and 59, including 0 and 59
+	LongitudeMinute int32 `protobuf:"varint,6,opt,name=longitude_minute,json=longitudeMinute,proto3" json:"longitude_minute,omitempty"`
+	// Longitude second
+	//
+	// x-displayName: "Longitude second"
+	// x-example: "12.000"
+	// Longitude second, an decimal between 0 and 59.999, including 0 and 59.999
+	LongitudeSecond float32 `protobuf:"fixed32,7,opt,name=longitude_second,json=longitudeSecond,proto3" json:"longitude_second,omitempty"`
+	// Longitude hemisphere
+	//
+	// x-displayName: "Longitude hemisphere"
+	// x-example: "E"
+	// x-required
+	// Longitude hemisphere, E or W
+	LongitudeHemisphere LongitudeHemisphere `protobuf:"varint,8,opt,name=longitude_hemisphere,json=longitudeHemisphere,proto3,enum=ves.io.schema.dns_zone.LongitudeHemisphere" json:"longitude_hemisphere,omitempty"`
+	// Altitude
+	//
+	// x-displayName: "Altitude"
+	// x-example: "20.3"
+	// x-required
+	// Altitude in meters
+	Altitude float32 `protobuf:"fixed32,9,opt,name=altitude,proto3" json:"altitude,omitempty"`
+	// Size
+	//
+	// x-displayName: "Size"
+	// x-example: "12.03"
+	// Diameter of a sphere enclosing the described entity, in meters
+	LocationDiameter float32 `protobuf:"fixed32,10,opt,name=location_diameter,json=locationDiameter,proto3" json:"location_diameter,omitempty"`
+	// Horizontal Precision
+	//
+	// x-displayName: "Horizontal Precision"
+	// x-example: "12.71"
+	// Horizontal Precision in meters
+	HorizontalPrecision float32 `protobuf:"fixed32,11,opt,name=horizontal_precision,json=horizontalPrecision,proto3" json:"horizontal_precision,omitempty"`
+	// Vertical Precision
+	//
+	// x-displayName: "Vertical Precision"
+	// x-example: "12.71m"
+	// Vertical Precision in meters
+	VerticalPrecision float32 `protobuf:"fixed32,12,opt,name=vertical_precision,json=verticalPrecision,proto3" json:"vertical_precision,omitempty"`
+}
+
+func (m *LOCValue) Reset()      { *m = LOCValue{} }
+func (*LOCValue) ProtoMessage() {}
+func (*LOCValue) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ad554e1b0b937441, []int{31}
+}
+func (m *LOCValue) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LOCValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LOCValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LOCValue.Merge(m, src)
+}
+func (m *LOCValue) XXX_Size() int {
+	return m.Size()
+}
+func (m *LOCValue) XXX_DiscardUnknown() {
+	xxx_messageInfo_LOCValue.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LOCValue proto.InternalMessageInfo
+
+func (m *LOCValue) GetLatitudeDegree() int32 {
+	if m != nil {
+		return m.LatitudeDegree
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLatitudeMinute() int32 {
+	if m != nil {
+		return m.LatitudeMinute
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLatitudeSecond() float32 {
+	if m != nil {
+		return m.LatitudeSecond
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLatitudeHemisphere() LatitudeHemisphere {
+	if m != nil {
+		return m.LatitudeHemisphere
+	}
+	return N
+}
+
+func (m *LOCValue) GetLongitudeDegree() int32 {
+	if m != nil {
+		return m.LongitudeDegree
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLongitudeMinute() int32 {
+	if m != nil {
+		return m.LongitudeMinute
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLongitudeSecond() float32 {
+	if m != nil {
+		return m.LongitudeSecond
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLongitudeHemisphere() LongitudeHemisphere {
+	if m != nil {
+		return m.LongitudeHemisphere
+	}
+	return E
+}
+
+func (m *LOCValue) GetAltitude() float32 {
+	if m != nil {
+		return m.Altitude
+	}
+	return 0
+}
+
+func (m *LOCValue) GetLocationDiameter() float32 {
+	if m != nil {
+		return m.LocationDiameter
+	}
+	return 0
+}
+
+func (m *LOCValue) GetHorizontalPrecision() float32 {
+	if m != nil {
+		return m.HorizontalPrecision
+	}
+	return 0
+}
+
+func (m *LOCValue) GetVerticalPrecision() float32 {
+	if m != nil {
+		return m.VerticalPrecision
+	}
+	return 0
+}
+
 // Secondary DNS Configuration
 //
 // x-displayName: "Secondary DNS Configuration"
@@ -1524,7 +2851,7 @@ type SecondaryDNSConfig struct {
 func (m *SecondaryDNSConfig) Reset()      { *m = SecondaryDNSConfig{} }
 func (*SecondaryDNSConfig) ProtoMessage() {}
 func (*SecondaryDNSConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{18}
+	return fileDescriptor_ad554e1b0b937441, []int{32}
 }
 func (m *SecondaryDNSConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1626,7 +2953,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{19}
+	return fileDescriptor_ad554e1b0b937441, []int{33}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1735,7 +3062,7 @@ type PrimaryDNSCreateSpecType struct {
 func (m *PrimaryDNSCreateSpecType) Reset()      { *m = PrimaryDNSCreateSpecType{} }
 func (*PrimaryDNSCreateSpecType) ProtoMessage() {}
 func (*PrimaryDNSCreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{20}
+	return fileDescriptor_ad554e1b0b937441, []int{34}
 }
 func (m *PrimaryDNSCreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1866,7 +3193,7 @@ type SecondaryDNSCreateSpecType struct {
 func (m *SecondaryDNSCreateSpecType) Reset()      { *m = SecondaryDNSCreateSpecType{} }
 func (*SecondaryDNSCreateSpecType) ProtoMessage() {}
 func (*SecondaryDNSCreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{21}
+	return fileDescriptor_ad554e1b0b937441, []int{35}
 }
 func (m *SecondaryDNSCreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1933,7 +3260,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{22}
+	return fileDescriptor_ad554e1b0b937441, []int{36}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2018,7 +3345,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{23}
+	return fileDescriptor_ad554e1b0b937441, []int{37}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2108,7 +3435,7 @@ type PrimaryDNSGetSpecType struct {
 func (m *PrimaryDNSGetSpecType) Reset()      { *m = PrimaryDNSGetSpecType{} }
 func (*PrimaryDNSGetSpecType) ProtoMessage() {}
 func (*PrimaryDNSGetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{24}
+	return fileDescriptor_ad554e1b0b937441, []int{38}
 }
 func (m *PrimaryDNSGetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2237,7 +3564,7 @@ type SecondaryDNSGetSpecType struct {
 func (m *SecondaryDNSGetSpecType) Reset()      { *m = SecondaryDNSGetSpecType{} }
 func (*SecondaryDNSGetSpecType) ProtoMessage() {}
 func (*SecondaryDNSGetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{25}
+	return fileDescriptor_ad554e1b0b937441, []int{39}
 }
 func (m *SecondaryDNSGetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2320,7 +3647,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ad554e1b0b937441, []int{26}
+	return fileDescriptor_ad554e1b0b937441, []int{40}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2407,6 +3734,14 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 }
 
 func init() {
+	proto.RegisterEnum("ves.io.schema.dns_zone.DSKeyAlgorithm", DSKeyAlgorithm_name, DSKeyAlgorithm_value)
+	golang_proto.RegisterEnum("ves.io.schema.dns_zone.DSKeyAlgorithm", DSKeyAlgorithm_name, DSKeyAlgorithm_value)
+	proto.RegisterEnum("ves.io.schema.dns_zone.AFSDBRecordSubtype", AFSDBRecordSubtype_name, AFSDBRecordSubtype_value)
+	golang_proto.RegisterEnum("ves.io.schema.dns_zone.AFSDBRecordSubtype", AFSDBRecordSubtype_name, AFSDBRecordSubtype_value)
+	proto.RegisterEnum("ves.io.schema.dns_zone.LatitudeHemisphere", LatitudeHemisphere_name, LatitudeHemisphere_value)
+	golang_proto.RegisterEnum("ves.io.schema.dns_zone.LatitudeHemisphere", LatitudeHemisphere_name, LatitudeHemisphere_value)
+	proto.RegisterEnum("ves.io.schema.dns_zone.LongitudeHemisphere", LongitudeHemisphere_name, LongitudeHemisphere_value)
+	golang_proto.RegisterEnum("ves.io.schema.dns_zone.LongitudeHemisphere", LongitudeHemisphere_name, LongitudeHemisphere_value)
 	proto.RegisterEnum("ves.io.schema.dns_zone.TSIGKeyAlgorithm", TSIGKeyAlgorithm_name, TSIGKeyAlgorithm_value)
 	golang_proto.RegisterEnum("ves.io.schema.dns_zone.TSIGKeyAlgorithm", TSIGKeyAlgorithm_name, TSIGKeyAlgorithm_value)
 	proto.RegisterType((*PrimaryDNSConfig)(nil), "ves.io.schema.dns_zone.PrimaryDNSConfig")
@@ -2445,6 +3780,34 @@ func init() {
 	golang_proto.RegisterType((*DNSTXTResourceRecord)(nil), "ves.io.schema.dns_zone.DNSTXTResourceRecord")
 	proto.RegisterType((*DNSLBResourceRecord)(nil), "ves.io.schema.dns_zone.DNSLBResourceRecord")
 	golang_proto.RegisterType((*DNSLBResourceRecord)(nil), "ves.io.schema.dns_zone.DNSLBResourceRecord")
+	proto.RegisterType((*DNSNAPTRResourceRecord)(nil), "ves.io.schema.dns_zone.DNSNAPTRResourceRecord")
+	golang_proto.RegisterType((*DNSNAPTRResourceRecord)(nil), "ves.io.schema.dns_zone.DNSNAPTRResourceRecord")
+	proto.RegisterType((*NAPTRValue)(nil), "ves.io.schema.dns_zone.NAPTRValue")
+	golang_proto.RegisterType((*NAPTRValue)(nil), "ves.io.schema.dns_zone.NAPTRValue")
+	proto.RegisterType((*DNSDSRecord)(nil), "ves.io.schema.dns_zone.DNSDSRecord")
+	golang_proto.RegisterType((*DNSDSRecord)(nil), "ves.io.schema.dns_zone.DNSDSRecord")
+	proto.RegisterType((*DNSCDSRecord)(nil), "ves.io.schema.dns_zone.DNSCDSRecord")
+	golang_proto.RegisterType((*DNSCDSRecord)(nil), "ves.io.schema.dns_zone.DNSCDSRecord")
+	proto.RegisterType((*DSRecordValue)(nil), "ves.io.schema.dns_zone.DSRecordValue")
+	golang_proto.RegisterType((*DSRecordValue)(nil), "ves.io.schema.dns_zone.DSRecordValue")
+	proto.RegisterType((*SHA1Digest)(nil), "ves.io.schema.dns_zone.SHA1Digest")
+	golang_proto.RegisterType((*SHA1Digest)(nil), "ves.io.schema.dns_zone.SHA1Digest")
+	proto.RegisterType((*SHA256Digest)(nil), "ves.io.schema.dns_zone.SHA256Digest")
+	golang_proto.RegisterType((*SHA256Digest)(nil), "ves.io.schema.dns_zone.SHA256Digest")
+	proto.RegisterType((*SHA384Digest)(nil), "ves.io.schema.dns_zone.SHA384Digest")
+	golang_proto.RegisterType((*SHA384Digest)(nil), "ves.io.schema.dns_zone.SHA384Digest")
+	proto.RegisterType((*DNSAFSDBRecord)(nil), "ves.io.schema.dns_zone.DNSAFSDBRecord")
+	golang_proto.RegisterType((*DNSAFSDBRecord)(nil), "ves.io.schema.dns_zone.DNSAFSDBRecord")
+	proto.RegisterType((*AFSDBRecordValue)(nil), "ves.io.schema.dns_zone.AFSDBRecordValue")
+	golang_proto.RegisterType((*AFSDBRecordValue)(nil), "ves.io.schema.dns_zone.AFSDBRecordValue")
+	proto.RegisterType((*DNSEUI48ResourceRecord)(nil), "ves.io.schema.dns_zone.DNSEUI48ResourceRecord")
+	golang_proto.RegisterType((*DNSEUI48ResourceRecord)(nil), "ves.io.schema.dns_zone.DNSEUI48ResourceRecord")
+	proto.RegisterType((*DNSEUI64ResourceRecord)(nil), "ves.io.schema.dns_zone.DNSEUI64ResourceRecord")
+	golang_proto.RegisterType((*DNSEUI64ResourceRecord)(nil), "ves.io.schema.dns_zone.DNSEUI64ResourceRecord")
+	proto.RegisterType((*DNSLOCResourceRecord)(nil), "ves.io.schema.dns_zone.DNSLOCResourceRecord")
+	golang_proto.RegisterType((*DNSLOCResourceRecord)(nil), "ves.io.schema.dns_zone.DNSLOCResourceRecord")
+	proto.RegisterType((*LOCValue)(nil), "ves.io.schema.dns_zone.LOCValue")
+	golang_proto.RegisterType((*LOCValue)(nil), "ves.io.schema.dns_zone.LOCValue")
 	proto.RegisterType((*SecondaryDNSConfig)(nil), "ves.io.schema.dns_zone.SecondaryDNSConfig")
 	golang_proto.RegisterType((*SecondaryDNSConfig)(nil), "ves.io.schema.dns_zone.SecondaryDNSConfig")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.dns_zone.GlobalSpecType")
@@ -2473,209 +3836,331 @@ func init() {
 }
 
 var fileDescriptor_ad554e1b0b937441 = []byte{
-	// 3196 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x5d, 0x6c, 0x1b, 0x57,
-	0x76, 0xd6, 0x25, 0x87, 0xd4, 0xf0, 0x50, 0x3f, 0xa3, 0x91, 0x2c, 0x31, 0xb2, 0x4d, 0xd3, 0xb4,
-	0xd3, 0x48, 0xf4, 0x88, 0x12, 0x47, 0x96, 0x2c, 0xcb, 0x8d, 0x1d, 0x52, 0x72, 0x6d, 0x2b, 0xfa,
-	0xeb, 0x50, 0x75, 0x0d, 0x3b, 0xf2, 0x60, 0x44, 0x5e, 0x52, 0xd3, 0x90, 0x1c, 0x62, 0x66, 0x24,
-	0x4b, 0x71, 0x04, 0x18, 0x79, 0x2a, 0x0a, 0x14, 0x08, 0xfc, 0x50, 0xb4, 0x28, 0xd0, 0xb7, 0x00,
-	0x45, 0x80, 0x02, 0x45, 0xff, 0x50, 0x94, 0x01, 0x6a, 0x18, 0x28, 0x50, 0xf8, 0x25, 0xde, 0x37,
-	0xc3, 0x58, 0x60, 0x37, 0xf2, 0x62, 0x91, 0x05, 0xf6, 0x21, 0xc8, 0x02, 0x8b, 0x45, 0xf6, 0xc1,
-	0x8b, 0xb9, 0xf3, 0xc3, 0x19, 0xfe, 0x48, 0xf2, 0x06, 0xd9, 0x24, 0xd8, 0xbc, 0xcd, 0xbd, 0xf7,
-	0x9c, 0x8f, 0xe7, 0xef, 0x9e, 0x73, 0xee, 0xbd, 0x84, 0xf8, 0x36, 0xd6, 0x92, 0xb2, 0x32, 0xae,
-	0xe5, 0x36, 0x71, 0x59, 0x1a, 0xcf, 0x57, 0x34, 0xf1, 0x3d, 0xa5, 0x82, 0xc7, 0xf5, 0xdd, 0x2a,
-	0xd6, 0x92, 0x55, 0x55, 0xd1, 0x15, 0x76, 0xd0, 0xa4, 0x49, 0x9a, 0x34, 0x49, 0x9b, 0x66, 0x78,
-	0xac, 0x28, 0xeb, 0x9b, 0x5b, 0x1b, 0xc9, 0x9c, 0x52, 0x1e, 0x2f, 0x2a, 0x45, 0x65, 0x9c, 0x90,
-	0x6f, 0x6c, 0x15, 0xc8, 0x88, 0x0c, 0xc8, 0x97, 0x09, 0x33, 0x7c, 0xaa, 0xa8, 0x28, 0xc5, 0x12,
-	0xae, 0x53, 0xe9, 0x72, 0x19, 0x6b, 0xba, 0x54, 0xae, 0x5a, 0x04, 0x67, 0xda, 0xc8, 0x92, 0xaf,
-	0x68, 0x1a, 0xce, 0x59, 0x44, 0x43, 0x5e, 0xa2, 0x0a, 0xd6, 0xad, 0x85, 0xe3, 0xde, 0x05, 0xa5,
-	0xaa, 0xcb, 0x4a, 0xc5, 0x52, 0x61, 0xf8, 0x35, 0xef, 0xa2, 0x4b, 0xbb, 0xe1, 0x13, 0xde, 0xa5,
-	0x6d, 0xa9, 0x24, 0xe7, 0x25, 0x1d, 0x5b, 0xab, 0xb1, 0x86, 0x55, 0x19, 0xdf, 0x13, 0xbd, 0xd0,
-	0xa7, 0x9a, 0x29, 0x34, 0xf7, 0x0f, 0xc4, 0xff, 0x2f, 0x00, 0xcc, 0xaa, 0x2a, 0x97, 0x25, 0x75,
-	0x77, 0x7e, 0x39, 0x3b, 0xa7, 0x54, 0x0a, 0x72, 0x91, 0x5d, 0x84, 0xc1, 0x3c, 0x2e, 0x48, 0x5b,
-	0x25, 0x5d, 0xd4, 0x14, 0x49, 0xac, 0x4a, 0xaa, 0x54, 0xc6, 0x3a, 0x56, 0xb5, 0x48, 0x30, 0x86,
-	0x46, 0xc2, 0xfc, 0x40, 0xd2, 0x6b, 0xf4, 0xab, 0xe5, 0xaa, 0xbe, 0x7b, 0xbd, 0x43, 0x18, 0xb0,
-	0xb8, 0xb2, 0x8a, 0xb4, 0xea, 0xf0, 0xb0, 0x22, 0xf4, 0x34, 0xa0, 0x74, 0x12, 0x94, 0x89, 0x64,
-	0x6b, 0xd7, 0x25, 0xb3, 0x2b, 0x69, 0x01, 0xe7, 0x14, 0x35, 0xef, 0x80, 0x98, 0x72, 0x65, 0xa8,
-	0xa7, 0x35, 0x84, 0xae, 0x77, 0x08, 0xdd, 0x9a, 0xe7, 0x07, 0x6e, 0x43, 0x97, 0xaa, 0x8a, 0x1a,
-	0xd6, 0xc5, 0xa2, 0xaa, 0x6c, 0x55, 0x23, 0x74, 0xcc, 0x3f, 0x12, 0xe6, 0xe3, 0xed, 0xe0, 0x05,
-	0x21, 0x8b, 0xf5, 0x6b, 0x06, 0x65, 0x66, 0xe0, 0x7f, 0x7e, 0xf1, 0xc8, 0x1f, 0x78, 0x88, 0x7c,
-	0x0c, 0x6f, 0x7f, 0x4d, 0x20, 0x01, 0x54, 0xd5, 0xa6, 0x60, 0x07, 0x21, 0xa8, 0x61, 0x55, 0x96,
-	0x4a, 0x91, 0x50, 0x0c, 0x8d, 0x74, 0x0b, 0xd6, 0x88, 0x1d, 0x80, 0x80, 0x94, 0x2f, 0xcb, 0x95,
-	0x08, 0xc4, 0xd0, 0x48, 0x48, 0x30, 0x07, 0xec, 0x1d, 0xb0, 0x4d, 0x20, 0x7a, 0x24, 0x0a, 0x13,
-	0x89, 0x4e, 0x1e, 0x28, 0x51, 0x26, 0x6c, 0x88, 0x10, 0x7c, 0x88, 0xfc, 0xcc, 0x87, 0xcb, 0x42,
-	0x9f, 0x85, 0x23, 0xd4, 0x45, 0x99, 0x83, 0xb0, 0x19, 0x6c, 0x62, 0x59, 0xc9, 0xe3, 0x48, 0x17,
-	0x31, 0x62, 0x5b, 0x2d, 0xe7, 0x97, 0xb3, 0xd9, 0xab, 0x73, 0x4b, 0x4a, 0x1e, 0x0b, 0x60, 0xb2,
-	0x19, 0xdf, 0xec, 0x6d, 0x38, 0x29, 0x95, 0x4a, 0xca, 0x3d, 0x71, 0x53, 0xd7, 0xab, 0x62, 0x69,
-	0x43, 0x2c, 0x4b, 0x15, 0xa9, 0x88, 0xf3, 0xa2, 0x4a, 0x2c, 0xae, 0x45, 0xba, 0x63, 0x68, 0x84,
-	0xce, 0x44, 0x3e, 0xfe, 0x04, 0x0d, 0x24, 0xfc, 0x39, 0x55, 0x4f, 0x74, 0x6a, 0xba, 0x54, 0x94,
-	0x2b, 0xc5, 0x04, 0x55, 0x55, 0x95, 0xbc, 0xf0, 0x1a, 0x61, 0xbf, 0xae, 0xeb, 0xd5, 0xc5, 0x8d,
-	0x25, 0x93, 0xd7, 0x74, 0x96, 0x36, 0x7b, 0xee, 0xcb, 0xcb, 0x5d, 0x53, 0x5c, 0x8a, 0xe7, 0x52,
-	0x93, 0x5c, 0x2a, 0xc5, 0xcd, 0x3c, 0xae, 0xa1, 0x08, 0x0c, 0x42, 0x5f, 0x76, 0x25, 0x1d, 0x33,
-	0x3d, 0xb8, 0xa5, 0x4a, 0x46, 0x74, 0xb2, 0x68, 0x2a, 0x33, 0x0e, 0x27, 0x8c, 0xa8, 0x30, 0x7f,
-	0xd6, 0x15, 0x1c, 0x62, 0x6e, 0x53, 0x91, 0x73, 0x98, 0xed, 0x7d, 0x54, 0x43, 0xc1, 0xa7, 0x35,
-	0x14, 0xd8, 0xaf, 0x21, 0xff, 0x34, 0x77, 0x61, 0x81, 0xa2, 0x11, 0xe3, 0x5b, 0xa0, 0x68, 0x1f,
-	0xe3, 0x5f, 0xa0, 0x68, 0x3f, 0x43, 0x2d, 0x50, 0x34, 0xc5, 0x04, 0x16, 0x28, 0x3a, 0xc0, 0x04,
-	0xe3, 0xbf, 0xf2, 0x41, 0xa4, 0x5d, 0xdc, 0xb0, 0x97, 0xa0, 0x53, 0xc5, 0x05, 0x15, 0x6b, 0x9b,
-	0x11, 0x64, 0x78, 0x31, 0x73, 0xfa, 0x79, 0x0d, 0x05, 0x66, 0xa6, 0xcf, 0x4f, 0x4c, 0xfc, 0xa6,
-	0x86, 0x3a, 0xfe, 0xfa, 0x13, 0x84, 0x0c, 0xdb, 0x87, 0x13, 0xa1, 0xc8, 0xcb, 0x97, 0x2f, 0x5f,
-	0x76, 0x8e, 0x7c, 0x78, 0x42, 0xb0, 0x39, 0xd8, 0x29, 0x08, 0xa8, 0x58, 0x57, 0x77, 0x23, 0x3e,
-	0xc2, 0x7a, 0xea, 0x79, 0x0d, 0x51, 0x17, 0x78, 0x2f, 0x27, 0x24, 0x68, 0x8b, 0xf3, 0x4f, 0x05,
-	0x93, 0x9a, 0xbd, 0x00, 0x41, 0xbc, 0x53, 0x95, 0x55, 0x1c, 0xf1, 0x3b, 0x7c, 0xc1, 0xc9, 0xe9,
-	0x89, 0x09, 0x2f, 0x27, 0x9d, 0x08, 0x9a, 0x9c, 0x82, 0x45, 0xce, 0xbe, 0x05, 0x5d, 0x15, 0x5c,
-	0x94, 0x74, 0x79, 0x1b, 0x8b, 0xba, 0x5e, 0x8a, 0x50, 0x84, 0xfd, 0xa4, 0xf1, 0xb3, 0xa9, 0x99,
-	0x76, 0xcc, 0x61, 0x9b, 0x65, 0x4d, 0x2f, 0xb1, 0x13, 0xe0, 0x37, 0x18, 0x03, 0x84, 0x31, 0xda,
-	0x52, 0xd5, 0x3a, 0xa7, 0x41, 0x3a, 0x3b, 0xfd, 0xb8, 0x86, 0x78, 0x98, 0x80, 0x33, 0x59, 0x5d,
-	0x52, 0xf5, 0xd8, 0x4a, 0x21, 0x96, 0xde, 0xd2, 0x37, 0x15, 0x55, 0xd6, 0x77, 0x63, 0x23, 0xd9,
-	0x95, 0xf4, 0x68, 0x6c, 0x55, 0x55, 0xaa, 0x58, 0xd5, 0x65, 0xac, 0xb1, 0xa1, 0x14, 0xc7, 0x73,
-	0x93, 0xdc, 0x79, 0x6e, 0x2a, 0xfe, 0x05, 0x02, 0xa8, 0x6f, 0x27, 0x76, 0x16, 0xe8, 0x32, 0xd6,
-	0xa5, 0xbc, 0xa4, 0x4b, 0xc4, 0xd0, 0x61, 0x3e, 0xda, 0x10, 0x9e, 0x4b, 0x58, 0xd3, 0xa4, 0x22,
-	0x5e, 0xc2, 0xba, 0xb4, 0xb6, 0x5b, 0xc5, 0x82, 0x43, 0xcf, 0xa6, 0x21, 0x68, 0x6e, 0x99, 0x88,
-	0xef, 0x95, 0x37, 0x4b, 0x80, 0x6c, 0xd8, 0xd9, 0xdc, 0x93, 0x1a, 0x12, 0x61, 0x08, 0xa8, 0x65,
-	0xa9, 0x8c, 0x87, 0x7b, 0xa1, 0xdb, 0x06, 0x4f, 0x56, 0xa4, 0x32, 0x86, 0xd7, 0x21, 0x3c, 0x8f,
-	0xb5, 0x9c, 0x2a, 0x93, 0x0c, 0x39, 0x3c, 0x08, 0x03, 0xce, 0x7a, 0xbe, 0x3e, 0x0f, 0x27, 0xa1,
-	0x6f, 0x79, 0xab, 0xbc, 0x81, 0xd5, 0x98, 0x52, 0x88, 0x09, 0x42, 0x2c, 0x8b, 0x75, 0x6d, 0x96,
-	0xb6, 0xa5, 0x8b, 0x7f, 0xd4, 0x03, 0x01, 0x22, 0x02, 0x9b, 0x32, 0xcd, 0x8c, 0xea, 0x61, 0x61,
-	0xb8, 0xb7, 0x5d, 0x58, 0x18, 0xb4, 0xec, 0x35, 0xa0, 0xed, 0x90, 0x27, 0x1b, 0x2d, 0xcc, 0x27,
-	0x0e, 0xd8, 0xbf, 0x69, 0x01, 0x6b, 0xca, 0x96, 0x9a, 0xc3, 0x66, 0x54, 0x5f, 0xef, 0x10, 0x3a,
-	0x25, 0xf3, 0x93, 0x5d, 0x85, 0xb0, 0x24, 0x49, 0x0e, 0x56, 0x0f, 0xc1, 0x1a, 0x3b, 0x08, 0x2b,
-	0x9d, 0x6e, 0x86, 0x03, 0x03, 0xc3, 0x42, 0xcc, 0x42, 0x97, 0x54, 0x92, 0x25, 0xcd, 0x86, 0xec,
-	0x25, 0x90, 0xc9, 0x83, 0x20, 0x0d, 0xf2, 0x26, 0xcc, 0xb0, 0x64, 0x4e, 0x13, 0xd0, 0x25, 0x80,
-	0x5c, 0x5d, 0x4a, 0x86, 0x40, 0x72, 0x07, 0x40, 0xce, 0xb5, 0x10, 0x32, 0x94, 0x73, 0xcb, 0x98,
-	0x33, 0x5c, 0x69, 0x03, 0xf6, 0x1d, 0x2a, 0xe3, 0xdc, 0x72, 0x7a, 0xe9, 0x6a, 0xb3, 0x8c, 0x04,
-	0xc5, 0x02, 0x5d, 0x80, 0x50, 0x79, 0xc7, 0x46, 0x64, 0x09, 0xe2, 0xb9, 0x03, 0x10, 0x97, 0x6e,
-	0x35, 0xc1, 0xd1, 0xe5, 0x9d, 0x3a, 0x56, 0xc5, 0xb1, 0x60, 0xff, 0xa1, 0x58, 0xcb, 0xd9, 0x66,
-	0xac, 0x8a, 0xcb, 0x76, 0x55, 0x5d, 0xb5, 0xc1, 0x06, 0x0e, 0xb5, 0xdd, 0xea, 0x9a, 0xd0, 0x6c,
-	0xbb, 0xaa, 0xae, 0xd6, 0xe1, 0x34, 0x75, 0xdb, 0x86, 0x3b, 0x76, 0x28, 0x5c, 0x56, 0xb8, 0xd9,
-	0x0c, 0xa7, 0xa9, 0xdb, 0x75, 0x38, 0x7d, 0x47, 0xb7, 0xe1, 0x06, 0x0f, 0x85, 0x5b, 0xbb, 0xb5,
-	0xd6, 0x0c, 0xa7, 0xef, 0xe8, 0x75, 0xc3, 0x95, 0x36, 0x6c, 0xb4, 0xa1, 0x43, 0x0d, 0xb7, 0x98,
-	0x69, 0x36, 0x5c, 0x69, 0xc3, 0xfc, 0x9e, 0x7d, 0x10, 0x7c, 0x52, 0x43, 0xbf, 0x0d, 0xc0, 0xe7,
-	0x08, 0x28, 0x23, 0xc9, 0x24, 0x7e, 0x82, 0xe0, 0xc7, 0x08, 0xba, 0xeb, 0x7b, 0x8f, 0x47, 0x69,
-	0xe8, 0xf7, 0xec, 0x20, 0x9e, 0x32, 0x36, 0x08, 0x1c, 0xf3, 0x6e, 0x02, 0x3e, 0x90, 0x5e, 0xbc,
-	0x91, 0xce, 0x42, 0x9f, 0x3b, 0x8c, 0x79, 0xff, 0x9c, 0x49, 0xe9, 0x0e, 0x45, 0x3e, 0x40, 0x22,
-	0x0d, 0x7a, 0x5d, 0xc1, 0xc4, 0xfb, 0x96, 0x6e, 0x19, 0x13, 0x4e, 0x44, 0xf0, 0xbe, 0x65, 0x82,
-	0x55, 0x77, 0x2b, 0xef, 0x5f, 0x5d, 0x13, 0x8c, 0xa9, 0xba, 0x6b, 0x78, 0x7f, 0x56, 0xb8, 0x69,
-	0x4c, 0xd5, 0xcd, 0xcb, 0xfb, 0xd7, 0x6e, 0xad, 0xc1, 0xb0, 0xcb, 0x44, 0x7c, 0xf7, 0xe2, 0x4a,
-	0x7a, 0x3e, 0x96, 0x49, 0x2f, 0xa6, 0x97, 0xe7, 0xae, 0xce, 0xc3, 0xa7, 0x08, 0xc2, 0xa6, 0xf6,
-	0x31, 0x23, 0xf7, 0x25, 0xfe, 0x17, 0xc1, 0x27, 0x08, 0x7a, 0xa1, 0xdb, 0x16, 0xda, 0xcc, 0x80,
-	0x2c, 0x30, 0x2e, 0x9d, 0xcd, 0xb9, 0x3e, 0xe8, 0xcd, 0x35, 0x4c, 0xf5, 0x43, 0x9f, 0x5b, 0x37,
-	0x73, 0x92, 0x81, 0x1e, 0x47, 0x33, 0x67, 0xc6, 0x51, 0xcd, 0xc1, 0xaa, 0xeb, 0xe6, 0x4c, 0xd5,
-	0x75, 0x73, 0xa6, 0xea, 0xba, 0x39, 0x50, 0x8e, 0x6e, 0xe6, 0xcc, 0xbf, 0xf8, 0xa0, 0xd7, 0xd2,
-	0xe8, 0xa6, 0x54, 0xda, 0xc2, 0x23, 0xda, 0x68, 0xe2, 0x1f, 0x7c, 0xf0, 0x77, 0x3e, 0x38, 0x06,
-	0xbd, 0x8e, 0xb8, 0xdb, 0xc6, 0x92, 0x16, 0xf7, 0x31, 0x14, 0x44, 0x80, 0x75, 0xeb, 0xe6, 0x5a,
-	0x19, 0x00, 0xd6, 0xed, 0x54, 0x73, 0x09, 0x86, 0xa0, 0x2f, 0xd7, 0x8e, 0xdc, 0xa3, 0xbd, 0x49,
-	0x1e, 0x05, 0xa6, 0xae, 0xbe, 0x45, 0x0d, 0x0c, 0x15, 0x0f, 0xe6, 0x95, 0xb2, 0x24, 0x57, 0x60,
-	0x10, 0x98, 0x8a, 0xd6, 0x02, 0x6d, 0x08, 0xfa, 0x5c, 0x26, 0xf1, 0x2e, 0xb8, 0x0c, 0xe3, 0x5d,
-	0x70, 0x99, 0xc7, 0xb5, 0x70, 0x1c, 0x7a, 0xeb, 0x46, 0x22, 0xf3, 0x2c, 0x3d, 0x1c, 0x9c, 0x5f,
-	0xce, 0xc6, 0x16, 0x33, 0xd0, 0x05, 0xfe, 0xb5, 0xb5, 0xc5, 0xe1, 0x00, 0xa9, 0x49, 0x99, 0x2b,
-	0xd0, 0x6b, 0x34, 0xf9, 0x76, 0x77, 0xa5, 0x61, 0x9d, 0xe5, 0x1e, 0xd5, 0x50, 0xf7, 0xd3, 0x1a,
-	0xf2, 0xed, 0xd7, 0x50, 0xcc, 0x68, 0xd0, 0xce, 0x73, 0xa9, 0x29, 0x2e, 0x35, 0xcd, 0xa5, 0x2e,
-	0x70, 0xa9, 0x19, 0x2e, 0x75, 0x91, 0xe3, 0x27, 0x38, 0x3e, 0xc5, 0xf1, 0x3c, 0xc7, 0x4f, 0xb6,
-	0x6b, 0xb3, 0x16, 0x28, 0x3a, 0xc8, 0x74, 0x2e, 0x50, 0x74, 0x27, 0x43, 0x2f, 0x50, 0x34, 0xcd,
-	0x84, 0x16, 0x28, 0x3a, 0xc4, 0xc0, 0x02, 0x45, 0x03, 0x13, 0x5e, 0xa0, 0xe8, 0x30, 0xd3, 0xb5,
-	0x40, 0xd1, 0x5d, 0x4c, 0x77, 0xfc, 0xdf, 0x10, 0xb0, 0xcd, 0x35, 0x8c, 0xbd, 0x09, 0x94, 0x61,
-	0x5c, 0x52, 0x35, 0x43, 0x99, 0x8c, 0x51, 0x25, 0xdf, 0x54, 0x2f, 0xf1, 0x17, 0xef, 0x9e, 0x7d,
-	0xff, 0xee, 0xc8, 0x9d, 0xc4, 0xfa, 0xfb, 0x77, 0xa4, 0xb1, 0xf7, 0xd2, 0x63, 0xb7, 0x27, 0xc6,
-	0x2e, 0x8e, 0x8d, 0x8b, 0xeb, 0xf7, 0x53, 0xdc, 0xf4, 0xe4, 0xde, 0xe8, 0xc8, 0x9d, 0xe4, 0x7a,
-	0xcb, 0x85, 0xc4, 0x59, 0x81, 0xe0, 0xb1, 0xf3, 0x10, 0x34, 0x4d, 0x45, 0xda, 0x87, 0x50, 0x86,
-	0x33, 0x90, 0x43, 0x0f, 0x51, 0x30, 0x4e, 0xa9, 0xbe, 0x1d, 0xe4, 0xf4, 0xf9, 0x79, 0xfb, 0x8b,
-	0x76, 0xe6, 0x22, 0x48, 0xb0, 0x78, 0xe3, 0xff, 0x85, 0xe0, 0x58, 0xcb, 0x62, 0xf9, 0x8d, 0xc9,
-	0x7d, 0xb5, 0x41, 0xee, 0x31, 0xd2, 0x37, 0x3c, 0x44, 0x9d, 0xf1, 0x80, 0xea, 0x7f, 0x80, 0x8e,
-	0x2a, 0x78, 0x19, 0x06, 0x5b, 0x57, 0x64, 0x76, 0xc4, 0x23, 0xf8, 0xc0, 0xb3, 0x3d, 0xf4, 0x79,
-	0xcd, 0x84, 0x0d, 0xaa, 0x14, 0xef, 0xbb, 0x7b, 0x36, 0x82, 0x2c, 0x51, 0x46, 0x21, 0x40, 0xd0,
-	0x48, 0xa3, 0x1b, 0xca, 0xf4, 0x93, 0x9f, 0x51, 0xfd, 0x91, 0x97, 0x84, 0x9a, 0x52, 0x7d, 0x9b,
-	0x48, 0x30, 0x29, 0xe2, 0xff, 0x8a, 0xe0, 0xcc, 0x9c, 0xd1, 0x0e, 0x16, 0xe4, 0x1c, 0xe9, 0xe8,
-	0x9d, 0x76, 0xd1, 0xfa, 0x78, 0xcf, 0xec, 0xf3, 0x47, 0x21, 0x50, 0x28, 0x49, 0x45, 0xcd, 0x6a,
-	0x92, 0xfa, 0x9f, 0xd7, 0x10, 0x22, 0x1d, 0x12, 0xc1, 0x4e, 0x18, 0xd8, 0x82, 0x49, 0xc1, 0xce,
-	0x82, 0x5f, 0x97, 0x8a, 0xd6, 0x6f, 0x8f, 0x18, 0xeb, 0x67, 0xd4, 0xd3, 0xc2, 0xa9, 0x3b, 0x71,
-	0x59, 0xd3, 0xb6, 0x70, 0x9c, 0x8b, 0x99, 0x1f, 0xf7, 0xe4, 0x52, 0x9e, 0x0c, 0x94, 0x3c, 0x2e,
-	0xc4, 0xd7, 0x05, 0x83, 0x89, 0x8d, 0xdb, 0x92, 0xfb, 0x09, 0x77, 0x97, 0xc1, 0xdd, 0xa9, 0x06,
-	0x18, 0x14, 0x79, 0x40, 0xdb, 0x22, 0x7f, 0x8a, 0x60, 0xa0, 0x55, 0x87, 0xf1, 0x8d, 0x79, 0x56,
-	0xf4, 0x78, 0x36, 0xcc, 0x5f, 0x6a, 0x57, 0xcf, 0x8e, 0x60, 0xc8, 0x0c, 0xd4, 0xe3, 0xc0, 0xf1,
-	0xf9, 0xdf, 0x23, 0xe2, 0xf4, 0x16, 0x2d, 0x0e, 0x9b, 0xf5, 0xe8, 0x74, 0xc5, 0x60, 0x9e, 0x55,
-	0x67, 0xf8, 0xe9, 0xaf, 0xa5, 0xd0, 0x2b, 0xc4, 0x07, 0x86, 0xee, 0x25, 0x49, 0x2e, 0x5d, 0xdd,
-	0xc9, 0x6d, 0x4a, 0x95, 0x22, 0x56, 0xd9, 0xd3, 0x60, 0x25, 0x4a, 0x4b, 0xa4, 0x50, 0x9d, 0xc5,
-	0x5a, 0x60, 0x53, 0x40, 0x57, 0x55, 0x99, 0xe8, 0x6e, 0x1d, 0xb5, 0x8e, 0x3d, 0xaf, 0x21, 0x5f,
-	0xca, 0x89, 0x97, 0x60, 0x82, 0x8a, 0xbc, 0x7c, 0xe9, 0x17, 0x1c, 0xb2, 0xf8, 0x7f, 0x23, 0xe8,
-	0x6f, 0xd1, 0x92, 0x7d, 0x63, 0x2e, 0xbd, 0xd1, 0xe0, 0xd2, 0xd7, 0xdb, 0xb9, 0xd4, 0xa3, 0x7c,
-	0x4b, 0xe7, 0xfd, 0xbb, 0x29, 0x7a, 0x63, 0x07, 0xf8, 0xed, 0xe4, 0xc7, 0xcd, 0xa3, 0xa6, 0x99,
-	0xff, 0x30, 0x37, 0x51, 0x53, 0xab, 0xf9, 0x1d, 0x17, 0xbb, 0x66, 0x8a, 0xdd, 0xd4, 0xd2, 0xb2,
-	0x7f, 0xee, 0x11, 0xfb, 0x4d, 0x83, 0x75, 0x46, 0x9d, 0xe6, 0xcf, 0x37, 0xc9, 0xdc, 0x4e, 0xe4,
-	0x66, 0x89, 0x57, 0x1b, 0x62, 0xa4, 0xed, 0x05, 0x4d, 0x56, 0xb8, 0x99, 0xc5, 0xea, 0xb6, 0x9c,
-	0xc3, 0xae, 0x6b, 0x28, 0x97, 0x1e, 0x8e, 0xf4, 0x7f, 0xeb, 0x07, 0xa8, 0x13, 0x7b, 0xf6, 0x09,
-	0x3a, 0xd2, 0x3e, 0x61, 0xc7, 0x20, 0x78, 0x0f, 0xcb, 0xc5, 0x4d, 0xfd, 0xe0, 0x8d, 0x65, 0x11,
-	0xb1, 0xa3, 0x40, 0x55, 0x15, 0x55, 0xb7, 0x2e, 0x2e, 0xda, 0x10, 0x13, 0x12, 0xf6, 0x1f, 0x11,
-	0x04, 0x75, 0x49, 0x2d, 0x62, 0x9d, 0xdc, 0x53, 0x84, 0x32, 0x1f, 0x10, 0xfb, 0xef, 0xa9, 0xf7,
-	0xf9, 0x5d, 0xc3, 0xf7, 0x77, 0x92, 0xeb, 0x24, 0x02, 0x1c, 0x8b, 0xad, 0xdf, 0x4f, 0xed, 0xd5,
-	0x47, 0xe2, 0xd8, 0xfa, 0xfd, 0x09, 0x6e, 0x9a, 0xdf, 0x1b, 0x1d, 0x79, 0x27, 0xe9, 0x9a, 0x6e,
-	0x47, 0x95, 0xb8, 0x52, 0xa7, 0xf3, 0xd2, 0xd8, 0x14, 0xef, 0x24, 0xaf, 0x9c, 0x15, 0x2c, 0x91,
-	0x66, 0xd7, 0x9e, 0xd4, 0xd0, 0x2a, 0xb0, 0x10, 0x5c, 0x23, 0xe3, 0x61, 0xda, 0x16, 0x16, 0x7a,
-	0x80, 0x5a, 0x55, 0x54, 0x7d, 0x38, 0x68, 0xaa, 0x0a, 0x83, 0x40, 0xaf, 0x5a, 0xd6, 0x1a, 0x86,
-	0xba, 0x81, 0x0d, 0xde, 0xbf, 0x24, 0x46, 0x31, 0x78, 0x4d, 0xf3, 0xc4, 0xff, 0xd3, 0x8c, 0xa6,
-	0xa6, 0x13, 0xcd, 0xb7, 0xd3, 0x23, 0x44, 0x1e, 0x50, 0x47, 0xdf, 0x05, 0xfd, 0x2d, 0xce, 0x4e,
-	0xec, 0x9a, 0x47, 0xec, 0xb7, 0x0c, 0xce, 0x4b, 0xea, 0x45, 0xfe, 0x82, 0xdb, 0x6d, 0x89, 0x2b,
-	0xeb, 0xef, 0xbb, 0x86, 0x57, 0x12, 0xeb, 0xe7, 0xc6, 0x3c, 0xab, 0xe7, 0x46, 0x47, 0xef, 0x4f,
-	0x70, 0xfc, 0xd4, 0xe4, 0x9e, 0x25, 0xf4, 0xb2, 0xbb, 0x5a, 0x34, 0x6f, 0x03, 0x72, 0x13, 0x9d,
-	0x5c, 0xd9, 0xf8, 0x2b, 0x9c, 0xd3, 0x05, 0x5c, 0x30, 0xce, 0x69, 0x99, 0x81, 0x8f, 0xf7, 0xfa,
-	0x8c, 0xed, 0x51, 0x52, 0xa4, 0xbc, 0xb8, 0x21, 0x95, 0xa4, 0x4a, 0x0e, 0xab, 0x76, 0x49, 0xf9,
-	0x27, 0x0a, 0xd8, 0x2c, 0xce, 0x29, 0x95, 0xbc, 0xe7, 0xaa, 0xfa, 0x2f, 0xa0, 0xb7, 0x6a, 0x5e,
-	0x5f, 0x8b, 0x1a, 0x56, 0xb7, 0xb1, 0xaa, 0x45, 0x02, 0x07, 0x36, 0x80, 0xd0, 0xd2, 0x46, 0x3d,
-	0x16, 0x48, 0xd6, 0xc4, 0x60, 0xc7, 0xa0, 0x5b, 0xd7, 0xe4, 0xa2, 0xf8, 0x2e, 0xde, 0x15, 0x89,
-	0x71, 0x82, 0x8d, 0x65, 0x2b, 0x6c, 0xac, 0xbf, 0x8d, 0x77, 0x8d, 0xf3, 0x16, 0x7b, 0x13, 0x58,
-	0x87, 0x5c, 0x2a, 0x15, 0x8d, 0xd8, 0xd9, 0x2c, 0x93, 0x6b, 0xee, 0x1e, 0x7e, 0xa4, 0x5d, 0x02,
-	0x58, 0xcb, 0xde, 0xb8, 0xf6, 0x36, 0xde, 0x4d, 0xdb, 0xf4, 0x02, 0x63, 0x41, 0x3a, 0x33, 0xec,
-	0x55, 0xe8, 0x71, 0x70, 0x4d, 0x6b, 0xd2, 0xc4, 0x9a, 0xaf, 0x35, 0x60, 0x66, 0x71, 0x4e, 0xc5,
-	0x3a, 0x31, 0x22, 0xb9, 0x23, 0x17, 0xba, 0x2c, 0x28, 0x72, 0x76, 0x62, 0x17, 0xa0, 0xbf, 0x24,
-	0x69, 0xba, 0x28, 0xed, 0x14, 0x54, 0xd1, 0x79, 0xd8, 0x20, 0x37, 0xda, 0x61, 0x7e, 0x38, 0x69,
-	0x3e, 0x7d, 0x24, 0xed, 0xa7, 0x8f, 0xe4, 0x9a, 0x4d, 0x21, 0xf4, 0x19, 0x6c, 0xe9, 0x9d, 0x82,
-	0xea, 0x4c, 0xb1, 0x73, 0x10, 0x32, 0xa4, 0x17, 0x0b, 0x72, 0x09, 0x9b, 0x97, 0xdf, 0x99, 0x3f,
-	0x79, 0xb6, 0x87, 0xf6, 0xf7, 0x4e, 0x2c, 0x29, 0xdb, 0x38, 0x1f, 0xd3, 0x95, 0x58, 0x49, 0xc9,
-	0x49, 0x25, 0xd1, 0xa1, 0x8a, 0x49, 0x55, 0xd9, 0xe8, 0x39, 0x05, 0xda, 0x98, 0xfa, 0x33, 0xb9,
-	0x84, 0x67, 0x67, 0x1f, 0xd7, 0xd0, 0x34, 0x0c, 0x01, 0x7b, 0x5b, 0xa9, 0xe0, 0xa6, 0xbb, 0x61,
-	0x38, 0x0e, 0xac, 0x61, 0x9c, 0x86, 0x85, 0xc0, 0x34, 0x77, 0x81, 0x9b, 0x69, 0x77, 0x0f, 0x1c,
-	0x7f, 0xe0, 0x87, 0x9e, 0x6b, 0x25, 0x65, 0x43, 0x2a, 0x65, 0xab, 0x38, 0x67, 0xd8, 0x82, 0x5d,
-	0x80, 0x4e, 0xcb, 0xaf, 0x24, 0x97, 0x85, 0xdb, 0xfb, 0xa2, 0xf1, 0x09, 0xc4, 0x79, 0x6a, 0xb0,
-	0x01, 0xd8, 0x55, 0x08, 0x69, 0x76, 0xf8, 0x91, 0x5c, 0x77, 0xc0, 0xdd, 0x5d, 0x73, 0x9c, 0x3a,
-	0x78, 0x75, 0x10, 0xf6, 0x0d, 0xe8, 0xd5, 0xb6, 0x36, 0x9c, 0x8b, 0x47, 0x51, 0xce, 0x93, 0x2b,
-	0xdb, 0x90, 0xd0, 0xe3, 0x9e, 0xbe, 0x91, 0x67, 0x93, 0xd0, 0xaf, 0x99, 0xc9, 0x5f, 0x94, 0x2b,
-	0x9a, 0x6e, 0x6c, 0x0b, 0x83, 0x98, 0x84, 0xa4, 0xd0, 0x67, 0x2d, 0xdd, 0xb0, 0x56, 0x6e, 0xe4,
-	0xd9, 0x73, 0xc0, 0x56, 0xb6, 0xca, 0xa2, 0x52, 0x10, 0xf3, 0xce, 0x99, 0xd4, 0x7c, 0x74, 0xe9,
-	0x16, 0x7a, 0x2b, 0x5b, 0xe5, 0x95, 0xc2, 0xbc, 0x7d, 0xcb, 0xa4, 0xcd, 0x9e, 0x7e, 0x5c, 0x43,
-	0x27, 0xe1, 0x38, 0x69, 0x25, 0x63, 0xad, 0xdc, 0xc1, 0x67, 0x8e, 0x03, 0x6d, 0x00, 0x19, 0x27,
-	0x4a, 0x72, 0x2d, 0xef, 0xb7, 0x8e, 0x91, 0xfe, 0x49, 0xee, 0xbc, 0xdb, 0x1d, 0xf1, 0x9f, 0x05,
-	0x20, 0xe2, 0xb2, 0xa4, 0x8a, 0x25, 0x1d, 0x3b, 0xce, 0xf8, 0x9e, 0x3d, 0x2a, 0xdd, 0xfd, 0xbd,
-	0x1f, 0x95, 0x22, 0x8f, 0x6a, 0xae, 0x73, 0x5b, 0xbb, 0x87, 0xa5, 0x76, 0x4f, 0x45, 0xa1, 0x3f,
-	0x8a, 0xa7, 0xa2, 0xc5, 0x27, 0x97, 0x9b, 0x9e, 0x1d, 0x1f, 0xd7, 0xd0, 0x54, 0xbb, 0xe7, 0x22,
-	0x38, 0x0e, 0x03, 0x76, 0xd9, 0x8a, 0x59, 0xf7, 0x42, 0x59, 0xac, 0x6b, 0xac, 0xff, 0x22, 0x37,
-	0x93, 0x59, 0x39, 0xe4, 0x2d, 0x69, 0xbc, 0xe1, 0x2d, 0xe9, 0x83, 0xaf, 0xd0, 0x81, 0x0c, 0x87,
-	0xbc, 0x35, 0x7d, 0xe5, 0x83, 0x61, 0xcf, 0x16, 0xf7, 0x06, 0xfa, 0x0f, 0x25, 0xe9, 0xf0, 0x92,
-	0x34, 0x7b, 0xea, 0xc9, 0xe5, 0x16, 0xe5, 0xfc, 0xcb, 0xcb, 0x9d, 0x53, 0xdc, 0xc1, 0x69, 0xfe,
-	0xd7, 0x08, 0x7a, 0x9a, 0x32, 0x4b, 0x43, 0x9a, 0x9f, 0x38, 0x42, 0x9a, 0xf7, 0x40, 0xb8, 0x13,
-	0xbd, 0xd0, 0x9c, 0xe8, 0xf9, 0x23, 0x25, 0xfa, 0x46, 0xc4, 0x3a, 0xcc, 0x6c, 0xdf, 0x93, 0xcb,
-	0x0d, 0xb5, 0x29, 0x73, 0xc6, 0x95, 0x54, 0x87, 0x8c, 0xa4, 0x6a, 0x25, 0xd4, 0x0f, 0xbe, 0x42,
-	0xce, 0x82, 0x27, 0xb9, 0xfe, 0x12, 0x41, 0xaf, 0x80, 0xab, 0x25, 0x29, 0xf7, 0x3d, 0xd7, 0x3c,
-	0xe2, 0xd2, 0xbc, 0xab, 0xad, 0xba, 0x3f, 0x0f, 0xc0, 0xb1, 0xba, 0xd0, 0xd7, 0xb0, 0xfe, 0x7d,
-	0x2d, 0x24, 0x3f, 0xfc, 0x3b, 0xe1, 0xbb, 0x51, 0x72, 0xde, 0x68, 0x51, 0x72, 0xbe, 0xbc, 0xdc,
-	0x67, 0xff, 0x61, 0x61, 0x86, 0xbb, 0xc8, 0xa5, 0x52, 0x5c, 0x6a, 0xe2, 0x0f, 0x5d, 0x4d, 0x7e,
-	0xe4, 0x87, 0x21, 0xf7, 0x6e, 0x72, 0x87, 0xfa, 0x1b, 0x6d, 0x4a, 0x49, 0x53, 0x71, 0x88, 0xb7,
-	0x2c, 0x0e, 0x3f, 0x1c, 0x52, 0xbe, 0xce, 0x21, 0xe5, 0x74, 0x9b, 0x12, 0x15, 0xb2, 0x4a, 0x14,
-	0x77, 0xb1, 0x6d, 0x91, 0xfa, 0xc8, 0x07, 0x61, 0xb7, 0x1f, 0x87, 0x1b, 0xae, 0x3f, 0xc9, 0xb1,
-	0xdc, 0xba, 0xf7, 0xbc, 0xd1, 0x98, 0xc3, 0xc7, 0x0e, 0xcf, 0xe1, 0x2e, 0x6c, 0x77, 0x02, 0x5f,
-	0x69, 0x4e, 0xe0, 0xe3, 0x47, 0x49, 0xe0, 0x5e, 0x38, 0xd7, 0x11, 0xe5, 0x95, 0x4e, 0x12, 0xaf,
-	0x98, 0xea, 0x7d, 0x8c, 0x3f, 0xa1, 0x01, 0xd3, 0x18, 0x60, 0x6c, 0x17, 0xd0, 0xd7, 0x97, 0xd2,
-	0x73, 0xe2, 0xd2, 0xfc, 0x14, 0xd3, 0xc1, 0x76, 0x43, 0x88, 0x8c, 0xb2, 0xd7, 0xd3, 0x29, 0x06,
-	0xb1, 0xbd, 0x10, 0xb6, 0x87, 0x3c, 0x7f, 0x9e, 0xf1, 0x79, 0x26, 0xa6, 0xa6, 0x19, 0xbf, 0x7b,
-	0x62, 0x72, 0xe6, 0x3c, 0x43, 0xb9, 0x27, 0xa6, 0x52, 0x3c, 0x13, 0xc8, 0xfc, 0x0d, 0x7a, 0xfa,
-	0x59, 0xb4, 0xe3, 0xd9, 0x67, 0xd1, 0x8e, 0x2f, 0x3e, 0x8b, 0xa2, 0x07, 0xfb, 0x51, 0xf4, 0xcf,
-	0xfb, 0x51, 0xf4, 0xff, 0xfb, 0x51, 0xf4, 0x74, 0x3f, 0x8a, 0x9e, 0xed, 0x47, 0xd1, 0x4f, 0xf7,
-	0xa3, 0xe8, 0xf3, 0xfd, 0x68, 0xc7, 0x17, 0xfb, 0x51, 0xf4, 0xe1, 0x8b, 0x68, 0xc7, 0xa3, 0x17,
-	0x51, 0xf4, 0xf4, 0x45, 0xb4, 0xe3, 0xd9, 0x8b, 0x68, 0xc7, 0xed, 0xc5, 0xa2, 0x52, 0x7d, 0xb7,
-	0x98, 0xdc, 0x56, 0x4a, 0x3a, 0x56, 0x55, 0x29, 0xb9, 0xa5, 0x8d, 0x93, 0x8f, 0x82, 0xa2, 0x96,
-	0xc7, 0xaa, 0xaa, 0xb2, 0x2d, 0xe7, 0xb1, 0x3a, 0x66, 0x2f, 0x8f, 0x57, 0x37, 0x8a, 0xca, 0x38,
-	0xde, 0xd1, 0xad, 0x7f, 0xe0, 0x35, 0xfc, 0x7d, 0x70, 0x23, 0x48, 0x02, 0x7a, 0xf2, 0x77, 0x01,
-	0x00, 0x00, 0xff, 0xff, 0x9c, 0x07, 0x03, 0x9d, 0xeb, 0x28, 0x00, 0x00,
+	// 4689 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5b, 0x5d, 0x6c, 0x1b, 0x57,
+	0x76, 0xd6, 0xe5, 0x9f, 0xc8, 0x43, 0xfd, 0x8c, 0xae, 0x64, 0x8b, 0xa6, 0x6d, 0x85, 0xa1, 0xbd,
+	0x59, 0x8a, 0x26, 0x29, 0x71, 0x24, 0xca, 0xb2, 0xdc, 0xb5, 0x4d, 0x8a, 0x72, 0x6c, 0x45, 0x7f,
+	0x1d, 0x2a, 0xde, 0xc0, 0x8e, 0xcc, 0x1d, 0x91, 0x57, 0x14, 0xbb, 0x24, 0x87, 0x98, 0x19, 0x2a,
+	0x52, 0x2c, 0x01, 0x46, 0xfa, 0x52, 0x14, 0x28, 0x10, 0xe4, 0xa9, 0x40, 0x8b, 0x02, 0x05, 0xb6,
+	0x40, 0xdb, 0x7d, 0x29, 0xda, 0x6d, 0xd1, 0x96, 0x41, 0x61, 0xb8, 0x0f, 0x5d, 0xa8, 0x05, 0xea,
+	0xa2, 0x40, 0x1b, 0xb8, 0x7d, 0x68, 0x14, 0xa0, 0x48, 0x8b, 0x02, 0x0d, 0x52, 0xa0, 0x28, 0x52,
+	0x60, 0x5d, 0xcc, 0x9d, 0x7f, 0xfe, 0x48, 0x4a, 0x17, 0xce, 0x36, 0x45, 0x9e, 0xc4, 0x39, 0xf7,
+	0x9c, 0x6f, 0xce, 0xfd, 0xce, 0x39, 0xf7, 0x6f, 0xae, 0x20, 0xbc, 0x43, 0xa4, 0x44, 0x59, 0x98,
+	0x90, 0x0a, 0xdb, 0xa4, 0xca, 0x4f, 0x14, 0x6b, 0x52, 0xfe, 0x5d, 0xa1, 0x46, 0x26, 0xe4, 0xbd,
+	0x3a, 0x91, 0x12, 0x75, 0x51, 0x90, 0x05, 0x7c, 0x56, 0xd5, 0x49, 0xa8, 0x3a, 0x09, 0x5d, 0x27,
+	0x18, 0x2f, 0x95, 0xe5, 0xed, 0xc6, 0x66, 0xa2, 0x20, 0x54, 0x27, 0x4a, 0x42, 0x49, 0x98, 0xa0,
+	0xea, 0x9b, 0x8d, 0x2d, 0xfa, 0x44, 0x1f, 0xe8, 0x2f, 0x15, 0x26, 0xf8, 0x4a, 0x49, 0x10, 0x4a,
+	0x15, 0x62, 0x6a, 0xc9, 0xe5, 0x2a, 0x91, 0x64, 0xbe, 0x5a, 0xd7, 0x14, 0x2e, 0x75, 0xf1, 0xa5,
+	0x58, 0x93, 0x24, 0x52, 0xd0, 0x94, 0x46, 0xed, 0x4a, 0x35, 0x22, 0x6b, 0x0d, 0xe7, 0xed, 0x0d,
+	0x42, 0x5d, 0x2e, 0x0b, 0x35, 0xad, 0x0b, 0xc1, 0x73, 0xf6, 0x46, 0x4b, 0xef, 0x82, 0x17, 0xec,
+	0x4d, 0x3b, 0x7c, 0xa5, 0x5c, 0xe4, 0x65, 0xa2, 0xb5, 0x86, 0x5a, 0x5a, 0xcb, 0xe4, 0x9d, 0xbc,
+	0x1d, 0xfa, 0x95, 0x76, 0x0d, 0xc9, 0xfa, 0x82, 0xf0, 0x0f, 0xdd, 0xc0, 0xac, 0x89, 0xe5, 0x2a,
+	0x2f, 0xee, 0x65, 0x57, 0x72, 0xf3, 0x42, 0x6d, 0xab, 0x5c, 0xc2, 0x4b, 0x70, 0xb6, 0x48, 0xb6,
+	0xf8, 0x46, 0x45, 0xce, 0x4b, 0x02, 0x9f, 0xaf, 0xf3, 0x22, 0x5f, 0x25, 0x32, 0x11, 0xa5, 0x80,
+	0x27, 0x84, 0x22, 0x7e, 0x76, 0x24, 0x61, 0x27, 0x7d, 0xa1, 0x5a, 0x97, 0xf7, 0xee, 0xf4, 0x70,
+	0x23, 0x9a, 0x55, 0x4e, 0xe0, 0xd7, 0x0c, 0x1b, 0x9c, 0x87, 0x81, 0x16, 0x94, 0x5e, 0x8a, 0x32,
+	0x99, 0xe8, 0x1c, 0xba, 0x44, 0x6e, 0x35, 0xcd, 0x91, 0x82, 0x20, 0x16, 0x0d, 0x10, 0xd5, 0xaf,
+	0x8c, 0xeb, 0x59, 0x13, 0xa1, 0x3b, 0x3d, 0x5c, 0xbf, 0x64, 0x7b, 0xc1, 0x7d, 0xe8, 0x13, 0xc5,
+	0xbc, 0x44, 0xe4, 0x7c, 0x49, 0x14, 0x1a, 0xf5, 0x80, 0x37, 0xe4, 0x8c, 0xf8, 0xd9, 0x70, 0x37,
+	0x78, 0x8e, 0xcb, 0x11, 0xf9, 0x75, 0x45, 0x33, 0x33, 0xf2, 0xa7, 0xff, 0xf2, 0xc4, 0xe9, 0xfe,
+	0x00, 0x39, 0x18, 0x56, 0xff, 0x35, 0x89, 0x38, 0x10, 0x45, 0x5d, 0x03, 0x9f, 0x05, 0x8f, 0x44,
+	0xc4, 0x32, 0x5f, 0x09, 0xf8, 0x42, 0x28, 0xd2, 0xcf, 0x69, 0x4f, 0x78, 0x04, 0xdc, 0x7c, 0xb1,
+	0x5a, 0xae, 0x05, 0x20, 0x84, 0x22, 0x3e, 0x4e, 0x7d, 0xc0, 0x0f, 0x40, 0xa7, 0x20, 0x6f, 0xf3,
+	0xc8, 0x4f, 0x3d, 0xba, 0x78, 0xac, 0x47, 0x19, 0xbf, 0xe2, 0x82, 0xe7, 0x03, 0xe4, 0x64, 0xde,
+	0x5f, 0xe1, 0x86, 0x34, 0x1c, 0xce, 0x74, 0x65, 0x1e, 0xfc, 0x6a, 0xb2, 0xe5, 0xab, 0x42, 0x91,
+	0x04, 0xfa, 0x28, 0x89, 0x5d, 0x7b, 0x99, 0x5d, 0xc9, 0xe5, 0x16, 0xe6, 0x97, 0x85, 0x22, 0xe1,
+	0x40, 0x35, 0x53, 0x7e, 0xe3, 0x5b, 0x70, 0x91, 0xaf, 0x54, 0x84, 0x77, 0xf2, 0xdb, 0xb2, 0x5c,
+	0xcf, 0x57, 0x36, 0xf3, 0x55, 0xbe, 0xc6, 0x97, 0x48, 0x31, 0x2f, 0x52, 0xc6, 0xa5, 0x40, 0x7f,
+	0x08, 0x45, 0xbc, 0xdc, 0x39, 0xaa, 0x74, 0x47, 0x96, 0xeb, 0x4b, 0x9b, 0xcb, 0xaa, 0x86, 0x1a,
+	0x12, 0x69, 0xee, 0xca, 0xe7, 0x37, 0xfa, 0x52, 0xb1, 0x24, 0x1b, 0x4b, 0x4e, 0xc5, 0x92, 0xc9,
+	0xd8, 0xec, 0xd3, 0x26, 0x0a, 0xc0, 0x59, 0x18, 0xca, 0xad, 0xa6, 0x43, 0x6a, 0x9c, 0x1a, 0x22,
+	0xaf, 0xe4, 0x20, 0x46, 0xa9, 0xcc, 0x04, 0x5c, 0x50, 0x62, 0xaf, 0x82, 0x5b, 0x52, 0x20, 0x5f,
+	0xd8, 0x16, 0xca, 0x05, 0x82, 0x07, 0x9f, 0x34, 0x91, 0xe7, 0x59, 0x13, 0xb9, 0x8f, 0x9a, 0xc8,
+	0x39, 0x13, 0xbb, 0xba, 0xe8, 0xf2, 0x22, 0xc6, 0xb1, 0xe8, 0xf2, 0x3a, 0x18, 0xe7, 0xa2, 0xcb,
+	0xeb, 0x64, 0x5c, 0x8b, 0x2e, 0xaf, 0x8b, 0x71, 0x2f, 0xba, 0xbc, 0x6e, 0xc6, 0x13, 0xfe, 0x0f,
+	0x07, 0x04, 0xba, 0x65, 0x07, 0xbe, 0x0e, 0xbd, 0x22, 0xd9, 0x12, 0x89, 0xb4, 0x1d, 0x40, 0x4a,
+	0xac, 0x32, 0xaf, 0x3e, 0x6f, 0x22, 0xf7, 0xec, 0xcc, 0xf4, 0xe4, 0xe4, 0x7f, 0x35, 0x51, 0xcf,
+	0x2f, 0x7d, 0x88, 0x90, 0xc2, 0xb0, 0x3f, 0xea, 0x0b, 0xbc, 0x78, 0xf1, 0xe2, 0x45, 0x6f, 0xe4,
+	0xfd, 0x0b, 0x9c, 0x6e, 0x81, 0x53, 0xe0, 0x16, 0x89, 0x2c, 0xee, 0x05, 0x1c, 0xd4, 0xf4, 0x95,
+	0xe7, 0x4d, 0xe4, 0xba, 0xca, 0xda, 0x2d, 0x21, 0xea, 0xd5, 0x2c, 0x7f, 0x8e, 0x53, 0xb5, 0xf1,
+	0x55, 0xf0, 0x90, 0xdd, 0x7a, 0x59, 0x24, 0x01, 0xa7, 0x61, 0xe7, 0x99, 0x9a, 0x99, 0x9c, 0xb4,
+	0x5b, 0x7a, 0xa3, 0x1e, 0xd5, 0x92, 0xd3, 0xd4, 0xf1, 0x2d, 0xe8, 0xab, 0x91, 0x12, 0x2f, 0x97,
+	0x77, 0x48, 0x5e, 0x96, 0x2b, 0x01, 0x17, 0x35, 0xbf, 0xa8, 0xbc, 0x36, 0x39, 0xdb, 0xcd, 0xd8,
+	0xaf, 0x9b, 0xac, 0xcb, 0x15, 0x3c, 0x09, 0x4e, 0xc5, 0xd0, 0x4d, 0x0d, 0xc7, 0x3a, 0x76, 0xd5,
+	0xb4, 0x54, 0x54, 0xe7, 0x66, 0x9e, 0x36, 0x11, 0x0b, 0x93, 0x70, 0x29, 0x27, 0xf3, 0xa2, 0x1c,
+	0x5a, 0xdd, 0x0a, 0xa5, 0x1b, 0xf2, 0xb6, 0x20, 0x96, 0xe5, 0xbd, 0x50, 0x24, 0xb7, 0x9a, 0x1e,
+	0x0f, 0xad, 0x89, 0x42, 0x9d, 0x88, 0x72, 0x99, 0x48, 0xd8, 0x97, 0x8c, 0xb1, 0xb1, 0xa9, 0xd8,
+	0x74, 0x2c, 0x15, 0xfe, 0x0c, 0x01, 0x98, 0x45, 0x83, 0xe7, 0xc0, 0x5b, 0x25, 0x32, 0x5f, 0xe4,
+	0x65, 0x9e, 0x12, 0xed, 0x67, 0xc7, 0x5a, 0x92, 0x70, 0x99, 0x48, 0x12, 0x5f, 0x22, 0xcb, 0x44,
+	0xe6, 0xd7, 0xf7, 0xea, 0x84, 0x33, 0xf4, 0x71, 0x1a, 0x3c, 0x6a, 0x61, 0x04, 0x1c, 0x5f, 0xba,
+	0x24, 0xdc, 0xb4, 0x2c, 0xe7, 0x0a, 0x87, 0x4d, 0x94, 0x87, 0x51, 0x70, 0xad, 0xf0, 0x55, 0x12,
+	0x1c, 0x84, 0x7e, 0x1d, 0x3c, 0x51, 0xe3, 0xab, 0x04, 0xbe, 0x05, 0xfe, 0x2c, 0x91, 0x0a, 0x62,
+	0x99, 0x8e, 0x83, 0xc1, 0xb3, 0x30, 0x62, 0xb4, 0x17, 0x4d, 0x39, 0x5c, 0x84, 0xa1, 0x95, 0x46,
+	0x75, 0x93, 0x88, 0x21, 0x61, 0x2b, 0xc4, 0x71, 0xa1, 0x1c, 0x91, 0xa5, 0x39, 0xaf, 0xee, 0x5d,
+	0xf8, 0xc3, 0xb3, 0xe0, 0xa6, 0x2e, 0xe0, 0xa4, 0x4a, 0x33, 0x32, 0xd3, 0x42, 0x09, 0x6f, 0xb7,
+	0xb4, 0x50, 0x74, 0xf1, 0xeb, 0xe0, 0xd5, 0x53, 0x9e, 0x96, 0x93, 0x9f, 0x8d, 0x1e, 0x53, 0xa5,
+	0x69, 0x8e, 0x48, 0x42, 0x43, 0x2c, 0x10, 0x35, 0xab, 0xef, 0xf4, 0x70, 0xbd, 0xbc, 0xfa, 0x13,
+	0xaf, 0x81, 0x9f, 0xe7, 0x79, 0x03, 0x6b, 0x80, 0x62, 0xc5, 0x8f, 0xc3, 0x4a, 0xa7, 0xdb, 0xe1,
+	0x40, 0xc1, 0xd0, 0x10, 0x73, 0xd0, 0xc7, 0x57, 0xca, 0xbc, 0xa4, 0x43, 0x0e, 0x52, 0xc8, 0xc4,
+	0x71, 0x90, 0x8a, 0x7a, 0x1b, 0xa6, 0x9f, 0x57, 0xc5, 0x14, 0x74, 0x19, 0xa0, 0x60, 0x7a, 0xc9,
+	0x50, 0xc8, 0xd8, 0x31, 0x90, 0xf3, 0x1d, 0x9c, 0xf4, 0x15, 0xac, 0x3e, 0x16, 0x94, 0x50, 0xea,
+	0x80, 0x43, 0x27, 0xfa, 0x38, 0xbf, 0x92, 0x5e, 0x5e, 0x68, 0xf7, 0x91, 0xa2, 0x68, 0xa0, 0x8b,
+	0xe0, 0xab, 0xee, 0xea, 0x88, 0x98, 0x22, 0x5e, 0x39, 0x06, 0x71, 0xf9, 0xad, 0x36, 0x38, 0x6f,
+	0x75, 0xd7, 0xc4, 0xaa, 0x19, 0x0c, 0x0e, 0x9f, 0x88, 0xb5, 0x92, 0x6b, 0xc7, 0xaa, 0x59, 0xb8,
+	0xab, 0xcb, 0xa2, 0x0e, 0x36, 0x72, 0x22, 0x77, 0x6b, 0xeb, 0x5c, 0x3b, 0x77, 0x75, 0x59, 0x34,
+	0xe1, 0x24, 0x71, 0x47, 0x87, 0x3b, 0x73, 0x22, 0x5c, 0x8e, 0xbb, 0xd7, 0x0e, 0x27, 0x89, 0x3b,
+	0x26, 0x9c, 0xbc, 0x2b, 0xeb, 0x70, 0x67, 0x4f, 0x84, 0x5b, 0x7f, 0x6b, 0xbd, 0x1d, 0x4e, 0xde,
+	0x95, 0x4d, 0xe2, 0x2a, 0x9b, 0x3a, 0xda, 0xe8, 0x89, 0xc4, 0x2d, 0x65, 0xda, 0x89, 0xab, 0x6c,
+	0x9a, 0x59, 0x52, 0xe3, 0x2d, 0xd4, 0x05, 0x4e, 0xcc, 0x92, 0x95, 0x74, 0x27, 0xf2, 0xfc, 0x14,
+	0x45, 0x03, 0xcd, 0x80, 0xaf, 0x68, 0x44, 0xf6, 0x1c, 0x45, 0xbc, 0x74, 0x0c, 0x62, 0x36, 0x67,
+	0x3a, 0x56, 0xd4, 0x23, 0xba, 0x00, 0x50, 0x30, 0x41, 0x82, 0x14, 0xe4, 0xf2, 0x71, 0xc9, 0x6b,
+	0x41, 0xf1, 0x15, 0x0c, 0x98, 0x37, 0xa0, 0x8f, 0xdf, 0x92, 0x8a, 0x06, 0x5d, 0xe7, 0x29, 0xd0,
+	0x6b, 0xc7, 0x55, 0xea, 0xed, 0x5c, 0x36, 0x63, 0xa9, 0x50, 0xc5, 0xda, 0x24, 0x8b, 0x34, 0xca,
+	0xd3, 0xb3, 0x3a, 0xd8, 0x85, 0x13, 0xc9, 0x5a, 0x78, 0xf3, 0xee, 0xf4, 0x6c, 0x3b, 0x59, 0x14,
+	0xc5, 0x06, 0x3a, 0x33, 0xad, 0x83, 0x5e, 0x3c, 0x0d, 0xe8, 0xcc, 0x74, 0x47, 0x50, 0x45, 0xac,
+	0x67, 0x5c, 0x45, 0x28, 0xe8, 0x90, 0x63, 0x27, 0x66, 0xdc, 0xd2, 0xea, 0x7c, 0x7b, 0xc6, 0x55,
+	0x84, 0x82, 0xfa, 0x30, 0xf7, 0x8f, 0xbe, 0xc3, 0x26, 0xfa, 0x7b, 0x1f, 0xfc, 0xb7, 0x03, 0x5c,
+	0xca, 0x54, 0x14, 0xfd, 0xdc, 0x01, 0xff, 0xee, 0x80, 0x7e, 0x73, 0x84, 0x66, 0x51, 0x1a, 0x86,
+	0x6d, 0xe3, 0x2c, 0xeb, 0x52, 0x86, 0x51, 0x38, 0x63, 0x1f, 0x2a, 0x59, 0x77, 0x7a, 0xe9, 0x6e,
+	0x3a, 0x07, 0x43, 0xd6, 0xc1, 0x8e, 0x75, 0xce, 0xab, 0x9a, 0xd6, 0x01, 0x8b, 0x75, 0xd3, 0xf1,
+	0x08, 0x06, 0x2d, 0x43, 0x0e, 0xeb, 0x58, 0x7e, 0x4b, 0x11, 0x18, 0xe3, 0x06, 0xeb, 0x58, 0xa1,
+	0x58, 0x66, 0x06, 0xb3, 0xce, 0xb5, 0x75, 0x4e, 0x11, 0x99, 0x05, 0xcc, 0x3a, 0x73, 0xdc, 0x3d,
+	0x45, 0x64, 0x16, 0x21, 0xeb, 0x5c, 0x7f, 0x6b, 0x1d, 0x82, 0x96, 0x42, 0x62, 0xfb, 0x97, 0x56,
+	0xd3, 0xd9, 0x50, 0x26, 0xbd, 0x94, 0x5e, 0x99, 0x5f, 0xc8, 0x2a, 0xde, 0x58, 0x0b, 0x83, 0x75,
+	0xd3, 0xbc, 0xa7, 0xdd, 0xb1, 0xe4, 0x13, 0xeb, 0xa6, 0xe9, 0xa2, 0x88, 0xad, 0x99, 0xc1, 0xba,
+	0x69, 0xe0, 0x35, 0xb1, 0x11, 0x5b, 0x2a, 0x9e, 0x99, 0x56, 0x7a, 0x50, 0x34, 0x7b, 0x90, 0x55,
+	0xd9, 0x30, 0x25, 0xce, 0x79, 0x55, 0x64, 0x46, 0x90, 0x75, 0x2e, 0xad, 0xce, 0xc3, 0x3f, 0x38,
+	0xc0, 0xaf, 0x06, 0x24, 0xa4, 0x4c, 0xda, 0xd1, 0xbf, 0x74, 0xc0, 0x8f, 0x1d, 0x30, 0x08, 0xfd,
+	0x3a, 0x8f, 0xea, 0xd4, 0x8d, 0x81, 0xb1, 0x84, 0x41, 0x95, 0x0d, 0xc1, 0x60, 0xa1, 0x45, 0x34,
+	0x0c, 0x43, 0x56, 0xba, 0x55, 0x21, 0x03, 0x03, 0x06, 0xd9, 0x86, 0xc4, 0x60, 0xdb, 0xc0, 0x32,
+	0x79, 0x31, 0x44, 0x26, 0xdd, 0x86, 0xc8, 0xa4, 0xdb, 0x80, 0x32, 0xe8, 0x36, 0x7c, 0xb0, 0x92,
+	0x6c, 0x08, 0xad, 0x14, 0x1b, 0x42, 0x2b, 0xc1, 0x56, 0xa1, 0x41, 0xaf, 0xf1, 0x96, 0x62, 0x9b,
+	0xc3, 0x85, 0x76, 0x91, 0xc9, 0xae, 0x2a, 0xfa, 0x57, 0x27, 0x0c, 0x6a, 0xec, 0xde, 0xe3, 0x2b,
+	0x0d, 0x12, 0x91, 0xc6, 0xa3, 0x7f, 0xe7, 0x84, 0xbf, 0x75, 0xc2, 0x19, 0x18, 0x34, 0xa8, 0xdb,
+	0x51, 0x9a, 0xa4, 0xb0, 0x83, 0x71, 0x41, 0x00, 0xb0, 0x95, 0x67, 0x4b, 0xcb, 0x08, 0x60, 0x6b,
+	0xce, 0xab, 0x4d, 0x30, 0x0a, 0x43, 0x85, 0x6e, 0xea, 0xb6, 0x48, 0xa8, 0xea, 0x63, 0xc0, 0x98,
+	0xa1, 0xd0, 0xb4, 0x81, 0x71, 0x85, 0x3d, 0x45, 0xa1, 0xca, 0x97, 0x6b, 0x70, 0x16, 0x98, 0x9a,
+	0xd4, 0x01, 0x6d, 0x14, 0x86, 0x2c, 0x8c, 0xda, 0x1b, 0x2c, 0x41, 0xb2, 0x37, 0x58, 0x42, 0x65,
+	0x69, 0x38, 0x0f, 0x83, 0x66, 0xc0, 0xa8, 0x1c, 0x7b, 0x83, 0x9e, 0xec, 0x4a, 0x2e, 0xb4, 0x94,
+	0x81, 0x73, 0x30, 0x6c, 0x8b, 0x9d, 0xc5, 0xee, 0x1c, 0x0c, 0xdb, 0x22, 0x68, 0xef, 0xab, 0x2d,
+	0x8e, 0x6a, 0x5f, 0x55, 0xa9, 0x19, 0x48, 0x55, 0x7a, 0x16, 0x98, 0x62, 0x97, 0x1e, 0x16, 0x3a,
+	0x36, 0x44, 0x60, 0xc8, 0x12, 0x55, 0xad, 0x61, 0x98, 0x71, 0x85, 0x07, 0x2b, 0xbc, 0x5c, 0x96,
+	0x1b, 0x45, 0x92, 0x2f, 0x92, 0x92, 0x48, 0x08, 0xf4, 0x81, 0x73, 0x7d, 0x7d, 0x29, 0xe8, 0xa6,
+	0xab, 0xd2, 0xcc, 0x3a, 0x0c, 0x2a, 0x9b, 0x79, 0x7d, 0x7f, 0x25, 0x11, 0x19, 0xa7, 0x9f, 0x34,
+	0x51, 0xff, 0xb3, 0x26, 0x72, 0x1c, 0x35, 0x51, 0x4a, 0xd9, 0xa2, 0x4d, 0xc7, 0x92, 0xa9, 0x58,
+	0x72, 0x26, 0x96, 0xbc, 0x1a, 0x4b, 0xce, 0xc6, 0x92, 0xd7, 0x62, 0xec, 0x64, 0x8c, 0x4d, 0xc6,
+	0x58, 0x36, 0xc6, 0x4e, 0xc5, 0xd8, 0xe9, 0x18, 0x9b, 0x8a, 0xb1, 0x33, 0x31, 0xf6, 0x6a, 0x8c,
+	0x9d, 0x8d, 0xb1, 0xd7, 0x62, 0x53, 0x93, 0xdd, 0x76, 0x5f, 0x8b, 0x2e, 0xaf, 0x87, 0xe9, 0x5d,
+	0x74, 0x79, 0x7b, 0x19, 0xef, 0xa2, 0xcb, 0xeb, 0x65, 0x7c, 0x8b, 0x2e, 0xaf, 0x8f, 0x81, 0x45,
+	0x97, 0x17, 0x18, 0xff, 0xa2, 0xcb, 0xeb, 0x67, 0xfa, 0x16, 0x5d, 0xde, 0x3e, 0xa6, 0x3f, 0xfc,
+	0xfb, 0x08, 0x70, 0xfb, 0xd2, 0x16, 0xdf, 0x03, 0x97, 0x92, 0x2e, 0x74, 0x31, 0xed, 0xcb, 0x64,
+	0x94, 0xc5, 0xf3, 0x77, 0xc4, 0xeb, 0xec, 0xb5, 0x87, 0x97, 0xf7, 0x1f, 0x46, 0x1e, 0x44, 0x37,
+	0xf6, 0x1f, 0xf0, 0xf1, 0x77, 0xd3, 0xf1, 0xfb, 0x93, 0xf1, 0x6b, 0xf1, 0x89, 0xfc, 0xc6, 0xa3,
+	0x64, 0x6c, 0x66, 0xea, 0x60, 0x3c, 0xf2, 0x20, 0xb1, 0xd1, 0xb1, 0x21, 0x7a, 0x99, 0xa3, 0x78,
+	0x38, 0x0b, 0x1e, 0x95, 0x33, 0xba, 0xab, 0xf0, 0x65, 0x62, 0x0a, 0xb2, 0xef, 0x03, 0xe4, 0x09,
+	0xbb, 0x44, 0xc7, 0x2e, 0x32, 0x36, 0xf9, 0x45, 0xfd, 0x97, 0xd7, 0x90, 0x05, 0x10, 0xa7, 0xd9,
+	0x86, 0xff, 0x08, 0xc1, 0x99, 0x8e, 0x6b, 0xe8, 0x97, 0xe6, 0xf7, 0x42, 0x8b, 0xdf, 0x71, 0xba,
+	0x9d, 0xf8, 0x00, 0xf5, 0x86, 0xdd, 0xa2, 0xf3, 0x31, 0x3a, 0xad, 0xe3, 0x55, 0x38, 0xdb, 0x79,
+	0xa1, 0x8e, 0x23, 0x36, 0xc7, 0x47, 0x3e, 0x3a, 0x40, 0x9f, 0x36, 0x55, 0x58, 0x8f, 0xe8, 0x62,
+	0x1d, 0x0f, 0x2f, 0x07, 0x90, 0xe6, 0xca, 0x38, 0xb8, 0x29, 0x1a, 0xdd, 0xff, 0xfa, 0x32, 0xc3,
+	0xf4, 0x35, 0xa2, 0x33, 0xf0, 0x82, 0x6a, 0xbb, 0x44, 0xc7, 0x36, 0xe2, 0x54, 0x8d, 0xf0, 0xef,
+	0x21, 0xb8, 0x34, 0xaf, 0xec, 0x12, 0xb7, 0xca, 0x05, 0xba, 0xd1, 0x37, 0x76, 0x91, 0xda, 0x8f,
+	0x77, 0xd5, 0xed, 0xff, 0x38, 0xb8, 0xb7, 0x2a, 0x7c, 0x49, 0xd2, 0xf6, 0x4e, 0xc3, 0xcf, 0x9b,
+	0x08, 0xd1, 0x8d, 0x13, 0xc5, 0x8e, 0x2a, 0xd8, 0x9c, 0xaa, 0x81, 0xe7, 0xc0, 0x29, 0xf3, 0x25,
+	0xed, 0xdd, 0x11, 0xa5, 0xfd, 0x92, 0xf8, 0x2a, 0xf7, 0xca, 0x83, 0x70, 0x59, 0x92, 0x1a, 0x24,
+	0x1c, 0x0b, 0xa9, 0x3f, 0xde, 0x29, 0x57, 0x8a, 0xf4, 0x41, 0x28, 0x92, 0xad, 0xf0, 0x06, 0xa7,
+	0x18, 0xe1, 0xb0, 0xee, 0xb9, 0x93, 0x5a, 0xf7, 0x29, 0xd6, 0xbd, 0xa2, 0x9b, 0x41, 0x81, 0xc7,
+	0x5e, 0xdd, 0xe5, 0xbf, 0x46, 0x30, 0xd2, 0x69, 0xe3, 0xf1, 0xd2, 0x22, 0x9b, 0xb7, 0x45, 0xd6,
+	0xcf, 0x5e, 0xef, 0xb6, 0x84, 0x39, 0x05, 0x91, 0x19, 0x30, 0xf3, 0xc0, 0x88, 0xf9, 0xaf, 0x22,
+	0x1a, 0xf4, 0x0e, 0x3b, 0x1f, 0x9c, 0xb3, 0xf5, 0xe9, 0xa6, 0x62, 0x3c, 0x27, 0xce, 0xb2, 0x33,
+	0x3f, 0x55, 0x87, 0xbe, 0x44, 0x7e, 0x10, 0xe8, 0x5f, 0xe6, 0xcb, 0x95, 0x85, 0xdd, 0xc2, 0x36,
+	0x5f, 0x2b, 0x11, 0x11, 0xbf, 0x0a, 0xda, 0xd0, 0xaf, 0xb9, 0xe4, 0x33, 0x4d, 0xb4, 0x06, 0x9c,
+	0x04, 0x6f, 0x5d, 0x2c, 0xd3, 0xbe, 0x6b, 0x27, 0x30, 0x67, 0x9e, 0x37, 0x91, 0x23, 0x69, 0xe4,
+	0x8b, 0x27, 0xea, 0x0a, 0xbc, 0x78, 0xe1, 0xe4, 0x0c, 0xb5, 0xf0, 0x1f, 0x23, 0x18, 0xee, 0xb0,
+	0x53, 0x7b, 0x69, 0x21, 0xbd, 0xdb, 0x12, 0xd2, 0x6f, 0x75, 0x0b, 0xa9, 0xad, 0xf3, 0x1d, 0x83,
+	0xf7, 0x07, 0xaa, 0xeb, 0xad, 0x1b, 0xc3, 0x9f, 0xcd, 0xf8, 0xb8, 0x7d, 0xda, 0x61, 0xe6, 0x47,
+	0x6a, 0x11, 0xb5, 0x6d, 0xa2, 0xfe, 0x8f, 0xbb, 0xdd, 0x54, 0xdd, 0x6e, 0xdb, 0xe9, 0xe2, 0x9f,
+	0xb7, 0xb9, 0xfd, 0x1d, 0xc5, 0x74, 0x56, 0x9c, 0x61, 0xa7, 0xdb, 0x7c, 0xee, 0xe6, 0x72, 0xbb,
+	0xc7, 0x6b, 0x2d, 0x39, 0xd2, 0xf5, 0x74, 0x36, 0xc7, 0xdd, 0xcb, 0x11, 0x71, 0xa7, 0x5c, 0x20,
+	0x96, 0x33, 0x68, 0x4b, 0x3f, 0x0c, 0xef, 0x7f, 0xc5, 0x09, 0x60, 0x2a, 0xdb, 0xea, 0x04, 0x9d,
+	0xaa, 0x4e, 0x70, 0x1c, 0x3c, 0xef, 0x90, 0x72, 0x69, 0x5b, 0x3e, 0xbe, 0xb0, 0x34, 0x25, 0x3c,
+	0x0e, 0xae, 0xba, 0x20, 0xca, 0xda, 0x79, 0x66, 0x17, 0x65, 0xaa, 0x82, 0x7f, 0x0d, 0x81, 0x47,
+	0xe6, 0xc5, 0x12, 0x91, 0xe9, 0xf1, 0xa5, 0x2f, 0xf3, 0x1e, 0xe5, 0xff, 0x40, 0x7c, 0xc4, 0xee,
+	0x29, 0xb1, 0x7f, 0x90, 0xd8, 0xa0, 0x19, 0x60, 0x30, 0xb6, 0xf1, 0x28, 0x79, 0x60, 0x3e, 0xe5,
+	0xe3, 0x1b, 0x8f, 0x26, 0x63, 0x33, 0xec, 0xc1, 0x78, 0xe4, 0xed, 0x84, 0x45, 0xdc, 0x4d, 0x2b,
+	0x7a, 0xd3, 0xd4, 0xb3, 0xeb, 0xe8, 0x1a, 0x6f, 0x27, 0x6e, 0x5e, 0xe6, 0x34, 0x97, 0xe6, 0xd6,
+	0x0f, 0x9b, 0x68, 0x0d, 0x30, 0x78, 0xd6, 0xe9, 0x73, 0xd0, 0xab, 0x3b, 0x0b, 0x03, 0xe0, 0x5a,
+	0x13, 0x44, 0x39, 0xe8, 0x51, 0xbb, 0x0a, 0x67, 0xc1, 0xbb, 0xa6, 0xb1, 0x15, 0x04, 0x93, 0x60,
+	0xc5, 0xf6, 0xbb, 0x94, 0x14, 0xc5, 0x56, 0xa5, 0x27, 0xfc, 0x87, 0x6a, 0x36, 0xb5, 0x1d, 0x74,
+	0xfc, 0x6c, 0xd6, 0x08, 0x81, 0xc7, 0xae, 0xd3, 0x57, 0xc1, 0x70, 0x87, 0x23, 0x15, 0xbc, 0x6e,
+	0x73, 0xfb, 0x96, 0x62, 0x79, 0x5d, 0xbc, 0xc6, 0x5e, 0xb5, 0x86, 0x2d, 0x7a, 0x73, 0x63, 0xdf,
+	0xf2, 0x78, 0x33, 0xba, 0x71, 0x25, 0x6e, 0x6b, 0xbd, 0x32, 0x3e, 0xfe, 0x68, 0x32, 0xc6, 0xa6,
+	0xa6, 0x0e, 0x34, 0xa7, 0x57, 0xac, 0xb3, 0x45, 0x7b, 0x19, 0xd0, 0xcf, 0x50, 0x89, 0xd5, 0xcd,
+	0x5f, 0x20, 0x05, 0x99, 0x23, 0x5b, 0xca, 0xc6, 0x3c, 0x33, 0xf2, 0xbb, 0x07, 0x43, 0x4a, 0x79,
+	0x54, 0x04, 0xbe, 0x98, 0xdf, 0xe4, 0x2b, 0x7c, 0xad, 0x40, 0x44, 0x7d, 0x4a, 0x79, 0xa2, 0xce,
+	0x76, 0x1d, 0x4e, 0x70, 0x5e, 0x52, 0x07, 0x4e, 0x5d, 0xc8, 0xd4, 0x25, 0xba, 0xed, 0x3a, 0xa1,
+	0x90, 0x7f, 0xe0, 0x02, 0x30, 0x95, 0xf1, 0x15, 0x70, 0x0b, 0x62, 0x91, 0x88, 0xc7, 0x57, 0xb1,
+	0xaa, 0x83, 0x53, 0x00, 0x75, 0x91, 0x6c, 0x11, 0x91, 0xd4, 0x0a, 0xe4, 0xf8, 0x32, 0xb6, 0x28,
+	0xe2, 0xac, 0xbe, 0x00, 0x53, 0x57, 0x46, 0x89, 0xe7, 0x4d, 0xd4, 0x63, 0xac, 0xbf, 0x8c, 0xb9,
+	0x7b, 0x54, 0x3c, 0xc3, 0x0e, 0x3f, 0x8c, 0xe4, 0xf6, 0xa5, 0xfd, 0xf4, 0x3e, 0xbf, 0xff, 0xe6,
+	0x7e, 0x63, 0x7f, 0x6d, 0xbf, 0x3e, 0x7e, 0x59, 0x5f, 0x9b, 0x09, 0xd0, 0x2b, 0xa9, 0xa3, 0x8f,
+	0x56, 0xe5, 0x6f, 0x3e, 0x6f, 0xc3, 0xc8, 0x88, 0xb7, 0xd8, 0x1b, 0x0f, 0x23, 0x0f, 0xd2, 0xf1,
+	0xfb, 0x7c, 0xfc, 0xdd, 0x0d, 0xed, 0xaf, 0x56, 0x99, 0x53, 0xc9, 0x83, 0xc8, 0xdb, 0x57, 0xba,
+	0xb6, 0x8d, 0x47, 0x2f, 0xef, 0x3f, 0xbc, 0x3c, 0xce, 0xe9, 0x6f, 0xc1, 0xaf, 0x81, 0x47, 0x24,
+	0x25, 0xb2, 0x5b, 0xa7, 0xdf, 0x36, 0x7c, 0x99, 0x01, 0xfb, 0xfb, 0x38, 0xad, 0x15, 0x4f, 0x80,
+	0x5f, 0x24, 0xf5, 0x0a, 0x5f, 0x20, 0x55, 0x52, 0x93, 0xe9, 0xa7, 0x49, 0x5f, 0xa6, 0x5f, 0x57,
+	0x56, 0xd7, 0x17, 0x56, 0x8d, 0xb9, 0xdf, 0x44, 0x87, 0x4d, 0xf4, 0xeb, 0x08, 0x18, 0x70, 0xaf,
+	0x2a, 0xbc, 0x06, 0x7b, 0xb5, 0x20, 0x40, 0x10, 0x60, 0xcd, 0xe0, 0x2d, 0xd8, 0x67, 0xa5, 0x5b,
+	0xd1, 0xbe, 0xad, 0x10, 0xa1, 0x68, 0x53, 0x46, 0x20, 0x02, 0xe7, 0xd7, 0x44, 0x41, 0x16, 0x0a,
+	0x42, 0x25, 0xa4, 0x64, 0x63, 0xa5, 0xa1, 0x2c, 0xd3, 0x42, 0xda, 0x18, 0x1d, 0xf4, 0x19, 0x84,
+	0x29, 0x23, 0x08, 0x47, 0x9d, 0x55, 0x46, 0x10, 0xd5, 0x6d, 0xb8, 0x00, 0x7e, 0xce, 0x74, 0x2a,
+	0xd8, 0x6f, 0xeb, 0x85, 0xb2, 0xaa, 0xf1, 0x5b, 0x4e, 0x16, 0x5f, 0x52, 0x7a, 0xe7, 0x4e, 0xbb,
+	0x96, 0xd1, 0xfd, 0x38, 0x4d, 0x86, 0xff, 0x09, 0x82, 0x3e, 0xeb, 0x79, 0xe6, 0xd7, 0xc9, 0xf7,
+	0x7f, 0x76, 0x42, 0xbf, 0x4d, 0x1f, 0x47, 0xa1, 0xf7, 0xfb, 0x64, 0x2f, 0xaf, 0x6c, 0x4b, 0xd4,
+	0x12, 0x1d, 0xd2, 0x4b, 0xc7, 0x1b, 0xf5, 0x04, 0x1e, 0x3f, 0x76, 0x45, 0x10, 0xe7, 0xf9, 0x3e,
+	0xd9, 0x5b, 0xe7, 0x4b, 0xf8, 0x6d, 0xba, 0xdf, 0x57, 0xd4, 0xf9, 0x4a, 0x49, 0x99, 0x3b, 0xb6,
+	0xab, 0xb4, 0x4a, 0x07, 0x8e, 0x39, 0xaf, 0xcd, 0xbd, 0x41, 0xf6, 0xd2, 0xba, 0xb6, 0xb6, 0x4a,
+	0x7c, 0x0f, 0x39, 0x42, 0x3d, 0xdc, 0x40, 0x51, 0xb2, 0xb6, 0xe1, 0x05, 0xf0, 0x4b, 0xdb, 0x7c,
+	0x32, 0x5f, 0x2c, 0x97, 0x88, 0xa4, 0x4e, 0xb5, 0xc7, 0xad, 0x2c, 0xee, 0xa4, 0x93, 0x59, 0xaa,
+	0x79, 0xa7, 0x87, 0x03, 0xc5, 0x50, 0x7d, 0xc2, 0x6f, 0x40, 0xbf, 0xb4, 0xcd, 0xb3, 0xa9, 0x19,
+	0x1d, 0xc8, 0x7d, 0xfc, 0xd1, 0x74, 0xee, 0x4e, 0x9a, 0x4d, 0xcd, 0x18, 0x50, 0x7d, 0xaa, 0xb1,
+	0x0d, 0x6c, 0x6a, 0x76, 0x5a, 0x07, 0xf3, 0x9c, 0x08, 0x36, 0x35, 0x3b, 0x6d, 0x03, 0x33, 0x9e,
+	0xe7, 0xb2, 0x87, 0x4d, 0x74, 0x0b, 0x46, 0xa0, 0xf7, 0x0d, 0xb2, 0x17, 0x5a, 0xe7, 0x4b, 0x4a,
+	0x05, 0x69, 0xdc, 0x43, 0x04, 0x98, 0x6c, 0x2e, 0xa4, 0x34, 0x18, 0xd4, 0x06, 0x47, 0xda, 0xe9,
+	0x0e, 0xa1, 0xcc, 0x18, 0xf4, 0xab, 0xbe, 0xe8, 0xdf, 0x96, 0xfb, 0x9f, 0x35, 0x91, 0xf3, 0xa8,
+	0x89, 0xdc, 0xd3, 0xb1, 0x54, 0x6c, 0x46, 0x3d, 0xcf, 0x08, 0x27, 0x01, 0x4c, 0x86, 0xf0, 0x25,
+	0xf0, 0x68, 0xfe, 0xab, 0x39, 0xea, 0xd7, 0xb6, 0xc6, 0x4c, 0x24, 0x10, 0xe1, 0xb4, 0xa6, 0xf0,
+	0x14, 0xf4, 0x59, 0xb9, 0xb0, 0x18, 0x39, 0xec, 0x46, 0xb7, 0x02, 0xb7, 0x5a, 0x8c, 0x8c, 0x3e,
+	0x76, 0x37, 0xfa, 0x5e, 0xe0, 0x7b, 0x86, 0xd1, 0x9f, 0x21, 0x18, 0xb0, 0x1f, 0xe4, 0xbf, 0xa4,
+	0x1a, 0xba, 0xd7, 0x52, 0x43, 0x91, 0x6e, 0x71, 0xb3, 0xb8, 0x72, 0x9a, 0x32, 0x7a, 0x8a, 0x80,
+	0x69, 0x35, 0xc1, 0x6b, 0xd0, 0x2b, 0x35, 0x36, 0xe5, 0xbd, 0xba, 0xda, 0x8b, 0x81, 0xee, 0x5f,
+	0x43, 0x2d, 0xa6, 0x39, 0xd5, 0xc2, 0x56, 0x18, 0x3a, 0x0c, 0xfe, 0x16, 0x78, 0xb7, 0x05, 0x49,
+	0xa6, 0xc4, 0x38, 0x5a, 0xb7, 0x94, 0x46, 0xd3, 0x5c, 0xea, 0xb0, 0x89, 0x92, 0x30, 0x0a, 0xde,
+	0x5c, 0x63, 0x33, 0xa4, 0x18, 0x06, 0xfd, 0x86, 0x2b, 0x21, 0xa4, 0x2c, 0xfb, 0xee, 0x68, 0xaa,
+	0xca, 0xb2, 0x4f, 0x37, 0xd3, 0x17, 0x1b, 0x1d, 0xbe, 0x80, 0xbc, 0xb4, 0xc5, 0x86, 0x6d, 0x6f,
+	0x3d, 0xa7, 0xa7, 0xc6, 0x50, 0x60, 0x48, 0xf9, 0x19, 0x15, 0x23, 0xec, 0x6b, 0x0f, 0x23, 0x0f,
+	0x26, 0xe3, 0xd7, 0xd2, 0xf1, 0xdb, 0x7c, 0x7c, 0x6b, 0xe3, 0x11, 0x7b, 0x10, 0x1f, 0x7f, 0x94,
+	0x3a, 0x68, 0x91, 0x29, 0x73, 0xb6, 0x6d, 0xbd, 0xd4, 0xe1, 0x7b, 0xcb, 0x57, 0xdc, 0x85, 0xd1,
+	0xc0, 0xe8, 0x71, 0x5d, 0xb8, 0xda, 0xbd, 0x0b, 0x1f, 0xaa, 0x0b, 0xed, 0xb6, 0xef, 0x3b, 0x2f,
+	0x6d, 0xc5, 0x6a, 0xaf, 0x88, 0x50, 0xb7, 0x1c, 0x5d, 0x5a, 0x9d, 0x3f, 0x4d, 0x25, 0x7c, 0xd1,
+	0x0b, 0x5e, 0x5d, 0x15, 0xb3, 0xd0, 0x7a, 0x8e, 0x4b, 0xbd, 0x77, 0x6b, 0x69, 0x1b, 0x74, 0x04,
+	0xee, 0x73, 0x03, 0xba, 0x46, 0x96, 0x2a, 0xd8, 0x6c, 0xaa, 0xe5, 0x5a, 0x43, 0x56, 0xb9, 0xb5,
+	0xd8, 0x5c, 0x37, 0x6d, 0x96, 0xa9, 0x02, 0x4e, 0x59, 0x6c, 0x24, 0x52, 0x10, 0x6a, 0x45, 0xba,
+	0xf4, 0x73, 0x68, 0x87, 0x62, 0xe0, 0xbe, 0xf8, 0xc5, 0x4f, 0x84, 0x8c, 0x69, 0x96, 0xa3, 0x3a,
+	0xf8, 0x01, 0x0c, 0x1b, 0x66, 0xdb, 0xa4, 0x5a, 0x96, 0xea, 0xdb, 0x44, 0x54, 0x57, 0x7b, 0xc7,
+	0x14, 0xeb, 0x92, 0x66, 0x72, 0xc7, 0xb0, 0xe0, 0x70, 0xa5, 0x4d, 0x86, 0x53, 0xc0, 0x54, 0x84,
+	0x5a, 0xc9, 0xd6, 0x79, 0x37, 0xed, 0x88, 0x5a, 0xda, 0x41, 0x67, 0xe0, 0x47, 0x88, 0x1b, 0x34,
+	0x74, 0xb4, 0xee, 0x4f, 0x5b, 0xcd, 0xb4, 0xfe, 0x7b, 0x5a, 0xfb, 0x6f, 0x5a, 0x69, 0x04, 0x5c,
+	0xb5, 0x5a, 0x69, 0x0c, 0xf4, 0x76, 0x60, 0xc0, 0x34, 0xd4, 0x28, 0x78, 0x08, 0x23, 0xa6, 0xa1,
+	0x85, 0x03, 0x2f, 0xe5, 0xa0, 0xeb, 0x47, 0xea, 0x25, 0xdd, 0xc6, 0x42, 0xc2, 0x70, 0xa5, 0x5d,
+	0x88, 0xe3, 0xe0, 0xe5, 0x2b, 0x2a, 0x37, 0xf4, 0x22, 0x99, 0x23, 0x43, 0x4b, 0xbb, 0x0f, 0xe0,
+	0xe2, 0x66, 0xe3, 0xd2, 0x52, 0xbc, 0x67, 0xed, 0xcf, 0xff, 0x82, 0x33, 0x54, 0xf0, 0x35, 0xfa,
+	0x3d, 0x80, 0x9e, 0xfe, 0xe5, 0x8b, 0x65, 0xf5, 0x96, 0x13, 0xbd, 0x69, 0x66, 0xe9, 0xc8, 0xda,
+	0xef, 0xfc, 0x70, 0x89, 0x63, 0x74, 0xb5, 0xac, 0xa6, 0x85, 0x6f, 0xc2, 0x08, 0x3d, 0x3a, 0x14,
+	0x6a, 0x32, 0x5f, 0xc9, 0xd7, 0x45, 0x52, 0x28, 0x4b, 0x65, 0xa1, 0x16, 0xf0, 0x77, 0xb0, 0x1e,
+	0x36, 0x35, 0xd7, 0x74, 0x45, 0x7c, 0x1d, 0xf0, 0x0e, 0x11, 0xe5, 0x72, 0xc1, 0x66, 0xde, 0xd7,
+	0xc1, 0x7c, 0x48, 0xd7, 0x33, 0x8c, 0xe7, 0x7e, 0xd1, 0x71, 0xd8, 0x44, 0x3f, 0x41, 0x70, 0x19,
+	0x06, 0xf5, 0xfc, 0x08, 0xa9, 0x41, 0x0f, 0x0e, 0xb5, 0x15, 0x81, 0x4d, 0x4b, 0x8d, 0xb1, 0x4d,
+	0x4b, 0x15, 0x41, 0x02, 0x86, 0x0d, 0x2d, 0x33, 0x34, 0xc1, 0xd1, 0x8e, 0x59, 0x1b, 0x42, 0xf0,
+	0x1a, 0x30, 0x46, 0x5c, 0xf4, 0x97, 0xe3, 0xf6, 0x2c, 0xb4, 0xeb, 0x69, 0xaf, 0xc7, 0xed, 0x69,
+	0x07, 0x93, 0x30, 0x62, 0xea, 0x59, 0x1c, 0x08, 0x74, 0xce, 0x99, 0x10, 0x0a, 0xff, 0x86, 0x0b,
+	0xb0, 0x9a, 0x58, 0xb6, 0x6b, 0x95, 0x6f, 0xc2, 0x60, 0x5d, 0xbd, 0x6a, 0x99, 0x57, 0x36, 0x08,
+	0x44, 0x94, 0x02, 0xee, 0x63, 0xbf, 0x57, 0x40, 0xc7, 0x2d, 0xfd, 0x80, 0x06, 0x92, 0x53, 0x31,
+	0x70, 0x1c, 0xfa, 0x65, 0xa9, 0x5c, 0xa2, 0x0b, 0x22, 0x3a, 0x32, 0x7a, 0x5a, 0xa7, 0x44, 0xbf,
+	0xd2, 0xfe, 0x06, 0xd9, 0x5b, 0x51, 0xe7, 0x7e, 0x6c, 0xa8, 0x9b, 0xcb, 0xd5, 0x5e, 0x9a, 0xe8,
+	0x5d, 0xd7, 0x01, 0xeb, 0xb9, 0xbb, 0xaf, 0x5b, 0x17, 0xa5, 0x1c, 0xa3, 0x41, 0x5a, 0x97, 0xa9,
+	0x03, 0x06, 0xae, 0x3a, 0x17, 0x78, 0xe9, 0x9a, 0xf0, 0x5c, 0x0b, 0x66, 0x8e, 0x14, 0x44, 0x22,
+	0xd3, 0x3d, 0x3f, 0xbd, 0xcf, 0xc9, 0xf5, 0x69, 0x50, 0xea, 0x58, 0xb9, 0xa8, 0x84, 0x55, 0x92,
+	0xf3, 0xfc, 0xee, 0x96, 0x98, 0x37, 0x2e, 0xe1, 0xd2, 0xa2, 0xf1, 0xb3, 0xc1, 0x84, 0x7a, 0x4d,
+	0x37, 0xa1, 0x5f, 0xd3, 0x4d, 0xac, 0xeb, 0x1a, 0xdc, 0x90, 0x62, 0x96, 0xde, 0xdd, 0x12, 0x0d,
+	0x11, 0x9e, 0x07, 0x9f, 0xe2, 0x7d, 0x7e, 0xab, 0x5c, 0x21, 0xea, 0x45, 0xcd, 0xcc, 0x6b, 0x1f,
+	0x1d, 0xa0, 0xa3, 0x83, 0x0b, 0xcb, 0xc2, 0x0e, 0x29, 0x86, 0x64, 0x21, 0xa4, 0xd4, 0x4f, 0x25,
+	0x6f, 0x68, 0x85, 0xf8, 0x7a, 0xf9, 0x53, 0xc5, 0x29, 0xaf, 0x22, 0xba, 0x5d, 0xae, 0x90, 0xb9,
+	0xb9, 0xa7, 0x4d, 0x34, 0x03, 0xa3, 0x80, 0xef, 0x0b, 0x35, 0xd2, 0x76, 0xc3, 0x11, 0xce, 0x03,
+	0x56, 0xc8, 0x69, 0x69, 0x70, 0xcf, 0xc4, 0xae, 0xc6, 0x66, 0xbb, 0xdd, 0x66, 0x0c, 0x3f, 0x76,
+	0xc2, 0xc0, 0xeb, 0x15, 0x61, 0x93, 0xaf, 0xe4, 0xea, 0xa4, 0xa0, 0x70, 0x81, 0x17, 0xa1, 0x57,
+	0x8b, 0x2b, 0x1d, 0xb3, 0x8f, 0x59, 0x93, 0xb5, 0x5e, 0xd7, 0x35, 0xae, 0xc5, 0xea, 0x00, 0x78,
+	0x0d, 0x7c, 0x92, 0x9e, 0x7e, 0xda, 0x7e, 0xa1, 0xeb, 0x30, 0xde, 0x9e, 0xa7, 0x06, 0x9e, 0x09,
+	0x82, 0xbf, 0x0d, 0x83, 0x52, 0x63, 0xd3, 0xb8, 0x3e, 0x97, 0x2f, 0x17, 0xd5, 0xcd, 0x39, 0x37,
+	0x60, 0x15, 0xdf, 0x2d, 0xe2, 0x04, 0x0c, 0x6b, 0x9b, 0xdf, 0x7c, 0xb9, 0x26, 0xc9, 0x7c, 0x4d,
+	0xf9, 0x51, 0x54, 0x53, 0x92, 0x1b, 0xd2, 0x9a, 0xee, 0x6a, 0x2d, 0x77, 0x8b, 0xf8, 0x0a, 0xe0,
+	0x5a, 0xa3, 0x9a, 0x17, 0xb6, 0xf2, 0x45, 0xe3, 0xa3, 0xb0, 0x7a, 0x41, 0xb8, 0x9f, 0x1b, 0xac,
+	0x35, 0xaa, 0xab, 0x5b, 0x59, 0xfd, 0xae, 0x94, 0x34, 0xf7, 0xea, 0xd3, 0x26, 0xba, 0x08, 0xe7,
+	0xe9, 0xda, 0x26, 0xd4, 0x29, 0x1c, 0x6c, 0xe6, 0x3c, 0x78, 0x15, 0x20, 0xba, 0x4c, 0x1c, 0x7c,
+	0xd2, 0x44, 0x4e, 0xed, 0x53, 0xa8, 0x73, 0x2a, 0x36, 0x6d, 0x0d, 0x47, 0xf8, 0xd0, 0x0d, 0x01,
+	0x0b, 0x93, 0x22, 0xe1, 0x65, 0x62, 0x04, 0xe3, 0x6b, 0x76, 0x01, 0xfa, 0xe1, 0xff, 0xfa, 0x02,
+	0x74, 0xe0, 0x49, 0xd3, 0xf2, 0x99, 0xb1, 0xdb, 0x25, 0xe8, 0x6e, 0xd7, 0x9a, 0x7d, 0xff, 0x8f,
+	0xae, 0x35, 0x2f, 0x1d, 0xde, 0x68, 0xbb, 0x08, 0xff, 0xb4, 0x89, 0x52, 0xdd, 0xae, 0x36, 0xc3,
+	0x79, 0x18, 0xd1, 0x57, 0xa6, 0x21, 0xed, 0xfa, 0x45, 0x8e, 0xc8, 0x12, 0x76, 0x5e, 0x8b, 0xcd,
+	0x66, 0x56, 0x4f, 0xb8, 0xf7, 0x3c, 0xd1, 0x72, 0xef, 0xf9, 0xbd, 0x2f, 0xd0, 0xb1, 0x06, 0x27,
+	0xdc, 0x8b, 0xfe, 0xc2, 0x01, 0x41, 0x5b, 0x21, 0xdb, 0xd3, 0xf9, 0x9b, 0x89, 0xe7, 0xe4, 0x89,
+	0x67, 0xee, 0x95, 0xc3, 0x1b, 0x1d, 0x26, 0xed, 0xcf, 0x6f, 0xf4, 0xa6, 0x62, 0xc7, 0x0f, 0xe6,
+	0xff, 0x89, 0x60, 0xa0, 0x6d, 0xfc, 0x68, 0x19, 0xcc, 0x27, 0x4f, 0x31, 0x98, 0xdb, 0x20, 0xac,
+	0xc3, 0x39, 0xd7, 0x3e, 0x9c, 0xb3, 0xa7, 0x1a, 0xce, 0x5b, 0x11, 0x4d, 0x98, 0xb9, 0xa1, 0xc3,
+	0x1b, 0x2d, 0x33, 0x50, 0xe6, 0x92, 0x65, 0xe8, 0x1c, 0x7d, 0xa2, 0x9e, 0x9d, 0x28, 0xc3, 0xe6,
+	0x7b, 0x5f, 0x20, 0xa3, 0xc1, 0x36, 0x84, 0xfe, 0x1b, 0x82, 0x41, 0xed, 0x28, 0xf3, 0xeb, 0xdd,
+	0xf3, 0x80, 0xa5, 0xe7, 0x7d, 0x5d, 0xbb, 0xfb, 0x57, 0x6e, 0x38, 0x63, 0x3a, 0xfd, 0x3a, 0x91,
+	0xbf, 0xae, 0xd3, 0xc5, 0x37, 0xff, 0x2f, 0xf3, 0x55, 0x4e, 0x2c, 0xdf, 0xee, 0x30, 0xb1, 0x7c,
+	0x7e, 0x63, 0x48, 0xff, 0x17, 0x9a, 0xd9, 0xd8, 0xb5, 0x58, 0x32, 0x19, 0x4b, 0x4e, 0x7e, 0xd5,
+	0x73, 0xc6, 0xdf, 0x38, 0x61, 0xd4, 0x5a, 0x33, 0xd6, 0x84, 0xfe, 0x76, 0x97, 0x09, 0xa3, 0x6d,
+	0x0a, 0x08, 0x77, 0x9c, 0x02, 0xbe, 0xd9, 0x70, 0xfc, 0x34, 0x1b, 0x8e, 0x57, 0xbb, 0x4c, 0x44,
+	0x3e, 0x6d, 0x22, 0x8a, 0x5d, 0xeb, 0x3a, 0x15, 0xfd, 0x96, 0x03, 0xfc, 0xd6, 0x38, 0x06, 0x5b,
+	0x6e, 0xde, 0xd0, 0x2f, 0xc2, 0xda, 0x95, 0x9b, 0xbb, 0xad, 0x23, 0x75, 0xfc, 0xe4, 0x91, 0xda,
+	0x82, 0x6d, 0x1d, 0xa6, 0x57, 0xdb, 0x87, 0xe9, 0x89, 0xd3, 0x0c, 0xd3, 0x76, 0x38, 0xcb, 0x76,
+	0xe3, 0x4b, 0xed, 0x0a, 0xbe, 0xe4, 0x80, 0xee, 0x60, 0x9c, 0xd1, 0x1f, 0x20, 0x18, 0xb0, 0x7f,
+	0x81, 0xc1, 0x83, 0xe0, 0x7f, 0x73, 0x25, 0xb7, 0xb6, 0x30, 0x7f, 0xf7, 0xf6, 0xdd, 0x85, 0x2c,
+	0xd3, 0x83, 0xfd, 0xd0, 0xcb, 0xe5, 0xd2, 0xb9, 0x3b, 0xe9, 0x24, 0xe3, 0xc6, 0x23, 0xc0, 0x68,
+	0x0f, 0x2b, 0xb9, 0x85, 0xf9, 0x29, 0x2a, 0xed, 0xc5, 0xfd, 0xe0, 0x53, 0xa5, 0x6c, 0x6a, 0x86,
+	0xf1, 0x9a, 0x8f, 0xa9, 0x24, 0xcb, 0x00, 0x1e, 0x86, 0xc1, 0x85, 0xf9, 0x6c, 0x2e, 0xbd, 0xc6,
+	0xa6, 0x66, 0x34, 0x9d, 0x7e, 0x53, 0x38, 0x35, 0x3b, 0xad, 0x7e, 0x20, 0x60, 0x06, 0x94, 0x57,
+	0x2d, 0x64, 0xd9, 0x54, 0x2a, 0x79, 0x8d, 0x19, 0xc4, 0x3e, 0x70, 0x2f, 0x64, 0xa7, 0xa7, 0x67,
+	0x19, 0x26, 0xfa, 0x16, 0xe0, 0xf6, 0x23, 0x71, 0xec, 0x05, 0xd7, 0xca, 0xea, 0xca, 0x02, 0xd3,
+	0x83, 0xcf, 0xc3, 0x68, 0xfa, 0x76, 0xee, 0x9e, 0x50, 0x69, 0x54, 0xc9, 0x92, 0x76, 0x10, 0xa4,
+	0x56, 0x26, 0x83, 0x94, 0xc6, 0xec, 0xfc, 0x42, 0xba, 0x21, 0x6f, 0x93, 0x9a, 0x5c, 0xb6, 0x35,
+	0x3a, 0xa2, 0x61, 0xc0, 0xed, 0xe7, 0x77, 0xd8, 0x0d, 0x68, 0x85, 0xe9, 0x51, 0xfe, 0xe4, 0x18,
+	0x14, 0xbd, 0x04, 0xc3, 0x1d, 0xce, 0xb7, 0x94, 0xd6, 0x05, 0x55, 0xe9, 0xbb, 0x0c, 0x8a, 0x4a,
+	0xc0, 0xb4, 0x96, 0x2a, 0xee, 0x03, 0xef, 0x9d, 0xe5, 0xf4, 0x7c, 0x7e, 0x39, 0x9b, 0x62, 0x7a,
+	0x14, 0x56, 0xe8, 0x13, 0xe5, 0x0c, 0x29, 0x3c, 0xeb, 0x8f, 0x2c, 0x3b, 0xcd, 0x38, 0x6c, 0x82,
+	0xd4, 0x0c, 0xe3, 0xb4, 0x0a, 0x14, 0x7a, 0x5c, 0x56, 0x81, 0xc2, 0xac, 0x3b, 0xf3, 0xcb, 0xe8,
+	0xd9, 0xc7, 0x63, 0x3d, 0x1f, 0x7d, 0x3c, 0xd6, 0xf3, 0xd9, 0xc7, 0x63, 0xe8, 0xf1, 0xd1, 0x18,
+	0xfa, 0xed, 0xa3, 0x31, 0xf4, 0xe3, 0xa3, 0x31, 0xf4, 0xec, 0x68, 0x0c, 0x7d, 0x74, 0x34, 0x86,
+	0xfe, 0xe9, 0x68, 0x0c, 0x7d, 0x7a, 0x34, 0xd6, 0xf3, 0xd9, 0xd1, 0x18, 0x7a, 0xff, 0x93, 0xb1,
+	0x9e, 0x27, 0x9f, 0x8c, 0xa1, 0x67, 0x9f, 0x8c, 0xf5, 0x7c, 0xf4, 0xc9, 0x58, 0xcf, 0xfd, 0xa5,
+	0x92, 0x50, 0xff, 0x7e, 0x29, 0xb1, 0x23, 0x54, 0x64, 0x22, 0x8a, 0x7c, 0xa2, 0x21, 0x4d, 0xd0,
+	0x1f, 0x5b, 0x82, 0x58, 0x8d, 0xd7, 0x45, 0x61, 0xa7, 0x5c, 0x24, 0x62, 0x5c, 0x6f, 0x9e, 0xa8,
+	0x6f, 0x96, 0x84, 0x09, 0xb2, 0x2b, 0x6b, 0xff, 0x43, 0xdb, 0xf2, 0x0f, 0xc0, 0x9b, 0x1e, 0x3a,
+	0x34, 0x4c, 0xfd, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa6, 0xff, 0xa2, 0x24, 0xad, 0x3c, 0x00,
+	0x00,
 }
 
+func (x DSKeyAlgorithm) String() string {
+	s, ok := DSKeyAlgorithm_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x AFSDBRecordSubtype) String() string {
+	s, ok := AFSDBRecordSubtype_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x LatitudeHemisphere) String() string {
+	s, ok := LatitudeHemisphere_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x LongitudeHemisphere) String() string {
+	s, ok := LongitudeHemisphere_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (x TSIGKeyAlgorithm) String() string {
 	s, ok := TSIGKeyAlgorithm_name[int32(x)]
 	if ok {
@@ -3154,6 +4639,174 @@ func (this *RRSet_LbRecord) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *RRSet_NaptrRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_NaptrRecord)
+	if !ok {
+		that2, ok := that.(RRSet_NaptrRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NaptrRecord.Equal(that1.NaptrRecord) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_DsRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_DsRecord)
+	if !ok {
+		that2, ok := that.(RRSet_DsRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DsRecord.Equal(that1.DsRecord) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_CdsRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_CdsRecord)
+	if !ok {
+		that2, ok := that.(RRSet_CdsRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CdsRecord.Equal(that1.CdsRecord) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_AfsdbRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_AfsdbRecord)
+	if !ok {
+		that2, ok := that.(RRSet_AfsdbRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AfsdbRecord.Equal(that1.AfsdbRecord) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_Eui48Record) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_Eui48Record)
+	if !ok {
+		that2, ok := that.(RRSet_Eui48Record)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Eui48Record.Equal(that1.Eui48Record) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_Eui64Record) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_Eui64Record)
+	if !ok {
+		that2, ok := that.(RRSet_Eui64Record)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Eui64Record.Equal(that1.Eui64Record) {
+		return false
+	}
+	return true
+}
+func (this *RRSet_LocRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RRSet_LocRecord)
+	if !ok {
+		that2, ok := that.(RRSet_LocRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LocRecord.Equal(that1.LocRecord) {
+		return false
+	}
+	return true
+}
 func (this *DNSAResourceRecord) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3577,6 +5230,523 @@ func (this *DNSLBResourceRecord) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Value.Equal(that1.Value) {
+		return false
+	}
+	return true
+}
+func (this *DNSNAPTRResourceRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSNAPTRResourceRecord)
+	if !ok {
+		that2, ok := that.(DNSNAPTRResourceRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *NAPTRValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NAPTRValue)
+	if !ok {
+		that2, ok := that.(NAPTRValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Order != that1.Order {
+		return false
+	}
+	if this.Preference != that1.Preference {
+		return false
+	}
+	if this.Flags != that1.Flags {
+		return false
+	}
+	if this.Service != that1.Service {
+		return false
+	}
+	if this.Regexp != that1.Regexp {
+		return false
+	}
+	if this.Replacement != that1.Replacement {
+		return false
+	}
+	return true
+}
+func (this *DNSDSRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSDSRecord)
+	if !ok {
+		that2, ok := that.(DNSDSRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DNSCDSRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSCDSRecord)
+	if !ok {
+		that2, ok := that.(DNSCDSRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DSRecordValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DSRecordValue)
+	if !ok {
+		that2, ok := that.(DSRecordValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.KeyTag != that1.KeyTag {
+		return false
+	}
+	if this.DsKeyAlgorithm != that1.DsKeyAlgorithm {
+		return false
+	}
+	if that1.DigestChoice == nil {
+		if this.DigestChoice != nil {
+			return false
+		}
+	} else if this.DigestChoice == nil {
+		return false
+	} else if !this.DigestChoice.Equal(that1.DigestChoice) {
+		return false
+	}
+	return true
+}
+func (this *DSRecordValue_Sha1Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DSRecordValue_Sha1Digest)
+	if !ok {
+		that2, ok := that.(DSRecordValue_Sha1Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Sha1Digest.Equal(that1.Sha1Digest) {
+		return false
+	}
+	return true
+}
+func (this *DSRecordValue_Sha256Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DSRecordValue_Sha256Digest)
+	if !ok {
+		that2, ok := that.(DSRecordValue_Sha256Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Sha256Digest.Equal(that1.Sha256Digest) {
+		return false
+	}
+	return true
+}
+func (this *DSRecordValue_Sha384Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DSRecordValue_Sha384Digest)
+	if !ok {
+		that2, ok := that.(DSRecordValue_Sha384Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Sha384Digest.Equal(that1.Sha384Digest) {
+		return false
+	}
+	return true
+}
+func (this *SHA1Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SHA1Digest)
+	if !ok {
+		that2, ok := that.(SHA1Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Digest != that1.Digest {
+		return false
+	}
+	return true
+}
+func (this *SHA256Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SHA256Digest)
+	if !ok {
+		that2, ok := that.(SHA256Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Digest != that1.Digest {
+		return false
+	}
+	return true
+}
+func (this *SHA384Digest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SHA384Digest)
+	if !ok {
+		that2, ok := that.(SHA384Digest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Digest != that1.Digest {
+		return false
+	}
+	return true
+}
+func (this *DNSAFSDBRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSAFSDBRecord)
+	if !ok {
+		that2, ok := that.(DNSAFSDBRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AFSDBRecordValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AFSDBRecordValue)
+	if !ok {
+		that2, ok := that.(AFSDBRecordValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Subtype != that1.Subtype {
+		return false
+	}
+	if this.Hostname != that1.Hostname {
+		return false
+	}
+	return true
+}
+func (this *DNSEUI48ResourceRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSEUI48ResourceRecord)
+	if !ok {
+		that2, ok := that.(DNSEUI48ResourceRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *DNSEUI64ResourceRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSEUI64ResourceRecord)
+	if !ok {
+		that2, ok := that.(DNSEUI64ResourceRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *DNSLOCResourceRecord) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DNSLOCResourceRecord)
+	if !ok {
+		that2, ok := that.(DNSLOCResourceRecord)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *LOCValue) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LOCValue)
+	if !ok {
+		that2, ok := that.(LOCValue)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.LatitudeDegree != that1.LatitudeDegree {
+		return false
+	}
+	if this.LatitudeMinute != that1.LatitudeMinute {
+		return false
+	}
+	if this.LatitudeSecond != that1.LatitudeSecond {
+		return false
+	}
+	if this.LatitudeHemisphere != that1.LatitudeHemisphere {
+		return false
+	}
+	if this.LongitudeDegree != that1.LongitudeDegree {
+		return false
+	}
+	if this.LongitudeMinute != that1.LongitudeMinute {
+		return false
+	}
+	if this.LongitudeSecond != that1.LongitudeSecond {
+		return false
+	}
+	if this.LongitudeHemisphere != that1.LongitudeHemisphere {
+		return false
+	}
+	if this.Altitude != that1.Altitude {
+		return false
+	}
+	if this.LocationDiameter != that1.LocationDiameter {
+		return false
+	}
+	if this.HorizontalPrecision != that1.HorizontalPrecision {
+		return false
+	}
+	if this.VerticalPrecision != that1.VerticalPrecision {
 		return false
 	}
 	return true
@@ -4313,7 +6483,7 @@ func (this *RRSet) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 23)
 	s = append(s, "&dns_zone.RRSet{")
 	s = append(s, "Ttl: "+fmt.Sprintf("%#v", this.Ttl)+",\n")
 	if this.TypeRecordSet != nil {
@@ -4408,6 +6578,62 @@ func (this *RRSet_LbRecord) GoString() string {
 	}
 	s := strings.Join([]string{`&dns_zone.RRSet_LbRecord{` +
 		`LbRecord:` + fmt.Sprintf("%#v", this.LbRecord) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_NaptrRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_NaptrRecord{` +
+		`NaptrRecord:` + fmt.Sprintf("%#v", this.NaptrRecord) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_DsRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_DsRecord{` +
+		`DsRecord:` + fmt.Sprintf("%#v", this.DsRecord) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_CdsRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_CdsRecord{` +
+		`CdsRecord:` + fmt.Sprintf("%#v", this.CdsRecord) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_AfsdbRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_AfsdbRecord{` +
+		`AfsdbRecord:` + fmt.Sprintf("%#v", this.AfsdbRecord) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_Eui48Record) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_Eui48Record{` +
+		`Eui48Record:` + fmt.Sprintf("%#v", this.Eui48Record) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_Eui64Record) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_Eui64Record{` +
+		`Eui64Record:` + fmt.Sprintf("%#v", this.Eui64Record) + `}`}, ", ")
+	return s
+}
+func (this *RRSet_LocRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.RRSet_LocRecord{` +
+		`LocRecord:` + fmt.Sprintf("%#v", this.LocRecord) + `}`}, ", ")
 	return s
 }
 func (this *DNSAResourceRecord) GoString() string {
@@ -4572,6 +6798,208 @@ func (this *DNSLBResourceRecord) GoString() string {
 	if this.Value != nil {
 		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
 	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSNAPTRResourceRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSNAPTRResourceRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NAPTRValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&dns_zone.NAPTRValue{")
+	s = append(s, "Order: "+fmt.Sprintf("%#v", this.Order)+",\n")
+	s = append(s, "Preference: "+fmt.Sprintf("%#v", this.Preference)+",\n")
+	s = append(s, "Flags: "+fmt.Sprintf("%#v", this.Flags)+",\n")
+	s = append(s, "Service: "+fmt.Sprintf("%#v", this.Service)+",\n")
+	s = append(s, "Regexp: "+fmt.Sprintf("%#v", this.Regexp)+",\n")
+	s = append(s, "Replacement: "+fmt.Sprintf("%#v", this.Replacement)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSDSRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSDSRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSCDSRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSCDSRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DSRecordValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&dns_zone.DSRecordValue{")
+	s = append(s, "KeyTag: "+fmt.Sprintf("%#v", this.KeyTag)+",\n")
+	s = append(s, "DsKeyAlgorithm: "+fmt.Sprintf("%#v", this.DsKeyAlgorithm)+",\n")
+	if this.DigestChoice != nil {
+		s = append(s, "DigestChoice: "+fmt.Sprintf("%#v", this.DigestChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DSRecordValue_Sha1Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.DSRecordValue_Sha1Digest{` +
+		`Sha1Digest:` + fmt.Sprintf("%#v", this.Sha1Digest) + `}`}, ", ")
+	return s
+}
+func (this *DSRecordValue_Sha256Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.DSRecordValue_Sha256Digest{` +
+		`Sha256Digest:` + fmt.Sprintf("%#v", this.Sha256Digest) + `}`}, ", ")
+	return s
+}
+func (this *DSRecordValue_Sha384Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_zone.DSRecordValue_Sha384Digest{` +
+		`Sha384Digest:` + fmt.Sprintf("%#v", this.Sha384Digest) + `}`}, ", ")
+	return s
+}
+func (this *SHA1Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_zone.SHA1Digest{")
+	s = append(s, "Digest: "+fmt.Sprintf("%#v", this.Digest)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SHA256Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_zone.SHA256Digest{")
+	s = append(s, "Digest: "+fmt.Sprintf("%#v", this.Digest)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SHA384Digest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&dns_zone.SHA384Digest{")
+	s = append(s, "Digest: "+fmt.Sprintf("%#v", this.Digest)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSAFSDBRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSAFSDBRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AFSDBRecordValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.AFSDBRecordValue{")
+	s = append(s, "Subtype: "+fmt.Sprintf("%#v", this.Subtype)+",\n")
+	s = append(s, "Hostname: "+fmt.Sprintf("%#v", this.Hostname)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSEUI48ResourceRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSEUI48ResourceRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSEUI64ResourceRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSEUI64ResourceRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DNSLOCResourceRecord) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DNSLOCResourceRecord{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *LOCValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&dns_zone.LOCValue{")
+	s = append(s, "LatitudeDegree: "+fmt.Sprintf("%#v", this.LatitudeDegree)+",\n")
+	s = append(s, "LatitudeMinute: "+fmt.Sprintf("%#v", this.LatitudeMinute)+",\n")
+	s = append(s, "LatitudeSecond: "+fmt.Sprintf("%#v", this.LatitudeSecond)+",\n")
+	s = append(s, "LatitudeHemisphere: "+fmt.Sprintf("%#v", this.LatitudeHemisphere)+",\n")
+	s = append(s, "LongitudeDegree: "+fmt.Sprintf("%#v", this.LongitudeDegree)+",\n")
+	s = append(s, "LongitudeMinute: "+fmt.Sprintf("%#v", this.LongitudeMinute)+",\n")
+	s = append(s, "LongitudeSecond: "+fmt.Sprintf("%#v", this.LongitudeSecond)+",\n")
+	s = append(s, "LongitudeHemisphere: "+fmt.Sprintf("%#v", this.LongitudeHemisphere)+",\n")
+	s = append(s, "Altitude: "+fmt.Sprintf("%#v", this.Altitude)+",\n")
+	s = append(s, "LocationDiameter: "+fmt.Sprintf("%#v", this.LocationDiameter)+",\n")
+	s = append(s, "HorizontalPrecision: "+fmt.Sprintf("%#v", this.HorizontalPrecision)+",\n")
+	s = append(s, "VerticalPrecision: "+fmt.Sprintf("%#v", this.VerticalPrecision)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -5348,6 +7776,167 @@ func (m *RRSet_LbRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *RRSet_NaptrRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_NaptrRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NaptrRecord != nil {
+		{
+			size, err := m.NaptrRecord.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xc2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_DsRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_DsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DsRecord != nil {
+		{
+			size, err := m.DsRecord.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_CdsRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_CdsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CdsRecord != nil {
+		{
+			size, err := m.CdsRecord.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_AfsdbRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_AfsdbRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AfsdbRecord != nil {
+		{
+			size, err := m.AfsdbRecord.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_Eui48Record) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_Eui48Record) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Eui48Record != nil {
+		{
+			size, err := m.Eui48Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_Eui64Record) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_Eui64Record) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Eui64Record != nil {
+		{
+			size, err := m.Eui64Record.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RRSet_LocRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RRSet_LocRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.LocRecord != nil {
+		{
+			size, err := m.LocRecord.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *DNSAResourceRecord) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -5909,6 +8498,680 @@ func (m *DNSLBResourceRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSNAPTRResourceRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSNAPTRResourceRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSNAPTRResourceRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NAPTRValue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NAPTRValue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NAPTRValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Replacement) > 0 {
+		i -= len(m.Replacement)
+		copy(dAtA[i:], m.Replacement)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Replacement)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Regexp) > 0 {
+		i -= len(m.Regexp)
+		copy(dAtA[i:], m.Regexp)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Regexp)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Service) > 0 {
+		i -= len(m.Service)
+		copy(dAtA[i:], m.Service)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Service)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Flags) > 0 {
+		i -= len(m.Flags)
+		copy(dAtA[i:], m.Flags)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Flags)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Preference != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Preference))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Order != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Order))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSDSRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSDSRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSDSRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSCDSRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSCDSRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSCDSRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DSRecordValue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DSRecordValue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DSRecordValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.DigestChoice != nil {
+		{
+			size := m.DigestChoice.Size()
+			i -= size
+			if _, err := m.DigestChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.DsKeyAlgorithm != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DsKeyAlgorithm))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.KeyTag != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.KeyTag))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DSRecordValue_Sha1Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DSRecordValue_Sha1Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Sha1Digest != nil {
+		{
+			size, err := m.Sha1Digest.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DSRecordValue_Sha256Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DSRecordValue_Sha256Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Sha256Digest != nil {
+		{
+			size, err := m.Sha256Digest.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DSRecordValue_Sha384Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DSRecordValue_Sha384Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Sha384Digest != nil {
+		{
+			size, err := m.Sha384Digest.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SHA1Digest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SHA1Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SHA1Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Digest) > 0 {
+		i -= len(m.Digest)
+		copy(dAtA[i:], m.Digest)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Digest)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SHA256Digest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SHA256Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SHA256Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Digest) > 0 {
+		i -= len(m.Digest)
+		copy(dAtA[i:], m.Digest)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Digest)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SHA384Digest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SHA384Digest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SHA384Digest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Digest) > 0 {
+		i -= len(m.Digest)
+		copy(dAtA[i:], m.Digest)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Digest)))
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSAFSDBRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSAFSDBRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSAFSDBRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AFSDBRecordValue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AFSDBRecordValue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AFSDBRecordValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Hostname) > 0 {
+		i -= len(m.Hostname)
+		copy(dAtA[i:], m.Hostname)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Hostname)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Subtype != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Subtype))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSEUI48ResourceRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSEUI48ResourceRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSEUI48ResourceRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSEUI64ResourceRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSEUI64ResourceRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSEUI64ResourceRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DNSLOCResourceRecord) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DNSLOCResourceRecord) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DNSLOCResourceRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LOCValue) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LOCValue) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LOCValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VerticalPrecision != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.VerticalPrecision))))
+		i--
+		dAtA[i] = 0x65
+	}
+	if m.HorizontalPrecision != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.HorizontalPrecision))))
+		i--
+		dAtA[i] = 0x5d
+	}
+	if m.LocationDiameter != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.LocationDiameter))))
+		i--
+		dAtA[i] = 0x55
+	}
+	if m.Altitude != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Altitude))))
+		i--
+		dAtA[i] = 0x4d
+	}
+	if m.LongitudeHemisphere != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LongitudeHemisphere))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.LongitudeSecond != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.LongitudeSecond))))
+		i--
+		dAtA[i] = 0x3d
+	}
+	if m.LongitudeMinute != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LongitudeMinute))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.LongitudeDegree != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LongitudeDegree))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.LatitudeHemisphere != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LatitudeHemisphere))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.LatitudeSecond != 0 {
+		i -= 4
+		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.LatitudeSecond))))
+		i--
+		dAtA[i] = 0x1d
+	}
+	if m.LatitudeMinute != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LatitudeMinute))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.LatitudeDegree != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.LatitudeDegree))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -6969,6 +10232,90 @@ func (m *RRSet_LbRecord) Size() (n int) {
 	}
 	return n
 }
+func (m *RRSet_NaptrRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NaptrRecord != nil {
+		l = m.NaptrRecord.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_DsRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DsRecord != nil {
+		l = m.DsRecord.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_CdsRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CdsRecord != nil {
+		l = m.CdsRecord.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_AfsdbRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AfsdbRecord != nil {
+		l = m.AfsdbRecord.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_Eui48Record) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Eui48Record != nil {
+		l = m.Eui48Record.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_Eui64Record) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Eui64Record != nil {
+		l = m.Eui64Record.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RRSet_LocRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LocRecord != nil {
+		l = m.LocRecord.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *DNSAResourceRecord) Size() (n int) {
 	if m == nil {
 		return 0
@@ -7226,6 +10573,320 @@ func (m *DNSLBResourceRecord) Size() (n int) {
 	if m.Value != nil {
 		l = m.Value.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSNAPTRResourceRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *NAPTRValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Order != 0 {
+		n += 1 + sovTypes(uint64(m.Order))
+	}
+	if m.Preference != 0 {
+		n += 1 + sovTypes(uint64(m.Preference))
+	}
+	l = len(m.Flags)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Service)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Regexp)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Replacement)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSDSRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DNSCDSRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DSRecordValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.KeyTag != 0 {
+		n += 1 + sovTypes(uint64(m.KeyTag))
+	}
+	if m.DsKeyAlgorithm != 0 {
+		n += 1 + sovTypes(uint64(m.DsKeyAlgorithm))
+	}
+	if m.DigestChoice != nil {
+		n += m.DigestChoice.Size()
+	}
+	return n
+}
+
+func (m *DSRecordValue_Sha1Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Sha1Digest != nil {
+		l = m.Sha1Digest.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DSRecordValue_Sha256Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Sha256Digest != nil {
+		l = m.Sha256Digest.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DSRecordValue_Sha384Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Sha384Digest != nil {
+		l = m.Sha384Digest.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SHA1Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Digest)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SHA256Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Digest)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SHA384Digest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Digest)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSAFSDBRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AFSDBRecordValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Subtype != 0 {
+		n += 1 + sovTypes(uint64(m.Subtype))
+	}
+	l = len(m.Hostname)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSEUI48ResourceRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSEUI64ResourceRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *DNSLOCResourceRecord) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *LOCValue) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LatitudeDegree != 0 {
+		n += 1 + sovTypes(uint64(m.LatitudeDegree))
+	}
+	if m.LatitudeMinute != 0 {
+		n += 1 + sovTypes(uint64(m.LatitudeMinute))
+	}
+	if m.LatitudeSecond != 0 {
+		n += 5
+	}
+	if m.LatitudeHemisphere != 0 {
+		n += 1 + sovTypes(uint64(m.LatitudeHemisphere))
+	}
+	if m.LongitudeDegree != 0 {
+		n += 1 + sovTypes(uint64(m.LongitudeDegree))
+	}
+	if m.LongitudeMinute != 0 {
+		n += 1 + sovTypes(uint64(m.LongitudeMinute))
+	}
+	if m.LongitudeSecond != 0 {
+		n += 5
+	}
+	if m.LongitudeHemisphere != 0 {
+		n += 1 + sovTypes(uint64(m.LongitudeHemisphere))
+	}
+	if m.Altitude != 0 {
+		n += 5
+	}
+	if m.LocationDiameter != 0 {
+		n += 5
+	}
+	if m.HorizontalPrecision != 0 {
+		n += 5
+	}
+	if m.VerticalPrecision != 0 {
+		n += 5
 	}
 	return n
 }
@@ -7807,6 +11468,76 @@ func (this *RRSet_LbRecord) String() string {
 	}, "")
 	return s
 }
+func (this *RRSet_NaptrRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_NaptrRecord{`,
+		`NaptrRecord:` + strings.Replace(fmt.Sprintf("%v", this.NaptrRecord), "DNSNAPTRResourceRecord", "DNSNAPTRResourceRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_DsRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_DsRecord{`,
+		`DsRecord:` + strings.Replace(fmt.Sprintf("%v", this.DsRecord), "DNSDSRecord", "DNSDSRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_CdsRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_CdsRecord{`,
+		`CdsRecord:` + strings.Replace(fmt.Sprintf("%v", this.CdsRecord), "DNSCDSRecord", "DNSCDSRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_AfsdbRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_AfsdbRecord{`,
+		`AfsdbRecord:` + strings.Replace(fmt.Sprintf("%v", this.AfsdbRecord), "DNSAFSDBRecord", "DNSAFSDBRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_Eui48Record) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_Eui48Record{`,
+		`Eui48Record:` + strings.Replace(fmt.Sprintf("%v", this.Eui48Record), "DNSEUI48ResourceRecord", "DNSEUI48ResourceRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_Eui64Record) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_Eui64Record{`,
+		`Eui64Record:` + strings.Replace(fmt.Sprintf("%v", this.Eui64Record), "DNSEUI64ResourceRecord", "DNSEUI64ResourceRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RRSet_LocRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RRSet_LocRecord{`,
+		`LocRecord:` + strings.Replace(fmt.Sprintf("%v", this.LocRecord), "DNSLOCResourceRecord", "DNSLOCResourceRecord", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *DNSAResourceRecord) String() string {
 	if this == nil {
 		return "nil"
@@ -7975,6 +11706,227 @@ func (this *DNSLBResourceRecord) String() string {
 	s := strings.Join([]string{`&DNSLBResourceRecord{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Value:` + strings.Replace(fmt.Sprintf("%v", this.Value), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSNAPTRResourceRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*NAPTRValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "NAPTRValue", "NAPTRValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&DNSNAPTRResourceRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NAPTRValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NAPTRValue{`,
+		`Order:` + fmt.Sprintf("%v", this.Order) + `,`,
+		`Preference:` + fmt.Sprintf("%v", this.Preference) + `,`,
+		`Flags:` + fmt.Sprintf("%v", this.Flags) + `,`,
+		`Service:` + fmt.Sprintf("%v", this.Service) + `,`,
+		`Regexp:` + fmt.Sprintf("%v", this.Regexp) + `,`,
+		`Replacement:` + fmt.Sprintf("%v", this.Replacement) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSDSRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*DSRecordValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "DSRecordValue", "DSRecordValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&DNSDSRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSCDSRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*DSRecordValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "DSRecordValue", "DSRecordValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&DNSCDSRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DSRecordValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DSRecordValue{`,
+		`KeyTag:` + fmt.Sprintf("%v", this.KeyTag) + `,`,
+		`DsKeyAlgorithm:` + fmt.Sprintf("%v", this.DsKeyAlgorithm) + `,`,
+		`DigestChoice:` + fmt.Sprintf("%v", this.DigestChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DSRecordValue_Sha1Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DSRecordValue_Sha1Digest{`,
+		`Sha1Digest:` + strings.Replace(fmt.Sprintf("%v", this.Sha1Digest), "SHA1Digest", "SHA1Digest", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DSRecordValue_Sha256Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DSRecordValue_Sha256Digest{`,
+		`Sha256Digest:` + strings.Replace(fmt.Sprintf("%v", this.Sha256Digest), "SHA256Digest", "SHA256Digest", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DSRecordValue_Sha384Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DSRecordValue_Sha384Digest{`,
+		`Sha384Digest:` + strings.Replace(fmt.Sprintf("%v", this.Sha384Digest), "SHA384Digest", "SHA384Digest", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SHA1Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SHA1Digest{`,
+		`Digest:` + fmt.Sprintf("%v", this.Digest) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SHA256Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SHA256Digest{`,
+		`Digest:` + fmt.Sprintf("%v", this.Digest) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SHA384Digest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SHA384Digest{`,
+		`Digest:` + fmt.Sprintf("%v", this.Digest) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSAFSDBRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*AFSDBRecordValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "AFSDBRecordValue", "AFSDBRecordValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&DNSAFSDBRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AFSDBRecordValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AFSDBRecordValue{`,
+		`Subtype:` + fmt.Sprintf("%v", this.Subtype) + `,`,
+		`Hostname:` + fmt.Sprintf("%v", this.Hostname) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSEUI48ResourceRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSEUI48ResourceRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSEUI64ResourceRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DNSEUI64ResourceRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DNSLOCResourceRecord) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*LOCValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(f.String(), "LOCValue", "LOCValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&DNSLOCResourceRecord{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *LOCValue) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&LOCValue{`,
+		`LatitudeDegree:` + fmt.Sprintf("%v", this.LatitudeDegree) + `,`,
+		`LatitudeMinute:` + fmt.Sprintf("%v", this.LatitudeMinute) + `,`,
+		`LatitudeSecond:` + fmt.Sprintf("%v", this.LatitudeSecond) + `,`,
+		`LatitudeHemisphere:` + fmt.Sprintf("%v", this.LatitudeHemisphere) + `,`,
+		`LongitudeDegree:` + fmt.Sprintf("%v", this.LongitudeDegree) + `,`,
+		`LongitudeMinute:` + fmt.Sprintf("%v", this.LongitudeMinute) + `,`,
+		`LongitudeSecond:` + fmt.Sprintf("%v", this.LongitudeSecond) + `,`,
+		`LongitudeHemisphere:` + fmt.Sprintf("%v", this.LongitudeHemisphere) + `,`,
+		`Altitude:` + fmt.Sprintf("%v", this.Altitude) + `,`,
+		`LocationDiameter:` + fmt.Sprintf("%v", this.LocationDiameter) + `,`,
+		`HorizontalPrecision:` + fmt.Sprintf("%v", this.HorizontalPrecision) + `,`,
+		`VerticalPrecision:` + fmt.Sprintf("%v", this.VerticalPrecision) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -9246,6 +13198,251 @@ func (m *RRSet) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.TypeRecordSet = &RRSet_LbRecord{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NaptrRecord", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSNAPTRResourceRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_NaptrRecord{v}
+			iNdEx = postIndex
+		case 25:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DsRecord", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSDSRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_DsRecord{v}
+			iNdEx = postIndex
+		case 26:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CdsRecord", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSCDSRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_CdsRecord{v}
+			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AfsdbRecord", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSAFSDBRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_AfsdbRecord{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Eui48Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSEUI48ResourceRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_Eui48Record{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Eui64Record", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSEUI64ResourceRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_Eui64Record{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocRecord", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DNSLOCResourceRecord{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeRecordSet = &RRSet_LocRecord{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -10926,6 +15123,1842 @@ func (m *DNSLBResourceRecord) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSNAPTRResourceRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSNAPTRResourceRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSNAPTRResourceRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &NAPTRValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NAPTRValue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NAPTRValue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NAPTRValue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Order", wireType)
+			}
+			m.Order = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Order |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Preference", wireType)
+			}
+			m.Preference = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Preference |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Flags", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Flags = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Service", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Service = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Regexp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Regexp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Replacement", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Replacement = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSDSRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSDSRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSDSRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &DSRecordValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSCDSRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSCDSRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSCDSRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &DSRecordValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DSRecordValue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DSRecordValue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DSRecordValue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KeyTag", wireType)
+			}
+			m.KeyTag = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.KeyTag |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DsKeyAlgorithm", wireType)
+			}
+			m.DsKeyAlgorithm = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DsKeyAlgorithm |= DSKeyAlgorithm(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sha1Digest", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SHA1Digest{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DigestChoice = &DSRecordValue_Sha1Digest{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sha256Digest", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SHA256Digest{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DigestChoice = &DSRecordValue_Sha256Digest{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sha384Digest", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SHA384Digest{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DigestChoice = &DSRecordValue_Sha384Digest{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SHA1Digest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SHA1Digest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SHA1Digest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Digest", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Digest = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SHA256Digest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SHA256Digest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SHA256Digest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Digest", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Digest = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SHA384Digest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SHA384Digest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SHA384Digest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Digest", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Digest = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSAFSDBRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSAFSDBRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSAFSDBRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &AFSDBRecordValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AFSDBRecordValue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AFSDBRecordValue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AFSDBRecordValue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Subtype", wireType)
+			}
+			m.Subtype = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Subtype |= AFSDBRecordSubtype(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hostname", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Hostname = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSEUI48ResourceRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSEUI48ResourceRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSEUI48ResourceRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSEUI64ResourceRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSEUI64ResourceRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSEUI64ResourceRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DNSLOCResourceRecord) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DNSLOCResourceRecord: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DNSLOCResourceRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &LOCValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LOCValue) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LOCValue: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LOCValue: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatitudeDegree", wireType)
+			}
+			m.LatitudeDegree = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LatitudeDegree |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatitudeMinute", wireType)
+			}
+			m.LatitudeMinute = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LatitudeMinute |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatitudeSecond", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.LatitudeSecond = float32(math.Float32frombits(v))
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LatitudeHemisphere", wireType)
+			}
+			m.LatitudeHemisphere = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LatitudeHemisphere |= LatitudeHemisphere(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LongitudeDegree", wireType)
+			}
+			m.LongitudeDegree = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LongitudeDegree |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LongitudeMinute", wireType)
+			}
+			m.LongitudeMinute = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LongitudeMinute |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LongitudeSecond", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.LongitudeSecond = float32(math.Float32frombits(v))
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LongitudeHemisphere", wireType)
+			}
+			m.LongitudeHemisphere = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.LongitudeHemisphere |= LongitudeHemisphere(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Altitude", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.Altitude = float32(math.Float32frombits(v))
+		case 10:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocationDiameter", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.LocationDiameter = float32(math.Float32frombits(v))
+		case 11:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HorizontalPrecision", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.HorizontalPrecision = float32(math.Float32frombits(v))
+		case 12:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VerticalPrecision", wireType)
+			}
+			var v uint32
+			if (iNdEx + 4) > l {
+				return io.ErrUnexpectedEOF
+			}
+			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
+			iNdEx += 4
+			m.VerticalPrecision = float32(math.Float32frombits(v))
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

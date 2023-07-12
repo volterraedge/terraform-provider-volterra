@@ -15901,6 +15901,14 @@ type ValidateOpenApiValidationAllSpecEndpointsSettings struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOpenApiValidationAllSpecEndpointsSettings) OversizedBodyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for oversized_body_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOpenApiValidationAllSpecEndpointsSettings) ValidationModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -15966,6 +15974,42 @@ func (v *ValidateOpenApiValidationAllSpecEndpointsSettings) Validate(ctx context
 
 	}
 
+	if fv, exists := v.FldValidators["oversized_body_choice"]; exists {
+		val := m.GetOversizedBodyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("oversized_body_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOversizedBodyChoice().(type) {
+	case *OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_skip_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation).OversizedBodySkipValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_skip_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_fail_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation).OversizedBodyFailValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_fail_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["validation_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("validation_mode"))
@@ -15989,6 +16033,17 @@ var DefaultOpenApiValidationAllSpecEndpointsSettingsValidator = func() *Validate
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhOversizedBodyChoice := v.OversizedBodyChoiceValidationRuleHandler
+	rulesOversizedBodyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOversizedBodyChoice(rulesOversizedBodyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationAllSpecEndpointsSettings.oversized_body_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["oversized_body_choice"] = vFn
 
 	vrhValidationMode := v.ValidationModeValidationRuleHandler
 	rulesValidationMode := map[string]string{
@@ -16060,6 +16115,14 @@ type ValidateOpenApiValidationMode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOpenApiValidationMode) ResponseValidationModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for response_validation_mode_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOpenApiValidationMode) ValidationModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -16080,6 +16143,42 @@ func (v *ValidateOpenApiValidationMode) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["response_validation_mode_choice"]; exists {
+		val := m.GetResponseValidationModeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("response_validation_mode_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetResponseValidationModeChoice().(type) {
+	case *OpenApiValidationMode_SkipResponseValidation:
+		if fv, exists := v.FldValidators["response_validation_mode_choice.skip_response_validation"]; exists {
+			val := m.GetResponseValidationModeChoice().(*OpenApiValidationMode_SkipResponseValidation).SkipResponseValidation
+			vOpts := append(opts,
+				db.WithValidateField("response_validation_mode_choice"),
+				db.WithValidateField("skip_response_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationMode_ResponseValidationModeActive:
+		if fv, exists := v.FldValidators["response_validation_mode_choice.response_validation_mode_active"]; exists {
+			val := m.GetResponseValidationModeChoice().(*OpenApiValidationMode_ResponseValidationModeActive).ResponseValidationModeActive
+			vOpts := append(opts,
+				db.WithValidateField("response_validation_mode_choice"),
+				db.WithValidateField("response_validation_mode_active"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["validation_mode_choice"]; exists {
@@ -16133,6 +16232,17 @@ var DefaultOpenApiValidationModeValidator = func() *ValidateOpenApiValidationMod
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhResponseValidationModeChoice := v.ResponseValidationModeChoiceValidationRuleHandler
+	rulesResponseValidationModeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhResponseValidationModeChoice(rulesResponseValidationModeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationMode.response_validation_mode_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_validation_mode_choice"] = vFn
+
 	vrhValidationModeChoice := v.ValidationModeChoiceValidationRuleHandler
 	rulesValidationModeChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -16143,6 +16253,8 @@ var DefaultOpenApiValidationModeValidator = func() *ValidateOpenApiValidationMod
 		panic(errMsg)
 	}
 	v.FldValidators["validation_mode_choice"] = vFn
+
+	v.FldValidators["response_validation_mode_choice.response_validation_mode_active"] = OpenApiValidationModeActiveResponseValidator().Validate
 
 	v.FldValidators["validation_mode_choice.validation_mode_active"] = OpenApiValidationModeActiveValidator().Validate
 
@@ -16338,6 +16450,7 @@ var DefaultOpenApiValidationModeActiveValidator = func() *ValidateOpenApiValidat
 	rulesRequestValidationProperties := map[string]string{
 		"ves.io.schema.rules.message.required":                 "true",
 		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.not_in":       "[7]",
 		"ves.io.schema.rules.repeated.min_items":               "1",
 		"ves.io.schema.rules.repeated.unique":                  "true",
 	}
@@ -16353,6 +16466,209 @@ var DefaultOpenApiValidationModeActiveValidator = func() *ValidateOpenApiValidat
 
 func OpenApiValidationModeActiveValidator() db.Validator {
 	return DefaultOpenApiValidationModeActiveValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenApiValidationModeActiveResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenApiValidationModeActiveResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenApiValidationModeActiveResponse) DeepCopy() *OpenApiValidationModeActiveResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenApiValidationModeActiveResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenApiValidationModeActiveResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenApiValidationModeActiveResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenApiValidationModeActiveResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOpenApiValidationModeActiveResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenApiValidationModeActiveResponse) ValidationEnforcementTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for validation_enforcement_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationModeActiveResponse) ResponseValidationPropertiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.OpenApiValidationProperties)
+		return int32(i)
+	}
+	// ves_io_schema.OpenApiValidationProperties_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.OpenApiValidationProperties_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for response_validation_properties")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.OpenApiValidationProperties, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_validation_properties")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.OpenApiValidationProperties)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.OpenApiValidationProperties, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_validation_properties")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_validation_properties")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationModeActiveResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenApiValidationModeActiveResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenApiValidationModeActiveResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["response_validation_properties"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_validation_properties"))
+		if err := fv(ctx, m.GetResponseValidationProperties(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_enforcement_type"]; exists {
+		val := m.GetValidationEnforcementType()
+		vOpts := append(opts,
+			db.WithValidateField("validation_enforcement_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetValidationEnforcementType().(type) {
+	case *OpenApiValidationModeActiveResponse_EnforcementReport:
+		if fv, exists := v.FldValidators["validation_enforcement_type.enforcement_report"]; exists {
+			val := m.GetValidationEnforcementType().(*OpenApiValidationModeActiveResponse_EnforcementReport).EnforcementReport
+			vOpts := append(opts,
+				db.WithValidateField("validation_enforcement_type"),
+				db.WithValidateField("enforcement_report"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationModeActiveResponse_EnforcementBlock:
+		if fv, exists := v.FldValidators["validation_enforcement_type.enforcement_block"]; exists {
+			val := m.GetValidationEnforcementType().(*OpenApiValidationModeActiveResponse_EnforcementBlock).EnforcementBlock
+			vOpts := append(opts,
+				db.WithValidateField("validation_enforcement_type"),
+				db.WithValidateField("enforcement_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenApiValidationModeActiveResponseValidator = func() *ValidateOpenApiValidationModeActiveResponse {
+	v := &ValidateOpenApiValidationModeActiveResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhValidationEnforcementType := v.ValidationEnforcementTypeValidationRuleHandler
+	rulesValidationEnforcementType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhValidationEnforcementType(rulesValidationEnforcementType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationModeActiveResponse.validation_enforcement_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["validation_enforcement_type"] = vFn
+
+	vrhResponseValidationProperties := v.ResponseValidationPropertiesValidationRuleHandler
+	rulesResponseValidationProperties := map[string]string{
+		"ves.io.schema.rules.message.required":                 "true",
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.items.enum.in":           "[2,4,5,7]",
+		"ves.io.schema.rules.repeated.min_items":               "1",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhResponseValidationProperties(rulesResponseValidationProperties)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationModeActiveResponse.response_validation_properties: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_validation_properties"] = vFn
+
+	return v
+}()
+
+func OpenApiValidationModeActiveResponseValidator() db.Validator {
+	return DefaultOpenApiValidationModeActiveResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -17389,10 +17705,11 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -17814,10 +18131,11 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -18296,10 +18614,11 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":       "true",
-		"ves.io.schema.rules.string.max_len":         "512",
-		"ves.io.schema.rules.string.min_len":         "1",
-		"ves.io.schema.rules.string.port_range_list": "true",
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
 	if err != nil {
@@ -22853,6 +23172,15 @@ func (v *ValidateRouteTypeDirectResponse) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["incoming_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("incoming_port"))
+		if err := fv(ctx, m.GetIncomingPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path"))
@@ -22901,6 +23229,8 @@ var DefaultRouteTypeDirectResponseValidator = func() *ValidateRouteTypeDirectRes
 	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["route_direct_response"] = ves_io_schema_route.RouteDirectResponseValidator().Validate
+
+	v.FldValidators["incoming_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
 
 	return v
 }()
@@ -23029,6 +23359,15 @@ func (v *ValidateRouteTypeRedirect) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["incoming_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("incoming_port"))
+		if err := fv(ctx, m.GetIncomingPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("path"))
@@ -23077,6 +23416,8 @@ var DefaultRouteTypeRedirectValidator = func() *ValidateRouteTypeRedirect {
 	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["route_redirect"] = ves_io_schema_route.RouteRedirectValidator().Validate
+
+	v.FldValidators["incoming_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
 
 	return v
 }()
@@ -23401,6 +23742,15 @@ func (v *ValidateRouteTypeSimple) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["incoming_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("incoming_port"))
+		if err := fv(ctx, m.GetIncomingPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
 		if err := fv(ctx, m.GetOriginPools(), vOpts...); err != nil {
@@ -23483,6 +23833,8 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 	v.FldValidators["path"] = ves_io_schema.PathMatcherTypeValidator().Validate
 
 	v.FldValidators["advanced_options"] = RouteSimpleAdvancedOptionsValidator().Validate
+
+	v.FldValidators["incoming_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
 
 	return v
 }()
@@ -25998,7 +26350,7 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 	vrhActions := v.ActionsValidationRuleHandler
 	rulesActions := map[string]string{
 		"ves.io.schema.rules.enum.defined_only":  "true",
-		"ves.io.schema.rules.repeated.max_items": "5",
+		"ves.io.schema.rules.repeated.max_items": "10",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhActions(rulesActions)
@@ -26300,6 +26652,14 @@ type ValidateValidateApiBySpecRule struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateValidateApiBySpecRule) OversizedBodyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for oversized_body_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateValidateApiBySpecRule) OpenApiValidationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -26400,6 +26760,42 @@ func (v *ValidateValidateApiBySpecRule) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["oversized_body_choice"]; exists {
+		val := m.GetOversizedBodyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("oversized_body_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOversizedBodyChoice().(type) {
+	case *ValidateApiBySpecRule_OversizedBodySkipValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_skip_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*ValidateApiBySpecRule_OversizedBodySkipValidation).OversizedBodySkipValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_skip_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ValidateApiBySpecRule_OversizedBodyFailValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_fail_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*ValidateApiBySpecRule_OversizedBodyFailValidation).OversizedBodyFailValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_fail_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -26414,6 +26810,17 @@ var DefaultValidateApiBySpecRuleValidator = func() *ValidateValidateApiBySpecRul
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhOversizedBodyChoice := v.OversizedBodyChoiceValidationRuleHandler
+	rulesOversizedBodyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOversizedBodyChoice(rulesOversizedBodyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ValidateApiBySpecRule.oversized_body_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["oversized_body_choice"] = vFn
 
 	vrhOpenApiValidationRules := v.OpenApiValidationRulesValidationRuleHandler
 	rulesOpenApiValidationRules := map[string]string{

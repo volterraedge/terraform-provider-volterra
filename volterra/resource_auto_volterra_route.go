@@ -80,9 +80,39 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
-									"js_download_path": {
-										Type:     schema.TypeString,
+									"javascript_tags": {
+
+										Type:     schema.TypeList,
 										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"javascript_url": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"tag_attributes": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"javascript_tag": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"tag_value": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 								},
 							},
@@ -185,6 +215,12 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"no_port_match": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 
 												"port": {
 
@@ -1351,9 +1387,43 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+					if v, ok := cs["javascript_tags"]; ok && !isIntfNil(v) {
 
-						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+						sl := v.([]interface{})
+						javascriptTags := make([]*ves_io_schema_route.JavaScriptTag, len(sl))
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptTags = javascriptTags
+						for i, set := range sl {
+							javascriptTags[i] = &ves_io_schema_route.JavaScriptTag{}
+							javascriptTagsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := javascriptTagsMapStrToI["javascript_url"]; ok && !isIntfNil(w) {
+								javascriptTags[i].JavascriptUrl = w.(string)
+							}
+
+							if v, ok := javascriptTagsMapStrToI["tag_attributes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tagAttributes := make([]*ves_io_schema_route.TagAttribute, len(sl))
+								javascriptTags[i].TagAttributes = tagAttributes
+								for i, set := range sl {
+									tagAttributes[i] = &ves_io_schema_route.TagAttribute{}
+									tagAttributesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tagAttributesMapStrToI["javascript_tag"]; ok && !isIntfNil(v) {
+
+										tagAttributes[i].JavascriptTag = ves_io_schema_route.TagAttributeName(ves_io_schema_route.TagAttributeName_value[v.(string)])
+
+									}
+
+									if w, ok := tagAttributesMapStrToI["tag_value"]; ok && !isIntfNil(w) {
+										tagAttributes[i].TagValue = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 
@@ -1487,6 +1557,18 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							incomingPortMapStrToI := set.(map[string]interface{})
 
 							portMatchTypeFound := false
+
+							if v, ok := incomingPortMapStrToI["no_port_match"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+
+								if v.(bool) {
+									portMatchInt := &ves_io_schema.PortMatcherType_NoPortMatch{}
+									portMatchInt.NoPortMatch = &ves_io_schema.Empty{}
+									incomingPort.PortMatch = portMatchInt
+								}
+
+							}
 
 							if v, ok := incomingPortMapStrToI["port"]; ok && !isIntfNil(v) && !portMatchTypeFound {
 
@@ -3044,9 +3126,43 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["js_download_path"]; ok && !isIntfNil(v) {
+					if v, ok := cs["javascript_tags"]; ok && !isIntfNil(v) {
 
-						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JsDownloadPath = v.(string)
+						sl := v.([]interface{})
+						javascriptTags := make([]*ves_io_schema_route.JavaScriptTag, len(sl))
+						botDefenseJavascriptInjectionChoiceInt.BotDefenseJavascriptInjection.JavascriptTags = javascriptTags
+						for i, set := range sl {
+							javascriptTags[i] = &ves_io_schema_route.JavaScriptTag{}
+							javascriptTagsMapStrToI := set.(map[string]interface{})
+
+							if w, ok := javascriptTagsMapStrToI["javascript_url"]; ok && !isIntfNil(w) {
+								javascriptTags[i].JavascriptUrl = w.(string)
+							}
+
+							if v, ok := javascriptTagsMapStrToI["tag_attributes"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tagAttributes := make([]*ves_io_schema_route.TagAttribute, len(sl))
+								javascriptTags[i].TagAttributes = tagAttributes
+								for i, set := range sl {
+									tagAttributes[i] = &ves_io_schema_route.TagAttribute{}
+									tagAttributesMapStrToI := set.(map[string]interface{})
+
+									if v, ok := tagAttributesMapStrToI["javascript_tag"]; ok && !isIntfNil(v) {
+
+										tagAttributes[i].JavascriptTag = ves_io_schema_route.TagAttributeName(ves_io_schema_route.TagAttributeName_value[v.(string)])
+
+									}
+
+									if w, ok := tagAttributesMapStrToI["tag_value"]; ok && !isIntfNil(w) {
+										tagAttributes[i].TagValue = w.(string)
+									}
+
+								}
+
+							}
+
+						}
 
 					}
 
@@ -3180,6 +3296,18 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							incomingPortMapStrToI := set.(map[string]interface{})
 
 							portMatchTypeFound := false
+
+							if v, ok := incomingPortMapStrToI["no_port_match"]; ok && !isIntfNil(v) && !portMatchTypeFound {
+
+								portMatchTypeFound = true
+
+								if v.(bool) {
+									portMatchInt := &ves_io_schema.PortMatcherType_NoPortMatch{}
+									portMatchInt.NoPortMatch = &ves_io_schema.Empty{}
+									incomingPort.PortMatch = portMatchInt
+								}
+
+							}
 
 							if v, ok := incomingPortMapStrToI["port"]; ok && !isIntfNil(v) && !portMatchTypeFound {
 

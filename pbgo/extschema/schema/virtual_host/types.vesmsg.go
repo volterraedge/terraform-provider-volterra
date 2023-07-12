@@ -250,6 +250,8 @@ var DefaultApiSpecValidator = func() *ValidateApiSpec {
 	}
 	v.FldValidators["api_definition"] = vFn
 
+	v.FldValidators["open_api_validation_choice.enable_open_api_validation"] = OpenApiValidationSettingsValidator().Validate
+
 	return v
 }()
 
@@ -9445,6 +9447,138 @@ var DefaultJavascriptChallengeTypeValidator = func() *ValidateJavascriptChalleng
 
 func JavascriptChallengeTypeValidator() db.Validator {
 	return DefaultJavascriptChallengeTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenApiValidationSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenApiValidationSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenApiValidationSettings) DeepCopy() *OpenApiValidationSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenApiValidationSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenApiValidationSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenApiValidationSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenApiValidationSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOpenApiValidationSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenApiValidationSettings) OversizedBodyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for oversized_body_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOpenApiValidationSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenApiValidationSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenApiValidationSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["oversized_body_choice"]; exists {
+		val := m.GetOversizedBodyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("oversized_body_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetOversizedBodyChoice().(type) {
+	case *OpenApiValidationSettings_OversizedBodySkipValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_skip_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationSettings_OversizedBodySkipValidation).OversizedBodySkipValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_skip_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationSettings_OversizedBodyFailValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_fail_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationSettings_OversizedBodyFailValidation).OversizedBodyFailValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_fail_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenApiValidationSettingsValidator = func() *ValidateOpenApiValidationSettings {
+	v := &ValidateOpenApiValidationSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOversizedBodyChoice := v.OversizedBodyChoiceValidationRuleHandler
+	rulesOversizedBodyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOversizedBodyChoice(rulesOversizedBodyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationSettings.oversized_body_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["oversized_body_choice"] = vFn
+
+	return v
+}()
+
+func OpenApiValidationSettingsValidator() db.Validator {
+	return DefaultOpenApiValidationSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct

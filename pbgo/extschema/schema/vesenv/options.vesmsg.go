@@ -1350,6 +1350,15 @@ func (v *ValidateServiceInfo) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["locations"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("locations"))
@@ -1871,6 +1880,24 @@ func (v *ValidateServiceSlugInfo) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("daemon"))
 		if err := fv(ctx, m.GetDaemon(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["p0_pol_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("p0_pol_name"))
+		if err := fv(ctx, m.GetP0PolName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_selector"))
+		if err := fv(ctx, m.GetServiceSelector(), vOpts...); err != nil {
 			return err
 		}
 

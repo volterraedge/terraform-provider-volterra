@@ -26,6 +26,151 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AFSDBRecordValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AFSDBRecordValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AFSDBRecordValue) DeepCopy() *AFSDBRecordValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AFSDBRecordValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AFSDBRecordValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AFSDBRecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AFSDBRecordValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAFSDBRecordValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAFSDBRecordValue) SubtypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(AFSDBRecordSubtype)
+		return int32(i)
+	}
+	// AFSDBRecordSubtype_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, AFSDBRecordSubtype_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subtype")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAFSDBRecordValue) HostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAFSDBRecordValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AFSDBRecordValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AFSDBRecordValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["hostname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hostname"))
+		if err := fv(ctx, m.GetHostname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subtype"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subtype"))
+		if err := fv(ctx, m.GetSubtype(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAFSDBRecordValueValidator = func() *ValidateAFSDBRecordValue {
+	v := &ValidateAFSDBRecordValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSubtype := v.SubtypeValidationRuleHandler
+	rulesSubtype := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSubtype(rulesSubtype)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AFSDBRecordValue.subtype: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subtype"] = vFn
+
+	vrhHostname := v.HostnameValidationRuleHandler
+	rulesHostname := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+	}
+	vFn, err = vrhHostname(rulesHostname)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AFSDBRecordValue.hostname: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["hostname"] = vFn
+
+	return v
+}()
+
+func AFSDBRecordValueValidator() db.Validator {
+	return DefaultAFSDBRecordValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CertificationAuthorityAuthorization) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -552,6 +697,182 @@ func DNSAAAAResourceRecordValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DNSAFSDBRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSAFSDBRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSAFSDBRecord) DeepCopy() *DNSAFSDBRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSAFSDBRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSAFSDBRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSAFSDBRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSAFSDBRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSAFSDBRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSAFSDBRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSAFSDBRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AFSDBRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AFSDBRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AFSDBRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AFSDBRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSAFSDBRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSAFSDBRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSAFSDBRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSAFSDBRecordValidator = func() *ValidateDNSAFSDBRecord {
+	v := &ValidateDNSAFSDBRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSAFSDBRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSAFSDBRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DNSAFSDBRecordValidator() db.Validator {
+	return DefaultDNSAFSDBRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DNSAResourceRecord) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1036,6 +1357,182 @@ func DNSCAAResourceRecordValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DNSCDSRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSCDSRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSCDSRecord) DeepCopy() *DNSCDSRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSCDSRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSCDSRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSCDSRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSCDSRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSCDSRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSCDSRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSCDSRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DSRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DSRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DSRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DSRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSCDSRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSCDSRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSCDSRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSCDSRecordValidator = func() *ValidateDNSCDSRecord {
+	v := &ValidateDNSCDSRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSCDSRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSCDSRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DNSCDSRecordValidator() db.Validator {
+	return DefaultDNSCDSRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DNSCNAMEResourceRecord) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1171,6 +1668,462 @@ var DefaultDNSCNAMEResourceRecordValidator = func() *ValidateDNSCNAMEResourceRec
 
 func DNSCNAMEResourceRecordValidator() db.Validator {
 	return DefaultDNSCNAMEResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSDSRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSDSRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSDSRecord) DeepCopy() *DNSDSRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSDSRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSDSRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSDSRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSDSRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSDSRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSDSRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSDSRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DSRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DSRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DSRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DSRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSDSRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSDSRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSDSRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSDSRecordValidator = func() *ValidateDNSDSRecord {
+	v := &ValidateDNSDSRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSDSRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSDSRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DNSDSRecordValidator() db.Validator {
+	return DefaultDNSDSRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSEUI48ResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSEUI48ResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSEUI48ResourceRecord) DeepCopy() *DNSEUI48ResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSEUI48ResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSEUI48ResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSEUI48ResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSEUI48ResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSEUI48ResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSEUI48ResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSEUI48ResourceRecord) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSEUI48ResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSEUI48ResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSEUI48ResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSEUI48ResourceRecordValidator = func() *ValidateDNSEUI48ResourceRecord {
+	v := &ValidateDNSEUI48ResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSEUI48ResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "17",
+		"ves.io.schema.rules.string.min_len":   "17",
+		"ves.io.schema.rules.string.pattern":   "^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSEUI48ResourceRecord.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func DNSEUI48ResourceRecordValidator() db.Validator {
+	return DefaultDNSEUI48ResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSEUI64ResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSEUI64ResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSEUI64ResourceRecord) DeepCopy() *DNSEUI64ResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSEUI64ResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSEUI64ResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSEUI64ResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSEUI64ResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSEUI64ResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSEUI64ResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSEUI64ResourceRecord) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSEUI64ResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSEUI64ResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSEUI64ResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSEUI64ResourceRecordValidator = func() *ValidateDNSEUI64ResourceRecord {
+	v := &ValidateDNSEUI64ResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSEUI64ResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "23",
+		"ves.io.schema.rules.string.min_len":   "23",
+		"ves.io.schema.rules.string.pattern":   "^([0-9A-Fa-f]{2}-){7}([0-9A-Fa-f]{2})$",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSEUI64ResourceRecord.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func DNSEUI64ResourceRecordValidator() db.Validator {
+	return DefaultDNSEUI64ResourceRecordValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1351,6 +2304,182 @@ func DNSLBResourceRecordValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DNSLOCResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSLOCResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSLOCResourceRecord) DeepCopy() *DNSLOCResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSLOCResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSLOCResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSLOCResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSLOCResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSLOCResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLOCResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLOCResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*LOCValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := LOCValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*LOCValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*LOCValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLOCResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSLOCResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSLOCResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSLOCResourceRecordValidator = func() *ValidateDNSLOCResourceRecord {
+	v := &ValidateDNSLOCResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLOCResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLOCResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DNSLOCResourceRecordValidator() db.Validator {
+	return DefaultDNSLOCResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DNSMXResourceRecord) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1522,6 +2651,182 @@ var DefaultDNSMXResourceRecordValidator = func() *ValidateDNSMXResourceRecord {
 
 func DNSMXResourceRecordValidator() db.Validator {
 	return DefaultDNSMXResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DNSNAPTRResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSNAPTRResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSNAPTRResourceRecord) DeepCopy() *DNSNAPTRResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSNAPTRResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSNAPTRResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSNAPTRResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSNAPTRResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSNAPTRResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSNAPTRResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSNAPTRResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*NAPTRValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := NAPTRValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*NAPTRValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*NAPTRValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSNAPTRResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSNAPTRResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSNAPTRResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSNAPTRResourceRecordValidator = func() *ValidateDNSNAPTRResourceRecord {
+	v := &ValidateDNSNAPTRResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSNAPTRResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSNAPTRResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DNSNAPTRResourceRecordValidator() db.Validator {
+	return DefaultDNSNAPTRResourceRecordValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2219,6 +3524,222 @@ func DNSTXTResourceRecordValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DSRecordValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DSRecordValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DSRecordValue) DeepCopy() *DSRecordValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DSRecordValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DSRecordValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DSRecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DSRecordValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDSRecordValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDSRecordValue) DigestChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for digest_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDSRecordValue) KeyTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key_tag")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDSRecordValue) DsKeyAlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(DSKeyAlgorithm)
+		return int32(i)
+	}
+	// DSKeyAlgorithm_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, DSKeyAlgorithm_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ds_key_algorithm")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDSRecordValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DSRecordValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DSRecordValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["digest_choice"]; exists {
+		val := m.GetDigestChoice()
+		vOpts := append(opts,
+			db.WithValidateField("digest_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDigestChoice().(type) {
+	case *DSRecordValue_Sha1Digest:
+		if fv, exists := v.FldValidators["digest_choice.sha1_digest"]; exists {
+			val := m.GetDigestChoice().(*DSRecordValue_Sha1Digest).Sha1Digest
+			vOpts := append(opts,
+				db.WithValidateField("digest_choice"),
+				db.WithValidateField("sha1_digest"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DSRecordValue_Sha256Digest:
+		if fv, exists := v.FldValidators["digest_choice.sha256_digest"]; exists {
+			val := m.GetDigestChoice().(*DSRecordValue_Sha256Digest).Sha256Digest
+			vOpts := append(opts,
+				db.WithValidateField("digest_choice"),
+				db.WithValidateField("sha256_digest"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DSRecordValue_Sha384Digest:
+		if fv, exists := v.FldValidators["digest_choice.sha384_digest"]; exists {
+			val := m.GetDigestChoice().(*DSRecordValue_Sha384Digest).Sha384Digest
+			vOpts := append(opts,
+				db.WithValidateField("digest_choice"),
+				db.WithValidateField("sha384_digest"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ds_key_algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ds_key_algorithm"))
+		if err := fv(ctx, m.GetDsKeyAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["key_tag"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key_tag"))
+		if err := fv(ctx, m.GetKeyTag(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDSRecordValueValidator = func() *ValidateDSRecordValue {
+	v := &ValidateDSRecordValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDigestChoice := v.DigestChoiceValidationRuleHandler
+	rulesDigestChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDigestChoice(rulesDigestChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DSRecordValue.digest_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["digest_choice"] = vFn
+
+	vrhKeyTag := v.KeyTagValidationRuleHandler
+	rulesKeyTag := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65536",
+	}
+	vFn, err = vrhKeyTag(rulesKeyTag)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DSRecordValue.key_tag: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key_tag"] = vFn
+
+	vrhDsKeyAlgorithm := v.DsKeyAlgorithmValidationRuleHandler
+	rulesDsKeyAlgorithm := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDsKeyAlgorithm(rulesDsKeyAlgorithm)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DSRecordValue.ds_key_algorithm: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ds_key_algorithm"] = vFn
+
+	v.FldValidators["digest_choice.sha1_digest"] = SHA1DigestValidator().Validate
+	v.FldValidators["digest_choice.sha256_digest"] = SHA256DigestValidator().Validate
+	v.FldValidators["digest_choice.sha384_digest"] = SHA384DigestValidator().Validate
+
+	return v
+}()
+
+func DSRecordValueValidator() db.Validator {
+	return DefaultDSRecordValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2634,6 +4155,468 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LOCValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LOCValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LOCValue) DeepCopy() *LOCValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LOCValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LOCValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LOCValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LOCValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLOCValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLOCValue) LatitudeDegreeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude_degree")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LatitudeMinuteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude_minute")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LatitudeSecondValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude_second")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LatitudeHemisphereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(LatitudeHemisphere)
+		return int32(i)
+	}
+	// LatitudeHemisphere_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, LatitudeHemisphere_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude_hemisphere")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LongitudeDegreeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude_degree")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LongitudeMinuteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude_minute")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LongitudeSecondValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude_second")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LongitudeHemisphereValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(LongitudeHemisphere)
+		return int32(i)
+	}
+	// LongitudeHemisphere_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, LongitudeHemisphere_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude_hemisphere")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) AltitudeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for altitude")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) LocationDiameterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for location_diameter")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) HorizontalPrecisionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for horizontal_precision")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) VerticalPrecisionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vertical_precision")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLOCValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LOCValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LOCValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["altitude"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("altitude"))
+		if err := fv(ctx, m.GetAltitude(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["horizontal_precision"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("horizontal_precision"))
+		if err := fv(ctx, m.GetHorizontalPrecision(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latitude_degree"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latitude_degree"))
+		if err := fv(ctx, m.GetLatitudeDegree(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latitude_hemisphere"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latitude_hemisphere"))
+		if err := fv(ctx, m.GetLatitudeHemisphere(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latitude_minute"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latitude_minute"))
+		if err := fv(ctx, m.GetLatitudeMinute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["latitude_second"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latitude_second"))
+		if err := fv(ctx, m.GetLatitudeSecond(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["location_diameter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("location_diameter"))
+		if err := fv(ctx, m.GetLocationDiameter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["longitude_degree"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("longitude_degree"))
+		if err := fv(ctx, m.GetLongitudeDegree(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["longitude_hemisphere"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("longitude_hemisphere"))
+		if err := fv(ctx, m.GetLongitudeHemisphere(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["longitude_minute"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("longitude_minute"))
+		if err := fv(ctx, m.GetLongitudeMinute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["longitude_second"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("longitude_second"))
+		if err := fv(ctx, m.GetLongitudeSecond(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vertical_precision"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vertical_precision"))
+		if err := fv(ctx, m.GetVerticalPrecision(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLOCValueValidator = func() *ValidateLOCValue {
+	v := &ValidateLOCValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLatitudeDegree := v.LatitudeDegreeValidationRuleHandler
+	rulesLatitudeDegree := map[string]string{
+		"ves.io.schema.rules.int32.gte":        "0",
+		"ves.io.schema.rules.int32.lte":        "90",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLatitudeDegree(rulesLatitudeDegree)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.latitude_degree: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["latitude_degree"] = vFn
+
+	vrhLatitudeMinute := v.LatitudeMinuteValidationRuleHandler
+	rulesLatitudeMinute := map[string]string{
+		"ves.io.schema.rules.int32.gte": "0",
+		"ves.io.schema.rules.int32.lte": "59",
+	}
+	vFn, err = vrhLatitudeMinute(rulesLatitudeMinute)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.latitude_minute: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["latitude_minute"] = vFn
+
+	vrhLatitudeSecond := v.LatitudeSecondValidationRuleHandler
+	rulesLatitudeSecond := map[string]string{
+		"ves.io.schema.rules.float.gte": "0.0",
+		"ves.io.schema.rules.float.lte": "59.999",
+	}
+	vFn, err = vrhLatitudeSecond(rulesLatitudeSecond)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.latitude_second: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["latitude_second"] = vFn
+
+	vrhLatitudeHemisphere := v.LatitudeHemisphereValidationRuleHandler
+	rulesLatitudeHemisphere := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLatitudeHemisphere(rulesLatitudeHemisphere)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.latitude_hemisphere: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["latitude_hemisphere"] = vFn
+
+	vrhLongitudeDegree := v.LongitudeDegreeValidationRuleHandler
+	rulesLongitudeDegree := map[string]string{
+		"ves.io.schema.rules.int32.gte":        "0",
+		"ves.io.schema.rules.int32.lte":        "180",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLongitudeDegree(rulesLongitudeDegree)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.longitude_degree: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["longitude_degree"] = vFn
+
+	vrhLongitudeMinute := v.LongitudeMinuteValidationRuleHandler
+	rulesLongitudeMinute := map[string]string{
+		"ves.io.schema.rules.int32.gte": "0",
+		"ves.io.schema.rules.int32.lte": "59",
+	}
+	vFn, err = vrhLongitudeMinute(rulesLongitudeMinute)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.longitude_minute: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["longitude_minute"] = vFn
+
+	vrhLongitudeSecond := v.LongitudeSecondValidationRuleHandler
+	rulesLongitudeSecond := map[string]string{
+		"ves.io.schema.rules.float.gte": "0.0",
+		"ves.io.schema.rules.float.lte": "59.999",
+	}
+	vFn, err = vrhLongitudeSecond(rulesLongitudeSecond)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.longitude_second: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["longitude_second"] = vFn
+
+	vrhLongitudeHemisphere := v.LongitudeHemisphereValidationRuleHandler
+	rulesLongitudeHemisphere := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLongitudeHemisphere(rulesLongitudeHemisphere)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.longitude_hemisphere: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["longitude_hemisphere"] = vFn
+
+	vrhAltitude := v.AltitudeValidationRuleHandler
+	rulesAltitude := map[string]string{
+		"ves.io.schema.rules.float.gte":        "-100000.00",
+		"ves.io.schema.rules.float.lte":        "42849672.95",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAltitude(rulesAltitude)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.altitude: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["altitude"] = vFn
+
+	vrhLocationDiameter := v.LocationDiameterValidationRuleHandler
+	rulesLocationDiameter := map[string]string{
+		"ves.io.schema.rules.float.gte": "0.0",
+		"ves.io.schema.rules.float.lte": "90000000.00",
+	}
+	vFn, err = vrhLocationDiameter(rulesLocationDiameter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.location_diameter: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["location_diameter"] = vFn
+
+	vrhHorizontalPrecision := v.HorizontalPrecisionValidationRuleHandler
+	rulesHorizontalPrecision := map[string]string{
+		"ves.io.schema.rules.float.gte": "0.0",
+		"ves.io.schema.rules.float.lte": "90000000.00",
+	}
+	vFn, err = vrhHorizontalPrecision(rulesHorizontalPrecision)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.horizontal_precision: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["horizontal_precision"] = vFn
+
+	vrhVerticalPrecision := v.VerticalPrecisionValidationRuleHandler
+	rulesVerticalPrecision := map[string]string{
+		"ves.io.schema.rules.float.gte": "0.0",
+		"ves.io.schema.rules.float.lte": "90000000.00",
+	}
+	vFn, err = vrhVerticalPrecision(rulesVerticalPrecision)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LOCValue.vertical_precision: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vertical_precision"] = vFn
+
+	return v
+}()
+
+func LOCValueValidator() db.Validator {
+	return DefaultLOCValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *MailExchanger) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2768,6 +4751,270 @@ var DefaultMailExchangerValidator = func() *ValidateMailExchanger {
 
 func MailExchangerValidator() db.Validator {
 	return DefaultMailExchangerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NAPTRValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NAPTRValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NAPTRValue) DeepCopy() *NAPTRValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NAPTRValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NAPTRValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NAPTRValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NAPTRValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNAPTRValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNAPTRValue) OrderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for order")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) PreferenceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for preference")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) FlagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for flags")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) ServiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) RegexpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for regexp")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) ReplacementValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for replacement")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNAPTRValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NAPTRValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NAPTRValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["flags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("flags"))
+		if err := fv(ctx, m.GetFlags(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["order"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("order"))
+		if err := fv(ctx, m.GetOrder(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["preference"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("preference"))
+		if err := fv(ctx, m.GetPreference(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["regexp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("regexp"))
+		if err := fv(ctx, m.GetRegexp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["replacement"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("replacement"))
+		if err := fv(ctx, m.GetReplacement(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service"))
+		if err := fv(ctx, m.GetService(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNAPTRValueValidator = func() *ValidateNAPTRValue {
+	v := &ValidateNAPTRValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOrder := v.OrderValidationRuleHandler
+	rulesOrder := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhOrder(rulesOrder)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.order: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["order"] = vFn
+
+	vrhPreference := v.PreferenceValidationRuleHandler
+	rulesPreference := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPreference(rulesPreference)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.preference: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["preference"] = vFn
+
+	vrhFlags := v.FlagsValidationRuleHandler
+	rulesFlags := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "255",
+		"ves.io.schema.rules.string.pattern":   "^(S|s|A|a|U|u|P|p)$",
+	}
+	vFn, err = vrhFlags(rulesFlags)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.flags: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["flags"] = vFn
+
+	vrhService := v.ServiceValidationRuleHandler
+	rulesService := map[string]string{
+		"ves.io.schema.rules.string.max_len": "255",
+		"ves.io.schema.rules.string.pattern": "^([A-Za-z][A-Za-z0-9]{0,31}(\\+[A-Za-z][A-Za-z0-9]{0,31})*$|^$)",
+	}
+	vFn, err = vrhService(rulesService)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.service: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service"] = vFn
+
+	vrhRegexp := v.RegexpValidationRuleHandler
+	rulesRegexp := map[string]string{
+		"ves.io.schema.rules.string.max_len": "255",
+	}
+	vFn, err = vrhRegexp(rulesRegexp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.regexp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["regexp"] = vFn
+
+	vrhReplacement := v.ReplacementValidationRuleHandler
+	rulesReplacement := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhReplacement(rulesReplacement)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NAPTRValue.replacement: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["replacement"] = vFn
+
+	return v
+}()
+
+func NAPTRValueValidator() db.Validator {
+	return DefaultNAPTRValueValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3916,6 +6163,34 @@ func (m *RRSet) GetTypeRecordSetDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *RRSet_NaptrRecord:
+
+		return nil, nil
+
+	case *RRSet_DsRecord:
+
+		return nil, nil
+
+	case *RRSet_CdsRecord:
+
+		return nil, nil
+
+	case *RRSet_AfsdbRecord:
+
+		return nil, nil
+
+	case *RRSet_Eui48Record:
+
+		return nil, nil
+
+	case *RRSet_Eui64Record:
+
+		return nil, nil
+
+	case *RRSet_LocRecord:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -4099,6 +6374,83 @@ func (v *ValidateRRSet) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
+	case *RRSet_NaptrRecord:
+		if fv, exists := v.FldValidators["type_record_set.naptr_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_NaptrRecord).NaptrRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("naptr_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_DsRecord:
+		if fv, exists := v.FldValidators["type_record_set.ds_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_DsRecord).DsRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("ds_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_CdsRecord:
+		if fv, exists := v.FldValidators["type_record_set.cds_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_CdsRecord).CdsRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("cds_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_AfsdbRecord:
+		if fv, exists := v.FldValidators["type_record_set.afsdb_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_AfsdbRecord).AfsdbRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("afsdb_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_Eui48Record:
+		if fv, exists := v.FldValidators["type_record_set.eui48_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_Eui48Record).Eui48Record
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("eui48_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_Eui64Record:
+		if fv, exists := v.FldValidators["type_record_set.eui64_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_Eui64Record).Eui64Record
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("eui64_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_LocRecord:
+		if fv, exists := v.FldValidators["type_record_set.loc_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_LocRecord).LocRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("loc_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4151,6 +6503,13 @@ var DefaultRRSetValidator = func() *ValidateRRSet {
 	v.FldValidators["type_record_set.srv_record"] = DNSSRVResourceRecordValidator().Validate
 	v.FldValidators["type_record_set.txt_record"] = DNSTXTResourceRecordValidator().Validate
 	v.FldValidators["type_record_set.lb_record"] = DNSLBResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.naptr_record"] = DNSNAPTRResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.ds_record"] = DNSDSRecordValidator().Validate
+	v.FldValidators["type_record_set.cds_record"] = DNSCDSRecordValidator().Validate
+	v.FldValidators["type_record_set.afsdb_record"] = DNSAFSDBRecordValidator().Validate
+	v.FldValidators["type_record_set.eui48_record"] = DNSEUI48ResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.eui64_record"] = DNSEUI64ResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.loc_record"] = DNSLOCResourceRecordValidator().Validate
 
 	return v
 }()
@@ -4558,6 +6917,333 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SHA1Digest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SHA1Digest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SHA1Digest) DeepCopy() *SHA1Digest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SHA1Digest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SHA1Digest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SHA1Digest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SHA1DigestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSHA1Digest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSHA1Digest) DigestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for digest")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSHA1Digest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SHA1Digest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SHA1Digest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["digest"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("digest"))
+		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSHA1DigestValidator = func() *ValidateSHA1Digest {
+	v := &ValidateSHA1Digest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDigest := v.DigestValidationRuleHandler
+	rulesDigest := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "40",
+		"ves.io.schema.rules.string.min_len":   "40",
+	}
+	vFn, err = vrhDigest(rulesDigest)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SHA1Digest.digest: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["digest"] = vFn
+
+	return v
+}()
+
+func SHA1DigestValidator() db.Validator {
+	return DefaultSHA1DigestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SHA256Digest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SHA256Digest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SHA256Digest) DeepCopy() *SHA256Digest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SHA256Digest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SHA256Digest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SHA256Digest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SHA256DigestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSHA256Digest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSHA256Digest) DigestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for digest")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSHA256Digest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SHA256Digest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SHA256Digest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["digest"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("digest"))
+		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSHA256DigestValidator = func() *ValidateSHA256Digest {
+	v := &ValidateSHA256Digest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDigest := v.DigestValidationRuleHandler
+	rulesDigest := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "64",
+	}
+	vFn, err = vrhDigest(rulesDigest)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SHA256Digest.digest: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["digest"] = vFn
+
+	return v
+}()
+
+func SHA256DigestValidator() db.Validator {
+	return DefaultSHA256DigestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SHA384Digest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SHA384Digest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SHA384Digest) DeepCopy() *SHA384Digest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SHA384Digest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SHA384Digest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SHA384Digest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SHA384DigestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSHA384Digest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSHA384Digest) DigestValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for digest")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSHA384Digest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SHA384Digest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SHA384Digest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["digest"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("digest"))
+		if err := fv(ctx, m.GetDigest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSHA384DigestValidator = func() *ValidateSHA384Digest {
+	v := &ValidateSHA384Digest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDigest := v.DigestValidationRuleHandler
+	rulesDigest := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "96",
+		"ves.io.schema.rules.string.min_len":   "96",
+	}
+	vFn, err = vrhDigest(rulesDigest)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SHA384Digest.digest: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["digest"] = vFn
+
+	return v
+}()
+
+func SHA384DigestValidator() db.Validator {
+	return DefaultSHA384DigestValidator
 }
 
 // augmented methods on protoc/std generated struct

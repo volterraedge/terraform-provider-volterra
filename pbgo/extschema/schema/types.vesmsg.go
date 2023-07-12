@@ -3728,6 +3728,93 @@ func CsrfPolicyValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DateRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DateRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DateRange) DeepCopy() *DateRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DateRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DateRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DateRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DateRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDateRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDateRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DateRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DateRange got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_date"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_date"))
+		if err := fv(ctx, m.GetEndDate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_date"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_date"))
+		if err := fv(ctx, m.GetStartDate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDateRangeValidator = func() *ValidateDateRange {
+	v := &ValidateDateRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DateRangeValidator() db.Validator {
+	return DefaultDateRangeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DomainNameList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4140,6 +4227,146 @@ var DefaultEmptyValidator = func() *ValidateEmpty {
 
 func EmptyValidator() db.Validator {
 	return DefaultEmptyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *File) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *File) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *File) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Content = []byte{}
+
+	return copy.string()
+}
+
+func (m *File) GoString() string {
+	copy := m.DeepCopy()
+	copy.Content = []byte{}
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *File) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Content = []byte{}
+
+	return nil
+}
+
+func (m *File) DeepCopy() *File {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &File{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *File) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *File) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FileValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFile struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFile) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*File)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *File got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content"))
+		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["content_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_type"))
+		if err := fv(ctx, m.GetContentType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file_id"))
+		if err := fv(ctx, m.GetFileId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetStorageProvider().(type) {
+	case *File_AwsS3:
+		if fv, exists := v.FldValidators["storage_provider.aws_s3"]; exists {
+			val := m.GetStorageProvider().(*File_AwsS3).AwsS3
+			vOpts := append(opts,
+				db.WithValidateField("storage_provider"),
+				db.WithValidateField("aws_s3"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFileValidator = func() *ValidateFile {
+	v := &ValidateFile{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FileValidator() db.Validator {
+	return DefaultFileValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -9517,14 +9744,6 @@ type ValidatePortMatcherType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidatePortMatcherType) PortMatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for port_match")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidatePortMatcherType) PortMatchPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -9554,16 +9773,6 @@ func (v *ValidatePortMatcherType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["port_match"]; exists {
-		val := m.GetPortMatch()
-		vOpts := append(opts,
-			db.WithValidateField("port_match"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetPortMatch().(type) {
 	case *PortMatcherType_Port:
 		if fv, exists := v.FldValidators["port_match.port"]; exists {
@@ -9587,6 +9796,17 @@ func (v *ValidatePortMatcherType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *PortMatcherType_NoPortMatch:
+		if fv, exists := v.FldValidators["port_match.no_port_match"]; exists {
+			val := m.GetPortMatch().(*PortMatcherType_NoPortMatch).NoPortMatch
+			vOpts := append(opts,
+				db.WithValidateField("port_match"),
+				db.WithValidateField("no_port_match"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -9604,17 +9824,6 @@ var DefaultPortMatcherTypeValidator = func() *ValidatePortMatcherType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhPortMatch := v.PortMatchValidationRuleHandler
-	rulesPortMatch := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhPortMatch(rulesPortMatch)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for PortMatcherType.port_match: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["port_match"] = vFn
 
 	vrhPortMatchPort := v.PortMatchPortValidationRuleHandler
 	rulesPortMatchPort := map[string]string{

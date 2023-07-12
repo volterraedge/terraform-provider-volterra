@@ -82,6 +82,7 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 		  disk_size = 80
 		  instance_type = "t3.xlarge"
 
+
 		  ingress_egress_gw {
 			aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 			az_nodes {
@@ -223,6 +224,7 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 		    }
 		  }
 		}
+		ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDWf4iSk7KTSYwWYlGq+1PyPRZ2soqMfWztm90shv66s8y4N9CSJzpHx1FXbMb+iIT9jxQ2Qt8upovaM1d3Y0lTNC0o9eKKwGMLcg5HG3dIu1r8RcakbL9XlbS+XOapx8BNTCNa7kx2X1BD8Zibzr7JpBokrd18A4GeWtX8EjLfCzvLRMl1UKIGmaSGm49yYWLONZwFdQJkvUb0eogM4LZ5B7/KgUh/a8+j9LmflflkyvkcoEOIJ847iNzswWPUMwTcSmaG174DSnhFRus+a5yixnXjywvwu0zOGoFFITSmsG+VxmI42EwS58TRNDC1PDB3l25LSulzXgoBcopz7Y1lMPfoqxuubZ2DPKDYGvmuUURXej0HV1+cb33IxOMwOluPzXmXvBpNPIpVJvwZUhwVHQYhnK07IDp8m47Bw/7DIUm2hb6cvBQ/rMkCMgeFNbvPEgxKm73aZkA0zLUEUo32BltbGEJVQwouuf5Ggon7i/cn+OosF3FiPtkL0Oklqo8="
 		logs_streaming_disabled = true
 		no_worker_nodes = true
 		coordinates {

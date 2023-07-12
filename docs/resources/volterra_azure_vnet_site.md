@@ -20,15 +20,8 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      ssh          = true
-      network_type = "network_type"
-    }
-  }
+  // One of the arguments from this list "blocked_services default_blocked_services block_all_services" must be set
+  default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
 
@@ -39,48 +32,18 @@ resource "volterra_azure_vnet_site" "example" {
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "azure_region alternate_region" must be set
+  // One of the arguments from this list "alternate_region azure_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
+  // One of the arguments from this list "voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw" must be set
 
-  ingress_egress_gw_ar {
-    azure_certified_hw = "azure-byol-multi-nic-voltmesh"
+  ingress_gw {
+    az_nodes {
+      azure_az  = "1"
+      disk_size = "80"
 
-    // One of the arguments from this list "dc_cluster_group_inside_vn no_dc_cluster_group dc_cluster_group_outside_vn" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "no_forward_proxy active_forward_proxy_policies forward_proxy_allow_all" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "global_network_list no_global_network" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "not_hub hub" must be set
-    not_hub = true
-
-    // One of the arguments from this list "no_inside_static_routes inside_static_routes" must be set
-    no_inside_static_routes = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-    no_network_policy = true
-
-    node {
-      fault_domain = "1"
-
-      inside_subnet {
-        // One of the arguments from this list "subnet subnet_param" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-
-      node_number = "1"
-
-      outside_subnet {
+      local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
 
         subnet_param {
@@ -88,33 +51,22 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      update_domain = "1"
     }
 
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-    no_outside_static_routes = true
+    azure_certified_hw = "azure-byol-voltmesh"
 
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-
-      perf_mode_l3_enhanced {
-        // One of the arguments from this list "no_jumbo jumbo" must be set
-        jumbo = true
-      }
+      perf_mode_l7_enhanced = true
     }
-
-    // One of the arguments from this list "sm_connection_pvt_ip sm_connection_public_ip" must be set
-    sm_connection_public_ip = true
   }
+  ssh_key = ["ssh-rsa AAAAB..."]
   vnet {
     // One of the arguments from this list "new_vnet existing_vnet" must be set
 
-    new_vnet {
-      // One of the arguments from this list "name autogenerate" must be set
-      name = "name"
-
-      primary_ipv4 = "10.1.0.0/16"
+    existing_vnet {
+      resource_group = "MyResourceGroup"
+      vnet_name      = "MyVnet"
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
@@ -184,7 +136,7 @@ Argument Reference
 
 `voltstack_cluster_ar` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
 
-`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 

@@ -2854,7 +2854,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 			"ssh_key": {
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 
 			"sw": {
@@ -7486,6 +7486,41 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
 				coordinates.Longitude = float32(w.(float64))
+			}
+
+		}
+
+	}
+
+	deploymentTypeFound := false
+
+	if v, ok := d.GetOk("aws_cred"); ok && !deploymentTypeFound {
+
+		deploymentTypeFound = true
+		deploymentInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_AwsCred{}
+		deploymentInt.AwsCred = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.Deployment = deploymentInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				deploymentInt.AwsCred.Name = v.(string)
+
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				deploymentInt.AwsCred.Namespace = v.(string)
+
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				deploymentInt.AwsCred.Tenant = v.(string)
+
 			}
 
 		}

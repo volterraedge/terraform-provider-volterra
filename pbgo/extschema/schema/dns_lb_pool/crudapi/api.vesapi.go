@@ -2849,6 +2849,7 @@ var APISwaggerJSON string = `{
             "description": "Public IP address which can be IPv4 or IPv6. This can be a member of only A/AAAA type Pool",
             "title": "AddressMember",
             "x-displayname": "IP Endpoint",
+            "x-ves-displayorder": "1,8,5,6,7",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.AddressMember",
             "properties": {
                 "disable": {
@@ -2869,6 +2870,17 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Pool member name\n\nExample: - \"web server 1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "web server 1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "priority": {
@@ -2902,6 +2914,7 @@ var APISwaggerJSON string = `{
             "description": "CNAME Record which can be a member of a CNAME type pool",
             "title": "CNAMEMember",
             "x-displayname": "CNAME member",
+            "x-ves-displayorder": "1,4,2,3",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.CNAMEMember",
             "properties": {
                 "domain": {
@@ -2922,6 +2935,17 @@ var APISwaggerJSON string = `{
                     "title": "Final Translation",
                     "format": "boolean",
                     "x-displayname": "Final Translation"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Pool member name\n\nExample: - \"web server 1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "web server 1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 },
                 "ratio": {
                     "type": "integer",
@@ -3055,6 +3079,7 @@ var APISwaggerJSON string = `{
             "description": "MX Record which can be a member of a MX type pool",
             "title": "MXMember",
             "x-displayname": "MX Record",
+            "x-ves-displayorder": "1,4,2,3",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.MXMember",
             "properties": {
                 "domain": {
@@ -3067,6 +3092,17 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Pool member name\n\nExample: - \"web server 1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "web server 1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "priority": {

@@ -4887,7 +4887,7 @@ var APISwaggerJSON string = `{
                 },
                 "idle_timeout": {
                     "type": "integer",
-                    "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 408 (Request Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
+                    "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 504 (Gateway Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
                     "title": "Idle timeout",
                     "format": "int64",
                     "x-displayname": "Idle timeout (in milliseconds)",
@@ -5190,7 +5190,7 @@ var APISwaggerJSON string = `{
                 "enable_open_api_validation": {
                     "description": "x-displayName: \"Specify OpenApi Validation Configuration\"\nOpenApi Validation configuration object",
                     "title": "Shape Bot Defense",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/virtual_hostOpenApiValidationSettings"
                 }
             }
         },
@@ -5714,6 +5714,23 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1000",
                         "ves.io.schema.rules.uint32.lte": "60000"
                     }
+                }
+            }
+        },
+        "virtual_hostOpenApiValidationSettings": {
+            "type": "object",
+            "description": "x-displayName: \"OpenAPI Validation Settings\"\nx-required\nSettings in VH of enabled OpenAPI validation",
+            "title": "OpenAPI Validation Settings",
+            "properties": {
+                "oversized_body_fail_validation": {
+                    "description": "x-displayName: \"Fail Body Validation\"\nApply the request/response action (block or report) when the body length is too long to verify (default 64Kb)",
+                    "title": "Fail the validation for over-sized body",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "oversized_body_skip_validation": {
+                    "description": "x-displayName: \"Skip Body Validation\"\nSkip body validation when the body length is too long to verify (default 64Kb)",
+                    "title": "Skip validation for over-sized body",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },

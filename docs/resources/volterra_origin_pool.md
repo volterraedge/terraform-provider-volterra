@@ -23,10 +23,10 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "k8s_service custom_endpoint_object vn_private_name public_ip public_name private_ip private_name consul_service vn_private_ip" must be set
+    // One of the arguments from this list "vn_private_ip public_ip private_name k8s_service consul_service public_name private_ip custom_endpoint_object vn_private_name" must be set
 
-    public_ip {
-      ip = "8.8.8.8"
+    public_name {
+      dns_name = "value"
     }
 
     labels = {
@@ -34,10 +34,10 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  // One of the arguments from this list "automatic_port lb_port port" must be set
-  automatic_port = true
+  // One of the arguments from this list "port automatic_port lb_port" must be set
+  port = "9080"
 
-  // One of the arguments from this list "no_tls use_tls" must be set
+  // One of the arguments from this list "use_tls no_tls" must be set
   no_tls = true
 }
 
@@ -364,11 +364,13 @@ Outside network on the site.
 
 Specify origin server with private or public IP address and site information.
 
-`ip` - (Required) IP address (`String`).
-
 `inside_network` - (Optional) Inside network on the site (bool).
 
 `outside_network` - (Optional) Outside network on the site (bool).
+
+`ip` - (Optional) Private IPV4 address (`String`).
+
+`ipv6` - (Optional) Private IPV6 address (`String`).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
@@ -408,7 +410,9 @@ For example, “content-type” becomes “Content-Type”, and “foo$b#$are”
 
 Specify origin server with public IP.
 
-`ip` - (Required) Public IP address (`String`).
+`ip` - (Optional) Public IPV4 address (`String`).
+
+`ipv6` - (Optional) Public IPV6 address (`String`).
 
 ### Public Name
 
@@ -540,9 +544,11 @@ origin server are on vK8s network on the site.
 
 Specify origin server IP address on virtual network other than inside or outside network.
 
-`ip` - (Required) IP address (`String`).
-
 `virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
+
+`ip` - (Optional) IPV4 address (`String`).
+
+`ipv6` - (Optional) IPV6 address (`String`).
 
 ### Vn Private Name
 

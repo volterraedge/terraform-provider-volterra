@@ -275,6 +275,755 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DHCPIPV6NetworkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DHCPIPV6NetworkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DHCPIPV6NetworkType) DeepCopy() *DHCPIPV6NetworkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DHCPIPV6NetworkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DHCPIPV6NetworkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DHCPIPV6NetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DHCPIPV6NetworkTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DHCPIPV6NetworkType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNetworkPrefixChoiceDRefInfo()
+
+}
+
+func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetNetworkPrefixChoice().(type) {
+	case *DHCPIPV6NetworkType_NetworkPrefixAllocator:
+
+		vref := m.GetNetworkPrefixAllocator()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("address_allocator.Object")
+		dri := db.DRefInfo{
+			RefdType:   "address_allocator.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_prefix_allocator",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetNetworkPrefixChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DHCPIPV6NetworkType) GetNetworkPrefixChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetNetworkPrefixChoice().(type) {
+	case *DHCPIPV6NetworkType_NetworkPrefixAllocator:
+		refdType, err := d.TypeForEntryKind("", "", "address_allocator.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: address_allocator")
+		}
+
+		vref := m.GetNetworkPrefixAllocator()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "address_allocator.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateDHCPIPV6NetworkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDHCPIPV6NetworkType) NetworkPrefixChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_prefix_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6NetworkType) NetworkPrefixChoiceNetworkPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NetworkPrefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_prefix")
+	}
+	return oValidatorFn_NetworkPrefix, nil
+}
+
+func (v *ValidateDHCPIPV6NetworkType) PoolsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for pools")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DHCPIPV6PoolType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DHCPIPV6PoolTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for pools")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DHCPIPV6PoolType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DHCPIPV6PoolType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated pools")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items pools")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6NetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DHCPIPV6NetworkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DHCPIPV6NetworkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["network_prefix_choice"]; exists {
+		val := m.GetNetworkPrefixChoice()
+		vOpts := append(opts,
+			db.WithValidateField("network_prefix_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetNetworkPrefixChoice().(type) {
+	case *DHCPIPV6NetworkType_NetworkPrefix:
+		if fv, exists := v.FldValidators["network_prefix_choice.network_prefix"]; exists {
+			val := m.GetNetworkPrefixChoice().(*DHCPIPV6NetworkType_NetworkPrefix).NetworkPrefix
+			vOpts := append(opts,
+				db.WithValidateField("network_prefix_choice"),
+				db.WithValidateField("network_prefix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DHCPIPV6NetworkType_NetworkPrefixAllocator:
+		if fv, exists := v.FldValidators["network_prefix_choice.network_prefix_allocator"]; exists {
+			val := m.GetNetworkPrefixChoice().(*DHCPIPV6NetworkType_NetworkPrefixAllocator).NetworkPrefixAllocator
+			vOpts := append(opts,
+				db.WithValidateField("network_prefix_choice"),
+				db.WithValidateField("network_prefix_allocator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pools"]; exists {
+		vOpts := append(opts, db.WithValidateField("pools"))
+		if err := fv(ctx, m.GetPools(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
+	v := &ValidateDHCPIPV6NetworkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetworkPrefixChoice := v.NetworkPrefixChoiceValidationRuleHandler
+	rulesNetworkPrefixChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhNetworkPrefixChoice(rulesNetworkPrefixChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6NetworkType.network_prefix_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network_prefix_choice"] = vFn
+
+	vrhNetworkPrefixChoiceNetworkPrefix := v.NetworkPrefixChoiceNetworkPrefixValidationRuleHandler
+	rulesNetworkPrefixChoiceNetworkPrefix := map[string]string{
+		"ves.io.schema.rules.string.ipv6_prefix": "true",
+	}
+	vFnMap["network_prefix_choice.network_prefix"], err = vrhNetworkPrefixChoiceNetworkPrefix(rulesNetworkPrefixChoiceNetworkPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DHCPIPV6NetworkType.network_prefix_choice_network_prefix: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["network_prefix_choice.network_prefix"] = vFnMap["network_prefix_choice.network_prefix"]
+
+	vrhPools := v.PoolsValidationRuleHandler
+	rulesPools := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhPools(rulesPools)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6NetworkType.pools: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pools"] = vFn
+
+	v.FldValidators["network_prefix_choice.network_prefix_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func DHCPIPV6NetworkTypeValidator() db.Validator {
+	return DefaultDHCPIPV6NetworkTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DHCPIPV6PoolType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DHCPIPV6PoolType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DHCPIPV6PoolType) DeepCopy() *DHCPIPV6PoolType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DHCPIPV6PoolType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DHCPIPV6PoolType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DHCPIPV6PoolType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DHCPIPV6PoolTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDHCPIPV6PoolType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDHCPIPV6PoolType) StartIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6PoolType) EndIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6PoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DHCPIPV6PoolType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DHCPIPV6PoolType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_ip"))
+		if err := fv(ctx, m.GetEndIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["exclude"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("exclude"))
+		if err := fv(ctx, m.GetExclude(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_ip"))
+		if err := fv(ctx, m.GetStartIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDHCPIPV6PoolTypeValidator = func() *ValidateDHCPIPV6PoolType {
+	v := &ValidateDHCPIPV6PoolType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartIp := v.StartIpValidationRuleHandler
+	rulesStartIp := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhStartIp(rulesStartIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6PoolType.start_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_ip"] = vFn
+
+	vrhEndIp := v.EndIpValidationRuleHandler
+	rulesEndIp := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhEndIp(rulesEndIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6PoolType.end_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_ip"] = vFn
+
+	return v
+}()
+
+func DHCPIPV6PoolTypeValidator() db.Validator {
+	return DefaultDHCPIPV6PoolTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DHCPIPV6StatefulServer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DHCPIPV6StatefulServer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DHCPIPV6StatefulServer) DeepCopy() *DHCPIPV6StatefulServer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DHCPIPV6StatefulServer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DHCPIPV6StatefulServer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DHCPIPV6StatefulServer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DHCPIPV6StatefulServerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DHCPIPV6StatefulServer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDhcpNetworksDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DHCPIPV6StatefulServer) GetDhcpNetworksDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDhcpNetworks() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetDhcpNetworks() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDhcpNetworks() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("dhcp_networks[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateDHCPIPV6StatefulServer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDHCPIPV6StatefulServer) InterfacesAddressingChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for interfaces_addressing_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6StatefulServer) DhcpNetworksValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for dhcp_networks")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DHCPIPV6NetworkType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DHCPIPV6NetworkTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dhcp_networks")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DHCPIPV6NetworkType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DHCPIPV6NetworkType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dhcp_networks")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dhcp_networks")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6StatefulServer) FixedIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for fixed_ip_map")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for fixed_ip_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for fixed_ip_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map fixed_ip_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items fixed_ip_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPIPV6StatefulServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DHCPIPV6StatefulServer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DHCPIPV6StatefulServer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dhcp_networks"]; exists {
+		vOpts := append(opts, db.WithValidateField("dhcp_networks"))
+		if err := fv(ctx, m.GetDhcpNetworks(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fixed_ip_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("fixed_ip_map"))
+		if err := fv(ctx, m.GetFixedIpMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["interfaces_addressing_choice"]; exists {
+		val := m.GetInterfacesAddressingChoice()
+		vOpts := append(opts,
+			db.WithValidateField("interfaces_addressing_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInterfacesAddressingChoice().(type) {
+	case *DHCPIPV6StatefulServer_AutomaticFromStart:
+		if fv, exists := v.FldValidators["interfaces_addressing_choice.automatic_from_start"]; exists {
+			val := m.GetInterfacesAddressingChoice().(*DHCPIPV6StatefulServer_AutomaticFromStart).AutomaticFromStart
+			vOpts := append(opts,
+				db.WithValidateField("interfaces_addressing_choice"),
+				db.WithValidateField("automatic_from_start"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DHCPIPV6StatefulServer_AutomaticFromEnd:
+		if fv, exists := v.FldValidators["interfaces_addressing_choice.automatic_from_end"]; exists {
+			val := m.GetInterfacesAddressingChoice().(*DHCPIPV6StatefulServer_AutomaticFromEnd).AutomaticFromEnd
+			vOpts := append(opts,
+				db.WithValidateField("interfaces_addressing_choice"),
+				db.WithValidateField("automatic_from_end"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DHCPIPV6StatefulServer_InterfaceIpMap:
+		if fv, exists := v.FldValidators["interfaces_addressing_choice.interface_ip_map"]; exists {
+			val := m.GetInterfacesAddressingChoice().(*DHCPIPV6StatefulServer_InterfaceIpMap).InterfaceIpMap
+			vOpts := append(opts,
+				db.WithValidateField("interfaces_addressing_choice"),
+				db.WithValidateField("interface_ip_map"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDHCPIPV6StatefulServerValidator = func() *ValidateDHCPIPV6StatefulServer {
+	v := &ValidateDHCPIPV6StatefulServer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterfacesAddressingChoice := v.InterfacesAddressingChoiceValidationRuleHandler
+	rulesInterfacesAddressingChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInterfacesAddressingChoice(rulesInterfacesAddressingChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6StatefulServer.interfaces_addressing_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interfaces_addressing_choice"] = vFn
+
+	vrhDhcpNetworks := v.DhcpNetworksValidationRuleHandler
+	rulesDhcpNetworks := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDhcpNetworks(rulesDhcpNetworks)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6StatefulServer.dhcp_networks: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dhcp_networks"] = vFn
+
+	vrhFixedIpMap := v.FixedIpMapValidationRuleHandler
+	rulesFixedIpMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.mac":    "true",
+		"ves.io.schema.rules.map.max_pairs":          "128",
+		"ves.io.schema.rules.map.unique_values":      "true",
+		"ves.io.schema.rules.map.values.string.ipv6": "true",
+	}
+	vFn, err = vrhFixedIpMap(rulesFixedIpMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6StatefulServer.fixed_ip_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fixed_ip_map"] = vFn
+
+	v.FldValidators["interfaces_addressing_choice.interface_ip_map"] = DHCPInterfaceIPV6TypeValidator().Validate
+
+	return v
+}()
+
+func DHCPIPV6StatefulServerValidator() db.Validator {
+	return DefaultDHCPIPV6StatefulServerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DHCPInterfaceIPType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -415,6 +1164,150 @@ var DefaultDHCPInterfaceIPTypeValidator = func() *ValidateDHCPInterfaceIPType {
 
 func DHCPInterfaceIPTypeValidator() db.Validator {
 	return DefaultDHCPInterfaceIPTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DHCPInterfaceIPV6Type) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DHCPInterfaceIPV6Type) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DHCPInterfaceIPV6Type) DeepCopy() *DHCPInterfaceIPV6Type {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DHCPInterfaceIPV6Type{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DHCPInterfaceIPV6Type) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DHCPInterfaceIPV6Type) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DHCPInterfaceIPV6TypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDHCPInterfaceIPV6Type struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDHCPInterfaceIPV6Type) InterfaceIpMapValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for interface_ip_map")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for interface_ip_map")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for interface_ip_map")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map interface_ip_map")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items interface_ip_map")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDHCPInterfaceIPV6Type) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DHCPInterfaceIPV6Type)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DHCPInterfaceIPV6Type got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interface_ip_map"]; exists {
+		vOpts := append(opts, db.WithValidateField("interface_ip_map"))
+		if err := fv(ctx, m.GetInterfaceIpMap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDHCPInterfaceIPV6TypeValidator = func() *ValidateDHCPInterfaceIPV6Type {
+	v := &ValidateDHCPInterfaceIPV6Type{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterfaceIpMap := v.InterfaceIpMapValidationRuleHandler
+	rulesInterfaceIpMap := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "128",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "64",
+		"ves.io.schema.rules.map.values.string.ipv6":  "true",
+	}
+	vFn, err = vrhInterfaceIpMap(rulesInterfaceIpMap)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPInterfaceIPV6Type.interface_ip_map: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface_ip_map"] = vFn
+
+	return v
+}()
+
+func DHCPInterfaceIPV6TypeValidator() db.Validator {
+	return DefaultDHCPInterfaceIPV6TypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2059,6 +2952,17 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 		}
 		return drInfos, err
 
+	case *EthernetInterfaceType_Ipv6AutoConfig:
+		drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv6_auto_config." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2368,6 +3272,17 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 			vOpts := append(opts,
 				db.WithValidateField("ipv6_address_choice"),
 				db.WithValidateField("static_ipv6_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EthernetInterfaceType_Ipv6AutoConfig:
+		if fv, exists := v.FldValidators["ipv6_address_choice.ipv6_auto_config"]; exists {
+			val := m.GetIpv6AddressChoice().(*EthernetInterfaceType_Ipv6AutoConfig).Ipv6AutoConfig
+			vOpts := append(opts,
+				db.WithValidateField("ipv6_address_choice"),
+				db.WithValidateField("ipv6_auto_config"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2744,6 +3659,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 	v.FldValidators["address_choice.static_ip"] = StaticIPParametersTypeValidator().Validate
 
 	v.FldValidators["ipv6_address_choice.static_ipv6_address"] = StaticIPParametersTypeValidator().Validate
+	v.FldValidators["ipv6_address_choice.ipv6_auto_config"] = IPV6AutoConfigTypeValidator().Validate
 
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["network_choice.srv6_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -3898,6 +4814,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetIpv6AutoConfigDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AutoConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetIpv6StaticAddressesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetIpv6StaticAddressesDRefInfo() FAILED")
 	} else {
@@ -4063,6 +4985,24 @@ func (m *GlobalSpecType) GetIpv4StaticAddressesDRefInfo() ([]db.DRefInfo, error)
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "ipv4_static_addresses." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetIpv6AutoConfigDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpv6AutoConfig() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv6_auto_config." + dri.DRField
 	}
 	return drInfos, err
 
@@ -4531,6 +5471,54 @@ func (v *ValidateGlobalSpecType) InterfaceIpMapValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) StaticIpv6AddressesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for static_ipv6_addresses")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.Ipv6SubnetType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.Ipv6SubnetTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for static_ipv6_addresses")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.Ipv6SubnetType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.Ipv6SubnetType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated static_ipv6_addresses")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items static_ipv6_addresses")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4715,6 +5703,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ipv6_auto_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_auto_config"))
+		if err := fv(ctx, m.GetIpv6AutoConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipv6_static_addresses"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ipv6_static_addresses"))
@@ -4797,6 +5794,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["static_addresses"]; exists {
 		vOpts := append(opts, db.WithValidateField("static_addresses"))
 		if err := fv(ctx, m.GetStaticAddresses(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["static_ipv6_addresses"]; exists {
+		vOpts := append(opts, db.WithValidateField("static_ipv6_addresses"))
+		if err := fv(ctx, m.GetStaticIpv6Addresses(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5019,6 +6024,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["interface_ip_map"] = vFn
 
+	vrhStaticIpv6Addresses := v.StaticIpv6AddressesValidationRuleHandler
+	rulesStaticIpv6Addresses := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhStaticIpv6Addresses(rulesStaticIpv6Addresses)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.static_ipv6_addresses: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_ipv6_addresses"] = vFn
+
 	v.FldValidators["interface_choice.dedicated_interface"] = DedicatedInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.ethernet_interface"] = EthernetInterfaceTypeValidator().Validate
 	v.FldValidators["interface_choice.tunnel_interface"] = TunnelInterfaceTypeValidator().Validate
@@ -5040,11 +6057,820 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["ipv4_static_addresses"] = StaticIPParametersTypeValidator().Validate
 
+	v.FldValidators["ipv6_auto_config"] = IPV6AutoConfigTypeValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6AutoConfigRouterType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6AutoConfigRouterType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6AutoConfigRouterType) DeepCopy() *IPV6AutoConfigRouterType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6AutoConfigRouterType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6AutoConfigRouterType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6AutoConfigRouterType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6AutoConfigRouterTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *IPV6AutoConfigRouterType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAddressChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *IPV6AutoConfigRouterType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAddressChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAddressChoice().(type) {
+	case *IPV6AutoConfigRouterType_Stateful:
+		drInfos, err := m.GetStateful().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStateful().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "stateful." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateIPV6AutoConfigRouterType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6AutoConfigRouterType) AddressChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6AutoConfigRouterType) AddressChoiceNetworkPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_NetworkPrefix, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network_prefix")
+	}
+	return oValidatorFn_NetworkPrefix, nil
+}
+
+func (v *ValidateIPV6AutoConfigRouterType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6AutoConfigRouterType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6AutoConfigRouterType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["address_choice"]; exists {
+		val := m.GetAddressChoice()
+		vOpts := append(opts,
+			db.WithValidateField("address_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAddressChoice().(type) {
+	case *IPV6AutoConfigRouterType_NetworkPrefix:
+		if fv, exists := v.FldValidators["address_choice.network_prefix"]; exists {
+			val := m.GetAddressChoice().(*IPV6AutoConfigRouterType_NetworkPrefix).NetworkPrefix
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("network_prefix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPV6AutoConfigRouterType_Stateful:
+		if fv, exists := v.FldValidators["address_choice.stateful"]; exists {
+			val := m.GetAddressChoice().(*IPV6AutoConfigRouterType_Stateful).Stateful
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("stateful"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_config"))
+		if err := fv(ctx, m.GetDnsConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRouterType {
+	v := &ValidateIPV6AutoConfigRouterType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAddressChoice := v.AddressChoiceValidationRuleHandler
+	rulesAddressChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAddressChoice(rulesAddressChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6AutoConfigRouterType.address_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["address_choice"] = vFn
+
+	vrhAddressChoiceNetworkPrefix := v.AddressChoiceNetworkPrefixValidationRuleHandler
+	rulesAddressChoiceNetworkPrefix := map[string]string{
+		"ves.io.schema.rules.string.ipv6_prefix": "true",
+	}
+	vFnMap["address_choice.network_prefix"], err = vrhAddressChoiceNetworkPrefix(rulesAddressChoiceNetworkPrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field IPV6AutoConfigRouterType.address_choice_network_prefix: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["address_choice.network_prefix"] = vFnMap["address_choice.network_prefix"]
+
+	v.FldValidators["address_choice.stateful"] = DHCPIPV6StatefulServerValidator().Validate
+
+	v.FldValidators["dns_config"] = IPV6DnsConfigValidator().Validate
+
+	return v
+}()
+
+func IPV6AutoConfigRouterTypeValidator() db.Validator {
+	return DefaultIPV6AutoConfigRouterTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6AutoConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6AutoConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6AutoConfigType) DeepCopy() *IPV6AutoConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6AutoConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6AutoConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6AutoConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6AutoConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *IPV6AutoConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAutoconfigChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *IPV6AutoConfigType) GetAutoconfigChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAutoconfigChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAutoconfigChoice().(type) {
+	case *IPV6AutoConfigType_Host:
+
+		return nil, nil
+
+	case *IPV6AutoConfigType_Router:
+		drInfos, err := m.GetRouter().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRouter().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "router." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateIPV6AutoConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6AutoConfigType) AutoconfigChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for autoconfig_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6AutoConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6AutoConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6AutoConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["autoconfig_choice"]; exists {
+		val := m.GetAutoconfigChoice()
+		vOpts := append(opts,
+			db.WithValidateField("autoconfig_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAutoconfigChoice().(type) {
+	case *IPV6AutoConfigType_Host:
+		if fv, exists := v.FldValidators["autoconfig_choice.host"]; exists {
+			val := m.GetAutoconfigChoice().(*IPV6AutoConfigType_Host).Host
+			vOpts := append(opts,
+				db.WithValidateField("autoconfig_choice"),
+				db.WithValidateField("host"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPV6AutoConfigType_Router:
+		if fv, exists := v.FldValidators["autoconfig_choice.router"]; exists {
+			val := m.GetAutoconfigChoice().(*IPV6AutoConfigType_Router).Router
+			vOpts := append(opts,
+				db.WithValidateField("autoconfig_choice"),
+				db.WithValidateField("router"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6AutoConfigTypeValidator = func() *ValidateIPV6AutoConfigType {
+	v := &ValidateIPV6AutoConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAutoconfigChoice := v.AutoconfigChoiceValidationRuleHandler
+	rulesAutoconfigChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAutoconfigChoice(rulesAutoconfigChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6AutoConfigType.autoconfig_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["autoconfig_choice"] = vFn
+
+	v.FldValidators["autoconfig_choice.router"] = IPV6AutoConfigRouterTypeValidator().Validate
+
+	return v
+}()
+
+func IPV6AutoConfigTypeValidator() db.Validator {
+	return DefaultIPV6AutoConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6DnsConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6DnsConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6DnsConfig) DeepCopy() *IPV6DnsConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6DnsConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6DnsConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6DnsConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6DnsConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV6DnsConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6DnsConfig) DnsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6DnsConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6DnsConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6DnsConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_choice"]; exists {
+		val := m.GetDnsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("dns_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDnsChoice().(type) {
+	case *IPV6DnsConfig_LocalDns:
+		if fv, exists := v.FldValidators["dns_choice.local_dns"]; exists {
+			val := m.GetDnsChoice().(*IPV6DnsConfig_LocalDns).LocalDns
+			vOpts := append(opts,
+				db.WithValidateField("dns_choice"),
+				db.WithValidateField("local_dns"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPV6DnsConfig_ConfiguredList:
+		if fv, exists := v.FldValidators["dns_choice.configured_list"]; exists {
+			val := m.GetDnsChoice().(*IPV6DnsConfig_ConfiguredList).ConfiguredList
+			vOpts := append(opts,
+				db.WithValidateField("dns_choice"),
+				db.WithValidateField("configured_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6DnsConfigValidator = func() *ValidateIPV6DnsConfig {
+	v := &ValidateIPV6DnsConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsChoice := v.DnsChoiceValidationRuleHandler
+	rulesDnsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDnsChoice(rulesDnsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6DnsConfig.dns_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_choice"] = vFn
+
+	v.FldValidators["dns_choice.local_dns"] = IPV6LocalDnsAddressValidator().Validate
+	v.FldValidators["dns_choice.configured_list"] = IPV6DnsListValidator().Validate
+
+	return v
+}()
+
+func IPV6DnsConfigValidator() db.Validator {
+	return DefaultIPV6DnsConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6DnsList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6DnsList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6DnsList) DeepCopy() *IPV6DnsList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6DnsList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6DnsList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6DnsList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6DnsListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV6DnsList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6DnsList) DnsListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for dns_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dns_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dns_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dns_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6DnsList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6DnsList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6DnsList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_list"))
+		if err := fv(ctx, m.GetDnsList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6DnsListValidator = func() *ValidateIPV6DnsList {
+	v := &ValidateIPV6DnsList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsList := v.DnsListValidationRuleHandler
+	rulesDnsList := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "4",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.ipv6":        "true",
+	}
+	vFn, err = vrhDnsList(rulesDnsList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6DnsList.dns_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_list"] = vFn
+
+	return v
+}()
+
+func IPV6DnsListValidator() db.Validator {
+	return DefaultIPV6DnsListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPV6LocalDnsAddress) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPV6LocalDnsAddress) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPV6LocalDnsAddress) DeepCopy() *IPV6LocalDnsAddress {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPV6LocalDnsAddress{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPV6LocalDnsAddress) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPV6LocalDnsAddress) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPV6LocalDnsAddressValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPV6LocalDnsAddress struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPV6LocalDnsAddress) LocalDnsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for local_dns_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateIPV6LocalDnsAddress) LocalDnsChoiceConfiguredAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ConfiguredAddress, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for configured_address")
+	}
+	return oValidatorFn_ConfiguredAddress, nil
+}
+
+func (v *ValidateIPV6LocalDnsAddress) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPV6LocalDnsAddress)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPV6LocalDnsAddress got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["local_dns_choice"]; exists {
+		val := m.GetLocalDnsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("local_dns_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetLocalDnsChoice().(type) {
+	case *IPV6LocalDnsAddress_FirstAddress:
+		if fv, exists := v.FldValidators["local_dns_choice.first_address"]; exists {
+			val := m.GetLocalDnsChoice().(*IPV6LocalDnsAddress_FirstAddress).FirstAddress
+			vOpts := append(opts,
+				db.WithValidateField("local_dns_choice"),
+				db.WithValidateField("first_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPV6LocalDnsAddress_LastAddress:
+		if fv, exists := v.FldValidators["local_dns_choice.last_address"]; exists {
+			val := m.GetLocalDnsChoice().(*IPV6LocalDnsAddress_LastAddress).LastAddress
+			vOpts := append(opts,
+				db.WithValidateField("local_dns_choice"),
+				db.WithValidateField("last_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *IPV6LocalDnsAddress_ConfiguredAddress:
+		if fv, exists := v.FldValidators["local_dns_choice.configured_address"]; exists {
+			val := m.GetLocalDnsChoice().(*IPV6LocalDnsAddress_ConfiguredAddress).ConfiguredAddress
+			vOpts := append(opts,
+				db.WithValidateField("local_dns_choice"),
+				db.WithValidateField("configured_address"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPV6LocalDnsAddressValidator = func() *ValidateIPV6LocalDnsAddress {
+	v := &ValidateIPV6LocalDnsAddress{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLocalDnsChoice := v.LocalDnsChoiceValidationRuleHandler
+	rulesLocalDnsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhLocalDnsChoice(rulesLocalDnsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6LocalDnsAddress.local_dns_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["local_dns_choice"] = vFn
+
+	vrhLocalDnsChoiceConfiguredAddress := v.LocalDnsChoiceConfiguredAddressValidationRuleHandler
+	rulesLocalDnsChoiceConfiguredAddress := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["local_dns_choice.configured_address"], err = vrhLocalDnsChoiceConfiguredAddress(rulesLocalDnsChoiceConfiguredAddress)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field IPV6LocalDnsAddress.local_dns_choice_configured_address: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["local_dns_choice.configured_address"] = vFnMap["local_dns_choice.configured_address"]
+
+	return v
+}()
+
+func IPV6LocalDnsAddressValidator() db.Validator {
+	return DefaultIPV6LocalDnsAddressValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5143,6 +6969,17 @@ func (v *ValidateLayer2InterfaceType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *Layer2InterfaceType_L2SriovInterface:
+		if fv, exists := v.FldValidators["layer2_interface_choice.l2sriov_interface"]; exists {
+			val := m.GetLayer2InterfaceChoice().(*Layer2InterfaceType_L2SriovInterface).L2SriovInterface
+			vOpts := append(opts,
+				db.WithValidateField("layer2_interface_choice"),
+				db.WithValidateField("l2sriov_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5174,6 +7011,7 @@ var DefaultLayer2InterfaceTypeValidator = func() *ValidateLayer2InterfaceType {
 
 	v.FldValidators["layer2_interface_choice.l2vlan_interface"] = Layer2VlanInterfaceTypeValidator().Validate
 	v.FldValidators["layer2_interface_choice.l2vlan_slo_interface"] = Layer2SloVlanInterfaceTypeValidator().Validate
+	v.FldValidators["layer2_interface_choice.l2sriov_interface"] = Layer2SriovInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -5289,6 +7127,192 @@ var DefaultLayer2SloVlanInterfaceTypeValidator = func() *ValidateLayer2SloVlanIn
 
 func Layer2SloVlanInterfaceTypeValidator() db.Validator {
 	return DefaultLayer2SloVlanInterfaceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Layer2SriovInterfaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Layer2SriovInterfaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Layer2SriovInterfaceType) DeepCopy() *Layer2SriovInterfaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Layer2SriovInterfaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Layer2SriovInterfaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Layer2SriovInterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Layer2SriovInterfaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLayer2SriovInterfaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLayer2SriovInterfaceType) VlanChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLayer2SriovInterfaceType) VlanChoiceVlanIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VlanId, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vlan_id")
+	}
+	return oValidatorFn_VlanId, nil
+}
+
+func (v *ValidateLayer2SriovInterfaceType) DeviceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for device")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLayer2SriovInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Layer2SriovInterfaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Layer2SriovInterfaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["device"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("device"))
+		if err := fv(ctx, m.GetDevice(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vlan_choice"]; exists {
+		val := m.GetVlanChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vlan_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVlanChoice().(type) {
+	case *Layer2SriovInterfaceType_Untagged:
+		if fv, exists := v.FldValidators["vlan_choice.untagged"]; exists {
+			val := m.GetVlanChoice().(*Layer2SriovInterfaceType_Untagged).Untagged
+			vOpts := append(opts,
+				db.WithValidateField("vlan_choice"),
+				db.WithValidateField("untagged"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Layer2SriovInterfaceType_VlanId:
+		if fv, exists := v.FldValidators["vlan_choice.vlan_id"]; exists {
+			val := m.GetVlanChoice().(*Layer2SriovInterfaceType_VlanId).VlanId
+			vOpts := append(opts,
+				db.WithValidateField("vlan_choice"),
+				db.WithValidateField("vlan_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterfaceType {
+	v := &ValidateLayer2SriovInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVlanChoice := v.VlanChoiceValidationRuleHandler
+	rulesVlanChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVlanChoice(rulesVlanChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Layer2SriovInterfaceType.vlan_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vlan_choice"] = vFn
+
+	vrhVlanChoiceVlanId := v.VlanChoiceVlanIdValidationRuleHandler
+	rulesVlanChoiceVlanId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "4095",
+	}
+	vFnMap["vlan_choice.vlan_id"], err = vrhVlanChoiceVlanId(rulesVlanChoiceVlanId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field Layer2SriovInterfaceType.vlan_choice_vlan_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vlan_choice.vlan_id"] = vFnMap["vlan_choice.vlan_id"]
+
+	vrhDevice := v.DeviceValidationRuleHandler
+	rulesDevice := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhDevice(rulesDevice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Layer2SriovInterfaceType.device: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["device"] = vFn
+
+	return v
+}()
+
+func Layer2SriovInterfaceTypeValidator() db.Validator {
+	return DefaultLayer2SriovInterfaceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

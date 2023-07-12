@@ -2855,6 +2855,15 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["max_ports"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_ports"))
+		if err := fv(ctx, m.GetMaxPorts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["max_time_interval"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("max_time_interval"))
@@ -3441,6 +3450,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("cookie_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_UniquePortRangeList:
+		if fv, exists := v.FldValidators["well_known.unique_port_range_list"]; exists {
+			val := m.GetWellKnown().(*StringRules_UniquePortRangeList).UniquePortRangeList
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("unique_port_range_list"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

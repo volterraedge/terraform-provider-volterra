@@ -23,18 +23,54 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli" must be set
-    advertise_on_internet_default_vip = true
-    domain_suffix                     = "foo.com"
+    // One of the arguments from this list "advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip" must be set
 
-    // One of the arguments from this list "advertise_on_public do_not_advertise advertise_on_public_default_vip" must be set
+    advertise_on_sli_vip {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+      no_mtls = true
+
+      tls_certificates {
+        certificate_url = "value"
+        description     = "Certificate used in production environment"
+
+        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
+
+        disable_ocsp_stapling {}
+        private_key {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+        default_security = true
+      }
+    }
+
+    domain_suffix = "foo.com"
+
+    // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public do_not_advertise" must be set
     do_not_advertise = true
 
-    // One of the arguments from this list "default_https_port https_port" must be set
+    // One of the arguments from this list "https_port default_https_port" must be set
     default_https_port = true
   }
 
-  // One of the arguments from this list "aws_site_type_choice baremetal_site_type_choice" must be set
+  // One of the arguments from this list "baremetal_site_type_choice aws_site_type_choice" must be set
 
   aws_site_type_choice {
     apm_aws_site {
@@ -47,12 +83,10 @@ resource "volterra_apm" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
+        wingman_secret_info {
+          name = "ChargeBack-API-Key"
         }
       }
 
@@ -67,14 +101,14 @@ resource "volterra_apm" "example" {
       }
 
       endpoint_service {
-        // One of the arguments from this list "advertise_on_slo_ip_external disable_advertise_on_slo_ip advertise_on_slo_ip" must be set
+        // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
         disable_advertise_on_slo_ip = true
 
         // One of the arguments from this list "automatic_vip configured_vip" must be set
         automatic_vip = true
 
-        // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
-        https_port = true
+        // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
+        default_tcp_ports = true
 
         // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
         no_udp_ports = true
@@ -83,10 +117,17 @@ resource "volterra_apm" "example" {
       nodes {
         aws_az_name = "us-west-2a"
 
-        // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
-        reserved_mgmt_subnet = true
-        node_name            = "node1"
+        // One of the arguments from this list "mgmt_subnet reserved_mgmt_subnet" must be set
 
+        mgmt_subnet {
+          // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+
+          subnet_param {
+            ipv4 = "10.1.2.0/24"
+            ipv6 = "1234:568:abcd:9100::/64"
+          }
+        }
+        node_name = "node1"
         // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
         automatic_prefix = true
       }
@@ -130,7 +171,7 @@ Argument Reference
 
 `https_management` - (Optional) Enable HTTPS based management. See [Https Management ](#https-management) below for details.
 
-`aws_site_type_choice` - (Optional) Virtual F5 BIG-IP service to be deployed on AWS Transit Gateway Site. See [Aws Site Type Choice ](#aws-site-type-choice) below for details.
+`aws_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site. See [Aws Site Type Choice ](#aws-site-type-choice) below for details.
 
 `baremetal_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site. See [Baremetal Site Type Choice ](#baremetal-site-type-choice) below for details.
 
@@ -258,7 +299,7 @@ System will automatically select a VIP.
 
 ### Aws Site Type Choice
 
-Virtual F5 BIG-IP service to be deployed on AWS Transit Gateway Site.
+Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site.
 
 `apm_aws_site` - (Required) Virtual F5 BIG-IP service to be deployed on AWS. See [Apm Aws Site ](#apm-aws-site) below for details.
 
@@ -274,7 +315,7 @@ Reference to AWS transit gateway site.
 
 Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site.
 
-`f5_bare_metal_site` - (Optional) Virtual BIG-IP specification for App Stack Bare Metal Site. See [F5 Bare Metal Site ](#f5-bare-metal-site) below for details.
+`f5_bare_metal_site` - (Required) Virtual BIG-IP specification for App Stack Bare Metal Site. See [F5 Bare Metal Site ](#f5-bare-metal-site) below for details.
 
 ### Best Plus Payg 1gbps
 
@@ -326,7 +367,7 @@ Custom selection of TLS versions and cipher suites.
 
 ### Custom Tcp Ports
 
-select custom tcp ports.
+Select custom TCP Ports.
 
 `ports` - (Required) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
 
@@ -346,7 +387,7 @@ TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
 ### Default Tcp Ports
 
-Select default TCP ports, 80 and 443.
+Select default TCP Ports, 80 and 443.
 
 ### Disable Advertise On Slo Ip
 
@@ -382,15 +423,15 @@ External service type is Endpoint service.
 
 `configured_vip` - (Optional) Enter IP address for the default VIP (`String`).
 
-`custom_tcp_ports` - (Optional) select custom tcp ports. See [Custom Tcp Ports ](#custom-tcp-ports) below for details.
+`custom_tcp_ports` - (Optional) Select custom TCP Ports. See [Custom Tcp Ports ](#custom-tcp-ports) below for details.
 
-`default_tcp_ports` - (Optional) Select default TCP ports, 80 and 443 (bool).
+`default_tcp_ports` - (Optional) Select default TCP Ports, 80 and 443 (bool).
 
 `http_port` - (Optional) Select HTTP Port 80 (bool).
 
 `https_port` - (Optional) Select HTTPS Port 443 (bool).
 
-`no_tcp_ports` - (Optional) do not select tcp ports (bool).
+`no_tcp_ports` - (Optional) Do not select TCP Ports (bool).
 
 `custom_udp_ports` - (Optional) select custom udp ports. See [Custom Udp Ports ](#custom-udp-ports) below for details.
 
@@ -472,6 +513,10 @@ TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
 Select Existing Subnet or Create New.
 
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+
 ### No Crl
 
 Client certificate revocation status is not verified.
@@ -482,7 +527,7 @@ x-displayName: "Disable".
 
 ### No Tcp Ports
 
-do not select tcp ports.
+Do not select TCP Ports.
 
 ### No Udp Ports
 
@@ -492,7 +537,7 @@ do not select udp ports.
 
 Specify how and where the service nodes are spawned.
 
-`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. It is recommended that AZ is one of the AZ for sites (`String`).
+`aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
 
 `mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet ](#mgmt-subnet) below for details.
 
@@ -533,6 +578,14 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 ### Reserved Mgmt Subnet
 
 Autogenerate and reserve a subnet from the Primary CIDR.
+
+### Subnet Param
+
+Parameters for creating new subnet.
+
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+
+`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
 
 ### Tls Certificates
 

@@ -2795,6 +2795,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "k8s_manifest_paramsDeployStatus": {
+            "type": "string",
+            "enum": [
+                "RUNNING",
+                "STOPPED",
+                "PROVISIONING",
+                "STARTING",
+                "PAUSED",
+                "STOPPING",
+                "TERMINATING",
+                "CRASHLOOP_BACKOFF",
+                "MIGRATING",
+                "UNKNOWN",
+                "ERROR_RUN_SCHEDULABLE",
+                "ERR_IMAGE_PULL",
+                "IMAGE_PULL_BACKOFF",
+                "ERROR_PVC_NOTFOUND",
+                "DATA_VOLUME_ERROR",
+                "WAITING_FOR_VOLUME_BINDING"
+            ],
+            "default": "RUNNING",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.views.k8s_manifest_params.DeployStatus"
+        },
         "nfv_serviceEndpointRefType": {
             "type": "object",
             "description": "x-displayName: \"Endpoint Ref type\"\nA reference from a node to a endpoint.",
@@ -3537,65 +3561,89 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "nfv_serviceSSHManagementType": {
+        "nfv_serviceSSHManagementNodePorts": {
             "type": "object",
-            "description": "HTTPS based configuration",
-            "title": "SSH based management",
-            "x-displayname": "SSH based management",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_public\",\"advertise_on_public_default_vip\",\"advertise_on_sli_vip\",\"advertise_on_slo_internet_vip\",\"advertise_on_slo_sli\",\"advertise_on_slo_vip\"]",
-            "x-ves-proto-message": "ves.io.schema.nfv_service.SSHManagementType",
+            "description": "TCP Port configuration per node",
+            "title": "SSHManagement Port Configuration",
+            "x-displayname": "Management Node SSH Port",
+            "x-ves-proto-message": "ves.io.schema.nfv_service.SSHManagementNodePorts",
             "properties": {
-                "advertise_on_public": {
-                    "description": "Exclusive with [advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Advertise this loadbalancer on public network",
-                    "title": "Enable on Internet with specific VIP",
-                    "$ref": "#/definitions/viewsAdvertisePublic",
-                    "x-displayname": "Enable Internet Access(Specified VIP)"
-                },
-                "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable management access on internet with default VIP",
-                    "title": "Enable On Public Default VIP",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable Internet Access"
-                },
-                "advertise_on_sli_vip": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable on Site local inside network, default VIP will be used",
-                    "title": "Enable On Site Local Inside",
-                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
-                    "x-displayname": "Enable On Site Local Inside"
-                },
-                "advertise_on_slo_internet_vip": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_sli advertise_on_slo_vip]\n Enable On Site Local Outside Internet VIP",
-                    "title": "Enable On Site Local Outside Internet VIP",
-                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
-                    "x-displayname": "Enable On Site Local Outside Internet VIP"
-                },
-                "advertise_on_slo_sli": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_vip]\n Enable on Site local inside and outside network, default VIP will be used",
-                    "title": "Enable On Site Local Inside and Outside",
-                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
-                    "x-displayname": "Enable On Site Local Inside and Outside"
-                },
-                "advertise_on_slo_vip": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
-                    "title": "Enable On Site Local Outside",
-                    "$ref": "#/definitions/viewsDownstreamTlsParamsType",
-                    "x-displayname": "Enable On Site Local Outside"
-                },
-                "ssh_ports": {
-                    "type": "array",
-                    "description": " Enter TCP port per node\n\nExample: - \"2222,3345\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.uint32.lte: 65535\n  ves.io.schema.rules.repeated.max_items: 2\n",
-                    "title": "List of SSH port per node",
-                    "maxItems": 2,
-                    "items": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "x-displayname": "SSH Port",
-                    "x-ves-example": "2222,3345",
+                "node_name": {
+                    "type": "string",
+                    "description": " Node name will be used to match a particular node with the desired TCP port\n\nExample: - \"node1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Node Name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Node Name",
+                    "x-ves-example": "node1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.uint32.lte": "65535",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "ssh_port": {
+                    "type": "integer",
+                    "description": " Enter TCP port per node\n\nExample: - \"2222\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1024\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "SSH port per node",
+                    "format": "int64",
+                    "x-displayname": "SSH Port",
+                    "x-ves-example": "2222",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1024",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "nfv_serviceSSHManagementType": {
+            "type": "object",
+            "description": "SSH based configuration",
+            "title": "SSH based management",
+            "x-displayname": "SSH based management",
+            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_sli\",\"advertise_on_slo\",\"advertise_on_slo_internet_vip\",\"advertise_on_slo_sli\"]",
+            "x-ves-proto-message": "ves.io.schema.nfv_service.SSHManagementType",
+            "properties": {
+                "advertise_on_sli": {
+                    "description": "Exclusive with [advertise_on_slo advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local inside network, default VIP will be used",
+                    "title": "Enable On Site Local Inside",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable On Site Local Inside"
+                },
+                "advertise_on_slo": {
+                    "description": "Exclusive with [advertise_on_sli advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
+                    "title": "Enable On Site Local Outside",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable On Site Local Outside"
+                },
+                "advertise_on_slo_internet_vip": {
+                    "description": "Exclusive with [advertise_on_sli advertise_on_slo advertise_on_slo_sli]\n Enable On Site Local Outside Internet VIP",
+                    "title": "Enable On Site Local Outside Internet VIP",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable On Site Local Outside Internet VIP"
+                },
+                "advertise_on_slo_sli": {
+                    "description": "Exclusive with [advertise_on_sli advertise_on_slo advertise_on_slo_internet_vip]\n Enable on Site local inside and outside network, default VIP will be used",
+                    "title": "Enable On Site Local Inside and Outside",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable On Site Local Inside and Outside"
+                },
+                "node_ssh_ports": {
+                    "type": "array",
+                    "description": " Enter TCP port and node name per node\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n",
+                    "title": "List of SSH port and node name per node",
+                    "maxItems": 2,
+                    "items": {
+                        "$ref": "#/definitions/nfv_serviceSSHManagementNodePorts"
+                    },
+                    "x-displayname": "Management Node SSH Port",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "2"
                     }
                 }
@@ -3695,7 +3743,7 @@ var APISwaggerJSON string = `{
                 },
                 "aws_az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region. It is recommended that AZ is one of the AZ for sites\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
+                    "description": " The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
                     "title": "AWS AZ",
                     "x-displayname": "AWS AZ Name",
                     "x-ves-example": "us-west-2a",
@@ -3791,6 +3839,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of object",
             "title": "Status for NFV Service",
             "x-displayname": "Status",
+            "x-ves-displayorder": "1,3,4,5,8,7",
             "x-ves-proto-message": "ves.io.schema.nfv_service.StatusObject",
             "properties": {
                 "conditions": {
@@ -3806,13 +3855,19 @@ var APISwaggerJSON string = `{
                     "description": " Status of deployment status",
                     "title": "Deployment Status",
                     "$ref": "#/definitions/terraform_parametersApplyStatus",
-                    "x-displayname": "Deplyment Status"
+                    "x-displayname": "Deployment Status"
                 },
                 "external_cname": {
                     "type": "string",
                     "description": " External CNAME",
                     "title": "External CNAME",
                     "x-displayname": "External CNAME"
+                },
+                "k8s_deployment_status_type": {
+                    "description": " Status of K8s VM Deployment Status",
+                    "title": "K8s VM Deployment Status",
+                    "$ref": "#/definitions/viewsk8s_manifest_paramsDeploymentStatusType",
+                    "x-displayname": "K8s VM Deployment Status"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -3822,7 +3877,7 @@ var APISwaggerJSON string = `{
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": " Refernce to object for current status",
+                    "description": " Reference to object for current status",
                     "title": "object_refs",
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
@@ -3833,7 +3888,7 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": " Software version",
                     "title": "Software version",
-                    "x-displayname": "Software version"
+                    "x-displayname": "Software Version"
                 },
                 "vip": {
                     "type": "string",
@@ -4216,7 +4271,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "List of Port Ranges",
+                    "x-displayname": "Port Ranges",
                     "x-ves-example": "100-200",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -4758,6 +4813,16 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemanfv_serviceServiceType": {
+            "type": "string",
+            "description": "x-displayName: \"Service Type\"\nEnum to define the service types that have used the NFV service as child object, for internal use\n\n - NONE: none\n\nx-displayName: \"None\"\nServiceType is set to None for NFV Services by default\n - BIGIP_APM: BIG-IP APM\n\nx-displayName: \"BIG-IP APM\"\nServiceType will be set to this value when APM object is created with NFV as it's child object",
+            "title": "Service Type",
+            "enum": [
+                "NONE",
+                "BIGIP_APM"
+            ],
+            "default": "NONE"
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -4806,8 +4871,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "description": "Terraform state during apply stage",
-            "title": "Apply Stage State",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
@@ -4817,7 +4881,7 @@ var APISwaggerJSON string = `{
                 "APPLY_PLAN_ERRORED"
             ],
             "default": "APPLIED",
-            "x-displayname": "Apply Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.ApplyStageState"
         },
         "terraform_parametersApplyStatus": {
@@ -4863,6 +4927,13 @@ var APISwaggerJSON string = `{
                     "format": "date-time",
                     "x-displayname": "Modification Timestamp"
                 },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "suggested_action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                },
                 "tf_output": {
                     "type": "string",
                     "description": " The value of an \"output\" variable from the terraform state file.\n\nExample: - \"value\"-",
@@ -4880,21 +4951,19 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "description": "Terraform state during destroy stage",
-            "title": "Destroy Stage State",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
                 "DESTROYING"
             ],
             "default": "DESTROYED",
-            "x-displayname": "Destroy Stage State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.DestroyStageState"
         },
         "terraform_parametersInfraState": {
             "type": "string",
-            "description": "Infrastructure state of the view provisioning",
-            "title": "Infra State",
+            "title": "- PROVISIONED: x-displayName: \"Provisioned\"\n - TIMED_OUT: x-displayName: \"Timed out\"\n - ERRORED: x-displayName: \"Errored\"\n - PROVISIONING: x-displayName: \"Provisioning\"",
             "enum": [
                 "PROVISIONED",
                 "TIMED_OUT",
@@ -4902,13 +4971,12 @@ var APISwaggerJSON string = `{
                 "PROVISIONING"
             ],
             "default": "PROVISIONED",
-            "x-displayname": "Infra State",
+            "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.terraform_parameters.InfraState"
         },
         "terraform_parametersRollbackState": {
             "type": "string",
-            "description": "x-displayName: \"Rollback State\"\nTerraform State after version Rollback",
-            "title": "Rollback State",
+            "title": "- ROLLBACK_SUCCESSFUL: x-displayName: \"Rollback successful\"\n - ROLLBACK_ERRORED: x-displayName: \"Rollback errored\"\n - ROLLBACK_NOT_REQUIRED: x-displayName: \"Rollback not required\"",
             "enum": [
                 "ROLLBACK_SUCCESSFUL",
                 "ROLLBACK_ERRORED",
@@ -4918,7 +4986,7 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersUpgradeState": {
             "type": "string",
-            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade",
+            "description": "x-displayName: \"Upgrade State\"\nTerraform State after version Upgrade\n\n - UPGRADE_SUCCESSFUL: x-displayName: \"Upgrade successful\"\n - UPGRADE_ERRORED: x-displayName: \"Upgrade errored\"\n - UPGRADE_NOT_REQUIRED: x-displayName: \"Upgrade not required\"",
             "title": "Upgrade State",
             "enum": [
                 "UPGRADE_SUCCESSFUL",
@@ -5249,6 +5317,24 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
                         "ves.io.schema.rules.repeated.items.enum.not_in": "[0]"
                     }
+                }
+            }
+        },
+        "viewsk8s_manifest_paramsDeploymentStatusType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.k8s_manifest_params.DeploymentStatusType",
+            "properties": {
+                "status": {
+                    "description": " Status",
+                    "title": "Status",
+                    "$ref": "#/definitions/k8s_manifest_paramsDeployStatus",
+                    "x-displayname": "Status"
+                },
+                "status_output": {
+                    "type": "string",
+                    "description": " Status Output",
+                    "title": "Status Output",
+                    "x-displayname": "Status Output"
                 }
             }
         }

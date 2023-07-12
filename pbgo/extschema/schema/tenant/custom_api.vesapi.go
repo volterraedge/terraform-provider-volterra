@@ -165,6 +165,15 @@ func (c *CustomAPIGrpcClient) doRPCGetPasswordPolicy(ctx context.Context, yamlRe
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetSupportInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetSupportInfo(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetTenantEscalationDoc(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -303,6 +312,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetLoginEventsInTimeFrame"] = ccl.doRPCGetLoginEventsInTimeFrame
 
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
+
+	rpcFns["GetSupportInfo"] = ccl.doRPCGetSupportInfo
 
 	rpcFns["GetTenantEscalationDoc"] = ccl.doRPCGetTenantEscalationDoc
 
@@ -1498,6 +1509,88 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCGetSupportInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := ioutil.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SupportInfo{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.SupportInfo", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2313,6 +2406,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
 
+	rpcFns["GetSupportInfo"] = ccl.doRPCGetSupportInfo
+
 	rpcFns["GetTenantEscalationDoc"] = ccl.doRPCGetTenantEscalationDoc
 
 	rpcFns["GetTenantSettings"] = ccl.doRPCGetTenantSettings
@@ -2384,6 +2479,9 @@ func (c *customAPIInprocClient) GetLoginEventsInTimeFrame(ctx context.Context, i
 }
 func (c *customAPIInprocClient) GetPasswordPolicy(ctx context.Context, in *GetPasswordPolicyRequest, opts ...grpc.CallOption) (*PasswordPolicyPublicAccess, error) {
 	return c.CustomAPIServer.GetPasswordPolicy(ctx, in)
+}
+func (c *customAPIInprocClient) GetSupportInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SupportInfo, error) {
+	return c.CustomAPIServer.GetSupportInfo(ctx, in)
 }
 func (c *customAPIInprocClient) GetTenantEscalationDoc(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	return c.CustomAPIServer.GetTenantEscalationDoc(ctx, in)
@@ -3117,6 +3215,55 @@ func (s *customAPISrv) GetPasswordPolicy(ctx context.Context, in *GetPasswordPol
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.PasswordPolicyPublicAccess", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetSupportInfo(ctx context.Context, in *Empty) (*SupportInfo, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *SupportInfo
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetSupportInfo' operation on 'tenant'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.GetSupportInfo"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetSupportInfo(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.SupportInfo", rsp)...)
 
 	return rsp, nil
 }
@@ -5433,6 +5580,80 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/tenant/support-info": {
+            "get": {
+                "summary": "Support Info",
+                "description": "Receive support information for tenant",
+                "operationId": "ves.io.schema.tenant.CustomAPI.GetSupportInfo",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/tenantSupportInfo"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getsupportinfo"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetSupportInfo"
+            },
+            "x-displayname": "Tenant Custom API",
+            "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/tenant/tenant-escalation-doc": {
             "get": {
                 "summary": "Tenant escalation document",
@@ -6161,6 +6382,21 @@ var CustomAPISwaggerJSON string = `{
             "description": "LookupCnameResponse sets the response format based on the availability of cname.\n\nIt can return any of these three types of errors.\nEEXISTS =\u003e cname exists.\nEOK =\u003e valid request. However, cname does not exist.\nEUNKNOWN =\u003e internal error in fetching tenants info.",
             "x-displayname": "LookupCnameResponse",
             "x-ves-proto-message": "ves.io.schema.tenant.StatusResponse"
+        },
+        "tenantSupportInfo": {
+            "type": "object",
+            "description": "Support Info contains support information for tenant",
+            "title": "Support Info",
+            "x-displayname": "Support Info",
+            "x-ves-proto-message": "ves.io.schema.tenant.SupportInfo",
+            "properties": {
+                "support_email_address": {
+                    "type": "string",
+                    "description": " Support Email address for tenant",
+                    "title": "Support email address",
+                    "x-displayname": "Support email address"
+                }
+            }
         },
         "tenantTenantSettingsResponse": {
             "type": "object",
