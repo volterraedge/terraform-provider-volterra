@@ -27,13 +27,16 @@ resource "volterra_securemesh_site" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
   master_node_configuration {
     name      = "master-0"
     public_ip = "192.168.0.156"
   }
-
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
   volterra_certified_hw  = ["isv-8000-series-voltmesh"]
@@ -85,6 +88,8 @@ Argument Reference
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -199,6 +204,12 @@ Configuration will apply to given device on all nodes of the site..
 Static IP configuration for a specific node.
 
 `interface_ip_map` - (Optional) Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map ](#interface-ip-map) below for details.
+
+### Configured List
+
+Configured address outside network range - external dns server.
+
+`dns_list` - (Required) List of IPV6 Addresses acting as Dns servers (`String`).
 
 ### Coordinates
 
@@ -394,6 +405,14 @@ This is the default behavior if no choice is selected..
 
 Matches DNS port 53.
 
+### Dns Config
+
+Dns information that needs to added in the RouterAdvetisement.
+
+`configured_list` - (Optional) Configured address outside network range - external dns server. See [Configured List ](#configured-list) below for details.
+
+`local_dns` - (Optional) Choose the address from the network prefix range as dns server. See [Local Dns ](#local-dns) below for details.
+
 ### Domain Match
 
 Domain value or regular expression to match.
@@ -443,6 +462,8 @@ Ethernet interface configuration..
 `static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
+
+`ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Auto Config ](#ipv6-auto-config) below for details.
 
 `no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
 
@@ -516,6 +537,10 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
+### Host
+
+auto configuration routers.
+
 ### Interception Rules
 
 List of ordered rules to enable or disable for TLS interception.
@@ -562,9 +587,21 @@ Configure network interfaces for this Secure Mesh site.
 
 Interface belongs to IP Fabric network.
 
+### Ipv6 Auto Config
+
+Configuration corresponding to IPV6 auto configuration.
+
+`host` - (Optional) auto configuration routers (bool).
+
+`router` - (Optional) System behaves like Auto config Router and provides auto config parameters. See [Router ](#router) below for details.
+
 ### Is Primary
 
 This interface is primary.
+
+### Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
 
 ### Lacp
 
@@ -575,6 +612,16 @@ Configure LACP (802.3ad) based bond device.
 ### Last Address
 
 Last usable address from the network prefix is chosen as default gateway.
+
+### Local Dns
+
+Choose the address from the network prefix range as dns server.
+
+`configured_address` - (Optional) Configured address from the network prefix is chosen as dns server (`String`).
+
+`first_address` - (Optional) First usable address from the network prefix is chosen as dns server (bool).
+
+`last_address` - (Optional) Last usable address from the network prefix is chosen as dns server (bool).
 
 ### Loopback Interface
 
@@ -640,6 +687,10 @@ No TLS interception is enabled for this network connector.
 
 Interface does not have an IPv6 Address..
 
+### No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
 ### No Network Policy
 
 Firewall Policy is disabled for this site..
@@ -686,6 +737,26 @@ Operating System Details.
 
 `operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
+### Perf Mode L3 Enhanced
+
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
+
+### Perf Mode L7 Enhanced
+
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+
 ### Policy
 
 Policy to enable/disable specific domains, with implicit enable all domains.
@@ -727,6 +798,16 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Router
+
+System behaves like Auto config Router and provides auto config parameters.
+
+`network_prefix` - (Optional) Nework prefix that is used as Prefix information (`String`).
+
+`stateful` - (Optional) works along with Router Advertisement' Managed flag. See [Stateful ](#stateful) below for details.
+
+`dns_config` - (Optional) Dns information that needs to added in the RouterAdvetisement. See [Dns Config ](#dns-config) below for details.
 
 ### Same As Dgw
 
@@ -811,6 +892,20 @@ creating ipsec between two sites which are part of the site mesh group.
 ### Ssh
 
 Matches ssh port 22.
+
+### Stateful
+
+works along with Router Advertisement' Managed flag.
+
+`dhcp_networks` - (Required) List of networks from which DHCP server can allocate ip addresses. See [Dhcp Networks ](#dhcp-networks) below for details.
+
+`fixed_ip_map` - (Optional) Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address (`String`).
+
+`automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (bool).
+
+`automatic_from_start` - (Optional) Assign automatically from start of the first network in the list (bool).
+
+`interface_ip_map` - (Optional) Configured address for every node. See [Interface Ip Map ](#interface-ip-map) below for details.
 
 ### Static Ip
 
