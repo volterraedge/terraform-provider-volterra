@@ -20,56 +20,60 @@ resource "volterra_fleet" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
-  no_bond_devices = true
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
 
+  bond_device_list {
+    bond_devices {
+      devices = ["eth0"]
+
+      // One of the arguments from this list "lacp active_backup" must be set
+
+      lacp {
+        rate = "30"
+      }
+      link_polling_interval = "1000"
+      link_up_delay         = "200"
+      name                  = "bond0"
+    }
+  }
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  fleet_label = ["sfo"]
-
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  disable_gpu = true
 
-  enable_vgpu {
-    feature_type   = "feature_type"
-    server_address = "gridlicense1.example.com"
-    server_port    = "7070"
-  }
   // One of the arguments from this list "interface_list default_config device_list" must be set
-  default_config = true
+
+  device_list {
+    devices {
+      // One of the arguments from this list "network_device" must be set
+
+      network_device {
+        interface {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        use = "use"
+      }
+
+      name  = "eth0"
+      owner = "owner"
+    }
+  }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-
-  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
-
-  sriov_interfaces {
-    sriov_interface {
-      interface_name = "eth0"
-      number_of_vfs  = "3"
-    }
-  }
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
-  // One of the arguments from this list "storage_device_list no_storage_device" must be set
+  // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
-
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
-
-  storage_interface_list {
-    interfaces {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
-  allow_all_usb = true
+  deny_all_usb = true
 }
 
 ```
@@ -137,10 +141,6 @@ Argument Reference
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
-`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (bool).
-
-`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interfaces ](#sriov-interfaces) below for details.
-
 `default_storage_class` - (Optional) Use only default storage class in kubernetes (bool).
 
 `storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for this fleet. See [Storage Class List ](#storage-class-list) below for details.
@@ -177,7 +177,7 @@ Configure active/backup based bond device.
 
 Configuration to block the default services allowed by the platform.
 
-`dns` - (Optional) Matches DNS port 53 (bool).
+`dns` - (Optional) Matches ssh port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -189,11 +189,11 @@ Configuration to block the default services allowed by the platform.
 
 Configure Bond Devices for this fleet.
 
-`bond_devices` - (Required) List of bond devices. See [Bond Devices ](#bond-devices) below for details.
+`bond_devices` - (Required) List of bond devices for this fleet. See [Bond Devices ](#bond-devices) below for details.
 
 ### Bond Devices
 
-List of bond devices.
+List of bond devices for this fleet.
 
 `devices` - (Required) Ethernet devices that will make up this bond (`String`).
 
@@ -231,7 +231,7 @@ device instance specific sections.
 
 ### Dns
 
-Matches DNS port 53.
+Matches ssh port 53.
 
 ### Enable Vgpu
 
@@ -311,6 +311,16 @@ Configure LACP (802.3ad) based bond device.
 
 `rate` - (Optional) Interval in seconds to transmit LACP packets (`Int`).
 
+### Mayastor Pools
+
+mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality..
+
+`node` - (Required) Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located. (`String`).
+
+`pool_disk_devices` - (Required) It supports various types such as "/dev/sdb", "nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432" or "iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2". (`String`).
+
+`pool_name` - (Required) Enter Mayastor Pool Name (`String`).
+
 ### Netapp Trident
 
 Storage class Device configuration for NetApp Trident.
@@ -349,9 +359,15 @@ Nexthop address when type is "Use-Configured".
 
 L3 performance mode enhancement without jumbo frame.
 
+### Openebs Enterprise
+
+Device configuration for Pure Storage Service Orchestrator.
+
+`mayastor_pools` - (Optional) mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.. See [Mayastor Pools ](#mayastor-pools) below for details.
+
 ### Perf Mode L3 Enhanced
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+Site optimized for L3 traffic processing.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -359,15 +375,15 @@ When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 ### Perf Mode L7 Enhanced
 
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+Site optimized for L7 traffic processing.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Pure Service Orchestrator
 
@@ -388,20 +404,6 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
-
-### Sriov Interface
-
-Use custom SR-IOV interfaces Configuration.
-
-`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
-
-`number_of_vfs` - (Required) Number of virtual functions (`Int`).
-
-### Sriov Interfaces
-
-Use custom Single Root I/O Virtualization interfaces.
-
-`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interface ](#sriov-interface) below for details.
 
 ### Ssh
 
@@ -456,6 +458,8 @@ List of custom storage devices.
 `hpe_storage` - (Optional) Device configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
 
 `netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
+
+`openebs_enterprise` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `pure_service_orchestrator` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
 

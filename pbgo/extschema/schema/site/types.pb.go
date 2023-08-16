@@ -4135,7 +4135,6 @@ type OfflineSurvivabilityStatus struct {
 	// Offline survivability phase
 	//
 	// x-displayName: "State"
-	//
 	Phase OfflineSurvivabilityPhase `protobuf:"varint,1,opt,name=phase,proto3,enum=ves.io.schema.site.OfflineSurvivabilityPhase" json:"phase,omitempty"`
 	// Message
 	//
@@ -4325,7 +4324,7 @@ type OsInfo struct {
 	// x-displayName: "Chassis"
 	// HW chassis information
 	Chassis *Chassis `protobuf:"bytes,4,opt,name=chassis,proto3" json:"chassis,omitempty"`
-	//  bios
+	//	bios
 	//
 	// x-displayName: "BIOS"
 	// Information about bios
@@ -6629,6 +6628,7 @@ type ReMeshGroup struct {
 	// Choose connection type between the sites
 	//
 	// Types that are valid to be assigned to Type:
+	//
 	//	*ReMeshGroup_IpsecGroup
 	//	*ReMeshGroup_L3VpnGroup
 	Type isReMeshGroup_Type `protobuf_oneof:"type"`
@@ -6842,7 +6842,8 @@ type DirectConnectVIFStateInfo struct {
 	// BGP Peers
 	//
 	// x-displayName: " BGP Peers"
-	//  BGP Peers
+	//
+	//	BGP Peers
 	BgpPeers []*DirectConnectBGPPeerInfo `protobuf:"bytes,4,rep,name=bgp_peers,json=bgpPeers,proto3" json:"bgp_peers,omitempty"`
 }
 

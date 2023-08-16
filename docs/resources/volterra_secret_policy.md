@@ -44,53 +44,11 @@ Argument Reference
 
 `algo` - (Optional) - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action (`String`).
 
-`allow_f5xc` - (Optional) if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy. (`Bool`).
+`allow_volterra` - (Optional) if allow_volterra is set to true, it allows relevant volterra infrastructure services to decrypt the secret encrypted using this policy. (`Bool`).
 
 `decrypt_cache_timeout` - (Optional) Value for this parameter is a string ending in the suffix "s" (indicating seconds), suffix "m" (indicating minutes) or suffix "h" (indicating hours) (`String`).
 
-`legacy_rule_list` - (Optional) x-displayName: "Legacy Rule List". See [Legacy Rule List ](#legacy-rule-list) below for details.
-
-`rule_list` - (Optional) x-displayName: "Custom Rule List". See [Rule List ](#rule-list) below for details.
-
 `rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
-
-### Client Name Matcher
-
-The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher..
-
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
-
-### Client Selector
-
-The predicate evaluates to true if the expressions in the label selector are true for the client labels..
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Label Matcher
-
-The values of any other labels do not matter..
-
-`keys` - (Optional) The list of label key names that have to match (`String`).
-
-### Legacy Rule List
-
-x-displayName: "Legacy Rule List".
-
-`rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
-
-### Metadata
-
-Common attributes for the rule including name and description..
-
-`description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
-
-`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Ref
 
@@ -101,34 +59,6 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
-
-### Rule List
-
-x-displayName: "Custom Rule List".
-
-`rules` - (Optional) Rules are evaluated from top to bottom in the list.. See [Rules ](#rules) below for details.
-
-### Rules
-
-Rules are evaluated from top to bottom in the list..
-
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
-
-`spec` - (Required) Specification for the rule including match predicates and actions.. See [Spec ](#spec) below for details.
-
-### Spec
-
-Specification for the rule including match predicates and actions..
-
-`action` - (Required) Action to be enforced if all the predicates evaluates to true. (`String`).
-
-`client_name` - (Optional) This predicate evaluates to true if client name matches the configured name (`String`).
-
-`client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Name Matcher ](#client-name-matcher) below for details.
-
-`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
-
-`label_matcher` - (Optional) The values of any other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
 
 Attribute Reference
 -------------------

@@ -325,7 +325,6 @@ func (m *RuntimeClassStrategyOptions) GetDefaultRuntimeClassName() string {
 // SE Linux Strategy
 //
 // x-displayName: "SE Linux Strategy"
-//
 type SELinuxStrategyOptions struct {
 	// Rule
 	//

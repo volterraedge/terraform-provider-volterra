@@ -215,7 +215,7 @@ func (VGPUFeatureType) EnumDescriptor() ([]byte, []int) {
 // The 'interface' reference points to a Network Interface object. Attributes such as Labels, MTU from
 // Network Interface must be applied to the device.
 //
-// Device mapping to nodes
+// # Device mapping to nodes
 //
 // A fleet can have many devices and nodes in VER customer edge site can have many interfaces.
 // An interface in node inherits configuration from a device by matching,
@@ -3830,6 +3830,7 @@ type FleetStorageClassType struct {
 	// Select storage Class configuration
 	//
 	// Types that are valid to be assigned to DeviceChoice:
+	//
 	//	*FleetStorageClassType_NetappTrident
 	//	*FleetStorageClassType_PureServiceOrchestrator
 	//	*FleetStorageClassType_CustomStorage
@@ -4129,6 +4130,7 @@ type FleetBondDeviceType struct {
 	// Select how bonding will happen, Active/Backup or LACP
 	//
 	// Types that are valid to be assigned to LacpChoice:
+	//
 	//	*FleetBondDeviceType_Lacp
 	//	*FleetBondDeviceType_ActiveBackup
 	LacpChoice isFleetBondDeviceType_LacpChoice `protobuf_oneof:"lacp_choice"`
@@ -4528,6 +4530,7 @@ type LocalControlPlaneType struct {
 	// Select local network for local control plane
 	//
 	// Types that are valid to be assigned to NetworkChoice:
+	//
 	//	*LocalControlPlaneType_InsideVn
 	//	*LocalControlPlaneType_OutsideVn
 	NetworkChoice isLocalControlPlaneType_NetworkChoice `protobuf_oneof:"network_choice"`
@@ -4631,6 +4634,7 @@ type BlockedServices struct {
 	// Match criteria for blocked services
 	//
 	// Types that are valid to be assigned to BlockedServicesValueTypeChoice:
+	//
 	//	*BlockedServices_WebUserInterface
 	//	*BlockedServices_Dns
 	//	*BlockedServices_Ssh
@@ -4984,6 +4988,7 @@ type GlobalSpecType struct {
 	// Select how interfaces are configured for this fleet
 	//
 	// Types that are valid to be assigned to InterfaceChoice:
+	//
 	//	*GlobalSpecType_InterfaceList
 	//	*GlobalSpecType_DefaultInterfaces
 	//	*GlobalSpecType_LegacyDevices
@@ -4995,6 +5000,7 @@ type GlobalSpecType struct {
 	// Add bond interface devices to the fleet
 	//
 	// Types that are valid to be assigned to BondChoice:
+	//
 	//	*GlobalSpecType_NoBondDevices
 	//	*GlobalSpecType_BondDeviceList
 	BondChoice isGlobalSpecType_BondChoice `protobuf_oneof:"bond_choice"`
@@ -5005,6 +5011,7 @@ type GlobalSpecType struct {
 	// Select if storage interfaces are configured
 	//
 	// Types that are valid to be assigned to StorageInterfaceChoice:
+	//
 	//	*GlobalSpecType_NoStorageInterfaces
 	//	*GlobalSpecType_StorageInterfaceList
 	StorageInterfaceChoice isGlobalSpecType_StorageInterfaceChoice `protobuf_oneof:"storage_interface_choice"`
@@ -5015,6 +5022,7 @@ type GlobalSpecType struct {
 	// Configure external storage devices for this fleet
 	//
 	// Types that are valid to be assigned to StorageDeviceChoice:
+	//
 	//	*GlobalSpecType_NoStorageDevice
 	//	*GlobalSpecType_StorageDeviceList
 	StorageDeviceChoice isGlobalSpecType_StorageDeviceChoice `protobuf_oneof:"storage_device_choice"`
@@ -5025,6 +5033,7 @@ type GlobalSpecType struct {
 	// Configure custom storage classes in kubernetes for this fleet
 	//
 	// Types that are valid to be assigned to StorageClassChoice:
+	//
 	//	*GlobalSpecType_DefaultStorageClass
 	//	*GlobalSpecType_StorageClassList
 	StorageClassChoice isGlobalSpecType_StorageClassChoice `protobuf_oneof:"storage_class_choice"`
@@ -5035,11 +5044,12 @@ type GlobalSpecType struct {
 	// Configure DC cluster group for this fleet
 	//
 	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//
 	//	*GlobalSpecType_NoDcClusterGroup
 	//	*GlobalSpecType_DcClusterGroup
 	//	*GlobalSpecType_DcClusterGroupInside
 	DcClusterGroupChoice isGlobalSpecType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
-	//  DC Cluster group connectivity interface
+	//	DC Cluster group connectivity interface
 	//
 	// x-displayName: "DC cluster Group connectivity interface"
 	// This fleet is member of dc cluster group and connected to network over this interface
@@ -5051,6 +5061,7 @@ type GlobalSpecType struct {
 	// Enable or Disable GPU for this fleet
 	//
 	// Types that are valid to be assigned to GpuChoice:
+	//
 	//	*GlobalSpecType_DisableGpu
 	//	*GlobalSpecType_EnableGpu
 	//	*GlobalSpecType_EnableVgpu
@@ -5066,6 +5077,7 @@ type GlobalSpecType struct {
 	// Enable or Disable VM support for this fleet
 	//
 	// Types that are valid to be assigned to VmChoice:
+	//
 	//	*GlobalSpecType_DisableVm
 	//	*GlobalSpecType_EnableVm
 	VmChoice isGlobalSpecType_VmChoice `protobuf_oneof:"vm_choice"`
@@ -5081,6 +5093,7 @@ type GlobalSpecType struct {
 	// Select storage Storage Static Routes
 	//
 	// Types that are valid to be assigned to StorageStaticRoutesChoice:
+	//
 	//	*GlobalSpecType_NoStorageStaticRoutes
 	//	*GlobalSpecType_StorageStaticRoutes
 	StorageStaticRoutesChoice isGlobalSpecType_StorageStaticRoutesChoice `protobuf_oneof:"storage_static_routes_choice"`
@@ -5107,6 +5120,7 @@ type GlobalSpecType struct {
 	// Select Logs receiver for logs streaming
 	//
 	// Types that are valid to be assigned to LogsReceiverChoice:
+	//
 	//	*GlobalSpecType_LogsStreamingDisabled
 	//	*GlobalSpecType_LogReceiver
 	LogsReceiverChoice isGlobalSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
@@ -5117,6 +5131,7 @@ type GlobalSpecType struct {
 	// Select USB device policy
 	//
 	// Types that are valid to be assigned to UsbPolicyChoice:
+	//
 	//	*GlobalSpecType_DenyAllUsb
 	//	*GlobalSpecType_AllowAllUsb
 	//	*GlobalSpecType_UsbPolicy
@@ -5137,6 +5152,7 @@ type GlobalSpecType struct {
 	// Configuration for exporting flows
 	//
 	// Types that are valid to be assigned to FlowExporterChoice:
+	//
 	//	*GlobalSpecType_DisableFlowExport
 	//	*GlobalSpecType_EnableFlowExport
 	FlowExporterChoice isGlobalSpecType_FlowExporterChoice `protobuf_oneof:"flow_exporter_choice"`
@@ -5157,6 +5173,7 @@ type GlobalSpecType struct {
 	// Select to use default or custom Single Root I/O Virtualization interfaces Configuration
 	//
 	// Types that are valid to be assigned to SriovInterfaceChoice:
+	//
 	//	*GlobalSpecType_DefaultSriovInterface
 	//	*GlobalSpecType_SriovInterfaces
 	SriovInterfaceChoice isGlobalSpecType_SriovInterfaceChoice `protobuf_oneof:"sriov_interface_choice"`
@@ -5897,57 +5914,69 @@ type CreateSpecType struct {
 	// Select how interfaces are configured for this fleet
 	//
 	// Types that are valid to be assigned to InterfaceChoice:
+	//
 	//	*CreateSpecType_InterfaceList
 	//	*CreateSpecType_DefaultConfig
 	//	*CreateSpecType_DeviceList
 	InterfaceChoice isCreateSpecType_InterfaceChoice `protobuf_oneof:"interface_choice"`
 	// Types that are valid to be assigned to BondChoice:
+	//
 	//	*CreateSpecType_NoBondDevices
 	//	*CreateSpecType_BondDeviceList
 	BondChoice isCreateSpecType_BondChoice `protobuf_oneof:"bond_choice"`
 	// Types that are valid to be assigned to StorageInterfaceChoice:
+	//
 	//	*CreateSpecType_NoStorageInterfaces
 	//	*CreateSpecType_StorageInterfaceList
 	StorageInterfaceChoice isCreateSpecType_StorageInterfaceChoice `protobuf_oneof:"storage_interface_choice"`
 	// Types that are valid to be assigned to StorageDeviceChoice:
+	//
 	//	*CreateSpecType_NoStorageDevice
 	//	*CreateSpecType_StorageDeviceList
 	StorageDeviceChoice isCreateSpecType_StorageDeviceChoice `protobuf_oneof:"storage_device_choice"`
 	// Types that are valid to be assigned to StorageClassChoice:
+	//
 	//	*CreateSpecType_DefaultStorageClass
 	//	*CreateSpecType_StorageClassList
 	StorageClassChoice isCreateSpecType_StorageClassChoice `protobuf_oneof:"storage_class_choice"`
 	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//
 	//	*CreateSpecType_NoDcClusterGroup
 	//	*CreateSpecType_DcClusterGroup
 	//	*CreateSpecType_DcClusterGroupInside
 	DcClusterGroupChoice isCreateSpecType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 	// Types that are valid to be assigned to GpuChoice:
+	//
 	//	*CreateSpecType_DisableGpu
 	//	*CreateSpecType_EnableGpu
 	//	*CreateSpecType_EnableVgpu
 	GpuChoice isCreateSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
 	// Types that are valid to be assigned to StorageStaticRoutesChoice:
+	//
 	//	*CreateSpecType_NoStorageStaticRoutes
 	//	*CreateSpecType_StorageStaticRoutes
 	StorageStaticRoutesChoice        isCreateSpecType_StorageStaticRoutesChoice `protobuf_oneof:"storage_static_routes_choice"`
 	EnableDefaultFleetConfigDownload bool                                       `protobuf:"varint,37,opt,name=enable_default_fleet_config_download,json=enableDefaultFleetConfigDownload,proto3" json:"enable_default_fleet_config_download,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
+	//
 	//	*CreateSpecType_LogsStreamingDisabled
 	//	*CreateSpecType_LogReceiver
 	LogsReceiverChoice isCreateSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 	// Types that are valid to be assigned to UsbPolicyChoice:
+	//
 	//	*CreateSpecType_DenyAllUsb
 	//	*CreateSpecType_AllowAllUsb
 	//	*CreateSpecType_UsbPolicy
 	UsbPolicyChoice isCreateSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 	// Types that are valid to be assigned to VmChoice:
+	//
 	//	*CreateSpecType_DisableVm
 	//	*CreateSpecType_EnableVm
 	VmChoice                   isCreateSpecType_VmChoice             `protobuf_oneof:"vm_choice"`
 	BlockedServices            []*BlockedServices                    `protobuf:"bytes,59,rep,name=blocked_services,json=blockedServices,proto3" json:"blocked_services,omitempty"`
 	PerformanceEnhancementMode *views.PerformanceEnhancementModeType `protobuf:"bytes,75,opt,name=performance_enhancement_mode,json=performanceEnhancementMode,proto3" json:"performance_enhancement_mode,omitempty"`
 	// Types that are valid to be assigned to SriovInterfaceChoice:
+	//
 	//	*CreateSpecType_DefaultSriovInterface
 	//	*CreateSpecType_SriovInterfaces
 	SriovInterfaceChoice isCreateSpecType_SriovInterfaceChoice `protobuf_oneof:"sriov_interface_choice"`
@@ -6559,51 +6588,62 @@ type ReplaceSpecType struct {
 	// Select how network interfaces are configured for this fleet
 	//
 	// Types that are valid to be assigned to InterfaceChoice:
+	//
 	//	*ReplaceSpecType_InterfaceList
 	//	*ReplaceSpecType_DefaultConfig
 	//	*ReplaceSpecType_DeviceList
 	InterfaceChoice isReplaceSpecType_InterfaceChoice `protobuf_oneof:"interface_choice"`
 	// Types that are valid to be assigned to BondChoice:
+	//
 	//	*ReplaceSpecType_NoBondDevices
 	//	*ReplaceSpecType_BondDeviceList
 	BondChoice isReplaceSpecType_BondChoice `protobuf_oneof:"bond_choice"`
 	// Types that are valid to be assigned to StorageInterfaceChoice:
+	//
 	//	*ReplaceSpecType_NoStorageInterfaces
 	//	*ReplaceSpecType_StorageInterfaceList
 	StorageInterfaceChoice isReplaceSpecType_StorageInterfaceChoice `protobuf_oneof:"storage_interface_choice"`
 	// Types that are valid to be assigned to StorageDeviceChoice:
+	//
 	//	*ReplaceSpecType_NoStorageDevice
 	//	*ReplaceSpecType_StorageDeviceList
 	StorageDeviceChoice isReplaceSpecType_StorageDeviceChoice `protobuf_oneof:"storage_device_choice"`
 	// Types that are valid to be assigned to StorageClassChoice:
+	//
 	//	*ReplaceSpecType_DefaultStorageClass
 	//	*ReplaceSpecType_StorageClassList
 	StorageClassChoice isReplaceSpecType_StorageClassChoice `protobuf_oneof:"storage_class_choice"`
 	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//
 	//	*ReplaceSpecType_NoDcClusterGroup
 	//	*ReplaceSpecType_DcClusterGroup
 	//	*ReplaceSpecType_DcClusterGroupInside
 	DcClusterGroupChoice isReplaceSpecType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 	// Types that are valid to be assigned to GpuChoice:
+	//
 	//	*ReplaceSpecType_DisableGpu
 	//	*ReplaceSpecType_EnableGpu
 	//	*ReplaceSpecType_EnableVgpu
 	GpuChoice isReplaceSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
 	// Types that are valid to be assigned to StorageStaticRoutesChoice:
+	//
 	//	*ReplaceSpecType_NoStorageStaticRoutes
 	//	*ReplaceSpecType_StorageStaticRoutes
 	StorageStaticRoutesChoice        isReplaceSpecType_StorageStaticRoutesChoice `protobuf_oneof:"storage_static_routes_choice"`
 	EnableDefaultFleetConfigDownload bool                                        `protobuf:"varint,37,opt,name=enable_default_fleet_config_download,json=enableDefaultFleetConfigDownload,proto3" json:"enable_default_fleet_config_download,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
+	//
 	//	*ReplaceSpecType_LogsStreamingDisabled
 	//	*ReplaceSpecType_LogReceiver
 	LogsReceiverChoice isReplaceSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 	// Types that are valid to be assigned to UsbPolicyChoice:
+	//
 	//	*ReplaceSpecType_DenyAllUsb
 	//	*ReplaceSpecType_AllowAllUsb
 	//	*ReplaceSpecType_UsbPolicy
 	UsbPolicyChoice isReplaceSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 	// Types that are valid to be assigned to VmChoice:
+	//
 	//	*ReplaceSpecType_DisableVm
 	//	*ReplaceSpecType_EnableVm
 	VmChoice                   isReplaceSpecType_VmChoice            `protobuf_oneof:"vm_choice"`
@@ -7175,57 +7215,69 @@ type GetSpecType struct {
 	// Select how interfaces are configured for this fleet
 	//
 	// Types that are valid to be assigned to InterfaceChoice:
+	//
 	//	*GetSpecType_InterfaceList
 	//	*GetSpecType_DefaultConfig
 	//	*GetSpecType_DeviceList
 	InterfaceChoice isGetSpecType_InterfaceChoice `protobuf_oneof:"interface_choice"`
 	// Types that are valid to be assigned to BondChoice:
+	//
 	//	*GetSpecType_NoBondDevices
 	//	*GetSpecType_BondDeviceList
 	BondChoice isGetSpecType_BondChoice `protobuf_oneof:"bond_choice"`
 	// Types that are valid to be assigned to StorageInterfaceChoice:
+	//
 	//	*GetSpecType_NoStorageInterfaces
 	//	*GetSpecType_StorageInterfaceList
 	StorageInterfaceChoice isGetSpecType_StorageInterfaceChoice `protobuf_oneof:"storage_interface_choice"`
 	// Types that are valid to be assigned to StorageDeviceChoice:
+	//
 	//	*GetSpecType_NoStorageDevice
 	//	*GetSpecType_StorageDeviceList
 	StorageDeviceChoice isGetSpecType_StorageDeviceChoice `protobuf_oneof:"storage_device_choice"`
 	// Types that are valid to be assigned to StorageClassChoice:
+	//
 	//	*GetSpecType_DefaultStorageClass
 	//	*GetSpecType_StorageClassList
 	StorageClassChoice isGetSpecType_StorageClassChoice `protobuf_oneof:"storage_class_choice"`
 	// Types that are valid to be assigned to DcClusterGroupChoice:
+	//
 	//	*GetSpecType_NoDcClusterGroup
 	//	*GetSpecType_DcClusterGroup
 	//	*GetSpecType_DcClusterGroupInside
 	DcClusterGroupChoice isGetSpecType_DcClusterGroupChoice `protobuf_oneof:"dc_cluster_group_choice"`
 	// Types that are valid to be assigned to GpuChoice:
+	//
 	//	*GetSpecType_DisableGpu
 	//	*GetSpecType_EnableGpu
 	//	*GetSpecType_EnableVgpu
 	GpuChoice isGetSpecType_GpuChoice `protobuf_oneof:"gpu_choice"`
 	// Types that are valid to be assigned to StorageStaticRoutesChoice:
+	//
 	//	*GetSpecType_NoStorageStaticRoutes
 	//	*GetSpecType_StorageStaticRoutes
 	StorageStaticRoutesChoice        isGetSpecType_StorageStaticRoutesChoice `protobuf_oneof:"storage_static_routes_choice"`
 	EnableDefaultFleetConfigDownload bool                                    `protobuf:"varint,37,opt,name=enable_default_fleet_config_download,json=enableDefaultFleetConfigDownload,proto3" json:"enable_default_fleet_config_download,omitempty"`
 	// Types that are valid to be assigned to LogsReceiverChoice:
+	//
 	//	*GetSpecType_LogsStreamingDisabled
 	//	*GetSpecType_LogReceiver
 	LogsReceiverChoice isGetSpecType_LogsReceiverChoice `protobuf_oneof:"logs_receiver_choice"`
 	// Types that are valid to be assigned to UsbPolicyChoice:
+	//
 	//	*GetSpecType_DenyAllUsb
 	//	*GetSpecType_AllowAllUsb
 	//	*GetSpecType_UsbPolicy
 	UsbPolicyChoice isGetSpecType_UsbPolicyChoice `protobuf_oneof:"usb_policy_choice"`
 	// Types that are valid to be assigned to VmChoice:
+	//
 	//	*GetSpecType_DisableVm
 	//	*GetSpecType_EnableVm
 	VmChoice                   isGetSpecType_VmChoice                `protobuf_oneof:"vm_choice"`
 	BlockedServices            []*BlockedServices                    `protobuf:"bytes,59,rep,name=blocked_services,json=blockedServices,proto3" json:"blocked_services,omitempty"`
 	PerformanceEnhancementMode *views.PerformanceEnhancementModeType `protobuf:"bytes,75,opt,name=performance_enhancement_mode,json=performanceEnhancementMode,proto3" json:"performance_enhancement_mode,omitempty"`
 	// Types that are valid to be assigned to SriovInterfaceChoice:
+	//
 	//	*GetSpecType_DefaultSriovInterface
 	//	*GetSpecType_SriovInterfaces
 	SriovInterfaceChoice isGetSpecType_SriovInterfaceChoice `protobuf_oneof:"sriov_interface_choice"`

@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/server"
 
@@ -51,7 +51,6 @@ func dataSourceVolterraHttpLoadbalancerState() *schema.Resource {
 			},
 			"auto_cert_info": {
 				Type:     schema.TypeList,
-				MaxItems: 1,
 				Computed: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -74,7 +73,6 @@ func dataSourceVolterraHttpLoadbalancerState() *schema.Resource {
 						"dns_records": {
 							Computed: true,
 							Type:     schema.TypeList,
-							MaxItems: 1,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"name": {

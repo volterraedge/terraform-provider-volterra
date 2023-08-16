@@ -12,7 +12,7 @@ var (
 	// apiGWServiceSlugs is a mapping of public API FQN to the service slug to use on the api gateway
 	// this will be replaced by discovery when api gateway supports it. The service slug is the part
 	// at https://<xyz>.volterra.us/api/<service-slug>/<resource-uri>
-	apiGWServiceSlugs = ves_io_schema_combined.APIGwServiceSlugs
+	apiGWServiceSlugs = ves_io_schema_combined.MDR.APIGwServiceSlugs
 )
 
 // API gateway service slug e.g. "config"

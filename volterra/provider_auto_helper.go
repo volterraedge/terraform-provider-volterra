@@ -5,7 +5,7 @@
 package volterra
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"gopkg.volterra.us/stdlib/sets"
 
@@ -20,14 +20,15 @@ import (
 	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
 	ves_io_schema_bgp_asn_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set"
 	ves_io_schema_apm "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm"
-	ves_io_schema_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 	ves_io_schema_certificate "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate"
 	ves_io_schema_certificate_chain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_container_registry "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
+	ves_io_schema_crl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/crl"
 	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
+	ves_io_schema_dns_compliance_checks "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks"
 	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
 	ves_io_schema_dns_lb_health_check "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check"
 	ves_io_schema_dns_lb_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool"
@@ -53,6 +54,7 @@ import (
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
 	ves_io_schema_nfv_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
+	ves_io_schema_protocol_inspection "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection"
 	ves_io_schema_protocol_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
 	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 	ves_io_schema_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role"
@@ -69,6 +71,7 @@ import (
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	ves_io_schema_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 	ves_io_schema_forward_proxy_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy"
 	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 	ves_io_schema_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
@@ -101,8 +104,10 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_cloud_credentials":         resourceVolterraCloudCredentials(),
 		"volterra_cluster":                   resourceVolterraCluster(),
 		"volterra_container_registry":        resourceVolterraContainerRegistry(),
+		"volterra_crl":                       resourceVolterraCrl(),
 		"volterra_dc_cluster_group":          resourceVolterraDcClusterGroup(),
 		"volterra_discovery":                 resourceVolterraDiscovery(),
+		"volterra_dns_compliance_checks":     resourceVolterraDnsComplianceChecks(),
 		"volterra_dns_domain":                resourceVolterraDnsDomain(),
 		"volterra_dns_lb_health_check":       resourceVolterraDnsLbHealthCheck(),
 		"volterra_dns_lb_pool":               resourceVolterraDnsLbPool(),
@@ -128,6 +133,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_network_policy_rule":       resourceVolterraNetworkPolicyRule(),
 		"volterra_nfv_service":               resourceVolterraNfvService(),
 		"volterra_policer":                   resourceVolterraPolicer(),
+		"volterra_protocol_inspection":       resourceVolterraProtocolInspection(),
 		"volterra_protocol_policer":          resourceVolterraProtocolPolicer(),
 		"volterra_rate_limiter":              resourceVolterraRateLimiter(),
 		"volterra_role":                      resourceVolterraRole(),
@@ -179,8 +185,10 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_cloud_credentials.ObjectType,
 		ves_io_schema_cluster.ObjectType,
 		ves_io_schema_container_registry.ObjectType,
+		ves_io_schema_crl.ObjectType,
 		ves_io_schema_dc_cluster_group.ObjectType,
 		ves_io_schema_discovery.ObjectType,
+		ves_io_schema_dns_compliance_checks.ObjectType,
 		ves_io_schema_dns_domain.ObjectType,
 		ves_io_schema_dns_lb_health_check.ObjectType,
 		ves_io_schema_dns_lb_pool.ObjectType,
@@ -206,6 +214,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_policy_rule.ObjectType,
 		ves_io_schema_nfv_service.ObjectType,
 		ves_io_schema_policer.ObjectType,
+		ves_io_schema_protocol_inspection.ObjectType,
 		ves_io_schema_protocol_policer.ObjectType,
 		ves_io_schema_rate_limiter.ObjectType,
 		ves_io_schema_role.ObjectType,

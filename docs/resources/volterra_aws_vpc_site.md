@@ -21,7 +21,7 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "aws_cred" must be set
@@ -33,26 +33,18 @@ resource "volterra_aws_vpc_site" "example" {
   }
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
-  // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
-  egress_gateway_default = true
-  instance_type          = ["a1.xlarge"]
+  instance_type           = ["a1.xlarge"]
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
   disable_internet_vip = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  logs_streaming_disabled = true
 
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "custom_ports disable_allowed_vip_port use_http_port use_https_port use_http_https_port" must be set
-      use_https_port = true
+      // One of the arguments from this list "use_http_https_port custom_ports use_http_port use_https_port" must be set
+      use_http_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -72,13 +64,12 @@ resource "volterra_aws_vpc_site" "example" {
     }
 
     performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
       perf_mode_l7_enhanced = true
     }
   }
-  ssh_key = ["ssh-rsa AAAAB..."]
-  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
-  nodes_per_az = "2"
+  // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+  total_nodes = "1"
 }
 
 ```
@@ -106,11 +97,9 @@ Argument Reference
 
 `aws_region` - (Required) Name for AWS Region. (`String`).
 
-`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
-
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -121,12 +110,6 @@ Argument Reference
 `direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
-
-`egress_gateway_default` - (Optional) With this option, egress site traffic will be routed through an Internet Gateway. (bool).
-
-`egress_nat_gw` - (Optional) With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.. See [Egress Nat Gw ](#egress-nat-gw) below for details.
-
-`egress_virtual_private_gateway` - (Optional) With this option, egress site traffic will be routed through an Virtual Private Gateway.. See [Egress Virtual Private Gateway ](#egress-virtual-private-gateway) below for details.
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
 
@@ -148,7 +131,7 @@ Argument Reference
 
 `voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
 
-`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -164,7 +147,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-with an additional option for service insertion..
+Enhanced Firewall Policies active for this site..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -186,8 +169,6 @@ Allowed VIP Port Configuration for Outside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
 
-`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
-
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
@@ -199,8 +180,6 @@ Allowed VIP Port Configuration for Outside Network.
 Allowed VIP Port Configuration for Inside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
-
-`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
 
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
@@ -262,7 +241,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches DNS port 53 (bool).
+`dns` - (Optional) Matches ssh port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -356,10 +335,6 @@ Direct Connect feature is enabled.
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
 
-### Disable Allowed Vip Port
-
-HTTP Port (80) & HTTPS Port (443) will be disabled..
-
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -374,7 +349,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches DNS port 53.
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -385,18 +360,6 @@ Domain value or regular expression to match.
 `regex_value` - (Optional) Regular Expression value for the domain name (`String`).
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
-
-### Egress Nat Gw
-
-With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway..
-
-`nat_gw_id` - (Optional) x-displayName: "Existing NAT Gateway ID" (`String`).
-
-### Egress Virtual Private Gateway
-
-With this option, egress site traffic will be routed through an Virtual Private Gateway..
-
-`vgw_id` - (Optional) x-displayName: "Existing Virtual Private Gateway ID" (`String`).
 
 ### Enable For All Domains
 
@@ -492,7 +455,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -642,6 +605,14 @@ Enable/Disable offline survivability mode.
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
+### Openebs Enterprise
+
+Storage class Device configuration for OpenEBS Enterprise.
+
+`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
+
 ### Os
 
 Operating System Details.
@@ -666,7 +637,7 @@ Subnet for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+Site optimized for L3 traffic processing.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -674,15 +645,15 @@ When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 ### Perf Mode L7 Enhanced
 
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+Site optimized for L7 traffic processing.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 
@@ -781,6 +752,8 @@ Add additional custom storage classes in kubernetes for site.
 List of custom storage classes.
 
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
+
+`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
@@ -900,7 +873,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

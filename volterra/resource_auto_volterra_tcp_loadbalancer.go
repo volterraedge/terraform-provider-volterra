@@ -11,7 +11,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
@@ -147,13 +147,13 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
-												"default_v4_vip": {
+												"default_vip": {
 
 													Type:     schema.TypeBool,
 													Optional: true,
 												},
 
-												"specific_v4_vip": {
+												"specific_vip": {
 
 													Type:     schema.TypeString,
 													Optional: true,
@@ -1527,26 +1527,26 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							vipChoiceTypeFound := false
 
-							if v, ok := cs["default_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV4Vip{}
-									vipChoiceInt.DefaultV4Vip = &ves_io_schema.Empty{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
 									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
 
-							if v, ok := cs["specific_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV4Vip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
 
 								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
-								vipChoiceInt.SpecificV4Vip = v.(string)
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 
@@ -3437,26 +3437,26 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							vipChoiceTypeFound := false
 
-							if v, ok := cs["default_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["default_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
 
 								if v.(bool) {
-									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultV4Vip{}
-									vipChoiceInt.DefaultV4Vip = &ves_io_schema.Empty{}
+									vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_DefaultVip{}
+									vipChoiceInt.DefaultVip = &ves_io_schema.Empty{}
 									choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 								}
 
 							}
 
-							if v, ok := cs["specific_v4_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
+							if v, ok := cs["specific_vip"]; ok && !isIntfNil(v) && !vipChoiceTypeFound {
 
 								vipChoiceTypeFound = true
-								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificV4Vip{}
+								vipChoiceInt := &ves_io_schema_views.WhereVirtualNetwork_SpecificVip{}
 
 								choiceInt.VirtualNetwork.VipChoice = vipChoiceInt
 
-								vipChoiceInt.SpecificV4Vip = v.(string)
+								vipChoiceInt.SpecificVip = v.(string)
 
 							}
 

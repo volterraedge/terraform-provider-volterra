@@ -758,22 +758,22 @@ func (m *DynamicReverseProxyType) GetConnectionTimeout() uint32 {
 //
 // By default compression will be skipped when:
 //
-//   A request does NOT contain accept-encoding header.
-//   A request includes accept-encoding header, but it does not contain “gzip” or “*”.
-//   A request includes accept-encoding with “gzip” or “*” with the weight “q=0”. Note that the “gzip” will have a higher weight then “*”. For example, if accept-encoding is “gzip;q=0,*;q=1”, the filter will not compress. But if the header is set to “*;q=0,gzip;q=1”, the filter will compress.
-//   A request whose accept-encoding header includes “identity”.
-//   A response contains a content-encoding header.
-//   A response contains a cache-control header whose value includes “no-transform”.
-//   A response contains a transfer-encoding header whose value includes “gzip”.
-//   A response does not contain a content-type value that matches one of the selected mime-types, which default to application/javascript, application/json, application/xhtml+xml, image/svg+xml, text/css, text/html, text/plain, text/xml.
-//   Neither content-length nor transfer-encoding headers are present in the response.
-//   Response size is smaller than 30 bytes (only applicable when transfer-encoding is not chunked).
+//	A request does NOT contain accept-encoding header.
+//	A request includes accept-encoding header, but it does not contain “gzip” or “*”.
+//	A request includes accept-encoding with “gzip” or “*” with the weight “q=0”. Note that the “gzip” will have a higher weight then “*”. For example, if accept-encoding is “gzip;q=0,*;q=1”, the filter will not compress. But if the header is set to “*;q=0,gzip;q=1”, the filter will compress.
+//	A request whose accept-encoding header includes “identity”.
+//	A response contains a content-encoding header.
+//	A response contains a cache-control header whose value includes “no-transform”.
+//	A response contains a transfer-encoding header whose value includes “gzip”.
+//	A response does not contain a content-type value that matches one of the selected mime-types, which default to application/javascript, application/json, application/xhtml+xml, image/svg+xml, text/css, text/html, text/plain, text/xml.
+//	Neither content-length nor transfer-encoding headers are present in the response.
+//	Response size is smaller than 30 bytes (only applicable when transfer-encoding is not chunked).
 //
 // When compression is applied:
 //
-//   The content-length is removed from response headers.
-//   Response headers contain “transfer-encoding: chunked” and do not contain “content-encoding” header.
-//   The “vary: accept-encoding” header is inserted on every response.
+//	The content-length is removed from response headers.
+//	Response headers contain “transfer-encoding: chunked” and do not contain “content-encoding” header.
+//	The “vary: accept-encoding” header is inserted on every response.
 //
 // GZIP Compression Level:
 //
@@ -894,10 +894,10 @@ func (m *CompressionType) GetRemoveAcceptEncodingHeader() bool {
 // Loadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.
 //
 // Javascript challenge serves following purposes
-//    * Validate that the request is coming via a browser that is capable for running Javascript
-//    * Force the browser to run a complex operation, f(X), that requires it to spend a large number
-//      of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch
-//    a large request flood without having to spend even larger CPU cost at their end.
+//   - Validate that the request is coming via a browser that is capable for running Javascript
+//   - Force the browser to run a complex operation, f(X), that requires it to spend a large number
+//     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch
+//     a large request flood without having to spend even larger CPU cost at their end.
 //
 // You can enable either Javascript challenge or Captcha challenge on a virtual host
 type JavascriptChallengeType struct {
@@ -979,7 +979,7 @@ func (m *JavascriptChallengeType) GetCustomPage() string {
 //
 // x-displayName: "Captcha Challenge Parameters"
 //
-// Enables loadbalancer to perform captcha challenge
+// # Enables loadbalancer to perform captcha challenge
 //
 // Captcha challenge will be based on Google Recaptcha.
 //
@@ -5335,6 +5335,7 @@ type GetSpecType struct {
 	RequestHeadersToRemove  []string                               `protobuf:"bytes,17,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
 	ResponseHeadersToRemove []string                               `protobuf:"bytes,8,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
 	// Types that are valid to be assigned to TlsCertificatesChoice:
+	//
 	//	*GetSpecType_TlsParameters
 	//	*GetSpecType_TlsCertParams
 	TlsCertificatesChoice    isGetSpecType_TlsCertificatesChoice `protobuf_oneof:"tls_certificates_choice"`
@@ -5350,6 +5351,7 @@ type GetSpecType struct {
 	DisableDefaultErrorPages bool                                `protobuf:"varint,33,opt,name=disable_default_error_pages,json=disableDefaultErrorPages,proto3" json:"disable_default_error_pages,omitempty"`
 	MaxRequestHeaderSize     uint32                              `protobuf:"varint,23,opt,name=max_request_header_size,json=maxRequestHeaderSize,proto3" json:"max_request_header_size,omitempty"`
 	// Types that are valid to be assigned to ChallengeType:
+	//
 	//	*GetSpecType_NoChallenge
 	//	*GetSpecType_JsChallenge
 	//	*GetSpecType_CaptchaChallenge
@@ -5361,24 +5363,29 @@ type GetSpecType struct {
 	IdleTimeout                uint32                      `protobuf:"varint,32,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
 	TemporaryUserBlocking      *TemporaryUserBlockingType  `protobuf:"bytes,35,opt,name=temporary_user_blocking,json=temporaryUserBlocking,proto3" json:"temporary_user_blocking,omitempty"`
 	// Types that are valid to be assigned to AuthenticationChoice:
+	//
 	//	*GetSpecType_NoAuthentication
 	//	*GetSpecType_Authentication
 	AuthenticationChoice isGetSpecType_AuthenticationChoice `protobuf_oneof:"authentication_choice"`
 	// Types that are valid to be assigned to ServerHeaderChoice:
+	//
 	//	*GetSpecType_DefaultHeader
 	//	*GetSpecType_ServerName
 	//	*GetSpecType_AppendServerName
 	//	*GetSpecType_PassThrough
 	ServerHeaderChoice isGetSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
 	// Types that are valid to be assigned to PathNormalizeChoice:
+	//
 	//	*GetSpecType_EnablePathNormalize
 	//	*GetSpecType_DisablePathNormalize
 	PathNormalizeChoice isGetSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
 	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//
 	//	*GetSpecType_EnableStrictSniHostHeaderCheck
 	//	*GetSpecType_AdditionalDomains
 	StrictSniHostHeaderCheckChoice isGetSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 	// Types that are valid to be assigned to DefaultLbChoice:
+	//
 	//	*GetSpecType_NonDefaultLoadbalancer
 	//	*GetSpecType_DefaultLoadbalancer
 	DefaultLbChoice          isGetSpecType_DefaultLbChoice          `protobuf_oneof:"default_lb_choice"`
@@ -5395,6 +5402,7 @@ type GetSpecType struct {
 	CsrfPolicy               *schema.CsrfPolicy                     `protobuf:"bytes,80,opt,name=csrf_policy,json=csrfPolicy,proto3" json:"csrf_policy,omitempty"`
 	DnsProxyConfiguration    *DNSProxyConfiguration                 `protobuf:"bytes,1200,opt,name=dns_proxy_configuration,json=dnsProxyConfiguration,proto3" json:"dns_proxy_configuration,omitempty"`
 	// Types that are valid to be assigned to DnsZoneStateChoice:
+	//
 	//	*GetSpecType_NotReady
 	//	*GetSpecType_Ready
 	DnsZoneStateChoice isGetSpecType_DnsZoneStateChoice `protobuf_oneof:"dns_zone_state_choice"`

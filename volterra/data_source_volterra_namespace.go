@@ -10,7 +10,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	ves_io_schema_namespace "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 )
@@ -48,7 +48,7 @@ func dataSourceVolterraNamespaceRead(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("Error finding Volterra Namespace %q: %s", d.Id(), err)
 	}
 	d.Set("tenant_name", resp.GetObjSystemMetadata().GetTenant())
-	d.Set("name", resp.GetObjName)
+	d.Set("name", resp.GetObjName())
 	d.SetId(resp.GetObjUid())
 	return nil
 }

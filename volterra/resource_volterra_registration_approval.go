@@ -13,12 +13,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	"gopkg.volterra.us/stdlib/codec"
-	"gopkg.volterra.us/stdlib/svcfw"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration"
+	"gopkg.volterra.us/stdlib/codec"
+	"gopkg.volterra.us/stdlib/svcfw"
 )
 
 const (

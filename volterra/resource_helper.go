@@ -8,7 +8,7 @@ import (
 	"time"
 
 	google_protobuf1 "github.com/gogo/protobuf/types"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 func getResourceData(d *schema.ResourceData, key string) interface{} {

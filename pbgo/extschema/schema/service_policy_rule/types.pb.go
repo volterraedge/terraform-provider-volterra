@@ -2094,6 +2094,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 type GetSpecType struct {
 	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
+	//
 	//	*GetSpecType_AnyClient
 	//	*GetSpecType_ClientName
 	//	*GetSpecType_IpThreatCategoryList
@@ -2108,21 +2109,25 @@ type GetSpecType struct {
 	QueryParams    []*policy.QueryParameterMatcherType `protobuf:"bytes,7,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty"`
 	HttpMethod     *policy.HttpMethodMatcherType       `protobuf:"bytes,8,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`
 	// Types that are valid to be assigned to IpChoice:
+	//
 	//	*GetSpecType_AnyIp
 	//	*GetSpecType_IpPrefixList
 	//	*GetSpecType_IpMatcher
 	IpChoice isGetSpecType_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to DstIpChoice:
+	//
 	//	*GetSpecType_AnyDstIp
 	//	*GetSpecType_DstIpPrefixList
 	//	*GetSpecType_DstIpMatcher
 	DstIpChoice isGetSpecType_DstIpChoice `protobuf_oneof:"dst_ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
+	//
 	//	*GetSpecType_AnyAsn
 	//	*GetSpecType_AsnList
 	//	*GetSpecType_AsnMatcher
 	AsnChoice isGetSpecType_AsnChoice `protobuf_oneof:"asn_choice"`
 	// Types that are valid to be assigned to DstAsnChoice:
+	//
 	//	*GetSpecType_AnyDstAsn
 	//	*GetSpecType_DstAsnList
 	//	*GetSpecType_DstAsnMatcher
@@ -2691,16 +2696,19 @@ type ChallengeRuleSpec struct {
 	// by setting the action to disable_challenge
 	//
 	// Types that are valid to be assigned to ChallengeAction:
+	//
 	//	*ChallengeRuleSpec_DisableChallenge
 	//	*ChallengeRuleSpec_EnableJavascriptChallenge
 	//	*ChallengeRuleSpec_EnableCaptchaChallenge
 	ChallengeAction isChallengeRuleSpec_ChallengeAction `protobuf_oneof:"challenge_action"`
 	// Types that are valid to be assigned to IpChoice:
+	//
 	//	*ChallengeRuleSpec_AnyIp
 	//	*ChallengeRuleSpec_IpPrefixList
 	//	*ChallengeRuleSpec_IpMatcher
 	IpChoice isChallengeRuleSpec_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
+	//
 	//	*ChallengeRuleSpec_AnyAsn
 	//	*ChallengeRuleSpec_AsnList
 	//	*ChallengeRuleSpec_AsnMatcher
@@ -2715,6 +2723,7 @@ type ChallengeRuleSpec struct {
 	ArgMatchers           []*policy.ArgMatcherType            `protobuf:"bytes,13,rep,name=arg_matchers,json=argMatchers,proto3" json:"arg_matchers,omitempty"`
 	CookieMatchers        []*policy.CookieMatcherType         `protobuf:"bytes,14,rep,name=cookie_matchers,json=cookieMatchers,proto3" json:"cookie_matchers,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
+	//
 	//	*ChallengeRuleSpec_AnyClient
 	//	*ChallengeRuleSpec_ClientName
 	//	*ChallengeRuleSpec_ClientSelector
@@ -3047,16 +3056,19 @@ type RateLimiterRuleSpec struct {
 	// Specify action for the rule.
 	//
 	// Types that are valid to be assigned to ActionChoice:
+	//
 	//	*RateLimiterRuleSpec_BypassRateLimiter
 	//	*RateLimiterRuleSpec_ApplyRateLimiter
 	//	*RateLimiterRuleSpec_CustomRateLimiter
 	ActionChoice isRateLimiterRuleSpec_ActionChoice `protobuf_oneof:"action_choice"`
 	// Types that are valid to be assigned to IpChoice:
+	//
 	//	*RateLimiterRuleSpec_AnyIp
 	//	*RateLimiterRuleSpec_IpPrefixList
 	//	*RateLimiterRuleSpec_IpMatcher
 	IpChoice isRateLimiterRuleSpec_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
+	//
 	//	*RateLimiterRuleSpec_AnyAsn
 	//	*RateLimiterRuleSpec_AsnList
 	//	*RateLimiterRuleSpec_AsnMatcher
@@ -3069,6 +3081,7 @@ type RateLimiterRuleSpec struct {
 	// The country is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
 	//
 	// Types that are valid to be assigned to CountryChoice:
+	//
 	//	*RateLimiterRuleSpec_AnyCountry
 	//	*RateLimiterRuleSpec_CountryList
 	CountryChoice isRateLimiterRuleSpec_CountryChoice `protobuf_oneof:"country_choice"`

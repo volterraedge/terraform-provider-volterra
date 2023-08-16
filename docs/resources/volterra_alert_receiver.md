@@ -20,10 +20,12 @@ resource "volterra_alert_receiver" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "webhook slack pagerduty opsgenie email sms" must be set
+  // One of the arguments from this list "opsgenie email sms slack pagerduty" must be set
 
-  pagerduty {
-    routing_key {
+  slack {
+    channel = "value"
+
+    url {
       blindfold_secret_info_internal {
         decryption_provider = "value"
         location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
@@ -32,7 +34,7 @@ resource "volterra_alert_receiver" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
       blindfold_secret_info {
         decryption_provider = "value"
@@ -40,8 +42,6 @@ resource "volterra_alert_receiver" "example" {
         store_provider      = "value"
       }
     }
-
-    url = "value"
   }
 }
 
@@ -76,8 +76,6 @@ Argument Reference
 
 `sms` - (Optional) Send alert notifications as SMS. See [Sms ](#sms) below for details.
 
-`webhook` - (Optional) Send alert notifications to Webhook. See [Webhook ](#webhook) below for details.
-
 ### Api Key
 
 API integration key to send alert notifications using REST API to OpsGenie service..
@@ -86,37 +84,17 @@ API integration key to send alert notifications using REST API to OpsGenie servi
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Auth Config
-
-Authorization header configuration.
-
-`auth_type_bearer` - (Optional) Sets the authentication type. (bool).
-
-`credentials` - (Required) Sets the credentials.. See [Credentials ](#credentials) below for details.
-
-### Auth Type Bearer
-
-Sets the authentication type..
-
-### Basic Auth
-
-Use HTTP Basic Auth for authorization to the HTTP(s) server.
-
-`password` - (Required) HTTP Basic Auth Password. See [Password ](#password) below for details.
-
-`user_name` - (Required) HTTP Basic Auth User Name (`String`).
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -142,63 +120,11 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Client Key
-
-Key for client cert authentication to the server..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Credentials
-
-Sets the credentials..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
 ### Email
 
 Send alert notifications as Email.
 
 `email` - (Optional) Email id of the user (`String`).
-
-### Http Config
-
-Configuration for HTTP endpoint.
-
-`auth_config` - (Optional) Authorization header configuration. See [Auth Config ](#auth-config) below for details.
-
-`basic_auth` - (Optional) Use HTTP Basic Auth for authorization to the HTTP(s) server. See [Basic Auth ](#basic-auth) below for details.
-
-`no_authorization` - (Optional) Do not use authorization to the HTTP(s) server (bool).
-
-`enable_http2` - (Optional) Whether to enable HTTP2. (`Bool`).
-
-`follow_redirects` - (Optional) Configure whether HTTP requests follow HTTP 3xx redirects. (`Bool`).
-
-`tls_config` - (Required) Configures the TLS settings.. See [Tls Config ](#tls-config) below for details.
-
-### No Authorization
-
-Do not use authorization to the HTTP(s) server.
 
 ### Opsgenie
 
@@ -216,22 +142,6 @@ Send alert notifications to PagerDuty.
 
 `url` - (Required) URL to send API requests to (`String`).
 
-### Password
-
-HTTP Basic Auth Password.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
 ### Routing Key
 
 PagerDuty integration key (choose Integration Type: Events API v2).
@@ -240,13 +150,13 @@ PagerDuty integration key (choose Integration Type: Events API v2).
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Slack
 
@@ -262,22 +172,6 @@ Send alert notifications as SMS.
 
 `contact_number` - (Optional) Contact number of the user in ITU E.164 format [+][country code][subscriber number including area code](`String`).
 
-### Tls Config
-
-Configures the TLS settings..
-
-`ca_cert` - (Required) CA certificate to validate the server certificate with. (`String`).
-
-`client_cert` - (Required) Cert for client cert authentication to the server. (`String`).
-
-`client_key` - (Required) Key for client cert authentication to the server.. See [Client Key ](#client-key) below for details.
-
-`max_version` - (Optional) If unset, Prometheus will use Go default maximum version, which is TLS 1.3. (`String`).
-
-`min_version` - (Optional) If unset, Prometheus will use Go default minimum version, which is TLS 1.2. (`String`).
-
-`server_name` - (Required) ServerName extension to indicate the name of the server. (`String`).
-
 ### Url
 
 API Key is embedded in the webhook URL..
@@ -286,13 +180,13 @@ API Key is embedded in the webhook URL..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Vault Secret Info
 
@@ -308,17 +202,9 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Webhook
-
-Send alert notifications to Webhook.
-
-`http_config` - (Required) Configuration for HTTP endpoint. See [Http Config ](#http-config) below for details.
-
-`url` - (Required) URL to send API requests to (`String`).
-
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in F5XC Security Sidecar.
+Secret is given as bootstrap secret in Volterra Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

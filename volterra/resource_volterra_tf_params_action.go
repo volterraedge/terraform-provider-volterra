@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/errors"
 

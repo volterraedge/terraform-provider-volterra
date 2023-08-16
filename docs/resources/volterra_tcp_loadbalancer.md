@@ -32,10 +32,10 @@ resource "volterra_tcp_loadbalancer" "example" {
   // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
   tcp = true
 
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
   service_policies_from_namespace = true
 
-  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
   no_sni = true
 }
 
@@ -86,6 +86,8 @@ Argument Reference
 
 `idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
+`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
+
 `tcp` - (Optional) TCP Load Balancer. (bool).
 
 `tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
@@ -93,10 +95,6 @@ Argument Reference
 `tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
-
-`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
-
-`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
 
@@ -192,11 +190,7 @@ Custom selection of TLS versions and cipher suites.
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
-### Default V4 Vip
-
-Use the default VIP, system allocated or configured in the virtual network.
-
-### Default V6 Vip
+### Default Vip
 
 Use the default VIP, system allocated or configured in the virtual network.
 
@@ -266,15 +260,13 @@ Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 
-`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
-
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
 ### Tls Cert Params
 
-Multiple domains with separate TLS certificates on this load balancer.
+TLS Parameters and selected Certificates for downstream connections (RE sites only).
 
 `certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
 
@@ -314,7 +306,7 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 ### Tls Parameters
 
-Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
+Inline TLS parameters for downstream connections..
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
@@ -328,9 +320,9 @@ Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
 
 User is responsible for managing DNS to this load balancer..
 
-`tls_cert_params` - (Optional) Multiple domains with separate TLS certificates on this load balancer. See [Tls Cert Params ](#tls-cert-params) below for details.
+`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
 
-`tls_parameters` - (Optional) Single RSA and/or ECDSA TLS certificate for all domains on this load balancer. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Tls Tcp Auto Cert
 
@@ -354,13 +346,7 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
-
-`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
-
-`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
+`trusted_ca_url` - (Required) The URL for a trust store (`String`).
 
 ### Use System Defaults
 
@@ -384,13 +370,9 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Advertise on a virtual network.
 
-`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
 
-`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
-
-`default_v4_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
-
-`specific_v4_vip` - (Optional) Use given IP address as VIP on virtual Network (`String`).
+`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
 
 `virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
@@ -415,16 +397,6 @@ Advertise on vK8s Service Network on RE..
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
-
-### Xfcc Disabled
-
-No X-Forwarded-Client-Cert header will be added.
-
-### Xfcc Options
-
-X-Forwarded-Client-Cert header will be added with the configured fields.
-
-`xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
 
 Attribute Reference
 -------------------

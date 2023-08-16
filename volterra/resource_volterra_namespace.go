@@ -14,7 +14,7 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/server"
@@ -124,9 +124,8 @@ func resourceVolterraNamespaceCreate(d *schema.ResourceData, meta interface{}) e
 		return fmt.Errorf("error creating Namespace: %s", err)
 	}
 	createNamespaceResp := callRsp.ProtoMsg.(*ves_io_schema_namespace.CreateResponse)
-
-	d.SetId(createNamespaceResp.SystemMetadata.Uid)
-	d.Set("uid", d.Id)
+	d.SetId(createNamespaceResp.GetSystemMetadata().Uid)
+	d.Set("uid", createNamespaceResp.GetSystemMetadata().Uid)
 	return resourceVolterraNamespaceRead(d, meta)
 }
 

@@ -10,7 +10,7 @@ import (
 	"log"
 
 	"github.com/google/uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 type xmlConnConfig struct {
@@ -95,11 +95,9 @@ func dataVolterraParseAWSCGWConfigurationRead(d *schema.ResourceData, meta inter
 	d.Set("tunnel1_address", vpnConfig.Tunnels[0].OutsideAddress)
 	d.Set("tunnel1_cgw_inside_address", vpnConfig.Tunnels[0].CgwInsideAddress)
 	d.Set("tunnel1_vgw_inside_address", vpnConfig.Tunnels[0].VgwInsideAddress)
-	d.Set("tunnel1_preshared_key", vpnConfig.Tunnels[0].PreSharedKey)
 	d.Set("tunnel1_bgp_asn", vpnConfig.Tunnels[0].BGPASN)
 	d.Set("tunnel1_bgp_holdtime", vpnConfig.Tunnels[0].BGPHoldTime)
 	d.Set("tunnel2_address", vpnConfig.Tunnels[1].OutsideAddress)
-	d.Set("tunnel2_preshared_key", vpnConfig.Tunnels[1].PreSharedKey)
 	d.Set("tunnel2_cgw_inside_address", vpnConfig.Tunnels[1].CgwInsideAddress)
 	d.Set("tunnel2_vgw_inside_address", vpnConfig.Tunnels[1].VgwInsideAddress)
 	d.Set("tunnel2_bgp_asn", vpnConfig.Tunnels[1].BGPASN)

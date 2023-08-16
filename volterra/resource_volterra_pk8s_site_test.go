@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
 	ves_io_schema_k8s_cluster_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
 	ves_io_schema_k8s_cluster_role_binding "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
