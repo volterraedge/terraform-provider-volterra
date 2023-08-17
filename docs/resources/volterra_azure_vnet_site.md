@@ -20,7 +20,7 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services block_all_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
@@ -32,13 +32,13 @@ resource "volterra_azure_vnet_site" "example" {
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "alternate_region azure_region" must be set
+  // One of the arguments from this list "azure_region alternate_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
 
-  ingress_gw {
+  voltstack_cluster {
     az_nodes {
       azure_az  = "1"
       disk_size = "80"
@@ -53,20 +53,44 @@ resource "volterra_azure_vnet_site" "example" {
       }
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    azure_certified_hw = "azure-byol-voltstack-combo"
 
-    performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-      perf_mode_l7_enhanced = true
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+    no_dc_cluster_group = true
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+    no_global_network = true
+
+    // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
+    no_k8s_cluster = true
+
+    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
+    no_network_policy = true
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    outside_static_routes {
+      static_route_list {
+        // One of the arguments from this list "simple_static_route custom_static_route" must be set
+        simple_static_route = "10.5.1.0/24"
+      }
     }
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+    sm_connection_public_ip = true
+    // One of the arguments from this list "storage_class_list default_storage" must be set
+    default_storage = true
   }
-  ssh_key = ["ssh-rsa AAAAB..."]
   vnet {
-    // One of the arguments from this list "new_vnet existing_vnet" must be set
+    // One of the arguments from this list "existing_vnet new_vnet" must be set
 
-    existing_vnet {
-      resource_group = "MyResourceGroup"
-      vnet_name      = "MyVnet"
+    new_vnet {
+      // One of the arguments from this list "name autogenerate" must be set
+      name = "name"
+
+      primary_ipv4 = "10.1.0.0/16"
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
@@ -96,11 +120,9 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
-
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -136,7 +158,7 @@ Argument Reference
 
 `voltstack_cluster_ar` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
 
-`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -152,7 +174,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-with an additional option for service insertion..
+Enhanced Firewall Policies active for this site..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -167,10 +189,6 @@ Enable Forward Proxy for this site and manage policies.
 Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
-
-### Advertise To Route Server
-
-Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
 
 ### Authorized Key
 
@@ -194,7 +212,7 @@ The subnet CIDR is autogenerated..
 
 ### Auto Asn
 
-(Recommended) Automatically set ASN for F5XC Site.
+(Recommended) Automatically set ASN for BGP between Site and Azure Route Servers.
 
 ### Autogenerate
 
@@ -242,7 +260,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches DNS port 53 (bool).
+`dns` - (Optional) Matches ssh port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -338,11 +356,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches DNS port 53.
-
-### Do Not Advertise To Route Server
-
-Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -398,9 +412,9 @@ Express Route is disabled on this site.
 
 Express Route is enabled on this site.
 
-`auto_asn` - (Optional) (Recommended) Automatically set ASN for F5XC Site (bool).
+`auto_asn` - (Optional) (Recommended) Automatically set ASN for BGP between Site and Azure Route Servers (bool).
 
-`custom_asn` - (Optional) Set custom ASN for F5XC Site (`Int`).
+`custom_asn` - (Optional) Set custom ASN for BGP between Site and Azure Route Servers (`Int`).
 
 `connections` - (Required) Add the ExpressRoute Circuit Connections to this site. See [Connections ](#connections) below for details.
 
@@ -419,10 +433,6 @@ Express Route is enabled on this site.
 `sku_high_perf` - (Optional) High Perf SKU (bool).
 
 `sku_standard` - (Optional) Standard SKU (bool).
-
-`advertise_to_route_server` - (Optional) Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
-
-`do_not_advertise_to_route_server` - (Optional) Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
 
 ### Forward Proxy Allow All
 
@@ -498,7 +508,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -544,7 +554,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -730,6 +740,14 @@ Enable/Disable offline survivability mode.
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
+### Openebs Enterprise
+
+Storage class Device configuration for OpenEBS Enterprise.
+
+`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
+
+`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
+
 ### Os
 
 Operating System Details.
@@ -762,7 +780,7 @@ Subnets for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+Site optimized for L3 traffic processing.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -770,15 +788,15 @@ When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 ### Perf Mode L7 Enhanced
 
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+Site optimized for L7 traffic processing.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 
@@ -904,6 +922,8 @@ List of custom storage classes.
 
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
 
+`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
+
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
 ### Subnet
@@ -1020,7 +1040,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -1062,7 +1082,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

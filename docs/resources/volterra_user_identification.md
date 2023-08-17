@@ -21,8 +21,8 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "cookie_name client_asn tls_fingerprint ip_and_tls_fingerprint client_ip query_param_key ip_and_http_header_name client_country client_region client_city http_header_name none" must be set
-    client_country = true
+    // One of the arguments from this list "client_asn ip_and_http_header_name ip_and_tls_fingerprint client_country client_region client_city http_header_name cookie_name none tls_fingerprint client_ip query_param_key" must be set
+    client_ip = true
   }
 }
 

@@ -21,67 +21,25 @@ resource "volterra_k8s_cluster" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
+  no_cluster_wide_apps = true
 
-  cluster_wide_app_list {
-    cluster_wide_apps {
-      // One of the arguments from this list "dashboard metrics_server prometheus argo_cd" must be set
-
-      argo_cd {
-        generated_yaml = "value"
-
-        local_domain {
-          local_domain = "example.com"
-
-          password {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-          }
-
-          // One of the arguments from this list "default_port port" must be set
-          default_port = true
-        }
-      }
-    }
-  }
-
-  // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
-
-  use_custom_cluster_role_bindings {
-    cluster_role_bindings {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  // One of the arguments from this list "use_custom_cluster_role_bindings use_default_cluster_role_bindings" must be set
+  use_default_cluster_role_bindings = true
 
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
+  use_default_cluster_roles = true
 
-  use_custom_cluster_role_list {
-    cluster_roles {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "cluster_scoped_access_deny cluster_scoped_access_permit" must be set
   cluster_scoped_access_deny = true
+
   // One of the arguments from this list "no_global_access global_access_enable" must be set
   no_global_access = true
+
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
-  no_insecure_registries = true
+
+  insecure_registry_list {
+    insecure_registries = ["example.com:5000"]
+  }
   // One of the arguments from this list "no_local_access local_access_config" must be set
   no_local_access = true
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
@@ -151,7 +109,7 @@ Deploy Argo Continuous Deployment(CD) application.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -247,13 +205,13 @@ Select blindfold or clear text password for ArgoCD admin..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Prometheus
 
@@ -305,7 +263,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in F5XC Security Sidecar.
+Secret is given as bootstrap secret in Volterra Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

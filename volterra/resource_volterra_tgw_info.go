@@ -11,7 +11,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -214,10 +214,8 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 		},
 	}
 	if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
-		fmt.Printf("Foo Madhukar: %# v\n", dcxInfo)
 		req.DirectConnectInfo = dcxInfo
 	}
-	log.Printf("[INFO] Foo Setting Id %s, %s\n", tgwID, vpcID)
 	yamlReq, err := codec.ToYAML(req)
 	if err != nil {
 		return fmt.Errorf("error marshalling rpc response to yaml: %s", err)

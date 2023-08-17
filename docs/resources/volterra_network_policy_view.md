@@ -21,7 +21,7 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "interface namespace label_selector prefix_list any outside_endpoints inside_endpoints" must be set
+    // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
     outside_endpoints = true
   }
 }
@@ -221,9 +221,7 @@ All ip prefixes that are reachable via outside interfaces are chosen as Endpoint
 
 For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs..
 
-`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
-
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Protocol Port Range
 

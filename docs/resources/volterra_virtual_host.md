@@ -20,12 +20,8 @@ resource "volterra_virtual_host" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "js_challenge captcha_challenge no_challenge" must be set
-
-  captcha_challenge {
-    cookie_expiry = "1000"
-    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
+  // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
+  no_challenge = true
 }
 
 ```
@@ -173,7 +169,7 @@ OpenAPI specification settings.
 
 `disable_open_api_validation` - (Optional) No OpenApi Validation configuration for this VH (bool).
 
-`enable_open_api_validation` - (Optional) OpenApi Validation configuration object. See [Enable Open Api Validation ](#enable-open-api-validation) below for details.
+`enable_open_api_validation` - (Optional) OpenApi Validation configuration object (bool).
 
 ### App Firewall
 
@@ -249,9 +245,9 @@ specify the maximum buffer size and buffer interval with this config..
 
 which caches DNS replies from the origin DNS servers..
 
-`cache_size` - (Optional) cache size (`Int`).
-
 `disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
+
+`enable_cache_profile` - (Optional) x-displayName: "Enable" (bool).
 
 ### Captcha Challenge
 
@@ -461,6 +457,10 @@ the ECDSA certificate for the domain, if any.
 
 `uid` - (Optional) then uid will hold the referred object's(e.g. route's) uid. (`String`).
 
+### Enable Cache Profile
+
+x-displayName: "Enable".
+
 ### Enable Ddos Mitigation
 
 x-displayName: "Enable".
@@ -468,10 +468,6 @@ x-displayName: "Enable".
 ### Enable Open Api Validation
 
 OpenApi Validation configuration object.
-
-`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
-
-`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
 
 ### Enable Tampering Protection
 
@@ -520,14 +516,6 @@ Configure Javascript challenge on Virtual Host.
 HMAC configured using KMS_KEY.
 
 `auth_hmac_kms` - (Optional) HMAC configured using the KMS_KEY reference. See [ref](#ref) below for details.
-
-### Oversized Body Fail Validation
-
-Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb).
-
-### Oversized Body Skip Validation
-
-Skip body validation when the body length is too long to verify (default 64Kb).
 
 ### Prim Key
 
@@ -709,8 +697,6 @@ in advertise policy.
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
-`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
-
 ### Tls Certificates
 
 Set of TLS certificates.
@@ -737,14 +723,6 @@ in advertise policy.
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
 
-`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
-
-### Trusted Ca
-
-Trusted CA List.
-
-`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
-
 ### Use Auth Object Config
 
 Use the Cookie Params configured in Authentication Object.
@@ -759,9 +737,7 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
+`trusted_ca_url` - (Optional) The URL for a trust store (`String`).
 
 `use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
 

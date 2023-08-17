@@ -21,16 +21,20 @@ resource "volterra_network_firewall" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "disable_fast_acl active_fast_acls fast_acl_set" must be set
+  disable_fast_acl = true
 
-  fast_acl_set {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
   // One of the arguments from this list "disable_forward_proxy_policy active_forward_proxy_policies forward_proxy_policy_set" must be set
   disable_forward_proxy_policy = true
-  // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set active_enhanced_firewall_policies" must be set
-  disable_network_policy = true
+
+  // One of the arguments from this list "network_policy_set active_enhanced_firewall_policies disable_network_policy active_network_policies" must be set
+
+  active_network_policies {
+    network_policies {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
 }
 
 ```
@@ -66,7 +70,7 @@ Argument Reference
 
 `forward_proxy_policy_set` - (Optional) L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.. See [ref](#ref) below for details.
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Active Enhanced Firewall Policies for this network firewall(L3/L4 firewall).. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Active firewall policies for this network firewall(L3/L4 firewall).. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -76,7 +80,7 @@ Argument Reference
 
 ### Active Enhanced Firewall Policies
 
-with an additional option for service insertion..
+Active Enhanced Firewall Policies for this network firewall(L3/L4 firewall)..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 

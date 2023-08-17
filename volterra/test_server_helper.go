@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/db"
@@ -266,12 +266,7 @@ func (t *tgwCustomAPIServer) SetVPCIpPrefixes(ctx context.Context,
 		return nil, fmt.Errorf("aws_tgw_site %s does not exist", r.Name)
 	}
 	obj := e.(*ves_io_schema_aws_tgw_site.DBObject)
-
-	fmt.Printf("Foo Before setting the map\n")
-
 	obj.Spec.GcSpec.VpcIpPrefixes = r.GetVpcIpPrefixes()
-	fmt.Printf("Foo %s\n", obj.Spec.GcSpec)
-
 	if _, err := t.sf.ChgEntry(ctx, obj.ToEntry()); err != nil {
 		return nil, fmt.Errorf("Could not update aws_tgw_site %s", err)
 	}

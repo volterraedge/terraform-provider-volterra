@@ -291,7 +291,6 @@ func (m *SIDCounterRequest) GetRange() string {
 // SID Counter Response
 //
 // x-displayName: "SID Counter Response"
-//
 type SIDCounterResponse struct {
 	// Data
 	//

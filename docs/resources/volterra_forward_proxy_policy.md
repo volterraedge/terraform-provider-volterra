@@ -20,10 +20,10 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
+  // One of the arguments from this list "proxy_label_selector drp_http_connect any_proxy network_connector" must be set
   any_proxy = true
 
-  // One of the arguments from this list "rule_list allow_all allow_list deny_list" must be set
+  // One of the arguments from this list "allow_list deny_list rule_list allow_all" must be set
   allow_all = true
 }
 
@@ -144,9 +144,7 @@ Destination is the set of prefixes determined by the label selector expression.
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
-
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Http List
 
@@ -202,9 +200,7 @@ In case of an HTTP Connect, the destination port is extracted from the connect d
 
 list of ip prefixes that are representing source of traffic seen by proxy.
 
-`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
-
-`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Proxy Label Selector
 

@@ -33,15 +33,11 @@ resource "volterra_aws_tgw_site" "example" {
 
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
+        existing_subnet_id = "subnet-12345678901234567"
       }
 
       workload_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -50,7 +46,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
     }
 
-    // One of the arguments from this list "aws_cred assisted" must be set
+    // One of the arguments from this list "assisted aws_cred" must be set
 
     aws_cred {
       name      = "test1"
@@ -60,7 +56,7 @@ resource "volterra_aws_tgw_site" "example" {
     disk_size     = "80"
     instance_type = "a1.xlarge"
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-    disable_internet_vip = true
+    enable_internet_vip = true
 
     // One of the arguments from this list "new_vpc vpc_id" must be set
 
@@ -76,17 +72,16 @@ resource "volterra_aws_tgw_site" "example" {
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
 
-    existing_tgw {
-      tgw_asn           = "64500"
-      tgw_id            = "tgw-12345678901234567"
-      volterra_site_asn = "64501"
+    new_tgw {
+      // One of the arguments from this list "system_generated user_assigned" must be set
+      system_generated = true
     }
     // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-    nodes_per_az = "2"
+    no_worker_nodes = true
   }
 
-  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
-  block_all_services = true
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
@@ -118,11 +113,9 @@ Argument Reference
 
 `aws_parameters` - (Required) Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc. See [Aws Parameters ](#aws-parameters) below for details.
 
-`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`blocked_services` - (Optional) Use custom blocked services configuration, to list the services which need to be blocked. See [Blocked Services ](#blocked-services) below for details.
-
-`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -158,7 +151,7 @@ Enable service policy so east-west traffic goes via proxy.
 
 ### Active Enhanced Firewall Policies
 
-with an additional option for service insertion..
+Enhanced Firewall Policies active for this site..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -180,8 +173,6 @@ Allowed VIP Port Configuration.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
 
-`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
-
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (bool).
@@ -193,8 +184,6 @@ Allowed VIP Port Configuration.
 Allowed VIP Port Configuration for Inside Network.
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Custom Ports ](#custom-ports) below for details.
-
-`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (bool).
 
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (bool).
 
@@ -240,7 +229,7 @@ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 
 `vpc_id` - (Optional) Existing VPC ID (`String`).
 
-`ssh_key` - (Required) Public SSH key for accessing nodes of the site. (`String`).
+`ssh_key` - (Optional) Public SSH key for accessing nodes of the site. (`String`).
 
 `existing_tgw` - (Optional) Information about existing TGW. See [Existing Tgw ](#existing-tgw) below for details.
 
@@ -290,7 +279,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Blocked Services
 
-Use custom blocked services configuration, to list the services which need to be blocked.
+Use custom blocked services configuration.
 
 `blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
 
@@ -298,7 +287,7 @@ Use custom blocked services configuration, to list the services which need to be
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches DNS port 53 (bool).
+`dns` - (Optional) Matches ssh port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -388,10 +377,6 @@ Direct Connect Connection to Site is enabled.
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (bool).
 
-### Disable Allowed Vip Port
-
-HTTP Port (80) & HTTPS Port (443) will be disabled..
-
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -410,7 +395,7 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches DNS port 53.
+Matches ssh port 53.
 
 ### Domain Match
 
@@ -660,7 +645,7 @@ Subnet for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+Site optimized for L3 traffic processing.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -668,15 +653,15 @@ When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 ### Perf Mode L7 Enhanced
 
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+Site optimized for L7 traffic processing.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
 
 ### Policy
 
@@ -808,7 +793,7 @@ Security Configuration for transit gateway.
 
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -926,7 +911,7 @@ Spoke VPCs to be attached to the AWS TGW Site.
 
 List of VPC attachments to transit gateway.
 
-`labels` - (Optional) These labels used must be from known key, label defined in shared namespace and unknown key. (`String`).
+`labels` - (Optional) These labels used must be from known key and label defined in shared namespace (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
 

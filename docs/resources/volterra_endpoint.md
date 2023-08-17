@@ -114,7 +114,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
 
 ### Strict Ttl
 
@@ -124,7 +124,7 @@ Use TTL value returned by DNS Server during DNS resolution as DNS refresh interv
 
 Direct reference to virtual network object.
 
-`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -136,7 +136,7 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 

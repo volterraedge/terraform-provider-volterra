@@ -3014,11 +3014,13 @@ type CustomSensitiveDataDetectionRule struct {
 	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// sensitive_data_type
 	//
+	// x-required
 	// x-displayName: "Sensitive Data Type"
 	// If the pattern is detected, the request is labeled with specified sensitive data type.
 	SensitiveDataType *CustomSensitiveDataType `protobuf:"bytes,2,opt,name=sensitive_data_type,json=sensitiveDataType,proto3" json:"sensitive_data_type,omitempty"`
 	// sensitive_data_detection_config
 	//
+	// x-required
 	// x-displayName: "Sensitive Data Detection Config"
 	// The custom data detection config specifies targets, scopes & the pattern to be detected.
 	SensitiveDataDetectionConfig *CustomDataDetectionConfig `protobuf:"bytes,3,opt,name=sensitive_data_detection_config,json=sensitiveDataDetectionConfig,proto3" json:"sensitive_data_detection_config,omitempty"`

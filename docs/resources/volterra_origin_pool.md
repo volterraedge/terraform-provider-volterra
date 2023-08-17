@@ -23,7 +23,7 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "vn_private_ip public_ip private_name k8s_service consul_service public_name private_ip custom_endpoint_object vn_private_name" must be set
+    // One of the arguments from this list "vn_private_name public_ip public_name private_ip private_name k8s_service consul_service vn_private_ip custom_endpoint_object" must be set
 
     public_name {
       dns_name = "value"
@@ -34,10 +34,10 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  // One of the arguments from this list "port automatic_port lb_port" must be set
-  port = "9080"
+  // One of the arguments from this list "port automatic_port" must be set
+  automatic_port = true
 
-  // One of the arguments from this list "use_tls no_tls" must be set
+  // One of the arguments from this list "no_tls use_tls" must be set
   no_tls = true
 }
 
@@ -77,8 +77,6 @@ Argument Reference
 `origin_servers` - (Required) List of origin servers in this pool. See [Origin Servers ](#origin-servers) below for details.
 
 `automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (bool).
-
-`lb_port` - (Optional) Endpoint port is selected based on loadbalancer port (bool).
 
 `port` - (Optional) Endpoint service is available on this port (`Int`).
 
@@ -246,7 +244,7 @@ Subset load balancing is disabled. All eligible origin servers will be considere
 
 Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing..
 
-`endpoint_subsets` - (Required) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
+`endpoint_subsets` - (Optional) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Endpoint Subsets ](#endpoint-subsets) below for details.
 
 `any_endpoint` - (Optional) Select any origin server from available healthy origin servers in this pool (bool).
 
@@ -258,7 +256,7 @@ Subset load balancing is enabled. Based on route, subset of origin servers will 
 
 List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
 
-`keys` - (Required) List of keys that define a cluster subset class. (`String`).
+`keys` - (Optional) List of keys that define a cluster subset class. (`String`).
 
 ### Fail Request
 
@@ -364,13 +362,11 @@ Outside network on the site.
 
 Specify origin server with private or public IP address and site information.
 
+`ip` - (Required) IP address (`String`).
+
 `inside_network` - (Optional) Inside network on the site (bool).
 
 `outside_network` - (Optional) Outside network on the site (bool).
-
-`ip` - (Optional) Private IPV4 address (`String`).
-
-`ipv6` - (Optional) Private IPV6 address (`String`).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
@@ -410,9 +406,7 @@ For example, “content-type” becomes “Content-Type”, and “foo$b#$are”
 
 Specify origin server with public IP.
 
-`ip` - (Optional) Public IPV4 address (`String`).
-
-`ipv6` - (Optional) Public IPV6 address (`String`).
+`ip` - (Required) Public IP address (`String`).
 
 ### Public Name
 
@@ -482,7 +476,7 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-x-displayName: "Enable MTLS With Inline Certificate".
+x-displayName: "Enable".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
@@ -490,9 +484,7 @@ x-displayName: "Enable MTLS With Inline Certificate".
 
 Perform origin server verification using the provided trusted CA list.
 
-`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca_url` - (Required) Trusted CA certificates for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -504,9 +496,7 @@ x-displayName: "Enable".
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
-
-`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 
@@ -544,11 +534,9 @@ origin server are on vK8s network on the site.
 
 Specify origin server IP address on virtual network other than inside or outside network.
 
+`ip` - (Required) IP address (`String`).
+
 `virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
-
-`ip` - (Optional) IPV4 address (`String`).
-
-`ipv6` - (Optional) IPV6 address (`String`).
 
 ### Vn Private Name
 

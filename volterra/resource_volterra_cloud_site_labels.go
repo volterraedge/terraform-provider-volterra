@@ -11,8 +11,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/server"
 
@@ -132,7 +132,6 @@ func getVolterraCloudSite(client *APIClient, name, siteObjectType string, rspFmt
 
 // resourceVolterraCloudSiteLabelsUpdate updates Site resource
 func resourceVolterraCloudSiteLabelsUpdate(d *schema.ResourceData, meta interface{}) error {
-	//fmt.Printf("Foo update\n")
 	client := meta.(*APIClient)
 	var name, siteType string
 	var labels map[string]interface{}
@@ -152,7 +151,6 @@ func resourceVolterraCloudSiteLabelsUpdate(d *schema.ResourceData, meta interfac
 		}
 		return err
 	}
-	//fmt.Printf("Foo update getting cloud replace\n")
 	updateReq := getCloudSiteReplaceForm(siteType, labels, false, resp)
 	log.Printf("[DEBUG] Updating Volterra %s obj with struct: %+v", siteType, updateReq)
 
@@ -176,7 +174,6 @@ func getCloudSiteReplaceForm(siteType string, labels map[string]interface{}, isD
 				delete(resp.ReplaceForm.Metadata.Labels, v.(string))
 			}
 		}
-		//fmt.Printf("Foo %# v", resp)
 		replaceReq = resp.ReplaceForm
 	case "aws_tgw_site":
 		resp := serverResp.ProtoMsg.(*aws_tgw_site.GetResponse)
@@ -206,7 +203,6 @@ func getCloudSiteReplaceForm(siteType string, labels map[string]interface{}, isD
 		}
 		replaceReq = resp.ReplaceForm
 	}
-	//fmt.Printf("Foo replace req %# v\n", replaceReq)
 	return replaceReq
 }
 

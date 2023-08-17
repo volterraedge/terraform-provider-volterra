@@ -2153,6 +2153,7 @@ type StringRules struct {
 	// patterns
 	//
 	// Types that are valid to be assigned to WellKnown:
+	//
 	//	*StringRules_Email
 	//	*StringRules_Hostname
 	//	*StringRules_Ip
@@ -3030,6 +3031,7 @@ type BytesRules struct {
 	// patterns
 	//
 	// Types that are valid to be assigned to WellKnown:
+	//
 	//	*BytesRules_Ip
 	//	*BytesRules_Ipv4
 	//	*BytesRules_Ipv6

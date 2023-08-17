@@ -11,7 +11,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
@@ -79,6 +79,11 @@ func resourceVolterraDnsZone() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
 
 									"ttl": {
 										Type:     schema.TypeInt,
@@ -849,6 +854,11 @@ func resourceVolterraDnsZone() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
 
 												"ttl": {
 													Type:     schema.TypeInt,
@@ -1854,6 +1864,10 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 					defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
 					defaultRrSetGroupMapStrToI := set.(map[string]interface{})
 
+					if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
+						defaultRrSetGroup[i].Description = w.(string)
+					}
+
 					if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
 						defaultRrSetGroup[i].Ttl = uint32(w.(int))
 					}
@@ -2787,6 +2801,10 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 						for i, set := range sl {
 							rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
 							rrSetMapStrToI := set.(map[string]interface{})
+
+							if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
+								rrSet[i].Description = w.(string)
+							}
 
 							if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
 								rrSet[i].Ttl = uint32(w.(int))
@@ -4048,6 +4066,10 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 					defaultRrSetGroup[i] = &ves_io_schema_dns_zone.RRSet{}
 					defaultRrSetGroupMapStrToI := set.(map[string]interface{})
 
+					if w, ok := defaultRrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
+						defaultRrSetGroup[i].Description = w.(string)
+					}
+
 					if w, ok := defaultRrSetGroupMapStrToI["ttl"]; ok && !isIntfNil(w) {
 						defaultRrSetGroup[i].Ttl = uint32(w.(int))
 					}
@@ -4981,6 +5003,10 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 						for i, set := range sl {
 							rrSet[i] = &ves_io_schema_dns_zone.RRSet{}
 							rrSetMapStrToI := set.(map[string]interface{})
+
+							if w, ok := rrSetMapStrToI["description"]; ok && !isIntfNil(w) {
+								rrSet[i].Description = w.(string)
+							}
 
 							if w, ok := rrSetMapStrToI["ttl"]; ok && !isIntfNil(w) {
 								rrSet[i].Ttl = uint32(w.(int))

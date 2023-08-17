@@ -32,7 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Network Policy Rule
 //
 // x-displayName: "Rule"
-//Network Policy Rule object
+// Network Policy Rule object
 type Object struct {
 	// metadata
 	//

@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_ap "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
 	ves_io_schema_ap_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
 	ves_io_schema_facl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"

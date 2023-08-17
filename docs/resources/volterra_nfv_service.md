@@ -20,8 +20,55 @@ resource "volterra_nfv_service" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "disable_https_management https_management" must be set
-  disable_https_management = true
+  // One of the arguments from this list "https_management disable_https_management" must be set
+
+  https_management {
+    // One of the arguments from this list "advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip" must be set
+
+    advertise_on_slo_sli {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+      no_mtls = true
+
+      tls_certificates {
+        certificate_url = "value"
+        description     = "Certificate used in production environment"
+
+        // One of the arguments from this list "disable_ocsp_stapling custom_hash_algorithms use_system_defaults" must be set
+
+        disable_ocsp_stapling {}
+        private_key {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "custom_security default_security medium_security low_security" must be set
+        default_security = true
+      }
+    }
+
+    domain_suffix = "foo.com"
+
+    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    do_not_advertise = true
+
+    // One of the arguments from this list "default_https_port https_port" must be set
+    default_https_port = true
+  }
 
   // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
 
@@ -35,14 +82,12 @@ resource "volterra_nfv_service" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-      vault_secret_info {
-        key             = "key_pem"
-        location        = "v1/data/vhost_key"
-        provider        = "vault-vh-provider"
-        secret_encoding = "secret_encoding"
-        version         = "1"
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
       }
     }
 
@@ -50,40 +95,25 @@ resource "volterra_nfv_service" "example" {
 
     endpoint_service {
       // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-      advertise_on_slo_ip_external = true
+      disable_advertise_on_slo_ip = true
 
       // One of the arguments from this list "automatic_vip configured_vip" must be set
       automatic_vip = true
 
       // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
-      default_tcp_ports = true
 
+      custom_tcp_ports {
+        ports = ["100-200"]
+      }
       // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
       no_udp_ports = true
     }
 
     // One of the arguments from this list "byol_image market_place_image" must be set
 
-    byol_image {
-      image = "image1"
-
-      license {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
-        }
-      }
+    market_place_image {
+      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps" must be set
+      AWAFPayG200Mbps = true
     }
     nodes {
       aws_az_name = "us-west-2a"
@@ -98,8 +128,8 @@ resource "volterra_nfv_service" "example" {
 
     // One of the arguments from this list "aws_vpc_site_params aws_tgw_site_params" must be set
 
-    aws_vpc_site_params {
-      aws_vpc_site {
+    aws_tgw_site_params {
+      aws_tgw_site {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -139,7 +169,7 @@ Argument Reference
 
 `https_management` - (Optional) Enable HTTPS based management. See [Https Management ](#https-management) below for details.
 
-`f5_big_ip_aws_service` - (Optional) Virtual BIG-IP service to be deployed on AWS. See [F5 Big Ip Aws Service ](#f5-big-ip-aws-service) below for details.
+`f5_big_ip_aws_service` - (Optional) Virtual F5 BigIP service to be deployed on AWS. See [F5 Big Ip Aws Service ](#f5-big-ip-aws-service) below for details.
 
 `palo_alto_fw_service` - (Optional) Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud. See [Palo Alto Fw Service ](#palo-alto-fw-service) below for details.
 
@@ -154,10 +184,6 @@ F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps).
 ### AWAFPayG3Gbps
 
 F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps).
-
-### BestPlusPayG200Mbps
-
-F5 Best Plus with all modules (PAYG, 200mbps).
 
 ### Admin Password
 
@@ -195,10 +221,6 @@ Advertise this loadbalancer on public network.
 
 Enable management access on internet with default VIP.
 
-### Advertise On Sli
-
-Enable on Site local inside network, default VIP will be used.
-
 ### Advertise On Sli Vip
 
 Enable on Site local inside network, default VIP will be used.
@@ -210,10 +232,6 @@ Enable on Site local inside network, default VIP will be used.
 `tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Advertise On Slo
-
-Enable on Site local outside network, default VIP will be used.
 
 ### Advertise On Slo Internet Vip
 
@@ -311,10 +329,6 @@ Select AWS VPC site.
 
 `aws_vpc_site` - (Required) Reference to AWS VPC site. See [ref](#ref) below for details.
 
-### Best Plus Payg 1gbps
-
-F5 Best Plus with all modules in 1Gbps flavor.
-
 ### Blindfold Secret Info
 
 Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
@@ -337,9 +351,9 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 ### Byol Image
 
-Select the BIG-IP bring your own license image to be used for this service.
+Select the BigIp bring your own license image to be used for this service.
 
-`image` - (Required) Select the BIG-IP pay as you go image to be used for this service (`String`).
+`image` - (Required) Select the BigIp pay as you go image to be used for this service (`String`).
 
 `license` - (Optional) Secret License data. See [License ](#license) below for details.
 
@@ -423,15 +437,15 @@ Enable SSH access to nodes.
 
 `advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (bool).
 
-`advertise_on_sli` - (Optional) Enable on Site local inside network, default VIP will be used (bool).
+`advertise_on_sli_vip` - (Optional) Enable on Site local inside network, default VIP will be used. See [Advertise On Sli Vip ](#advertise-on-sli-vip) below for details.
 
-`advertise_on_slo` - (Optional) Enable on Site local outside network, default VIP will be used (bool).
+`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP. See [Advertise On Slo Internet Vip ](#advertise-on-slo-internet-vip) below for details.
 
-`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP (bool).
+`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used. See [Advertise On Slo Sli ](#advertise-on-slo-sli) below for details.
 
-`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used (bool).
+`advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise On Slo Vip ](#advertise-on-slo-vip) below for details.
 
-`node_ssh_ports` - (Required) Enter TCP port and node name per node. See [Node Ssh Ports ](#node-ssh-ports) below for details.
+`ssh_ports` - (Required) Enter TCP port per node (`Int`).
 
 ### Endpoint Service
 
@@ -463,7 +477,7 @@ External service type is Endpoint service.
 
 ### F5 Big Ip Aws Service
 
-Virtual BIG-IP service to be deployed on AWS.
+Virtual F5 BigIP service to be deployed on AWS.
 
 `admin_password` - (Required) Secret admin password for BIG ip. See [Admin Password ](#admin-password) below for details.
 
@@ -471,9 +485,9 @@ Virtual BIG-IP service to be deployed on AWS.
 
 `endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
 
-`byol_image` - (Required) Select the BIG-IP bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
+`byol_image` - (Required) Select the BigIp bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
 
-`market_place_image` - (Required) Select the BIG-IP pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
+`market_place_image` - (Required) Select the BigIp pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
 
 `nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
@@ -555,15 +569,11 @@ User given public and private SSH keys.
 
 ### Market Place Image
 
-Select the BIG-IP pay as you go image to be used for this service.
+Select the BigIp pay as you go image to be used for this service.
 
 `AWAFPayG200Mbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (bool).
 
 `AWAFPayG3Gbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (bool).
-
-`BestPlusPayG200Mbps` - (Required) F5 Best Plus with all modules (PAYG, 200mbps) (bool).
-
-`best_plus_payg_1gbps` - (Required) F5 Best Plus with all modules in 1Gbps flavor (bool).
 
 ### Medium Security
 
@@ -593,19 +603,11 @@ do not select tcp ports.
 
 do not select udp ports.
 
-### Node Ssh Ports
-
-Enter TCP port and node name per node.
-
-`node_name` - (Required) Node name will be used to match a particular node with the desired TCP port (`String`).
-
-`ssh_port` - (Required) Enter TCP port per node (`Int`).
-
 ### Nodes
 
 Specify how and where the service nodes are spawned.
 
-`aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
+`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. It is recommended that AZ is one of the AZ for sites (`String`).
 
 `mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet ](#mgmt-subnet) below for details.
 
@@ -743,13 +745,7 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
-
-`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
-
-`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
+`trusted_ca_url` - (Required) The URL for a trust store (`String`).
 
 ### Use System Defaults
 
@@ -774,16 +770,6 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
-
-### Xfcc Disabled
-
-No X-Forwarded-Client-Cert header will be added.
-
-### Xfcc Options
-
-X-Forwarded-Client-Cert header will be added with the configured fields.
-
-`xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
 
 Attribute Reference
 -------------------

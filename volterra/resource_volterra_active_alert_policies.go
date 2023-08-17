@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"

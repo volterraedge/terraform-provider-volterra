@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_cloud_cred "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 )
@@ -81,7 +81,6 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 		  }
 		  disk_size = 80
 		  instance_type = "t3.xlarge"
-
 
 		  ingress_egress_gw {
 			aws_certified_hw = "aws-byol-multi-nic-voltmesh"

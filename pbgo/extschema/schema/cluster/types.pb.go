@@ -239,20 +239,19 @@ func (EndpointSelectionPolicy) EnumDescriptor() ([]byte, []int) {
 // of hosts in an upstream cluster are performing unlike the others and removing them from the
 // healthy load balancing set. Outlier detection is a form of passive health checking.
 //
-// Algorithm
+// # Algorithm
 //
-// 1. A endpoint is determined to be an outlier (based on configured number of consecutive_5xx
-//    or consecutive_gateway_failures) .
-// 2. If no endpoints have been ejected, loadbalancer will eject the host immediately.
-//    Otherwise, it checks to make sure the number of ejected hosts is below the allowed threshold
-//    (specified via max_ejection_percent setting). If the number of ejected hosts is above the
-//    threshold, the host is not ejected.
-// 3. The endpoint is ejected for some number of milliseconds. Ejection means that the endpoint is marked
-//    unhealthy and will not be used during load balancing. The number of milliseconds is equal to the
-//    base_ejection_time value multiplied by the number of times the host has been ejected.
-// 4. An ejected endpoint will automatically be brought back into service after the ejection time
-//    has been satisfied
-//
+//  1. A endpoint is determined to be an outlier (based on configured number of consecutive_5xx
+//     or consecutive_gateway_failures) .
+//  2. If no endpoints have been ejected, loadbalancer will eject the host immediately.
+//     Otherwise, it checks to make sure the number of ejected hosts is below the allowed threshold
+//     (specified via max_ejection_percent setting). If the number of ejected hosts is above the
+//     threshold, the host is not ejected.
+//  3. The endpoint is ejected for some number of milliseconds. Ejection means that the endpoint is marked
+//     unhealthy and will not be used during load balancing. The number of milliseconds is equal to the
+//     base_ejection_time value multiplied by the number of times the host has been ejected.
+//  4. An ejected endpoint will automatically be brought back into service after the ejection time
+//     has been satisfied
 type OutlierDetectionType struct {
 	// consecutive_5xx
 	//

@@ -64,8 +64,9 @@ func (SchemeType) EnumDescriptor() ([]byte, []int) {
 // x-displayName: "Virtual IP Discovery"
 // How is the Virtual IP discovery done
 // Two modes are possible
-//   DNS_DELEGATION: Program DNS delegation for a sub-domain in external K8s cluster
-//   PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster
+//
+//	DNS_DELEGATION: Program DNS delegation for a sub-domain in external K8s cluster
+//	PUBLISH_SERVICE: Create/Register a service in external K8s/consul cluster
 type VirtualIPDiscoveryType int32
 
 const (

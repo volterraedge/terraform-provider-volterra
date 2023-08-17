@@ -26,47 +26,34 @@ resource "volterra_global_log_receiver" "example" {
   // One of the arguments from this list "request_logs security_events audit_logs" must be set
   request_logs = true
 
-  // One of the arguments from this list "elastic_receiver azure_event_hubs_receiver sumo_logic_receiver http_receiver datadog_receiver azure_receiver aws_cloud_watch_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver" must be set
+  // One of the arguments from this list "elastic_receiver azure_receiver kafka_receiver azure_event_hubs_receiver aws_cloud_watch_receiver s3_receiver http_receiver datadog_receiver splunk_receiver" must be set
 
-  datadog_receiver {
+  s3_receiver {
+    aws_cred {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    aws_region = "us-east-1"
+
     batch {
       // One of the arguments from this list "max_bytes_disabled max_bytes" must be set
       max_bytes_disabled = true
 
       // One of the arguments from this list "max_events_disabled max_events" must be set
-      max_events_disabled = true
+      max_events = "200"
 
       // One of the arguments from this list "timeout_seconds_default timeout_seconds" must be set
       timeout_seconds_default = true
     }
 
+    bucket = "S3 Bucket Name"
+
     compression {
       // One of the arguments from this list "compression_none compression_gzip" must be set
       compression_none = true
     }
-
-    datadog_api_key {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-      clear_secret_info {
-        provider = "box-provider"
-        url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      }
-    }
-
-    // One of the arguments from this list "endpoint site" must be set
-    site = "datadoghq.com"
-
-    // One of the arguments from this list "no_tls use_tls" must be set
-    no_tls = true
   }
 }
 
@@ -119,31 +106,9 @@ Argument Reference
 
 `kafka_receiver` - (Optional) Send logs to a Kafka cluster. See [Kafka Receiver ](#kafka-receiver) below for details.
 
-`new_relic_receiver` - (Optional) Send logs to NewRelic. See [New Relic Receiver ](#new-relic-receiver) below for details.
-
-`qradar_receiver` - (Optional) Send logs to IBM QRadar. See [Qradar Receiver ](#qradar-receiver) below for details.
-
 `s3_receiver` - (Optional) Send logs to an AWS S3 bucket. See [S3 Receiver ](#s3-receiver) below for details.
 
 `splunk_receiver` - (Optional) Send logs to a Splunk HEC Logs service. See [Splunk Receiver ](#splunk-receiver) below for details.
-
-`sumo_logic_receiver` - (Optional) Send logs to SumoLogic. See [Sumo Logic Receiver ](#sumo-logic-receiver) below for details.
-
-### Api Key
-
-A New Relic License Key.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Auth Basic
 
@@ -161,7 +126,7 @@ No Authentication for the Elasticsearch endpoint.
 
 Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token).
 
-`token` - (Optional) F5XC Secret. URL for token, needs to be fetched from this path. See [Token ](#token) below for details.
+`token` - (Optional) Volterra Secret. URL for token, needs to be fetched from this path. See [Token ](#token) below for details.
 
 ### Aws Cloud Watch Receiver
 
@@ -219,7 +184,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -269,13 +234,13 @@ Azure Event Hubs Connection String..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Datadog Api Key
 
@@ -285,13 +250,13 @@ Secret API key to access the datadog server.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Datadog Receiver
 
@@ -347,10 +312,6 @@ x-displayName: "Perform Server Certificate Verification".
 
 x-displayName: "Enable Server Hostname Verification".
 
-### Eu
-
-EU Endpoint.
-
 ### Http Receiver
 
 Send logs to a generic HTTP(s) server.
@@ -395,13 +356,13 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Max Bytes Disabled
 
@@ -422,16 +383,6 @@ Enable mTLS configuration.
 `certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
 
 `key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Key Url ](#key-url) below for details.
-
-### New Relic Receiver
-
-Send logs to NewRelic.
-
-`api_key` - (Required) A New Relic License Key. See [Api Key ](#api-key) below for details.
-
-`eu` - (Optional) EU Endpoint (bool).
-
-`us` - (Optional) US Endpoint (bool).
 
 ### No Ca
 
@@ -455,27 +406,13 @@ HTTP Basic Auth Password.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Qradar Receiver
-
-Send logs to IBM QRadar.
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
-
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
-
-`uri` - (Required) Log Source Collector URL is the URL of the IBM QRadar Log Source Collector to send logs to, example: `http://example.com:9000` (`String`).
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -509,13 +446,13 @@ Splunk HEC Logs secret Token.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Splunk Receiver
 
@@ -533,51 +470,25 @@ Send logs to a Splunk HEC Logs service.
 
 `use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
 
-### Sumo Logic Receiver
-
-Send logs to SumoLogic.
-
-`url` - (Required) The HTTP Source Address URL for the desired SumoLogic HTTP Collector. See [Url ](#url) below for details.
-
 ### Timeout Seconds Default
 
 Use Default Timeout (300 seconds).
 
 ### Token
 
-F5XC Secret. URL for token, needs to be fetched from this path.
+Volterra Secret. URL for token, needs to be fetched from this path.
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Url
-
-The HTTP Source Address URL for the desired SumoLogic HTTP Collector.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Us
-
-US Endpoint.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Use Tls
 
@@ -615,7 +526,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in F5XC Security Sidecar.
+Secret is given as bootstrap secret in Volterra Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

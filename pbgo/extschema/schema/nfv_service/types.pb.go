@@ -2590,7 +2590,7 @@ type F5BigIpAppStackBareMetalType struct {
 	// x-displayName: "Image URL"
 	// x-example: "https://imagepath.com/bigip_ve"
 	// x-required
-	// Public URL where BIG-IP VE image is hosted
+	// Public URL where BIG-IP VE image (qcow2) is hosted
 	PublicDownloadUrl string `protobuf:"bytes,6,opt,name=public_download_url,json=publicDownloadUrl,proto3" json:"public_download_url,omitempty"`
 }
 
