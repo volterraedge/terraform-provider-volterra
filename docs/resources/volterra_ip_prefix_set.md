@@ -10,7 +10,7 @@ Resource volterra_ip_prefix_set
 
 The Ip Prefix Set allows CRUD of Ip Prefix Set resource on Volterra SaaS
 
-~> **Note:** Please refer to [Ip Prefix Set API docs](https://volterra.io/docs/api/ip-prefix-set) to learn more
+~> **Note:** Please refer to [Ip Prefix Set API docs](https://docs.cloud.f5.com/docs/api/ip-prefix-set) to learn more
 
 Example Usage
 -------------

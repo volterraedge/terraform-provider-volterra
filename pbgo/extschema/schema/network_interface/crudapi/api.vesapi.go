@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -2817,6 +2817,127 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceDHCPIPV6NetworkType": {
+            "type": "object",
+            "description": "DHCP IPV6 network type configuration",
+            "title": "DHCPIPV6NetworkType",
+            "x-displayname": "DHCPIPV6NetworkType",
+            "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6NetworkType",
+            "properties": {
+                "network_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with []\n Network Prefix to be used for IPV6 address auto configuration\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "Network Prefix",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "2001::0/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "pools": {
+                    "type": "array",
+                    "description": " List of non overlapping ip address ranges.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "DHCP pools",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6PoolType"
+                    },
+                    "x-displayname": "DHCP Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6PoolType": {
+            "type": "object",
+            "description": "DHCP IPV6 pool is a range of IP addresses (start ip and end ip).",
+            "title": "DHCP IPV6 Range",
+            "x-displayname": "DHCP IPV6 Range",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6PoolType",
+            "properties": {
+                "end_ip": {
+                    "type": "string",
+                    "description": " Ending IPV6 address of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n\nExample: - \"2001::200\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "End IP",
+                    "x-displayname": "Ending IPV6",
+                    "x-ves-example": "2001::200",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "start_ip": {
+                    "type": "string",
+                    "description": " Starting IPV6 address of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 2001::1 with prefix length of 64, start offset is 5\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Start IPV6",
+                    "x-displayname": "Starting IPV6",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6StatefulServer": {
+            "type": "object",
+            "title": "DHCPIPV6StatefulServer",
+            "x-displayname": "DHCPIPV6 Stateful Server",
+            "x-ves-oneof-field-interfaces_addressing_choice": "[\"automatic_from_end\",\"automatic_from_start\",\"interface_ip_map\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6StatefulServer",
+            "properties": {
+                "automatic_from_end": {
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
+                    "title": "Automatic End",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic End"
+                },
+                "automatic_from_start": {
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
+                    "title": "Automatic Start",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic Start"
+                },
+                "dhcp_networks": {
+                    "type": "array",
+                    "description": " List of networks from which DHCP server can allocate ip addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "DHCP IPV6 Networks",
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6NetworkType"
+                    },
+                    "x-displayname": "DHCP IPV6 Networks",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "fixed_ip_map": {
+                    "type": "object",
+                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "title": "Fixed IPV6 Assignments",
+                    "x-displayname": "Fixed MAC address to IPV6 Assignments",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.mac": "true",
+                        "ves.io.schema.rules.map.max_pairs": "128",
+                        "ves.io.schema.rules.map.unique_values": "true",
+                        "ves.io.schema.rules.map.values.string.ipv6": "true"
+                    }
+                },
+                "interface_ip_map": {
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
+                    "title": "Configured Address",
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPV6Type",
+                    "x-displayname": "Configured"
+                }
+            }
+        },
         "network_interfaceDHCPInterfaceIPType": {
             "type": "object",
             "description": "Map of Interface IP assignments per node",
@@ -2835,6 +2956,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
                         "ves.io.schema.rules.map.max_pairs": "64",
                         "ves.io.schema.rules.map.values.string.ipv4": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPInterfaceIPV6Type": {
+            "type": "object",
+            "description": "Map of Interface IPV6 assignments per node",
+            "title": "Interface IPV6 Assignments",
+            "x-displayname": "Interface IPV6 Assignments",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPInterfaceIPV6Type",
+            "properties": {
+                "interface_ip_map": {
+                    "type": "object",
+                    "description": " Map of Site:Node to IPV6 address.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "title": "Site:Node to IPV6 mapping",
+                    "x-displayname": "Site:Node to IPV6 Mapping",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.ipv6": "true"
                     }
                 }
             }
@@ -3140,6 +3283,11 @@ var APISwaggerJSON string = `{
                     "title": "IP Fabric Network",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "ipv6_auto_config": {
+                    "description": "x-displayName: \"IPV6 AutoConfiguration\"\nConfiguration corresponding to IPV6 auto configuration",
+                    "title": "IPV6 Auto configuration",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigType"
+                },
                 "is_primary": {
                     "description": "x-displayName: \"Interface is Primary\"\nThis interface is primary",
                     "title": "Interface is Primary",
@@ -3308,6 +3456,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.values.string.ipv4": "true"
                     }
                 },
+                "ipv6_auto_config": {
+                    "description": " IPV6 Addrss Auto configuration parameters",
+                    "title": "IPV6 Address Auto Configuration",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
+                    "x-displayname": "IPV6 Auto Configuration"
+                },
                 "is_primary": {
                     "type": "boolean",
                     "description": " This interface is primary interface",
@@ -3417,6 +3571,138 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceNetworkInterfaceVLANTagging",
                     "x-displayname": "Enable VLAN Tagging",
                     "x-ves-example": "NETWORK_INTERFACE_VLAN_TAGGING_DISABLE"
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigRouterType": {
+            "type": "object",
+            "title": "IPV6AutoConfigRouterType",
+            "x-displayname": "IPV6AutoConfigRouterType",
+            "x-ves-oneof-field-address_choice": "[\"network_prefix\",\"stateful\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigRouterType",
+            "properties": {
+                "dns_config": {
+                    "description": " Dns information that needs to added in the RouterAdvetisement",
+                    "title": "Dns Information",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsConfig",
+                    "x-displayname": "DNS Information"
+                },
+                "network_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information \n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "Prefix Info",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "2001::0/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "stateful": {
+                    "description": "Exclusive with [network_prefix]\n Use stateful dhcp server which provides the IPV6 address to clients\n works along with Router Advertisement' Managed flag",
+                    "title": "Stateful DHCP IPV6 server",
+                    "$ref": "#/definitions/network_interfaceDHCPIPV6StatefulServer",
+                    "x-displayname": "StateFul DHCPIPV6 server"
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigType": {
+            "type": "object",
+            "title": "IPV6AutoConfigType",
+            "x-displayname": "IPV6AutoConfigType",
+            "x-ves-oneof-field-autoconfig_choice": "[\"host\",\"router\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigType",
+            "properties": {
+                "host": {
+                    "description": "Exclusive with [router]\n System behaves like Auto config host and receives the auto configuration parameters from other\n auto configuration routers",
+                    "title": "host",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Auto Config Host"
+                },
+                "router": {
+                    "description": "Exclusive with [host]\n System behaves like Auto config Router and provides auto config parameters",
+                    "title": "router",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigRouterType",
+                    "x-displayname": "Auto Config Router"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsConfig": {
+            "type": "object",
+            "title": "IPV6DnsConfig",
+            "x-displayname": "IPV6DnsConfig",
+            "x-ves-oneof-field-dns_choice": "[\"configured_list\",\"local_dns\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6DnsConfig",
+            "properties": {
+                "configured_list": {
+                    "description": "Exclusive with [local_dns]\n Configured address outside network range - external dns server",
+                    "title": "Configured Address List",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsList",
+                    "x-displayname": "Configured Address List"
+                },
+                "local_dns": {
+                    "description": "Exclusive with [configured_list]\n Choose the address from the network prefix range as dns server",
+                    "title": "Local Dns Address",
+                    "$ref": "#/definitions/network_interfaceIPV6LocalDnsAddress",
+                    "x-displayname": "Local Dns Address"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsList": {
+            "type": "object",
+            "title": "IPV6DnsList",
+            "x-displayname": "IPV6DnsList",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6DnsList",
+            "properties": {
+                "dns_list": {
+                    "type": "array",
+                    "description": " List of IPV6 Addresses acting as Dns servers\n\nExample: - \"2001::11\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Dns List",
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Dns List",
+                    "x-ves-example": "2001::11",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceIPV6LocalDnsAddress": {
+            "type": "object",
+            "title": "IPV6LocalDnsAddress",
+            "x-displayname": "IPV6LocalDnsAddress",
+            "x-ves-oneof-field-local_dns_choice": "[\"configured_address\",\"first_address\",\"last_address\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6LocalDnsAddress",
+            "properties": {
+                "configured_address": {
+                    "type": "string",
+                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as dns server\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "2001::10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "first_address": {
+                    "description": "Exclusive with [configured_address last_address]\n First usable address from the network prefix is chosen as dns server",
+                    "title": "First Address",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "First Address of Network"
+                },
+                "last_address": {
+                    "description": "Exclusive with [configured_address first_address]\n Last usable address from the network prefix is chosen as dns server",
+                    "title": "Last Address",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Last Address of Network"
                 }
             }
         },
@@ -4175,6 +4461,24 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
                     }
+                }
+            }
+        },
+        "schemaIpv6SubnetType": {
+            "type": "object",
+            "description": "x-displayName: \"IPv6 Subnet\"\nIPv6 subnets specified as prefix and prefix-length. prefix-legnth must be \u003c= 128",
+            "title": "IPv6 Subnet",
+            "properties": {
+                "plen": {
+                    "type": "integer",
+                    "description": "x-example: \"38\"\nx-displayName: \"Prefix Length\"\nPrefix length of the IPv6 subnet. Must be \u003c= 128",
+                    "title": "Prefix length",
+                    "format": "int64"
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Prefix\"\nx-example: \"2001:db8:0:0:0:0:2:0\"\nPrefix part of the IPv6 subnet given in form of string.\nIPv6 address must be specified as hexadecimal numbers separated by ':'\ne.g. \"2001:db8:0:0:0:2:0:0\"\nThe address can be compacted by suppressing zeros\ne.g. \"2001:db8::2::\"",
+                    "title": "Prefix"
                 }
             }
         },

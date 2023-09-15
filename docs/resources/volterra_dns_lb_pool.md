@@ -10,7 +10,7 @@ Resource volterra_dns_lb_pool
 
 The Dns Lb Pool allows CRUD of Dns Lb Pool resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dns Lb Pool API docs](https://volterra.io/docs/api/dns-lb-pool) to learn more
+~> **Note:** Please refer to [Dns Lb Pool API docs](https://docs.cloud.f5.com/docs/api/dns-lb-pool) to learn more
 
 Example Usage
 -------------

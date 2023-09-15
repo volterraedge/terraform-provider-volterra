@@ -797,8 +797,76 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetEnableDisableComplianceChecksDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDnsProxiesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxiesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetEnableDisableComplianceChecksDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetEnableDisableComplianceChecksDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *GlobalSpecType) GetDnsProxiesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetDnsProxies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_proxies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("dns_proxy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "dns_proxy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "dns_proxies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDnsProxiesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDnsProxiesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_proxy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_proxy")
+	}
+	for i, vref := range m.GetDnsProxies() {
+		if vref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.dns_proxies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "dns_proxy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -865,6 +933,54 @@ func (v *ValidateGlobalSpecType) EnableDisableSignaturesValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DnsProxiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for dns_proxies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dns_proxies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dns_proxies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dns_proxies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -883,6 +999,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("action"))
 		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_proxies"]; exists {
+		vOpts := append(opts, db.WithValidateField("dns_proxies"))
+		if err := fv(ctx, m.GetDnsProxies(), vOpts...); err != nil {
 			return err
 		}
 
@@ -942,6 +1066,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["enable_disable_signatures"] = vFn
+
+	vrhDnsProxies := v.DnsProxiesValidationRuleHandler
+	rulesDnsProxies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+	}
+	vFn, err = vrhDnsProxies(rulesDnsProxies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.dns_proxies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_proxies"] = vFn
 
 	return v
 }()

@@ -87,6 +87,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
 
+	sm["dns"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config-dns",
+		ServiceSelector: "bifrost\\.gc.*\\",
+	}
+
 }
 
 func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {

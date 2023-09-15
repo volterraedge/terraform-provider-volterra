@@ -605,6 +605,88 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Optional: true,
 									},
 
+									"settings": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"oversized_body_fail_validation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"oversized_body_skip_validation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"property_validation_settings_custom": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"headers": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"allow_additional_headers": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"disallow_additional_headers": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"query_parameters": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"allow_additional_parameters": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"disallow_additional_parameters": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"property_validation_settings_default": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"validation_mode": {
 
 										Type:     schema.TypeSet,
@@ -997,6 +1079,88 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"settings": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"oversized_body_fail_validation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"oversized_body_skip_validation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"property_validation_settings_custom": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"headers": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"allow_additional_headers": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"disallow_additional_headers": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"query_parameters": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"allow_additional_parameters": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"disallow_additional_parameters": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"property_validation_settings_default": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -8704,6 +8868,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Optional: true,
 												},
 
+												"refresh_interval": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+
 												"site_locator": {
 
 													Type:     schema.TypeSet,
@@ -8804,6 +8973,11 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 												"dns_name": {
 													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"refresh_interval": {
+													Type:     schema.TypeInt,
 													Optional: true,
 												},
 											},
@@ -12937,6 +13111,149 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.Settings = settings
+						for _, set := range sl {
+							settingsMapStrToI := set.(map[string]interface{})
+
+							oversizedBodyChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							propertyValidationSettingsChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
+										for _, set := range sl {
+											headersMapStrToI := set.(map[string]interface{})
+
+											additionalHeadersChoiceTypeFound := false
+
+											if v, ok := headersMapStrToI["allow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["disallow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
+										for _, set := range sl {
+											queryParametersMapStrToI := set.(map[string]interface{})
+
+											additionalParametersChoiceTypeFound := false
+
+											if v, ok := queryParametersMapStrToI["allow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+											if v, ok := queryParametersMapStrToI["disallow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["property_validation_settings_default"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+
+								if v.(bool) {
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
+									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -13546,6 +13863,149 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						validationTargetChoiceInt.ValidationCustomList.Settings = settings
+						for _, set := range sl {
+							settingsMapStrToI := set.(map[string]interface{})
+
+							oversizedBodyChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							propertyValidationSettingsChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
+										for _, set := range sl {
+											headersMapStrToI := set.(map[string]interface{})
+
+											additionalHeadersChoiceTypeFound := false
+
+											if v, ok := headersMapStrToI["allow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["disallow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
+										for _, set := range sl {
+											queryParametersMapStrToI := set.(map[string]interface{})
+
+											additionalParametersChoiceTypeFound := false
+
+											if v, ok := queryParametersMapStrToI["allow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+											if v, ok := queryParametersMapStrToI["disallow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["property_validation_settings_default"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+
+								if v.(bool) {
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
+									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+								}
+
+							}
+
 						}
 
 					}
@@ -24659,6 +25119,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -24796,6 +25262,12 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 								choiceInt.PublicName.DnsName = v.(string)
+
+							}
+
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.RefreshInterval = uint32(v.(int))
 
 							}
 
@@ -30339,6 +30811,149 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						validationTargetChoiceInt.ValidationAllSpecEndpoints.Settings = settings
+						for _, set := range sl {
+							settingsMapStrToI := set.(map[string]interface{})
+
+							oversizedBodyChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							propertyValidationSettingsChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
+										for _, set := range sl {
+											headersMapStrToI := set.(map[string]interface{})
+
+											additionalHeadersChoiceTypeFound := false
+
+											if v, ok := headersMapStrToI["allow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["disallow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
+										for _, set := range sl {
+											queryParametersMapStrToI := set.(map[string]interface{})
+
+											additionalParametersChoiceTypeFound := false
+
+											if v, ok := queryParametersMapStrToI["allow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+											if v, ok := queryParametersMapStrToI["disallow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["property_validation_settings_default"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+
+								if v.(bool) {
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
+									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -30948,6 +31563,149 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						validationTargetChoiceInt.ValidationCustomList.Settings = settings
+						for _, set := range sl {
+							settingsMapStrToI := set.(map[string]interface{})
+
+							oversizedBodyChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+
+								oversizedBodyChoiceTypeFound = true
+
+								if v.(bool) {
+									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
+									settings.OversizedBodyChoice = oversizedBodyChoiceInt
+								}
+
+							}
+
+							propertyValidationSettingsChoiceTypeFound := false
+
+							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
+										for _, set := range sl {
+											headersMapStrToI := set.(map[string]interface{})
+
+											additionalHeadersChoiceTypeFound := false
+
+											if v, ok := headersMapStrToI["allow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+											if v, ok := headersMapStrToI["disallow_additional_headers"]; ok && !isIntfNil(v) && !additionalHeadersChoiceTypeFound {
+
+												additionalHeadersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
+													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
+										for _, set := range sl {
+											queryParametersMapStrToI := set.(map[string]interface{})
+
+											additionalParametersChoiceTypeFound := false
+
+											if v, ok := queryParametersMapStrToI["allow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+											if v, ok := queryParametersMapStrToI["disallow_additional_parameters"]; ok && !isIntfNil(v) && !additionalParametersChoiceTypeFound {
+
+												additionalParametersChoiceTypeFound = true
+
+												if v.(bool) {
+													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
+													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
+												}
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := settingsMapStrToI["property_validation_settings_default"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
+
+								propertyValidationSettingsChoiceTypeFound = true
+
+								if v.(bool) {
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
+									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
+								}
+
+							}
+
 						}
 
 					}
@@ -42028,6 +42786,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
@@ -42165,6 +42929,12 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 								choiceInt.PublicName.DnsName = v.(string)
+
+							}
+
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.RefreshInterval = uint32(v.(int))
 
 							}
 

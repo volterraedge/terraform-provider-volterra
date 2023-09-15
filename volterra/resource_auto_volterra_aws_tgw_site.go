@@ -266,6 +266,32 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"custom_security_group": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"inside_security_group_id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"outside_security_group_id": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"f5xc_security_group": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"new_vpc": {
 
 							Type:     schema.TypeSet,
@@ -2271,6 +2297,47 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_EnableInternetVip{}
 					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
 					awsParameters.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			securityGroupChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+
+				securityGroupChoiceTypeFound = true
+				securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_CustomSecurityGroup{}
+				securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
+				awsParameters.SecurityGroupChoice = securityGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
+
+						securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
+
+					}
+
+					if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
+
+						securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+
+				securityGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCType_F5XcSecurityGroup{}
+					securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+					awsParameters.SecurityGroupChoice = securityGroupChoiceInt
 				}
 
 			}

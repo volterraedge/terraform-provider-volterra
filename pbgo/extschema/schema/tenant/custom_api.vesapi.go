@@ -7,7 +7,7 @@ import (
 	bytes "bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	io "io"
 	"net/http"
 	"strings"
 
@@ -109,6 +109,15 @@ func (c *CustomAPIGrpcClient) doRPCGetDebugUser(ctx context.Context, yamlReq str
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetFavIcon(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetFavIcon(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetIDMSettings(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -151,6 +160,15 @@ func (c *CustomAPIGrpcClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.GetLoginEventsInTimeFrameRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetLoginEventsInTimeFrame(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCGetLogo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetLogo(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -299,6 +317,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["GetDebugUser"] = ccl.doRPCGetDebugUser
 
+	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
+
 	rpcFns["GetIDMSettings"] = ccl.doRPCGetIDMSettings
 
 	rpcFns["GetImage"] = ccl.doRPCGetImage
@@ -308,6 +328,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetLoginEvents"] = ccl.doRPCGetLoginEvents
 
 	rpcFns["GetLoginEventsInTimeFrame"] = ccl.doRPCGetLoginEventsInTimeFrame
+
+	rpcFns["GetLogo"] = ccl.doRPCGetLogo
 
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
 
@@ -407,11 +429,11 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -492,11 +514,11 @@ func (c *CustomAPIRestClient) doRPCCreateDebugUser(ctx context.Context, callOpts
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -574,11 +596,11 @@ func (c *CustomAPIRestClient) doRPCDeleteDebugUser(ctx context.Context, callOpts
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -656,11 +678,11 @@ func (c *CustomAPIRestClient) doRPCDeleteImage(ctx context.Context, callOpts *se
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -742,11 +764,11 @@ func (c *CustomAPIRestClient) doRPCDeleteTenant(ctx context.Context, callOpts *s
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -824,11 +846,11 @@ func (c *CustomAPIRestClient) doRPCDisableTenantLevelOTP(ctx context.Context, ca
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -906,11 +928,11 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -988,17 +1010,101 @@ func (c *CustomAPIRestClient) doRPCGetDebugUser(ctx context.Context, callOpts *s
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
 	pbRsp := &DebugUser{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.DebugUser", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetFavIcon(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &google_api.HttpBody{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		// server strips HTTP Body proto message and sends only data, re-build it here
+		pbRsp.ContentType = rsp.Header.Get("Content-Type")
+		pbRsp.Data = body
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1070,11 +1176,11 @@ func (c *CustomAPIRestClient) doRPCGetIDMSettings(ctx context.Context, callOpts 
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1152,11 +1258,11 @@ func (c *CustomAPIRestClient) doRPCGetImage(ctx context.Context, callOpts *serve
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1236,11 +1342,11 @@ func (c *CustomAPIRestClient) doRPCGetLastLoginMap(ctx context.Context, callOpts
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1320,11 +1426,11 @@ func (c *CustomAPIRestClient) doRPCGetLoginEvents(ctx context.Context, callOpts 
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1406,17 +1512,101 @@ func (c *CustomAPIRestClient) doRPCGetLoginEventsInTimeFrame(ctx context.Context
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
 	pbRsp := &LoginEventsMap{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.LoginEventsMap", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetLogo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &Empty{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &google_api.HttpBody{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		// server strips HTTP Body proto message and sends only data, re-build it here
+		pbRsp.ContentType = rsp.Header.Get("Content-Type")
+		pbRsp.Data = body
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1489,11 +1679,11 @@ func (c *CustomAPIRestClient) doRPCGetPasswordPolicy(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1571,11 +1761,11 @@ func (c *CustomAPIRestClient) doRPCGetSupportInfo(ctx context.Context, callOpts 
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1653,11 +1843,11 @@ func (c *CustomAPIRestClient) doRPCGetTenantEscalationDoc(ctx context.Context, c
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1737,11 +1927,11 @@ func (c *CustomAPIRestClient) doRPCGetTenantSettings(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1819,11 +2009,11 @@ func (c *CustomAPIRestClient) doRPCListInactiveUsers(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1903,11 +2093,11 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -1998,11 +2188,11 @@ func (c *CustomAPIRestClient) doRPCSetBillingInfo(ctx context.Context, callOpts 
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -2081,11 +2271,11 @@ func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, call
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -2166,11 +2356,11 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -2250,11 +2440,11 @@ func (c *CustomAPIRestClient) doRPCUpdateImage(ctx context.Context, callOpts *se
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -2334,11 +2524,11 @@ func (c *CustomAPIRestClient) doRPCUpdateTenantSettings(ctx context.Context, cal
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -2394,6 +2584,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["GetDebugUser"] = ccl.doRPCGetDebugUser
 
+	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
+
 	rpcFns["GetIDMSettings"] = ccl.doRPCGetIDMSettings
 
 	rpcFns["GetImage"] = ccl.doRPCGetImage
@@ -2403,6 +2595,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["GetLoginEvents"] = ccl.doRPCGetLoginEvents
 
 	rpcFns["GetLoginEventsInTimeFrame"] = ccl.doRPCGetLoginEventsInTimeFrame
+
+	rpcFns["GetLogo"] = ccl.doRPCGetLogo
 
 	rpcFns["GetPasswordPolicy"] = ccl.doRPCGetPasswordPolicy
 
@@ -2462,6 +2656,9 @@ func (c *customAPIInprocClient) EnableTenantLevelOTP(ctx context.Context, in *Em
 func (c *customAPIInprocClient) GetDebugUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DebugUser, error) {
 	return c.CustomAPIServer.GetDebugUser(ctx, in)
 }
+func (c *customAPIInprocClient) GetFavIcon(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	return c.CustomAPIServer.GetFavIcon(ctx, in)
+}
 func (c *customAPIInprocClient) GetIDMSettings(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ves_io_schema_views_tenant_configuration.GlobalSpecType, error) {
 	return c.CustomAPIServer.GetIDMSettings(ctx, in)
 }
@@ -2476,6 +2673,9 @@ func (c *customAPIInprocClient) GetLoginEvents(ctx context.Context, in *GetLogin
 }
 func (c *customAPIInprocClient) GetLoginEventsInTimeFrame(ctx context.Context, in *GetLoginEventsInTimeFrameRequest, opts ...grpc.CallOption) (*LoginEventsMap, error) {
 	return c.CustomAPIServer.GetLoginEventsInTimeFrame(ctx, in)
+}
+func (c *customAPIInprocClient) GetLogo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	return c.CustomAPIServer.GetLogo(ctx, in)
 }
 func (c *customAPIInprocClient) GetPasswordPolicy(ctx context.Context, in *GetPasswordPolicyRequest, opts ...grpc.CallOption) (*PasswordPolicyPublicAccess, error) {
 	return c.CustomAPIServer.GetPasswordPolicy(ctx, in)
@@ -2924,6 +3124,55 @@ func (s *customAPISrv) GetDebugUser(ctx context.Context, in *Empty) (*DebugUser,
 
 	return rsp, nil
 }
+func (s *customAPISrv) GetFavIcon(ctx context.Context, in *Empty) (*google_api.HttpBody, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *google_api.HttpBody
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetFavIcon' operation on 'tenant'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.GetFavIcon"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetFavIcon(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) GetIDMSettings(ctx context.Context, in *Empty) (*ves_io_schema_views_tenant_configuration.GlobalSpecType, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -3166,6 +3415,55 @@ func (s *customAPISrv) GetLoginEventsInTimeFrame(ctx context.Context, in *GetLog
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.LoginEventsMap", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetLogo(ctx context.Context, in *Empty) (*google_api.HttpBody, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *google_api.HttpBody
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetLogo' operation on 'tenant'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.GetLogo"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetLogo(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
 
 	return rsp, nil
 }
@@ -3995,7 +4293,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/system/tenant/debug/user": {
             "get": {
                 "summary": "GetDebugUser",
-                "description": "GetDebugUser returns information about tenant's debug user",
+                "description": "GetDebugUser returns information about tenant's debug user\nDeprecated: this and other debugUser RPCs are deprecated",
                 "operationId": "ves.io.schema.tenant.CustomAPI.GetDebugUser",
                 "responses": {
                     "200": {
@@ -4064,7 +4362,7 @@ var CustomAPISwaggerJSON string = `{
             },
             "delete": {
                 "summary": "DeleteDebugUser",
-                "description": "DeleteDebugUser deletes tenant's debug user.",
+                "description": "DeleteDebugUser deletes tenant's debug user.\nDeprecated: this and other debugUser RPCs are deprecated",
                 "operationId": "ves.io.schema.tenant.CustomAPI.DeleteDebugUser",
                 "responses": {
                     "200": {
@@ -4133,7 +4431,7 @@ var CustomAPISwaggerJSON string = `{
             },
             "post": {
                 "summary": "CreateDebugUser",
-                "description": "CreateDebugUser creates tenant's debug user. Debug user can be disabled or deleter later.",
+                "description": "CreateDebugUser creates tenant's debug user. Debug user can be disabled or deleter later.\nDeprecated: this and other debugUser RPCs are deprecated",
                 "operationId": "ves.io.schema.tenant.CustomAPI.CreateDebugUser",
                 "responses": {
                     "200": {
@@ -5358,6 +5656,80 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/tenant/settings/tenant/favicon": {
+            "get": {
+                "summary": "Tenant favicon",
+                "description": "Receive current tenant favicon.",
+                "operationId": "ves.io.schema.tenant.CustomAPI.GetFavIcon",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/apiHttpBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getfavicon"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetFavIcon"
+            },
+            "x-displayname": "Tenant Custom API",
+            "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/tenant/settings/tenant/image": {
             "get": {
                 "summary": "Tenant profile image",
@@ -5575,6 +5947,80 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-updateimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.UpdateImage"
+            },
+            "x-displayname": "Tenant Custom API",
+            "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/tenant/settings/tenant/logo": {
+            "get": {
+                "summary": "Tenant logo",
+                "description": "Receive current tenant logo.",
+                "operationId": "ves.io.schema.tenant.CustomAPI.GetLogo",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/apiHttpBody"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getlogo"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetLogo"
             },
             "x-displayname": "Tenant Custom API",
             "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
@@ -5825,21 +6271,21 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "address1": {
                     "type": "string",
-                    "description": " address line 1\n\nExample: - \"1234 Main road\"-",
+                    "description": "\n\nExample: - \"1234 Main road\"-",
                     "title": "address1",
                     "x-displayname": "Address Line 1",
                     "x-ves-example": "1234 Main road"
                 },
                 "address2": {
                     "type": "string",
-                    "description": " address line 2\n\nExample: - \"P.O BOX 56\"-",
+                    "description": "\n\nExample: - \"P.O BOX 56\"-",
                     "title": "address2",
                     "x-displayname": "Address Line 2",
                     "x-ves-example": "P.O BOX 56"
                 },
                 "city": {
                     "type": "string",
-                    "description": " city / town of the contact\n\nExample: - \"Sunnyvale\"-",
+                    "description": "\n\nExample: - \"Sunnyvale\"-",
                     "title": "city",
                     "x-displayname": "City",
                     "x-ves-example": "Sunnyvale"
@@ -5852,42 +6298,42 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "country": {
                     "type": "string",
-                    "description": " country of contact (e.g. USA). refer to https://en.wikipedia.org/wiki/ISO_3166-1, column alpha-2\n\nExample: - \"US\"-",
+                    "description": "\n\nExample: - \"US\"-",
                     "title": "country",
                     "x-displayname": "Country",
                     "x-ves-example": "US"
                 },
                 "county": {
                     "type": "string",
-                    "description": " county (optional, for countries where they have counties)\n\nExample: - \"Santa Clara\"-",
+                    "description": "\n\nExample: - \"Santa Clara\"-",
                     "title": "county",
                     "x-displayname": "County",
                     "x-ves-example": "Santa Clara"
                 },
                 "phone_number": {
                     "type": "string",
-                    "description": " phone number of the contact\n\nExample: - \"+11234567890\"-",
+                    "description": "\n\nExample: - \"+11234567890\"-",
                     "title": "phone_number",
                     "x-displayname": "Phone Number",
                     "x-ves-example": "+11234567890"
                 },
                 "state": {
                     "type": "string",
-                    "description": " state (optional, for countries where they have states)\n\nExample: - \"California\"-",
+                    "description": "\n\nExample: - \"California\"-",
                     "title": "state",
                     "x-displayname": "State",
                     "x-ves-example": "California"
                 },
                 "state_code": {
                     "type": "string",
-                    "description": " state code (optional, for countries where they have states)\n\nExample: - \"CA\"-",
+                    "description": "\n\nExample: - \"CA\"-",
                     "title": "state code",
                     "x-displayname": "State Code",
                     "x-ves-example": "CA"
                 },
                 "zip_code": {
                     "type": "string",
-                    "description": " zip or postal code\n\nExample: - \"95054\"-",
+                    "description": "\n\nExample: - \"95054\"-",
                     "title": "zip_code",
                     "x-displayname": "ZIP code",
                     "x-ves-example": "95054"

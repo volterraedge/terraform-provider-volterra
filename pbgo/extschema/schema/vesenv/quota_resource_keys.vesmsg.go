@@ -430,6 +430,17 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_FastAclSourceIps:
+		if fv, exists := v.FldValidators["choice.fast_acl_source_ips"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_FastAclSourceIps).FastAclSourceIps
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("fast_acl_source_ips"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

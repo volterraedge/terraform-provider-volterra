@@ -10,7 +10,7 @@ Resource volterra_network_interface
 
 The Network Interface allows CRUD of Network Interface resource on Volterra SaaS
 
-~> **Note:** Please refer to [Network Interface API docs](https://volterra.io/docs/api/network-interface) to learn more
+~> **Note:** Please refer to [Network Interface API docs](https://docs.cloud.f5.com/docs/api/network-interface) to learn more
 
 Example Usage
 -------------

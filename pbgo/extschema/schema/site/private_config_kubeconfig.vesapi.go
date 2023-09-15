@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	io "io"
 	"net/http"
 	"strings"
 
@@ -152,11 +152,11 @@ func (c *PrivateConfigKubeConfigAPIRestClient) doRPCGlobalAccessEnabled(ctx cont
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}

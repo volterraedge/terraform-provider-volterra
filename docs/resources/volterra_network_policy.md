@@ -10,7 +10,7 @@ Resource volterra_network_policy
 
 The Network Policy allows CRUD of Network Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Network Policy API docs](https://volterra.io/docs/api/network-policy) to learn more
+~> **Note:** Please refer to [Network Policy API docs](https://docs.cloud.f5.com/docs/api/network-policy) to learn more
 
 Example Usage
 -------------

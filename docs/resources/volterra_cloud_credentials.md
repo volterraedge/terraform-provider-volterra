@@ -10,7 +10,7 @@ Resource volterra_cloud_credentials
 
 The Cloud Credentials allows CRUD of Cloud Credentials resource on Volterra SaaS
 
-~> **Note:** Please refer to [Cloud Credentials API docs](https://volterra.io/docs/api/cloud-credentials) to learn more
+~> **Note:** Please refer to [Cloud Credentials API docs](https://docs.cloud.f5.com/docs/api/cloud-credentials) to learn more
 
 Example Usage
 -------------

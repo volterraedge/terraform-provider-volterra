@@ -51,7 +51,7 @@ func testVoltStackSiteConfig(name string) string {
 				no_static_routes = true
 			}
 		  }
-		  enable_vm = true
+		  disable_vm = true
 		  default_network_config = false
 		  default_storage_config = true
 		  volterra_certified_hw = "generic-single-nic-volstack-combo"

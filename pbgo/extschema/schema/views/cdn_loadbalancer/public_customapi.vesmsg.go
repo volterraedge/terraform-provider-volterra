@@ -1385,6 +1385,265 @@ func CDNLogResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetServiceOperationReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetServiceOperationReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetServiceOperationReq) DeepCopy() *GetServiceOperationReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetServiceOperationReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetServiceOperationReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetServiceOperationReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetServiceOperationReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetServiceOperationReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetServiceOperationReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetServiceOperationReq) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetServiceOperationReq) ServiceOpIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_op_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetServiceOperationReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetServiceOperationReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetServiceOperationReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_op_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_op_id"))
+		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetServiceOperationReqValidator = func() *ValidateGetServiceOperationReq {
+	v := &ValidateGetServiceOperationReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetServiceOperationReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetServiceOperationReq.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhServiceOpId := v.ServiceOpIdValidationRuleHandler
+	rulesServiceOpId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServiceOpId(rulesServiceOpId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetServiceOperationReq.service_op_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_op_id"] = vFn
+
+	return v
+}()
+
+func GetServiceOperationReqValidator() db.Validator {
+	return DefaultGetServiceOperationReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetServiceOperationRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetServiceOperationRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetServiceOperationRsp) DeepCopy() *GetServiceOperationRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetServiceOperationRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetServiceOperationRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetServiceOperationRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetServiceOperationRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetServiceOperationRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetServiceOperationRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetServiceOperationRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetServiceOperationRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetServiceOperationRspValidator = func() *ValidateGetServiceOperationRsp {
+	v := &ValidateGetServiceOperationRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["items"] = ServiceOperationItemValidator().Validate
+
+	return v
+}()
+
+func GetServiceOperationRspValidator() db.Validator {
+	return DefaultGetServiceOperationRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LilacCDNAccessLogsResponseData) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2415,6 +2674,884 @@ var DefaultLilacCDNMetricsResponseValidator = func() *ValidateLilacCDNMetricsRes
 
 func LilacCDNMetricsResponseValidator() db.Validator {
 	return DefaultLilacCDNMetricsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListServiceOperationsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListServiceOperationsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListServiceOperationsReq) DeepCopy() *ListServiceOperationsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListServiceOperationsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListServiceOperationsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListServiceOperationsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListServiceOperationsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListServiceOperationsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListServiceOperationsReq) OptionsTimeRangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ServiceOperationsTimeRangeValidator().Validate, nil
+}
+
+func (v *ValidateListServiceOperationsReq) OptionsLastnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Lastn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for lastn")
+	}
+	return oValidatorFn_Lastn, nil
+}
+
+func (v *ValidateListServiceOperationsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateListServiceOperationsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListServiceOperationsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListServiceOperationsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetOptions().(type) {
+	case *ListServiceOperationsReq_TimeRange:
+		if fv, exists := v.FldValidators["options.time_range"]; exists {
+			val := m.GetOptions().(*ListServiceOperationsReq_TimeRange).TimeRange
+			vOpts := append(opts,
+				db.WithValidateField("options"),
+				db.WithValidateField("time_range"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ListServiceOperationsReq_Lastn:
+		if fv, exists := v.FldValidators["options.lastn"]; exists {
+			val := m.GetOptions().(*ListServiceOperationsReq_Lastn).Lastn
+			vOpts := append(opts,
+				db.WithValidateField("options"),
+				db.WithValidateField("lastn"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperationsReq {
+	v := &ValidateListServiceOperationsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOptionsTimeRange := v.OptionsTimeRangeValidationRuleHandler
+	rulesOptionsTimeRange := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["options.time_range"], err = vrhOptionsTimeRange(rulesOptionsTimeRange)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ListServiceOperationsReq.options_time_range: %s", err)
+		panic(errMsg)
+	}
+	vrhOptionsLastn := v.OptionsLastnValidationRuleHandler
+	rulesOptionsLastn := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["options.lastn"], err = vrhOptionsLastn(rulesOptionsLastn)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ListServiceOperationsReq.options_lastn: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["options.time_range"] = vFnMap["options.time_range"]
+	v.FldValidators["options.lastn"] = vFnMap["options.lastn"]
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListServiceOperationsReq.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	return v
+}()
+
+func ListServiceOperationsReqValidator() db.Validator {
+	return DefaultListServiceOperationsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListServiceOperationsRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListServiceOperationsRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListServiceOperationsRsp) DeepCopy() *ListServiceOperationsRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListServiceOperationsRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListServiceOperationsRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListServiceOperationsRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListServiceOperationsRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListServiceOperationsRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListServiceOperationsRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListServiceOperationsRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListServiceOperationsRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListServiceOperationsRspValidator = func() *ValidateListServiceOperationsRsp {
+	v := &ValidateListServiceOperationsRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["items"] = ServiceOperationsItemValidator().Validate
+
+	return v
+}()
+
+func ListServiceOperationsRspValidator() db.Validator {
+	return DefaultListServiceOperationsRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PurgeOperationItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PurgeOperationItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PurgeOperationItem) DeepCopy() *PurgeOperationItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PurgeOperationItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PurgeOperationItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PurgeOperationItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PurgeOperationItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePurgeOperationItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePurgeOperationItem) PurgeTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for purge_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePurgeOperationItem) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePurgeOperationItem) FinishTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for finish_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePurgeOperationItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PurgeOperationItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PurgeOperationItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bytes_not_purged"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bytes_not_purged"))
+		if err := fv(ctx, m.GetBytesNotPurged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bytes_purged"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bytes_purged"))
+		if err := fv(ctx, m.GetBytesPurged(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["finish_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finish_time"))
+		if err := fv(ctx, m.GetFinishTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["hard_purge"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hard_purge"))
+		if err := fv(ctx, m.GetHardPurge(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["purge_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("purge_time"))
+		if err := fv(ctx, m.GetPurgeTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["regexp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("regexp"))
+		if err := fv(ctx, m.GetRegexp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPurgeOperationItemValidator = func() *ValidatePurgeOperationItem {
+	v := &ValidatePurgeOperationItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPurgeTime := v.PurgeTimeValidationRuleHandler
+	rulesPurgeTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhPurgeTime(rulesPurgeTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PurgeOperationItem.purge_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["purge_time"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PurgeOperationItem.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhFinishTime := v.FinishTimeValidationRuleHandler
+	rulesFinishTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhFinishTime(rulesFinishTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PurgeOperationItem.finish_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["finish_time"] = vFn
+
+	return v
+}()
+
+func PurgeOperationItemValidator() db.Validator {
+	return DefaultPurgeOperationItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceOperationItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceOperationItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceOperationItem) DeepCopy() *ServiceOperationItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceOperationItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceOperationItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceOperationItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceOperationItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceOperationItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceOperationItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceOperationItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceOperationItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOpStatus().(type) {
+	case *ServiceOperationItem_Purge:
+		if fv, exists := v.FldValidators["op_status.purge"]; exists {
+			val := m.GetOpStatus().(*ServiceOperationItem_Purge).Purge
+			vOpts := append(opts,
+				db.WithValidateField("op_status"),
+				db.WithValidateField("purge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_op_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_op_id"))
+		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceOperationItemValidator = func() *ValidateServiceOperationItem {
+	v := &ValidateServiceOperationItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["op_status.purge"] = PurgeOperationItemValidator().Validate
+
+	return v
+}()
+
+func ServiceOperationItemValidator() db.Validator {
+	return DefaultServiceOperationItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceOperationsItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceOperationsItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceOperationsItem) DeepCopy() *ServiceOperationsItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceOperationsItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceOperationsItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceOperationsItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceOperationsItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceOperationsItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceOperationsItem) CreatedTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for created_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceOperationsItem) ModifiedTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for modified_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceOperationsItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceOperationsItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceOperationsItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["created_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("created_time"))
+		if err := fv(ctx, m.GetCreatedTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["modified_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("modified_time"))
+		if err := fv(ctx, m.GetModifiedTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_op_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_op_id"))
+		if err := fv(ctx, m.GetServiceOpId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["svc_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("svc_version"))
+		if err := fv(ctx, m.GetSvcVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceOperationsItemValidator = func() *ValidateServiceOperationsItem {
+	v := &ValidateServiceOperationsItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCreatedTime := v.CreatedTimeValidationRuleHandler
+	rulesCreatedTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhCreatedTime(rulesCreatedTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceOperationsItem.created_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["created_time"] = vFn
+
+	vrhModifiedTime := v.ModifiedTimeValidationRuleHandler
+	rulesModifiedTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhModifiedTime(rulesModifiedTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceOperationsItem.modified_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["modified_time"] = vFn
+
+	return v
+}()
+
+func ServiceOperationsItemValidator() db.Validator {
+	return DefaultServiceOperationsItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ServiceOperationsTimeRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ServiceOperationsTimeRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ServiceOperationsTimeRange) DeepCopy() *ServiceOperationsTimeRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ServiceOperationsTimeRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ServiceOperationsTimeRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ServiceOperationsTimeRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ServiceOperationsTimeRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateServiceOperationsTimeRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateServiceOperationsTimeRange) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceOperationsTimeRange) FinishTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for finish_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceOperationsTimeRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ServiceOperationsTimeRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ServiceOperationsTimeRange got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["finish_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finish_time"))
+		if err := fv(ctx, m.GetFinishTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultServiceOperationsTimeRangeValidator = func() *ValidateServiceOperationsTimeRange {
+	v := &ValidateServiceOperationsTimeRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceOperationsTimeRange.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhFinishTime := v.FinishTimeValidationRuleHandler
+	rulesFinishTime := map[string]string{
+		"ves.io.schema.rules.message.required":  "true",
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhFinishTime(rulesFinishTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceOperationsTimeRange.finish_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["finish_time"] = vFn
+
+	return v
+}()
+
+func ServiceOperationsTimeRangeValidator() db.Validator {
+	return DefaultServiceOperationsTimeRangeValidator
 }
 
 // augmented methods on protoc/std generated struct

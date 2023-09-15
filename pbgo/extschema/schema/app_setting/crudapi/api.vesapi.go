@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -2652,6 +2652,43 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_settingBolaDetectionManualSettings": {
+            "type": "object",
+            "description": "x-displayName: \"Enumeration Attack Detection Manual Settings\"",
+            "title": "Enumeration Attack Detection Settings for Manual Threshold",
+            "properties": {
+                "threshold_level_1": {
+                    "description": "x-displayName: \"10\"\nDetected in range: 10 - 150",
+                    "title": "10",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "threshold_level_2": {
+                    "description": "x-displayName: \"25\"\nDetected in range: 25 - 400",
+                    "title": "25",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "threshold_level_3": {
+                    "description": "x-displayName: \"50\"\nDetected in range: 50 - 800",
+                    "title": "50",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "threshold_level_4": {
+                    "description": "x-displayName: \"100\"\nDetected in range: 100 - 1500",
+                    "title": "100",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "threshold_level_5": {
+                    "description": "x-displayName: \"200\"\nDetected in range: 200 - 3000",
+                    "title": "200",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "threshold_level_6": {
+                    "description": "x-displayName: \"500\"\nDetected in range: 500 - 8000",
+                    "title": "500",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "app_settingBusinessLogicMarkupSetting": {
             "type": "object",
             "description": "Settings specifying how API Discovery will be performed",
@@ -2723,7 +2760,8 @@ var APISwaggerJSON string = `{
             "description": "Various factors about user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
             "title": "Malicious User Detection Settings",
             "x-displayname": "Malicious User Detection Settings",
-            "x-ves-displayorder": "1,4,7,12,15,10",
+            "x-ves-displayorder": "1,4,7,12,15,19,10",
+            "x-ves-oneof-field-bola_activity_choice": "[\"bola_detection_automatic\",\"exclude_bola_detection\"]",
             "x-ves-oneof-field-cooling_off_period_setting": "[\"cooling_off_period\"]",
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
             "x-ves-oneof-field-forbidden_activity_choice": "[\"exclude_forbidden_activity\",\"include_forbidden_activity\"]",
@@ -2732,6 +2770,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-waf_activity_choice": "[\"exclude_waf_activity\",\"include_waf_activity\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.MaliciousUserDetectionSetting",
             "properties": {
+                "bola_detection_automatic": {
+                    "description": "Exclusive with [exclude_bola_detection]\n Detect Enumeration attack automatically.",
+                    "title": "include enumeration activity using automatic threshold",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "cooling_off_period": {
                     "type": "integer",
                     "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity.\n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from\n a high to medium or medium to low or low to none.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
@@ -2744,6 +2788,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gt": "0",
                         "ves.io.schema.rules.uint32.lte": "120"
                     }
+                },
+                "exclude_bola_detection": {
+                    "description": "Exclusive with [bola_detection_automatic]\n Disable Enumeration attack detection",
+                    "title": "exclude enumeration activity",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "exclude_failed_login_activity": {
                     "description": "Exclusive with [include_failed_login_activity]\n Exclude persistent login failures activity (401 response code) in malicious user detection",

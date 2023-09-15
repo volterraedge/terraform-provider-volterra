@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	io "io"
 	"net/http"
 	"strings"
 
@@ -70,6 +70,24 @@ func (c *CustomAPIGrpcClient) doRPCCDNMetrics(ctx context.Context, yamlReq strin
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetServiceOperation(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetServiceOperationReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetServiceOperation(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCListServiceOperations(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListServiceOperationsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListServiceOperations(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCSubscribe(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SubscribeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -125,6 +143,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["CDNCachePurge"] = ccl.doRPCCDNCachePurge
 
 	rpcFns["CDNMetrics"] = ccl.doRPCCDNMetrics
+
+	rpcFns["GetServiceOperation"] = ccl.doRPCGetServiceOperation
+
+	rpcFns["ListServiceOperations"] = ccl.doRPCListServiceOperations
 
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
 
@@ -212,11 +234,11 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogAggregationQuery(ctx context.Cont
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -303,11 +325,11 @@ func (c *CustomAPIRestClient) doRPCCDNAccessLogs(ctx context.Context, callOpts *
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -390,11 +412,11 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -485,17 +507,187 @@ func (c *CustomAPIRestClient) doRPCCDNMetrics(ctx context.Context, callOpts *ser
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
 	pbRsp := &LilacCDNMetricsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetServiceOperationReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("service_op_id", fmt.Sprintf("%v", req.ServiceOpId))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetServiceOperationRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListServiceOperationsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("options", fmt.Sprintf("%v", req.Options))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListServiceOperationsRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -567,11 +759,11 @@ func (c *CustomAPIRestClient) doRPCSubscribe(ctx context.Context, callOpts *serv
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -649,11 +841,11 @@ func (c *CustomAPIRestClient) doRPCUnsubscribe(ctx context.Context, callOpts *se
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -701,6 +893,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["CDNMetrics"] = ccl.doRPCCDNMetrics
 
+	rpcFns["GetServiceOperation"] = ccl.doRPCGetServiceOperation
+
+	rpcFns["ListServiceOperations"] = ccl.doRPCListServiceOperations
+
 	rpcFns["Subscribe"] = ccl.doRPCSubscribe
 
 	rpcFns["Unsubscribe"] = ccl.doRPCUnsubscribe
@@ -728,6 +924,12 @@ func (c *customAPIInprocClient) CDNCachePurge(ctx context.Context, in *LilacCDNC
 }
 func (c *customAPIInprocClient) CDNMetrics(ctx context.Context, in *LilacCDNMetricsRequest, opts ...grpc.CallOption) (*LilacCDNMetricsResponse, error) {
 	return c.CustomAPIServer.CDNMetrics(ctx, in)
+}
+func (c *customAPIInprocClient) GetServiceOperation(ctx context.Context, in *GetServiceOperationReq, opts ...grpc.CallOption) (*GetServiceOperationRsp, error) {
+	return c.CustomAPIServer.GetServiceOperation(ctx, in)
+}
+func (c *customAPIInprocClient) ListServiceOperations(ctx context.Context, in *ListServiceOperationsReq, opts ...grpc.CallOption) (*ListServiceOperationsRsp, error) {
+	return c.CustomAPIServer.ListServiceOperations(ctx, in)
 }
 func (c *customAPIInprocClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
 	return c.CustomAPIServer.Subscribe(ctx, in)
@@ -950,6 +1152,104 @@ func (s *customAPISrv) CDNMetrics(ctx context.Context, in *LilacCDNMetricsReques
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *GetServiceOperationReq) (*GetServiceOperationRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetServiceOperationRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetServiceOperation' operation on 'cdn_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetServiceOperation(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ListServiceOperationsReq) (*ListServiceOperationsRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListServiceOperationsRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListServiceOperations' operation on 'cdn_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListServiceOperations(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -1422,6 +1722,190 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnaccesslogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogAggregationQuery"
+            },
+            "x-displayname": "Custom API for CDN LoadBalancer",
+            "x-ves-proto-service": "ves.io.schema.views.cdn_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/cdn_loadbalancer/get-service-operation-status": {
+            "post": {
+                "summary": "Get Service Operation Status",
+                "description": "Get status of an operation command for a given CDN Loadbalancer.",
+                "operationId": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/cdn_loadbalancerGetServiceOperationRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nx-required\nNamespace scope of the operation request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cdn_loadbalancerGetServiceOperationReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-getserviceoperation"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation"
+            },
+            "x-displayname": "Custom API for CDN LoadBalancer",
+            "x-ves-proto-service": "ves.io.schema.views.cdn_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/cdn_loadbalancer/list-service-operations-status": {
+            "post": {
+                "summary": "List of CDN Operation Commands",
+                "description": "List of service operations for a given CDN LB",
+                "operationId": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/cdn_loadbalancerListServiceOperationsRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"ns1\"\nx-required\nThe namespace this item belongs to",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cdn_loadbalancerListServiceOperationsReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-listserviceoperations"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations"
             },
             "x-displayname": "Custom API for CDN LoadBalancer",
             "x-ves-proto-service": "ves.io.schema.views.cdn_loadbalancer.CustomAPI",
@@ -1951,6 +2435,73 @@ var CustomAPISwaggerJSON string = `{
                     "format": "uint64",
                     "x-displayname": "Total Hits",
                     "x-ves-example": "0"
+                }
+            }
+        },
+        "cdn_loadbalancerGetServiceOperationReq": {
+            "type": "object",
+            "description": "Get Service Operation Request",
+            "title": "Service Operation Request",
+            "x-displayname": "Get Service Operation Request",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the CDN distribution.\n Format: string\n\nExample: - \"cdn-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "CDN Distribution Name",
+                    "x-displayname": "Name of the CDN distribution",
+                    "x-ves-example": "cdn-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace scope of the operation request\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "service_op_id": {
+                    "type": "integer",
+                    "description": " Operation ID for which status is requested\n\nExample: - \"101\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Operation ID",
+                    "format": "int64",
+                    "x-displayname": "Service Operation ID",
+                    "x-ves-example": "101",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cdn_loadbalancerGetServiceOperationRsp": {
+            "type": "object",
+            "description": "Get Service Operation Response",
+            "title": "Service Operation Response",
+            "x-displayname": "Service Operation Response",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp",
+            "properties": {
+                "error": {
+                    "description": " Errors(if any) while listing items from collection ",
+                    "title": "error",
+                    "$ref": "#/definitions/schemaErrorType",
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "Serice Operation Status Details",
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerServiceOperationItem"
+                    },
+                    "x-displayname": "Operation Status Details"
                 }
             }
         },
@@ -2571,6 +3122,255 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Tags",
             "x-ves-proto-enum": "ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsTag"
         },
+        "cdn_loadbalancerListServiceOperationsReq": {
+            "type": "object",
+            "description": "List Service Operations Request",
+            "title": "Service Operations Request",
+            "x-displayname": "List Service Operations Request",
+            "x-ves-oneof-field-options": "[\"lastn\",\"time_range\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq",
+            "properties": {
+                "lastn": {
+                    "type": "integer",
+                    "description": "Exclusive with [time_range]\n The last n service operations\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "lastn",
+                    "format": "int64",
+                    "x-displayname": "Last N",
+                    "x-ves-example": "5",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the CDN Distribution\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace this item belongs to\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "time_range": {
+                    "description": "Exclusive with [lastn]\n service operations between a start and end time.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "time-range",
+                    "$ref": "#/definitions/cdn_loadbalancerServiceOperationsTimeRange",
+                    "x-displayname": "Time Range",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cdn_loadbalancerListServiceOperationsRsp": {
+            "type": "object",
+            "description": "Get Service Operations Response",
+            "title": "Service Operations Response",
+            "x-displayname": "Service Operations Response",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp",
+            "properties": {
+                "error": {
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "error",
+                    "$ref": "#/definitions/schemaErrorType",
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "Details of the Service Operation",
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerServiceOperationsItem"
+                    },
+                    "x-displayname": "Details of the Service Operation"
+                }
+            }
+        },
+        "cdn_loadbalancerPurgeOperationItem": {
+            "type": "object",
+            "description": "Purge Operation Status",
+            "title": "Purge Operation Status",
+            "x-displayname": "Purge Operation Status",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.PurgeOperationItem",
+            "properties": {
+                "bytes_not_purged": {
+                    "type": "string",
+                    "description": " Number of bytes Not Purged\n\nExample: - 1024-",
+                    "title": "Number of Bytes Not Purged",
+                    "format": "uint64",
+                    "x-displayname": "Number of Bytes Not Purged"
+                },
+                "bytes_purged": {
+                    "type": "string",
+                    "description": " Number of bytes Purged\n\nExample: - 1024-",
+                    "title": "Number of Bytes Purged",
+                    "format": "uint64",
+                    "x-displayname": "Number of Bytes Purged"
+                },
+                "finish_time": {
+                    "type": "string",
+                    "description": " Finish time of Purge Operation\n format: unix_timestamp|rfc 3339\n\nExample: - \"2019-09-23T12:32:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Finish time of Purge Operation",
+                    "x-displayname": "Cache Purge Finish Time",
+                    "x-ves-example": "2019-09-23T12:32:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "hard_purge": {
+                    "type": "boolean",
+                    "description": " Cache Hard Purge\n\nExample: - true-",
+                    "title": "Hard Purge",
+                    "format": "boolean",
+                    "x-displayname": "Cache Hard Purge"
+                },
+                "purge_time": {
+                    "type": "string",
+                    "description": " Time taken for Cache Purge\n\nExample: - \"2018-12-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Time taken for Cache Purge",
+                    "x-displayname": "Cache Purge Time",
+                    "x-ves-example": "2018-12-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "regexp": {
+                    "type": "string",
+                    "description": " Regex issued in the Purge Operation\n\nExample: - \"*.m3u8\"-",
+                    "title": "Regex used in Purge",
+                    "x-displayname": "Cache Purge Regex",
+                    "x-ves-example": "*.m3u8"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site at which the purge operation was performed.",
+                    "title": "NodeId on which the operation status is gathered",
+                    "x-displayname": "CDN CE Site"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " Start time of Purge Operation\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Start time of Purge Operation",
+                    "x-displayname": "Cache Purge Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "cdn_loadbalancerServiceOperationItem": {
+            "type": "object",
+            "description": "Service Operation Item",
+            "title": "Service Operation Item",
+            "x-displayname": "Service Operation Item",
+            "x-ves-oneof-field-op_status": "[\"purge\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationItem",
+            "properties": {
+                "purge": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cdn_loadbalancerPurgeOperationItem"
+                },
+                "service_op_id": {
+                    "type": "integer",
+                    "description": " Operation ID for which status is requested. This for example is the purge_request_id obtained in the response to the CachePurge Request.\n\nExample: - \"101\"-",
+                    "title": "Service Operation ID",
+                    "format": "int64",
+                    "x-displayname": "Service Operation ID",
+                    "x-ves-example": "101"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the operation command\n\nExample: - success-",
+                    "title": "Service Operation Status",
+                    "x-displayname": "Service Operation Status"
+                }
+            }
+        },
+        "cdn_loadbalancerServiceOperationsItem": {
+            "type": "object",
+            "description": "List of Service Operations",
+            "title": "Service Operations Item",
+            "x-displayname": "List of Service Operations",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationsItem",
+            "properties": {
+                "created_time": {
+                    "type": "string",
+                    "description": " The service created time\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "created time",
+                    "x-displayname": "Created Time",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "modified_time": {
+                    "type": "string",
+                    "description": " The service modified time\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "modified time",
+                    "x-displayname": "Modified Time",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "service_op_id": {
+                    "type": "integer",
+                    "description": " The id of the operation command\n\nExample: - \"\"-",
+                    "title": "service operation id",
+                    "format": "int64",
+                    "x-displayname": "Service Operation ID"
+                },
+                "svc_version": {
+                    "type": "integer",
+                    "description": " The version info of the service\n\nExample: - \"\"-",
+                    "title": "svc version",
+                    "format": "int64",
+                    "x-displayname": "Service Version"
+                }
+            }
+        },
+        "cdn_loadbalancerServiceOperationsTimeRange": {
+            "type": "object",
+            "description": "Option to specify lastn or start-end time.",
+            "title": "Service Operations Time Range",
+            "x-displayname": "Service Operations Options",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationsTimeRange",
+            "properties": {
+                "finish_time": {
+                    "type": "string",
+                    "description": " A finish time for the time range in which the service operation status is requested.\n format: unix_timestamp|rfc 3339\n\nExample: - \"2019-09-23T12:32:11.733Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Finish time of Service Operations",
+                    "x-displayname": "Service Operation Finish Time",
+                    "x-ves-example": "2019-09-23T12:32:11.733Z",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " A start time for the time range in which the service operation status is requested.\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Start time of Service Operations",
+                    "x-displayname": "Service Operation Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
         "cdn_loadbalancerSubscribeRequest": {
             "type": "object",
             "description": "Request to subscribe to CDN Loadbalancer",
@@ -2860,6 +3660,68 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Value\"\nx-example: 985.0\n\nvalue corresponding to the key percent",
                     "title": "value",
                     "format": "double"
+                }
+            }
+        },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL",
+                "EPARTIAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
                 }
             }
         },

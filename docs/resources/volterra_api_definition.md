@@ -10,7 +10,7 @@ Resource volterra_api_definition
 
 The Api Definition allows CRUD of Api Definition resource on Volterra SaaS
 
-~> **Note:** Please refer to [Api Definition API docs](https://volterra.io/docs/api/views-api-definition) to learn more
+~> **Note:** Please refer to [Api Definition API docs](https://docs.cloud.f5.com/docs/api/views-api-definition) to learn more
 
 Example Usage
 -------------

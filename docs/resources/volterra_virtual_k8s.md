@@ -10,7 +10,7 @@ Resource volterra_virtual_k8s
 
 The Virtual K8s allows CRUD of Virtual K8s resource on Volterra SaaS
 
-~> **Note:** Please refer to [Virtual K8s API docs](https://volterra.io/docs/api/virtual-k8s) to learn more
+~> **Note:** Please refer to [Virtual K8s API docs](https://docs.cloud.f5.com/docs/api/virtual-k8s) to learn more
 
 Example Usage
 -------------

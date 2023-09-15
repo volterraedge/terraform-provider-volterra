@@ -10,7 +10,7 @@ Resource volterra_policer
 
 The Policer allows CRUD of Policer resource on Volterra SaaS
 
-~> **Note:** Please refer to [Policer API docs](https://volterra.io/docs/api/policer) to learn more
+~> **Note:** Please refer to [Policer API docs](https://docs.cloud.f5.com/docs/api/policer) to learn more
 
 Example Usage
 -------------

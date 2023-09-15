@@ -10,7 +10,7 @@ Resource volterra_malicious_user_mitigation
 
 The Malicious User Mitigation allows CRUD of Malicious User Mitigation resource on Volterra SaaS
 
-~> **Note:** Please refer to [Malicious User Mitigation API docs](https://volterra.io/docs/api/malicious-user-mitigation) to learn more
+~> **Note:** Please refer to [Malicious User Mitigation API docs](https://docs.cloud.f5.com/docs/api/malicious-user-mitigation) to learn more
 
 Example Usage
 -------------

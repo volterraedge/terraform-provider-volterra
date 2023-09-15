@@ -10,7 +10,7 @@ Resource volterra_rate_limiter_policy
 
 The Rate Limiter Policy allows CRUD of Rate Limiter Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Rate Limiter Policy API docs](https://volterra.io/docs/api/views-rate-limiter-policy) to learn more
+~> **Note:** Please refer to [Rate Limiter Policy API docs](https://docs.cloud.f5.com/docs/api/views-rate-limiter-policy) to learn more
 
 Example Usage
 -------------

@@ -222,6 +222,64 @@ func resourceVolterraAppSetting() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"bola_detection_automatic": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"bola_detection_manual": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"threshold_level_1": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"threshold_level_2": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"threshold_level_3": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"threshold_level_4": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"threshold_level_5": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"threshold_level_6": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"exclude_bola_detection": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"cooling_off_period": {
 
 													Type:     schema.TypeInt,
@@ -631,6 +689,121 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							bolaActivityChoiceTypeFound := false
+
+							if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+									bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+								bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+								bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+								maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									thresholdLevelsTypeFound := false
+
+									if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+											thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+											thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+											thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+											thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+											thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+											thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+									bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+								}
+
+							}
 
 							coolingOffPeriodSettingTypeFound := false
 
@@ -1185,6 +1358,121 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							bolaActivityChoiceTypeFound := false
+
+							if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+									bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+								bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+								bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+								maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									thresholdLevelsTypeFound := false
+
+									if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+											thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+											thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+											thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+											thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+											thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+									if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+										thresholdLevelsTypeFound = true
+
+										if v.(bool) {
+											thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+											thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+											bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+								bolaActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+									bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+								}
+
+							}
 
 							coolingOffPeriodSettingTypeFound := false
 

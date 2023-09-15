@@ -251,8 +251,6 @@ var DefaultApiSpecValidator = func() *ValidateApiSpec {
 	}
 	v.FldValidators["api_definition"] = vFn
 
-	v.FldValidators["open_api_validation_choice.enable_open_api_validation"] = OpenApiValidationSettingsValidator().Validate
-
 	return v
 }()
 
@@ -1457,6 +1455,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDnsProxyConfigurationDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfigurationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
@@ -1590,6 +1594,24 @@ func (m *CreateSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetDnsProxyConfigurationDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDnsProxyConfiguration() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetDnsProxyConfiguration().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfiguration().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_proxy_configuration." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -3478,6 +3500,64 @@ func (m *DNSProxyConfiguration) Validate(ctx context.Context, opts ...db.Validat
 	return DNSProxyConfigurationValidator().Validate(ctx, m, opts...)
 }
 
+func (m *DNSProxyConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetProtocolInspectionDRefInfo()
+
+}
+
+func (m *DNSProxyConfiguration) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetProtocolInspection()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("protocol_inspection.Object")
+	dri := db.DRefInfo{
+		RefdType:   "protocol_inspection.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "protocol_inspection",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetProtocolInspectionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DNSProxyConfiguration) GetProtocolInspectionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "protocol_inspection.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: protocol_inspection")
+	}
+
+	vref := m.GetProtocolInspection()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "protocol_inspection.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
 type ValidateDNSProxyConfiguration struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3531,6 +3611,15 @@ func (v *ValidateDNSProxyConfiguration) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["protocol_inspection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol_inspection"))
+		if err := fv(ctx, m.GetProtocolInspection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3558,6 +3647,8 @@ var DefaultDNSProxyConfigurationValidator = func() *ValidateDNSProxyConfiguratio
 	v.FldValidators["ddos_profile"] = vFn
 
 	v.FldValidators["cache_profile"] = DNSCacheProfileValidator().Validate
+
+	v.FldValidators["protocol_inspection"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -4155,6 +4246,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDnsProxyConfigurationDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfigurationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
@@ -4288,6 +4385,24 @@ func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetDnsProxyConfigurationDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDnsProxyConfiguration() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetDnsProxyConfiguration().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfiguration().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_proxy_configuration." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -6077,6 +6192,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDnsProxyConfigurationDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfigurationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
 	} else {
@@ -6354,6 +6475,24 @@ func (m *GlobalSpecType) GetDnsDomainsDBEntries(ctx context.Context, d db.Interf
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetDnsProxyConfigurationDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDnsProxyConfiguration() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetDnsProxyConfiguration().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfiguration().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_proxy_configuration." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (m *GlobalSpecType) GetDnsZonesDRefInfo() ([]db.DRefInfo, error) {
@@ -9491,14 +9630,6 @@ type ValidateOpenApiValidationSettings struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateOpenApiValidationSettings) OversizedBodyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for oversized_body_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateOpenApiValidationSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OpenApiValidationSettings)
 	if !ok {
@@ -9513,38 +9644,29 @@ func (v *ValidateOpenApiValidationSettings) Validate(ctx context.Context, pm int
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["oversized_body_choice"]; exists {
-		val := m.GetOversizedBodyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("oversized_body_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
+	if fv, exists := v.FldValidators["allow_only_specified_headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_only_specified_headers"))
+		if err := fv(ctx, m.GetAllowOnlySpecifiedHeaders(), vOpts...); err != nil {
 			return err
 		}
+
 	}
 
-	switch m.GetOversizedBodyChoice().(type) {
-	case *OpenApiValidationSettings_OversizedBodySkipValidation:
-		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_skip_validation"]; exists {
-			val := m.GetOversizedBodyChoice().(*OpenApiValidationSettings_OversizedBodySkipValidation).OversizedBodySkipValidation
-			vOpts := append(opts,
-				db.WithValidateField("oversized_body_choice"),
-				db.WithValidateField("oversized_body_skip_validation"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["allow_only_specified_query_params"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_only_specified_query_params"))
+		if err := fv(ctx, m.GetAllowOnlySpecifiedQueryParams(), vOpts...); err != nil {
+			return err
 		}
-	case *OpenApiValidationSettings_OversizedBodyFailValidation:
-		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_fail_validation"]; exists {
-			val := m.GetOversizedBodyChoice().(*OpenApiValidationSettings_OversizedBodyFailValidation).OversizedBodyFailValidation
-			vOpts := append(opts,
-				db.WithValidateField("oversized_body_choice"),
-				db.WithValidateField("oversized_body_fail_validation"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["fail_oversized_body_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fail_oversized_body_validation"))
+		if err := fv(ctx, m.GetFailOversizedBodyValidation(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -9555,25 +9677,6 @@ func (v *ValidateOpenApiValidationSettings) Validate(ctx context.Context, pm int
 // Well-known symbol for default validator implementation
 var DefaultOpenApiValidationSettingsValidator = func() *ValidateOpenApiValidationSettings {
 	v := &ValidateOpenApiValidationSettings{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhOversizedBodyChoice := v.OversizedBodyChoiceValidationRuleHandler
-	rulesOversizedBodyChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhOversizedBodyChoice(rulesOversizedBodyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationSettings.oversized_body_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["oversized_body_choice"] = vFn
 
 	return v
 }()
@@ -9970,6 +10073,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDnsProxyConfigurationDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfigurationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetDynamicReverseProxyDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDynamicReverseProxyDRefInfo() FAILED")
 	} else {
@@ -10103,6 +10212,24 @@ func (m *ReplaceSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, erro
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetDnsProxyConfigurationDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDnsProxyConfiguration() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetDnsProxyConfiguration().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDnsProxyConfiguration().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dns_proxy_configuration." + dri.DRField
+	}
+	return drInfos, err
 
 }
 

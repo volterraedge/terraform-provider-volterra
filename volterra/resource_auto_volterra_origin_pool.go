@@ -716,6 +716,11 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"refresh_interval": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
 									"site_locator": {
 
 										Type:     schema.TypeSet,
@@ -816,6 +821,11 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"dns_name": {
 										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"refresh_interval": {
+										Type:     schema.TypeInt,
 										Optional: true,
 									},
 								},
@@ -2326,6 +2336,12 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+						choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
+
+					}
+
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -2463,6 +2479,12 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicName.DnsName = v.(string)
+
+					}
+
+					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+						choiceInt.PublicName.RefreshInterval = uint32(v.(int))
 
 					}
 
@@ -4214,6 +4236,12 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+						choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
+
+					}
+
 					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
@@ -4351,6 +4379,12 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
 
 						choiceInt.PublicName.DnsName = v.(string)
+
+					}
+
+					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+						choiceInt.PublicName.RefreshInterval = uint32(v.(int))
 
 					}
 

@@ -10,7 +10,7 @@ Resource volterra_user_identification
 
 The User Identification allows CRUD of User Identification resource on Volterra SaaS
 
-~> **Note:** Please refer to [User Identification API docs](https://volterra.io/docs/api/user-identification) to learn more
+~> **Note:** Please refer to [User Identification API docs](https://docs.cloud.f5.com/docs/api/user-identification) to learn more
 
 Example Usage
 -------------

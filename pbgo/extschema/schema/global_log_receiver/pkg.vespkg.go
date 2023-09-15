@@ -41,6 +41,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.global_log_receiver.DatadogConfig"] = DatadogConfigValidator()
 	vr["ves.io.schema.global_log_receiver.ElasticConfig"] = ElasticConfigValidator()
+	vr["ves.io.schema.global_log_receiver.GCPBucketConfig"] = GCPBucketConfigValidator()
 	vr["ves.io.schema.global_log_receiver.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.global_log_receiver.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.global_log_receiver.HTTPConfig"] = HTTPConfigValidator()
@@ -215,6 +216,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

@@ -10,7 +10,7 @@ Resource volterra_voltstack_site
 
 The Voltstack Site allows CRUD of Voltstack Site resource on Volterra SaaS
 
-~> **Note:** Please refer to [Voltstack Site API docs](https://volterra.io/docs/api/views-voltstack-site) to learn more
+~> **Note:** Please refer to [Voltstack Site API docs](https://docs.cloud.f5.com/docs/api/views-voltstack-site) to learn more
 
 Example Usage
 -------------
@@ -20,13 +20,13 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
   disable_gpu = true
 
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
@@ -35,15 +35,21 @@ resource "volterra_voltstack_site" "example" {
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 
-  master_nodes = ["master-0"]
+  master_node_configuration {
+    name      = "master-0"
+    public_ip = "192.168.0.156"
+  }
 
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
 
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+  default_sriov_interface = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
 
-  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -73,7 +79,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default dehavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
 
 `bond_device_list` - (Optional) Configure Bond Devices for this App Stack site. See [Bond Device List ](#bond-device-list) below for details.
 
@@ -99,7 +105,9 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
-`master_nodes` - (Required) Names of master nodes (`List of String`).
+`master_node_configuration` - (Required) Configuration of master nodes. See [Master Node Configuration ](#master-node-configuration) below for details.
+
+`master_nodes` - (Optional) Names of master nodes (`List of String`).
 
 `custom_network_config` - (Optional) Use custom networking configuration. See [Custom Network Config ](#custom-network-config) below for details.
 
@@ -108,6 +116,10 @@ Argument Reference
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
+
+`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (bool).
+
+`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interfaces ](#sriov-interfaces) below for details.
 
 `custom_storage_config` - (Optional) Use custom storage configuration. See [Custom Storage Config ](#custom-storage-config) below for details.
 
@@ -135,7 +147,7 @@ Configure active/backup based bond device.
 
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -197,7 +209,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -209,11 +221,11 @@ Use custom blocked services configuration.
 
 Configure Bond Devices for this App Stack site.
 
-`bond_devices` - (Required) List of bond devices for this fleet. See [Bond Devices ](#bond-devices) below for details.
+`bond_devices` - (Required) List of bond devices. See [Bond Devices ](#bond-devices) below for details.
 
 ### Bond Devices
 
-List of bond devices for this fleet.
+List of bond devices.
 
 `devices` - (Required) Ethernet devices that will make up this bond (`String`).
 
@@ -244,6 +256,12 @@ Configuration will apply to given device on all nodes of the site..
 Static IP configuration for a specific node.
 
 `interface_ip_map` - (Optional) Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Interface Ip Map ](#interface-ip-map) below for details.
+
+### Configured List
+
+Configured address outside network range - external dns server.
+
+`dns_list` - (Required) List of IPV6 Addresses acting as Dns servers (`String`).
 
 ### Coordinates
 
@@ -297,7 +315,7 @@ Use custom networking configuration.
 
 `interface_list` - (Optional) Add all interfaces belonging to this site. See [Interface List ](#interface-list) below for details.
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -305,9 +323,15 @@ Use custom networking configuration.
 
 `outside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in local network (`String`).
 
-`outside_vip` - (Optional) Optional common virtual IP across all nodes to be used as automatic VIP for site local network. (`String`).
+`outside_vip` - (Optional) Optional common virtual V4 IP across all nodes to be used as automatic VIP for site local network. (`String`).
 
-`site_to_site_tunnel_ip` - (Optional) Optional, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup. (`String`).
+`outside_vip_v6` - (Optional) Optional common virtual V6 IP across all nodes to be used as automatic VIP for site local network. (`String`).
+
+`site_to_site_tunnel_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`String`).
+
+`sm_connection_public_ip` - (Optional) which are part of the site mesh group (bool).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
 
 `default_sli_config` - (Optional) Use default configuration for site local network (bool).
 
@@ -346,6 +370,14 @@ Use custom storage configuration.
 `no_storage_interfaces` - (Optional) This site does not have any storage interfaces (bool).
 
 `storage_interface_list` - (Optional) Add all storage interfaces belonging to this site. See [Storage Interface List ](#storage-interface-list) below for details.
+
+### Dc Cluster Group Connectivity Interface Disabled
+
+Do not use this interface to connect to DC Cluster Group peers. .
+
+### Dc Cluster Group Connectivity Interface Enabled
+
+Use this interface to connect to DC Cluster Group peers..
 
 ### Dedicated Interface
 
@@ -461,7 +493,15 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
+
+### Dns Config
+
+Dns information that needs to added in the RouterAdvetisement.
+
+`configured_list` - (Optional) Configured address outside network range - external dns server. See [Configured List ](#configured-list) below for details.
+
+`local_dns` - (Optional) Choose the address from the network prefix range as dns server. See [Local Dns ](#local-dns) below for details.
 
 ### Domain Match
 
@@ -526,6 +566,8 @@ Ethernet interface configuration..
 `static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
+
+`ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Auto Config ](#ipv6-auto-config) below for details.
 
 `no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
 
@@ -599,6 +641,46 @@ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
 
+### Host
+
+auto configuration routers.
+
+### Hpe Storage
+
+Storage configuration for HPE Storage.
+
+`allow_mutations` - (Optional) mutation can override specified parameters (`String`).
+
+`allow_overrides` - (Optional) PVC can override specified parameters (`String`).
+
+`dedupe_enabled` - (Optional) Indicates that the volume should enable deduplication. (`Bool`).
+
+`description` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
+
+`destroy_on_delete` - (Optional) Indicates the backing Nimble volume (including snapshots) should be destroyed when the PVC is deleted (`Bool`).
+
+`encrypted` - (Optional) Indicates that the volume should be encrypted. (`Bool`).
+
+`folder` - (Optional) The name of the folder in which to place the volume. (`String`).
+
+`limit_iops` - (Optional) The IOPS limit of the volume. (`Int`).
+
+`limit_mbps` - (Optional) The IOPS limit of the volume. (`Int`).
+
+`performance_policy` - (Optional) The name of the performance policy to assign to the volume. (`String`).
+
+`pool` - (Optional) The name of the pool in which to place the volume. (`String`).
+
+`protection_template` - (Optional) The name of the performance policy to assign to the volume. (`String`).
+
+`secret_name` - (Optional) The SecretName parameter is used to identify name of secret to identify backend storage's auth information (`String`).
+
+`secret_namespace` - (Optional) The SecretNamespace parameter is used to identify name of namespace where secret resides (`String`).
+
+`sync_on_detach` - (Optional) Indicates that a snapshot of the volume should be synced to the replication partner each time it is detached from a node. (`Bool`).
+
+`thick` - (Optional) Indicates that the volume should be thick provisioned. (`Bool`).
+
 ### Inside Vn
 
 Local control plane will work on inside network.
@@ -629,6 +711,10 @@ Add all interfaces belonging to this site.
 
 Configure network interfaces for this App Stack site.
 
+`dc_cluster_group_connectivity_interface_disabled` - (Optional) Do not use this interface to connect to DC Cluster Group peers. (bool).
+
+`dc_cluster_group_connectivity_interface_enabled` - (Optional) Use this interface to connect to DC Cluster Group peers. (bool).
+
 `description` - (Optional) Description for this Interface (`String`).
 
 `dedicated_interface` - (Optional) Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet. See [Dedicated Interface ](#dedicated-interface) below for details.
@@ -646,6 +732,14 @@ Configure network interfaces for this App Stack site.
 ### Ip Fabric Network
 
 Interface belongs to IP Fabric network.
+
+### Ipv6 Auto Config
+
+Configuration corresponding to IPV6 auto configuration.
+
+`host` - (Optional) auto configuration routers (bool).
+
+`router` - (Optional) System behaves like Auto config Router and provides auto config parameters. See [Router ](#router) below for details.
 
 ### Is Primary
 
@@ -670,6 +764,16 @@ Site Local control plane is enabled.
 `inside_vn` - (Optional) Local control plane will work on inside network (bool).
 
 `outside_vn` - (Optional) Local control plane will work on outside network (bool).
+
+### Local Dns
+
+Choose the address from the network prefix range as dns server.
+
+`configured_address` - (Optional) Configured address from the network prefix is chosen as dns server (`String`).
+
+`first_address` - (Optional) First usable address from the network prefix is chosen as dns server (bool).
+
+`last_address` - (Optional) Last usable address from the network prefix is chosen as dns server (bool).
 
 ### Loopback Interface
 
@@ -699,15 +803,13 @@ Loopback device..
 
 `node` - (Optional) Configuration will apply to a device on the given node. (`String`).
 
-### Mayastor Pools
+### Master Node Configuration
 
-mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality..
+Configuration of master nodes.
 
-`node` - (Required) Enter k8s node name of Mayastor Node (MSN) where this pool is or going to be located. (`String`).
+`name` - (Required) Names of master node (`String`).
 
-`pool_disk_devices` - (Required) It supports various types such as "/dev/sdb", "nvme://nqn.2014-08.com.vendor:nvme:nvm-subsystem-sn-d78432" or "iscsi://iqn.2000-08.com.datacore.com:cloudvm41-2". (`String`).
-
-`pool_name` - (Required) Enter Mayastor Pool Name (`String`).
+`public_ip` - (Optional) via Site Mesh Group (`String`).
 
 ### Monitor
 
@@ -757,6 +859,10 @@ When this feature is disabled on an existing site, the pods/services on this sit
 
 Static Routes disabled for site local inside network..
 
+### No Static V6 Routes
+
+Static IPv6 Routes disabled for site local network..
+
 ### No Storage Device
 
 This site does not have any storage devices.
@@ -764,6 +870,10 @@ This site does not have any storage devices.
 ### No Storage Interfaces
 
 This site does not have any storage interfaces.
+
+### No V6 Static Routes
+
+Static IPv6 Routes disabled for site local inside network..
 
 ### Node Static Ip
 
@@ -786,12 +896,6 @@ Enable/Disable offline survivability mode.
 `enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
-
-### Openebs Enterprise
-
-Device configuration for Pure Storage Service Orchestrator.
-
-`mayastor_pools` - (Optional) mechanism/transport/device type and differentiated by corresponding performance and/or attachment locality.. See [Mayastor Pools ](#mayastor-pools) below for details.
 
 ### Os
 
@@ -861,6 +965,16 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Router
+
+System behaves like Auto config Router and provides auto config parameters.
+
+`network_prefix` - (Optional) Nework prefix that is used as Prefix information (`String`).
+
+`stateful` - (Optional) works along with Router Advertisement' Managed flag. See [Stateful ](#stateful) below for details.
+
+`dns_config` - (Optional) Dns information that needs to added in the RouterAdvetisement. See [Dns Config ](#dns-config) below for details.
+
 ### Same As Dgw
 
 DNS server address is same as default gateway address.
@@ -880,6 +994,10 @@ Configuration for site local inside network.
 `no_static_routes` - (Optional) Static Routes disabled for site local inside network. (bool).
 
 `static_routes` - (Optional) Manage static routes for site local inside network.. See [Static Routes ](#static-routes) below for details.
+
+`no_v6_static_routes` - (Optional) Static IPv6 Routes disabled for site local inside network. (bool).
+
+`static_v6_routes` - (Optional) Manage IPv6 static routes for site local inside network.. See [Static V6 Routes ](#static-v6-routes) below for details.
 
 ### Sli To Global Dr
 
@@ -903,15 +1021,55 @@ Configuration for site local network.
 
 `static_routes` - (Optional) Manage static routes for site local network.. See [Static Routes ](#static-routes) below for details.
 
+`no_static_v6_routes` - (Optional) Static IPv6 Routes disabled for site local network. (bool).
+
+`static_v6_routes` - (Optional) Manage static IPv6 routes for site local network.. See [Static V6 Routes ](#static-v6-routes) below for details.
+
 ### Slo To Global Dr
 
 Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
 
+### Sm Connection Public Ip
+
+which are part of the site mesh group.
+
+### Sm Connection Pvt Ip
+
+creating ipsec between two sites which are part of the site mesh group.
+
+### Sriov Interface
+
+Use custom SR-IOV interfaces Configuration.
+
+`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
+
+`number_of_vfs` - (Required) Number of virtual functions (`Int`).
+
+### Sriov Interfaces
+
+Use custom Single Root I/O Virtualization interfaces.
+
+`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interface ](#sriov-interface) below for details.
+
 ### Ssh
 
 Matches ssh port 22.
+
+### Stateful
+
+works along with Router Advertisement' Managed flag.
+
+`dhcp_networks` - (Required) List of networks from which DHCP server can allocate ip addresses. See [Dhcp Networks ](#dhcp-networks) below for details.
+
+`fixed_ip_map` - (Optional) Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address (`String`).
+
+`automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (bool).
+
+`automatic_from_start` - (Optional) Assign automatically from start of the first network in the list (bool).
+
+`interface_ip_map` - (Optional) Configured address for every node. See [Interface Ip Map ](#interface-ip-map) below for details.
 
 ### Static Ip
 
@@ -939,6 +1097,12 @@ Manage static routes for site local inside network..
 
 `static_routes` - (Required) List of static routes. See [Static Routes ](#static-routes) below for details.
 
+### Static V6 Routes
+
+Manage IPv6 static routes for site local inside network..
+
+`static_routes` - (Required) List of IPv6 static routes. See [Static Routes ](#static-routes) below for details.
+
 ### Storage Class List
 
 Add additional custom storage classes in kubernetes.
@@ -958,6 +1122,8 @@ List of custom storage classes.
 `description` - (Optional) Description for this storage class (`String`).
 
 `custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
+
+`hpe_storage` - (Optional) Storage configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
 
 `netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
@@ -983,9 +1149,9 @@ List of custom storage devices.
 
 `custom_storage` - (Optional) Device configuration for Custom Storage (bool).
 
-`netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
+`hpe_storage` - (Optional) Device configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
 
-`openebs_enterprise` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Openebs Enterprise ](#openebs-enterprise) below for details.
+`netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
 
 `pure_service_orchestrator` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
 
@@ -1002,6 +1168,8 @@ Configure storage interface for this App Stack site.
 `static_ip` - (Optional) Interface IP is configured statically. See [Static Ip ](#static-ip) below for details.
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
+
+`ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Auto Config ](#ipv6-auto-config) below for details.
 
 `no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (bool).
 

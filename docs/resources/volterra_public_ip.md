@@ -12,7 +12,7 @@ Resource volterra_public_ip
 
 volterra_public_ip helps to update fields of site object. This is not applicable for site created through view style APIs.
 
-~> **Note:** Please refer to [Public IP api docs](https://volterra.io/docs/api/public-ip) to learn more
+~> **Note:** Please refer to [Public IP api docs](https://docs.cloud.f5.com/docs/api/public-ip) to learn more
 
 Example Usage
 -------------

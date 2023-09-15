@@ -10,7 +10,7 @@ Resource volterra_role
 
 The Role allows CRUD of Role resource on Volterra SaaS
 
-~> **Note:** Please refer to [Role API docs](https://volterra.io/docs/api/role) to learn more
+~> **Note:** Please refer to [Role API docs](https://docs.cloud.f5.com/docs/api/role) to learn more
 
 Example Usage
 -------------

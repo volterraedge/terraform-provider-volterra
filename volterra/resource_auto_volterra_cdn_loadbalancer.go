@@ -1402,6 +1402,11 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
+
+												"refresh_interval": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
 											},
 										},
 									},
@@ -1418,6 +1423,11 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 									"dns_name": {
 										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"refresh_interval": {
+										Type:     schema.TypeInt,
 										Optional: true,
 									},
 								},
@@ -3600,6 +3610,12 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.RefreshInterval = uint32(v.(int))
+
+							}
+
 						}
 
 					}
@@ -3618,6 +3634,10 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 					if w, ok := publicNameMapStrToI["dns_name"]; ok && !isIntfNil(w) {
 						publicName.DnsName = w.(string)
+					}
+
+					if w, ok := publicNameMapStrToI["refresh_interval"]; ok && !isIntfNil(w) {
+						publicName.RefreshInterval = uint32(w.(int))
 					}
 
 				}
@@ -5994,6 +6014,12 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
+
+								choiceInt.PublicName.RefreshInterval = uint32(v.(int))
+
+							}
+
 						}
 
 					}
@@ -6012,6 +6038,10 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 					if w, ok := publicNameMapStrToI["dns_name"]; ok && !isIntfNil(w) {
 						publicName.DnsName = w.(string)
+					}
+
+					if w, ok := publicNameMapStrToI["refresh_interval"]; ok && !isIntfNil(w) {
+						publicName.RefreshInterval = uint32(w.(int))
 					}
 
 				}

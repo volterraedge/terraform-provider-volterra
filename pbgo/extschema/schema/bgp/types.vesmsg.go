@@ -3538,6 +3538,13 @@ func (v *ValidatePeerExternal) AddressChoiceSubnetEndOffsetValidationRuleHandler
 	}
 	return oValidatorFn_SubnetEndOffset, nil
 }
+func (v *ValidatePeerExternal) AddressChoiceAddressIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AddressIpv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for address_ipv6")
+	}
+	return oValidatorFn_AddressIpv6, nil
+}
 
 func (v *ValidatePeerExternal) InterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -3642,6 +3649,17 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 			vOpts := append(opts,
 				db.WithValidateField("address_choice"),
 				db.WithValidateField("default_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_AddressIpv6:
+		if fv, exists := v.FldValidators["address_choice.address_ipv6"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_AddressIpv6).AddressIpv6
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("address_ipv6"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3790,10 +3808,20 @@ var DefaultPeerExternalValidator = func() *ValidatePeerExternal {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_subnet_end_offset: %s", err)
 		panic(errMsg)
 	}
+	vrhAddressChoiceAddressIpv6 := v.AddressChoiceAddressIpv6ValidationRuleHandler
+	rulesAddressChoiceAddressIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["address_choice.address_ipv6"], err = vrhAddressChoiceAddressIpv6(rulesAddressChoiceAddressIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PeerExternal.address_choice_address_ipv6: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["address_choice.address"] = vFnMap["address_choice.address"]
 	v.FldValidators["address_choice.subnet_begin_offset"] = vFnMap["address_choice.subnet_begin_offset"]
 	v.FldValidators["address_choice.subnet_end_offset"] = vFnMap["address_choice.subnet_end_offset"]
+	v.FldValidators["address_choice.address_ipv6"] = vFnMap["address_choice.address_ipv6"]
 
 	vrhInterfaceChoice := v.InterfaceChoiceValidationRuleHandler
 	rulesInterfaceChoice := map[string]string{

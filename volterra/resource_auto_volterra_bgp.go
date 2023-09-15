@@ -206,6 +206,12 @@ func resourceVolterraBgp() *schema.Resource {
 										Optional: true,
 									},
 
+									"address_ipv6": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"default_gateway": {
 
 										Type:     schema.TypeBool,
@@ -868,6 +874,17 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
 						addressChoiceInt.Address = v.(string)
+
+					}
+
+					if v, ok := cs["address_ipv6"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_AddressIpv6{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.AddressIpv6 = v.(string)
 
 					}
 
@@ -1815,6 +1832,17 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 						typeChoiceInt.External.AddressChoice = addressChoiceInt
 
 						addressChoiceInt.Address = v.(string)
+
+					}
+
+					if v, ok := cs["address_ipv6"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+						addressChoiceTypeFound = true
+						addressChoiceInt := &ves_io_schema_bgp.PeerExternal_AddressIpv6{}
+
+						typeChoiceInt.External.AddressChoice = addressChoiceInt
+
+						addressChoiceInt.AddressIpv6 = v.(string)
 
 					}
 

@@ -1279,6 +1279,17 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *CreateSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1575,6 +1586,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_GcpBucketReceiver:
+		if fv, exists := v.FldValidators["receiver.gcp_bucket_receiver"]; exists {
+			val := m.GetReceiver().(*CreateSpecType_GcpBucketReceiver).GcpBucketReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("gcp_bucket_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1640,6 +1662,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
+	v.FldValidators["receiver.gcp_bucket_receiver"] = GCPBucketConfigValidator().Validate
 
 	return v
 }()
@@ -2289,6 +2312,235 @@ func ElasticConfigValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GCPBucketConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPBucketConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPBucketConfig) DeepCopy() *GCPBucketConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPBucketConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPBucketConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPBucketConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPBucketConfigValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GCPBucketConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcpCredDRefInfo()
+
+}
+
+func (m *GCPBucketConfig) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "gcp_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetGcpCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GCPBucketConfig) GetGcpCredDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+	}
+
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_credentials.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateGCPBucketConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPBucketConfig) BucketValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bucket")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBucketConfig) GcpCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for gcp_cred")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBucketConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPBucketConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPBucketConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["batch"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("batch"))
+		if err := fv(ctx, m.GetBatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bucket"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bucket"))
+		if err := fv(ctx, m.GetBucket(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["compression"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compression"))
+		if err := fv(ctx, m.GetCompression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_cred"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_cred"))
+		if err := fv(ctx, m.GetGcpCred(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPBucketConfigValidator = func() *ValidateGCPBucketConfig {
+	v := &ValidateGCPBucketConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBucket := v.BucketValidationRuleHandler
+	rulesBucket := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.min_len":   "3",
+		"ves.io.schema.rules.string.pattern":   "^[a-z0-9]+[a-z0-9_\\.-]+[a-z0-9]$",
+	}
+	vFn, err = vrhBucket(rulesBucket)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBucketConfig.bucket: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bucket"] = vFn
+
+	vrhGcpCred := v.GcpCredValidationRuleHandler
+	rulesGcpCred := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhGcpCred(rulesGcpCred)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBucketConfig.gcp_cred: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_cred"] = vFn
+
+	v.FldValidators["batch"] = BatchOptionTypeValidator().Validate
+
+	return v
+}()
+
+func GCPBucketConfigValidator() db.Validator {
+	return DefaultGCPBucketConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2457,6 +2709,17 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	case *GetSpecType_QradarReceiver:
 
 		return nil, nil
+
+	case *GetSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -2754,6 +3017,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_GcpBucketReceiver:
+		if fv, exists := v.FldValidators["receiver.gcp_bucket_receiver"]; exists {
+			val := m.GetReceiver().(*GetSpecType_GcpBucketReceiver).GcpBucketReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("gcp_bucket_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2819,6 +3093,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
+	v.FldValidators["receiver.gcp_bucket_receiver"] = GCPBucketConfigValidator().Validate
 
 	return v
 }()
@@ -3010,6 +3285,17 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	case *GlobalSpecType_QradarReceiver:
 
 		return nil, nil
+
+	case *GlobalSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -3356,6 +3642,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_GcpBucketReceiver:
+		if fv, exists := v.FldValidators["receiver.gcp_bucket_receiver"]; exists {
+			val := m.GetReceiver().(*GlobalSpecType_GcpBucketReceiver).GcpBucketReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("gcp_bucket_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3430,6 +3727,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
+	v.FldValidators["receiver.gcp_bucket_receiver"] = GCPBucketConfigValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4811,6 +5109,17 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *ReplaceSpecType_GcpBucketReceiver:
+		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp_bucket_receiver." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -5107,6 +5416,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_GcpBucketReceiver:
+		if fv, exists := v.FldValidators["receiver.gcp_bucket_receiver"]; exists {
+			val := m.GetReceiver().(*ReplaceSpecType_GcpBucketReceiver).GcpBucketReceiver
+			vOpts := append(opts,
+				db.WithValidateField("receiver"),
+				db.WithValidateField("gcp_bucket_receiver"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5172,6 +5492,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["receiver.new_relic_receiver"] = NewRelicConfigValidator().Validate
 	v.FldValidators["receiver.sumo_logic_receiver"] = SumoLogicConfigValidator().Validate
 	v.FldValidators["receiver.qradar_receiver"] = QRadarConfigValidator().Validate
+	v.FldValidators["receiver.gcp_bucket_receiver"] = GCPBucketConfigValidator().Validate
 
 	return v
 }()
@@ -5653,6 +5974,7 @@ var DefaultSplunkConfigValidator = func() *ValidateSplunkConfig {
 	vrhEndpoint := v.EndpointValidationRuleHandler
 	rulesEndpoint := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri_ref":   "true",
 	}
 	vFn, err = vrhEndpoint(rulesEndpoint)
 	if err != nil {
@@ -6334,6 +6656,9 @@ func (r *CreateSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_ElasticReceiver:
 		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
 
+	case *CreateSpecType_GcpBucketReceiver:
+		o.Receiver = &GlobalSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
+
 	case *CreateSpecType_HttpReceiver:
 		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
 
@@ -6380,6 +6705,9 @@ func (r *CreateSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error 
 
 	case *GlobalSpecType_ElasticReceiver:
 		r.Receiver = &CreateSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_GcpBucketReceiver:
+		r.Receiver = &CreateSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
 
 	case *GlobalSpecType_HttpReceiver:
 		r.Receiver = &CreateSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
@@ -6554,6 +6882,9 @@ func (r *GetSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_ElasticReceiver:
 		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
 
+	case *GetSpecType_GcpBucketReceiver:
+		o.Receiver = &GlobalSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
+
 	case *GetSpecType_HttpReceiver:
 		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
 
@@ -6600,6 +6931,9 @@ func (r *GetSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_ElasticReceiver:
 		r.Receiver = &GetSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_GcpBucketReceiver:
+		r.Receiver = &GetSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
 
 	case *GlobalSpecType_HttpReceiver:
 		r.Receiver = &GetSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
@@ -6774,6 +7108,9 @@ func (r *ReplaceSpecType) SetReceiverToGlobalSpecType(o *GlobalSpecType) error {
 	case *ReplaceSpecType_ElasticReceiver:
 		o.Receiver = &GlobalSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
 
+	case *ReplaceSpecType_GcpBucketReceiver:
+		o.Receiver = &GlobalSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
+
 	case *ReplaceSpecType_HttpReceiver:
 		o.Receiver = &GlobalSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}
 
@@ -6820,6 +7157,9 @@ func (r *ReplaceSpecType) GetReceiverFromGlobalSpecType(o *GlobalSpecType) error
 
 	case *GlobalSpecType_ElasticReceiver:
 		r.Receiver = &ReplaceSpecType_ElasticReceiver{ElasticReceiver: of.ElasticReceiver}
+
+	case *GlobalSpecType_GcpBucketReceiver:
+		r.Receiver = &ReplaceSpecType_GcpBucketReceiver{GcpBucketReceiver: of.GcpBucketReceiver}
 
 	case *GlobalSpecType_HttpReceiver:
 		r.Receiver = &ReplaceSpecType_HttpReceiver{HttpReceiver: of.HttpReceiver}

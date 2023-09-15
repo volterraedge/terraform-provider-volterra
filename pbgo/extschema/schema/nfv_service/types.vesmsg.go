@@ -3528,6 +3528,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["force_delete"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force_delete"))
+		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_management_choice"]; exists {
 		val := m.GetHttpManagementChoice()
 		vOpts := append(opts,
@@ -4644,6 +4653,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["force_delete"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force_delete"))
+		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -9344,6 +9362,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.Commands = f.GetCommands()
 	m.FinalizerTimestamp = f.GetFinalizerTimestamp()
+	m.ForceDelete = f.GetForceDelete()
 	m.GetHttpManagementChoiceFromGlobalSpecType(f)
 	m.GetServiceProviderChoiceFromGlobalSpecType(f)
 	m.GetServiceTypeChoiceFromGlobalSpecType(f)
@@ -9367,6 +9386,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.Commands = m1.Commands
 	f.FinalizerTimestamp = m1.FinalizerTimestamp
+	f.ForceDelete = m1.ForceDelete
 	m1.SetHttpManagementChoiceToGlobalSpecType(f)
 	m1.SetServiceProviderChoiceToGlobalSpecType(f)
 	m1.SetServiceTypeChoiceToGlobalSpecType(f)

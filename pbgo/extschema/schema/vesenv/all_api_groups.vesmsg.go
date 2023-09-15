@@ -1442,6 +1442,17 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcFlowCollectionMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_flow_collection_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcFlowCollectionMonitor).F5XcFlowCollectionMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_flow_collection_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

@@ -309,6 +309,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_F5XcFlowCollection:
+		if fv, exists := v.FldValidators["choice.f5xc_flow_collection"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcFlowCollection).F5XcFlowCollection
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_flow_collection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

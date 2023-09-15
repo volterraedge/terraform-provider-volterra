@@ -604,6 +604,30 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["deleted_referred_objects"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deleted_referred_objects"))
+		for idx, item := range m.GetDeletedReferredObjects() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["disabled_referred_objects"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disabled_referred_objects"))
+		for idx, item := range m.GetDisabledReferredObjects() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("metadata"))

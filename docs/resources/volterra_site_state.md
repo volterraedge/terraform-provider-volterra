@@ -12,7 +12,7 @@ Resource volterra_site_state
 
 volterra_site_state is used to change the state of the site.
 
-~> **Note:** Please refer to [Set Site State API docs](https://volterra.io/docs/api/site#operation/ves.io.schema.site.CustomStateAPI.SetState) to learn more
+~> **Note:** Please refer to [Set Site State API docs](https://docs.cloud.f5.com/docs/api/site#operation/ves.io.schema.site.CustomStateAPI.SetState) to learn more
 
 Example Usage
 -------------
@@ -22,7 +22,7 @@ Example Usage
 ```hcl
 resource "volterra_site_state" "example" {
   name  = "site1"
-  state = "DECOMMISSIONING
+  state = "DECOMMISSIONING"
   when  = "delete"
 }
 

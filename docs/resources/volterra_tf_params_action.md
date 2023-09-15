@@ -12,7 +12,7 @@ Resource volterra_tf_params_action
 
 volterra_tf_params_action perform terraform actions for a given view. Supported actions are apply and plan. By default destroy action is performed during delete.
 
-~> **Note:** Please refer to [Run Terraform Action API docs](https://volterra.io/docs/api/views-terraform-parameters#operation/ves.io.schema.views.terraform_parameters.CustomActionAPI.Run) to learn more
+~> **Note:** Please refer to [Run Terraform Action API docs](https://docs.cloud.f5.com/docs/api/views-terraform-parameters#operation/ves.io.schema.views.terraform_parameters.CustomActionAPI.Run) to learn more
 
 Example Usage
 -------------

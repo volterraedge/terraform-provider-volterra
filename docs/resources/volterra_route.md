@@ -10,7 +10,7 @@ Resource volterra_route
 
 The Route allows CRUD of Route resource on Volterra SaaS
 
-~> **Note:** Please refer to [Route API docs](https://volterra.io/docs/api/route) to learn more
+~> **Note:** Please refer to [Route API docs](https://docs.cloud.f5.com/docs/api/route) to learn more
 
 Example Usage
 -------------

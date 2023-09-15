@@ -10,7 +10,7 @@ Resource volterra_rate_limiter
 
 The Rate Limiter allows CRUD of Rate Limiter resource on Volterra SaaS
 
-~> **Note:** Please refer to [Rate Limiter API docs](https://volterra.io/docs/api/rate-limiter) to learn more
+~> **Note:** Please refer to [Rate Limiter API docs](https://docs.cloud.f5.com/docs/api/rate-limiter) to learn more
 
 Example Usage
 -------------

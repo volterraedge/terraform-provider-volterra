@@ -10,7 +10,7 @@ Resource volterra_app_api_group
 
 The App Api Group allows CRUD of App Api Group resource on Volterra SaaS
 
-~> **Note:** Please refer to [App Api Group API docs](https://volterra.io/docs/api/views-app-api-group) to learn more
+~> **Note:** Please refer to [App Api Group API docs](https://docs.cloud.f5.com/docs/api/views-app-api-group) to learn more
 
 Example Usage
 -------------

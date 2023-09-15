@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -4182,6 +4213,24 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/http_loadbalancerCreateRequest",
                     "x-displayname": "CreateRequest Format"
                 },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -4234,7 +4283,7 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -4242,7 +4291,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -4549,6 +4599,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "settings": {
+                    "description": " OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+                    "title": "OpenAPI specification validation common settings",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationCommonSettings",
+                    "x-displayname": "Common Settings"
+                },
                 "validation_mode": {
                     "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Validation Mode",
@@ -4561,15 +4617,62 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerOpenApiValidationCommonSettings": {
+            "type": "object",
+            "description": "OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+            "title": "OpenAPI specification validation common settings",
+            "x-displayname": "Common Settings",
+            "x-ves-oneof-field-oversized_body_choice": "[\"oversized_body_fail_validation\",\"oversized_body_skip_validation\"]",
+            "x-ves-oneof-field-property_validation_settings_choice": "[\"property_validation_settings_custom\",\"property_validation_settings_default\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationCommonSettings",
+            "properties": {
+                "oversized_body_fail_validation": {
+                    "description": "Exclusive with [oversized_body_skip_validation]\n Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb)",
+                    "title": "Fail the validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Fail Body Validation"
+                },
+                "oversized_body_skip_validation": {
+                    "description": "Exclusive with [oversized_body_fail_validation]\n Skip body validation when the body length is too long to verify (default 64Kb)",
+                    "title": "Skip validation for over-sized body",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip Body Validation"
+                },
+                "property_validation_settings_custom": {
+                    "description": "Exclusive with [property_validation_settings_default]\n Use custom settings with Open API specification validation",
+                    "title": "Custom settings",
+                    "$ref": "#/definitions/http_loadbalancerValidationPropertySetting",
+                    "x-displayname": "Custom"
+                },
+                "property_validation_settings_default": {
+                    "description": "Exclusive with [property_validation_settings_custom]\n Keep the default settings of OpenAPI specification validation",
+                    "title": "Default",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                }
+            }
+        },
         "http_loadbalancerOpenApiValidationMode": {
             "type": "object",
             "description": "x-required\nValidation mode of OpenAPI specification.\n When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)",
             "title": "Validation Mode",
             "x-displayname": "Validation Mode",
-            "x-ves-oneof-field-response_validation_mode_choice": "[]",
+            "x-ves-oneof-field-response_validation_mode_choice": "[\"response_validation_mode_active\",\"skip_response_validation\"]",
             "x-ves-oneof-field-validation_mode_choice": "[\"skip_validation\",\"validation_mode_active\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationMode",
             "properties": {
+                "response_validation_mode_active": {
+                    "description": "Exclusive with [skip_response_validation]\n Enforce OpenAPI validation processing for this event",
+                    "title": "Validate",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationModeActiveResponse",
+                    "x-displayname": "Validate"
+                },
+                "skip_response_validation": {
+                    "description": "Exclusive with [response_validation_mode_active]\n Skip OpenAPI validation processing for this event",
+                    "title": "Skip",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Skip"
+                },
                 "skip_validation": {
                     "description": "Exclusive with [validation_mode_active]\n Skip OpenAPI validation processing for this event",
                     "title": "Skip",
@@ -4626,25 +4729,40 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerOpenApiValidationModeActiveResponse": {
             "type": "object",
-            "description": "x-displayName: \"Open API Validation Mode Active\"\nValidation mode properties of response",
+            "description": "Validation mode properties of response",
             "title": "Open API Validation Mode Active For Response",
+            "x-displayname": "Open API Validation Mode Active",
+            "x-ves-oneof-field-validation_enforcement_type": "[\"enforcement_block\",\"enforcement_report\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActiveResponse",
             "properties": {
                 "enforcement_block": {
-                    "description": "x-displayName: \"Block\"\nBlock the response, trigger an API security event",
+                    "description": "Exclusive with [enforcement_report]\n Block the response, trigger an API security event",
                     "title": "Block",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Block"
                 },
                 "enforcement_report": {
-                    "description": "x-displayName: \"Report\"\nAllow the response, trigger an API security event",
+                    "description": "Exclusive with [enforcement_block]\n Allow the response, trigger an API security event",
                     "title": "Report",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Report"
                 },
                 "response_validation_properties": {
                     "type": "array",
-                    "description": "x-displayName: \"Response Validation Properties\"\nx-required\nList of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger)",
+                    "description": " List of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.in: [2,4,5,7]\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Response Validation Properties",
+                    "minItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaOpenApiValidationProperties"
+                    },
+                    "x-displayname": "Response Validation Properties",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.in": "[2,4,5,7]",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -4741,7 +4859,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "origin_server_subset_rules": {
                     "type": "array",
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, \n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Origin Server Subset",
                     "maxItems": 64,
                     "items": {
@@ -5588,15 +5706,19 @@ var APISwaggerJSON string = `{
                 },
                 "origin_pools": {
                     "type": "array",
-                    "description": " Origin Pools for this route\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Origin Pools for this route\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Origin Pools",
+                    "minItems": 1,
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/viewsOriginPoolWithWeight"
                     },
                     "x-displayname": "Origin Pools",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -6149,6 +6271,66 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "15",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
+                },
+                "settings": {
+                    "description": " OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+                    "title": "OpenAPI specification validation common settings",
+                    "$ref": "#/definitions/http_loadbalancerOpenApiValidationCommonSettings",
+                    "x-displayname": "OpenAPI specification validation settings"
+                }
+            }
+        },
+        "http_loadbalancerValidationPropertySetting": {
+            "type": "object",
+            "description": "Custom property validation settings",
+            "title": "Validation Property settings",
+            "x-displayname": "Validation Property Settings",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ValidationPropertySetting",
+            "properties": {
+                "queryParameters": {
+                    "description": " Custom settings for query parameters validation",
+                    "title": "Query parameters validation settings",
+                    "$ref": "#/definitions/http_loadbalancerValidationSettingForQueryParameters",
+                    "x-displayname": "Validation Settings For Query Parameters"
+                }
+            }
+        },
+        "http_loadbalancerValidationSettingForHeaders": {
+            "type": "object",
+            "description": "x-displayName: \"Validation Settings For Headers\"\nCustom settings for headers validation",
+            "title": "Validation Settings For Headers",
+            "properties": {
+                "allow_additional_headers": {
+                    "description": "x-displayName: \"Allow\"\nAllow extra headers (on top of what specified in the OAS documentation)",
+                    "title": "Allow",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "disallow_additional_headers": {
+                    "description": "x-displayName: \"Disallow\"\nDisallow extra headers (on top of what specified in the OAS documentation)",
+                    "title": "Custom settings",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
+        "http_loadbalancerValidationSettingForQueryParameters": {
+            "type": "object",
+            "description": "Custom settings for query parameters validation",
+            "title": "Validation Settings For Query Parameters",
+            "x-displayname": "Validation Settings For Query Parameters",
+            "x-ves-oneof-field-additional_parameters_choice": "[\"allow_additional_parameters\",\"disallow_additional_parameters\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ValidationSettingForQueryParameters",
+            "properties": {
+                "allow_additional_parameters": {
+                    "description": "Exclusive with [disallow_additional_parameters]\n Allow extra query parameters (on top of what specified in the OAS documentation)",
+                    "title": "Allow",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow"
+                },
+                "disallow_additional_parameters": {
+                    "description": "Exclusive with [allow_additional_parameters]\n Disallow extra query parameters (on top of what specified in the OAS documentation)",
+                    "title": "Custom settings",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disallow"
                 }
             }
         },
@@ -6737,7 +6919,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public DNS name and site information",
             "title": "OriginServerPrivateName",
             "x-displayname": "DNS Name on given Sites",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,6,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateName",
             "properties": {
@@ -6763,6 +6945,17 @@ var APISwaggerJSON string = `{
                     "title": "Outside Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Outside Network"
+                },
+                "refresh_interval": {
+                    "type": "integer",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "title": "refresh_interval",
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "604800"
+                    }
                 },
                 "site_locator": {
                     "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -6812,7 +7005,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with public DNS name",
             "title": "OriginServerPublicName",
             "x-displayname": "Public DNS Name",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "1,2",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicName",
             "properties": {
                 "dns_name": {
@@ -6829,6 +7022,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.hostname": "true",
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "refresh_interval": {
+                    "type": "integer",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "title": "refresh_interval",
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "604800"
                     }
                 }
             }
@@ -12926,7 +13130,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_server_subset_rule_list": {
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, \n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
+                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
                     "$ref": "#/definitions/http_loadbalancerOriginServerSubsetRuleListType",
                     "x-displayname": "Origin Server Subset Rules"
                 },
@@ -13393,7 +13597,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_server_subset_rule_list": {
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, \n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
+                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
                     "$ref": "#/definitions/http_loadbalancerOriginServerSubsetRuleListType",
                     "x-displayname": "Origin Server Subset Rules"
                 },
@@ -13939,7 +14143,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_server_subset_rule_list": {
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, \n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
+                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
                     "title": "Origin Server Subset Rules",
                     "$ref": "#/definitions/http_loadbalancerOriginServerSubsetRuleListType",
                     "x-displayname": "Origin Server Subset Rules"
@@ -14580,7 +14784,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_server_subset_rule_list": {
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names, \n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
+                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
                     "$ref": "#/definitions/http_loadbalancerOriginServerSubsetRuleListType",
                     "x-displayname": "Origin Server Subset Rules"
                 },

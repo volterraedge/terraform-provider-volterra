@@ -10,7 +10,7 @@ Resource volterra_network_firewall
 
 The Network Firewall allows CRUD of Network Firewall resource on Volterra SaaS
 
-~> **Note:** Please refer to [Network Firewall API docs](https://volterra.io/docs/api/network-firewall) to learn more
+~> **Note:** Please refer to [Network Firewall API docs](https://docs.cloud.f5.com/docs/api/network-firewall) to learn more
 
 Example Usage
 -------------

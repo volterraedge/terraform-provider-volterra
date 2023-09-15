@@ -6080,6 +6080,145 @@ func OfflineSurvivabilityModeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SecurityGroupType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SecurityGroupType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SecurityGroupType) DeepCopy() *SecurityGroupType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SecurityGroupType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SecurityGroupType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SecurityGroupType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SecurityGroupTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSecurityGroupType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecurityGroupType) OutsideSecurityGroupIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_security_group_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSecurityGroupType) InsideSecurityGroupIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_security_group_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSecurityGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SecurityGroupType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SecurityGroupType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
+		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
+		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSecurityGroupTypeValidator = func() *ValidateSecurityGroupType {
+	v := &ValidateSecurityGroupType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOutsideSecurityGroupId := v.OutsideSecurityGroupIdValidationRuleHandler
+	rulesOutsideSecurityGroupId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+		"ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
+	}
+	vFn, err = vrhOutsideSecurityGroupId(rulesOutsideSecurityGroupId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityGroupType.outside_security_group_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_security_group_id"] = vFn
+
+	vrhInsideSecurityGroupId := v.InsideSecurityGroupIdValidationRuleHandler
+	rulesInsideSecurityGroupId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "20",
+		"ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$",
+	}
+	vFn, err = vrhInsideSecurityGroupId(rulesInsideSecurityGroupId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityGroupType.inside_security_group_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_security_group_id"] = vFn
+
+	return v
+}()
+
+func SecurityGroupTypeValidator() db.Validator {
+	return DefaultSecurityGroupTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteStaticRoutesListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

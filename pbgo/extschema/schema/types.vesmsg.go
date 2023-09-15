@@ -4312,6 +4312,146 @@ func EmptyValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *File) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *File) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *File) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Content = []byte{}
+
+	return copy.string()
+}
+
+func (m *File) GoString() string {
+	copy := m.DeepCopy()
+	copy.Content = []byte{}
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *File) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Content = []byte{}
+
+	return nil
+}
+
+func (m *File) DeepCopy() *File {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &File{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *File) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *File) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FileValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFile struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFile) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*File)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *File got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content"))
+		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["content_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content_type"))
+		if err := fv(ctx, m.GetContentType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file_id"))
+		if err := fv(ctx, m.GetFileId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetStorageProvider().(type) {
+	case *File_AwsS3:
+		if fv, exists := v.FldValidators["storage_provider.aws_s3"]; exists {
+			val := m.GetStorageProvider().(*File_AwsS3).AwsS3
+			vOpts := append(opts,
+				db.WithValidateField("storage_provider"),
+				db.WithValidateField("aws_s3"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFileValidator = func() *ValidateFile {
+	v := &ValidateFile{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FileValidator() db.Validator {
+	return DefaultFileValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ForwardProxyConfigType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -12750,6 +12890,204 @@ var DefaultSiteRefTypeValidator = func() *ValidateSiteRefType {
 
 func SiteRefTypeValidator() db.Validator {
 	return DefaultSiteRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteReferenceListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteReferenceListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteReferenceListType) DeepCopy() *SiteReferenceListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteReferenceListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteReferenceListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteReferenceListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteReferenceListTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SiteReferenceListType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefsDRefInfo()
+
+}
+
+func (m *SiteReferenceListType) GetRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteReferenceListType.refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteReferenceListType) GetRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+	for _, ref := range m.GetRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSiteReferenceListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteReferenceListType) RefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteReferenceListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteReferenceListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteReferenceListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("refs"))
+		if err := fv(ctx, m.GetRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteReferenceListTypeValidator = func() *ValidateSiteReferenceListType {
+	v := &ValidateSiteReferenceListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRefs := v.RefsValidationRuleHandler
+	rulesRefs := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+	}
+	vFn, err = vrhRefs(rulesRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteReferenceListType.refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refs"] = vFn
+
+	return v
+}()
+
+func SiteReferenceListTypeValidator() db.Validator {
+	return DefaultSiteReferenceListTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -10,7 +10,7 @@ Resource volterra_alert_receiver
 
 The Alert Receiver allows CRUD of Alert Receiver resource on Volterra SaaS
 
-~> **Note:** Please refer to [Alert Receiver API docs](https://volterra.io/docs/api/alert-receiver) to learn more
+~> **Note:** Please refer to [Alert Receiver API docs](https://docs.cloud.f5.com/docs/api/alert-receiver) to learn more
 
 Example Usage
 -------------

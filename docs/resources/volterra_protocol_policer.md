@@ -10,7 +10,7 @@ Resource volterra_protocol_policer
 
 The Protocol Policer allows CRUD of Protocol Policer resource on Volterra SaaS
 
-~> **Note:** Please refer to [Protocol Policer API docs](https://volterra.io/docs/api/protocol-policer) to learn more
+~> **Note:** Please refer to [Protocol Policer API docs](https://docs.cloud.f5.com/docs/api/protocol-policer) to learn more
 
 Example Usage
 -------------

@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -27,6 +28,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bigip.apm.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.bigip.apm.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.bigip.apm.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.bigip.apm.MetricData"] = MetricDataValidator()
+	vr["ves.io.schema.bigip.apm.MetricTypeData"] = MetricTypeDataValidator()
+	vr["ves.io.schema.bigip.apm.MetricsRequest"] = MetricsRequestValidator()
+	vr["ves.io.schema.bigip.apm.MetricsResponse"] = MetricsResponseValidator()
 
 	vr["ves.io.schema.bigip.apm.APMBigIpAWSReplaceType"] = APMBigIpAWSReplaceTypeValidator()
 	vr["ves.io.schema.bigip.apm.APMBigIpAWSType"] = APMBigIpAWSTypeValidator()
@@ -126,10 +132,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.bigip.apm.API"] = "config"
+	sm["ves.io.schema.bigip.apm.CustomDataAPI"] = "data"
 
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 
@@ -155,6 +167,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.bigip.apm.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.bigip.apm.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.bigip.apm.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.bigip.apm.Object"] = CustomDataAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.bigip.apm.CustomDataAPI"] = NewCustomDataAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.bigip.apm.CustomDataAPI"] = NewCustomDataAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.bigip.apm.CustomDataAPI"] = RegisterCustomDataAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.bigip.apm.CustomDataAPI"] = RegisterGwCustomDataAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.bigip.apm.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomDataAPIServer(svc)
+		}
 
 	}()
 

@@ -34,6 +34,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_setting.SuspiciousUserStatusRsp"] = SuspiciousUserStatusRspValidator()
 
 	vr["ves.io.schema.app_setting.AppTypeSettings"] = AppTypeSettingsValidator()
+	vr["ves.io.schema.app_setting.BolaDetectionManualSettings"] = BolaDetectionManualSettingsValidator()
 	vr["ves.io.schema.app_setting.BusinessLogicMarkupSetting"] = BusinessLogicMarkupSettingValidator()
 	vr["ves.io.schema.app_setting.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.app_setting.FailedLoginActivitySetting"] = FailedLoginActivitySettingValidator()
@@ -67,6 +68,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_setting.API.Create"] = []string{
 		"spec.anomaly_types.#",
 		"spec.app_type_refs.#",
+		"spec.app_type_settings.#.user_behavior_analysis_setting.enable_detection.bola_detection_manual",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.app_setting.API.Get"] = []string{
@@ -76,6 +78,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_setting.API.Replace"] = []string{
 		"spec.anomaly_types.#",
 		"spec.app_type_refs.#",
+		"spec.app_type_settings.#.user_behavior_analysis_setting.enable_detection.bola_detection_manual",
 	}
 
 }
@@ -87,6 +90,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

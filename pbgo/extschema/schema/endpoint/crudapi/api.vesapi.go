@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -2888,6 +2888,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
+            "x-ves-oneof-field-proximity_choice": "[\"no_preference\",\"site_preferences\"]",
             "x-ves-proto-message": "ves.io.schema.endpoint.GlobalSpecType",
             "properties": {
                 "dns_name": {
@@ -2929,6 +2930,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "no_preference": {
+                    "description": "Exclusive with [site_preferences]\n Use all the discovered origins",
+                    "title": "NoChoice",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Preference"
+                },
                 "port": {
                     "type": "integer",
                     "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
@@ -2955,6 +2962,12 @@ var APISwaggerJSON string = `{
                     "title": "Service Selector Info",
                     "$ref": "#/definitions/endpointServiceInfoType",
                     "x-displayname": "Service Selector Info"
+                },
+                "site_preferences": {
+                    "description": "Exclusive with [no_preference]\n List of sites where this origin is preferred over others\n From a set of origins, LB on a site prefers origin containing the site\n If site is not in preference list of any origins, then it will use all\n discovered origins",
+                    "title": "Site Preference",
+                    "$ref": "#/definitions/ioschemaSiteReferenceListType",
+                    "x-displayname": "Site Preferences"
                 },
                 "where": {
                     "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
@@ -3257,6 +3270,28 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "ioschemaSiteReferenceListType": {
+            "type": "object",
+            "description": "Carries the references to one or more sites",
+            "title": "SiteReferenceListType",
+            "x-displayname": "List of sites",
+            "x-ves-proto-message": "ves.io.schema.SiteReferenceListType",
+            "properties": {
+                "refs": {
+                    "type": "array",
+                    "description": " Reference to one or more sites\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n",
+                    "title": "Site References",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Site References",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64"
+                    }
                 }
             }
         },

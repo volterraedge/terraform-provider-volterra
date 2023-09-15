@@ -77,55 +77,46 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Phone Number"
 	// x-example: "+11234567890"
-	// phone number of the contact
 	PhoneNumber string `protobuf:"bytes,2,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
 	// address1
 	//
 	// x-displayName: "Address Line 1"
 	// x-example: "1234 Main road"
-	// address line 1
 	Address1 string `protobuf:"bytes,3,opt,name=address1,proto3" json:"address1,omitempty"`
 	// address2
 	//
 	// x-displayName: "Address Line 2"
 	// x-example: "P.O BOX 56"
-	// address line 2
 	Address2 string `protobuf:"bytes,4,opt,name=address2,proto3" json:"address2,omitempty"`
 	// city
 	//
 	// x-displayName: "City"
 	// x-example: "Sunnyvale"
-	// city / town of the contact
 	City string `protobuf:"bytes,5,opt,name=city,proto3" json:"city,omitempty"`
 	// county
 	//
 	// x-displayName: "County"
 	// x-example: "Santa Clara"
-	// county (optional, for countries where they have counties)
 	County string `protobuf:"bytes,6,opt,name=county,proto3" json:"county,omitempty"`
 	// state
 	//
 	// x-displayName: "State"
 	// x-example: "California"
-	// state (optional, for countries where they have states)
 	State string `protobuf:"bytes,7,opt,name=state,proto3" json:"state,omitempty"`
 	// state code
 	//
 	// x-displayName: "State Code"
 	// x-example: "CA"
-	// state code (optional, for countries where they have states)
 	StateCode string `protobuf:"bytes,10,opt,name=state_code,json=stateCode,proto3" json:"state_code,omitempty"`
 	// country
 	//
 	// x-displayName: "Country"
 	// x-example: "US"
-	// country of contact (e.g. USA). refer to https://en.wikipedia.org/wiki/ISO_3166-1, column alpha-2
 	Country string `protobuf:"bytes,8,opt,name=country,proto3" json:"country,omitempty"`
 	// zip_code
 	//
 	// x-displayName: "ZIP code"
 	// x-example: "95054"
-	// zip or postal code
 	ZipCode string `protobuf:"bytes,9,opt,name=zip_code,json=zipCode,proto3" json:"zip_code,omitempty"`
 }
 

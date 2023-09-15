@@ -10,7 +10,7 @@ Resource volterra_active_network_policies
 
 The Active Network Policies allows you to set a list of Active Network Policies on a certain namespace
 
-~> **Note:** Please refer to [Active Network Policies API docs](https://volterra.io/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies) to learn more
+~> **Note:** Please refer to [Active Network Policies API docs](https://docs.cloud.f5.com/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies) to learn more
 
 Example Usage
 -------------

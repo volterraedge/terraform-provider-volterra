@@ -10,7 +10,7 @@ Resource volterra_advertise_policy
 
 The Advertise Policy allows CRUD of Advertise Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Advertise Policy API docs](https://volterra.io/docs/api/advertise-policy) to learn more
+~> **Note:** Please refer to [Advertise Policy API docs](https://docs.cloud.f5.com/docs/api/advertise-policy) to learn more
 
 Example Usage
 -------------

@@ -3893,6 +3893,16 @@ func (v *ValidateOriginServerPrivateName) SiteLocatorValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateOriginServerPrivateName) RefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for refresh_interval")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginServerPrivateName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OriginServerPrivateName)
 	if !ok {
@@ -3948,6 +3958,15 @@ func (v *ValidateOriginServerPrivateName) Validate(ctx context.Context, pm inter
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["refresh_interval"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("refresh_interval"))
+		if err := fv(ctx, m.GetRefreshInterval(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4008,6 +4027,17 @@ var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivat
 		panic(errMsg)
 	}
 	v.FldValidators["site_locator"] = vFn
+
+	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
+	rulesRefreshInterval := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "604800",
+	}
+	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPrivateName.refresh_interval: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refresh_interval"] = vFn
 
 	return v
 }()
@@ -4236,6 +4266,16 @@ func (v *ValidateOriginServerPublicName) DnsNameValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateOriginServerPublicName) RefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for refresh_interval")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOriginServerPublicName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OriginServerPublicName)
 	if !ok {
@@ -4254,6 +4294,15 @@ func (v *ValidateOriginServerPublicName) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("dns_name"))
 		if err := fv(ctx, m.GetDnsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["refresh_interval"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("refresh_interval"))
+		if err := fv(ctx, m.GetRefreshInterval(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4287,6 +4336,17 @@ var DefaultOriginServerPublicNameValidator = func() *ValidateOriginServerPublicN
 		panic(errMsg)
 	}
 	v.FldValidators["dns_name"] = vFn
+
+	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
+	rulesRefreshInterval := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "604800",
+	}
+	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerPublicName.refresh_interval: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refresh_interval"] = vFn
 
 	return v
 }()

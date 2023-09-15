@@ -256,6 +256,182 @@ func AppTypeSettingsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BolaDetectionManualSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BolaDetectionManualSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BolaDetectionManualSettings) DeepCopy() *BolaDetectionManualSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BolaDetectionManualSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BolaDetectionManualSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BolaDetectionManualSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BolaDetectionManualSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBolaDetectionManualSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBolaDetectionManualSettings) ThresholdLevelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threshold_levels")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBolaDetectionManualSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BolaDetectionManualSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BolaDetectionManualSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["threshold_levels"]; exists {
+		val := m.GetThresholdLevels()
+		vOpts := append(opts,
+			db.WithValidateField("threshold_levels"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThresholdLevels().(type) {
+	case *BolaDetectionManualSettings_ThresholdLevel_1:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_1"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_1).ThresholdLevel_1
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BolaDetectionManualSettings_ThresholdLevel_2:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_2"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_2).ThresholdLevel_2
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BolaDetectionManualSettings_ThresholdLevel_3:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_3"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_3).ThresholdLevel_3
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_3"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BolaDetectionManualSettings_ThresholdLevel_4:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_4"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_4).ThresholdLevel_4
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_4"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BolaDetectionManualSettings_ThresholdLevel_5:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_5"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_5).ThresholdLevel_5
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_5"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BolaDetectionManualSettings_ThresholdLevel_6:
+		if fv, exists := v.FldValidators["threshold_levels.threshold_level_6"]; exists {
+			val := m.GetThresholdLevels().(*BolaDetectionManualSettings_ThresholdLevel_6).ThresholdLevel_6
+			vOpts := append(opts,
+				db.WithValidateField("threshold_levels"),
+				db.WithValidateField("threshold_level_6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBolaDetectionManualSettingsValidator = func() *ValidateBolaDetectionManualSettings {
+	v := &ValidateBolaDetectionManualSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhThresholdLevels := v.ThresholdLevelsValidationRuleHandler
+	rulesThresholdLevels := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThresholdLevels(rulesThresholdLevels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BolaDetectionManualSettings.threshold_levels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threshold_levels"] = vFn
+
+	return v
+}()
+
+func BolaDetectionManualSettingsValidator() db.Validator {
+	return DefaultBolaDetectionManualSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BusinessLogicMarkupSetting) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1383,6 +1559,14 @@ type ValidateMaliciousUserDetectionSetting struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateMaliciousUserDetectionSetting) BolaActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bola_activity_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateMaliciousUserDetectionSetting) CoolingOffPeriodSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1443,6 +1627,53 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bola_activity_choice"]; exists {
+		val := m.GetBolaActivityChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bola_activity_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBolaActivityChoice().(type) {
+	case *MaliciousUserDetectionSetting_ExcludeBolaDetection:
+		if fv, exists := v.FldValidators["bola_activity_choice.exclude_bola_detection"]; exists {
+			val := m.GetBolaActivityChoice().(*MaliciousUserDetectionSetting_ExcludeBolaDetection).ExcludeBolaDetection
+			vOpts := append(opts,
+				db.WithValidateField("bola_activity_choice"),
+				db.WithValidateField("exclude_bola_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_BolaDetectionManual:
+		if fv, exists := v.FldValidators["bola_activity_choice.bola_detection_manual"]; exists {
+			val := m.GetBolaActivityChoice().(*MaliciousUserDetectionSetting_BolaDetectionManual).BolaDetectionManual
+			vOpts := append(opts,
+				db.WithValidateField("bola_activity_choice"),
+				db.WithValidateField("bola_detection_manual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_BolaDetectionAutomatic:
+		if fv, exists := v.FldValidators["bola_activity_choice.bola_detection_automatic"]; exists {
+			val := m.GetBolaActivityChoice().(*MaliciousUserDetectionSetting_BolaDetectionAutomatic).BolaDetectionAutomatic
+			vOpts := append(opts,
+				db.WithValidateField("bola_activity_choice"),
+				db.WithValidateField("bola_detection_automatic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cooling_off_period_setting"]; exists {
@@ -1666,6 +1897,17 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBolaActivityChoice := v.BolaActivityChoiceValidationRuleHandler
+	rulesBolaActivityChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBolaActivityChoice(rulesBolaActivityChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaliciousUserDetectionSetting.bola_activity_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bola_activity_choice"] = vFn
+
 	vrhCoolingOffPeriodSetting := v.CoolingOffPeriodSettingValidationRuleHandler
 	rulesCoolingOffPeriodSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1734,6 +1976,8 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["waf_activity_choice"] = vFn
+
+	v.FldValidators["bola_activity_choice.bola_detection_manual"] = BolaDetectionManualSettingsValidator().Validate
 
 	v.FldValidators["failed_login_activity_choice.include_failed_login_activity"] = FailedLoginActivitySettingValidator().Validate
 

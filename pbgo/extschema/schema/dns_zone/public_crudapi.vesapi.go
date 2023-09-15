@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -2236,6 +2267,144 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneCERTAlgorithm": {
+            "type": "string",
+            "description": "CERT algorithm value must be compatible with the specified algorithm.\n\n - RESERVEDALGORITHM: RESERVEDALGORITHM\n\n - RSAMD5: RSAMD5\n\n - DH: DH\n\n - DSASHA1: DSASHA1\n\n - ECC: ECC\n\n - RSASHA1ALGORITHM: RSA-SHA1\n\n - INDIRECT: INDIRECT\n\n - PRIVATEDNS: PRIVATEDNS\n\n - PRIVATEOID: PRIVATEOID\n",
+            "title": "CERT Algorithm",
+            "enum": [
+                "RESERVEDALGORITHM",
+                "RSAMD5",
+                "DH",
+                "DSASHA1",
+                "ECC",
+                "RSASHA1ALGORITHM",
+                "INDIRECT",
+                "PRIVATEDNS",
+                "PRIVATEOID"
+            ],
+            "default": "RESERVEDALGORITHM",
+            "x-displayname": "CERT Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.CERTAlgorithm"
+        },
+        "dns_zoneCERTRecordValue": {
+            "type": "object",
+            "title": "CERTRecordValue",
+            "x-displayname": "CERTRecordValue",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.CERTRecordValue",
+            "properties": {
+                "algorithm": {
+                    "description": "\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Algorithm",
+                    "$ref": "#/definitions/dns_zoneCERTAlgorithm",
+                    "x-displayname": "Algorithm",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "cert_key_tag": {
+                    "type": "integer",
+                    "description": "\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Key Tag",
+                    "format": "int64",
+                    "x-displayname": "Key Tag",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "cert_type": {
+                    "description": "\nExample: - \"PKIX\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Type",
+                    "$ref": "#/definitions/dns_zoneCERTType",
+                    "x-displayname": "Type",
+                    "x-ves-example": "PKIX",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "certificate": {
+                    "type": "string",
+                    "description": " Certificate in base 64 format.\n\nExample: - \"Ab100cFg\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Certificate",
+                    "minLength": 1,
+                    "maxLength": 4096,
+                    "x-displayname": "Certificate",
+                    "x-ves-example": "Ab100cFg",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "dns_zoneCERTResourceRecord": {
+            "type": "object",
+            "description": "DNS CERT Record",
+            "title": "CERTResourceRecord",
+            "x-displayname": "DNS CERT Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.CERTResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "CERT Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneCERTRecordValue"
+                    },
+                    "x-displayname": "CERT Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "dns_zoneCERTType": {
+            "type": "string",
+            "description": "CERT type value must be compatible with the specified types.\n\n - INVALIDCERTTYPE: INVALIDCERTTYPE\n\n - PKIX: PKIX\n\n - SPKI: SPKI\n\n - PGP: PGP\n\n - IPKIX: IPKIX\n\n - ISPKI: ISPKI\n\n - IPGP: IPGP\n\n - ACPKIX: ACPKIX\n\n - IACPKIX: IACPKIX\n\n - URI_: URI\n\n - OID: OID\n",
+            "title": "CERT Type",
+            "enum": [
+                "INVALIDCERTTYPE",
+                "PKIX",
+                "SPKI",
+                "PGP",
+                "IPKIX",
+                "ISPKI",
+                "IPGP",
+                "ACPKIX",
+                "IACPKIX",
+                "URI_",
+                "OID"
+            ],
+            "default": "INVALIDCERTTYPE",
+            "x-displayname": "CERT Type",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.CERTType"
+        },
         "dns_zoneCertificationAuthorityAuthorization": {
             "type": "object",
             "title": "CertificationAuthorityAuthorization",
@@ -2341,6 +2510,43 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [primary]\n Secondary DNS",
                     "$ref": "#/definitions/dns_zoneSecondaryDNSCreateSpecType",
                     "x-displayname": "Secondary DNS Configuration"
+                }
+            }
+        },
+        "dns_zoneDLVResourceRecord": {
+            "type": "object",
+            "description": "DNS DLV Record",
+            "title": "DLVResourceRecord",
+            "x-displayname": "DNS DLV Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DLVResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": " It uses the same format as the DS record.\n\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "DLV Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneDSRecordValue"
+                    },
+                    "x-displayname": "DLV Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -3195,19 +3401,19 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [sha256_digest sha384_digest]\n",
                     "title": "SHA1 Digest",
                     "$ref": "#/definitions/dns_zoneSHA1Digest",
-                    "x-displayname": "SHA1Digest"
+                    "x-displayname": "SHA1 Digest"
                 },
                 "sha256_digest": {
                     "description": "Exclusive with [sha1_digest sha384_digest]\n",
                     "title": "SHA256 Digest",
                     "$ref": "#/definitions/dns_zoneSHA256Digest",
-                    "x-displayname": "SHA256Digest"
+                    "x-displayname": "SHA256 Digest"
                 },
                 "sha384_digest": {
                     "description": "Exclusive with [sha1_digest sha256_digest]\n",
                     "title": "SHA384 Digest",
                     "$ref": "#/definitions/dns_zoneSHA384Digest",
-                    "x-displayname": "SHA384Digest"
+                    "x-displayname": "SHA384 Digest"
                 }
             }
         },
@@ -3253,6 +3459,24 @@ var APISwaggerJSON string = `{
                     "title": "create_form",
                     "$ref": "#/definitions/dns_zoneCreateRequest",
                     "x-displayname": "CreateRequest Format"
+                },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
                 },
                 "metadata": {
                     "description": " Standard object's metadata",
@@ -3306,7 +3530,7 @@ var APISwaggerJSON string = `{
         },
         "dns_zoneGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -3314,7 +3538,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -3352,9 +3577,28 @@ var APISwaggerJSON string = `{
             "description": "Desired state of DNS zone",
             "title": "DNS Zone specification",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-creation_method": "[\"crud_api\",\"import_axfr\",\"import_bind_file\"]",
             "x-ves-oneof-field-dns_type": "[\"primary\",\"secondary\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.GlobalSpecType",
             "properties": {
+                "crud_api": {
+                    "description": "Exclusive with [import_axfr import_bind_file]\n CRUD API is the most common method of creation",
+                    "title": "CRUD API",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "CRUD API"
+                },
+                "import_axfr": {
+                    "description": "Exclusive with [crud_api import_bind_file]\n Import AXFR for when user uses ImportAXFR custom API",
+                    "title": "Import AXFR",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Import AXFR"
+                },
+                "import_bind_file": {
+                    "description": "Exclusive with [crud_api import_axfr]\n Import BIND File for when user uses ImportBINDFile custom API",
+                    "title": "Import BIND File",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Import BIND File"
+                },
                 "num_of_dns_records": {
                     "type": "integer",
                     "description": " Number of DNS records displays number of dns records for each zone",
@@ -3851,15 +4095,15 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
+                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "title": "Default DNS Record Sets",
-                    "maxItems": 10000,
+                    "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
                     },
                     "x-displayname": "Resource Record Sets",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "10000"
+                        "ves.io.schema.rules.repeated.max_items": "50000"
                     }
                 },
                 "default_soa_parameters": {
@@ -3915,13 +4159,13 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
-                    "maxItems": 10000,
+                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
                     },
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "10000"
+                        "ves.io.schema.rules.repeated.max_items": "50000"
                     }
                 },
                 "default_soa_parameters": {
@@ -3966,13 +4210,13 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
-                    "maxItems": 10000,
+                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
                     },
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "10000"
+                        "ves.io.schema.rules.repeated.max_items": "50000"
                     }
                 },
                 "default_soa_parameters": {
@@ -4009,47 +4253,53 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "RRSet is a set of Resource Record Sets for specific type",
             "x-displayname": "Resource Record Set",
-            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"afsdb_record\",\"alias_record\",\"caa_record\",\"cds_record\",\"cname_record\",\"ds_record\",\"eui48_record\",\"eui64_record\",\"lb_record\",\"loc_record\",\"mx_record\",\"naptr_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"txt_record\"]",
+            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"afsdb_record\",\"alias_record\",\"caa_record\",\"cds_record\",\"cert_record\",\"cname_record\",\"dlv_record\",\"ds_record\",\"eui48_record\",\"eui64_record\",\"lb_record\",\"loc_record\",\"mx_record\",\"naptr_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"sshfp_record\",\"tlsa_record\",\"txt_record\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.RRSet",
             "properties": {
                 "a_record": {
-                    "description": "Exclusive with [aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "A Record",
                     "$ref": "#/definitions/dns_zoneDNSAResourceRecord",
                     "x-displayname": "A"
                 },
                 "aaaa_record": {
-                    "description": "Exclusive with [a_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "AAAA Record",
                     "$ref": "#/definitions/dns_zoneDNSAAAAResourceRecord",
                     "x-displayname": "AAAA"
                 },
                 "afsdb_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "AFSDB Record",
                     "$ref": "#/definitions/dns_zoneDNSAFSDBRecord",
                     "x-displayname": "AFSDB"
                 },
                 "alias_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "ALIAS Record",
                     "$ref": "#/definitions/dns_zoneDNSAliasResourceRecord",
                     "x-displayname": "ALIAS"
                 },
                 "caa_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CAA Record",
                     "$ref": "#/definitions/dns_zoneDNSCAAResourceRecord",
                     "x-displayname": "CAA"
                 },
                 "cds_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CDS Record",
                     "$ref": "#/definitions/dns_zoneDNSCDSRecord",
                     "x-displayname": "CDS"
                 },
+                "cert_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "title": "CERT Record",
+                    "$ref": "#/definitions/dns_zoneCERTResourceRecord",
+                    "x-displayname": "CERT"
+                },
                 "cname_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CNAME Record",
                     "$ref": "#/definitions/dns_zoneDNSCNAMEResourceRecord",
                     "x-displayname": "CNAME"
@@ -4061,65 +4311,83 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Comment",
                     "x-ves-example": "Comment"
                 },
+                "dlv_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "title": "DLV Record",
+                    "$ref": "#/definitions/dns_zoneDLVResourceRecord",
+                    "x-displayname": "DLV"
+                },
                 "ds_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "DS Record",
                     "$ref": "#/definitions/dns_zoneDNSDSRecord",
                     "x-displayname": "DS"
                 },
                 "eui48_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "EUI48 Record",
                     "$ref": "#/definitions/dns_zoneDNSEUI48ResourceRecord",
                     "x-displayname": "EUI48"
                 },
                 "eui64_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "EUI64 Record",
                     "$ref": "#/definitions/dns_zoneDNSEUI64ResourceRecord",
                     "x-displayname": "EUI64"
                 },
                 "lb_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record loc_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "DNS LB Record",
                     "$ref": "#/definitions/dns_zoneDNSLBResourceRecord",
                     "x-displayname": "DNS Load Balancer"
                 },
                 "loc_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record mx_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "LOC Record",
                     "$ref": "#/definitions/dns_zoneDNSLOCResourceRecord",
                     "x-displayname": "LOC"
                 },
                 "mx_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record naptr_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "MX Record",
                     "$ref": "#/definitions/dns_zoneDNSMXResourceRecord",
                     "x-displayname": "MX"
                 },
                 "naptr_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record ns_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "NAPTR Record",
                     "$ref": "#/definitions/dns_zoneDNSNAPTRResourceRecord",
                     "x-displayname": "NAPTR"
                 },
                 "ns_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ptr_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "NS Record",
                     "$ref": "#/definitions/dns_zoneDNSNSResourceRecord",
                     "x-displayname": "NS"
                 },
                 "ptr_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record srv_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "PTR Record",
                     "$ref": "#/definitions/dns_zoneDNSPTRResourceRecord",
                     "x-displayname": "PTR"
                 },
                 "srv_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record sshfp_record tlsa_record txt_record]\n",
                     "title": "SRV Record",
                     "$ref": "#/definitions/dns_zoneDNSSRVResourceRecord",
                     "x-displayname": "SRV"
+                },
+                "sshfp_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record tlsa_record txt_record]\n",
+                    "title": "SSHFP Record",
+                    "$ref": "#/definitions/dns_zoneSSHFPResourceRecord",
+                    "x-displayname": "SSHFP"
+                },
+                "tlsa_record": {
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record txt_record]\n",
+                    "title": "TLSA Record",
+                    "$ref": "#/definitions/dns_zoneTLSAResourceRecord",
+                    "x-displayname": "TLSA"
                 },
                 "ttl": {
                     "type": "integer",
@@ -4134,7 +4402,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "txt_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record]\n",
                     "title": "TXT Record",
                     "$ref": "#/definitions/dns_zoneDNSTXTResourceRecord",
                     "x-displayname": "TXT"
@@ -4159,15 +4427,15 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set": {
                     "type": "array",
-                    "description": " Collection of DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10000\n",
+                    "description": " Collection of DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "title": "Record Sets",
-                    "maxItems": 10000,
+                    "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
                     },
                     "x-displayname": "Resource Record Sets",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "10000"
+                        "ves.io.schema.rules.repeated.max_items": "50000"
                     }
                 }
             }
@@ -4408,6 +4676,131 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneSSHFPAlgorithm": {
+            "type": "string",
+            "description": "SSHFP algorithm value must be compatible with the specified algorithm.\n\n - UNSPECIFIEDALGORITHM: UNSPECIFIEDALGORITHM\n\n - RSA: RSA\n\n - DSA: DSA\n\n - ECDSA: ECDSA\n\n - Ed25519: Ed25519\n\n - Ed448: Ed448\n",
+            "title": "SSHFP Algorithm",
+            "enum": [
+                "UNSPECIFIEDALGORITHM",
+                "RSA",
+                "DSA",
+                "ECDSA",
+                "Ed25519",
+                "Ed448"
+            ],
+            "default": "UNSPECIFIEDALGORITHM",
+            "x-displayname": "SSHFP Algorithm",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.SSHFPAlgorithm"
+        },
+        "dns_zoneSSHFPFingerprintType": {
+            "type": "string",
+            "description": "SSHFP Fingerprint Type must be compatible with the specified values.\n\n - INVALIDFINGERPRINTTYPE: INVALIDFINGERPRINTTYPE\n\n - SHA1ALGORITHM: SHA1ALGORITHM\n\n - SHA256ALGORITHM: SHA256ALGORITHM\n",
+            "title": "SSHFP Fingerprint Type",
+            "enum": [
+                "INVALIDFINGERPRINTTYPE",
+                "SHA1ALGORITHM",
+                "SHA256ALGORITHM"
+            ],
+            "default": "INVALIDFINGERPRINTTYPE",
+            "x-displayname": "SSHFP Fingerprint Type",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.SSHFPFingerprintType"
+        },
+        "dns_zoneSSHFPRecordValue": {
+            "type": "object",
+            "title": "SSHFPRecordValue",
+            "x-displayname": "SSHFPRecordValue",
+            "x-ves-oneof-field-fingerprint_type": "[\"sha1_digest\",\"sha256_digest\"]",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SSHFPRecordValue",
+            "properties": {
+                "algorithm": {
+                    "description": " Algorithm of the public key.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "SSHFP Algorithm",
+                    "$ref": "#/definitions/dns_zoneSSHFPAlgorithm",
+                    "x-displayname": "SSHFP Algorithm",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "fingerprint": {
+                    "type": "string",
+                    "description": " The hexadecimal representation of the hash result of the SSH key as text.\n\nExample: - \"Ab100cFg\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pattern: ^[A-Fa-f0-9]+$\n",
+                    "title": "Fingerprint",
+                    "minLength": 1,
+                    "maxLength": 4096,
+                    "x-displayname": "Fingerprint",
+                    "x-ves-example": "Ab100cFg",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.pattern": "^[A-Fa-f0-9]+$"
+                    }
+                },
+                "fingerprinttype": {
+                    "description": " Algorithm used to calculate the fingerprint of the public key.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Fingerprint Type",
+                    "$ref": "#/definitions/dns_zoneSSHFPFingerprintType",
+                    "x-displayname": "Fingerprint Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "sha1_digest": {
+                    "description": "Exclusive with [sha256_digest]\n",
+                    "title": "SHA1 Digest",
+                    "$ref": "#/definitions/dns_zoneSHA1Digest",
+                    "x-displayname": "SHA1 Digest"
+                },
+                "sha256_digest": {
+                    "description": "Exclusive with [sha1_digest]\n",
+                    "title": "SHA256 Digest",
+                    "$ref": "#/definitions/dns_zoneSHA256Digest",
+                    "x-displayname": "SHA256 Digest"
+                }
+            }
+        },
+        "dns_zoneSSHFPResourceRecord": {
+            "type": "object",
+            "description": "DNS SSHFP Record",
+            "title": "SSHFPResourceRecord",
+            "x-displayname": "DNS SSHFP Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SSHFPResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "SSHFP Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneSSHFPRecordValue"
+                    },
+                    "x-displayname": "SSHFP Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
         "dns_zoneSecondaryDNSConfig": {
             "type": "object",
             "title": "Secondary DNS Configuration",
@@ -4608,6 +5001,138 @@ var APISwaggerJSON string = `{
                     "title": "Verification Status",
                     "$ref": "#/definitions/dns_zoneDNSZoneStatus",
                     "x-displayname": "Verification Status"
+                }
+            }
+        },
+        "dns_zoneTLSARecordCSelector": {
+            "type": "string",
+            "description": "\n - FullCertificate: Full Certificate\n\n - UseSubjectPublicKey: Use Subject Public Key\n",
+            "title": "TLSA Record Selector",
+            "enum": [
+                "FullCertificate",
+                "UseSubjectPublicKey"
+            ],
+            "default": "FullCertificate",
+            "x-displayname": "TLSA Record Selector",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.TLSARecordCSelector"
+        },
+        "dns_zoneTLSARecordCertificateUsage": {
+            "type": "string",
+            "description": "\n - CertificateAuthorityConstraint: Certificate Authority Constraint\n\n - ServiceCertificateConstraint: Service Certificate Constraint\n\n - TrustAnchorAssertion: Trust Anchor Assertion\n\n - DomainIssuedCertificate: Domain Issued Certificate\n",
+            "title": "TLSA Record Certificate Usage",
+            "enum": [
+                "CertificateAuthorityConstraint",
+                "ServiceCertificateConstraint",
+                "TrustAnchorAssertion",
+                "DomainIssuedCertificate"
+            ],
+            "default": "CertificateAuthorityConstraint",
+            "x-displayname": "TLSA Record Certificate Usage",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.TLSARecordCertificateUsage"
+        },
+        "dns_zoneTLSARecordMatchingType": {
+            "type": "string",
+            "description": "\n - NoHash: No Hash\n\n - SHA256: SHA-256\n\n - SHA512: SHA-512\n",
+            "title": "TLSA Record Matching Type",
+            "enum": [
+                "NoHash",
+                "SHA256",
+                "SHA512"
+            ],
+            "default": "NoHash",
+            "x-displayname": "TLSA Record Matching Type",
+            "x-ves-proto-enum": "ves.io.schema.dns_zone.TLSARecordMatchingType"
+        },
+        "dns_zoneTLSARecordValue": {
+            "type": "object",
+            "title": "TLSARecordValue",
+            "x-displayname": "TLSARecordValue",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.TLSARecordValue",
+            "properties": {
+                "certificate_association_data": {
+                    "type": "string",
+                    "description": " The actual data to be matched given the settings of the other fields.\n\nExample: - \"Certificate Association Data\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hex: true\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Certificate Association Data",
+                    "minLength": 1,
+                    "maxLength": 4096,
+                    "x-displayname": "Certificate Association Data",
+                    "x-ves-example": "Certificate Association Data",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hex": "true",
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "certificate_usage": {
+                    "description": " x-example: \n TLSA Record Certificate Usage.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Certificate Usage",
+                    "$ref": "#/definitions/dns_zoneTLSARecordCertificateUsage",
+                    "x-displayname": "Certificate Usage",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "matching_type": {
+                    "description": " TLSA Record Matching Type.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Matching Type",
+                    "$ref": "#/definitions/dns_zoneTLSARecordMatchingType",
+                    "x-displayname": "Matching Type",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "selector": {
+                    "description": " TLSA Record Selector.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Selector",
+                    "$ref": "#/definitions/dns_zoneTLSARecordCSelector",
+                    "x-displayname": "Selector",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "dns_zoneTLSAResourceRecord": {
+            "type": "object",
+            "description": "DNS TLSA Record",
+            "title": "TLSAResourceRecord",
+            "x-displayname": "DNS TLSA Record",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.TLSAResourceRecord",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "title": "Record Name",
+                    "x-displayname": "Record Name (Excluding Domain name)",
+                    "x-ves-example": "www or mail or * or ww* or *ab",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                    }
+                },
+                "values": {
+                    "type": "array",
+                    "description": "\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "TLSA Value",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneTLSARecordValue"
+                    },
+                    "x-displayname": "TLSA Value",
+                    "x-ves-example": "values",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
