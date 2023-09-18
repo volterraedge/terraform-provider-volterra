@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -2458,6 +2489,24 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/aws_tgw_siteCreateRequest",
                     "x-displayname": "CreateRequest Format"
                 },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -2510,7 +2559,7 @@ var APISwaggerJSON string = `{
         },
         "aws_tgw_siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2518,7 +2567,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2835,6 +2885,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS Service VPC and TGW",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
+            "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
@@ -2872,6 +2923,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.num_items": "1,3"
                     }
                 },
+                "custom_security_group": {
+                    "description": "Exclusive with [f5xc_security_group]\n With this option, ingress and egress traffic will be controlled via security group ids.",
+                    "title": "Custom Security Groups for SLO and SLI Interface",
+                    "$ref": "#/definitions/viewsSecurityGroupType",
+                    "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
+                },
                 "disable_internet_vip": {
                     "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
                     "title": "Disable VIP Advertisement to Internet on Site",
@@ -2900,6 +2957,12 @@ var APISwaggerJSON string = `{
                     "title": "Existing TGW",
                     "$ref": "#/definitions/aws_tgw_siteExistingTGWType",
                     "x-displayname": "Existing TGW"
+                },
+                "f5xc_security_group": {
+                    "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
+                    "title": "Default F5XC Security Group",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to create and attach F5XC default security group"
                 },
                 "instance_type": {
                     "type": "string",
@@ -5874,6 +5937,40 @@ var APISwaggerJSON string = `{
                     "title": "Default Performance Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L7 Enhanced"
+                }
+            }
+        },
+        "viewsSecurityGroupType": {
+            "type": "object",
+            "description": "Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC",
+            "title": "Security Group Parameters",
+            "x-displayname": "Security Group IDS",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.SecurityGroupType",
+            "properties": {
+                "inside_security_group_id": {
+                    "type": "string",
+                    "description": " Security Group ID to be attached to SLI(Site Local Inside) Interface\n\nExample: - \"sg-0db952838ba829943\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n  ves.io.schema.rules.string.pattern: ^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$\n",
+                    "title": "Inside Security Group ID",
+                    "maxLength": 20,
+                    "x-displayname": "Inside Security Group ID",
+                    "x-ves-example": "sg-0db952838ba829943",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20",
+                        "ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
+                    }
+                },
+                "outside_security_group_id": {
+                    "type": "string",
+                    "description": " Security Group ID to be attached to SLO(Site Local Outside) Interface\n\nExample: - \"sg-0db952838ba829943\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n  ves.io.schema.rules.string.pattern: ^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$\n",
+                    "title": "Outside Security Group ID",
+                    "maxLength": 20,
+                    "x-displayname": "Outside Security Group ID",
+                    "x-ves-example": "sg-0db952838ba829943",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20",
+                        "ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
+                    }
                 }
             }
         },

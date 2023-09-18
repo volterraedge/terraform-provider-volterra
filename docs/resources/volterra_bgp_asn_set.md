@@ -10,7 +10,7 @@ Resource volterra_bgp_asn_set
 
 The Bgp Asn Set allows CRUD of Bgp Asn Set resource on Volterra SaaS
 
-~> **Note:** Please refer to [Bgp Asn Set API docs](https://volterra.io/docs/api/bgp-asn-set) to learn more
+~> **Note:** Please refer to [Bgp Asn Set API docs](https://docs.cloud.f5.com/docs/api/bgp-asn-set) to learn more
 
 Example Usage
 -------------

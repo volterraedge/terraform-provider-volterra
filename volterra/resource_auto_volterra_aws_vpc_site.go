@@ -433,6 +433,32 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 				},
 			},
 
+			"custom_security_group": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"inside_security_group_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"outside_security_group_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"f5xc_security_group": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -3622,6 +3648,49 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+		}
+
+	}
+
+	//security_group_choice
+
+	securityGroupChoiceTypeFound := false
+
+	if v, ok := d.GetOk("custom_security_group"); ok && !securityGroupChoiceTypeFound {
+
+		securityGroupChoiceTypeFound = true
+		securityGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_CustomSecurityGroup{}
+		securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
+		createSpec.SecurityGroupChoice = securityGroupChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
+
+				securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
+
+			}
+
+			if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
+
+				securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("f5xc_security_group"); ok && !securityGroupChoiceTypeFound {
+
+		securityGroupChoiceTypeFound = true
+
+		if v.(bool) {
+			securityGroupChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_F5XcSecurityGroup{}
+			securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+			createSpec.SecurityGroupChoice = securityGroupChoiceInt
 		}
 
 	}

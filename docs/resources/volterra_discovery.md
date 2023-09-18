@@ -10,7 +10,7 @@ Resource volterra_discovery
 
 The Discovery allows CRUD of Discovery resource on Volterra SaaS
 
-~> **Note:** Please refer to [Discovery API docs](https://volterra.io/docs/api/discovery) to learn more
+~> **Note:** Please refer to [Discovery API docs](https://docs.cloud.f5.com/docs/api/discovery) to learn more
 
 Example Usage
 -------------

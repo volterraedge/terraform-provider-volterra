@@ -10,7 +10,7 @@ Resource volterra_active_alert_policies
 
 The active alert policies allows you to set a list of active alert policies on a certain namespace
 
-~> **Note:** Please refer to [Active Alert Policies API docs](https://volterra.io/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies) to learn more
+~> **Note:** Please refer to [Active Alert Policies API docs](https://docs.cloud.f5.com/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies) to learn more
 
 Example Usage
 -------------

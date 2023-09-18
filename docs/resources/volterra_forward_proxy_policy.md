@@ -10,7 +10,7 @@ Resource volterra_forward_proxy_policy
 
 The Forward Proxy Policy allows CRUD of Forward Proxy Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Forward Proxy Policy API docs](https://volterra.io/docs/api/views-forward-proxy-policy) to learn more
+~> **Note:** Please refer to [Forward Proxy Policy API docs](https://docs.cloud.f5.com/docs/api/views-forward-proxy-policy) to learn more
 
 Example Usage
 -------------

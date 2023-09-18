@@ -1509,6 +1509,112 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 				},
 			},
 
+			"gcp_bucket_receiver": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"batch": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"max_bytes": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"max_bytes_disabled": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"max_events": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"max_events_disabled": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"timeout_seconds": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"timeout_seconds_default": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"bucket": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"compression": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"compression_gzip": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"compression_none": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"gcp_cred": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"http_receiver": {
 
 				Type:     schema.TypeSet,
@@ -5722,6 +5828,174 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("gcp_bucket_receiver"); ok && !receiverTypeFound {
+
+		receiverTypeFound = true
+		receiverInt := &ves_io_schema_global_log_receiver.CreateSpecType_GcpBucketReceiver{}
+		receiverInt.GcpBucketReceiver = &ves_io_schema_global_log_receiver.GCPBucketConfig{}
+		createSpec.Receiver = receiverInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["batch"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				batch := &ves_io_schema_global_log_receiver.BatchOptionType{}
+				receiverInt.GcpBucketReceiver.Batch = batch
+				for _, set := range sl {
+					batchMapStrToI := set.(map[string]interface{})
+
+					batchBytesTypeFound := false
+
+					if v, ok := batchMapStrToI["max_bytes"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+						batchBytesTypeFound = true
+						batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytes{}
+
+						batch.BatchBytes = batchBytesInt
+
+						batchBytesInt.MaxBytes = uint32(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["max_bytes_disabled"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+						batchBytesTypeFound = true
+
+						if v.(bool) {
+							batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytesDisabled{}
+							batchBytesInt.MaxBytesDisabled = &ves_io_schema.Empty{}
+							batch.BatchBytes = batchBytesInt
+						}
+
+					}
+
+					batchEventsTypeFound := false
+
+					if v, ok := batchMapStrToI["max_events"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+						batchEventsTypeFound = true
+						batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEvents{}
+
+						batch.BatchEvents = batchEventsInt
+
+						batchEventsInt.MaxEvents = uint32(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["max_events_disabled"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+						batchEventsTypeFound = true
+
+						if v.(bool) {
+							batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEventsDisabled{}
+							batchEventsInt.MaxEventsDisabled = &ves_io_schema.Empty{}
+							batch.BatchEvents = batchEventsInt
+						}
+
+					}
+
+					batchTimeoutTypeFound := false
+
+					if v, ok := batchMapStrToI["timeout_seconds"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+						batchTimeoutTypeFound = true
+						batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSeconds{}
+
+						batch.BatchTimeout = batchTimeoutInt
+
+						batchTimeoutInt.TimeoutSeconds = uint64(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["timeout_seconds_default"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+						batchTimeoutTypeFound = true
+
+						if v.(bool) {
+							batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSecondsDefault{}
+							batchTimeoutInt.TimeoutSecondsDefault = &ves_io_schema.Empty{}
+							batch.BatchTimeout = batchTimeoutInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["bucket"]; ok && !isIntfNil(v) {
+
+				receiverInt.GcpBucketReceiver.Bucket = v.(string)
+
+			}
+
+			if v, ok := cs["compression"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				compression := &ves_io_schema_global_log_receiver.CompressionType{}
+				receiverInt.GcpBucketReceiver.Compression = compression
+				for _, set := range sl {
+					compressionMapStrToI := set.(map[string]interface{})
+
+					compressionChoiceTypeFound := false
+
+					if v, ok := compressionMapStrToI["compression_gzip"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+						compressionChoiceTypeFound = true
+
+						if v.(bool) {
+							compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}
+							compressionChoiceInt.CompressionGzip = &ves_io_schema.Empty{}
+							compression.CompressionChoice = compressionChoiceInt
+						}
+
+					}
+
+					if v, ok := compressionMapStrToI["compression_none"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+						compressionChoiceTypeFound = true
+
+						if v.(bool) {
+							compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionNone{}
+							compressionChoiceInt.CompressionNone = &ves_io_schema.Empty{}
+							compression.CompressionChoice = compressionChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				gcpCredInt := &ves_io_schema_views.ObjectRefType{}
+				receiverInt.GcpBucketReceiver.GcpCred = gcpCredInt
+
+				for _, set := range sl {
+					gcMapToStrVal := set.(map[string]interface{})
+					if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
+						gcpCredInt.Name = val.(string)
+					}
+					if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						gcpCredInt.Namespace = val.(string)
+					}
+
+					if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						gcpCredInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -10924,6 +11198,174 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("gcp_bucket_receiver"); ok && !receiverTypeFound {
+
+		receiverTypeFound = true
+		receiverInt := &ves_io_schema_global_log_receiver.ReplaceSpecType_GcpBucketReceiver{}
+		receiverInt.GcpBucketReceiver = &ves_io_schema_global_log_receiver.GCPBucketConfig{}
+		updateSpec.Receiver = receiverInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["batch"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				batch := &ves_io_schema_global_log_receiver.BatchOptionType{}
+				receiverInt.GcpBucketReceiver.Batch = batch
+				for _, set := range sl {
+					batchMapStrToI := set.(map[string]interface{})
+
+					batchBytesTypeFound := false
+
+					if v, ok := batchMapStrToI["max_bytes"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+						batchBytesTypeFound = true
+						batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytes{}
+
+						batch.BatchBytes = batchBytesInt
+
+						batchBytesInt.MaxBytes = uint32(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["max_bytes_disabled"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+						batchBytesTypeFound = true
+
+						if v.(bool) {
+							batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytesDisabled{}
+							batchBytesInt.MaxBytesDisabled = &ves_io_schema.Empty{}
+							batch.BatchBytes = batchBytesInt
+						}
+
+					}
+
+					batchEventsTypeFound := false
+
+					if v, ok := batchMapStrToI["max_events"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+						batchEventsTypeFound = true
+						batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEvents{}
+
+						batch.BatchEvents = batchEventsInt
+
+						batchEventsInt.MaxEvents = uint32(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["max_events_disabled"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+						batchEventsTypeFound = true
+
+						if v.(bool) {
+							batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEventsDisabled{}
+							batchEventsInt.MaxEventsDisabled = &ves_io_schema.Empty{}
+							batch.BatchEvents = batchEventsInt
+						}
+
+					}
+
+					batchTimeoutTypeFound := false
+
+					if v, ok := batchMapStrToI["timeout_seconds"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+						batchTimeoutTypeFound = true
+						batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSeconds{}
+
+						batch.BatchTimeout = batchTimeoutInt
+
+						batchTimeoutInt.TimeoutSeconds = uint64(v.(int))
+
+					}
+
+					if v, ok := batchMapStrToI["timeout_seconds_default"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+						batchTimeoutTypeFound = true
+
+						if v.(bool) {
+							batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSecondsDefault{}
+							batchTimeoutInt.TimeoutSecondsDefault = &ves_io_schema.Empty{}
+							batch.BatchTimeout = batchTimeoutInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["bucket"]; ok && !isIntfNil(v) {
+
+				receiverInt.GcpBucketReceiver.Bucket = v.(string)
+
+			}
+
+			if v, ok := cs["compression"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				compression := &ves_io_schema_global_log_receiver.CompressionType{}
+				receiverInt.GcpBucketReceiver.Compression = compression
+				for _, set := range sl {
+					compressionMapStrToI := set.(map[string]interface{})
+
+					compressionChoiceTypeFound := false
+
+					if v, ok := compressionMapStrToI["compression_gzip"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+						compressionChoiceTypeFound = true
+
+						if v.(bool) {
+							compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}
+							compressionChoiceInt.CompressionGzip = &ves_io_schema.Empty{}
+							compression.CompressionChoice = compressionChoiceInt
+						}
+
+					}
+
+					if v, ok := compressionMapStrToI["compression_none"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+						compressionChoiceTypeFound = true
+
+						if v.(bool) {
+							compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionNone{}
+							compressionChoiceInt.CompressionNone = &ves_io_schema.Empty{}
+							compression.CompressionChoice = compressionChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["gcp_cred"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				gcpCredInt := &ves_io_schema_views.ObjectRefType{}
+				receiverInt.GcpBucketReceiver.GcpCred = gcpCredInt
+
+				for _, set := range sl {
+					gcMapToStrVal := set.(map[string]interface{})
+					if val, ok := gcMapToStrVal["name"]; ok && !isIntfNil(v) {
+						gcpCredInt.Name = val.(string)
+					}
+					if val, ok := gcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						gcpCredInt.Namespace = val.(string)
+					}
+
+					if val, ok := gcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						gcpCredInt.Tenant = val.(string)
+					}
 				}
 
 			}

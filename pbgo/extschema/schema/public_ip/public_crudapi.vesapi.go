@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -81,6 +81,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -383,11 +385,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -425,10 +427,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -550,10 +552,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -920,6 +922,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1098,6 +1103,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1116,6 +1143,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -1549,7 +1579,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1558,10 +1588,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -1597,6 +1628,24 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Response",
             "x-ves-proto-message": "ves.io.schema.public_ip.GetResponse",
             "properties": {
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -1649,14 +1698,15 @@ var APISwaggerJSON string = `{
         },
         "public_ipGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },

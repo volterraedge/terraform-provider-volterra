@@ -83,6 +83,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType"] = MobileTrafficIdentifierTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OpenApiFallThroughMode"] = OpenApiFallThroughModeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings"] = OpenApiValidationAllSpecEndpointsSettingsValidator()
+	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationCommonSettings"] = OpenApiValidationCommonSettingsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationMode"] = OpenApiValidationModeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActive"] = OpenApiValidationModeActiveValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActiveResponse"] = OpenApiValidationModeActiveResponseValidator()
@@ -113,6 +114,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = SimpleClientSrcRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting"] = SingleLoadBalancerAppSettingValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ValidateApiBySpecRule"] = ValidateApiBySpecRuleValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ValidationPropertySetting"] = ValidationPropertySettingValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ValidationSettingForHeaders"] = ValidationSettingForHeadersValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ValidationSettingForQueryParameters"] = ValidationSettingForQueryParametersValidator()
 	vr["ves.io.schema.views.http_loadbalancer.WebMobileTrafficType"] = WebMobileTrafficTypeValidator()
 
 }
@@ -329,6 +333,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

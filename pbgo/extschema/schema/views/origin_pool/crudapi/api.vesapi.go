@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -3346,7 +3346,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public DNS name and site information",
             "title": "OriginServerPrivateName",
             "x-displayname": "DNS Name on given Sites",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,6,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateName",
             "properties": {
@@ -3372,6 +3372,17 @@ var APISwaggerJSON string = `{
                     "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Outside Network"
+                },
+                "refresh_interval": {
+                    "type": "integer",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "title": "refresh_interval",
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "604800"
+                    }
                 },
                 "site_locator": {
                     "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3421,7 +3432,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with public DNS name",
             "title": "OriginServerPublicName",
             "x-displayname": "Public DNS Name",
-            "x-ves-displayorder": "1",
+            "x-ves-displayorder": "1,2",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicName",
             "properties": {
                 "dns_name": {
@@ -3438,6 +3449,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.hostname": "true",
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "refresh_interval": {
+                    "type": "integer",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "title": "refresh_interval",
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "604800"
                     }
                 }
             }

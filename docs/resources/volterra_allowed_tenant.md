@@ -10,7 +10,7 @@ Resource volterra_allowed_tenant
 
 The Allowed Tenant allows CRUD of Allowed Tenant resource on Volterra SaaS
 
-~> **Note:** Please refer to [Allowed Tenant API docs](https://volterra.io/docs/api/allowed-tenant) to learn more
+~> **Note:** Please refer to [Allowed Tenant API docs](https://docs.cloud.f5.com/docs/api/allowed-tenant) to learn more
 
 Example Usage
 -------------

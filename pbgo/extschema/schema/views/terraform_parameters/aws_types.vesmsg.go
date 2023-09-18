@@ -687,6 +687,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
+		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
@@ -724,6 +733,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
+		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1120,6 +1138,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["inside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_security_group_id"))
+		if err := fv(ctx, m.GetInsideSecurityGroupId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_vip_port_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_vip_port_config"))
@@ -1157,6 +1184,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))
 		if err := fv(ctx, m.GetMultiNodeNonStdAz(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_security_group_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_security_group_id"))
+		if err := fv(ctx, m.GetOutsideSecurityGroupId(), vOpts...); err != nil {
 			return err
 		}
 

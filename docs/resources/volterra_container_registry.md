@@ -10,7 +10,7 @@ Resource volterra_container_registry
 
 The Container Registry allows CRUD of Container Registry resource on Volterra SaaS
 
-~> **Note:** Please refer to [Container Registry API docs](https://volterra.io/docs/api/container-registry) to learn more
+~> **Note:** Please refer to [Container Registry API docs](https://docs.cloud.f5.com/docs/api/container-registry) to learn more
 
 Example Usage
 -------------

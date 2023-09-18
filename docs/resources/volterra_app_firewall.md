@@ -10,7 +10,7 @@ Resource volterra_app_firewall
 
 The App Firewall allows CRUD of App Firewall resource on Volterra SaaS
 
-~> **Note:** Please refer to [App Firewall API docs](https://volterra.io/docs/api/app-firewall) to learn more
+~> **Note:** Please refer to [App Firewall API docs](https://docs.cloud.f5.com/docs/api/app-firewall) to learn more
 
 Example Usage
 -------------

@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -2620,21 +2620,21 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address1": {
                     "type": "string",
-                    "description": " address line 1\n\nExample: - \"1234 Main road\"-",
+                    "description": "\n\nExample: - \"1234 Main road\"-",
                     "title": "address1",
                     "x-displayname": "Address Line 1",
                     "x-ves-example": "1234 Main road"
                 },
                 "address2": {
                     "type": "string",
-                    "description": " address line 2\n\nExample: - \"P.O BOX 56\"-",
+                    "description": "\n\nExample: - \"P.O BOX 56\"-",
                     "title": "address2",
                     "x-displayname": "Address Line 2",
                     "x-ves-example": "P.O BOX 56"
                 },
                 "city": {
                     "type": "string",
-                    "description": " city / town of the contact\n\nExample: - \"Sunnyvale\"-",
+                    "description": "\n\nExample: - \"Sunnyvale\"-",
                     "title": "city",
                     "x-displayname": "City",
                     "x-ves-example": "Sunnyvale"
@@ -2647,42 +2647,42 @@ var APISwaggerJSON string = `{
                 },
                 "country": {
                     "type": "string",
-                    "description": " country of contact (e.g. USA). refer to https://en.wikipedia.org/wiki/ISO_3166-1, column alpha-2\n\nExample: - \"US\"-",
+                    "description": "\n\nExample: - \"US\"-",
                     "title": "country",
                     "x-displayname": "Country",
                     "x-ves-example": "US"
                 },
                 "county": {
                     "type": "string",
-                    "description": " county (optional, for countries where they have counties)\n\nExample: - \"Santa Clara\"-",
+                    "description": "\n\nExample: - \"Santa Clara\"-",
                     "title": "county",
                     "x-displayname": "County",
                     "x-ves-example": "Santa Clara"
                 },
                 "phone_number": {
                     "type": "string",
-                    "description": " phone number of the contact\n\nExample: - \"+11234567890\"-",
+                    "description": "\n\nExample: - \"+11234567890\"-",
                     "title": "phone_number",
                     "x-displayname": "Phone Number",
                     "x-ves-example": "+11234567890"
                 },
                 "state": {
                     "type": "string",
-                    "description": " state (optional, for countries where they have states)\n\nExample: - \"California\"-",
+                    "description": "\n\nExample: - \"California\"-",
                     "title": "state",
                     "x-displayname": "State",
                     "x-ves-example": "California"
                 },
                 "state_code": {
                     "type": "string",
-                    "description": " state code (optional, for countries where they have states)\n\nExample: - \"CA\"-",
+                    "description": "\n\nExample: - \"CA\"-",
                     "title": "state code",
                     "x-displayname": "State Code",
                     "x-ves-example": "CA"
                 },
                 "zip_code": {
                     "type": "string",
-                    "description": " zip or postal code\n\nExample: - \"95054\"-",
+                    "description": "\n\nExample: - \"95054\"-",
                     "title": "zip_code",
                     "x-displayname": "ZIP code",
                     "x-ves-example": "95054"

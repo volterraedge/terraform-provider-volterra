@@ -1104,7 +1104,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Server Selection"
 	// x-required
-	// Select servers for which the policy the will be applied.
+	// Select servers for which the policy will be applied.
 	//
 	// Types that are valid to be assigned to ServerChoice:
 	//	*GlobalSpecType_AnyServer

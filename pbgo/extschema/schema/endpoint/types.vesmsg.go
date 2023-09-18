@@ -1153,7 +1153,47 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetWhereDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetProximityChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetProximityChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWhereDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWhereDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetProximityChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetProximityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetProximityChoice().(type) {
+	case *GlobalSpecType_NoPreference:
+
+		return nil, nil
+
+	case *GlobalSpecType_SitePreferences:
+		drInfos, err := m.GetSitePreferences().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSitePreferences().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_preferences." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -1342,6 +1382,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetProximityChoice().(type) {
+	case *GlobalSpecType_NoPreference:
+		if fv, exists := v.FldValidators["proximity_choice.no_preference"]; exists {
+			val := m.GetProximityChoice().(*GlobalSpecType_NoPreference).NoPreference
+			vOpts := append(opts,
+				db.WithValidateField("proximity_choice"),
+				db.WithValidateField("no_preference"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SitePreferences:
+		if fv, exists := v.FldValidators["proximity_choice.site_preferences"]; exists {
+			val := m.GetProximityChoice().(*GlobalSpecType_SitePreferences).SitePreferences
+			vOpts := append(opts,
+				db.WithValidateField("proximity_choice"),
+				db.WithValidateField("site_preferences"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["where"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("where"))
@@ -1434,6 +1500,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["endpoint_address.service_info"] = ServiceInfoTypeValidator().Validate
 	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
+
+	v.FldValidators["proximity_choice.site_preferences"] = ves_io_schema.SiteReferenceListTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
 

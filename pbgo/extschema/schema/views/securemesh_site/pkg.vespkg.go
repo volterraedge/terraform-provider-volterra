@@ -64,6 +64,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_option82_tag",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.inside_network",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ip_fabric_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.srv6_network",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
@@ -86,6 +88,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.dhcp_server.dhcp_option82_tag",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.inside_network",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ip_fabric_network",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.srv6_network",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.static_ipv6_address.fleet_static_ip",
@@ -102,6 +106,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

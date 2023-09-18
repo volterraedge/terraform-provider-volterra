@@ -15,7 +15,7 @@ require (
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc
 	google.golang.org/grpc v1.54.0
-	gopkg.volterra.us/stdlib v1.0.2-0.20230719180411-6a2aee33d610
+	gopkg.volterra.us/stdlib v1.0.3
 	k8s.io/api v0.26.0
 )
 

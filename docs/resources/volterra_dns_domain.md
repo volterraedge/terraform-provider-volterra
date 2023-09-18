@@ -10,7 +10,7 @@ Resource volterra_dns_domain
 
 The Dns Domain allows CRUD of Dns Domain resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dns Domain API docs](https://volterra.io/docs/api/dns-domain) to learn more
+~> **Note:** Please refer to [Dns Domain API docs](https://docs.cloud.f5.com/docs/api/dns-domain) to learn more
 
 Example Usage
 -------------

@@ -10,7 +10,7 @@ Resource volterra_dns_load_balancer
 
 The Dns Load Balancer allows CRUD of Dns Load Balancer resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dns Load Balancer API docs](https://volterra.io/docs/api/dns-load-balancer) to learn more
+~> **Note:** Please refer to [Dns Load Balancer API docs](https://docs.cloud.f5.com/docs/api/dns-load-balancer) to learn more
 
 Example Usage
 -------------

@@ -43,11 +43,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNFieldAggregation"] = CDNFieldAggregationValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLogAggregationResponse"] = CDNLogAggregationResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLogResponse"] = CDNLogResponseValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq"] = GetServiceOperationReqValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp"] = GetServiceOperationRspValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNAccessLogsResponseData"] = LilacCDNAccessLogsResponseDataValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest"] = LilacCDNCachePurgeRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse"] = LilacCDNCachePurgeResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsRequest"] = LilacCDNMetricsRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse"] = LilacCDNMetricsResponseValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq"] = ListServiceOperationsReqValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp"] = ListServiceOperationsRspValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.PurgeOperationItem"] = PurgeOperationItemValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationItem"] = ServiceOperationItemValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationsItem"] = ServiceOperationsItemValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationsTimeRange"] = ServiceOperationsTimeRangeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SubscribeRequest"] = SubscribeRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"] = SubscribeResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"] = UnsubscribeRequestValidator()
@@ -171,6 +179,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

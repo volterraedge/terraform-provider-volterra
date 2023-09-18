@@ -138,14 +138,17 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"oversized_body_fail_validation": {
-
+									"allow_only_specified_headers": {
 										Type:     schema.TypeBool,
 										Optional: true,
 									},
 
-									"oversized_body_skip_validation": {
+									"allow_only_specified_query_params": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
+									"fail_oversized_body_validation": {
 										Type:     schema.TypeBool,
 										Optional: true,
 									},
@@ -942,6 +945,29 @@ func resourceVolterraVirtualHost() *schema.Resource {
 									"enable_ddos_mitigation": {
 
 										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"protocol_inspection": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
 										Optional: true,
 									},
 								},
@@ -2503,29 +2529,21 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					oversizedBodyChoiceTypeFound := false
+					if v, ok := cs["allow_only_specified_headers"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
-
-						oversizedBodyChoiceTypeFound = true
-
-						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodyFailValidation{}
-							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
-							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
-						}
+						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedHeaders = v.(bool)
 
 					}
 
-					if v, ok := cs["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+					if v, ok := cs["allow_only_specified_query_params"]; ok && !isIntfNil(v) {
 
-						oversizedBodyChoiceTypeFound = true
+						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedQueryParams = v.(bool)
 
-						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodySkipValidation{}
-							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
-							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
-						}
+					}
+
+					if v, ok := cs["fail_oversized_body_validation"]; ok && !isIntfNil(v) {
+
+						openApiValidationChoiceInt.EnableOpenApiValidation.FailOversizedBodyValidation = v.(bool)
 
 					}
 
@@ -3632,6 +3650,28 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 					}
 
+				}
+
+			}
+
+			if v, ok := dnsProxyConfigurationMapStrToI["protocol_inspection"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				protocolInspectionInt := &ves_io_schema_views.ObjectRefType{}
+				dnsProxyConfiguration.ProtocolInspection = protocolInspectionInt
+
+				for _, set := range sl {
+					piMapToStrVal := set.(map[string]interface{})
+					if val, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Name = val.(string)
+					}
+					if val, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Namespace = val.(string)
+					}
+
+					if val, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Tenant = val.(string)
+					}
 				}
 
 			}
@@ -5498,29 +5538,21 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 
-					oversizedBodyChoiceTypeFound := false
+					if v, ok := cs["allow_only_specified_headers"]; ok && !isIntfNil(v) {
 
-					if v, ok := cs["oversized_body_fail_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
-
-						oversizedBodyChoiceTypeFound = true
-
-						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodyFailValidation{}
-							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
-							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
-						}
+						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedHeaders = v.(bool)
 
 					}
 
-					if v, ok := cs["oversized_body_skip_validation"]; ok && !isIntfNil(v) && !oversizedBodyChoiceTypeFound {
+					if v, ok := cs["allow_only_specified_query_params"]; ok && !isIntfNil(v) {
 
-						oversizedBodyChoiceTypeFound = true
+						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedQueryParams = v.(bool)
 
-						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_virtual_host.OpenApiValidationSettings_OversizedBodySkipValidation{}
-							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
-							openApiValidationChoiceInt.EnableOpenApiValidation.OversizedBodyChoice = oversizedBodyChoiceInt
-						}
+					}
+
+					if v, ok := cs["fail_oversized_body_validation"]; ok && !isIntfNil(v) {
+
+						openApiValidationChoiceInt.EnableOpenApiValidation.FailOversizedBodyValidation = v.(bool)
 
 					}
 
@@ -6610,6 +6642,28 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 					}
 
+				}
+
+			}
+
+			if v, ok := dnsProxyConfigurationMapStrToI["protocol_inspection"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				protocolInspectionInt := &ves_io_schema_views.ObjectRefType{}
+				dnsProxyConfiguration.ProtocolInspection = protocolInspectionInt
+
+				for _, set := range sl {
+					piMapToStrVal := set.(map[string]interface{})
+					if val, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Name = val.(string)
+					}
+					if val, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Namespace = val.(string)
+					}
+
+					if val, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						protocolInspectionInt.Tenant = val.(string)
+					}
 				}
 
 			}

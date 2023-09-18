@@ -10,7 +10,7 @@ Resource volterra_log_receiver
 
 The Log Receiver allows CRUD of Log Receiver resource on Volterra SaaS
 
-~> **Note:** Please refer to [Log Receiver API docs](https://volterra.io/docs/api/log-receiver) to learn more
+~> **Note:** Please refer to [Log Receiver API docs](https://docs.cloud.f5.com/docs/api/log-receiver) to learn more
 
 Example Usage
 -------------

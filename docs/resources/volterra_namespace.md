@@ -10,7 +10,7 @@ Resource: volterra_namespace
 
 Namespace creates logical independent workspace within a tenant. This allows CRD of namespace resource on Volterra.
 
-~> **Note:** Please refer to [Namespace api docs](https://volterra.io/docs/api/namespace) to learn more
+~> **Note:** Please refer to [Namespace api docs](https://docs.cloud.f5.com/docs/api/namespace) to learn more
 
 Example Usage
 -------------

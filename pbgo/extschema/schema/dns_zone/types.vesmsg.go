@@ -172,6 +172,397 @@ func AFSDBRecordValueValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CERTRecordValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CERTRecordValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CERTRecordValue) DeepCopy() *CERTRecordValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CERTRecordValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CERTRecordValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CERTRecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CERTRecordValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCERTRecordValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCERTRecordValue) CertTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(CERTType)
+		return int32(i)
+	}
+	// CERTType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, CERTType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cert_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTRecordValue) CertKeyTagValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cert_key_tag")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTRecordValue) AlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(CERTAlgorithm)
+		return int32(i)
+	}
+	// CERTAlgorithm_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, CERTAlgorithm_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for algorithm")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTRecordValue) CertificateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTRecordValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CERTRecordValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CERTRecordValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("algorithm"))
+		if err := fv(ctx, m.GetAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_key_tag"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_key_tag"))
+		if err := fv(ctx, m.GetCertKeyTag(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_type"))
+		if err := fv(ctx, m.GetCertType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["certificate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certificate"))
+		if err := fv(ctx, m.GetCertificate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCERTRecordValueValidator = func() *ValidateCERTRecordValue {
+	v := &ValidateCERTRecordValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCertType := v.CertTypeValidationRuleHandler
+	rulesCertType := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCertType(rulesCertType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTRecordValue.cert_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cert_type"] = vFn
+
+	vrhCertKeyTag := v.CertKeyTagValidationRuleHandler
+	rulesCertKeyTag := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhCertKeyTag(rulesCertKeyTag)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTRecordValue.cert_key_tag: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cert_key_tag"] = vFn
+
+	vrhAlgorithm := v.AlgorithmValidationRuleHandler
+	rulesAlgorithm := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAlgorithm(rulesAlgorithm)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTRecordValue.algorithm: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["algorithm"] = vFn
+
+	vrhCertificate := v.CertificateValidationRuleHandler
+	rulesCertificate := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "4096",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhCertificate(rulesCertificate)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTRecordValue.certificate: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificate"] = vFn
+
+	return v
+}()
+
+func CERTRecordValueValidator() db.Validator {
+	return DefaultCERTRecordValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CERTResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CERTResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CERTResourceRecord) DeepCopy() *CERTResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CERTResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CERTResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CERTResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CERTResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCERTResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCERTResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CERTRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CERTRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CERTRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CERTRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCERTResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CERTResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CERTResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCERTResourceRecordValidator = func() *ValidateCERTResourceRecord {
+	v := &ValidateCERTResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CERTResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func CERTResourceRecordValidator() db.Validator {
+	return DefaultCERTResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CertificationAuthorityAuthorization) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -522,6 +913,182 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DLVResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DLVResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DLVResourceRecord) DeepCopy() *DLVResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DLVResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DLVResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DLVResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DLVResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDLVResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDLVResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDLVResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*DSRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := DSRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*DSRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*DSRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDLVResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DLVResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DLVResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDLVResourceRecordValidator = func() *ValidateDLVResourceRecord {
+	v := &ValidateDLVResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DLVResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DLVResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func DLVResourceRecordValidator() db.Validator {
+	return DefaultDLVResourceRecordValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4055,6 +4622,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	switch m.GetCreationMethod().(type) {
+	case *GlobalSpecType_CrudApi:
+		if fv, exists := v.FldValidators["creation_method.crud_api"]; exists {
+			val := m.GetCreationMethod().(*GlobalSpecType_CrudApi).CrudApi
+			vOpts := append(opts,
+				db.WithValidateField("creation_method"),
+				db.WithValidateField("crud_api"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ImportAxfr:
+		if fv, exists := v.FldValidators["creation_method.import_axfr"]; exists {
+			val := m.GetCreationMethod().(*GlobalSpecType_ImportAxfr).ImportAxfr
+			vOpts := append(opts,
+				db.WithValidateField("creation_method"),
+				db.WithValidateField("import_axfr"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ImportBindFile:
+		if fv, exists := v.FldValidators["creation_method.import_bind_file"]; exists {
+			val := m.GetCreationMethod().(*GlobalSpecType_ImportBindFile).ImportBindFile
+			vOpts := append(opts,
+				db.WithValidateField("creation_method"),
+				db.WithValidateField("import_bind_file"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dns_type"]; exists {
 		val := m.GetDnsType()
 		vOpts := append(opts,
@@ -5350,7 +5954,7 @@ var DefaultPrimaryDNSConfigValidator = func() *ValidatePrimaryDNSConfig {
 
 	vrhDefaultRrSetGroup := v.DefaultRrSetGroupValidationRuleHandler
 	rulesDefaultRrSetGroup := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "10000",
+		"ves.io.schema.rules.repeated.max_items": "50000",
 	}
 	vFn, err = vrhDefaultRrSetGroup(rulesDefaultRrSetGroup)
 	if err != nil {
@@ -5676,7 +6280,7 @@ var DefaultPrimaryDNSCreateSpecTypeValidator = func() *ValidatePrimaryDNSCreateS
 
 	vrhDefaultRrSetGroup := v.DefaultRrSetGroupValidationRuleHandler
 	rulesDefaultRrSetGroup := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "10000",
+		"ves.io.schema.rules.repeated.max_items": "50000",
 	}
 	vFn, err = vrhDefaultRrSetGroup(rulesDefaultRrSetGroup)
 	if err != nil {
@@ -6020,7 +6624,7 @@ var DefaultPrimaryDNSGetSpecTypeValidator = func() *ValidatePrimaryDNSGetSpecTyp
 
 	vrhDefaultRrSetGroup := v.DefaultRrSetGroupValidationRuleHandler
 	rulesDefaultRrSetGroup := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "10000",
+		"ves.io.schema.rules.repeated.max_items": "50000",
 	}
 	vFn, err = vrhDefaultRrSetGroup(rulesDefaultRrSetGroup)
 	if err != nil {
@@ -6168,6 +6772,22 @@ func (m *RRSet) GetTypeRecordSetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RRSet_LocRecord:
+
+		return nil, nil
+
+	case *RRSet_SshfpRecord:
+
+		return nil, nil
+
+	case *RRSet_TlsaRecord:
+
+		return nil, nil
+
+	case *RRSet_CertRecord:
+
+		return nil, nil
+
+	case *RRSet_DlvRecord:
 
 		return nil, nil
 
@@ -6440,6 +7060,50 @@ func (v *ValidateRRSet) Validate(ctx context.Context, pm interface{}, opts ...db
 				return err
 			}
 		}
+	case *RRSet_SshfpRecord:
+		if fv, exists := v.FldValidators["type_record_set.sshfp_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_SshfpRecord).SshfpRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("sshfp_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_TlsaRecord:
+		if fv, exists := v.FldValidators["type_record_set.tlsa_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_TlsaRecord).TlsaRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("tlsa_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_CertRecord:
+		if fv, exists := v.FldValidators["type_record_set.cert_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_CertRecord).CertRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("cert_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RRSet_DlvRecord:
+		if fv, exists := v.FldValidators["type_record_set.dlv_record"]; exists {
+			val := m.GetTypeRecordSet().(*RRSet_DlvRecord).DlvRecord
+			vOpts := append(opts,
+				db.WithValidateField("type_record_set"),
+				db.WithValidateField("dlv_record"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6499,6 +7163,10 @@ var DefaultRRSetValidator = func() *ValidateRRSet {
 	v.FldValidators["type_record_set.eui48_record"] = DNSEUI48ResourceRecordValidator().Validate
 	v.FldValidators["type_record_set.eui64_record"] = DNSEUI64ResourceRecordValidator().Validate
 	v.FldValidators["type_record_set.loc_record"] = DNSLOCResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.sshfp_record"] = SSHFPResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.tlsa_record"] = TLSAResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.cert_record"] = CERTResourceRecordValidator().Validate
+	v.FldValidators["type_record_set.dlv_record"] = DLVResourceRecordValidator().Validate
 
 	return v
 }()
@@ -6707,7 +7375,7 @@ var DefaultRRSetGroupValidator = func() *ValidateRRSetGroup {
 
 	vrhRrSet := v.RrSetValidationRuleHandler
 	rulesRrSet := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "10000",
+		"ves.io.schema.rules.repeated.max_items": "50000",
 	}
 	vFn, err = vrhRrSet(rulesRrSet)
 	if err != nil {
@@ -7669,6 +8337,395 @@ func SRVServiceValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SSHFPRecordValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SSHFPRecordValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SSHFPRecordValue) DeepCopy() *SSHFPRecordValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SSHFPRecordValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SSHFPRecordValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SSHFPRecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SSHFPRecordValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSSHFPRecordValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSSHFPRecordValue) AlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(SSHFPAlgorithm)
+		return int32(i)
+	}
+	// SSHFPAlgorithm_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, SSHFPAlgorithm_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for algorithm")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHFPRecordValue) FingerprintValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fingerprint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHFPRecordValue) FingerprinttypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(SSHFPFingerprintType)
+		return int32(i)
+	}
+	// SSHFPFingerprintType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, SSHFPFingerprintType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fingerprinttype")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHFPRecordValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SSHFPRecordValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SSHFPRecordValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("algorithm"))
+		if err := fv(ctx, m.GetAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fingerprint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fingerprint"))
+		if err := fv(ctx, m.GetFingerprint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetFingerprintType().(type) {
+	case *SSHFPRecordValue_Sha1Digest:
+		if fv, exists := v.FldValidators["fingerprint_type.sha1_digest"]; exists {
+			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha1Digest).Sha1Digest
+			vOpts := append(opts,
+				db.WithValidateField("fingerprint_type"),
+				db.WithValidateField("sha1_digest"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SSHFPRecordValue_Sha256Digest:
+		if fv, exists := v.FldValidators["fingerprint_type.sha256_digest"]; exists {
+			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha256Digest).Sha256Digest
+			vOpts := append(opts,
+				db.WithValidateField("fingerprint_type"),
+				db.WithValidateField("sha256_digest"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fingerprinttype"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fingerprinttype"))
+		if err := fv(ctx, m.GetFingerprinttype(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
+	v := &ValidateSSHFPRecordValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAlgorithm := v.AlgorithmValidationRuleHandler
+	rulesAlgorithm := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAlgorithm(rulesAlgorithm)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPRecordValue.algorithm: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["algorithm"] = vFn
+
+	vrhFingerprint := v.FingerprintValidationRuleHandler
+	rulesFingerprint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "4096",
+		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.pattern":   "^[A-Fa-f0-9]+$",
+	}
+	vFn, err = vrhFingerprint(rulesFingerprint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPRecordValue.fingerprint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fingerprint"] = vFn
+
+	vrhFingerprinttype := v.FingerprinttypeValidationRuleHandler
+	rulesFingerprinttype := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhFingerprinttype(rulesFingerprinttype)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPRecordValue.fingerprinttype: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fingerprinttype"] = vFn
+
+	v.FldValidators["fingerprint_type.sha1_digest"] = SHA1DigestValidator().Validate
+	v.FldValidators["fingerprint_type.sha256_digest"] = SHA256DigestValidator().Validate
+
+	return v
+}()
+
+func SSHFPRecordValueValidator() db.Validator {
+	return DefaultSSHFPRecordValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SSHFPResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SSHFPResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SSHFPResourceRecord) DeepCopy() *SSHFPResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SSHFPResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SSHFPResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SSHFPResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SSHFPResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSSHFPResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSSHFPResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHFPResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SSHFPRecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SSHFPRecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SSHFPRecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SSHFPRecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSSHFPResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SSHFPResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SSHFPResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSSHFPResourceRecordValidator = func() *ValidateSSHFPResourceRecord {
+	v := &ValidateSSHFPResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func SSHFPResourceRecordValidator() db.Validator {
+	return DefaultSSHFPResourceRecordValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SecondaryDNSConfig) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -8237,6 +9294,400 @@ var DefaultSecondaryDNSGetSpecTypeValidator = func() *ValidateSecondaryDNSGetSpe
 
 func SecondaryDNSGetSpecTypeValidator() db.Validator {
 	return DefaultSecondaryDNSGetSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TLSARecordValue) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TLSARecordValue) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TLSARecordValue) DeepCopy() *TLSARecordValue {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TLSARecordValue{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TLSARecordValue) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TLSARecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TLSARecordValueValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTLSARecordValue struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTLSARecordValue) CertificateUsageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(TLSARecordCertificateUsage)
+		return int32(i)
+	}
+	// TLSARecordCertificateUsage_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, TLSARecordCertificateUsage_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_usage")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSARecordValue) SelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(TLSARecordCSelector)
+		return int32(i)
+	}
+	// TLSARecordCSelector_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, TLSARecordCSelector_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for selector")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSARecordValue) MatchingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(TLSARecordMatchingType)
+		return int32(i)
+	}
+	// TLSARecordMatchingType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, TLSARecordMatchingType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for matching_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSARecordValue) CertificateAssociationDataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for certificate_association_data")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSARecordValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TLSARecordValue)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TLSARecordValue got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["certificate_association_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certificate_association_data"))
+		if err := fv(ctx, m.GetCertificateAssociationData(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["certificate_usage"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certificate_usage"))
+		if err := fv(ctx, m.GetCertificateUsage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["matching_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("matching_type"))
+		if err := fv(ctx, m.GetMatchingType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["selector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("selector"))
+		if err := fv(ctx, m.GetSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTLSARecordValueValidator = func() *ValidateTLSARecordValue {
+	v := &ValidateTLSARecordValue{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCertificateUsage := v.CertificateUsageValidationRuleHandler
+	rulesCertificateUsage := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCertificateUsage(rulesCertificateUsage)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSARecordValue.certificate_usage: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificate_usage"] = vFn
+
+	vrhSelector := v.SelectorValidationRuleHandler
+	rulesSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSelector(rulesSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSARecordValue.selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["selector"] = vFn
+
+	vrhMatchingType := v.MatchingTypeValidationRuleHandler
+	rulesMatchingType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMatchingType(rulesMatchingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSARecordValue.matching_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["matching_type"] = vFn
+
+	vrhCertificateAssociationData := v.CertificateAssociationDataValidationRuleHandler
+	rulesCertificateAssociationData := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hex":       "true",
+		"ves.io.schema.rules.string.max_len":   "4096",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhCertificateAssociationData(rulesCertificateAssociationData)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSARecordValue.certificate_association_data: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["certificate_association_data"] = vFn
+
+	return v
+}()
+
+func TLSARecordValueValidator() db.Validator {
+	return DefaultTLSARecordValueValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TLSAResourceRecord) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TLSAResourceRecord) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TLSAResourceRecord) DeepCopy() *TLSAResourceRecord {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TLSAResourceRecord{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TLSAResourceRecord) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TLSAResourceRecord) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TLSAResourceRecordValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTLSAResourceRecord struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTLSAResourceRecord) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSAResourceRecord) ValuesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for values")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*TLSARecordValue, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := TLSARecordValueValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for values")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*TLSARecordValue)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*TLSARecordValue, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated values")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items values")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTLSAResourceRecord) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TLSAResourceRecord)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TLSAResourceRecord got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+		vOpts := append(opts, db.WithValidateField("values"))
+		if err := fv(ctx, m.GetValues(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTLSAResourceRecordValidator = func() *ValidateTLSAResourceRecord {
+	v := &ValidateTLSAResourceRecord{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSAResourceRecord.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhValues := v.ValuesValidationRuleHandler
+	rulesValues := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "100",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhValues(rulesValues)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSAResourceRecord.values: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["values"] = vFn
+
+	return v
+}()
+
+func TLSAResourceRecordValidator() db.Validator {
+	return DefaultTLSAResourceRecordValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields

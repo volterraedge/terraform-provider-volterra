@@ -10,7 +10,7 @@ Resource volterra_dns_zone
 
 The Dns Zone allows CRUD of Dns Zone resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dns Zone API docs](https://volterra.io/docs/api/dns-zone) to learn more
+~> **Note:** Please refer to [Dns Zone API docs](https://docs.cloud.f5.com/docs/api/dns-zone) to learn more
 
 Example Usage
 -------------
@@ -23,15 +23,31 @@ resource "volterra_dns_zone" "example" {
   // One of the arguments from this list "primary secondary" must be set
 
   primary {
+    allow_http_lb_managed_records = true
+
     default_rr_set_group {
-      ttl = "3600"
+      description = "Comment"
+      ttl         = "3600"
 
-      // One of the arguments from this list "aaaa_record caa_record mx_record ns_record ptr_record txt_record lb_record a_record cname_record srv_record alias_record" must be set
+      // One of the arguments from this list "naptr_record eui64_record cert_record lb_record eui48_record loc_record alias_record srv_record txt_record dlv_record ns_record cds_record tlsa_record cname_record mx_record ptr_record ds_record afsdb_record a_record aaaa_record caa_record sshfp_record" must be set
 
-      aaaa_record {
-        name = "www or mail or * or corp.web or *.b"
+      loc_record {
+        name = "www or mail or * or ww* or *ab"
 
-        values = ["2001:0db8:85a3:0000:0000:8a2e:0370:7334"]
+        values {
+          altitude             = "20.3"
+          horizontal_precision = "30.00m"
+          latitude_degree      = "51"
+          latitude_hemisphere  = "N"
+          latitude_minute      = "30"
+          latitude_second      = "12.000"
+          location_diameter    = "30.00m"
+          longitude_degree     = "51"
+          longitude_hemisphere = "E"
+          longitude_minute     = "30"
+          longitude_second     = "12.000"
+          vertical_precision   = "10.00m"
+        }
       }
     }
 
@@ -48,14 +64,14 @@ resource "volterra_dns_zone" "example" {
       }
 
       rr_set {
-        ttl = "3600"
+        description = "Comment"
+        ttl         = "3600"
 
-        // One of the arguments from this list "alias_record cname_record srv_record txt_record lb_record a_record aaaa_record caa_record mx_record ns_record ptr_record" must be set
+        // One of the arguments from this list "srv_record txt_record lb_record eui48_record loc_record alias_record cds_record tlsa_record dlv_record ns_record aaaa_record caa_record cname_record mx_record ptr_record ds_record afsdb_record a_record sshfp_record eui64_record cert_record naptr_record" must be set
 
-        a_record {
-          name = "www or mail or * or corp.web or *.b"
-
-          values = ["1.1.1.1"]
+        alias_record {
+          name  = "name"
+          value = "example.com"
         }
       }
     }
@@ -106,6 +122,14 @@ x-displayName: "AAAA".
 
 `values` - (Required) x-required (`String`).
 
+### Afsdb Record
+
+x-displayName: "AFSDB".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Alias Record
 
 x-displayName: "ALIAS".
@@ -116,7 +140,7 @@ x-displayName: "ALIAS".
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -142,6 +166,22 @@ x-displayName: "CAA".
 
 `values` - (Optional) x-displayName: "CAA Record Value". See [Values ](#values) below for details.
 
+### Cds Record
+
+x-displayName: "CDS".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
+### Cert Record
+
+x-displayName: "CERT".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
@@ -162,27 +202,51 @@ x-displayName: "CNAME".
 
 default_rr_set_group.
 
+`description` - (Optional) x-displayName: "Comment" (`String`).
+
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
 `a_record` - (Optional) x-displayName: "A". See [A Record ](#a-record) below for details.
 
 `aaaa_record` - (Optional) x-displayName: "AAAA". See [Aaaa Record ](#aaaa-record) below for details.
 
+`afsdb_record` - (Optional) x-displayName: "AFSDB". See [Afsdb Record ](#afsdb-record) below for details.
+
 `alias_record` - (Optional) x-displayName: "ALIAS". See [Alias Record ](#alias-record) below for details.
 
 `caa_record` - (Optional) x-displayName: "CAA". See [Caa Record ](#caa-record) below for details.
 
+`cds_record` - (Optional) x-displayName: "CDS". See [Cds Record ](#cds-record) below for details.
+
+`cert_record` - (Optional) x-displayName: "CERT". See [Cert Record ](#cert-record) below for details.
+
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
 
-`lb_record` - (Optional) x-displayName: "DNS LB". See [Lb Record ](#lb-record) below for details.
+`dlv_record` - (Optional) x-displayName: "DLV". See [Dlv Record ](#dlv-record) below for details.
+
+`ds_record` - (Optional) x-displayName: "DS". See [Ds Record ](#ds-record) below for details.
+
+`eui48_record` - (Optional) x-displayName: "EUI48". See [Eui48 Record ](#eui48-record) below for details.
+
+`eui64_record` - (Optional) x-displayName: "EUI64". See [Eui64 Record ](#eui64-record) below for details.
+
+`lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
+
+`loc_record` - (Optional) x-displayName: "LOC". See [Loc Record ](#loc-record) below for details.
 
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
+
+`naptr_record` - (Optional) x-displayName: "NAPTR". See [Naptr Record ](#naptr-record) below for details.
 
 `ns_record` - (Optional) x-displayName: "NS". See [Ns Record ](#ns-record) below for details.
 
 `ptr_record` - (Optional) x-displayName: "PTR". See [Ptr Record ](#ptr-record) below for details.
 
 `srv_record` - (Optional) x-displayName: "SRV". See [Srv Record ](#srv-record) below for details.
+
+`sshfp_record` - (Optional) x-displayName: "SSHFP". See [Sshfp Record ](#sshfp-record) below for details.
+
+`tlsa_record` - (Optional) x-displayName: "TLSA". See [Tlsa Record ](#tlsa-record) below for details.
 
 `txt_record` - (Optional) x-displayName: "TXT". See [Txt Record ](#txt-record) below for details.
 
@@ -194,6 +258,14 @@ default_soa_parameters.
 
 DNSSEC disabled.
 
+### Dlv Record
+
+x-displayName: "DLV".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) It uses the same format as the DS record.. See [Values ](#values) below for details.
+
 ### Dnssec Mode
 
 dnssec_mode.
@@ -202,17 +274,49 @@ dnssec_mode.
 
 `enable` - (Optional) DNSSEC enable. See [Enable ](#enable) below for details.
 
+### Ds Record
+
+x-displayName: "DS".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Enable
 
 DNSSEC enable.
 
-### Lb Record
+### Eui48 Record
 
-x-displayName: "DNS LB".
+x-displayName: "EUI48".
 
 `name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
 
-`value` - (Optional) x-displayName: "DNS LB Record". See [ref](#ref) below for details.
+`value` - (Required) x-required (`String`).
+
+### Eui64 Record
+
+x-displayName: "EUI64".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`value` - (Required) x-required (`String`).
+
+### Lb Record
+
+x-displayName: "DNS Load Balancer".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`value` - (Optional) x-displayName: "DNS Load Balancer Record". See [ref](#ref) below for details.
+
+### Loc Record
+
+x-displayName: "LOC".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
 
 ### Metadata
 
@@ -232,6 +336,14 @@ x-displayName: "MX".
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
+### Naptr Record
+
+x-displayName: "NAPTR".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Ns Record
 
 x-displayName: "NS".
@@ -243,6 +355,8 @@ x-displayName: "NS".
 ### Primary
 
 Primary DNS.
+
+`allow_http_lb_managed_records` - (Optional)allow_http_lb_managed_records (`Bool`).
 
 `default_rr_set_group` - (Optional)default_rr_set_group. See [Default Rr Set Group ](#default-rr-set-group) below for details.
 
@@ -276,27 +390,51 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Collection of DNS resource record sets.
 
+`description` - (Optional) x-displayName: "Comment" (`String`).
+
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
 `a_record` - (Optional) x-displayName: "A". See [A Record ](#a-record) below for details.
 
 `aaaa_record` - (Optional) x-displayName: "AAAA". See [Aaaa Record ](#aaaa-record) below for details.
 
+`afsdb_record` - (Optional) x-displayName: "AFSDB". See [Afsdb Record ](#afsdb-record) below for details.
+
 `alias_record` - (Optional) x-displayName: "ALIAS". See [Alias Record ](#alias-record) below for details.
 
 `caa_record` - (Optional) x-displayName: "CAA". See [Caa Record ](#caa-record) below for details.
 
+`cds_record` - (Optional) x-displayName: "CDS". See [Cds Record ](#cds-record) below for details.
+
+`cert_record` - (Optional) x-displayName: "CERT". See [Cert Record ](#cert-record) below for details.
+
 `cname_record` - (Optional) x-displayName: "CNAME". See [Cname Record ](#cname-record) below for details.
 
-`lb_record` - (Optional) x-displayName: "DNS LB". See [Lb Record ](#lb-record) below for details.
+`dlv_record` - (Optional) x-displayName: "DLV". See [Dlv Record ](#dlv-record) below for details.
+
+`ds_record` - (Optional) x-displayName: "DS". See [Ds Record ](#ds-record) below for details.
+
+`eui48_record` - (Optional) x-displayName: "EUI48". See [Eui48 Record ](#eui48-record) below for details.
+
+`eui64_record` - (Optional) x-displayName: "EUI64". See [Eui64 Record ](#eui64-record) below for details.
+
+`lb_record` - (Optional) x-displayName: "DNS Load Balancer". See [Lb Record ](#lb-record) below for details.
+
+`loc_record` - (Optional) x-displayName: "LOC". See [Loc Record ](#loc-record) below for details.
 
 `mx_record` - (Optional) x-displayName: "MX". See [Mx Record ](#mx-record) below for details.
+
+`naptr_record` - (Optional) x-displayName: "NAPTR". See [Naptr Record ](#naptr-record) below for details.
 
 `ns_record` - (Optional) x-displayName: "NS". See [Ns Record ](#ns-record) below for details.
 
 `ptr_record` - (Optional) x-displayName: "PTR". See [Ptr Record ](#ptr-record) below for details.
 
 `srv_record` - (Optional) x-displayName: "SRV". See [Srv Record ](#srv-record) below for details.
+
+`sshfp_record` - (Optional) x-displayName: "SSHFP". See [Sshfp Record ](#sshfp-record) below for details.
+
+`tlsa_record` - (Optional) x-displayName: "TLSA". See [Tlsa Record ](#tlsa-record) below for details.
 
 `txt_record` - (Optional) x-displayName: "TXT". See [Txt Record ](#txt-record) below for details.
 
@@ -342,6 +480,22 @@ x-displayName: "SRV".
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
+### Sshfp Record
+
+x-displayName: "SSHFP".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
+### Tlsa Record
+
+x-displayName: "TLSA".
+
+`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+
+`values` - (Required) x-required. See [Values ](#values) below for details.
+
 ### Tsig Key Value
 
 x-displayName: "TSIG key value in base 64 format".
@@ -350,13 +504,13 @@ x-displayName: "TSIG key value in base 64 format".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Txt Record
 
@@ -368,13 +522,11 @@ x-displayName: "TXT".
 
 ### Values
 
-x-displayName: "CAA Record Value".
+x-required.
 
-`flags` - (Optional) x-example: "0" (`Int`).
+`hostname` - (Required) Server name of the AFS cell database server or the DCE name server. (`String`).
 
-`tag` - (Optional) x-example: "issue" (`String`).
-
-`value` - (Optional) x-example: "value" (`String`).
+`subtype` - (Required) AFSDB Record Subtype. (`String`).
 
 ### Vault Secret Info
 
@@ -392,7 +544,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

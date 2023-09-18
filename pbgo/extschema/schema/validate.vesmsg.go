@@ -1983,6 +1983,42 @@ func (v *ValidateMessageRules) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["date_range_max_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("date_range_max_days"))
+		if err := fv(ctx, m.GetDateRangeMaxDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["date_range_min_days"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("date_range_min_days"))
+		if err := fv(ctx, m.GetDateRangeMinDays(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file_content_max_bytes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file_content_max_bytes"))
+		if err := fv(ctx, m.GetFileContentMaxBytes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file_content_min_bytes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file_content_min_bytes"))
+		if err := fv(ctx, m.GetFileContentMinBytes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["required"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("required"))
@@ -3462,6 +3498,39 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("unique_port_range_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_IpGloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ip_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_IpGloballyRoutable).IpGloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ip_globally_routable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv4GloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ipv4_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv4GloballyRoutable).Ipv4GloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv4_globally_routable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv6GloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ipv6_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv6GloballyRoutable).Ipv6GloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv6_globally_routable"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

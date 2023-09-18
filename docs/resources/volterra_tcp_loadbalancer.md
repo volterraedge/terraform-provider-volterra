@@ -10,7 +10,7 @@ Resource volterra_tcp_loadbalancer
 
 The Tcp Loadbalancer allows CRUD of Tcp Loadbalancer resource on Volterra SaaS
 
-~> **Note:** Please refer to [Tcp Loadbalancer API docs](https://volterra.io/docs/api/views-tcp-loadbalancer) to learn more
+~> **Note:** Please refer to [Tcp Loadbalancer API docs](https://docs.cloud.f5.com/docs/api/views-tcp-loadbalancer) to learn more
 
 Example Usage
 -------------

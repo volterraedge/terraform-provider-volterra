@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -2521,7 +2552,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CreateSpecType",
             "properties": {
                 "audit_logs": {
@@ -2530,37 +2561,42 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
+                "gcp_bucket_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
+                    "$ref": "#/definitions/global_log_receiverGCPBucketConfig",
+                    "x-displayname": "GCP Bucket Receiver"
+                },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
                 },
                 "new_relic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
                     "$ref": "#/definitions/global_log_receiverNewRelicConfig",
                     "x-displayname": "NewRelic Receiver"
                 },
@@ -2580,7 +2616,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select logs in specific namespaces"
                 },
                 "qradar_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
                     "$ref": "#/definitions/global_log_receiverQRadarConfig",
                     "x-displayname": "IBM QRadar Receiver"
                 },
@@ -2590,7 +2626,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -2600,12 +2636,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
                 },
                 "sumo_logic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
                     "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
                     "x-displayname": "SumoLogic Receiver"
                 }
@@ -2750,6 +2786,53 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "global_log_receiverGCPBucketConfig": {
+            "type": "object",
+            "description": "GCP Bucket Configuration for Global Log Receiver",
+            "title": "GCP Bucket Configuration",
+            "x-displayname": "GCP BucketConfiguration",
+            "x-ves-proto-message": "ves.io.schema.global_log_receiver.GCPBucketConfig",
+            "properties": {
+                "batch": {
+                    "description": " Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint",
+                    "title": "Batch Options",
+                    "$ref": "#/definitions/global_log_receiverBatchOptionType",
+                    "x-displayname": "Batch Options"
+                },
+                "bucket": {
+                    "type": "string",
+                    "description": " GCP Bucket Name\n\nExample: - \"my-log-bucket\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[a-z0-9]+[a-z0-9_\\\\.-]+[a-z0-9]$\n",
+                    "title": "GCP Bucket Name",
+                    "minLength": 3,
+                    "maxLength": 128,
+                    "x-displayname": "GCP Bucket Name",
+                    "x-ves-example": "my-log-bucket",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.min_len": "3",
+                        "ves.io.schema.rules.string.pattern": "^[a-z0-9]+[a-z0-9_\\\\.-]+[a-z0-9]$"
+                    }
+                },
+                "compression": {
+                    "description": " Compression Options allows selection of how data should be compressed when sent to the endpoint",
+                    "title": "Compression Options",
+                    "$ref": "#/definitions/global_log_receiverCompressionType",
+                    "x-displayname": "Compression Options"
+                },
+                "gcp_cred": {
+                    "description": " Reference to GCP Cloud Credentials for access to the GCP bucket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "GCP Cloud Credentials",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "GCP Cloud Credentials",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "global_log_receiverGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -2762,6 +2845,24 @@ var APISwaggerJSON string = `{
                     "title": "create_form",
                     "$ref": "#/definitions/global_log_receiverCreateRequest",
                     "x-displayname": "CreateRequest Format"
+                },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
                 },
                 "metadata": {
                     "description": " Standard object's metadata",
@@ -2815,7 +2916,7 @@ var APISwaggerJSON string = `{
         },
         "global_log_receiverGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2823,7 +2924,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2834,7 +2936,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GetSpecType",
             "properties": {
                 "audit_logs": {
@@ -2843,37 +2945,42 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
+                "gcp_bucket_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
+                    "$ref": "#/definitions/global_log_receiverGCPBucketConfig",
+                    "x-displayname": "GCP Bucket Receiver"
+                },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
                 },
                 "new_relic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
                     "$ref": "#/definitions/global_log_receiverNewRelicConfig",
                     "x-displayname": "NewRelic Receiver"
                 },
@@ -2893,7 +3000,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select logs in specific namespaces"
                 },
                 "qradar_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
                     "$ref": "#/definitions/global_log_receiverQRadarConfig",
                     "x-displayname": "IBM QRadar Receiver"
                 },
@@ -2903,7 +3010,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -2913,12 +3020,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
                 },
                 "sumo_logic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
                     "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
                     "x-displayname": "SumoLogic Receiver"
                 }
@@ -2932,7 +3039,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "14,1,6",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GlobalSpecType",
             "properties": {
                 "audit_logs": {
@@ -2942,43 +3049,49 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "title": "AWS Cloudwatch Receiver",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "title": "Azure Event Hubs Receiver",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "title": "Azure Blob Storage Receiver",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "title": "Datadog Receiver",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
+                "gcp_bucket_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
+                    "title": "GCP Bucket Receiver",
+                    "$ref": "#/definitions/global_log_receiverGCPBucketConfig",
+                    "x-displayname": "GCP Bucket Receiver"
+                },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "title": "HTTP Receiver",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "title": "Kafka Receiver",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
                 },
                 "new_relic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
                     "title": "NewRelic Receiver",
                     "$ref": "#/definitions/global_log_receiverNewRelicConfig",
                     "x-displayname": "NewRelic Receiver"
@@ -3002,7 +3115,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select logs in specific namespaces"
                 },
                 "qradar_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
                     "title": "QRadar Receiver",
                     "$ref": "#/definitions/global_log_receiverQRadarConfig",
                     "x-displayname": "IBM QRadar Receiver"
@@ -3014,7 +3127,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "title": "S3 Receiver",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
@@ -3026,13 +3139,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "title": "Splunk Receiver",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
                 },
                 "sumo_logic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
                     "title": "SumoLogic Receiver",
                     "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
                     "x-displayname": "SumoLogic Receiver"
@@ -3492,7 +3605,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
             "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
-            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
+            "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.ReplaceSpecType",
             "properties": {
                 "audit_logs": {
@@ -3501,37 +3614,42 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Audit Logs"
                 },
                 "aws_cloud_watch_receiver": {
-                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
+                    "description": "Exclusive with [azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to AWS Cloudwatch",
                     "$ref": "#/definitions/global_log_receiverAWSCloudwatchConfig",
                     "x-displayname": "AWS Cloudwatch Receiver"
                 },
                 "azure_event_hubs_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Event Hubs",
                     "$ref": "#/definitions/global_log_receiverAzureEventHubsConfig",
                     "x-displayname": "Azure Event Hubs"
                 },
                 "azure_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to Azure Blob Storage",
                     "$ref": "#/definitions/global_log_receiverAzureBlobConfig",
                     "x-displayname": "Azure Blob Storage"
                 },
                 "datadog_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
                 },
+                "gcp_bucket_receiver": {
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
+                    "$ref": "#/definitions/global_log_receiverGCPBucketConfig",
+                    "x-displayname": "GCP Bucket Receiver"
+                },
                 "http_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a generic HTTP(s) server",
                     "$ref": "#/definitions/global_log_receiverHTTPConfig",
                     "x-displayname": "HTTP Receiver"
                 },
                 "kafka_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Kafka cluster",
                     "$ref": "#/definitions/global_log_receiverKafkaConfig",
                     "x-displayname": "Kafka Receiver"
                 },
                 "new_relic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to NewRelic",
                     "$ref": "#/definitions/global_log_receiverNewRelicConfig",
                     "x-displayname": "NewRelic Receiver"
                 },
@@ -3551,7 +3669,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select logs in specific namespaces"
                 },
                 "qradar_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to IBM QRadar",
                     "$ref": "#/definitions/global_log_receiverQRadarConfig",
                     "x-displayname": "IBM QRadar Receiver"
                 },
@@ -3561,7 +3679,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Request Logs"
                 },
                 "s3_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver splunk_receiver sumo_logic_receiver]\n Send logs to an AWS S3 bucket",
                     "$ref": "#/definitions/global_log_receiverS3Config",
                     "x-displayname": "S3 Receiver"
                 },
@@ -3571,12 +3689,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Security Events"
                 },
                 "splunk_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver sumo_logic_receiver]\n Send logs to a Splunk HEC Logs service",
                     "$ref": "#/definitions/global_log_receiverSplunkConfig",
                     "x-displayname": "Splunk Receiver"
                 },
                 "sumo_logic_receiver": {
-                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
+                    "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver]\n Send logs to SumoLogic",
                     "$ref": "#/definitions/global_log_receiverSumoLogicConfig",
                     "x-displayname": "SumoLogic Receiver"
                 }
@@ -3619,12 +3737,12 @@ var APISwaggerJSON string = `{
                 },
                 "bucket": {
                     "type": "string",
-                    "description": " S3 Bucket Name\n\nExample: - \"S3 Bucket Name\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[a-z0-9]+[a-z0-9\\\\.-]+[a-z0-9]$\n",
+                    "description": " S3 Bucket Name\n\nExample: - \"my-log-bucket\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 3\n  ves.io.schema.rules.string.pattern: ^[a-z0-9]+[a-z0-9\\\\.-]+[a-z0-9]$\n",
                     "title": "S3 Bucket Name",
                     "minLength": 3,
                     "maxLength": 128,
                     "x-displayname": "S3 Bucket Name",
-                    "x-ves-example": "S3 Bucket Name",
+                    "x-ves-example": "my-log-bucket",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -3677,13 +3795,14 @@ var APISwaggerJSON string = `{
                 },
                 "endpoint": {
                     "type": "string",
-                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com-\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Splunk HEC Logs Endpoint, example: -https://http-input-hec.splunkcloud.com-\n\nExample: - \"https://http-inputs-hec.splunkcloud.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Splunk HEC Logs Endpoint",
                     "x-displayname": "Splunk HEC Logs Endpoint",
                     "x-ves-example": "https://http-inputs-hec.splunkcloud.com",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.uri_ref": "true"
                     }
                 },
                 "no_tls": {

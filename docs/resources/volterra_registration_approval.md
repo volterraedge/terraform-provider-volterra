@@ -12,7 +12,7 @@ Resource volterra_registration_approval
 
 volterra_registration_approval approves pending registration request.
 
-~> **Note:** Please refer to [Registration api docs](https://volterra.io/docs/api/registration#operation/ves.io.schema.registration.CustomAPI.RegistrationApprove) to learn more
+~> **Note:** Please refer to [Registration api docs](https://docs.cloud.f5.com/docs/api/registration#operation/ves.io.schema.registration.CustomAPI.RegistrationApprove) to learn more
 
 Example Usage
 -------------

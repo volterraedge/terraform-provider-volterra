@@ -4903,6 +4903,14 @@ func (v *ValidateServicesVPCType) InternetVipChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateServicesVPCType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServicesVPCType) ServiceVpcChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5168,6 +5176,42 @@ func (v *ValidateServicesVPCType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *ServicesVPCType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ServicesVPCType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ServicesVPCType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_vpc_choice"]; exists {
 		val := m.GetServiceVpcChoice()
 		vOpts := append(opts,
@@ -5333,6 +5377,17 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	}
 	v.FldValidators["internet_vip_choice"] = vFn
 
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
+
 	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
 	rulesServiceVpcChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5463,6 +5518,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	v.FldValidators["disk_size"] = vFn
 
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
 
 	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 

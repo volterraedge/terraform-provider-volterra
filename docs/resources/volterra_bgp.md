@@ -10,7 +10,7 @@ Resource volterra_bgp
 
 The Bgp allows CRUD of Bgp resource on Volterra SaaS
 
-~> **Note:** Please refer to [Bgp API docs](https://volterra.io/docs/api/bgp) to learn more
+~> **Note:** Please refer to [Bgp API docs](https://docs.cloud.f5.com/docs/api/bgp) to learn more
 
 Example Usage
 -------------
@@ -46,13 +46,13 @@ resource "volterra_bgp" "example" {
     }
 
     // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
-    passive_mode_enabled = true
-    target_service       = "value"
+    passive_mode_disabled = true
+    target_service        = "value"
 
     // One of the arguments from this list "external internal" must be set
 
     external {
-      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway" must be set
+      // One of the arguments from this list "default_gateway address address_ipv6 subnet_begin_offset subnet_end_offset from_site" must be set
       from_site = true
       asn       = "64512"
 
@@ -61,21 +61,16 @@ resource "volterra_bgp" "example" {
         enable = true
       }
 
-      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
-
-      interface {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-      port = "179"
+      // One of the arguments from this list "interface_list inside_interfaces outside_interfaces interface" must be set
+      inside_interfaces = true
+      port              = "179"
     }
   }
 
   where {
     // One of the arguments from this list "site virtual_site" must be set
 
-    virtual_site {
+    site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
       disable_internet_vip = true
       network_type         = "network_type"
@@ -175,6 +170,8 @@ Enable MTLS.
 External BGP peer..
 
 `address` - (Optional) Specify peer address. (`String`).
+
+`address_ipv6` - (Optional) Specify peer ipv6 address. (`String`).
 
 `default_gateway` - (Optional) Use the default gateway address. (bool).
 
@@ -350,7 +347,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -362,7 +359,7 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 

@@ -10,7 +10,7 @@ Resource volterra_gcp_vpc_site
 
 The Gcp Vpc Site allows CRUD of Gcp Vpc Site resource on Volterra SaaS
 
-~> **Note:** Please refer to [Gcp Vpc Site API docs](https://volterra.io/docs/api/views-gcp-vpc-site) to learn more
+~> **Note:** Please refer to [Gcp Vpc Site API docs](https://docs.cloud.f5.com/docs/api/views-gcp-vpc-site) to learn more
 
 Example Usage
 -------------

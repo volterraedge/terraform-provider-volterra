@@ -10,7 +10,7 @@ Resource volterra_healthcheck
 
 The Healthcheck allows CRUD of Healthcheck resource on Volterra SaaS
 
-~> **Note:** Please refer to [Healthcheck API docs](https://volterra.io/docs/api/healthcheck) to learn more
+~> **Note:** Please refer to [Healthcheck API docs](https://docs.cloud.f5.com/docs/api/healthcheck) to learn more
 
 Example Usage
 -------------

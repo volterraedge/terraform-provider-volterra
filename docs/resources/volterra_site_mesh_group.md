@@ -10,7 +10,7 @@ Resource volterra_site_mesh_group
 
 The Site Mesh Group allows CRUD of Site Mesh Group resource on Volterra SaaS
 
-~> **Note:** Please refer to [Site Mesh Group API docs](https://volterra.io/docs/api/site-mesh-group) to learn more
+~> **Note:** Please refer to [Site Mesh Group API docs](https://docs.cloud.f5.com/docs/api/site-mesh-group) to learn more
 
 Example Usage
 -------------

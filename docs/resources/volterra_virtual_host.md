@@ -10,7 +10,7 @@ Resource volterra_virtual_host
 
 The Virtual Host allows CRUD of Virtual Host resource on Volterra SaaS
 
-~> **Note:** Please refer to [Virtual Host API docs](https://volterra.io/docs/api/virtual-host) to learn more
+~> **Note:** Please refer to [Virtual Host API docs](https://docs.cloud.f5.com/docs/api/virtual-host) to learn more
 
 Example Usage
 -------------
@@ -169,7 +169,7 @@ OpenAPI specification settings.
 
 `disable_open_api_validation` - (Optional) No OpenApi Validation configuration for this VH (bool).
 
-`enable_open_api_validation` - (Optional) OpenApi Validation configuration object (bool).
+`enable_open_api_validation` - (Optional) OpenApi Validation configuration object. See [Enable Open Api Validation ](#enable-open-api-validation) below for details.
 
 ### App Firewall
 
@@ -245,9 +245,9 @@ specify the maximum buffer size and buffer interval with this config..
 
 which caches DNS replies from the origin DNS servers..
 
-`disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
+`cache_size` - (Optional) cache size (`Int`).
 
-`enable_cache_profile` - (Optional) x-displayName: "Enable" (bool).
+`disable_cache_profile` - (Optional) x-displayName: "Disable" (bool).
 
 ### Captcha Challenge
 
@@ -423,6 +423,8 @@ Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfigu
 
 `ddos_profile` - (Required) to protect the origin DNS servers from external DDoS attacks.. See [Ddos Profile ](#ddos-profile) below for details.
 
+`protocol_inspection` - (Optional) Options for enabling and configuring protocol inspection configuration. See [ref](#ref) below for details.
+
 ### Domain Cert Map
 
 which contains repeated Certificate refs).
@@ -457,10 +459,6 @@ the ECDSA certificate for the domain, if any.
 
 `uid` - (Optional) then uid will hold the referred object's(e.g. route's) uid. (`String`).
 
-### Enable Cache Profile
-
-x-displayName: "Enable".
-
 ### Enable Ddos Mitigation
 
 x-displayName: "Enable".
@@ -468,6 +466,12 @@ x-displayName: "Enable".
 ### Enable Open Api Validation
 
 OpenApi Validation configuration object.
+
+`allow_only_specified_headers` - (Optional) Set to fail validation on request/response with header that is not specified in the OpenAPI specification (`Bool`).
+
+`allow_only_specified_query_params` - (Optional) Set to fail validation on request with query parameter that is not specified in the OpenAPI specification (`Bool`).
+
+`fail_oversized_body_validation` - (Optional) Set to fail validation on request/response with too long body (`Bool`).
 
 ### Enable Tampering Protection
 
@@ -697,6 +701,8 @@ in advertise policy.
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+
 ### Tls Certificates
 
 Set of TLS certificates.
@@ -723,6 +729,14 @@ in advertise policy.
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
 
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+
+### Trusted Ca
+
+Trusted CA List.
+
+`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
+
 ### Use Auth Object Config
 
 Use the Cookie Params configured in Authentication Object.
@@ -737,7 +751,9 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca_url` - (Optional) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
 

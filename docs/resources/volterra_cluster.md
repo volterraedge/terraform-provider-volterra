@@ -10,7 +10,7 @@ Resource volterra_cluster
 
 The Cluster allows CRUD of Cluster resource on Volterra SaaS
 
-~> **Note:** Please refer to [Cluster API docs](https://volterra.io/docs/api/cluster) to learn more
+~> **Note:** Please refer to [Cluster API docs](https://docs.cloud.f5.com/docs/api/cluster) to learn more
 
 Example Usage
 -------------

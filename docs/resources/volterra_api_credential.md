@@ -16,7 +16,7 @@ For each these credentials, user can request credential in 3 different formats a
 
 API certificate - a password protected P12 certificate bundle virtual k8s kubeconfig - a kubeconfig to access a cluster with embedded user access with client certificate. API token - an easy to use secret that can be send part of HTTP request header Authorization: APIToken
 
-~> **Note:** Please refer to [API Credential docs](https://volterra.io/docs/api/api-credential) to learn more
+~> **Note:** Please refer to [API Credential docs](https://docs.cloud.f5.com/docs/api/api-credential) to learn more
 
 Example Usage
 -------------

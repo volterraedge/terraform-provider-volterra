@@ -12,7 +12,7 @@ Resource volterra_modify_site
 
 volterra_modify_site helps to update fields of site object. This is not applicable for site created through view style APIs.
 
-~> **Note:** Please refer to [Site api docs](https://volterra.io/docs/api/site) to learn more
+~> **Note:** Please refer to [Site api docs](https://docs.cloud.f5.com/docs/api/site) to learn more
 
 Example Usage
 -------------

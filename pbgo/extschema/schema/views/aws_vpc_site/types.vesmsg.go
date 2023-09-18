@@ -4407,6 +4407,14 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4837,6 +4845,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *CreateSpecType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*CreateSpecType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*CreateSpecType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -5047,6 +5091,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5174,6 +5229,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AWSVPCIngressEgressGwTypeValidator().Validate
@@ -5495,6 +5552,14 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
 	}
 	return validatorFn, nil
 }
@@ -6035,6 +6100,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *GetSpecType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*GetSpecType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*GetSpecType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -6280,6 +6381,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6441,6 +6553,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AWSVPCIngressEgressGwTypeValidator().Validate
@@ -6872,6 +6986,14 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
 	}
 	return validatorFn, nil
 }
@@ -7421,6 +7543,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *GlobalSpecType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*GlobalSpecType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*GlobalSpecType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
@@ -7693,6 +7851,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7854,6 +8023,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AWSVPCIngressEgressGwTypeValidator().Validate
@@ -9512,6 +9683,41 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSecurityGroupChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SecurityGroupChoice.(type) {
+	case nil:
+		o.SecurityGroupChoice = nil
+
+	case *CreateSpecType_CustomSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *CreateSpecType_F5XcSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSecurityGroupChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SecurityGroupChoice.(type) {
+	case nil:
+		r.SecurityGroupChoice = nil
+
+	case *GlobalSpecType_CustomSecurityGroup:
+		r.SecurityGroupChoice = &CreateSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *GlobalSpecType_F5XcSecurityGroup:
+		r.SecurityGroupChoice = &CreateSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -9610,6 +9816,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.GetSecurityGroupChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
@@ -9646,6 +9853,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	m1.SetSecurityGroupChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
@@ -9885,6 +10093,41 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSecurityGroupChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SecurityGroupChoice.(type) {
+	case nil:
+		o.SecurityGroupChoice = nil
+
+	case *GetSpecType_CustomSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *GetSpecType_F5XcSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSecurityGroupChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SecurityGroupChoice.(type) {
+	case nil:
+		r.SecurityGroupChoice = nil
+
+	case *GlobalSpecType_CustomSecurityGroup:
+		r.SecurityGroupChoice = &GetSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *GlobalSpecType_F5XcSecurityGroup:
+		r.SecurityGroupChoice = &GetSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -9986,6 +10229,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
+	m.GetSecurityGroupChoiceFromGlobalSpecType(f)
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
@@ -10029,6 +10273,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
+	m1.SetSecurityGroupChoiceToGlobalSpecType(f)
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey

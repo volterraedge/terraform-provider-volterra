@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -2366,17 +2397,26 @@ var APISwaggerJSON string = `{
             "title": "PeerExternal",
             "x-displayname": "External BGP Peer",
             "x-ves-displayorder": "1,2,10,11,20",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"address_ipv6\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [address_ipv6 default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "address",
                     "x-displayname": "Peer Address",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "address_ipv6": {
+                    "type": "string",
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer ipv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPV6 address",
+                    "x-displayname": "Peer IPV6 Address",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "asn": {
@@ -2393,13 +2433,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
+                    "description": "Exclusive with [address address_ipv6 from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address address_ipv6 default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Address From Site Object"
@@ -2430,7 +2470,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address address_ipv6 default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
@@ -2441,7 +2481,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address address_ipv6 default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",
@@ -4577,6 +4617,127 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "network_interfaceDHCPIPV6NetworkType": {
+            "type": "object",
+            "description": "DHCP IPV6 network type configuration",
+            "title": "DHCPIPV6NetworkType",
+            "x-displayname": "DHCPIPV6NetworkType",
+            "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6NetworkType",
+            "properties": {
+                "network_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with []\n Network Prefix to be used for IPV6 address auto configuration\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "Network Prefix",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "2001::0/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "pools": {
+                    "type": "array",
+                    "description": " List of non overlapping ip address ranges.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "DHCP pools",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6PoolType"
+                    },
+                    "x-displayname": "DHCP Pools",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6PoolType": {
+            "type": "object",
+            "description": "DHCP IPV6 pool is a range of IP addresses (start ip and end ip).",
+            "title": "DHCP IPV6 Range",
+            "x-displayname": "DHCP IPV6 Range",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6PoolType",
+            "properties": {
+                "end_ip": {
+                    "type": "string",
+                    "description": " Ending IPV6 address of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n\nExample: - \"2001::200\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "End IP",
+                    "x-displayname": "Ending IPV6",
+                    "x-ves-example": "2001::200",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "start_ip": {
+                    "type": "string",
+                    "description": " Starting IPV6 address of the pool range.\n In case of address allocator, offset is derived based on network prefix.\n 2001::1 with prefix length of 64, start offset is 5\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Start IPV6",
+                    "x-displayname": "Starting IPV6",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPIPV6StatefulServer": {
+            "type": "object",
+            "title": "DHCPIPV6StatefulServer",
+            "x-displayname": "DHCPIPV6 Stateful Server",
+            "x-ves-oneof-field-interfaces_addressing_choice": "[\"automatic_from_end\",\"automatic_from_start\",\"interface_ip_map\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6StatefulServer",
+            "properties": {
+                "automatic_from_end": {
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
+                    "title": "Automatic End",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic End"
+                },
+                "automatic_from_start": {
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
+                    "title": "Automatic Start",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic Start"
+                },
+                "dhcp_networks": {
+                    "type": "array",
+                    "description": " List of networks from which DHCP server can allocate ip addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "DHCP IPV6 Networks",
+                    "minItems": 1,
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/network_interfaceDHCPIPV6NetworkType"
+                    },
+                    "x-displayname": "DHCP IPV6 Networks",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "fixed_ip_map": {
+                    "type": "object",
+                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "title": "Fixed IPV6 Assignments",
+                    "x-displayname": "Fixed MAC address to IPV6 Assignments",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.mac": "true",
+                        "ves.io.schema.rules.map.max_pairs": "128",
+                        "ves.io.schema.rules.map.unique_values": "true",
+                        "ves.io.schema.rules.map.values.string.ipv6": "true"
+                    }
+                },
+                "interface_ip_map": {
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
+                    "title": "Configured Address",
+                    "$ref": "#/definitions/network_interfaceDHCPInterfaceIPV6Type",
+                    "x-displayname": "Configured"
+                }
+            }
+        },
         "network_interfaceDHCPInterfaceIPType": {
             "type": "object",
             "description": "Map of Interface IP assignments per node",
@@ -4595,6 +4756,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.keys.string.min_len": "1",
                         "ves.io.schema.rules.map.max_pairs": "64",
                         "ves.io.schema.rules.map.values.string.ipv4": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceDHCPInterfaceIPV6Type": {
+            "type": "object",
+            "description": "Map of Interface IPV6 assignments per node",
+            "title": "Interface IPV6 Assignments",
+            "x-displayname": "Interface IPV6 Assignments",
+            "x-ves-proto-message": "ves.io.schema.network_interface.DHCPInterfaceIPV6Type",
+            "properties": {
+                "interface_ip_map": {
+                    "type": "object",
+                    "description": " Map of Site:Node to IPV6 address.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "title": "Site:Node to IPV6 mapping",
+                    "x-displayname": "Site:Node to IPV6 Mapping",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "128",
+                        "ves.io.schema.rules.map.keys.string.min_len": "1",
+                        "ves.io.schema.rules.map.max_pairs": "64",
+                        "ves.io.schema.rules.map.values.string.ipv6": "true"
                     }
                 }
             }
@@ -4935,7 +5118,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -4976,6 +5159,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
                     "x-displayname": "DHCP server"
                 },
+                "ipv6_auto_config": {
+                    "description": "Exclusive with [no_ipv6_address static_ipv6_address]\n Configuration corresponding to IPV6 auto configuration",
+                    "title": "IPV6 Auto configuration",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
+                    "x-displayname": "IPV6 AutoConfiguration"
+                },
                 "is_primary": {
                     "description": "Exclusive with [not_primary]\n This interface is primary",
                     "title": "Interface is Primary",
@@ -5006,7 +5195,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No IPv6 Address"
@@ -5060,7 +5249,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
+                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IP"
@@ -5087,6 +5276,138 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "4095"
                     }
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigRouterType": {
+            "type": "object",
+            "title": "IPV6AutoConfigRouterType",
+            "x-displayname": "IPV6AutoConfigRouterType",
+            "x-ves-oneof-field-address_choice": "[\"network_prefix\",\"stateful\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigRouterType",
+            "properties": {
+                "dns_config": {
+                    "description": " Dns information that needs to added in the RouterAdvetisement",
+                    "title": "Dns Information",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsConfig",
+                    "x-displayname": "DNS Information"
+                },
+                "network_prefix": {
+                    "type": "string",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information \n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "Prefix Info",
+                    "x-displayname": "Network Prefix",
+                    "x-ves-example": "2001::0/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "stateful": {
+                    "description": "Exclusive with [network_prefix]\n Use stateful dhcp server which provides the IPV6 address to clients\n works along with Router Advertisement' Managed flag",
+                    "title": "Stateful DHCP IPV6 server",
+                    "$ref": "#/definitions/network_interfaceDHCPIPV6StatefulServer",
+                    "x-displayname": "StateFul DHCPIPV6 server"
+                }
+            }
+        },
+        "network_interfaceIPV6AutoConfigType": {
+            "type": "object",
+            "title": "IPV6AutoConfigType",
+            "x-displayname": "IPV6AutoConfigType",
+            "x-ves-oneof-field-autoconfig_choice": "[\"host\",\"router\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigType",
+            "properties": {
+                "host": {
+                    "description": "Exclusive with [router]\n System behaves like Auto config host and receives the auto configuration parameters from other\n auto configuration routers",
+                    "title": "host",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Auto Config Host"
+                },
+                "router": {
+                    "description": "Exclusive with [host]\n System behaves like Auto config Router and provides auto config parameters",
+                    "title": "router",
+                    "$ref": "#/definitions/network_interfaceIPV6AutoConfigRouterType",
+                    "x-displayname": "Auto Config Router"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsConfig": {
+            "type": "object",
+            "title": "IPV6DnsConfig",
+            "x-displayname": "IPV6DnsConfig",
+            "x-ves-oneof-field-dns_choice": "[\"configured_list\",\"local_dns\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6DnsConfig",
+            "properties": {
+                "configured_list": {
+                    "description": "Exclusive with [local_dns]\n Configured address outside network range - external dns server",
+                    "title": "Configured Address List",
+                    "$ref": "#/definitions/network_interfaceIPV6DnsList",
+                    "x-displayname": "Configured Address List"
+                },
+                "local_dns": {
+                    "description": "Exclusive with [configured_list]\n Choose the address from the network prefix range as dns server",
+                    "title": "Local Dns Address",
+                    "$ref": "#/definitions/network_interfaceIPV6LocalDnsAddress",
+                    "x-displayname": "Local Dns Address"
+                }
+            }
+        },
+        "network_interfaceIPV6DnsList": {
+            "type": "object",
+            "title": "IPV6DnsList",
+            "x-displayname": "IPV6DnsList",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6DnsList",
+            "properties": {
+                "dns_list": {
+                    "type": "array",
+                    "description": " List of IPV6 Addresses acting as Dns servers\n\nExample: - \"2001::11\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Dns List",
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Dns List",
+                    "x-ves-example": "2001::11",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
+        "network_interfaceIPV6LocalDnsAddress": {
+            "type": "object",
+            "title": "IPV6LocalDnsAddress",
+            "x-displayname": "IPV6LocalDnsAddress",
+            "x-ves-oneof-field-local_dns_choice": "[\"configured_address\",\"first_address\",\"last_address\"]",
+            "x-ves-proto-message": "ves.io.schema.network_interface.IPV6LocalDnsAddress",
+            "properties": {
+                "configured_address": {
+                    "type": "string",
+                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as dns server\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Configured Address",
+                    "x-displayname": "Configured Address",
+                    "x-ves-example": "2001::10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "first_address": {
+                    "description": "Exclusive with [configured_address last_address]\n First usable address from the network prefix is chosen as dns server",
+                    "title": "First Address",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "First Address of Network"
+                },
+                "last_address": {
+                    "description": "Exclusive with [configured_address first_address]\n Last usable address from the network prefix is chosen as dns server",
+                    "title": "Last Address",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Last Address of Network"
                 }
             }
         },
@@ -8021,6 +8342,24 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/voltstack_siteCreateRequest",
                     "x-displayname": "CreateRequest Format"
                 },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -8073,7 +8412,7 @@ var APISwaggerJSON string = `{
         },
         "voltstack_siteGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -8081,7 +8420,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -8699,12 +9039,22 @@ var APISwaggerJSON string = `{
                 },
                 "outside_vip": {
                     "type": "string",
-                    "description": " Optional common virtual IP  across all nodes to be used as automatic VIP for site local network.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "Common VIP",
-                    "x-displayname": "Common VIP",
+                    "description": " Optional common virtual V4 IP  across all nodes to be used as automatic VIP for site local network.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Common V4 VIP",
+                    "x-displayname": "Common V4 VIP",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "outside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional common virtual V6 IP across all nodes to be used as automatic VIP for site local network.\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Common V6 VIP",
+                    "x-displayname": "Common V6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "site_to_site_tunnel_ip": {

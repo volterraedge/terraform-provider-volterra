@@ -29,7 +29,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_interface.ReplaceResponse"] = ReplaceResponseValidator()
 
 	vr["ves.io.schema.network_interface.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.network_interface.DHCPIPV6NetworkType"] = DHCPIPV6NetworkTypeValidator()
+	vr["ves.io.schema.network_interface.DHCPIPV6PoolType"] = DHCPIPV6PoolTypeValidator()
+	vr["ves.io.schema.network_interface.DHCPIPV6StatefulServer"] = DHCPIPV6StatefulServerValidator()
 	vr["ves.io.schema.network_interface.DHCPInterfaceIPType"] = DHCPInterfaceIPTypeValidator()
+	vr["ves.io.schema.network_interface.DHCPInterfaceIPV6Type"] = DHCPInterfaceIPV6TypeValidator()
 	vr["ves.io.schema.network_interface.DHCPNetworkType"] = DHCPNetworkTypeValidator()
 	vr["ves.io.schema.network_interface.DHCPPoolType"] = DHCPPoolTypeValidator()
 	vr["ves.io.schema.network_interface.DHCPServerParametersType"] = DHCPServerParametersTypeValidator()
@@ -38,6 +42,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.network_interface.EthernetInterfaceType"] = EthernetInterfaceTypeValidator()
 	vr["ves.io.schema.network_interface.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.network_interface.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.network_interface.IPV6AutoConfigRouterType"] = IPV6AutoConfigRouterTypeValidator()
+	vr["ves.io.schema.network_interface.IPV6AutoConfigType"] = IPV6AutoConfigTypeValidator()
+	vr["ves.io.schema.network_interface.IPV6DnsConfig"] = IPV6DnsConfigValidator()
+	vr["ves.io.schema.network_interface.IPV6DnsList"] = IPV6DnsListValidator()
+	vr["ves.io.schema.network_interface.IPV6LocalDnsAddress"] = IPV6LocalDnsAddressValidator()
 	vr["ves.io.schema.network_interface.Layer2InterfaceType"] = Layer2InterfaceTypeValidator()
 	vr["ves.io.schema.network_interface.Layer2SloVlanInterfaceType"] = Layer2SloVlanInterfaceTypeValidator()
 	vr["ves.io.schema.network_interface.Layer2SriovInterfaceType"] = Layer2SriovInterfaceTypeValidator()
@@ -79,6 +88,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ethernet_interface.dhcp_server.dhcp_option82_tag",
 		"spec.ethernet_interface.inside_network",
 		"spec.ethernet_interface.ip_fabric_network",
+		"spec.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.ethernet_interface.srv6_network",
 		"spec.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.ethernet_interface.static_ipv6_address.fleet_static_ip",
@@ -97,6 +108,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ethernet_interface.dhcp_server.dhcp_option82_tag",
 		"spec.ethernet_interface.inside_network",
 		"spec.ethernet_interface.ip_fabric_network",
+		"spec.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.network_prefix_allocator",
+		"spec.ethernet_interface.ipv6_auto_config.router.stateful.dhcp_networks.#.pools.#.exclude",
 		"spec.ethernet_interface.srv6_network",
 		"spec.ethernet_interface.static_ip.fleet_static_ip",
 		"spec.ethernet_interface.static_ipv6_address.fleet_static_ip",
@@ -112,6 +125,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

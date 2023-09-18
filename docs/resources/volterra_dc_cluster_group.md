@@ -10,7 +10,7 @@ Resource volterra_dc_cluster_group
 
 The Dc Cluster Group allows CRUD of Dc Cluster Group resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dc Cluster Group API docs](https://volterra.io/docs/api/dc-cluster-group) to learn more
+~> **Note:** Please refer to [Dc Cluster Group API docs](https://docs.cloud.f5.com/docs/api/dc-cluster-group) to learn more
 
 Example Usage
 -------------

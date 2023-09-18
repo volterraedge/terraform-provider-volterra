@@ -10,7 +10,7 @@ Resource volterra_k8s_cluster_role_binding
 
 The K8s Cluster Role Binding allows CRUD of K8s Cluster Role Binding resource on Volterra SaaS
 
-~> **Note:** Please refer to [K8s Cluster Role Binding API docs](https://volterra.io/docs/api/k8s-cluster-role-binding) to learn more
+~> **Note:** Please refer to [K8s Cluster Role Binding API docs](https://docs.cloud.f5.com/docs/api/k8s-cluster-role-binding) to learn more
 
 Example Usage
 -------------

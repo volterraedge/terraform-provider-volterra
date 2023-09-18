@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -5645,6 +5645,40 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSecurityGroupType": {
+            "type": "object",
+            "description": "Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC",
+            "title": "Security Group Parameters",
+            "x-displayname": "Security Group IDS",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.SecurityGroupType",
+            "properties": {
+                "inside_security_group_id": {
+                    "type": "string",
+                    "description": " Security Group ID to be attached to SLI(Site Local Inside) Interface\n\nExample: - \"sg-0db952838ba829943\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n  ves.io.schema.rules.string.pattern: ^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$\n",
+                    "title": "Inside Security Group ID",
+                    "maxLength": 20,
+                    "x-displayname": "Inside Security Group ID",
+                    "x-ves-example": "sg-0db952838ba829943",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20",
+                        "ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
+                    }
+                },
+                "outside_security_group_id": {
+                    "type": "string",
+                    "description": " Security Group ID to be attached to SLO(Site Local Outside) Interface\n\nExample: - \"sg-0db952838ba829943\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n  ves.io.schema.rules.string.pattern: ^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$\n",
+                    "title": "Outside Security Group ID",
+                    "maxLength": 20,
+                    "x-displayname": "Outside Security Group ID",
+                    "x-ves-example": "sg-0db952838ba829943",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "20",
+                        "ves.io.schema.rules.string.pattern": "^(sg-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
+                    }
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -5825,6 +5859,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.GlobalSpecType",
@@ -5881,6 +5916,12 @@ var APISwaggerJSON string = `{
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
+                },
+                "custom_security_group": {
+                    "description": "Exclusive with [f5xc_security_group]\n With this option, ingress and egress traffic will be controlled via security group ids.",
+                    "title": "Custom Security Groups for SLO and SLI Interface",
+                    "$ref": "#/definitions/viewsSecurityGroupType",
+                    "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
                 "default_blocked_services": {
                     "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
@@ -5953,6 +5994,12 @@ var APISwaggerJSON string = `{
                     "title": "error_description",
                     "x-displayname": "Error Description",
                     "x-ves-example": "value"
+                },
+                "f5xc_security_group": {
+                    "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
+                    "title": "Default F5XC Security Group",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Select this option to create and attach F5XC default security group"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",

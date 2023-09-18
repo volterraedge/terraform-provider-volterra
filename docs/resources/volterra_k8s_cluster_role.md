@@ -10,7 +10,7 @@ Resource volterra_k8s_cluster_role
 
 The K8s Cluster Role allows CRUD of K8s Cluster Role resource on Volterra SaaS
 
-~> **Note:** Please refer to [K8s Cluster Role API docs](https://volterra.io/docs/api/k8s-cluster-role) to learn more
+~> **Note:** Please refer to [K8s Cluster Role API docs](https://docs.cloud.f5.com/docs/api/k8s-cluster-role) to learn more
 
 Example Usage
 -------------

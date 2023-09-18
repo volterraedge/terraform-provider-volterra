@@ -10,7 +10,7 @@ Resource volterra_usb_policy
 
 The Usb Policy allows CRUD of Usb Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Usb Policy API docs](https://volterra.io/docs/api/usb-policy) to learn more
+~> **Note:** Please refer to [Usb Policy API docs](https://docs.cloud.f5.com/docs/api/usb-policy) to learn more
 
 Example Usage
 -------------

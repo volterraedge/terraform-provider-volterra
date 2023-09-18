@@ -10,7 +10,7 @@ Resource volterra_nfv_service
 
 The Nfv Service allows CRUD of Nfv Service resource on Volterra SaaS
 
-~> **Note:** Please refer to [Nfv Service API docs](https://volterra.io/docs/api/nfv-service) to learn more
+~> **Note:** Please refer to [Nfv Service API docs](https://docs.cloud.f5.com/docs/api/nfv-service) to learn more
 
 Example Usage
 -------------

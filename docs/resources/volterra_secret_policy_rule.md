@@ -10,7 +10,7 @@ Resource volterra_secret_policy_rule
 
 The Secret Policy Rule allows CRUD of Secret Policy Rule resource on Volterra SaaS
 
-~> **Note:** Please refer to [Secret Policy Rule API docs](https://volterra.io/docs/api/secret-policy-rule) to learn more
+~> **Note:** Please refer to [Secret Policy Rule API docs](https://docs.cloud.f5.com/docs/api/secret-policy-rule) to learn more
 
 Example Usage
 -------------

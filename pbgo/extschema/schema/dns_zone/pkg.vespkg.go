@@ -48,10 +48,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.ImportAXFRResponse"] = ImportAXFRResponseValidator()
 	vr["ves.io.schema.dns_zone.ImportF5CSZoneRequest"] = ImportF5CSZoneRequestValidator()
 	vr["ves.io.schema.dns_zone.ImportF5CSZoneResponse"] = ImportF5CSZoneResponseValidator()
+	vr["ves.io.schema.dns_zone.TSIGConfiguration"] = TSIGConfigurationValidator()
 
 	vr["ves.io.schema.dns_zone.AFSDBRecordValue"] = AFSDBRecordValueValidator()
+	vr["ves.io.schema.dns_zone.CERTRecordValue"] = CERTRecordValueValidator()
+	vr["ves.io.schema.dns_zone.CERTResourceRecord"] = CERTResourceRecordValidator()
 	vr["ves.io.schema.dns_zone.CertificationAuthorityAuthorization"] = CertificationAuthorityAuthorizationValidator()
 	vr["ves.io.schema.dns_zone.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.dns_zone.DLVResourceRecord"] = DLVResourceRecordValidator()
 	vr["ves.io.schema.dns_zone.DNSAAAAResourceRecord"] = DNSAAAAResourceRecordValidator()
 	vr["ves.io.schema.dns_zone.DNSAFSDBRecord"] = DNSAFSDBRecordValidator()
 	vr["ves.io.schema.dns_zone.DNSAResourceRecord"] = DNSAResourceRecordValidator()
@@ -87,9 +91,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.SHA384Digest"] = SHA384DigestValidator()
 	vr["ves.io.schema.dns_zone.SOARecordParameterConfig"] = SOARecordParameterConfigValidator()
 	vr["ves.io.schema.dns_zone.SRVService"] = SRVServiceValidator()
+	vr["ves.io.schema.dns_zone.SSHFPRecordValue"] = SSHFPRecordValueValidator()
+	vr["ves.io.schema.dns_zone.SSHFPResourceRecord"] = SSHFPResourceRecordValidator()
 	vr["ves.io.schema.dns_zone.SecondaryDNSConfig"] = SecondaryDNSConfigValidator()
 	vr["ves.io.schema.dns_zone.SecondaryDNSCreateSpecType"] = SecondaryDNSCreateSpecTypeValidator()
 	vr["ves.io.schema.dns_zone.SecondaryDNSGetSpecType"] = SecondaryDNSGetSpecTypeValidator()
+	vr["ves.io.schema.dns_zone.TLSARecordValue"] = TLSARecordValueValidator()
+	vr["ves.io.schema.dns_zone.TLSAResourceRecord"] = TLSAResourceRecordValidator()
 
 }
 
@@ -147,10 +155,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.API.Replace"] = "ves.io.schema.dns_zone.ReplaceRequest"
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = []string{
-		"tsig_key_value.blindfold_secret_info_internal",
-		"tsig_key_value.secret_encoding_type",
-		"tsig_key_value.vault_secret_info",
-		"tsig_key_value.wingman_secret_info",
+		"tsig_configuration.tsig_key_value.blindfold_secret_info_internal",
+		"tsig_configuration.tsig_key_value.secret_encoding_type",
+		"tsig_configuration.tsig_key_value.vault_secret_info",
+		"tsig_configuration.tsig_key_value.wingman_secret_info",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = "ves.io.schema.dns_zone.ImportAXFRRequest"
@@ -169,6 +177,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["dns"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config-dns",
+		ServiceSelector: "bifrost\\.gc.*\\",
+	}
 
 }
 

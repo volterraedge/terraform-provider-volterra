@@ -10,7 +10,7 @@ Resource volterra_service_policy_rule
 
 The Service Policy Rule allows CRUD of Service Policy Rule resource on Volterra SaaS
 
-~> **Note:** Please refer to [Service Policy Rule API docs](https://volterra.io/docs/api/service-policy-rule) to learn more
+~> **Note:** Please refer to [Service Policy Rule API docs](https://docs.cloud.f5.com/docs/api/service-policy-rule) to learn more
 
 Example Usage
 -------------

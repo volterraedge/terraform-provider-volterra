@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	io "io"
 	"net/http"
 	"strings"
 
@@ -205,11 +205,11 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterGroupsSummary(ctx context.Contex
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -289,11 +289,11 @@ func (c *CustomDataAPIRestClient) doRPCDCClusterTopology(ctx context.Context, ca
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -372,11 +372,11 @@ func (c *CustomDataAPIRestClient) doRPCGetRouteTable(ctx context.Context, callOp
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -454,11 +454,11 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshGroupsSummary(ctx context.Context
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -538,11 +538,11 @@ func (c *CustomDataAPIRestClient) doRPCSiteMeshTopology(ctx context.Context, cal
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
@@ -626,11 +626,11 @@ func (c *CustomDataAPIRestClient) doRPCSiteTopology(ctx context.Context, callOpt
 
 	// checking whether the status code is a successful status code (2xx series)
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}

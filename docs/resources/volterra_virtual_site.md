@@ -10,7 +10,7 @@ Resource volterra_virtual_site
 
 The Virtual Site allows CRUD of Virtual Site resource on Volterra SaaS
 
-~> **Note:** Please refer to [Virtual Site API docs](https://volterra.io/docs/api/virtual-site) to learn more
+~> **Note:** Please refer to [Virtual Site API docs](https://docs.cloud.f5.com/docs/api/virtual-site) to learn more
 
 Example Usage
 -------------

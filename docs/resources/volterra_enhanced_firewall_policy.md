@@ -10,7 +10,7 @@ Resource volterra_enhanced_firewall_policy
 
 The Enhanced Firewall Policy allows CRUD of Enhanced Firewall Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [Enhanced Firewall Policy API docs](https://volterra.io/docs/api/enhanced-firewall-policy) to learn more
+~> **Note:** Please refer to [Enhanced Firewall Policy API docs](https://docs.cloud.f5.com/docs/api/enhanced-firewall-policy) to learn more
 
 Example Usage
 -------------

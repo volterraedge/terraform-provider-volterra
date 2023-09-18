@@ -475,8 +475,8 @@ func (m *ImportAXFRRequest) Redact(ctx context.Context) error {
 		return nil
 	}
 
-	if err := m.GetTsigKeyValue().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting ImportAXFRRequest.tsig_key_value")
+	if err := m.GetTsigConfiguration().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ImportAXFRRequest.tsig_configuration")
 	}
 
 	return nil
@@ -523,11 +523,11 @@ func (v *ValidateImportAXFRRequest) PrimaryServerValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateImportAXFRRequest) TsigKeyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateImportAXFRRequest) DomainNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tsig_key_name")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_name")
 	}
 
 	return validatorFn, nil
@@ -547,19 +547,10 @@ func (v *ValidateImportAXFRRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["name"]; exists {
+	if fv, exists := v.FldValidators["domain_name"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("name"))
-		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["namespace"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("namespace"))
-		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("domain_name"))
+		if err := fv(ctx, m.GetDomainName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -574,28 +565,10 @@ func (v *ValidateImportAXFRRequest) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["tsig_key_algorithm"]; exists {
+	if fv, exists := v.FldValidators["tsig_configuration"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("tsig_key_algorithm"))
-		if err := fv(ctx, m.GetTsigKeyAlgorithm(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tsig_key_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tsig_key_name"))
-		if err := fv(ctx, m.GetTsigKeyName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["tsig_key_value"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tsig_key_value"))
-		if err := fv(ctx, m.GetTsigKeyValue(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("tsig_configuration"))
+		if err := fv(ctx, m.GetTsigConfiguration(), vOpts...); err != nil {
 			return err
 		}
 
@@ -618,7 +591,8 @@ var DefaultImportAXFRRequestValidator = func() *ValidateImportAXFRRequest {
 
 	vrhPrimaryServer := v.PrimaryServerValidationRuleHandler
 	rulesPrimaryServer := map[string]string{
-		"ves.io.schema.rules.string.ipv4": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
 	}
 	vFn, err = vrhPrimaryServer(rulesPrimaryServer)
 	if err != nil {
@@ -627,18 +601,21 @@ var DefaultImportAXFRRequestValidator = func() *ValidateImportAXFRRequest {
 	}
 	v.FldValidators["primary_server"] = vFn
 
-	vrhTsigKeyName := v.TsigKeyNameValidationRuleHandler
-	rulesTsigKeyName := map[string]string{
-		"ves.io.schema.rules.string.hostname": "true",
+	vrhDomainName := v.DomainNameValidationRuleHandler
+	rulesDomainName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
-	vFn, err = vrhTsigKeyName(rulesTsigKeyName)
+	vFn, err = vrhDomainName(rulesDomainName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ImportAXFRRequest.tsig_key_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ImportAXFRRequest.domain_name: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["tsig_key_name"] = vFn
+	v.FldValidators["domain_name"] = vFn
 
-	v.FldValidators["tsig_key_value"] = ves_io_schema.SecretTypeValidator().Validate
+	v.FldValidators["tsig_configuration"] = TSIGConfigurationValidator().Validate
 
 	return v
 }()
@@ -971,6 +948,148 @@ var DefaultImportF5CSZoneResponseValidator = func() *ValidateImportF5CSZoneRespo
 
 func ImportF5CSZoneResponseValidator() db.Validator {
 	return DefaultImportF5CSZoneResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TSIGConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TSIGConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *TSIGConfiguration) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetTsigKeyValue().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting TSIGConfiguration.tsig_key_value")
+	}
+
+	return nil
+}
+
+func (m *TSIGConfiguration) DeepCopy() *TSIGConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TSIGConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TSIGConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TSIGConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TSIGConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTSIGConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTSIGConfiguration) TsigKeyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tsig_key_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTSIGConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TSIGConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TSIGConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tsig_key_algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tsig_key_algorithm"))
+		if err := fv(ctx, m.GetTsigKeyAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tsig_key_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tsig_key_name"))
+		if err := fv(ctx, m.GetTsigKeyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tsig_key_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tsig_key_value"))
+		if err := fv(ctx, m.GetTsigKeyValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTSIGConfigurationValidator = func() *ValidateTSIGConfiguration {
+	v := &ValidateTSIGConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTsigKeyName := v.TsigKeyNameValidationRuleHandler
+	rulesTsigKeyName := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+	}
+	vFn, err = vrhTsigKeyName(rulesTsigKeyName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TSIGConfiguration.tsig_key_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tsig_key_name"] = vFn
+
+	v.FldValidators["tsig_key_value"] = ves_io_schema.SecretTypeValidator().Validate
+
+	return v
+}()
+
+func TSIGConfigurationValidator() db.Validator {
+	return DefaultTSIGConfigurationValidator
 }
 
 func (m *ImportF5CSZoneResponse) fromObject(e db.Entry, withDeepCopy bool) {

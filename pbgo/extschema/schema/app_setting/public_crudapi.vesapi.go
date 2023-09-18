@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -94,6 +94,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
+	case server.BrokenRefsForm:
+		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
 	default:
 		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
 	}
@@ -446,10 +448,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -567,11 +569,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	if _, err := ioutil.ReadAll(rsp.Body); err != nil {
+	if _, err := io.ReadAll(rsp.Body); err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
 
@@ -609,10 +611,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -734,10 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -785,11 +787,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	_, err = ioutil.ReadAll(rsp.Body)
+	_, err = io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -1283,6 +1285,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
 
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		rsrcReq.RspInBrokenReferencesForm = true
+
 	}
 
 	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
@@ -1507,6 +1512,28 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	}
 	_ = buildReferringObjectsForm
+	buildBrokenReferencesForm := func() {
+		for _, br := range rsrcRsp.DeletedReferredObjects {
+			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+		for _, br := range rsrcRsp.DisabledReferredObjects {
+			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
+				Kind:      db.KindForEntryType(br.Type),
+				Uid:       br.UID,
+				Tenant:    br.Tenant,
+				Namespace: br.Namespace,
+				Name:      br.Name,
+			})
+		}
+
+	}
+	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
 
@@ -1534,6 +1561,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		buildReferringObjectsForm()
+
+	case GET_RSP_FORMAT_BROKEN_REFERENCES:
+		buildBrokenReferencesForm()
 
 	default:
 		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
@@ -2067,7 +2097,7 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -2077,10 +2107,11 @@ var APISwaggerJSON string = `{
                             "GET_RSP_FORMAT_FOR_REPLACE",
                             "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
                         ],
                         "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Referring Objects"
+                        "x-displayname": "Broken Referred Objects"
                     }
                 ],
                 "tags": [
@@ -2245,6 +2276,43 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_settingBolaDetectionManualSettings": {
+            "type": "object",
+            "description": "x-displayName: \"Enumeration Attack Detection Manual Settings\"",
+            "title": "Enumeration Attack Detection Settings for Manual Threshold",
+            "properties": {
+                "threshold_level_1": {
+                    "description": "x-displayName: \"10\"\nDetected in range: 10 - 150",
+                    "title": "10",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "threshold_level_2": {
+                    "description": "x-displayName: \"25\"\nDetected in range: 25 - 400",
+                    "title": "25",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "threshold_level_3": {
+                    "description": "x-displayName: \"50\"\nDetected in range: 50 - 800",
+                    "title": "50",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "threshold_level_4": {
+                    "description": "x-displayName: \"100\"\nDetected in range: 100 - 1500",
+                    "title": "100",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "threshold_level_5": {
+                    "description": "x-displayName: \"200\"\nDetected in range: 200 - 3000",
+                    "title": "200",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "threshold_level_6": {
+                    "description": "x-displayName: \"500\"\nDetected in range: 500 - 8000",
+                    "title": "500",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "app_settingBusinessLogicMarkupSetting": {
             "type": "object",
             "description": "Settings specifying how API Discovery will be performed",
@@ -2399,6 +2467,24 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/app_settingCreateRequest",
                     "x-displayname": "CreateRequest Format"
                 },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
                 "metadata": {
                     "description": " Standard object's metadata",
                     "title": "metadata",
@@ -2451,7 +2537,7 @@ var APISwaggerJSON string = `{
         },
         "app_settingGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
@@ -2459,7 +2545,8 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_FOR_REPLACE",
                 "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS"
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
@@ -2596,7 +2683,8 @@ var APISwaggerJSON string = `{
             "description": "Various factors about user activity are monitored and analysed to determine malicious users.\nThese settings allow tuning those factors used by the system to detect malicious users.",
             "title": "Malicious User Detection Settings",
             "x-displayname": "Malicious User Detection Settings",
-            "x-ves-displayorder": "1,4,7,12,15,10",
+            "x-ves-displayorder": "1,4,7,12,15,19,10",
+            "x-ves-oneof-field-bola_activity_choice": "[\"bola_detection_automatic\",\"exclude_bola_detection\"]",
             "x-ves-oneof-field-cooling_off_period_setting": "[\"cooling_off_period\"]",
             "x-ves-oneof-field-failed_login_activity_choice": "[\"exclude_failed_login_activity\",\"include_failed_login_activity\"]",
             "x-ves-oneof-field-forbidden_activity_choice": "[\"exclude_forbidden_activity\",\"include_forbidden_activity\"]",
@@ -2605,6 +2693,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-waf_activity_choice": "[\"exclude_waf_activity\",\"include_waf_activity\"]",
             "x-ves-proto-message": "ves.io.schema.app_setting.MaliciousUserDetectionSetting",
             "properties": {
+                "bola_detection_automatic": {
+                    "description": "Exclusive with [exclude_bola_detection]\n Detect Enumeration attack automatically.",
+                    "title": "include enumeration activity using automatic threshold",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
                 "cooling_off_period": {
                     "type": "integer",
                     "description": "Exclusive with []\n Malicious user detection assigns a threat level to each user based on their activity.\n Once a threat level is assigned, the system continues tracking activity from this user\n and if no further malicious activity is seen, it gradually reduces the threat assesment to lower levels.\n This field specifies the time period, in minutes, used by the system to decay a user's threat level from\n a high to medium or medium to low or low to none.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 120\n",
@@ -2617,6 +2711,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gt": "0",
                         "ves.io.schema.rules.uint32.lte": "120"
                     }
+                },
+                "exclude_bola_detection": {
+                    "description": "Exclusive with [bola_detection_automatic]\n Disable Enumeration attack detection",
+                    "title": "exclude enumeration activity",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "exclude_failed_login_activity": {
                     "description": "Exclusive with [include_failed_login_activity]\n Exclude persistent login failures activity (401 response code) in malicious user detection",

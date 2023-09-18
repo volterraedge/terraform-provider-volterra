@@ -10,7 +10,7 @@ Resource volterra_managed_tenant
 
 The Managed Tenant allows CRUD of Managed Tenant resource on Volterra SaaS
 
-~> **Note:** Please refer to [Managed Tenant API docs](https://volterra.io/docs/api/managed-tenant) to learn more
+~> **Note:** Please refer to [Managed Tenant API docs](https://docs.cloud.f5.com/docs/api/managed-tenant) to learn more
 
 Example Usage
 -------------

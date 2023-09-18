@@ -12,7 +12,7 @@ Resource volterra_tgw_vpn_tunnels
 
 Configure VPN tunnels for aws_tgw_site object
 
-~> **Note:** Please refer to [Set vpn tunnels docs](https://volterra.io/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels) to learn more ~> **Note:** This resource works well as part of Volterra's aws_tgw_site site bring up terraform script. Please do not use this on already provisioned aws_tgw_site site.
+~> **Note:** Please refer to [Set vpn tunnels docs](https://docs.cloud.f5.com/docs/api/views-aws-tgw-site#operation/ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels) to learn more ~> **Note:** This resource works well as part of Volterra's aws_tgw_site site bring up terraform script. Please do not use this on already provisioned aws_tgw_site site.
 
 Example Usage
 -------------

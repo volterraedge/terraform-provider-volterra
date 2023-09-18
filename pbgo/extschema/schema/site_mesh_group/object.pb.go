@@ -102,7 +102,7 @@ func (m *Object) GetSpec() *SpecType {
 
 // Site Mesh Group specifications
 //
-// x-displayName: "Specification:
+// x-displayName: "Specification"
 // Shape of the site_mesh_group specification
 type SpecType struct {
 	// gc_spec

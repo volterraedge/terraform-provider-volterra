@@ -10,7 +10,7 @@ Resource volterra_network_connector
 
 The Network Connector allows CRUD of Network Connector resource on Volterra SaaS
 
-~> **Note:** Please refer to [Network Connector API docs](https://volterra.io/docs/api/network-connector) to learn more
+~> **Note:** Please refer to [Network Connector API docs](https://docs.cloud.f5.com/docs/api/network-connector) to learn more
 
 Example Usage
 -------------

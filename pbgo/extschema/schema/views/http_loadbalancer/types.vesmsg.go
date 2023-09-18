@@ -15993,6 +15993,15 @@ func (v *ValidateOpenApiValidationAllSpecEndpointsSettings) Validate(ctx context
 
 	}
 
+	if fv, exists := v.FldValidators["settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("settings"))
+		if err := fv(ctx, m.GetSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["validation_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("validation_mode"))
@@ -16039,11 +16048,136 @@ var DefaultOpenApiValidationAllSpecEndpointsSettingsValidator = func() *Validate
 	}
 	v.FldValidators["fall_through_mode"] = vFn
 
+	v.FldValidators["settings"] = OpenApiValidationCommonSettingsValidator().Validate
+
 	return v
 }()
 
 func OpenApiValidationAllSpecEndpointsSettingsValidator() db.Validator {
 	return DefaultOpenApiValidationAllSpecEndpointsSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OpenApiValidationCommonSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OpenApiValidationCommonSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OpenApiValidationCommonSettings) DeepCopy() *OpenApiValidationCommonSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OpenApiValidationCommonSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OpenApiValidationCommonSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OpenApiValidationCommonSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OpenApiValidationCommonSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOpenApiValidationCommonSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOpenApiValidationCommonSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OpenApiValidationCommonSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OpenApiValidationCommonSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOversizedBodyChoice().(type) {
+	case *OpenApiValidationCommonSettings_OversizedBodySkipValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_skip_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationCommonSettings_OversizedBodySkipValidation).OversizedBodySkipValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_skip_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationCommonSettings_OversizedBodyFailValidation:
+		if fv, exists := v.FldValidators["oversized_body_choice.oversized_body_fail_validation"]; exists {
+			val := m.GetOversizedBodyChoice().(*OpenApiValidationCommonSettings_OversizedBodyFailValidation).OversizedBodyFailValidation
+			vOpts := append(opts,
+				db.WithValidateField("oversized_body_choice"),
+				db.WithValidateField("oversized_body_fail_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetPropertyValidationSettingsChoice().(type) {
+	case *OpenApiValidationCommonSettings_PropertyValidationSettingsDefault:
+		if fv, exists := v.FldValidators["property_validation_settings_choice.property_validation_settings_default"]; exists {
+			val := m.GetPropertyValidationSettingsChoice().(*OpenApiValidationCommonSettings_PropertyValidationSettingsDefault).PropertyValidationSettingsDefault
+			vOpts := append(opts,
+				db.WithValidateField("property_validation_settings_choice"),
+				db.WithValidateField("property_validation_settings_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationCommonSettings_PropertyValidationSettingsCustom:
+		if fv, exists := v.FldValidators["property_validation_settings_choice.property_validation_settings_custom"]; exists {
+			val := m.GetPropertyValidationSettingsChoice().(*OpenApiValidationCommonSettings_PropertyValidationSettingsCustom).PropertyValidationSettingsCustom
+			vOpts := append(opts,
+				db.WithValidateField("property_validation_settings_choice"),
+				db.WithValidateField("property_validation_settings_custom"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOpenApiValidationCommonSettingsValidator = func() *ValidateOpenApiValidationCommonSettings {
+	v := &ValidateOpenApiValidationCommonSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["property_validation_settings_choice.property_validation_settings_custom"] = ValidationPropertySettingValidator().Validate
+
+	return v
+}()
+
+func OpenApiValidationCommonSettingsValidator() db.Validator {
+	return DefaultOpenApiValidationCommonSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -16087,6 +16221,14 @@ type ValidateOpenApiValidationMode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOpenApiValidationMode) ResponseValidationModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for response_validation_mode_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateOpenApiValidationMode) ValidationModeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -16107,6 +16249,16 @@ func (v *ValidateOpenApiValidationMode) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["response_validation_mode_choice"]; exists {
+		val := m.GetResponseValidationModeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("response_validation_mode_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetResponseValidationModeChoice().(type) {
@@ -16185,6 +16337,17 @@ var DefaultOpenApiValidationModeValidator = func() *ValidateOpenApiValidationMod
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhResponseValidationModeChoice := v.ResponseValidationModeChoiceValidationRuleHandler
+	rulesResponseValidationModeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhResponseValidationModeChoice(rulesResponseValidationModeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OpenApiValidationMode.response_validation_mode_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_validation_mode_choice"] = vFn
 
 	vrhValidationModeChoice := v.ValidationModeChoiceValidationRuleHandler
 	rulesValidationModeChoice := map[string]string{
@@ -23751,7 +23914,9 @@ var DefaultRouteTypeSimpleValidator = func() *ValidateRouteTypeSimple {
 
 	vrhOriginPools := v.OriginPoolsValidationRuleHandler
 	rulesOriginPools := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhOriginPools(rulesOriginPools)
@@ -26721,6 +26886,15 @@ func (v *ValidateValidateApiBySpecRule) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("settings"))
+		if err := fv(ctx, m.GetSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -26760,11 +26934,368 @@ var DefaultValidateApiBySpecRuleValidator = func() *ValidateValidateApiBySpecRul
 	}
 	v.FldValidators["fall_through_mode"] = vFn
 
+	v.FldValidators["settings"] = OpenApiValidationCommonSettingsValidator().Validate
+
 	return v
 }()
 
 func ValidateApiBySpecRuleValidator() db.Validator {
 	return DefaultValidateApiBySpecRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidationPropertySetting) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidationPropertySetting) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidationPropertySetting) DeepCopy() *ValidationPropertySetting {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidationPropertySetting{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidationPropertySetting) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidationPropertySetting) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidationPropertySettingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidationPropertySetting struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidationPropertySetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidationPropertySetting)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidationPropertySetting got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["queryParameters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("queryParameters"))
+		if err := fv(ctx, m.GetQueryParameters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidationPropertySettingValidator = func() *ValidateValidationPropertySetting {
+	v := &ValidateValidationPropertySetting{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["queryParameters"] = ValidationSettingForQueryParametersValidator().Validate
+
+	v.FldValidators["headers"] = ValidationSettingForHeadersValidator().Validate
+
+	return v
+}()
+
+func ValidationPropertySettingValidator() db.Validator {
+	return DefaultValidationPropertySettingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidationSettingForHeaders) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidationSettingForHeaders) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidationSettingForHeaders) DeepCopy() *ValidationSettingForHeaders {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidationSettingForHeaders{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidationSettingForHeaders) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidationSettingForHeaders) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidationSettingForHeadersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidationSettingForHeaders struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidationSettingForHeaders) AdditionalHeadersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for additional_headers_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateValidationSettingForHeaders) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidationSettingForHeaders)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidationSettingForHeaders got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["additional_headers_choice"]; exists {
+		val := m.GetAdditionalHeadersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("additional_headers_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAdditionalHeadersChoice().(type) {
+	case *ValidationSettingForHeaders_AllowAdditionalHeaders:
+		if fv, exists := v.FldValidators["additional_headers_choice.allow_additional_headers"]; exists {
+			val := m.GetAdditionalHeadersChoice().(*ValidationSettingForHeaders_AllowAdditionalHeaders).AllowAdditionalHeaders
+			vOpts := append(opts,
+				db.WithValidateField("additional_headers_choice"),
+				db.WithValidateField("allow_additional_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ValidationSettingForHeaders_DisallowAdditionalHeaders:
+		if fv, exists := v.FldValidators["additional_headers_choice.disallow_additional_headers"]; exists {
+			val := m.GetAdditionalHeadersChoice().(*ValidationSettingForHeaders_DisallowAdditionalHeaders).DisallowAdditionalHeaders
+			vOpts := append(opts,
+				db.WithValidateField("additional_headers_choice"),
+				db.WithValidateField("disallow_additional_headers"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidationSettingForHeadersValidator = func() *ValidateValidationSettingForHeaders {
+	v := &ValidateValidationSettingForHeaders{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAdditionalHeadersChoice := v.AdditionalHeadersChoiceValidationRuleHandler
+	rulesAdditionalHeadersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAdditionalHeadersChoice(rulesAdditionalHeadersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ValidationSettingForHeaders.additional_headers_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["additional_headers_choice"] = vFn
+
+	return v
+}()
+
+func ValidationSettingForHeadersValidator() db.Validator {
+	return DefaultValidationSettingForHeadersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidationSettingForQueryParameters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidationSettingForQueryParameters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidationSettingForQueryParameters) DeepCopy() *ValidationSettingForQueryParameters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidationSettingForQueryParameters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidationSettingForQueryParameters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidationSettingForQueryParameters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidationSettingForQueryParametersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidationSettingForQueryParameters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidationSettingForQueryParameters) AdditionalParametersChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for additional_parameters_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateValidationSettingForQueryParameters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidationSettingForQueryParameters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidationSettingForQueryParameters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["additional_parameters_choice"]; exists {
+		val := m.GetAdditionalParametersChoice()
+		vOpts := append(opts,
+			db.WithValidateField("additional_parameters_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAdditionalParametersChoice().(type) {
+	case *ValidationSettingForQueryParameters_AllowAdditionalParameters:
+		if fv, exists := v.FldValidators["additional_parameters_choice.allow_additional_parameters"]; exists {
+			val := m.GetAdditionalParametersChoice().(*ValidationSettingForQueryParameters_AllowAdditionalParameters).AllowAdditionalParameters
+			vOpts := append(opts,
+				db.WithValidateField("additional_parameters_choice"),
+				db.WithValidateField("allow_additional_parameters"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ValidationSettingForQueryParameters_DisallowAdditionalParameters:
+		if fv, exists := v.FldValidators["additional_parameters_choice.disallow_additional_parameters"]; exists {
+			val := m.GetAdditionalParametersChoice().(*ValidationSettingForQueryParameters_DisallowAdditionalParameters).DisallowAdditionalParameters
+			vOpts := append(opts,
+				db.WithValidateField("additional_parameters_choice"),
+				db.WithValidateField("disallow_additional_parameters"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidationSettingForQueryParametersValidator = func() *ValidateValidationSettingForQueryParameters {
+	v := &ValidateValidationSettingForQueryParameters{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAdditionalParametersChoice := v.AdditionalParametersChoiceValidationRuleHandler
+	rulesAdditionalParametersChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAdditionalParametersChoice(rulesAdditionalParametersChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ValidationSettingForQueryParameters.additional_parameters_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["additional_parameters_choice"] = vFn
+
+	return v
+}()
+
+func ValidationSettingForQueryParametersValidator() db.Validator {
+	return DefaultValidationSettingForQueryParametersValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -10,7 +10,7 @@ Resource volterra_fleet
 
 The Fleet allows CRUD of Fleet resource on Volterra SaaS
 
-~> **Note:** Please refer to [Fleet API docs](https://volterra.io/docs/api/fleet) to learn more
+~> **Note:** Please refer to [Fleet API docs](https://docs.cloud.f5.com/docs/api/fleet) to learn more
 
 Example Usage
 -------------

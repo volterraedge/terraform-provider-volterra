@@ -10,7 +10,7 @@ Resource volterra_app_type
 
 The App Type allows CRUD of App Type resource on Volterra SaaS
 
-~> **Note:** Please refer to [App Type API docs](https://volterra.io/docs/api/app-type) to learn more
+~> **Note:** Please refer to [App Type API docs](https://docs.cloud.f5.com/docs/api/app-type) to learn more
 
 Example Usage
 -------------

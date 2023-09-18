@@ -10,7 +10,7 @@ Resource volterra_fast_acl_for_internet_vips
 
 The fast_acl for internet vips resource activates the passed list of FastACLs for Internet VIPs
 
-~> **Note:** Please refer to [Fast ACL For Internet VIPs API docs](https://volterra.io/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs) to learn more
+~> **Note:** Please refer to [Fast ACL For Internet VIPs API docs](https://docs.cloud.f5.com/docs/api/namespace#operation/ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs) to learn more
 
 Example Usage
 -------------

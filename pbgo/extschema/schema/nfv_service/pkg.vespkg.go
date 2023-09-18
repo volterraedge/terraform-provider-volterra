@@ -137,6 +137,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.palo_alto_fw_service.panorama_server.authorization_key.wingman_secret_info",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.nfv_service.API.Create"] = "ves.io.schema.nfv_service.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.nfv_service.API.Get"] = []string{
@@ -146,9 +160,39 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.enabled_ssh_access.advertise_on_public",
 	}
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.nfv_service.API.List"] = []string{
 		"items.#.get_spec.enabled_ssh_access.advertise_on_public",
 		"items.#.object.spec.gc_spec.enabled_ssh_access.advertise_on_public",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.nfv_service.API.Replace"] = []string{
@@ -179,6 +223,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https_management.do_not_advertise_on_internet",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.nfv_service.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ssh_management_choice",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.nfv_service.API.Replace"] = "ves.io.schema.nfv_service.ReplaceRequest"
 
 }
@@ -191,6 +242,11 @@ func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 

@@ -10,7 +10,7 @@ Resource volterra_endpoint
 
 The Endpoint allows CRUD of Endpoint resource on Volterra SaaS
 
-~> **Note:** Please refer to [Endpoint API docs](https://volterra.io/docs/api/endpoint) to learn more
+~> **Note:** Please refer to [Endpoint API docs](https://docs.cloud.f5.com/docs/api/endpoint) to learn more
 
 Example Usage
 -------------

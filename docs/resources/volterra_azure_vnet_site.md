@@ -10,7 +10,7 @@ Resource volterra_azure_vnet_site
 
 The Azure Vnet Site allows CRUD of Azure Vnet Site resource on Volterra SaaS
 
-~> **Note:** Please refer to [Azure Vnet Site API docs](https://volterra.io/docs/api/views-azure-vnet-site) to learn more
+~> **Note:** Please refer to [Azure Vnet Site API docs](https://docs.cloud.f5.com/docs/api/views-azure-vnet-site) to learn more
 
 Example Usage
 -------------

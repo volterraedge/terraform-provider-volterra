@@ -7843,6 +7843,16 @@ func (v *ValidateVssNetworkConfiguration) TunnelDeadTimeoutValidationRuleHandler
 	return validatorFn, nil
 }
 
+func (v *ValidateVssNetworkConfiguration) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_vip_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VssNetworkConfiguration)
 	if !ok {
@@ -8054,6 +8064,15 @@ func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8281,7 +8300,7 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 
 	vrhOutsideVip := v.OutsideVipValidationRuleHandler
 	rulesOutsideVip := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
+		"ves.io.schema.rules.string.ipv4": "true",
 	}
 	vFn, err = vrhOutsideVip(rulesOutsideVip)
 	if err != nil {
@@ -8334,6 +8353,17 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VssNetworkConfiguration.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 

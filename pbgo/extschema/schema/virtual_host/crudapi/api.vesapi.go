@@ -8,7 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -426,10 +426,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient create")
 	}
@@ -510,11 +510,11 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient replace")
 	}
@@ -556,10 +556,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient Get")
 	}
@@ -691,10 +691,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	}
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, errors.Wrap(err, "RestClient List")
 	}
@@ -744,11 +744,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 
 	if rsp.StatusCode != http.StatusOK {
-		body, err := ioutil.ReadAll(rsp.Body)
+		body, err := io.ReadAll(rsp.Body)
 		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
 	}
 
-	body, err := ioutil.ReadAll(rsp.Body)
+	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
 		return errors.Wrap(err, "RestClient delete")
 	}
@@ -5540,6 +5540,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"DDoS mitigation\"\nx-required\nOptions for enabling and disabling the DDoS profile for the DNS Proxy.\nOn enabling this feature, a default DDoS profile is applied to the DNS proxy\nto protect the origin DNS servers from external DDoS attacks.",
                     "title": "DDoS mitigation",
                     "$ref": "#/definitions/virtual_hostDNSDDoSProfile"
+                },
+                "protocol_inspection": {
+                    "description": "x-displayName: \"Protocol Inspection\"\nOptions for enabling and configuring protocol inspection configuration",
+                    "title": "Protcol Inspection",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -5742,15 +5747,23 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"OpenAPI Validation Settings\"\nx-required\nSettings in VH of enabled OpenAPI validation",
             "title": "OpenAPI Validation Settings",
             "properties": {
-                "oversized_body_fail_validation": {
-                    "description": "x-displayName: \"Fail Body Validation\"\nApply the request/response action (block or report) when the body length is too long to verify (default 64Kb)",
-                    "title": "Fail the validation for over-sized body",
-                    "$ref": "#/definitions/schemaEmpty"
+                "allow_only_specified_headers": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Fail Validation On Unspecified Header\"\nSet to fail validation on request/response with header that is not specified in the OpenAPI specification",
+                    "title": "allow only specified header",
+                    "format": "boolean"
                 },
-                "oversized_body_skip_validation": {
-                    "description": "x-displayName: \"Skip Body Validation\"\nSkip body validation when the body length is too long to verify (default 64Kb)",
-                    "title": "Skip validation for over-sized body",
-                    "$ref": "#/definitions/schemaEmpty"
+                "allow_only_specified_query_params": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Fail Validation On Unspecified Query Parameter\"\nSet to fail validation on request with query parameter that is not specified in the OpenAPI specification",
+                    "title": "allow only specified query parameter",
+                    "format": "boolean"
+                },
+                "fail_oversized_body_validation": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Fail Oversized Body Validation\"\nSet to fail validation on request/response with too long body",
+                    "title": "fail oversized body validation",
+                    "format": "boolean"
                 }
             }
         },

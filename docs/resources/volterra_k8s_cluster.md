@@ -10,7 +10,7 @@ Resource volterra_k8s_cluster
 
 The K8s Cluster allows CRUD of K8s Cluster resource on Volterra SaaS
 
-~> **Note:** Please refer to [K8s Cluster API docs](https://volterra.io/docs/api/k8s-cluster) to learn more
+~> **Note:** Please refer to [K8s Cluster API docs](https://docs.cloud.f5.com/docs/api/k8s-cluster) to learn more
 
 Example Usage
 -------------

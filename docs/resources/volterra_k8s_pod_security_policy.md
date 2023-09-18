@@ -10,7 +10,7 @@ Resource volterra_k8s_pod_security_policy
 
 The K8s Pod Security Policy allows CRUD of K8s Pod Security Policy resource on Volterra SaaS
 
-~> **Note:** Please refer to [K8s Pod Security Policy API docs](https://volterra.io/docs/api/k8s-pod-security-policy) to learn more
+~> **Note:** Please refer to [K8s Pod Security Policy API docs](https://docs.cloud.f5.com/docs/api/k8s-pod-security-policy) to learn more
 
 Example Usage
 -------------

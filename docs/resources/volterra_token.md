@@ -10,7 +10,7 @@ Resource volterra_token
 
 The Token allows CRUD of Token resource on Volterra SaaS
 
-~> **Note:** Please refer to [Token API docs](https://volterra.io/docs/api/token) to learn more
+~> **Note:** Please refer to [Token API docs](https://docs.cloud.f5.com/docs/api/token) to learn more
 
 Example Usage
 -------------

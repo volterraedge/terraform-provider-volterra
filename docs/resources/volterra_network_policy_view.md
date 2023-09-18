@@ -10,7 +10,7 @@ Resource volterra_network_policy_view
 
 The Network Policy View allows CRUD of Network Policy View resource on Volterra SaaS
 
-~> **Note:** Please refer to [Network Policy View API docs](https://volterra.io/docs/api/views-network-policy-view) to learn more
+~> **Note:** Please refer to [Network Policy View API docs](https://docs.cloud.f5.com/docs/api/views-network-policy-view) to learn more
 
 Example Usage
 -------------
@@ -21,7 +21,7 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
+    // One of the arguments from this list "inside_endpoints interface namespace label_selector prefix_list any outside_endpoints" must be set
     outside_endpoints = true
   }
 }
@@ -221,7 +221,9 @@ All ip prefixes that are reachable via outside interfaces are chosen as Endpoint
 
 For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs..
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Protocol Port Range
 

@@ -53,6 +53,8 @@ import (
 	ves_io_schema_certified_hardware_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware/crudapi"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_cloud_credentials_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi"
+	ves_io_schema_cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
+	ves_io_schema_cloud_link_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link/crudapi"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_cluster_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi"
 	ves_io_schema_contact "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact"
@@ -341,6 +343,8 @@ func init() {
 	ves_io_schema_certified_hardware_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_credentials.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_credentials_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_link.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_link_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_contact.InitializeMDRegistry(MDR, true)

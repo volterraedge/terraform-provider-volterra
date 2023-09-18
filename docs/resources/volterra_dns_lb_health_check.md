@@ -10,7 +10,7 @@ Resource volterra_dns_lb_health_check
 
 The Dns Lb Health Check allows CRUD of Dns Lb Health Check resource on Volterra SaaS
 
-~> **Note:** Please refer to [Dns Lb Health Check API docs](https://volterra.io/docs/api/dns-lb-health-check) to learn more
+~> **Note:** Please refer to [Dns Lb Health Check API docs](https://docs.cloud.f5.com/docs/api/dns-lb-health-check) to learn more
 
 Example Usage
 -------------
