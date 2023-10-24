@@ -15,6 +15,8 @@ var (
 	AllResources = map[string]*schema.Resource{}
 	// EnvVarP12Password is the name of environment variable that holds password for P12 bundle file
 	EnvVarP12Password = "VES_P12_PASSWORD"
+	// EnvVarP12Content is the name of environment variable that holds content of P12 bundle file
+	EnvVarP12Content = "VES_P12_CONTENT"
 )
 
 const (
@@ -156,7 +158,17 @@ func providerConfigure(d *schema.ResourceData, terraformVersion string) (interfa
 		}
 		config.apiKey = fmt.Sprintf("file:///%s", v.(string))
 	} else {
-		return nil, fmt.Errorf("neither api_p12 bundle or api_cert/api_key is provided as provider config")
+		apiP12Content := os.Getenv(EnvVarP12Content)
+		if len(apiP12Content) == 0 {
+			return nil, fmt.Errorf("neither VES_P12_CONTENT, api_p12 bundle or api_cert/api_key is provided as provider config")
+		} else {
+			tmp, err := ioutil.TempFile(".", "volterra-cert")
+			if err != nil { panic(err) }
+			err := os.WriteFile(tmp, apiP12Content, 0600)
+			if err != nil { panic(err) }
+			config.apiP12File = fmt.Sprintf("file:///%s", tmp)
+			config.apiP12Password = os.Getenv(EnvVarP12Password)
+		}
 	}
 
 	if v, ok := d.GetOk("api_ca_cert"); ok {
