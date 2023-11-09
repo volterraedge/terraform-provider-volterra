@@ -405,12 +405,15 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) DNSLBHealthStatus(ctx context.Context, in *DNSLBHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBHealthStatusResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBHealthStatus", nil)
 	return c.CustomDataAPIServer.DNSLBHealthStatus(ctx, in)
 }
 func (c *customDataAPIInprocClient) DNSLBHealthStatusList(ctx context.Context, in *DNSLBHealthStatusListRequest, opts ...grpc.CallOption) (*DNSLBHealthStatusListResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBHealthStatusList", nil)
 	return c.CustomDataAPIServer.DNSLBHealthStatusList(ctx, in)
 }
 func (c *customDataAPIInprocClient) DNSLBPoolHealthStatus(ctx context.Context, in *DNSLBPoolHealthStatusRequest, opts ...grpc.CallOption) (*DNSLBPoolHealthStatusResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolHealthStatus", nil)
 	return c.CustomDataAPIServer.DNSLBPoolHealthStatus(ctx, in)
 }
 

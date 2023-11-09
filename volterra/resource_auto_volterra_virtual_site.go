@@ -64,7 +64,7 @@ func resourceVolterraVirtualSite() *schema.Resource {
 			"site_selector": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 

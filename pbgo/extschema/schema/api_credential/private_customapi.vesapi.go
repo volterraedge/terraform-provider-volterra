@@ -211,6 +211,7 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) ValidateToken(ctx context.Context, in *ValidateTokenRequest, opts ...grpc.CallOption) (*ValidateTokenResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken", nil)
 	return c.CustomPrivateAPIServer.ValidateToken(ctx, in)
 }
 

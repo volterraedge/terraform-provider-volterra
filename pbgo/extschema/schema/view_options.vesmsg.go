@@ -2205,6 +2205,180 @@ func HiddenConditionsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *HintWithAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HintWithAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HintWithAction) DeepCopy() *HintWithAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HintWithAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HintWithAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HintWithAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HintWithActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHintWithAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHintWithAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HintWithAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HintWithAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action_label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action_label"))
+		if err := fv(ctx, m.GetActionLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["action_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action_type"))
+		if err := fv(ctx, m.GetActionType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHintWithActionValidator = func() *ValidateHintWithAction {
+	v := &ValidateHintWithAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HintWithActionValidator() db.Validator {
+	return DefaultHintWithActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HintWithLink) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HintWithLink) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HintWithLink) DeepCopy() *HintWithLink {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HintWithLink{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HintWithLink) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HintWithLink) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HintWithLinkValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHintWithLink struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHintWithLink) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HintWithLink)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HintWithLink got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["link_text"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("link_text"))
+		if err := fv(ctx, m.GetLinkText(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["link_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("link_url"))
+		if err := fv(ctx, m.GetLinkUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHintWithLinkValidator = func() *ValidateHintWithLink {
+	v := &ValidateHintWithLink{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HintWithLinkValidator() db.Validator {
+	return DefaultHintWithLinkValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LabelKeyClassList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

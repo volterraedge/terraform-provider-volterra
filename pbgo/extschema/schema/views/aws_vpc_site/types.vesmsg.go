@@ -4177,6 +4177,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -4250,6 +4256,37 @@ func (m *CreateSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *CreateSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *CreateSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *CreateSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *CreateSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -4682,6 +4719,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
 				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5224,6 +5272,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
@@ -5320,6 +5369,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -5399,6 +5454,37 @@ func (m *GetSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interface
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GetSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *GetSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *GetSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *GetSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -5919,6 +6005,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
 				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6548,6 +6645,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
@@ -6644,6 +6742,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -6735,6 +6839,37 @@ func (m *GlobalSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Interf
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GlobalSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *GlobalSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *GlobalSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *GlobalSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -7353,6 +7488,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("direct_connect_choice"),
 				db.WithValidateField("direct_connect_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8018,6 +8164,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
@@ -8122,6 +8269,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -8195,6 +8348,37 @@ func (m *ReplaceSpecType) GetDeploymentDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *ReplaceSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *ReplaceSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *ReplaceSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 func (m *ReplaceSpecType) GetLogsReceiverChoiceDRefInfo() ([]db.DRefInfo, error) {
@@ -8522,6 +8706,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -8832,6 +9027,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -9548,6 +9744,9 @@ func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTyp
 	case *CreateSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *CreateSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -9564,6 +9763,9 @@ func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecT
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &CreateSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &CreateSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9958,6 +10160,9 @@ func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) 
 	case *GetSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *GetSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -9974,6 +10179,9 @@ func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &GetSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10376,6 +10584,9 @@ func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTy
 	case *ReplaceSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *ReplaceSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -10392,6 +10603,9 @@ func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpec
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &ReplaceSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

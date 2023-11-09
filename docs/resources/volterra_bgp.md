@@ -34,8 +34,8 @@ resource "volterra_bgp" "example" {
     bgp_router_id_key  = "value"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "from_site ip_address local_address" must be set
-    local_address = true
+    // One of the arguments from this list "local_address from_site ip_address" must be set
+    from_site = true
   }
 
   peers {
@@ -51,24 +51,42 @@ resource "volterra_bgp" "example" {
 
     // One of the arguments from this list "external internal" must be set
 
-    external {
-      // One of the arguments from this list "default_gateway address address_ipv6 subnet_begin_offset subnet_end_offset from_site" must be set
-      from_site = true
-      asn       = "64512"
+    internal {
+      // One of the arguments from this list "address from_site dns_name" must be set
+      dns_name = "dns_name"
 
-      family_inet {
+      family_inet6vpn {
+        // One of the arguments from this list "disable enable" must be set
+        enable = true
+      }
+
+      family_inetvpn {
+        // One of the arguments from this list "enable disable" must be set
+
+        enable {
+          // One of the arguments from this list "disable enable" must be set
+          enable = true
+        }
+      }
+
+      family_rtarget {
+        // One of the arguments from this list "disable enable" must be set
+        enable = true
+      }
+
+      family_uuidvpn {
         // One of the arguments from this list "enable disable" must be set
         enable = true
       }
 
-      // One of the arguments from this list "interface_list inside_interfaces outside_interfaces interface" must be set
-      inside_interfaces = true
-      port              = "179"
+      // One of the arguments from this list "disable_mtls enable_mtls" must be set
+      disable_mtls = true
+      port         = "179"
     }
   }
 
   where {
-    // One of the arguments from this list "site virtual_site" must be set
+    // One of the arguments from this list "virtual_site site" must be set
 
     site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
@@ -183,6 +201,10 @@ External BGP peer..
 
 `asn` - (Required) Autonomous System Number for BGP peer (`Int`).
 
+`md5_auth_key` - (Optional) MD5 key for protecting BGP Sessions (RFC 2385) (`String`).
+
+`no_authentication` - (Optional) No Authentication of BGP session (bool).
+
 `family_inet` - (Optional) Parameters for IPv4 Unicast family.. See [Family Inet ](#family-inet) below for details.
 
 `inside_interfaces` - (Optional) All interfaces in the site local inside network. (bool).
@@ -251,7 +273,7 @@ List of network interfaces..
 
 ### Internal
 
-External BGP peer..
+Internal BGP peer..
 
 `address` - (Optional) Specify peer address. (`String`).
 
@@ -299,6 +321,10 @@ Common attributes for the peer including name and description..
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
+### No Authentication
+
+No Authentication of BGP session.
+
 ### Outside Interfaces
 
 All interfaces in the site local outside network..
@@ -325,7 +351,7 @@ List of peers.
 
 `external` - (Optional) External BGP peer.. See [External ](#external) below for details.
 
-`internal` - (Optional) External BGP peer.. See [Internal ](#internal) below for details.
+`internal` - (Optional) Internal BGP peer.. See [Internal ](#internal) below for details.
 
 ### Ref
 

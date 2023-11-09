@@ -82,7 +82,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 						"access_info": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -95,7 +95,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 												"api_server": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"tls_info": {
@@ -126,7 +126,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -156,7 +156,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -181,7 +181,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -201,12 +201,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -231,7 +231,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -266,7 +266,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -296,7 +296,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -321,7 +321,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -341,12 +341,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -371,7 +371,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -401,7 +401,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -431,7 +431,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -456,7 +456,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -476,12 +476,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -506,7 +506,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -559,7 +559,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -589,7 +589,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -614,7 +614,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -634,12 +634,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -664,7 +664,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -692,7 +692,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 						"publish_info": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -724,7 +724,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 						"access_info": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -737,7 +737,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 												"api_server": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"tls_info": {
@@ -768,7 +768,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -798,7 +798,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -823,7 +823,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -843,12 +843,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -873,7 +873,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -908,7 +908,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -938,7 +938,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -963,7 +963,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -983,12 +983,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1013,7 +1013,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1043,7 +1043,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1073,7 +1073,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1098,7 +1098,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1118,12 +1118,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1148,7 +1148,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1200,7 +1200,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1230,7 +1230,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1255,7 +1255,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1275,12 +1275,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -1305,7 +1305,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1332,7 +1332,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 						"publish_info": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1351,12 +1351,12 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 												"dns_mode": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"subdomain": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1371,7 +1371,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 
 												"namespace": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1392,7 +1392,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 			"where": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1423,7 +1423,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1461,7 +1461,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1516,7 +1516,7 @@ func resourceVolterraDiscovery() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

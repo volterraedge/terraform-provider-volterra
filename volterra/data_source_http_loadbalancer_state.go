@@ -157,14 +157,13 @@ func dataSourceVolterraHttpLoadbalancerStateRead(d *schema.ResourceData, meta in
 	autoCertInfo["auto_cert_expiry"] = getSpec.GetAutoCertInfo().GetAutoCertExpiry().GoString()
 	autoCertInfo["auto_cert_subject"] = getSpec.GetAutoCertInfo().GetAutoCertSubject()
 	autoCertInfo["auto_cert_issuer"] = getSpec.GetAutoCertInfo().GetAutoCertIssuer()
-	flattenDnsRecords := make([]interface{}, 1, 1)
+	flattenDnsRecords := make([]interface{}, 0)
 	for _, dnsInfo := range getSpec.GetAutoCertInfo().GetDnsRecords() {
 		dnsRecords := make(map[string]interface{})
 		dnsRecords["name"] = dnsInfo.GetName()
 		dnsRecords["type"] = dnsInfo.GetType()
 		dnsRecords["value"] = dnsInfo.GetValue()
-		flattenDnsRecords[0] = dnsRecords
-		break
+		flattenDnsRecords = append(flattenDnsRecords, dnsRecords)
 	}
 	autoCertInfo["dns_records"] = flattenDnsRecords
 	flattenAutoCertInfo[0] = autoCertInfo

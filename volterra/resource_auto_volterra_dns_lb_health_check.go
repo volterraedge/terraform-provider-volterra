@@ -69,7 +69,7 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 						"health_check_port": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"receive": {
@@ -94,7 +94,7 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 						"health_check_port": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"receive": {
@@ -125,7 +125,7 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 						"health_check_port": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"receive": {
@@ -150,7 +150,7 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 						"health_check_port": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"receive": {
@@ -175,17 +175,17 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 
 						"health_check_port": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"receive": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"send": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},

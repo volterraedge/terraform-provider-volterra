@@ -37,6 +37,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nfv_service.MetricsRequest"] = MetricsRequestValidator()
 	vr["ves.io.schema.nfv_service.MetricsResponse"] = MetricsResponseValidator()
 
+	vr["ves.io.schema.nfv_service.BigIqInstanceType"] = BigIqInstanceTypeValidator()
 	vr["ves.io.schema.nfv_service.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.nfv_service.EndpointRefType"] = EndpointRefTypeValidator()
 	vr["ves.io.schema.nfv_service.EndpointServiceReplaceType"] = EndpointServiceReplaceTypeValidator()

@@ -22,6 +22,7 @@ import (
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	vh_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/server"
@@ -148,7 +149,7 @@ func TestHTTPLB(t *testing.T) {
 	os.Setenv("VOLT_VESENV", "true")
 	os.Setenv("VOLT_TENANT", "tenant1")
 	dataSourceName := "data.volterra_http_loadbalancer_state.exist_http_lb"
-	//httpLbResourceName := fmt.Sprintf("volterra_http_loadbalancer.%s", name)
+	httpLbResourceName := fmt.Sprintf("volterra_http_loadbalancer.%s", name)
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		PreCheck:  func() { testAccPreCheck() },
@@ -158,20 +159,20 @@ func TestHTTPLB(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(dataSourceName, "cname", "ves-io-082258df-c45e-4163-8884-7878453eeb2a"),
 					resource.TestCheckResourceAttr(dataSourceName, "ip_address", "1.1.1.1"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.#", "1"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.append", "false"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.name", "X-real-ip"),
-					//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.648059762.request_headers_to_add.0.value", "$[client_address]"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.#", "1"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.append", "false"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.name", "X-real-ip"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.value", "$[client_address]"),
 				),
 			},
 			{
 				// Test replace of http loadbalancer
 				Config: testConfigHTTPLB(name, "app-test", lbName, nsName, 600),
-				Check:  resource.ComposeTestCheckFunc(
-				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.#", "1"),
-				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.append", "false"),
-				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.name", "X-real-ip"),
-				//resource.TestCheckResourceAttr(httpLbResourceName, "more_option.3270546385.request_headers_to_add.0.value", "$[client_address]"),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.#", "1"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.append", "false"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.name", "X-real-ip"),
+					resource.TestCheckResourceAttr(httpLbResourceName, "more_option.0.request_headers_to_add.0.value", "$[client_address]"),
 				),
 			},
 		},
@@ -381,6 +382,130 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  }
 		}
 		data "volterra_http_loadbalancer_state" "exist_http_lb" {
+			name = "%[3]s"
+			namespace = "%[4]s"
+		}
+		`, name, namespace, existLbName, existNsName, timeout)
+}
+
+func TestHTTPLBWithAutoCert(t *testing.T) {
+	name := generateResourceName()
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
+		ves_io_schema_views_http_loadbalancer.ObjectType,
+		ves_io_schema_ns.ObjectType,
+		ves_io_schema_tenant.ObjectType,
+	})
+	defer stopFunc()
+	tenantName := "tenant1"
+	ctx := client.NewContextWithHeaders(f.StartCtx,
+		client.WithTenant(tenantName),
+		client.WithCreatorClass("test"),
+		client.WithCreatorID("test-"+t.Name()))
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	f.MustCreateEntry(tenantObj)
+
+	nsName := "default"
+	lbName := "httplb"
+	httpLbObj := &http_lb.Object{
+		Metadata: &ves_io_schema.ObjectMetaType{
+			Namespace: nsName,
+			Name:      lbName,
+		},
+		Spec: &http_lb.SpecType{
+			GcSpec: &http_lb.GlobalSpecType{
+				AutoCertInfo: &virtual_host.AutoCertInfoType{
+					DnsRecords: []*virtual_host.DNSRecord{
+						{
+							Name:  "_acme-challenge.http.helloclouds.app",
+							Type:  "CNAME",
+							Value: "ba6e11d53ef8559ab57a09413121dee4.autocerts.demo1.volterra.us",
+						},
+						{
+							Name:  "_acme-challenge.http.test.com",
+							Type:  "CNAME",
+							Value: "785e82a6627b5625819f61d5500dbe89.autocerts.demo1.volterra.us",
+						},
+						{
+							Name:  "_acme-challenge.www.f5cert.com",
+							Type:  "CNAME",
+							Value: "a33980e7a7915a32b0899f34d881a35e.autocerts.demo1.volterra.us",
+						},
+					},
+				},
+				AdvertiseChoice: &http_lb.GlobalSpecType_DoNotAdvertise{
+					DoNotAdvertise: &ves_io_schema.Empty{},
+				},
+				ChallengeType: &http_lb.GlobalSpecType_NoChallenge{
+					NoChallenge: &ves_io_schema.Empty{},
+				},
+				Domains: []string{"http.helloclouds.app", "http.test.com", "www.f5cert.com"},
+				LoadbalancerType: &http_lb.GlobalSpecType_HttpsAutoCert{
+					HttpsAutoCert: &http_lb.ProxyTypeHttpsAutoCerts{
+						AddHsts: true,
+						PortChoice: &http_lb.ProxyTypeHttpsAutoCerts_PortRanges{
+							PortRanges: "80,443",
+						},
+					},
+				},
+				MlConfigChoice: &http_lb.GlobalSpecType_MultiLbApp{
+					MultiLbApp: &ves_io_schema.Empty{},
+				},
+				HostName: "ves-io-082258df-c45e-4163-8884-7878453eeb2a",
+				DnsInfo: []*vh_dns_info.DnsInfo{
+					{
+						IpAddress: "1.1.1.1",
+					},
+				},
+			},
+		},
+	}
+	f.MustCreateEntry(httpLbObj.ToEntry(), server.WithAPIPrivate(), server.WithCtx(ctx))
+
+	os.Setenv("VOLT_API_TEST", "true")
+	os.Setenv("VOLT_API_URL", testURL)
+	os.Setenv("TF_ACC", "true")
+	os.Setenv("VOLT_VESENV", "true")
+	os.Setenv("VOLT_TENANT", "tenant1")
+	dataSourceName := "data.volterra_http_loadbalancer_state.http_lb"
+	resource.Test(t, resource.TestCase{
+		Providers: testAccProviders,
+		PreCheck:  func() { testAccPreCheck() },
+		Steps: []resource.TestStep{
+			{
+				Config: testConfigHTTPLBWithAutoCert(name, "app-test", lbName, nsName, 3000),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(dataSourceName, "cname", "ves-io-082258df-c45e-4163-8884-7878453eeb2a"),
+					resource.TestCheckResourceAttr(dataSourceName, "ip_address", "1.1.1.1"),
+					resource.TestCheckResourceAttr(dataSourceName, "auto_cert_info.0.dns_records.#", "3"),
+				),
+			},
+		},
+	})
+}
+
+func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName string, timeout int32) string {
+	return fmt.Sprintf(`
+		resource "volterra_namespace" "app" {
+		  name = "%[2]s"
+		}
+		resource "volterra_http_loadbalancer" "%[1]s" {
+		  name = "%[1]s"
+		  namespace = volterra_namespace.app.name
+		  labels = {
+			  "new-test"        = "true"
+		  }
+		  advertise_on_public_default_vip = true
+		  no_challenge = true
+		  https_auto_cert {
+			port_ranges= "80,443"
+		  }
+		  disable_rate_limit = true
+		  no_service_policies = true
+		  round_robin = true
+		  domains = ["http.helloclouds.app", "http.test.com", "www.f5cert.com"]
+		  multi_lb_app = true
+		}
+		data "volterra_http_loadbalancer_state" "http_lb" {
 			name = "%[3]s"
 			namespace = "%[4]s"
 		}

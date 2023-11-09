@@ -312,9 +312,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.CustomAPI.SetCloudSiteInfo", nil)
 	return c.CustomAPIServer.SetCloudSiteInfo(ctx, in)
 }
 func (c *customAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.CustomAPI.SetVIPInfo", nil)
 	return c.CustomAPIServer.SetVIPInfo(ctx, in)
 }
 

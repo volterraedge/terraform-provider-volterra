@@ -511,15 +511,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SetTGWInfo(ctx context.Context, in *SetTGWInfoRequest, opts ...grpc.CallOption) (*SetTGWInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo", nil)
 	return c.CustomAPIServer.SetTGWInfo(ctx, in)
 }
 func (c *customAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVIPInfo", nil)
 	return c.CustomAPIServer.SetVIPInfo(ctx, in)
 }
 func (c *customAPIInprocClient) SetVPCIpPrefixes(ctx context.Context, in *SetVPCIpPrefixesRequest, opts ...grpc.CallOption) (*SetVPCIpPrefixesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes", nil)
 	return c.CustomAPIServer.SetVPCIpPrefixes(ctx, in)
 }
 func (c *customAPIInprocClient) SetVPNTunnels(ctx context.Context, in *SetVPNTunnelsRequest, opts ...grpc.CallOption) (*SetVPNTunnelsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels", nil)
 	return c.CustomAPIServer.SetVPNTunnels(ctx, in)
 }
 

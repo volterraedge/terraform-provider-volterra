@@ -131,7 +131,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 						"bond_devices": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -168,17 +168,17 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 									"link_polling_interval": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"link_up_delay": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -234,7 +234,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 						"feature_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"server_address": {
@@ -295,7 +295,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 									"asn": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"peers": {
@@ -363,13 +363,13 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 			"master_node_configuration": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"public_ip": {
@@ -417,7 +417,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -462,7 +462,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -476,7 +476,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -514,7 +514,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -594,14 +594,14 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -653,7 +653,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -702,7 +702,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -720,7 +720,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -750,7 +750,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -775,7 +775,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -795,12 +795,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -825,7 +825,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -909,7 +909,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"interfaces": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -939,7 +939,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"monitor": {
@@ -1003,7 +1003,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"mtu": {
@@ -1049,7 +1049,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																		"dhcp_networks": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -1114,7 +1114,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"pool_settings": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"pools": {
@@ -1228,7 +1228,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1302,7 +1302,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1313,7 +1313,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6_auto_config": {
@@ -1352,7 +1352,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"dhcp_networks": {
 
 																									Type:     schema.TypeList,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -1561,7 +1561,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1635,7 +1635,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1801,7 +1801,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																		"dhcp_networks": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -1866,7 +1866,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"pool_settings": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"pools": {
@@ -1980,7 +1980,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2054,7 +2054,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2065,7 +2065,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"no_ipv6_address": {
@@ -2117,7 +2117,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2191,7 +2191,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2305,7 +2305,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"static_ip": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2345,7 +2345,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2419,7 +2419,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2431,7 +2431,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"tunnel": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2475,7 +2475,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2508,7 +2508,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2599,7 +2599,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2680,7 +2680,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2834,7 +2834,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2915,7 +2915,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -3068,12 +3068,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 									"interface_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"number_of_vfs": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -3105,7 +3105,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"static_routes": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -3367,12 +3367,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 												"storage_class_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"storage_device": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -3450,7 +3450,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -3480,7 +3480,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -3505,7 +3505,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -3525,12 +3525,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -3555,7 +3555,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -3595,7 +3595,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -3625,7 +3625,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -3650,7 +3650,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -3670,12 +3670,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -3700,7 +3700,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -3721,7 +3721,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"username": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3807,7 +3807,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -3837,7 +3837,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -3862,7 +3862,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -3882,12 +3882,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -3912,7 +3912,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -3986,7 +3986,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4016,7 +4016,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4041,7 +4041,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -4061,12 +4061,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -4091,7 +4091,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -4205,7 +4205,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																		"storage_driver_name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"storage_prefix": {
@@ -4225,7 +4225,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																		"username": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"volume_defaults": {
@@ -4350,7 +4350,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4380,7 +4380,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4405,7 +4405,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4425,12 +4425,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -4455,7 +4455,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4485,7 +4485,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4515,7 +4515,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4540,7 +4540,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4560,12 +4560,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -4590,7 +4590,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4638,7 +4638,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4668,7 +4668,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4693,7 +4693,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -4713,12 +4713,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -4743,7 +4743,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -4817,7 +4817,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4847,7 +4847,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -4872,7 +4872,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -4892,12 +4892,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -4922,7 +4922,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -5036,7 +5036,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																		"storage_driver_name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"storage_prefix": {
@@ -5056,7 +5056,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																		"username": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"volume_defaults": {
@@ -5153,7 +5153,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"arrays": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -5171,7 +5171,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"default_fs_type": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"default_mount_opts": {
@@ -5192,7 +5192,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"flash_arrays": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -5217,7 +5217,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"store_provider": {
@@ -5247,7 +5247,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"store_provider": {
@@ -5272,7 +5272,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"url": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 																													},
 																												},
@@ -5292,12 +5292,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"provider": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"secret_encoding": {
@@ -5322,7 +5322,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"name": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 																													},
 																												},
@@ -5353,12 +5353,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"iscsi_login_timeout": {
 																						Type:     schema.TypeInt,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"san_type": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -5384,7 +5384,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"flash_blades": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -5409,7 +5409,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"store_provider": {
@@ -5439,7 +5439,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"store_provider": {
@@ -5464,7 +5464,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"url": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 																													},
 																												},
@@ -5484,12 +5484,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"location": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"provider": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 
 																														"secret_encoding": {
@@ -5514,7 +5514,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																														"name": {
 																															Type:     schema.TypeString,
-																															Optional: true,
+																															Required: true,
 																														},
 																													},
 																												},
@@ -5563,7 +5563,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"cluster_id": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"enable_storage_topology": {
@@ -5581,7 +5581,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 												"storage_device": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -5606,7 +5606,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"storage_interfaces": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -5623,7 +5623,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 												"storage_interface": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -5643,7 +5643,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																		"dhcp_networks": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -5708,7 +5708,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"pool_settings": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"pools": {
@@ -5822,7 +5822,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -5896,7 +5896,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -5907,7 +5907,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6_auto_config": {
@@ -5946,7 +5946,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"dhcp_networks": {
 
 																									Type:     schema.TypeList,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -6155,7 +6155,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -6229,7 +6229,7 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -19825,6 +19825,56 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
 					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
 					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	sriovInterfaceChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_sriov_interface"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+
+		if v.(bool) {
+			sriovInterfaceChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_DefaultSriovInterface{}
+			sriovInterfaceChoiceInt.DefaultSriovInterface = &ves_io_schema.Empty{}
+			updateSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("sriov_interfaces"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+		sriovInterfaceChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_SriovInterfaces{}
+		sriovInterfaceChoiceInt.SriovInterfaces = &ves_io_schema_fleet.SriovInterfacesListType{}
+		updateSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["sriov_interface"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				sriovInterface := make([]*ves_io_schema_fleet.SriovInterface, len(sl))
+				sriovInterfaceChoiceInt.SriovInterfaces.SriovInterface = sriovInterface
+				for i, set := range sl {
+					sriovInterface[i] = &ves_io_schema_fleet.SriovInterface{}
+					sriovInterfaceMapStrToI := set.(map[string]interface{})
+
+					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
+						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfs = uint32(w.(int))
+					}
+
 				}
 
 			}

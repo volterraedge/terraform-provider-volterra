@@ -21,6 +21,7 @@ func TestAccAPICredentialBasic(t *testing.T) {
 	os.Setenv("TF_ACC", "true")
 	os.Setenv("VOLT_VESENV", "true")
 	os.Setenv("VOLT_TENANT", "ves-io")
+	getCreateResponseAPICredential(name)
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		PreCheck:  func() { testAccPreCheck() },

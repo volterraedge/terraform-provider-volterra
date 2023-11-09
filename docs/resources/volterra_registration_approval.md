@@ -51,6 +51,8 @@ resource "volterra_registration_approval" "example" {
 
 `retry` - (Optional) Number of retries to get the volterra registration config, before it fails (`Int`).
 
+`private_network_name` - (Optional) Name of the private network for which you are approving the request (`String`).
+
 Attribute Reference
 -------------------
 

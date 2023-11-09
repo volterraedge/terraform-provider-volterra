@@ -876,7 +876,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "257",
+		"ves.io.schema.rules.repeated.max_items": "1025",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -1068,7 +1068,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "257",
+		"ves.io.schema.rules.repeated.max_items": "1025",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -1260,7 +1260,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "257",
+		"ves.io.schema.rules.repeated.max_items": "1025",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -2014,7 +2014,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "257",
+		"ves.io.schema.rules.repeated.max_items": "1025",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {

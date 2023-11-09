@@ -64,7 +64,7 @@ func resourceVolterraRoute() *schema.Resource {
 			"routes": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -83,13 +83,13 @@ func resourceVolterraRoute() *schema.Resource {
 									"javascript_tags": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"javascript_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"tag_attributes": {
@@ -133,7 +133,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"element_selector": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"insert_content": {
@@ -180,7 +180,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"exact": {
@@ -274,7 +274,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"key": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"exact": {
@@ -309,7 +309,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"secret_value": {
@@ -333,7 +333,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -363,7 +363,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -388,7 +388,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -408,12 +408,12 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -438,7 +438,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -480,7 +480,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"secret_value": {
@@ -504,7 +504,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -534,7 +534,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -559,7 +559,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -579,12 +579,12 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -609,7 +609,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -749,14 +749,14 @@ func resourceVolterraRoute() *schema.Resource {
 									"destinations": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"cluster": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -832,7 +832,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"path": {
@@ -926,7 +926,7 @@ func resourceVolterraRoute() *schema.Resource {
 												"cluster": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -960,12 +960,12 @@ func resourceVolterraRoute() *schema.Resource {
 
 															"denominator": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"numerator": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1256,7 +1256,7 @@ func resourceVolterraRoute() *schema.Resource {
 												"app_firewall": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 

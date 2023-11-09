@@ -211,6 +211,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) GetSelectees(ctx context.Context, in *SelecteeRequest, opts ...grpc.CallOption) (*SelecteeResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_site.CustomAPI.GetSelectees", nil)
 	return c.CustomAPIServer.GetSelectees(ctx, in)
 }
 

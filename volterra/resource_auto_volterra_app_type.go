@@ -67,6 +67,21 @@ func resourceVolterraAppType() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"discovered_api_settings": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"purge_duration_for_inactive_discovered_apis": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"disable": {
 
 							Type:     schema.TypeBool,
@@ -96,7 +111,7 @@ func resourceVolterraAppType() *schema.Resource {
 												"metadata": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -112,7 +127,7 @@ func resourceVolterraAppType() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -121,26 +136,26 @@ func resourceVolterraAppType() *schema.Resource {
 												"sensitive_data_detection_config": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"any_domain": {
 
 																Type:     schema.TypeBool,
-																Optional: true,
+																Required: true,
 															},
 
 															"specific_domain": {
 
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"key_pattern": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -162,14 +177,14 @@ func resourceVolterraAppType() *schema.Resource {
 															"key_value_pattern": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -191,7 +206,7 @@ func resourceVolterraAppType() *schema.Resource {
 																		"value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -216,7 +231,7 @@ func resourceVolterraAppType() *schema.Resource {
 															"value_pattern": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -276,19 +291,19 @@ func resourceVolterraAppType() *schema.Resource {
 															"any_target": {
 
 																Type:     schema.TypeBool,
-																Optional: true,
+																Required: true,
 															},
 
 															"api_endpoint_target": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"api_endpoint_path": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"methods": {
@@ -313,7 +328,7 @@ func resourceVolterraAppType() *schema.Resource {
 															"base_path": {
 
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -322,13 +337,13 @@ func resourceVolterraAppType() *schema.Resource {
 												"sensitive_data_type": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"type": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -346,7 +361,7 @@ func resourceVolterraAppType() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -367,7 +382,7 @@ func resourceVolterraAppType() *schema.Resource {
 
 						"type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -437,6 +452,22 @@ func resourceVolterraAppTypeCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
 			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
+
+			if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
+				businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
+				for _, set := range sl {
+					discoveredApiSettingsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
+						discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+					}
+
+				}
+
+			}
 
 			learnFromRedirectTrafficTypeFound := false
 
@@ -1009,6 +1040,22 @@ func resourceVolterraAppTypeUpdate(d *schema.ResourceData, meta interface{}) err
 		updateSpec.BusinessLogicMarkupSetting = businessLogicMarkupSetting
 		for _, set := range sl {
 			businessLogicMarkupSettingMapStrToI := set.(map[string]interface{})
+
+			if v, ok := businessLogicMarkupSettingMapStrToI["discovered_api_settings"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				discoveredApiSettings := &ves_io_schema_app_type.DiscoveredAPISettings{}
+				businessLogicMarkupSetting.DiscoveredApiSettings = discoveredApiSettings
+				for _, set := range sl {
+					discoveredApiSettingsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := discoveredApiSettingsMapStrToI["purge_duration_for_inactive_discovered_apis"]; ok && !isIntfNil(w) {
+						discoveredApiSettings.PurgeDurationForInactiveDiscoveredApis = uint32(w.(int))
+					}
+
+				}
+
+			}
 
 			learnFromRedirectTrafficTypeFound := false
 

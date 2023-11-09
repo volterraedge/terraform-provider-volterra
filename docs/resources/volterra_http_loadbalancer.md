@@ -21,14 +21,47 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
 
-  // One of the arguments from this list "api_definitions disable_api_definition api_definition api_specification" must be set
-  disable_api_definition = true
+  advertise_custom {
+    advertise_where {
+      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
 
-  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
+      virtual_network {
+        // One of the arguments from this list "specific_v6_vip default_v6_vip" must be set
+        default_v6_vip = true
+
+        // One of the arguments from this list "default_vip specific_vip" must be set
+        default_vip = true
+
+        virtual_network {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+
+      // One of the arguments from this list "use_default_port port" must be set
+      use_default_port = true
+    }
+  }
+
+  // One of the arguments from this list "api_specification api_definitions disable_api_definition api_definition" must be set
+
+  api_definitions {
+    api_definitions {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
+
+  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
   enable_api_discovery {
+    discovered_api_settings {
+      purge_duration_for_inactive_discovered_apis = "2"
+    }
+
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
     disable_learn_from_redirect_traffic = true
 
@@ -50,14 +83,10 @@ resource "volterra_http_loadbalancer" "example" {
             // One of the arguments from this list "exact_value regex_value" must be set
             exact_value = "x-volt-header"
           }
-
           // One of the arguments from this list "all_sections all_request_sections all_response_sections custom_sections" must be set
-
-          custom_sections {
-            custom_sections = ["custom_sections"]
-          }
-          // One of the arguments from this list "base_path api_group any_target api_endpoint_target" must be set
-          any_target = true
+          all_sections = true
+          // One of the arguments from this list "any_target api_endpoint_target base_path api_group" must be set
+          api_group = "oas-all-operations"
         }
 
         sensitive_data_type {
@@ -76,40 +105,116 @@ resource "volterra_http_loadbalancer" "example" {
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
+    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
     enable_auto_mitigation = true
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
+  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
   round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  http {
-    dns_volterra_managed = true
+  https {
+    add_hsts                = true
+    connection_idle_timeout = "60000"
+
+    // One of the arguments from this list "default_loadbalancer non_default_loadbalancer" must be set
+    non_default_loadbalancer = true
+
+    header_transformation_type {
+      // One of the arguments from this list "default_header_transformation proper_case_header_transformation" must be set
+      default_header_transformation = true
+    }
+
+    http_protocol_options {
+      // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v2_only http_protocol_enable_v1_v2" must be set
+      http_protocol_enable_v2_only = true
+    }
+
+    http_redirect = true
+
+    // One of the arguments from this list "enable_path_normalize disable_path_normalize" must be set
+    enable_path_normalize = true
 
     // One of the arguments from this list "port port_ranges" must be set
-    port = "80"
+    port = "443"
+
+    // One of the arguments from this list "default_header server_name append_server_name pass_through" must be set
+    append_server_name = "append_server_name"
+
+    // One of the arguments from this list "tls_parameters tls_cert_params" must be set
+
+    tls_cert_params {
+      certificates {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+      no_mtls = true
+
+      tls_config {
+        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+        default_security = true
+      }
+    }
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
+
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-  disable_rate_limit = true
 
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  api_rate_limit {
+    api_endpoint_rules {
+      api_endpoint_method {
+        invert_matcher = true
 
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+        methods = ["['GET', 'POST', 'DELETE']"]
+      }
+
+      api_endpoint_path = "value"
+      base_path         = "/"
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+      any_domain = true
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      inline_rate_limiter {
+        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
+        use_http_lb_user_id = true
+        threshold           = "1"
+        unit                = "unit"
+      }
+    }
+
+    // One of the arguments from this list "no_ip_allowed_list ip_allowed_list custom_ip_allowed_list" must be set
+    no_ip_allowed_list = true
+
+    server_url_rules {
+      base_path = "/"
+
+      // One of the arguments from this list "any_domain specific_domain" must be set
+      any_domain = true
+
+      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+
+      inline_rate_limiter {
+        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
+        use_http_lb_user_id = true
+        threshold           = "1"
+        unit                = "unit"
+      }
     }
   }
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-  // One of the arguments from this list "disable_waf app_firewall" must be set
+  // One of the arguments from this list "app_firewall disable_waf" must be set
   disable_waf = true
 }
 
@@ -160,7 +265,9 @@ Argument Reference
 
 `blocked_clients` - (Optional) Define rules to block IP Prefixes or AS numbers.. See [Blocked Clients ](#blocked-clients) below for details.
 
-`bot_defense` - (Optional) Bot Defense configuration for Protected App endpoints and JavaScript insertion. See [Bot Defense ](#bot-defense) below for details.
+`bot_defense` - (Optional) Select Bot Defense Standard. See [Bot Defense ](#bot-defense) below for details.
+
+`bot_defense_advanced` - (Optional) Select Bot Defense Advanced. See [Bot Defense Advanced ](#bot-defense-advanced) below for details.
 
 `disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (bool).
 
@@ -211,6 +318,8 @@ Argument Reference
 `disable_ip_reputation` - (Optional) x-displayName: "Disable" (bool).
 
 `enable_ip_reputation` - (Optional) x-displayName: "Enable". See [Enable Ip Reputation ](#enable-ip-reputation) below for details.
+
+`jwt_validation` - (Optional) tokens or tokens that are not yet valid.. See [Jwt Validation ](#jwt-validation) below for details.
 
 `http` - (Optional) HTTP Load Balancer.. See [Http ](#http) below for details.
 
@@ -382,6 +491,10 @@ Where should this load balancer be available.
 
 `use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
 
+### All Endpoint
+
+Validation will be performed for all requests on this LB.
+
 ### All Load Balancer Domains
 
 Add All load balancer domains to source origin (allow) list..
@@ -500,6 +613,12 @@ The rule is applied only for the specified api endpoints..
 
 `methods` - (Required) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
 
+### Api Groups
+
+Validation will be performed for the endpoints mentioned in the API Groups.
+
+`api_groups` - (Required) x-required (`String`).
+
 ### Api Groups Rules
 
 For API groups, refer to API Definition which includes API groups derived from uploaded swaggers..
@@ -594,6 +713,16 @@ The predicate evaluates to true if the origin ASN is present in one of the BGP A
 
 `asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
+### Audience
+
+x-displayName: "Exact Match".
+
+`audiences` - (Required) x-required (`String`).
+
+### Audience Disable
+
+x-displayName: "Disable".
+
 ### Authentication
 
 x-displayName: "Authentication".
@@ -619,6 +748,26 @@ and will use whichever protocol is negotiated by ALPN with the upstream..
 ### Automatic Port
 
 For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled.
+
+### Base Paths
+
+Validation will be performed for selected path prefixes.
+
+`base_paths` - (Required) x-required (`String`).
+
+### Bearer Token
+
+Token is found in Authorization HTTP header with Bearer authentication scheme.
+
+### Blindfold
+
+Encrypt JWKS.
+
+`built_in` - (Optional) Use Built-In policy to encrypt key (bool).
+
+`custom_policy` - (Optional) Choose custom policy to encrypt key. See [ref](#ref) below for details.
+
+`key` - (Required) x-required (`String`).
 
 ### Blindfold Secret Info
 
@@ -686,13 +835,21 @@ The actual request body value is extracted from the request API as a string..
 
 ### Bot Defense
 
-Bot Defense configuration for Protected App endpoints and JavaScript insertion.
+Select Bot Defense Standard.
 
 `policy` - (Required) Bot Defense Policy.. See [Policy ](#policy) below for details.
 
 `regional_endpoint` - (Required) x-required (`String`).
 
 `timeout` - (Optional) The timeout for the inference check, in milliseconds. (`Int`).
+
+### Bot Defense Advanced
+
+Select Bot Defense Advanced.
+
+`mobile` - (Optional) Select infrastructure for mobile.. See [ref](#ref) below for details.
+
+`web` - (Optional) Select infrastructure for web.. See [ref](#ref) below for details.
 
 ### Bot Skip Processing
 
@@ -707,6 +864,10 @@ specify the maximum buffer size and buffer interval with this config..
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
 `max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).
+
+### Built In
+
+Use Built-In policy to encrypt key.
 
 ### Captcha Challenge
 
@@ -1150,7 +1311,7 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 `incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
 
-`path` - (Optional) URI path of route. See [Path ](#path) below for details.
+`path` - (Required) URI path of route. See [Path ](#path) below for details.
 
 `route_direct_response` - (Optional) Send direct response. See [Route Direct Response ](#route-direct-response) below for details.
 
@@ -1236,6 +1397,12 @@ Disallow extra headers (on top of what specified in the OAS documentation).
 
 Disallow extra query parameters (on top of what specified in the OAS documentation).
 
+### Discovered Api Settings
+
+Configure Discovered API Settings..
+
+`purge_duration_for_inactive_discovered_apis` - (Optional) Inactive discovered API will be deleted after configured duration. (`Int`).
+
 ### Domain
 
 Domain matcher..
@@ -1249,6 +1416,8 @@ Domain matcher..
 ### Enable Api Discovery
 
 x-displayName: "Enable".
+
+`discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Discovered Api Settings ](#discovered-api-settings) below for details.
 
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
 
@@ -1287,6 +1456,8 @@ x-displayName: "Enable".
 ### Enable Discovery
 
 x-displayName: "Enable".
+
+`discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Discovered Api Settings ](#discovered-api-settings) below for details.
 
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (bool).
 
@@ -1758,6 +1929,10 @@ IP threat categories to choose from.
 
 `ip_threat_categories` - (Required) The IP threat categories is obtained from the list and is used to auto-generate equivalent label selection expressions (`List of Strings`).
 
+### Issuer Disable
+
+x-displayName: "Disable".
+
 ### Item
 
 Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher..
@@ -1819,6 +1994,32 @@ Specify custom JavaScript insertion rules..
 `exclude_list` - (Optional) Optional JavaScript insertions exclude list of domain and path matchers.. See [Exclude List ](#exclude-list) below for details.
 
 `rules` - (Required) Required list of pages to insert Bot Defense client JavaScript.. See [Rules ](#rules) below for details.
+
+### Jwks Config
+
+The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details..
+
+`blindfold` - (Optional) Encrypt JWKS. See [Blindfold ](#blindfold) below for details.
+
+`cleartext` - (Optional) Store JWKS in the clear text (`String`).
+
+### Jwt Validation
+
+tokens or tokens that are not yet valid..
+
+`action` - (Required) x-required. See [Action ](#action) below for details.
+
+`auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).
+
+`jwks` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).
+
+`jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Config ](#jwks-config) below for details.
+
+`reserved_claims` - (Optional) the token validation of these claims should be disabled.. See [Reserved Claims ](#reserved-claims) below for details.
+
+`target` - (Required) Define endpoints for which JWT token validation will be performed. See [Target ](#target) below for details.
+
+`token_location` - (Required) Define where in the HTTP request the JWT token will be extracted. See [Token Location ](#token-location) below for details.
 
 ### K8s Service
 
@@ -2436,7 +2637,7 @@ A redirect route matches on path and/or HTTP method and redirects the matching t
 
 `incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
 
-`path` - (Optional) URI path of route. See [Path ](#path) below for details.
+`path` - (Required) URI path of route. See [Path ](#path) below for details.
 
 `route_redirect` - (Optional) Send redirect response. See [Route Redirect ](#route-redirect) below for details.
 
@@ -2479,6 +2680,22 @@ Conditions related to the request, such as query parameters, headers, etc..
 ### Reservation Search
 
 x-displayName: "Reservation Search (e.g., sporting events, concerts)".
+
+### Reserved Claims
+
+the token validation of these claims should be disabled..
+
+`audience` - (Optional) x-displayName: "Exact Match". See [Audience ](#audience) below for details.
+
+`audience_disable` - (Optional) x-displayName: "Disable" (bool).
+
+`issuer` - (Optional) x-displayName: "Exact Match" (`String`).
+
+`issuer_disable` - (Optional) x-displayName: "Disable" (bool).
+
+`validate_period_disable` - (Optional) x-displayName: "Disable" (bool).
+
+`validate_period_enable` - (Optional) x-displayName: "Enable" (bool).
 
 ### Response Headers To Add
 
@@ -2790,7 +3007,7 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 
 `origin_pools` - (Required) Origin Pools for this route. See [Origin Pools ](#origin-pools) below for details.
 
-`path` - (Optional) URI path of route. See [Path ](#path) below for details.
+`path` - (Required) URI path of route. See [Path ](#path) below for details.
 
 ### Single Lb App
 
@@ -2872,6 +3089,16 @@ Success Conditions.
 
 `status` - (Required) HTTP Status code (`String`).
 
+### Target
+
+Define endpoints for which JWT token validation will be performed.
+
+`all_endpoint` - (Optional) Validation will be performed for all requests on this LB (bool).
+
+`api_groups` - (Optional) Validation will be performed for the endpoints mentioned in the API Groups. See [Api Groups ](#api-groups) below for details.
+
+`base_paths` - (Optional) Validation will be performed for selected path prefixes. See [Base Paths ](#base-paths) below for details.
+
 ### Temporary User Blocking
 
 Specifies configuration for temporary user blocking resulting from malicious user detection.
@@ -2940,6 +3167,18 @@ Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
 
+### Token Location
+
+Define where in the HTTP request the JWT token will be extracted.
+
+`bearer_token` - (Optional) Token is found in Authorization HTTP header with Bearer authentication scheme (bool).
+
+`cookie` - (Optional) Token is found in the cookie (`String`).
+
+`header` - (Optional) Token is found in the header (`String`).
+
+`query_param` - (Optional) Token is found in the query string parameter (`String`).
+
 ### Token Refresh
 
 x-displayName: "Token Refresh".
@@ -3004,9 +3243,9 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
+`trusted_ca` - (Optional) Select/Add a Root CA certificate. See [ref](#ref) below for details.
 
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
+`trusted_ca_url` - (Optional) Inline Root CA certificate (`String`).
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
 
@@ -3014,11 +3253,11 @@ x-displayName: "Enable".
 
 ### Use Server Verification
 
-Perform origin server verification using the provided trusted CA list.
+Perform origin server verification using the provided Root CA list.
 
-`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+`trusted_ca` - (Optional) Select/Add a Root CA for verification of Server's certificate. See [ref](#ref) below for details.
 
-`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca_url` - (Optional) Inline Root CA certificate for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -3030,15 +3269,15 @@ x-displayName: "Enable".
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable by uploading a new certificate". See [Use Mtls ](#use-mtls) below for details.
 
-`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
+`use_mtls_obj` - (Optional) x-displayName: "Enable by selecting a certificate". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 
-`use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
+`use_server_verification` - (Optional) Perform origin server verification using the provided Root CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
-`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default trusted CA list (bool).
+`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default Root CA list (bool).
 
 `disable_sni` - (Optional) Do not use SNI. (bool).
 
@@ -3047,6 +3286,14 @@ x-displayName: "Enable".
 `use_host_header_as_sni` - (Optional) Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied. (bool).
 
 `tls_config` - (Required) TLS parameters such as min/max TLS version and ciphers. See [Tls Config ](#tls-config) below for details.
+
+### Validate Period Disable
+
+x-displayName: "Disable".
+
+### Validate Period Enable
+
+x-displayName: "Enable".
 
 ### Validation All Spec Endpoints
 
@@ -3182,7 +3429,7 @@ Specify origin server name on virtual network other than inside or outside netwo
 
 ### Volterra Trusted Ca
 
-Perform origin server verification using F5XC default trusted CA list.
+Perform origin server verification using F5XC default Root CA list.
 
 ### Waf Exclusion Rules
 

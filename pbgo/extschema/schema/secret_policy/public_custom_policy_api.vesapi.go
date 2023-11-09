@@ -405,12 +405,15 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) DeletePolicy(ctx context.Context, in *SoftDeleteRequest, opts ...grpc.CallOption) (*SoftDeleteResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.secret_policy.CustomAPI.DeletePolicy", nil)
 	return c.CustomAPIServer.DeletePolicy(ctx, in)
 }
 func (c *customAPIInprocClient) ListPolicy(ctx context.Context, in *ListPolicyRequest, opts ...grpc.CallOption) (*ListPolicyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.secret_policy.CustomAPI.ListPolicy", nil)
 	return c.CustomAPIServer.ListPolicy(ctx, in)
 }
 func (c *customAPIInprocClient) RecoverPolicy(ctx context.Context, in *RecoverRequest, opts ...grpc.CallOption) (*RecoverResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.secret_policy.CustomAPI.RecoverPolicy", nil)
 	return c.CustomAPIServer.RecoverPolicy(ctx, in)
 }
 

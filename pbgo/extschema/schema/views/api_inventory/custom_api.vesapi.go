@@ -214,6 +214,7 @@ type customAPIPrivateInprocClient struct {
 }
 
 func (c *customAPIPrivateInprocClient) GetPathSuggestions(ctx context.Context, in *GetPathSuggestionsReq, opts ...grpc.CallOption) (*ves_io_schema.SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.CustomAPIPrivate.GetPathSuggestions", nil)
 	return c.CustomAPIPrivateServer.GetPathSuggestions(ctx, in)
 }
 

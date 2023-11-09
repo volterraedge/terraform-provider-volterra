@@ -30,32 +30,74 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = []string{
+		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = []string{
+		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.crudapi.API.Create"] = "ves.io.schema.dns_zone.crudapi.ObjectCreateReq"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Get"] = []string{
+		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"items.#.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"items.#.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.gc_spec.secondary.zone_file",
 	}
 

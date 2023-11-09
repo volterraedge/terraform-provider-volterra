@@ -214,6 +214,7 @@ type customAPIEywaprimeInprocClient struct {
 }
 
 func (c *customAPIEywaprimeInprocClient) CreateV2(ctx context.Context, in *CreateV2Request, opts ...grpc.CallOption) (*CreateV2Response, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPIEywaprime.CreateV2", nil)
 	return c.CustomAPIEywaprimeServer.CreateV2(ctx, in)
 }
 

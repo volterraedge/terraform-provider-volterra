@@ -96,7 +96,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 						"anonymization_config": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -109,7 +109,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 												"cookie_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -124,7 +124,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 												"header_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -139,7 +139,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 												"query_param_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -314,7 +314,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 									"staging_period": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -329,7 +329,7 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 									"staging_period": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

@@ -164,7 +164,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -206,7 +206,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"asn_sets": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -392,7 +392,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"match": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -407,7 +407,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"element_selector": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"insert_content": {
@@ -500,7 +500,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -572,7 +572,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"asn_sets": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -621,7 +621,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"prefix_sets": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -789,7 +789,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -841,7 +841,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"prefix_sets": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -941,13 +941,13 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"l4_dests": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"port_ranges": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"prefixes": {
@@ -1112,7 +1112,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"key": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"check_not_present": {
@@ -1409,23 +1409,23 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"allow_goodbot": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Required: true,
 						},
 
 						"app_traffic_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"flow_label": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"mitigation": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1470,12 +1470,12 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 															"auto_type_header_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"inference_header_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1505,7 +1505,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"uri": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1545,7 +1545,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"status": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1575,7 +1575,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"status": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1586,7 +1586,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"web_scraping": {
 							Type:     schema.TypeBool,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -1647,7 +1647,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						"url_items": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1720,7 +1720,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 			"waf_action": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1740,7 +1740,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"exclude_attack_type": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1755,7 +1755,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"bot_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1770,7 +1770,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"context": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"context_name": {
@@ -1780,7 +1780,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"signature_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1795,7 +1795,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"context": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"context_name": {
@@ -1805,7 +1805,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"exclude_violation": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1827,6 +1827,12 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"jwt_validation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"none": {
@@ -4266,6 +4272,18 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["jwt_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_JwtValidation{}
+					actionTypeInt.JwtValidation = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
 				}
 
 			}
@@ -6727,6 +6745,18 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["jwt_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_JwtValidation{}
+					actionTypeInt.JwtValidation = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
 				}
 
 			}

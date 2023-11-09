@@ -104,7 +104,7 @@ func resourceVolterraFleet() *schema.Resource {
 						"bond_devices": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -141,17 +141,17 @@ func resourceVolterraFleet() *schema.Resource {
 
 									"link_polling_interval": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"link_up_delay": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -249,7 +249,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 						"feature_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"server_address": {
@@ -323,7 +323,7 @@ func resourceVolterraFleet() *schema.Resource {
 												"interface": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -350,7 +350,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 												"use": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -363,7 +363,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 									"owner": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -382,7 +382,7 @@ func resourceVolterraFleet() *schema.Resource {
 						"interfaces": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -583,12 +583,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 									"interface_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"number_of_vfs": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -794,12 +794,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 									"storage_class_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"storage_device": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -877,7 +877,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -907,7 +907,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -932,7 +932,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -952,12 +952,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -982,7 +982,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1022,7 +1022,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1052,7 +1052,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1077,7 +1077,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1097,12 +1097,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1127,7 +1127,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1148,7 +1148,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 												"username": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1234,7 +1234,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1264,7 +1264,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1289,7 +1289,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1309,12 +1309,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1339,7 +1339,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1413,7 +1413,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1443,7 +1443,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1468,7 +1468,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1488,12 +1488,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1518,7 +1518,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1632,7 +1632,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 															"storage_driver_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"storage_prefix": {
@@ -1652,7 +1652,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 															"username": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"volume_defaults": {
@@ -1777,7 +1777,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1807,7 +1807,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1832,7 +1832,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -1852,12 +1852,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -1882,7 +1882,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -1912,7 +1912,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1942,7 +1942,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1967,7 +1967,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -1987,12 +1987,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -2017,7 +2017,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -2065,7 +2065,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -2095,7 +2095,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -2120,7 +2120,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2140,12 +2140,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -2170,7 +2170,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2244,7 +2244,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -2274,7 +2274,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -2299,7 +2299,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2319,12 +2319,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -2349,7 +2349,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2463,7 +2463,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 															"storage_driver_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"storage_prefix": {
@@ -2483,7 +2483,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 															"username": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"volume_defaults": {
@@ -2580,7 +2580,7 @@ func resourceVolterraFleet() *schema.Resource {
 												"arrays": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2598,7 +2598,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"default_fs_type": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"default_mount_opts": {
@@ -2619,7 +2619,7 @@ func resourceVolterraFleet() *schema.Resource {
 																		"flash_arrays": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -2644,7 +2644,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2674,7 +2674,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2699,7 +2699,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2719,12 +2719,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -2749,7 +2749,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2780,12 +2780,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																		"iscsi_login_timeout": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"san_type": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2811,7 +2811,7 @@ func resourceVolterraFleet() *schema.Resource {
 																		"flash_blades": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -2836,7 +2836,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2866,7 +2866,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2891,7 +2891,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2911,12 +2911,12 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -2941,7 +2941,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2990,7 +2990,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 												"cluster_id": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"enable_storage_topology": {
@@ -3008,7 +3008,7 @@ func resourceVolterraFleet() *schema.Resource {
 
 									"storage_device": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -3033,7 +3033,7 @@ func resourceVolterraFleet() *schema.Resource {
 						"interfaces": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -3072,7 +3072,7 @@ func resourceVolterraFleet() *schema.Resource {
 						"storage_routes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -3177,7 +3177,7 @@ func resourceVolterraFleet() *schema.Resource {
 									"subnets": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -8371,6 +8371,56 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 					perfModeChoiceInt := &ves_io_schema_views.PerformanceEnhancementModeType_PerfModeL7Enhanced{}
 					perfModeChoiceInt.PerfModeL7Enhanced = &ves_io_schema.Empty{}
 					performanceEnhancementMode.PerfModeChoice = perfModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	sriovInterfaceChoiceTypeFound := false
+
+	if v, ok := d.GetOk("default_sriov_interface"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+
+		if v.(bool) {
+			sriovInterfaceChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_DefaultSriovInterface{}
+			sriovInterfaceChoiceInt.DefaultSriovInterface = &ves_io_schema.Empty{}
+			updateSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("sriov_interfaces"); ok && !sriovInterfaceChoiceTypeFound {
+
+		sriovInterfaceChoiceTypeFound = true
+		sriovInterfaceChoiceInt := &ves_io_schema_fleet.ReplaceSpecType_SriovInterfaces{}
+		sriovInterfaceChoiceInt.SriovInterfaces = &ves_io_schema_fleet.SriovInterfacesListType{}
+		updateSpec.SriovInterfaceChoice = sriovInterfaceChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["sriov_interface"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				sriovInterface := make([]*ves_io_schema_fleet.SriovInterface, len(sl))
+				sriovInterfaceChoiceInt.SriovInterfaces.SriovInterface = sriovInterface
+				for i, set := range sl {
+					sriovInterface[i] = &ves_io_schema_fleet.SriovInterface{}
+					sriovInterfaceMapStrToI := set.(map[string]interface{})
+
+					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
+						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfs = uint32(w.(int))
+					}
+
 				}
 
 			}

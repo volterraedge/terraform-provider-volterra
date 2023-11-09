@@ -606,18 +606,23 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) ListRegistrationsBySite(ctx context.Context, in *ListBySiteReq, opts ...grpc.CallOption) (*ListResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.CustomAPI.ListRegistrationsBySite", nil)
 	return c.CustomAPIServer.ListRegistrationsBySite(ctx, in)
 }
 func (c *customAPIInprocClient) ListRegistrationsByState(ctx context.Context, in *ListStateReq, opts ...grpc.CallOption) (*ListResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.CustomAPI.ListRegistrationsByState", nil)
 	return c.CustomAPIServer.ListRegistrationsByState(ctx, in)
 }
 func (c *customAPIInprocClient) RegistrationApprove(ctx context.Context, in *ApprovalReq, opts ...grpc.CallOption) (*ObjectChangeResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.CustomAPI.RegistrationApprove", nil)
 	return c.CustomAPIServer.RegistrationApprove(ctx, in)
 }
 func (c *customAPIInprocClient) RegistrationConfig(ctx context.Context, in *ConfigReq, opts ...grpc.CallOption) (*ConfigResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.CustomAPI.RegistrationConfig", nil)
 	return c.CustomAPIServer.RegistrationConfig(ctx, in)
 }
 func (c *customAPIInprocClient) RegistrationCreate(ctx context.Context, in *RegistrationCreateRequest, opts ...grpc.CallOption) (*Object, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.CustomAPI.RegistrationCreate", nil)
 	return c.CustomAPIServer.RegistrationCreate(ctx, in)
 }
 

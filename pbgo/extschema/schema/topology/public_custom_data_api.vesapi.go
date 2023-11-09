@@ -695,21 +695,27 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) DCClusterGroupsSummary(ctx context.Context, in *DCClusterGroupsSummaryRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterGroupsSummary", nil)
 	return c.CustomDataAPIServer.DCClusterGroupsSummary(ctx, in)
 }
 func (c *customDataAPIInprocClient) DCClusterTopology(ctx context.Context, in *DCClusterTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterTopology", nil)
 	return c.CustomDataAPIServer.DCClusterTopology(ctx, in)
 }
 func (c *customDataAPIInprocClient) GetRouteTable(ctx context.Context, in *RouteTableRequest, opts ...grpc.CallOption) (*RouteTableResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.GetRouteTable", nil)
 	return c.CustomDataAPIServer.GetRouteTable(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteMeshGroupsSummary(ctx context.Context, in *SiteMeshGroupsSummaryRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshGroupsSummary", nil)
 	return c.CustomDataAPIServer.SiteMeshGroupsSummary(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteMeshTopology(ctx context.Context, in *SiteMeshTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshTopology", nil)
 	return c.CustomDataAPIServer.SiteMeshTopology(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteTopology(ctx context.Context, in *SiteTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteTopology", nil)
 	return c.CustomDataAPIServer.SiteTopology(ctx, in)
 }
 
@@ -1573,16 +1579,23 @@ var CustomDataAPISwaggerJSON string = `{
                 "control_and_data_plane_mesh": {
                     "description": "Exclusive with [data_plane_mesh]\n Full Mesh of data plane connectivity across sites\n and control plane peering across sites",
                     "title": "Control and Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Control and Data Plane Mesh"
                 },
                 "data_plane_mesh": {
                     "description": "Exclusive with [control_and_data_plane_mesh]\n Full Mesh of Data plane connectivity across sites",
                     "title": "Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Plane Mesh"
                 }
             }
+        },
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -1627,13 +1640,6 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
-        },
-        "schemaEmpty": {
-            "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaLabelSelectorType": {
             "type": "object",
@@ -2084,13 +2090,13 @@ var CustomDataAPISwaggerJSON string = `{
                 "control_and_data_plane_mesh": {
                     "description": "Exclusive with [data_plane_mesh]\n Full mesh of data plane tunnels across sites\n and control plane peering across sites",
                     "title": "Control and Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Control and Data Plane Mesh"
                 },
                 "data_plane_mesh": {
                     "description": "Exclusive with [control_and_data_plane_mesh]\n Full Mesh of data plane tunnels across sites",
                     "title": "Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Plane Mesh"
                 }
             }
@@ -2106,13 +2112,13 @@ var CustomDataAPISwaggerJSON string = `{
                 "control_and_data_plane_mesh": {
                     "description": "Exclusive with [data_plane_mesh]\n Hub Full mesh of data plane tunnels across sites\n and control plane peering across sites",
                     "title": "Control and Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Control and Data Plane Mesh"
                 },
                 "data_plane_mesh": {
                     "description": "Exclusive with [control_and_data_plane_mesh]\n Hub Full Mesh of data plane tunnels across sites",
                     "title": "Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Plane Mesh"
                 }
             }
@@ -2128,13 +2134,13 @@ var CustomDataAPISwaggerJSON string = `{
                 "control_and_data_plane_mesh": {
                     "description": "Exclusive with [data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s\n and control plane peering with the hub site/s",
                     "title": "Control and Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Control and Data Plane Mesh"
                 },
                 "data_plane_mesh": {
                     "description": "Exclusive with [control_and_data_plane_mesh]\n Mesh of data plane tunnels to the hub site/s",
                     "title": "Data Plane Mesh",
-                    "$ref": "#/definitions/schemaEmpty",
+                    "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Data Plane Mesh"
                 },
                 "hub_mesh_group": {

@@ -132,7 +132,7 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -148,7 +148,7 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -157,13 +157,13 @@ func resourceVolterraSecretPolicy() *schema.Resource {
 									"spec": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"action": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"client_name": {

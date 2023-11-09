@@ -47,6 +47,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.views.http_loadbalancer.APIEndpointProtectionRule"] = APIEndpointProtectionRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.APIGroupProtectionRule"] = APIGroupProtectionRuleValidator()
+	vr["ves.io.schema.views.http_loadbalancer.APIGroups"] = APIGroupsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.APIProtectionRuleAction"] = APIProtectionRuleActionValidator()
 	vr["ves.io.schema.views.http_loadbalancer.APIProtectionRules"] = APIProtectionRulesValidator()
 	vr["ves.io.schema.views.http_loadbalancer.APIRateLimit"] = APIRateLimitValidator()
@@ -57,6 +58,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ApiEndpointDetails"] = ApiEndpointDetailsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ApiEndpointRule"] = ApiEndpointRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.AppEndpointType"] = AppEndpointTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.Audiences"] = AudiencesValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BasePathsType"] = BasePathsTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BlindfoldEncryptionType"] = BlindfoldEncryptionTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedType"] = BotDefenseAdvancedTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType"] = CSDJavaScriptInsertAllWithExceptionsTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType"] = CSDJavaScriptInsertTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule"] = CSDJavaScriptInsertionRuleValidator()
@@ -78,6 +83,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.HttpHeaderMatcherList"] = HttpHeaderMatcherListValidator()
 	vr["ves.io.schema.views.http_loadbalancer.IPThreatCategoryListType"] = IPThreatCategoryListTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.InlineRateLimiter"] = InlineRateLimiterValidator()
+	vr["ves.io.schema.views.http_loadbalancer.JWKS"] = JWKSValidator()
+	vr["ves.io.schema.views.http_loadbalancer.JWTValidation"] = JWTValidationValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = MirrorPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileSDKConfigType"] = MobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType"] = MobileTrafficIdentifierTypeValidator()
@@ -95,6 +102,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ProxyTypeHttpsAutoCertsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RateLimitConfigType"] = RateLimitConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ReservedClaims"] = ReservedClaimsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions"] = RouteSimpleAdvancedOptionsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteType"] = RouteTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteTypeCustomRoute"] = RouteTypeCustomRouteValidator()
@@ -113,6 +121,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule"] = ShapeJavaScriptInsertionRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = SimpleClientSrcRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting"] = SingleLoadBalancerAppSettingValidator()
+	vr["ves.io.schema.views.http_loadbalancer.Target"] = TargetValidator()
+	vr["ves.io.schema.views.http_loadbalancer.TokenLocation"] = TokenLocationValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ValidateApiBySpecRule"] = ValidateApiBySpecRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ValidationPropertySetting"] = ValidationPropertySettingValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ValidationSettingForHeaders"] = ValidationSettingForHeadersValidator()
@@ -138,12 +148,24 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense_advanced",
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"client-side-defense"},
 		},
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
+		"spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
+		"spec.jwt_validation.jwks",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
@@ -160,6 +182,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
+		"spec.bot_defense_advanced",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
 		"spec.client_side_defense.policy.js_insertion_rules.exclude_list.#.metadata.disable",
 		"spec.client_side_defense.policy.js_insertion_rules.rules.#.metadata.disable",
@@ -183,6 +206,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 		"spec.https_auto_cert.http_protocol_options",
+		"spec.jwt_validation",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
@@ -228,18 +252,34 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = "ves.io.schema.views.http_loadbalancer.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []string{
+		"create_form.spec.jwt_validation.jwks",
 		"object",
+		"replace_form.spec.jwt_validation.jwks",
+		"spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []string{
+		"items.#.get_spec.jwt_validation.jwks",
+		"items.#.object.spec.gc_spec.jwt_validation.jwks",
 	}
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense_advanced",
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"client-side-defense"},
 		},
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []string{
+		"spec.jwt_validation.jwks",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []string{
@@ -256,6 +296,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
+		"spec.bot_defense_advanced",
 		"spec.client_side_defense.policy.js_insert_all_pages_except.exclude_list.#.metadata.disable",
 		"spec.client_side_defense.policy.js_insertion_rules.exclude_list.#.metadata.disable",
 		"spec.client_side_defense.policy.js_insertion_rules.rules.#.metadata.disable",
@@ -279,6 +320,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
 		"spec.https_auto_cert.http_protocol_options",
+		"spec.jwt_validation",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",

@@ -64,13 +64,13 @@ func resourceVolterraBgp() *schema.Resource {
 			"bgp_parameters": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"asn": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"bgp_router_id": {
@@ -147,14 +147,14 @@ func resourceVolterraBgp() *schema.Resource {
 			"peers": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"metadata": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -170,7 +170,7 @@ func resourceVolterraBgp() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -238,6 +238,18 @@ func resourceVolterraBgp() *schema.Resource {
 
 									"asn": {
 										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"md5_auth_key": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"no_authentication": {
+
+										Type:     schema.TypeBool,
 										Optional: true,
 									},
 
@@ -302,7 +314,7 @@ func resourceVolterraBgp() *schema.Resource {
 												"interfaces": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -494,7 +506,7 @@ func resourceVolterraBgp() *schema.Resource {
 			"where": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -525,7 +537,7 @@ func resourceVolterraBgp() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -580,7 +592,7 @@ func resourceVolterraBgp() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -937,6 +949,31 @@ func resourceVolterraBgpCreate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Asn = uint32(v.(int))
+
+					}
+
+					authChoiceTypeFound := false
+
+					if v, ok := cs["md5_auth_key"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+						authChoiceInt := &ves_io_schema_bgp.PeerExternal_Md5AuthKey{}
+
+						typeChoiceInt.External.AuthChoice = authChoiceInt
+
+						authChoiceInt.Md5AuthKey = v.(string)
+
+					}
+
+					if v, ok := cs["no_authentication"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+
+						if v.(bool) {
+							authChoiceInt := &ves_io_schema_bgp.PeerExternal_NoAuthentication{}
+							authChoiceInt.NoAuthentication = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AuthChoice = authChoiceInt
+						}
 
 					}
 
@@ -1895,6 +1932,31 @@ func resourceVolterraBgpUpdate(d *schema.ResourceData, meta interface{}) error {
 					if v, ok := cs["asn"]; ok && !isIntfNil(v) {
 
 						typeChoiceInt.External.Asn = uint32(v.(int))
+
+					}
+
+					authChoiceTypeFound := false
+
+					if v, ok := cs["md5_auth_key"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+						authChoiceInt := &ves_io_schema_bgp.PeerExternal_Md5AuthKey{}
+
+						typeChoiceInt.External.AuthChoice = authChoiceInt
+
+						authChoiceInt.Md5AuthKey = v.(string)
+
+					}
+
+					if v, ok := cs["no_authentication"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+
+						if v.(bool) {
+							authChoiceInt := &ves_io_schema_bgp.PeerExternal_NoAuthentication{}
+							authChoiceInt.NoAuthentication = &ves_io_schema.Empty{}
+							typeChoiceInt.External.AuthChoice = authChoiceInt
+						}
 
 					}
 

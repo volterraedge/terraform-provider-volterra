@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.cloud_link.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.cloud_link.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -2646,11 +2625,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "auth_key": {
                     "description": " The authentication key for BGP configuration.\n This string has a minimum length of 6 characters and and a maximum length of 80 characters.\n\nExample: - \"\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 80\n  ves.io.schema.rules.string.min_bytes: 6\n",
-                    "title": "BGP Auth Key",
+                    "title": "BGP Authorization Key",
                     "$ref": "#/definitions/schemaSecretType",
                     "minimum": 6,
                     "maximum": 80,
-                    "x-displayname": "BGP Auth Key",
+                    "x-displayname": "BGP Authorization Key",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -2686,25 +2665,21 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.pattern": "^(dxcon-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
                 },
-                "enable_sitelink": {
-                    "type": "boolean",
-                    "description": " Enable direct connectivity between Direct Connect points of presence. The Virtual Interface will be created with SiteLink enabled.",
-                    "title": "Enable SiteLink",
-                    "format": "boolean",
-                    "x-displayname": "Enable SiteLink"
-                },
                 "ipv4": {
                     "description": "Exclusive with []\n Configure BGP IPv4 peering for endpoints",
                     "title": "IPv4 Peering option",
                     "$ref": "#/definitions/cloud_linkIpv4Type",
                     "x-displayname": "IPv4 Peering"
                 },
-                "jumbo_mtu": {
-                    "type": "boolean",
-                    "description": " Allow maximum transmission unit (MTU) size of 9001 on virtual interface.\n The Virtual Interface will be created with option to use jumbo frames enabled",
-                    "title": "Jumbo MTU",
-                    "format": "boolean",
-                    "x-displayname": "Jumbo MTU (MTU size 9001)"
+                "metadata": {
+                    "description": " Specify attributes for the connection including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "system_generated_name": {
                     "description": "Exclusive with [user_assigned_name]\n F5XC will automatically assign a AWS resource name",
@@ -2760,8 +2735,8 @@ var APISwaggerJSON string = `{
         },
         "cloud_linkAWSF5XCManagedType": {
             "type": "object",
-            "description": "x-displayName: \"F5 XC Managed Cloud Link Connection\"\nAWS F5 XC Managed Cloud Link Connection",
-            "title": "F5 XC Managed Cloud Link Connection"
+            "description": "x-displayName: \"F5 XC Managed CloudLink Connection\"\nAWS F5 XC Managed CloudLink Connection",
+            "title": "F5 XC Managed CloudLink Connection"
         },
         "cloud_linkAWSStatusType": {
             "type": "object",
@@ -2772,38 +2747,20 @@ var APISwaggerJSON string = `{
             "properties": {
                 "connection_status": {
                     "type": "array",
-                    "description": " Status reported by Amazon Web Services (AWS) Direct Connect Connection related to this Cloud Link",
-                    "title": "Direct Connect Connection Status",
+                    "description": " Status reported by Amazon Web Services (AWS) CloudLink Connection",
+                    "title": "CloudLink Direct Connect Connection Status",
                     "items": {
                         "$ref": "#/definitions/cloud_linkDirectConnectConnectionStatusType"
                     },
-                    "x-displayname": "Direct Connect Connection Status"
-                },
-                "gateway_status": {
-                    "type": "array",
-                    "description": " Status reported by Amazon Web Services (AWS) Direct Connect Gateway Status and associations related to this Cloud Link",
-                    "title": "Direct Connect Gateway Status",
-                    "items": {
-                        "$ref": "#/definitions/cloud_linkDirectConnectGatewayStatusType"
-                    },
-                    "x-displayname": "Direct Connect Gateway Status"
-                },
-                "vif_status": {
-                    "type": "array",
-                    "description": " Status reported by Amazon Web Services (AWS) Virtual Interface Status related to this Cloud Link",
-                    "title": "Virtual Interface Status",
-                    "items": {
-                        "$ref": "#/definitions/cloud_linkVirtualInterfaceStatusType"
-                    },
-                    "x-displayname": "Virtual Interface Status"
+                    "x-displayname": "CloudLink Direct Connect Connection Status"
                 }
             }
         },
         "cloud_linkAWSType": {
             "type": "object",
-            "description": "Cloud Link for AWS Cloud Provider",
-            "title": "Amazon Web Services(AWS) Cloud Link Provider",
-            "x-displayname": "Amazon Web Services(AWS) Cloud Link Provider",
+            "description": "CloudLink for AWS Cloud Provider",
+            "title": "Amazon Web Services(AWS) CloudLink Provider",
+            "x-displayname": "Amazon Web Services(AWS) CloudLink Provider",
             "x-ves-oneof-field-cloud_link_type": "[\"byoc\"]",
             "x-ves-oneof-field-direct_connect_gateway_asn_choice": "[\"auto\",\"custom_asn\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.AWSType",
@@ -2815,10 +2772,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Automatic"
                 },
                 "aws_cred": {
-                    "description": " Reference to AWS cloud account credential object used to deploy cloud link specific object",
+                    "description": " Reference to AWS cloud account credential object used to deploy CloudLink specific object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Account Credential",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Account Credential"
+                    "x-displayname": "Account Credential",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "byoc": {
                     "description": "Exclusive with []\n F5 XC will take care of using the AWS Direct Connect Connection and making it ready to be consumed by the site.\n Assumption is that this given AWS account already has direct connect connection provisioned",
@@ -2848,7 +2809,7 @@ var APISwaggerJSON string = `{
         },
         "cloud_linkAzureType": {
             "type": "object",
-            "description": "x-displayName: \"Azure Cloud Provider\"\nCloud Link for Azure Cloud Provider",
+            "description": "x-displayName: \"Azure Cloud Provider\"\nCloudLink for Azure Cloud Provider",
             "title": "Azure Cloud Provider"
         },
         "cloud_linkBGPPeerType": {
@@ -2912,28 +2873,78 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "cloud_linkCloudLinkStatus": {
+        "cloud_linkCloudLinkDeploymentStatus": {
             "type": "string",
-            "description": "Status of the cloud link deployment\n\n - IN_PROGRESS: In-Progress\n\nCloud link provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying cloud link. Check the error description and suggested action\n - READY: Ready\n\nCloud link is ready for use\n - IN_USE: In Use\n\nCloud link provisioning is in use by CE Sites\n - FULLY_USED: Fully Used\n\nCloud link is fully used by CE Sites. Currently 20 CE sites are supported",
-            "title": "Cloud Link Status",
+            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use",
+            "title": "CloudLink Status",
             "enum": [
                 "IN_PROGRESS",
                 "ERROR",
-                "READY",
-                "IN_USE",
-                "FULLY_USED"
+                "READY"
             ],
             "default": "IN_PROGRESS",
             "x-displayname": "Status",
-            "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkStatus"
+            "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkDeploymentStatus"
+        },
+        "cloud_linkCloudLinkState": {
+            "type": "string",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "title": "CloudLink State",
+            "enum": [
+                "UP",
+                "DOWN",
+                "DEGRADED"
+            ],
+            "default": "UP",
+            "x-displayname": "CloudLink State",
+            "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkState"
+        },
+        "cloud_linkCoordinates": {
+            "type": "object",
+            "description": "Coordinates of the Direct Connect Connection location",
+            "title": "Connection Coordinates",
+            "x-displayname": "Connection Coordinates",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": " Latitude of the Direct Connect Connection location\n\nExample: - \"10.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
+                    "title": "latitude",
+                    "format": "float",
+                    "x-displayname": "Latitude",
+                    "x-ves-example": "10.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "-90.0",
+                        "ves.io.schema.rules.float.lte": "90.0"
+                    }
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": " longitude of Direct Connect Connection location\n\nExample: - \"20.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
+                    "title": "longitude",
+                    "format": "float",
+                    "x-displayname": "Longitude",
+                    "x-ves-example": "20.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.float.gte": "-180.0",
+                        "ves.io.schema.rules.float.lte": "180.0"
+                    }
+                }
+            }
         },
         "cloud_linkDirectConnectConnectionStatusType": {
             "type": "object",
             "description": "Status reported by Amazon Web Services (AWS) Direct Connect Connection related to this Cloud Link",
-            "title": "Direct Connect Connection Status",
-            "x-displayname": "Direct Connect Connection Status",
+            "title": "CloudLink Direct Connect Connection Status",
+            "x-displayname": "CloudLink Direct Connect Connection Status",
             "x-ves-proto-message": "ves.io.schema.cloud_link.DirectConnectConnectionStatusType",
             "properties": {
+                "aws_path": {
+                    "type": "string",
+                    "description": " Link to Amazon Web Services (AWS) object",
+                    "title": "AWS Object Link",
+                    "x-displayname": "AWS Object Link"
+                },
                 "bandwidth": {
                     "type": "string",
                     "description": " The bandwidth of the connection.",
@@ -2960,6 +2971,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.in": "[\\\"ordering\\\",\\\"requested\\\",\\\"pending\\\",\\\"available\\\",\\\"down\\\",\\\"deleting\\\",\\\"deleted\\\",\\\"rejected\\\",\\\"unknown\\\"]"
                     }
+                },
+                "coordinates": {
+                    "description": " Coordinates of the CloudLink Connection based on connection's physical location",
+                    "title": "CloudLink Connection Coordinates",
+                    "$ref": "#/definitions/cloud_linkCoordinates",
+                    "x-displayname": "CloudLink Connection Coordinates"
+                },
+                "gateway_status": {
+                    "description": " Status reported by Amazon Web Services (AWS) Direct Connect Gateway Status and associations related to this Cloud Link",
+                    "title": "Direct Connect Gateway Status",
+                    "$ref": "#/definitions/cloud_linkDirectConnectGatewayStatusType",
+                    "x-displayname": "Direct Connect Gateway Status"
                 },
                 "has_logical_redundancy": {
                     "type": "string",
@@ -3014,6 +3037,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "AWS Tags",
                     "x-ves-example": "dev: staging"
                 },
+                "vif_status": {
+                    "description": " Status reported by Amazon Web Services (AWS) Virtual Interface Status related to this Cloud Link",
+                    "title": "Virtual Interface Status",
+                    "$ref": "#/definitions/cloud_linkVirtualInterfaceStatusType",
+                    "x-displayname": "Virtual Interface Status"
+                },
                 "vlan": {
                     "type": "integer",
                     "description": " Virtual Local Area Network number for the new virtual interface to be configured on the AWS.\n\nExample: - \"700\"-",
@@ -3037,6 +3066,12 @@ var APISwaggerJSON string = `{
                     "title": "Amazon Web Services (AWS) ASN",
                     "format": "uint64",
                     "x-displayname": "Amazon Web Services (AWS) ASN"
+                },
+                "aws_path": {
+                    "type": "string",
+                    "description": " Link to Amazon Web Services (AWS) object",
+                    "title": "AWS Object Link",
+                    "x-displayname": "AWS Object Link"
                 },
                 "direct_connect_gateway_id": {
                     "type": "string",
@@ -3083,8 +3118,8 @@ var APISwaggerJSON string = `{
                 "aws_router_peer_address": {
                     "type": "string",
                     "description": " The BGP peer IP configured on the AWS endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 31\n  ves.io.schema.rules.string.min_ip_prefix_length: 31\n",
-                    "title": "AWS Router Peer IP",
-                    "x-displayname": "AWS Router Peer IP",
+                    "title": "AWS Router Peer IP/Prefix",
+                    "x-displayname": "AWS Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -3096,9 +3131,9 @@ var APISwaggerJSON string = `{
                 },
                 "router_peer_address": {
                     "type": "string",
-                    "description": " The BGP peer IP configured on your endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 31\n  ves.io.schema.rules.string.min_ip_prefix_length: 31\n",
-                    "title": "Router peer IP",
-                    "x-displayname": "Router peer IP",
+                    "description": " The BGP peer IP configured on your (customer) endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 31\n  ves.io.schema.rules.string.min_ip_prefix_length: 31\n",
+                    "title": "Customer Peer IP/Prefix",
+                    "x-displayname": "Customer Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -3134,6 +3169,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of object",
             "title": "Status for Cloud Link",
             "x-displayname": "Status",
+            "x-ves-displayorder": "1,4",
             "x-ves-oneof-field-cloud_link_status": "[\"aws_status\",\"azure_status\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.StatusObject",
             "properties": {
@@ -3209,6 +3245,12 @@ var APISwaggerJSON string = `{
                     "description": " The error message if the state of an object failed to advance.",
                     "title": "Gateway Attachment State Error",
                     "x-displayname": "Gateway Attachment State Error"
+                },
+                "aws_path": {
+                    "type": "string",
+                    "description": " Link to Amazon Web Services (AWS) object",
+                    "title": "AWS Object Link",
+                    "x-displayname": "AWS Object Link"
                 },
                 "bgp_asn": {
                     "type": "integer",
@@ -3789,6 +3831,40 @@ var APISwaggerJSON string = `{
             "x-displayname": "List Metadata",
             "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
+        "schemaMessageMetaType": {
+            "type": "object",
+            "description": "MessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
+            "title": "MessageMetaType",
+            "x-displayname": "Message Metadata",
+            "x-ves-proto-message": "ves.io.schema.MessageMetaType",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Human readable description.\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "description",
+                    "maxLength": 256,
+                    "x-displayname": "Description",
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " This is the name of the message.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "x-displayname": "Name",
+                    "x-ves-example": "acmecorp-web",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
         "schemaObjectMetaType": {
             "type": "object",
             "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
@@ -4222,27 +4298,33 @@ var APISwaggerJSON string = `{
         },
         "schemacloud_linkGlobalSpecType": {
             "type": "object",
-            "description": "Desired specification of cloud link",
-            "title": "Cloud Link specification",
+            "description": "Desired specification of CloudLink",
+            "title": "CloudLink Specification",
             "x-displayname": "Specification",
             "x-ves-oneof-field-cloud_provider": "[\"aws\"]",
             "x-ves-oneof-field-enable_connection_to_re_choice": "[\"disabled\",\"enabled\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.GlobalSpecType",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with []\n Cloud Link for AWS Cloud",
-                    "title": "Amazon Web Services(AWS) Cloud",
+                    "description": "Exclusive with []\n CloudLink for AWS Cloud",
+                    "title": "Amazon Web Services(AWS)",
                     "$ref": "#/definitions/cloud_linkAWSType",
-                    "x-displayname": "Amazon Web Services(AWS) Cloud"
+                    "x-displayname": "Amazon Web Services(AWS)"
+                },
+                "cloud_link_state": {
+                    "description": " State of the connections with the CloudLink deployment",
+                    "title": "CloudLink State",
+                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "x-displayname": "CloudLink State"
                 },
                 "disabled": {
-                    "description": "Exclusive with [enabled]\n Cloud Link connection to RE Site is disabled",
+                    "description": "Exclusive with [enabled]\n CloudLink connection to RE Site is disabled",
                     "title": "Disabled Connection to RE",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
                 },
                 "enabled": {
-                    "description": "Exclusive with [disabled]\n Cloud Link connection to RE Site is enabled",
+                    "description": "Exclusive with [disabled]\n CloudLink connection to RE Site is enabled",
                     "title": "Enable Connection to RE",
                     "$ref": "#/definitions/viewsCloudLinkADNType",
                     "x-displayname": "Enable"
@@ -4256,7 +4338,7 @@ var APISwaggerJSON string = `{
                 },
                 "sites": {
                     "type": "integer",
-                    "description": " This field indicates the number of Sites connected to this Cloud Link object.\n\nValidation Rules:\n  ves.io.schema.rules.int32.lte: 20\n",
+                    "description": " This field indicates the number of Sites connected to this CloudLink object.\n\nValidation Rules:\n  ves.io.schema.rules.int32.lte: 20\n",
                     "title": "Sites",
                     "format": "int32",
                     "x-displayname": "Sites",
@@ -4265,9 +4347,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "status": {
-                    "description": " Status of the cloud link deployment",
-                    "title": "Cloud Link Status",
-                    "$ref": "#/definitions/cloud_linkCloudLinkStatus",
+                    "description": " Status of the CloudLink deployment",
+                    "title": "CloudLink Status",
+                    "$ref": "#/definitions/cloud_linkCloudLinkDeploymentStatus",
                     "x-displayname": "Status"
                 },
                 "suggested_action": {
@@ -4327,16 +4409,16 @@ var APISwaggerJSON string = `{
         },
         "viewsCloudLinkADNType": {
             "type": "object",
-            "title": "Cloud Link ADN Network Config",
-            "x-displayname": "Cloud Link ADN Network Config",
+            "title": "CloudLink ADN Network Config",
+            "x-displayname": "CloudLink ADN Network Config",
             "x-ves-proto-message": "ves.io.schema.views.CloudLinkADNType",
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " Cloud Link ADN Network Name for private access connectivity to F5XC ADN.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "Cloud Link ADN Network Name",
+                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "CloudLink ADN Network Name",
                     "maxLength": 64,
-                    "x-displayname": "Cloud Link ADN Network Name",
+                    "x-displayname": "CloudLink ADN Network Name",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {

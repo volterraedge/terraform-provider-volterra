@@ -69,27 +69,27 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 						"expected_rcode": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"expected_record_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"expected_response": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"query_name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"query_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"reverse": {
@@ -115,12 +115,12 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 						"expected_response": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"send_payload": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -135,12 +135,12 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 						"expected_response": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"send_payload": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -182,7 +182,7 @@ func resourceVolterraHealthcheck() *schema.Resource {
 
 						"path": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"request_headers_to_remove": {

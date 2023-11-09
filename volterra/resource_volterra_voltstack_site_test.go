@@ -58,5 +58,8 @@ func testVoltStackSiteConfig(name string) string {
 		  logs_streaming_disabled = true
 		  allow_all_usb = true
 		  no_local_control_plane = true
+		  master_node_configuration {
+			name      = "master-0"
+		  }
 		}`, name)
 }

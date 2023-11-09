@@ -108,12 +108,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -128,12 +128,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -148,12 +148,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"address": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -178,7 +178,7 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 									"vip_allocator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -223,12 +223,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -243,12 +243,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -263,12 +263,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"address": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -293,12 +293,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -313,12 +313,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -333,12 +333,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"address": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -386,12 +386,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -406,12 +406,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"as_number": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -426,12 +426,12 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 												"address": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -455,7 +455,7 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"namespace": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -469,7 +469,7 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 						"slice": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -499,7 +499,7 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 									"snat_pool_allocator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -538,7 +538,7 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 									"node_snat_pool": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

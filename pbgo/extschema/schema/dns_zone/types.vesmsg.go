@@ -2852,7 +2852,7 @@ var DefaultDNSLBResourceRecordValidator = func() *ValidateDNSLBResourceRecord {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}",
+		"ves.io.schema.rules.string.max_len": "255",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -4651,6 +4651,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("creation_method"),
 				db.WithValidateField("import_bind_file"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ImportDnsDomains:
+		if fv, exists := v.FldValidators["creation_method.import_dns_domains"]; exists {
+			val := m.GetCreationMethod().(*GlobalSpecType_ImportDnsDomains).ImportDnsDomains
+			vOpts := append(opts,
+				db.WithValidateField("creation_method"),
+				db.WithValidateField("import_dns_domains"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7687,6 +7698,115 @@ func SHA1DigestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SHA1Fingerprint) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SHA1Fingerprint) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SHA1Fingerprint) DeepCopy() *SHA1Fingerprint {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SHA1Fingerprint{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SHA1Fingerprint) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SHA1Fingerprint) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SHA1FingerprintValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSHA1Fingerprint struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSHA1Fingerprint) FingerprintValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fingerprint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSHA1Fingerprint) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SHA1Fingerprint)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SHA1Fingerprint got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["fingerprint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fingerprint"))
+		if err := fv(ctx, m.GetFingerprint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSHA1FingerprintValidator = func() *ValidateSHA1Fingerprint {
+	v := &ValidateSHA1Fingerprint{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFingerprint := v.FingerprintValidationRuleHandler
+	rulesFingerprint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "40",
+		"ves.io.schema.rules.string.min_len":   "40",
+	}
+	vFn, err = vrhFingerprint(rulesFingerprint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SHA1Fingerprint.fingerprint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fingerprint"] = vFn
+
+	return v
+}()
+
+func SHA1FingerprintValidator() db.Validator {
+	return DefaultSHA1FingerprintValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SHA256Digest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7792,6 +7912,115 @@ var DefaultSHA256DigestValidator = func() *ValidateSHA256Digest {
 
 func SHA256DigestValidator() db.Validator {
 	return DefaultSHA256DigestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SHA256Fingerprint) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SHA256Fingerprint) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SHA256Fingerprint) DeepCopy() *SHA256Fingerprint {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SHA256Fingerprint{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SHA256Fingerprint) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SHA256Fingerprint) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SHA256FingerprintValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSHA256Fingerprint struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSHA256Fingerprint) FingerprintValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fingerprint")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSHA256Fingerprint) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SHA256Fingerprint)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SHA256Fingerprint got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["fingerprint"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fingerprint"))
+		if err := fv(ctx, m.GetFingerprint(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSHA256FingerprintValidator = func() *ValidateSHA256Fingerprint {
+	v := &ValidateSHA256Fingerprint{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFingerprint := v.FingerprintValidationRuleHandler
+	rulesFingerprint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "64",
+	}
+	vFn, err = vrhFingerprint(rulesFingerprint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SHA256Fingerprint.fingerprint: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fingerprint"] = vFn
+
+	return v
+}()
+
+func SHA256FingerprintValidator() db.Validator {
+	return DefaultSHA256FingerprintValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -8319,7 +8548,7 @@ var DefaultSRVServiceValidator = func() *ValidateSRVService {
 
 	vrhTarget := v.TargetValidationRuleHandler
 	rulesTarget := map[string]string{
-		"ves.io.schema.rules.string.pattern": "^$|^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\.?$",
+		"ves.io.schema.rules.string.pattern": "^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\.?$",
 	}
 	vFn, err = vrhTarget(rulesTarget)
 	if err != nil {
@@ -8374,6 +8603,14 @@ func (m *SSHFPRecordValue) Validate(ctx context.Context, opts ...db.ValidateOpt)
 
 type ValidateSSHFPRecordValue struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSSHFPRecordValue) FingerprintTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for fingerprint_type")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateSSHFPRecordValue) AlgorithmValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -8450,24 +8687,34 @@ func (v *ValidateSSHFPRecordValue) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["fingerprint_type"]; exists {
+		val := m.GetFingerprintType()
+		vOpts := append(opts,
+			db.WithValidateField("fingerprint_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetFingerprintType().(type) {
-	case *SSHFPRecordValue_Sha1Digest:
-		if fv, exists := v.FldValidators["fingerprint_type.sha1_digest"]; exists {
-			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha1Digest).Sha1Digest
+	case *SSHFPRecordValue_Sha1Fingerprint:
+		if fv, exists := v.FldValidators["fingerprint_type.sha1_fingerprint"]; exists {
+			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha1Fingerprint).Sha1Fingerprint
 			vOpts := append(opts,
 				db.WithValidateField("fingerprint_type"),
-				db.WithValidateField("sha1_digest"),
+				db.WithValidateField("sha1_fingerprint"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *SSHFPRecordValue_Sha256Digest:
-		if fv, exists := v.FldValidators["fingerprint_type.sha256_digest"]; exists {
-			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha256Digest).Sha256Digest
+	case *SSHFPRecordValue_Sha256Fingerprint:
+		if fv, exists := v.FldValidators["fingerprint_type.sha256_fingerprint"]; exists {
+			val := m.GetFingerprintType().(*SSHFPRecordValue_Sha256Fingerprint).Sha256Fingerprint
 			vOpts := append(opts,
 				db.WithValidateField("fingerprint_type"),
-				db.WithValidateField("sha256_digest"),
+				db.WithValidateField("sha256_fingerprint"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8500,6 +8747,17 @@ var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhFingerprintType := v.FingerprintTypeValidationRuleHandler
+	rulesFingerprintType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhFingerprintType(rulesFingerprintType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHFPRecordValue.fingerprint_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fingerprint_type"] = vFn
+
 	vrhAlgorithm := v.AlgorithmValidationRuleHandler
 	rulesAlgorithm := map[string]string{
 		"ves.io.schema.rules.enum.not_in":      "0",
@@ -8514,10 +8772,8 @@ var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
 
 	vrhFingerprint := v.FingerprintValidationRuleHandler
 	rulesFingerprint := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "4096",
-		"ves.io.schema.rules.string.min_len":   "1",
-		"ves.io.schema.rules.string.pattern":   "^[A-Fa-f0-9]+$",
+		"ves.io.schema.rules.string.max_len": "4096",
+		"ves.io.schema.rules.string.pattern": "^[A-Fa-f0-9]+$",
 	}
 	vFn, err = vrhFingerprint(rulesFingerprint)
 	if err != nil {
@@ -8538,8 +8794,8 @@ var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
 	}
 	v.FldValidators["fingerprinttype"] = vFn
 
-	v.FldValidators["fingerprint_type.sha1_digest"] = SHA1DigestValidator().Validate
-	v.FldValidators["fingerprint_type.sha256_digest"] = SHA256DigestValidator().Validate
+	v.FldValidators["fingerprint_type.sha1_fingerprint"] = SHA1FingerprintValidator().Validate
+	v.FldValidators["fingerprint_type.sha256_fingerprint"] = SHA256FingerprintValidator().Validate
 
 	return v
 }()

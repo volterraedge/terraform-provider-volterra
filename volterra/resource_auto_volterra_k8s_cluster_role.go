@@ -90,7 +90,7 @@ func resourceVolterraK8SClusterRole() *schema.Resource {
 						"policy_rule": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

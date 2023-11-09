@@ -215,6 +215,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SuspiciousUserStatus(ctx context.Context, in *SuspiciousUserStatusReq, opts ...grpc.CallOption) (*SuspiciousUserStatusRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_setting.CustomAPI.SuspiciousUserStatus", nil)
 	return c.CustomAPIServer.SuspiciousUserStatus(ctx, in)
 }
 

@@ -70,14 +70,14 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 						"rules": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"mitigation_action": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -117,7 +117,7 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 									"threat_level": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

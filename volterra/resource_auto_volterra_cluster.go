@@ -338,7 +338,7 @@ func resourceVolterraCluster() *schema.Resource {
 									"certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -496,7 +496,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -545,7 +545,7 @@ func resourceVolterraCluster() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -563,7 +563,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -593,7 +593,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -618,7 +618,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -638,12 +638,12 @@ func resourceVolterraCluster() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -668,7 +668,7 @@ func resourceVolterraCluster() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},

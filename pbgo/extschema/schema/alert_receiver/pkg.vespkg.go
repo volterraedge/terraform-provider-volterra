@@ -36,7 +36,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.VerifyAlertReceiverRequest"] = VerifyAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.VerifyAlertReceiverResponse"] = VerifyAlertReceiverResponseValidator()
 
-	vr["ves.io.schema.alert_receiver.Authorization"] = AuthorizationValidator()
+	vr["ves.io.schema.alert_receiver.AuthToken"] = AuthTokenValidator()
+	vr["ves.io.schema.alert_receiver.CACertificateObj"] = CACertificateObjValidator()
+	vr["ves.io.schema.alert_receiver.ClientCertificateObj"] = ClientCertificateObjValidator()
 	vr["ves.io.schema.alert_receiver.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.alert_receiver.EmailConfig"] = EmailConfigValidator()
 	vr["ves.io.schema.alert_receiver.GetSpecType"] = GetSpecTypeValidator()
@@ -49,6 +51,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.SMSConfig"] = SMSConfigValidator()
 	vr["ves.io.schema.alert_receiver.SlackConfig"] = SlackConfigValidator()
 	vr["ves.io.schema.alert_receiver.TLSConfig"] = TLSConfigValidator()
+	vr["ves.io.schema.alert_receiver.UpstreamTlsValidationContext"] = UpstreamTlsValidationContextValidator()
 	vr["ves.io.schema.alert_receiver.WebhookConfig"] = WebhookConfigValidator()
 
 }
@@ -80,18 +83,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.slack.url.secret_encoding_type",
 		"spec.slack.url.vault_secret_info",
 		"spec.slack.url.wingman_secret_info",
-		"spec.webhook.http_config.auth_config.credentials.blindfold_secret_info_internal",
-		"spec.webhook.http_config.auth_config.credentials.secret_encoding_type",
-		"spec.webhook.http_config.auth_config.credentials.vault_secret_info",
-		"spec.webhook.http_config.auth_config.credentials.wingman_secret_info",
+		"spec.webhook.http_config.auth_token.token.blindfold_secret_info_internal",
+		"spec.webhook.http_config.auth_token.token.secret_encoding_type",
+		"spec.webhook.http_config.auth_token.token.vault_secret_info",
+		"spec.webhook.http_config.auth_token.token.wingman_secret_info",
 		"spec.webhook.http_config.basic_auth.password.blindfold_secret_info_internal",
 		"spec.webhook.http_config.basic_auth.password.secret_encoding_type",
 		"spec.webhook.http_config.basic_auth.password.vault_secret_info",
 		"spec.webhook.http_config.basic_auth.password.wingman_secret_info",
-		"spec.webhook.http_config.tls_config.client_key.blindfold_secret_info_internal",
-		"spec.webhook.http_config.tls_config.client_key.secret_encoding_type",
-		"spec.webhook.http_config.tls_config.client_key.vault_secret_info",
-		"spec.webhook.http_config.tls_config.client_key.wingman_secret_info",
+		"spec.webhook.url.blindfold_secret_info_internal",
+		"spec.webhook.url.secret_encoding_type",
+		"spec.webhook.url.vault_secret_info",
+		"spec.webhook.url.wingman_secret_info",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Create"] = "ves.io.schema.alert_receiver.CreateRequest"
@@ -113,18 +116,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.slack.url.secret_encoding_type",
 		"spec.slack.url.vault_secret_info",
 		"spec.slack.url.wingman_secret_info",
-		"spec.webhook.http_config.auth_config.credentials.blindfold_secret_info_internal",
-		"spec.webhook.http_config.auth_config.credentials.secret_encoding_type",
-		"spec.webhook.http_config.auth_config.credentials.vault_secret_info",
-		"spec.webhook.http_config.auth_config.credentials.wingman_secret_info",
+		"spec.webhook.http_config.auth_token.token.blindfold_secret_info_internal",
+		"spec.webhook.http_config.auth_token.token.secret_encoding_type",
+		"spec.webhook.http_config.auth_token.token.vault_secret_info",
+		"spec.webhook.http_config.auth_token.token.wingman_secret_info",
 		"spec.webhook.http_config.basic_auth.password.blindfold_secret_info_internal",
 		"spec.webhook.http_config.basic_auth.password.secret_encoding_type",
 		"spec.webhook.http_config.basic_auth.password.vault_secret_info",
 		"spec.webhook.http_config.basic_auth.password.wingman_secret_info",
-		"spec.webhook.http_config.tls_config.client_key.blindfold_secret_info_internal",
-		"spec.webhook.http_config.tls_config.client_key.secret_encoding_type",
-		"spec.webhook.http_config.tls_config.client_key.vault_secret_info",
-		"spec.webhook.http_config.tls_config.client_key.wingman_secret_info",
+		"spec.webhook.url.blindfold_secret_info_internal",
+		"spec.webhook.url.secret_encoding_type",
+		"spec.webhook.url.vault_secret_info",
+		"spec.webhook.url.wingman_secret_info",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Replace"] = "ves.io.schema.alert_receiver.ReplaceRequest"

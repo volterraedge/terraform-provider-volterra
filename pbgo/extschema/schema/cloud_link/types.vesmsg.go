@@ -250,14 +250,6 @@ func (v *ValidateAWSBYOCType) IpTypeValidationRuleHandler(rules map[string]strin
 	return validatorFn, nil
 }
 
-func (v *ValidateAWSBYOCType) ResourceNameChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_name_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateAWSBYOCType) ResourceNameChoiceUserAssignedNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_UserAssignedName, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -362,6 +354,27 @@ func (v *ValidateAWSBYOCType) TagsValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSBYOCType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSBYOCType)
 	if !ok {
@@ -457,14 +470,13 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["resource_name_choice"]; exists {
-		val := m.GetResourceNameChoice()
-		vOpts := append(opts,
-			db.WithValidateField("resource_name_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
 			return err
 		}
+
 	}
 
 	switch m.GetResourceNameChoice().(type) {
@@ -545,17 +557,6 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 	}
 	v.FldValidators["ip_type"] = vFn
 
-	vrhResourceNameChoice := v.ResourceNameChoiceValidationRuleHandler
-	rulesResourceNameChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhResourceNameChoice(rulesResourceNameChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSBYOCType.resource_name_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["resource_name_choice"] = vFn
-
 	vrhResourceNameChoiceUserAssignedName := v.ResourceNameChoiceUserAssignedNameValidationRuleHandler
 	rulesResourceNameChoiceUserAssignedName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -634,6 +635,17 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSBYOCType.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
 
 	v.FldValidators["ip_type.ipv4"] = Ipv4TypeValidator().Validate
 
@@ -834,12 +846,41 @@ func (v *ValidateAWSType) CloudLinkTypeValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSType) DirectConnectGatewayAsnChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for direct_connect_gateway_asn_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSType) DirectConnectGatewayAsnChoiceCustomAsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_CustomAsn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for custom_asn")
 	}
 	return oValidatorFn_CustomAsn, nil
+}
+
+func (v *ValidateAWSType) AwsCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for aws_cred")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -901,6 +942,16 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["direct_connect_gateway_asn_choice"]; exists {
+		val := m.GetDirectConnectGatewayAsnChoice()
+		vOpts := append(opts,
+			db.WithValidateField("direct_connect_gateway_asn_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetDirectConnectGatewayAsnChoice().(type) {
 	case *AWSType_Auto:
 		if fv, exists := v.FldValidators["direct_connect_gateway_asn_choice.auto"]; exists {
@@ -953,6 +1004,17 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 	}
 	v.FldValidators["cloud_link_type"] = vFn
 
+	vrhDirectConnectGatewayAsnChoice := v.DirectConnectGatewayAsnChoiceValidationRuleHandler
+	rulesDirectConnectGatewayAsnChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDirectConnectGatewayAsnChoice(rulesDirectConnectGatewayAsnChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSType.direct_connect_gateway_asn_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["direct_connect_gateway_asn_choice"] = vFn
+
 	vrhDirectConnectGatewayAsnChoiceCustomAsn := v.DirectConnectGatewayAsnChoiceCustomAsnValidationRuleHandler
 	rulesDirectConnectGatewayAsnChoiceCustomAsn := map[string]string{
 		"ves.io.schema.rules.uint32.ranges": "64512-65534, 4200000000-4294967294",
@@ -965,9 +1027,18 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 
 	v.FldValidators["direct_connect_gateway_asn_choice.custom_asn"] = vFnMap["direct_connect_gateway_asn_choice.custom_asn"]
 
-	v.FldValidators["cloud_link_type.byoc"] = AWSBYOCListTypeValidator().Validate
+	vrhAwsCred := v.AwsCredValidationRuleHandler
+	rulesAwsCred := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsCred(rulesAwsCred)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSType.aws_cred: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_cred"] = vFn
 
-	v.FldValidators["aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["cloud_link_type.byoc"] = AWSBYOCListTypeValidator().Validate
 
 	return v
 }()
@@ -1417,6 +1488,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
+		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cloud_provider"]; exists {
 		val := m.GetCloudProvider()
 		vOpts := append(opts,
@@ -1713,6 +1793,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_link_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_link_state"))
+		if err := fv(ctx, m.GetCloudLinkState(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cloud_provider"]; exists {
@@ -2514,6 +2603,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.CloudLinkState = f.GetCloudLinkState()
 	m.GetCloudProviderFromGlobalSpecType(f)
 	m.GetEnableConnectionToReChoiceFromGlobalSpecType(f)
 	m.ErrorDescription = f.GetErrorDescription()
@@ -2537,6 +2627,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.CloudLinkState = m1.CloudLinkState
 	m1.SetCloudProviderToGlobalSpecType(f)
 	m1.SetEnableConnectionToReChoiceToGlobalSpecType(f)
 	f.ErrorDescription = m1.ErrorDescription

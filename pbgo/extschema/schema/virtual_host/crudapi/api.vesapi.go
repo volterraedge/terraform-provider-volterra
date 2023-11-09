@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.virtual_host.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -3377,10 +3356,13 @@ var APISwaggerJSON string = `{
                 },
                 "allow_methods": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-",
+                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_valid_methods: true\n",
                     "title": "allow_methods",
                     "x-displayname": "Allow Methods",
-                    "x-ves-example": "GET"
+                    "x-ves-example": "GET",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_valid_methods": "true"
+                    }
                 },
                 "allow_origin": {
                     "type": "array",
@@ -5314,6 +5296,16 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostBotDefenseMode": {
+            "type": "string",
+            "description": "x-displayName: \"Bot Defense Mode\"\nBot Defense Mode Type\n\n - API_MODE: API\n\nx-displayName: \"API Mode\"\nBot Defense API Mode\n - INLINE_MODE: INLINE\n\nx-displayName: \"Inline Mode\"\nBot Defense INLINE Mode",
+            "title": "Bot Defense Mode",
+            "enum": [
+                "API_MODE",
+                "INLINE_MODE"
+            ],
+            "default": "API_MODE"
+        },
         "virtual_hostCaptchaChallengeType": {
             "type": "object",
             "description": "\nEnables loadbalancer to perform captcha challenge\n\nCaptcha challenge will be based on Google Recaptcha.\n\nWith this feature enabled, only clients that pass the captcha challenge will be allowed to\ncomplete the HTTP request.\n\nWhen loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it.\nClient will be allowed to make the request only if the captcha challenge is successful.\nLoadbalancer will tag response header with a cookie to avoid Captcha challenge for subsequent requests.\n\nCAPTCHA is mainly used as a security check to ensure only human users can pass through.\nGenerally, computers or bots are not capable of solving a captcha.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
@@ -5876,6 +5868,11 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"JS Path\"\nJavaScript download path",
                     "title": "JS Path"
+                },
+                "mode": {
+                    "description": "x-displayName: \"Bot Defense Mode\"\nBot Defense Mode Type",
+                    "title": "Bot Defense Mode",
+                    "$ref": "#/definitions/virtual_hostBotDefenseMode"
                 },
                 "reload_header_name": {
                     "type": "string",

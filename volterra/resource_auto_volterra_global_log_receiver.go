@@ -127,7 +127,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"aws_cred": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -149,7 +149,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"aws_region": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"batch": {
@@ -222,12 +222,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"group_name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"stream_name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -243,7 +243,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"connection_string": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -261,7 +261,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -291,7 +291,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -316,7 +316,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -336,12 +336,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -366,7 +366,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -377,12 +377,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"instance": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"namespace": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -466,7 +466,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"connection_string": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -484,7 +484,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -514,7 +514,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -539,7 +539,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -559,12 +559,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -589,7 +589,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -600,7 +600,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"container_name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -684,7 +684,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"datadog_api_key": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -702,7 +702,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -732,7 +732,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -757,7 +757,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -777,12 +777,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -807,7 +807,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -892,7 +892,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -922,7 +922,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -947,7 +947,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -967,12 +967,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -997,7 +997,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1097,7 +1097,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1127,7 +1127,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1152,7 +1152,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1172,12 +1172,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -1202,7 +1202,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1295,7 +1295,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"endpoint": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"no_tls": {
@@ -1362,7 +1362,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1392,7 +1392,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1417,7 +1417,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1437,12 +1437,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1467,7 +1467,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1564,7 +1564,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"bucket": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"compression": {
@@ -1592,7 +1592,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"gcp_cred": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1650,7 +1650,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1680,7 +1680,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1705,7 +1705,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1725,12 +1725,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -1755,7 +1755,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1806,7 +1806,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1836,7 +1836,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1861,7 +1861,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1881,12 +1881,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -1911,7 +1911,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2055,7 +2055,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2085,7 +2085,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2110,7 +2110,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2130,12 +2130,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -2160,7 +2160,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2201,7 +2201,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"uri": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -2294,7 +2294,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"kafka_topic": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"no_tls": {
@@ -2361,7 +2361,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2391,7 +2391,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2416,7 +2416,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2436,12 +2436,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -2466,7 +2466,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2518,7 +2518,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"api_key": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -2536,7 +2536,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -2566,7 +2566,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -2591,7 +2591,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2611,12 +2611,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -2641,7 +2641,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2804,7 +2804,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2834,7 +2834,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2859,7 +2859,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2879,12 +2879,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -2909,7 +2909,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2950,7 +2950,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"uri": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -2966,7 +2966,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"aws_cred": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -2988,7 +2988,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"aws_region": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"batch": {
@@ -3039,7 +3039,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"bucket": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"compression": {
@@ -3144,13 +3144,13 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"endpoint": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"splunk_hec_token": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -3168,7 +3168,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -3198,7 +3198,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -3223,7 +3223,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -3243,12 +3243,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -3273,7 +3273,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -3346,7 +3346,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -3376,7 +3376,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -3401,7 +3401,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -3421,12 +3421,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -3451,7 +3451,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -3503,7 +3503,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 						"url": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -3521,7 +3521,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -3551,7 +3551,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -3576,7 +3576,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -3596,12 +3596,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -3626,7 +3626,7 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

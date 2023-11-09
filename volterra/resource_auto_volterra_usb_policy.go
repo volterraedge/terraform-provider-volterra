@@ -63,7 +63,7 @@ func resourceVolterraUsbPolicy() *schema.Resource {
 			"allowed_devices": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 

@@ -10,12 +10,6 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
-	vr["ves.io.schema.topology.GetAWSDCConnectionRequest"] = GetAWSDCConnectionRequestValidator()
-	vr["ves.io.schema.topology.GetAWSDCConnectionResponse"] = GetAWSDCConnectionResponseValidator()
-	vr["ves.io.schema.topology.GetAWSDCGatewayRequest"] = GetAWSDCGatewayRequestValidator()
-	vr["ves.io.schema.topology.GetAWSDCGatewayResponse"] = GetAWSDCGatewayResponseValidator()
-	vr["ves.io.schema.topology.GetAWSDCVIFRequest"] = GetAWSDCVIFRequestValidator()
-	vr["ves.io.schema.topology.GetAWSDCVIFResponse"] = GetAWSDCVIFResponseValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagKeysRequest"] = ListCloudNetworkTagKeysRequestValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagKeysResponse"] = ListCloudNetworkTagKeysResponseValidator()
 	vr["ves.io.schema.topology.ListCloudNetworkTagValuesRequest"] = ListCloudNetworkTagValuesRequestValidator()

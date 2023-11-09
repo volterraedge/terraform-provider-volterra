@@ -1870,6 +1870,15 @@ func (v *ValidateNetworkingInventoryResponse) Validate(ctx context.Context, pm i
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cloud_links"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_links"))
+		if err := fv(ctx, m.GetCloudLinks(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dc_cluster_groups"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dc_cluster_groups"))

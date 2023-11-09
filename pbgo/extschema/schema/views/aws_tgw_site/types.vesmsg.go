@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cloud_connect "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
@@ -361,6 +362,530 @@ var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType 
 
 func AWSTGWInfoConfigTypeValidator() db.Validator {
 	return DefaultAWSTGWInfoConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWSpokeAttachmentListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWSpokeAttachmentListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWSpokeAttachmentListType) DeepCopy() *AWSTGWSpokeAttachmentListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWSpokeAttachmentListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWSpokeAttachmentListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWSpokeAttachmentListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWSpokeAttachmentListTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSTGWSpokeAttachmentListType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetAttachmentsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSTGWSpokeAttachmentListType) GetAttachmentsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAttachments() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetAttachments() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAttachments() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("attachments[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateAWSTGWSpokeAttachmentListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentListType) AttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for attachments")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*AWSTGWSpokeAttachmentType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := AWSTGWSpokeAttachmentTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for attachments")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*AWSTGWSpokeAttachmentType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*AWSTGWSpokeAttachmentType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated attachments")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items attachments")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWSpokeAttachmentListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWSpokeAttachmentListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attachments"]; exists {
+		vOpts := append(opts, db.WithValidateField("attachments"))
+		if err := fv(ctx, m.GetAttachments(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWSpokeAttachmentListTypeValidator = func() *ValidateAWSTGWSpokeAttachmentListType {
+	v := &ValidateAWSTGWSpokeAttachmentListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAttachments := v.AttachmentsValidationRuleHandler
+	rulesAttachments := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhAttachments(rulesAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentListType.attachments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["attachments"] = vFn
+
+	return v
+}()
+
+func AWSTGWSpokeAttachmentListTypeValidator() db.Validator {
+	return DefaultAWSTGWSpokeAttachmentListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWSpokeAttachmentType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWSpokeAttachmentType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWSpokeAttachmentType) DeepCopy() *AWSTGWSpokeAttachmentType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWSpokeAttachmentType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWSpokeAttachmentType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWSpokeAttachmentType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWSpokeAttachmentTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSTGWSpokeAttachmentType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCredentialChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCredentialChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentOptionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentOptionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *AWSTGWSpokeAttachmentType) GetCredentialChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetCredentialChoice().(type) {
+	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
+
+		return nil, nil
+
+	case *AWSTGWSpokeAttachmentType_Cred:
+
+		vref := m.GetCred()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_credentials.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_credentials.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cred",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetCredentialChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSTGWSpokeAttachmentType) GetCredentialChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetCredentialChoice().(type) {
+	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
+
+	case *AWSTGWSpokeAttachmentType_Cred:
+		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+		}
+
+		vref := m.GetCred()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cloud_credentials.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSTGWSpokeAttachmentType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentOption() == nil {
+		return nil, nil
+	}
+	switch m.GetSegmentOption().(type) {
+	case *AWSTGWSpokeAttachmentType_IsolatedSegment:
+
+		return nil, nil
+
+	case *AWSTGWSpokeAttachmentType_EnableSegment:
+		drInfos, err := m.GetEnableSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_segment." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateAWSTGWSpokeAttachmentType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentType) CredentialChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for credential_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentType) SpokesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spokes")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_cloud_connect.AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSTGWSpokeAttachmentType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWSpokeAttachmentType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWSpokeAttachmentType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["credential_choice"]; exists {
+		val := m.GetCredentialChoice()
+		vOpts := append(opts,
+			db.WithValidateField("credential_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCredentialChoice().(type) {
+	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
+		if fv, exists := v.FldValidators["credential_choice.use_site_credential"]; exists {
+			val := m.GetCredentialChoice().(*AWSTGWSpokeAttachmentType_UseSiteCredential).UseSiteCredential
+			vOpts := append(opts,
+				db.WithValidateField("credential_choice"),
+				db.WithValidateField("use_site_credential"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSTGWSpokeAttachmentType_Cred:
+		if fv, exists := v.FldValidators["credential_choice.cred"]; exists {
+			val := m.GetCredentialChoice().(*AWSTGWSpokeAttachmentType_Cred).Cred
+			vOpts := append(opts,
+				db.WithValidateField("credential_choice"),
+				db.WithValidateField("cred"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment_option"]; exists {
+		val := m.GetSegmentOption()
+		vOpts := append(opts,
+			db.WithValidateField("segment_option"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSegmentOption().(type) {
+	case *AWSTGWSpokeAttachmentType_IsolatedSegment:
+		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
+			val := m.GetSegmentOption().(*AWSTGWSpokeAttachmentType_IsolatedSegment).IsolatedSegment
+			vOpts := append(opts,
+				db.WithValidateField("segment_option"),
+				db.WithValidateField("isolated_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSTGWSpokeAttachmentType_EnableSegment:
+		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
+			val := m.GetSegmentOption().(*AWSTGWSpokeAttachmentType_EnableSegment).EnableSegment
+			vOpts := append(opts,
+				db.WithValidateField("segment_option"),
+				db.WithValidateField("enable_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spokes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spokes"))
+		if err := fv(ctx, m.GetSpokes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWSpokeAttachmentTypeValidator = func() *ValidateAWSTGWSpokeAttachmentType {
+	v := &ValidateAWSTGWSpokeAttachmentType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCredentialChoice := v.CredentialChoiceValidationRuleHandler
+	rulesCredentialChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCredentialChoice(rulesCredentialChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.credential_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["credential_choice"] = vFn
+
+	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
+	rulesSegmentOption := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSegmentOption(rulesSegmentOption)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.segment_option: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment_option"] = vFn
+
+	vrhSpokes := v.SpokesValidationRuleHandler
+	rulesSpokes := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSpokes(rulesSpokes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.spokes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["spokes"] = vFn
+
+	v.FldValidators["credential_choice.cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["segment_option.enable_segment"] = ves_io_schema_cloud_connect.EnableSegmentTypeValidator().Validate
+
+	return v
+}()
+
+func AWSTGWSpokeAttachmentTypeValidator() db.Validator {
+	return DefaultAWSTGWSpokeAttachmentTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -877,6 +1402,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -891,6 +1422,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -914,6 +1451,37 @@ func (m *CreateSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "aws_parameters." + dri.DRField
 	}
 	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *CreateSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *CreateSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *CreateSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -1018,6 +1586,37 @@ func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetVpcAttach() == nil {
+		return nil, nil
+	}
+	switch m.GetVpcAttach().(type) {
+	case *CreateSpecType_VpcAttachments:
+
+		return nil, nil
+
+	case *CreateSpecType_SpokeAttachments:
+		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_attachments." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_DisableVpcAttachment:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1044,6 +1643,10 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateCreateSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1224,6 +1827,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*CreateSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1325,11 +1939,39 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
-		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
-			return err
+	switch m.GetVpcAttach().(type) {
+	case *CreateSpecType_VpcAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
+			val := m.GetVpcAttach().(*CreateSpecType_VpcAttachments).VpcAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("vpc_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SpokeAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
+			val := m.GetVpcAttach().(*CreateSpecType_SpokeAttachments).SpokeAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("spoke_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisableVpcAttachment:
+		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
+			val := m.GetVpcAttach().(*CreateSpecType_DisableVpcAttachment).DisableVpcAttachment
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("disable_vpc_attachment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1382,6 +2024,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
+	rulesVpcAttachSpokeAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.vpc_attach_spoke_attachments: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
+
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -1409,10 +2063,11 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -1668,6 +2323,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -1682,6 +2343,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1705,6 +2372,37 @@ func (m *GetSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "aws_parameters." + dri.DRField
 	}
 	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GetSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *GetSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *GetSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -1809,6 +2507,37 @@ func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetVpcAttach() == nil {
+		return nil, nil
+	}
+	switch m.GetVpcAttach().(type) {
+	case *GetSpecType_VpcAttachments:
+
+		return nil, nil
+
+	case *GetSpecType_SpokeAttachments:
+		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_attachments." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_DisableVpcAttachment:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1835,6 +2564,10 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateGetSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2131,6 +2864,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*GetSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2302,11 +3046,39 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
-		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
-			return err
+	switch m.GetVpcAttach().(type) {
+	case *GetSpecType_VpcAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
+			val := m.GetVpcAttach().(*GetSpecType_VpcAttachments).VpcAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("vpc_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SpokeAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
+			val := m.GetVpcAttach().(*GetSpecType_SpokeAttachments).SpokeAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("spoke_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableVpcAttachment:
+		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
+			val := m.GetVpcAttach().(*GetSpecType_DisableVpcAttachment).DisableVpcAttachment
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("disable_vpc_attachment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2370,6 +3142,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
+	rulesVpcAttachSpokeAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.vpc_attach_spoke_attachments: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
 
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
@@ -2444,10 +3228,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -2535,6 +3320,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTfParamsDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTfParamsDRefInfo() FAILED")
 	} else {
@@ -2559,6 +3350,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -2578,6 +3375,37 @@ func (m *GlobalSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "aws_parameters." + dri.DRField
 	}
 	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *GlobalSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *GlobalSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *GlobalSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -2715,6 +3543,37 @@ func (m *GlobalSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetVpcAttach() == nil {
+		return nil, nil
+	}
+	switch m.GetVpcAttach().(type) {
+	case *GlobalSpecType_VpcAttachments:
+
+		return nil, nil
+
+	case *GlobalSpecType_SpokeAttachments:
+		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_attachments." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_DisableVpcAttachment:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2741,6 +3600,10 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateGlobalSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3056,6 +3919,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*GlobalSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3272,11 +4146,39 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
-		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
-			return err
+	switch m.GetVpcAttach().(type) {
+	case *GlobalSpecType_VpcAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
+			val := m.GetVpcAttach().(*GlobalSpecType_VpcAttachments).VpcAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("vpc_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SpokeAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
+			val := m.GetVpcAttach().(*GlobalSpecType_SpokeAttachments).SpokeAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("spoke_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableVpcAttachment:
+		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
+			val := m.GetVpcAttach().(*GlobalSpecType_DisableVpcAttachment).DisableVpcAttachment
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("disable_vpc_attachment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3340,6 +4242,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
+	rulesVpcAttachSpokeAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.vpc_attach_spoke_attachments: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
 
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
@@ -3425,10 +4339,11 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -3524,6 +4439,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetDirectConnectChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDirectConnectChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
 	} else {
@@ -3538,6 +4459,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -3561,6 +4488,37 @@ func (m *ReplaceSpecType) GetAwsParametersDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "aws_parameters." + dri.DRField
 	}
 	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDirectConnectChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDirectConnectChoice().(type) {
+	case *ReplaceSpecType_DirectConnectDisabled:
+
+		return nil, nil
+
+	case *ReplaceSpecType_DirectConnectEnabled:
+
+		return nil, nil
+
+	case *ReplaceSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -3665,6 +4623,37 @@ func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetVpcAttach() == nil {
+		return nil, nil
+	}
+	switch m.GetVpcAttach().(type) {
+	case *ReplaceSpecType_VpcAttachments:
+
+		return nil, nil
+
+	case *ReplaceSpecType_SpokeAttachments:
+		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "spoke_attachments." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_DisableVpcAttachment:
+
+		return nil, nil
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3691,6 +4680,10 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateReplaceSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3826,6 +4819,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["direct_connect_choice.private_connectivity"]; exists {
+			val := m.GetDirectConnectChoice().(*ReplaceSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("direct_connect_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3901,11 +4905,39 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
-		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
-			return err
+	switch m.GetVpcAttach().(type) {
+	case *ReplaceSpecType_VpcAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
+			val := m.GetVpcAttach().(*ReplaceSpecType_VpcAttachments).VpcAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("vpc_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SpokeAttachments:
+		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
+			val := m.GetVpcAttach().(*ReplaceSpecType_SpokeAttachments).SpokeAttachments
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("spoke_attachments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisableVpcAttachment:
+		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
+			val := m.GetVpcAttach().(*ReplaceSpecType_DisableVpcAttachment).DisableVpcAttachment
+			vOpts := append(opts,
+				db.WithValidateField("vpc_attach"),
+				db.WithValidateField("disable_vpc_attachment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3958,6 +4990,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
+	rulesVpcAttachSpokeAttachments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.vpc_attach_spoke_attachments: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
+
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3972,10 +5016,11 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
+	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -6895,6 +7940,9 @@ func (r *CreateSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTyp
 	case *CreateSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *CreateSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -6911,6 +7959,9 @@ func (r *CreateSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecT
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &CreateSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &CreateSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6953,6 +8004,47 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VpcAttach.(type) {
+	case nil:
+		o.VpcAttach = nil
+
+	case *CreateSpecType_DisableVpcAttachment:
+		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *CreateSpecType_SpokeAttachments:
+		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *CreateSpecType_VpcAttachments:
+		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VpcAttach.(type) {
+	case nil:
+		r.VpcAttach = nil
+
+	case *GlobalSpecType_DisableVpcAttachment:
+		r.VpcAttach = &CreateSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *GlobalSpecType_SpokeAttachments:
+		r.VpcAttach = &CreateSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *GlobalSpecType_VpcAttachments:
+		r.VpcAttach = &CreateSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -6969,7 +8061,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Tags = f.GetTags()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.VpcAttachments = f.GetVpcAttachments()
+	m.GetVpcAttachFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -6999,7 +8091,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Tags = m1.Tags
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	f.VpcAttachments = m1.VpcAttachments
+	m1.SetVpcAttachToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -7063,6 +8155,9 @@ func (r *GetSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecType) 
 	case *GetSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *GetSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -7079,6 +8174,9 @@ func (r *GetSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &GetSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &GetSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -7121,6 +8219,47 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VpcAttach.(type) {
+	case nil:
+		o.VpcAttach = nil
+
+	case *GetSpecType_DisableVpcAttachment:
+		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *GetSpecType_SpokeAttachments:
+		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *GetSpecType_VpcAttachments:
+		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VpcAttach.(type) {
+	case nil:
+		r.VpcAttach = nil
+
+	case *GlobalSpecType_DisableVpcAttachment:
+		r.VpcAttach = &GetSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *GlobalSpecType_SpokeAttachments:
+		r.VpcAttach = &GetSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *GlobalSpecType_VpcAttachments:
+		r.VpcAttach = &GetSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -7145,7 +8284,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VnConfig = f.GetVnConfig()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
-	m.VpcAttachments = f.GetVpcAttachments()
+	m.GetVpcAttachFromGlobalSpecType(f)
 	m.VpcIpPrefixes = f.GetVpcIpPrefixes()
 }
 
@@ -7184,7 +8323,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VnConfig = m1.VnConfig
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
-	f.VpcAttachments = m1.VpcAttachments
+	m1.SetVpcAttachToGlobalSpecType(f)
 	f.VpcIpPrefixes = m1.VpcIpPrefixes
 }
 
@@ -7249,6 +8388,9 @@ func (r *ReplaceSpecType) SetDirectConnectChoiceToGlobalSpecType(o *GlobalSpecTy
 	case *ReplaceSpecType_DirectConnectEnabled:
 		o.DirectConnectChoice = &GlobalSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
 
+	case *ReplaceSpecType_PrivateConnectivity:
+		o.DirectConnectChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -7265,6 +8407,9 @@ func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpec
 
 	case *GlobalSpecType_DirectConnectEnabled:
 		r.DirectConnectChoice = &ReplaceSpecType_DirectConnectEnabled{DirectConnectEnabled: of.DirectConnectEnabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.DirectConnectChoice = &ReplaceSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -7307,6 +8452,47 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.VpcAttach.(type) {
+	case nil:
+		o.VpcAttach = nil
+
+	case *ReplaceSpecType_DisableVpcAttachment:
+		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *ReplaceSpecType_SpokeAttachments:
+		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *ReplaceSpecType_VpcAttachments:
+		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.VpcAttach.(type) {
+	case nil:
+		r.VpcAttach = nil
+
+	case *GlobalSpecType_DisableVpcAttachment:
+		r.VpcAttach = &ReplaceSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
+
+	case *GlobalSpecType_SpokeAttachments:
+		r.VpcAttach = &ReplaceSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
+
+	case *GlobalSpecType_VpcAttachments:
+		r.VpcAttach = &ReplaceSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -7329,7 +8515,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.VpcAttachments = f.GetVpcAttachments()
+	m.GetVpcAttachFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -7367,7 +8553,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	f.VpcAttachments = m1.VpcAttachments
+	m1.SetVpcAttachToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

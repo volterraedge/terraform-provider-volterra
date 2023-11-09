@@ -412,12 +412,15 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) GetApiEndpointPathsSuggestions(ctx context.Context, in *GetApiEndpointPathsSuggestionsRequest, opts ...grpc.CallOption) (*ves_io_schema.SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.CustomAPI.GetApiEndpointPathsSuggestions", nil)
 	return c.CustomAPIServer.GetApiEndpointPathsSuggestions(ctx, in)
 }
 func (c *customAPIInprocClient) GetBasePathSuggestions(ctx context.Context, in *GetBasePathSuggestionsRequest, opts ...grpc.CallOption) (*ves_io_schema.SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.CustomAPI.GetBasePathSuggestions", nil)
 	return c.CustomAPIServer.GetBasePathSuggestions(ctx, in)
 }
 func (c *customAPIInprocClient) GetMethodsSuggestions(ctx context.Context, in *GetMethodsSuggestionsRequest, opts ...grpc.CallOption) (*ves_io_schema.SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.CustomAPI.GetMethodsSuggestions", nil)
 	return c.CustomAPIServer.GetMethodsSuggestions(ctx, in)
 }
 

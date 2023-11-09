@@ -48,7 +48,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Client Selection"
 	// x-required
-	// Select clients for which the rule the will be applied. The actual names/labels of the client are extracted from its TLS certificate.
+	// Select clients for which the rule will be applied. The actual names/labels of the client are extracted from its TLS certificate.
 	//
 	// Types that are valid to be assigned to ClientChoice:
 	//	*GlobalSpecType_ClientName

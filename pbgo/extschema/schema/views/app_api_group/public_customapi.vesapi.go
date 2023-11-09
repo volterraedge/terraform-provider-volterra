@@ -307,9 +307,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) EvaluateApiGroup(ctx context.Context, in *EvaluateApiGroupReq, opts ...grpc.CallOption) (*EvaluateApiGroupRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.app_api_group.CustomAPI.EvaluateApiGroup", nil)
 	return c.CustomAPIServer.EvaluateApiGroup(ctx, in)
 }
 func (c *customAPIInprocClient) GetApiGroupsStats(ctx context.Context, in *GetApiGroupsStatsReq, opts ...grpc.CallOption) (*GetApiGroupsStatsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.app_api_group.CustomAPI.GetApiGroupsStats", nil)
 	return c.CustomAPIServer.GetApiGroupsStats(ctx, in)
 }
 

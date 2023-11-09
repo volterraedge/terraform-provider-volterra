@@ -9,12 +9,13 @@ import (
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -196,196 +197,6 @@ func (m *ListCloudNetworkTagValuesRequest) GetQueryValue() string {
 	return ""
 }
 
-// Get AWS Direct Connect Connection Request
-//
-// x-displayName: "Get AWS Direct Connect Connection Request"
-// AWS Direct Connect Connection Request
-type GetAWSDCConnectionRequest struct {
-	// Namespace
-	//
-	// x-displayName: "Namespace"
-	// Value of namespace is always "system"
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// ConnectId
-	//
-	// x-displayName: "ConnectId"
-	// Connect Id of the AWS Direct Connect Connection
-	ConnectId string `protobuf:"bytes,2,opt,name=connect_id,json=connectId,proto3" json:"connect_id,omitempty"`
-}
-
-func (m *GetAWSDCConnectionRequest) Reset()      { *m = GetAWSDCConnectionRequest{} }
-func (*GetAWSDCConnectionRequest) ProtoMessage() {}
-func (*GetAWSDCConnectionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{2}
-}
-func (m *GetAWSDCConnectionRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCConnectionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCConnectionRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCConnectionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCConnectionRequest.Merge(m, src)
-}
-func (m *GetAWSDCConnectionRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCConnectionRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCConnectionRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCConnectionRequest proto.InternalMessageInfo
-
-func (m *GetAWSDCConnectionRequest) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *GetAWSDCConnectionRequest) GetConnectId() string {
-	if m != nil {
-		return m.ConnectId
-	}
-	return ""
-}
-
-// Get AWS Direct Connect VIF Request
-//
-// x-displayName: "Get AWS Direct Connect VIF Request"
-// AWS Direct Connect VIF Request
-type GetAWSDCVIFRequest struct {
-	// Namespace
-	//
-	// x-displayName: "Namespace"
-	// Value of namespace is always "system"
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// VIFId
-	//
-	// x-displayName: "VIFId"
-	// VIF Id associated with AWS Direct Connect Connection
-	VifId string `protobuf:"bytes,2,opt,name=vif_id,json=vifId,proto3" json:"vif_id,omitempty"`
-}
-
-func (m *GetAWSDCVIFRequest) Reset()      { *m = GetAWSDCVIFRequest{} }
-func (*GetAWSDCVIFRequest) ProtoMessage() {}
-func (*GetAWSDCVIFRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{3}
-}
-func (m *GetAWSDCVIFRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCVIFRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCVIFRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCVIFRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCVIFRequest.Merge(m, src)
-}
-func (m *GetAWSDCVIFRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCVIFRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCVIFRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCVIFRequest proto.InternalMessageInfo
-
-func (m *GetAWSDCVIFRequest) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *GetAWSDCVIFRequest) GetVifId() string {
-	if m != nil {
-		return m.VifId
-	}
-	return ""
-}
-
-// Get AWS Direct Connect Gateway Request
-//
-// x-displayName: "Get AWS Direct Connect Gateway Request"
-//
-//	AWS Direct Connect Gateway Request
-type GetAWSDCGatewayRequest struct {
-	// Namespace
-	//
-	// x-displayName: "Namespace"
-	// Value of namespace is always "system"
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// GatewayId
-	//
-	// x-displayName: "GatewayId"
-	// Id Of Gateway Associated With AWS Direct Connect Connection
-	GatewayId string `protobuf:"bytes,2,opt,name=gateway_id,json=gatewayId,proto3" json:"gateway_id,omitempty"`
-}
-
-func (m *GetAWSDCGatewayRequest) Reset()      { *m = GetAWSDCGatewayRequest{} }
-func (*GetAWSDCGatewayRequest) ProtoMessage() {}
-func (*GetAWSDCGatewayRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{4}
-}
-func (m *GetAWSDCGatewayRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCGatewayRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCGatewayRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCGatewayRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCGatewayRequest.Merge(m, src)
-}
-func (m *GetAWSDCGatewayRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCGatewayRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCGatewayRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCGatewayRequest proto.InternalMessageInfo
-
-func (m *GetAWSDCGatewayRequest) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *GetAWSDCGatewayRequest) GetGatewayId() string {
-	if m != nil {
-		return m.GatewayId
-	}
-	return ""
-}
-
 // List Cloud Network Tag Keys Response
 //
 // x-displayName: "List Cloud Network Tag Keys Response"
@@ -401,7 +212,7 @@ type ListCloudNetworkTagKeysResponse struct {
 func (m *ListCloudNetworkTagKeysResponse) Reset()      { *m = ListCloudNetworkTagKeysResponse{} }
 func (*ListCloudNetworkTagKeysResponse) ProtoMessage() {}
 func (*ListCloudNetworkTagKeysResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{5}
+	return fileDescriptor_d2a4c893e836a3c1, []int{2}
 }
 func (m *ListCloudNetworkTagKeysResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -452,7 +263,7 @@ type ListCloudNetworkTagValuesResponse struct {
 func (m *ListCloudNetworkTagValuesResponse) Reset()      { *m = ListCloudNetworkTagValuesResponse{} }
 func (*ListCloudNetworkTagValuesResponse) ProtoMessage() {}
 func (*ListCloudNetworkTagValuesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{6}
+	return fileDescriptor_d2a4c893e836a3c1, []int{3}
 }
 func (m *ListCloudNetworkTagValuesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -488,168 +299,15 @@ func (m *ListCloudNetworkTagValuesResponse) GetValues() []string {
 	return nil
 }
 
-// Get AWS Direct Connect Connection Response
-//
-// x-displayName: "Get AWS Direct Connect Connection Response"
-// AWS Direct Connect Connection Response
-type GetAWSDCConnectionResponse struct {
-	ConnectionStatus *cloud_link.DirectConnectConnectionStatusType `protobuf:"bytes,1,opt,name=connection_status,json=connectionStatus,proto3" json:"connection_status,omitempty"`
-}
-
-func (m *GetAWSDCConnectionResponse) Reset()      { *m = GetAWSDCConnectionResponse{} }
-func (*GetAWSDCConnectionResponse) ProtoMessage() {}
-func (*GetAWSDCConnectionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{7}
-}
-func (m *GetAWSDCConnectionResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCConnectionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCConnectionResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCConnectionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCConnectionResponse.Merge(m, src)
-}
-func (m *GetAWSDCConnectionResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCConnectionResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCConnectionResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCConnectionResponse proto.InternalMessageInfo
-
-func (m *GetAWSDCConnectionResponse) GetConnectionStatus() *cloud_link.DirectConnectConnectionStatusType {
-	if m != nil {
-		return m.ConnectionStatus
-	}
-	return nil
-}
-
-// Get AWS Direct Connect VIF Response
-//
-// x-displayName: "Get AWS Direct Connect VIF Response"
-// AWS Direct Connect VIF Response
-type GetAWSDCVIFResponse struct {
-	VifStatus *cloud_link.VirtualInterfaceStatusType `protobuf:"bytes,1,opt,name=vif_status,json=vifStatus,proto3" json:"vif_status,omitempty"`
-}
-
-func (m *GetAWSDCVIFResponse) Reset()      { *m = GetAWSDCVIFResponse{} }
-func (*GetAWSDCVIFResponse) ProtoMessage() {}
-func (*GetAWSDCVIFResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{8}
-}
-func (m *GetAWSDCVIFResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCVIFResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCVIFResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCVIFResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCVIFResponse.Merge(m, src)
-}
-func (m *GetAWSDCVIFResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCVIFResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCVIFResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCVIFResponse proto.InternalMessageInfo
-
-func (m *GetAWSDCVIFResponse) GetVifStatus() *cloud_link.VirtualInterfaceStatusType {
-	if m != nil {
-		return m.VifStatus
-	}
-	return nil
-}
-
-// Get AWS Direct Connect Gateway Response
-//
-// x-displayName: "Get AWS Direct Connect Gateway Response"
-// AWS Direct Connect Gateway Response
-type GetAWSDCGatewayResponse struct {
-	GatewayStatus *cloud_link.DirectConnectGatewayStatusType `protobuf:"bytes,1,opt,name=gateway_status,json=gatewayStatus,proto3" json:"gateway_status,omitempty"`
-}
-
-func (m *GetAWSDCGatewayResponse) Reset()      { *m = GetAWSDCGatewayResponse{} }
-func (*GetAWSDCGatewayResponse) ProtoMessage() {}
-func (*GetAWSDCGatewayResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2a4c893e836a3c1, []int{9}
-}
-func (m *GetAWSDCGatewayResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAWSDCGatewayResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAWSDCGatewayResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAWSDCGatewayResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAWSDCGatewayResponse.Merge(m, src)
-}
-func (m *GetAWSDCGatewayResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAWSDCGatewayResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAWSDCGatewayResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAWSDCGatewayResponse proto.InternalMessageInfo
-
-func (m *GetAWSDCGatewayResponse) GetGatewayStatus() *cloud_link.DirectConnectGatewayStatusType {
-	if m != nil {
-		return m.GatewayStatus
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*ListCloudNetworkTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysRequest")
 	golang_proto.RegisterType((*ListCloudNetworkTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysRequest")
 	proto.RegisterType((*ListCloudNetworkTagValuesRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesRequest")
 	golang_proto.RegisterType((*ListCloudNetworkTagValuesRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesRequest")
-	proto.RegisterType((*GetAWSDCConnectionRequest)(nil), "ves.io.schema.topology.GetAWSDCConnectionRequest")
-	golang_proto.RegisterType((*GetAWSDCConnectionRequest)(nil), "ves.io.schema.topology.GetAWSDCConnectionRequest")
-	proto.RegisterType((*GetAWSDCVIFRequest)(nil), "ves.io.schema.topology.GetAWSDCVIFRequest")
-	golang_proto.RegisterType((*GetAWSDCVIFRequest)(nil), "ves.io.schema.topology.GetAWSDCVIFRequest")
-	proto.RegisterType((*GetAWSDCGatewayRequest)(nil), "ves.io.schema.topology.GetAWSDCGatewayRequest")
-	golang_proto.RegisterType((*GetAWSDCGatewayRequest)(nil), "ves.io.schema.topology.GetAWSDCGatewayRequest")
 	proto.RegisterType((*ListCloudNetworkTagKeysResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysResponse")
 	golang_proto.RegisterType((*ListCloudNetworkTagKeysResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysResponse")
 	proto.RegisterType((*ListCloudNetworkTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesResponse")
 	golang_proto.RegisterType((*ListCloudNetworkTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesResponse")
-	proto.RegisterType((*GetAWSDCConnectionResponse)(nil), "ves.io.schema.topology.GetAWSDCConnectionResponse")
-	golang_proto.RegisterType((*GetAWSDCConnectionResponse)(nil), "ves.io.schema.topology.GetAWSDCConnectionResponse")
-	proto.RegisterType((*GetAWSDCVIFResponse)(nil), "ves.io.schema.topology.GetAWSDCVIFResponse")
-	golang_proto.RegisterType((*GetAWSDCVIFResponse)(nil), "ves.io.schema.topology.GetAWSDCVIFResponse")
-	proto.RegisterType((*GetAWSDCGatewayResponse)(nil), "ves.io.schema.topology.GetAWSDCGatewayResponse")
-	golang_proto.RegisterType((*GetAWSDCGatewayResponse)(nil), "ves.io.schema.topology.GetAWSDCGatewayResponse")
 }
 
 func init() {
@@ -660,69 +318,48 @@ func init() {
 }
 
 var fileDescriptor_d2a4c893e836a3c1 = []byte{
-	// 991 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xb8, 0x21, 0xc2, 0x13, 0x28, 0x65, 0x10, 0x69, 0xea, 0xa6, 0xdb, 0xb0, 0xa2, 0x52,
-	0x04, 0xca, 0x8e, 0x08, 0x3f, 0xda, 0xaa, 0xa7, 0xd6, 0x15, 0x95, 0x69, 0x81, 0xc8, 0x69, 0x13,
-	0xf0, 0xc5, 0x8c, 0x77, 0xc7, 0x9b, 0x89, 0xed, 0x9d, 0xed, 0xee, 0xec, 0x96, 0x25, 0x8a, 0x84,
-	0x38, 0xf4, 0x8c, 0x40, 0x42, 0x70, 0x40, 0xe2, 0x84, 0x7a, 0x41, 0x70, 0xe0, 0x80, 0x54, 0x09,
-	0x2a, 0x55, 0x48, 0x1c, 0x23, 0xb8, 0xf4, 0x48, 0x1c, 0x0e, 0x1c, 0xfb, 0x27, 0x20, 0xcf, 0x8c,
-	0xb3, 0xde, 0x90, 0x6d, 0x1d, 0xab, 0x95, 0x7a, 0x9b, 0x7d, 0xf3, 0xde, 0xfb, 0xde, 0xfb, 0xde,
-	0xcc, 0xb7, 0x03, 0xad, 0x98, 0x86, 0x16, 0xe3, 0x38, 0xb4, 0xd7, 0x68, 0x97, 0x60, 0xc1, 0x7d,
-	0xde, 0xe1, 0x6e, 0x82, 0xfd, 0x80, 0xc5, 0x44, 0xd0, 0x86, 0x1d, 0x85, 0x82, 0x77, 0x89, 0xcf,
-	0x2c, 0x3f, 0xe0, 0x82, 0xa3, 0x69, 0xe5, 0x6f, 0x29, 0x7f, 0x6b, 0xe0, 0x5f, 0x5e, 0x70, 0x99,
-	0x58, 0x8b, 0x9a, 0x96, 0xcd, 0xbb, 0xd8, 0xe5, 0x2e, 0xc7, 0xd2, 0xbd, 0x19, 0xb5, 0xe4, 0x97,
-	0xfc, 0x90, 0x2b, 0x95, 0xa6, 0x3c, 0xeb, 0x72, 0xee, 0x76, 0x28, 0x26, 0x3e, 0xc3, 0xc4, 0xf3,
-	0xb8, 0x20, 0x82, 0x71, 0x2f, 0xd4, 0xbb, 0xa7, 0xb2, 0x45, 0xd9, 0x1d, 0x1e, 0x39, 0x8d, 0x0e,
-	0xf3, 0xda, 0x98, 0x37, 0xd7, 0xa9, 0x2d, 0xb4, 0xdb, 0xf1, 0xac, 0x1b, 0xf7, 0x87, 0x73, 0x98,
-	0x39, 0x8d, 0x89, 0xc4, 0xa7, 0x03, 0x9f, 0xd9, 0xac, 0x4f, 0x4c, 0x3a, 0xcc, 0x21, 0x82, 0xaa,
-	0x5d, 0xf3, 0x3b, 0x00, 0x8d, 0x2b, 0x2c, 0x14, 0x95, 0x3e, 0xfc, 0x7b, 0x54, 0xdc, 0xe0, 0x41,
-	0xfb, 0x2a, 0x71, 0x2f, 0xd3, 0x24, 0xac, 0xd1, 0xeb, 0x11, 0x0d, 0x05, 0x9a, 0x85, 0x25, 0x8f,
-	0x74, 0x69, 0xe8, 0x13, 0x9b, 0xce, 0x80, 0x39, 0x30, 0x5f, 0xaa, 0xa5, 0x06, 0x54, 0x81, 0x50,
-	0x95, 0xde, 0xc7, 0x9c, 0x29, 0xce, 0x81, 0xf9, 0xc3, 0x8b, 0x2f, 0x5b, 0xfb, 0x13, 0x68, 0x2d,
-	0x05, 0x3c, 0x66, 0x0e, 0x0d, 0xae, 0x26, 0x3e, 0xad, 0x95, 0x64, 0x5c, 0x7f, 0x89, 0x8e, 0xc3,
-	0xd2, 0xf5, 0x88, 0x06, 0x49, 0xa3, 0x4d, 0x93, 0x99, 0x43, 0x12, 0xe2, 0x69, 0x69, 0xb8, 0x4c,
-	0x13, 0xf3, 0x2e, 0x80, 0x73, 0xfb, 0x94, 0xb8, 0x42, 0x3a, 0x11, 0x7d, 0x52, 0x8a, 0x44, 0x27,
-	0xe1, 0x94, 0xda, 0x8c, 0xfb, 0x65, 0xcd, 0x4c, 0xc8, 0x6d, 0x28, 0x4d, 0xb2, 0x50, 0xf3, 0x03,
-	0x78, 0xec, 0x12, 0x15, 0xe7, 0x57, 0x97, 0x2f, 0x56, 0x2a, 0xdc, 0xf3, 0xa8, 0xdd, 0x9f, 0xe3,
-	0x68, 0xd5, 0x9f, 0x80, 0xd0, 0x56, 0x21, 0x0d, 0xe6, 0xc8, 0xea, 0x4b, 0xb5, 0x92, 0xb6, 0x54,
-	0x1d, 0xb3, 0x0a, 0xd1, 0x20, 0xf3, 0x4a, 0xf5, 0xed, 0xd1, 0x52, 0xbe, 0x08, 0x27, 0x63, 0xd6,
-	0x4a, 0xd3, 0x3d, 0x15, 0xb3, 0x56, 0xd5, 0x31, 0xaf, 0xc1, 0xe9, 0x41, 0xaa, 0x4b, 0x44, 0xd0,
-	0x1b, 0x24, 0x19, 0xb9, 0x42, 0x57, 0xf9, 0x0f, 0x55, 0xa8, 0x2d, 0x55, 0xc7, 0x7c, 0x13, 0x9e,
-	0xcc, 0x3d, 0x63, 0xa1, 0xcf, 0xbd, 0x90, 0x22, 0x04, 0x27, 0xda, 0x34, 0x09, 0x67, 0xc0, 0xdc,
-	0xa1, 0xf9, 0x52, 0x4d, 0xae, 0xcd, 0x73, 0xf0, 0xa5, 0x07, 0xcc, 0x5d, 0x07, 0x4e, 0xc3, 0x49,
-	0x49, 0xf9, 0x20, 0x54, 0x7f, 0x99, 0x37, 0x01, 0x2c, 0xef, 0x47, 0xb8, 0x0e, 0x5b, 0x83, 0xcf,
-	0xdb, 0xbb, 0xd6, 0x46, 0x28, 0x88, 0x88, 0x42, 0xd9, 0xd7, 0xd4, 0xe2, 0xb9, 0x3d, 0x07, 0x23,
-	0xbd, 0x99, 0xd6, 0x45, 0x16, 0x50, 0x5b, 0xe8, 0x74, 0x69, 0xd6, 0x65, 0x19, 0x2e, 0xcf, 0xcb,
-	0x11, 0x7b, 0x8f, 0xd5, 0x5c, 0x87, 0x2f, 0x64, 0xc6, 0xa3, 0x0b, 0x58, 0x86, 0xb0, 0x3f, 0x81,
-	0x0c, 0xf2, 0x1b, 0xf9, 0xc8, 0x2b, 0x2c, 0x10, 0x11, 0xe9, 0x54, 0x3d, 0x41, 0x83, 0x16, 0xb1,
-	0xe9, 0x10, 0x64, 0x29, 0x66, 0x2d, 0x8d, 0xf5, 0x09, 0x3c, 0xfa, 0xbf, 0xf9, 0x69, 0xbc, 0x06,
-	0x3c, 0x3c, 0x18, 0x51, 0x06, 0xf3, 0xcc, 0x88, 0xdd, 0xea, 0x7c, 0x43, 0xb8, 0xcf, 0xba, 0xc3,
-	0xa6, 0xc5, 0x1f, 0x9e, 0x81, 0x47, 0x96, 0x94, 0xa0, 0x56, 0xa4, 0x9e, 0x9e, 0x5f, 0xaa, 0xa2,
-	0xef, 0x8b, 0xf0, 0x68, 0xce, 0xe8, 0xd1, 0x5b, 0x79, 0x17, 0xf0, 0xc1, 0x7a, 0x54, 0x3e, 0x7d,
-	0xe0, 0x38, 0x45, 0x81, 0xf9, 0x0d, 0xf8, 0xec, 0xaf, 0x7f, 0xbe, 0x2c, 0x7e, 0x01, 0xd0, 0xe9,
-	0x81, 0xf4, 0x63, 0x25, 0xfd, 0x78, 0xf7, 0x28, 0x87, 0x78, 0x63, 0x77, 0xbd, 0x89, 0x3d, 0x95,
-	0xa8, 0x21, 0x88, 0xdb, 0xbf, 0xf5, 0x61, 0x7d, 0x15, 0x5d, 0xc3, 0x19, 0x74, 0xcc, 0x3c, 0x11,
-	0xf0, 0xd0, 0xa7, 0xb6, 0xc0, 0x01, 0x25, 0xce, 0x98, 0x89, 0xd1, 0x4f, 0x45, 0x78, 0x2c, 0xf7,
-	0xb0, 0xa3, 0x33, 0x07, 0x68, 0x39, 0xa3, 0x8b, 0xe5, 0xb3, 0x63, 0x44, 0x6a, 0xba, 0xbe, 0x55,
-	0x74, 0x7d, 0x05, 0xd0, 0xd9, 0x31, 0xba, 0x52, 0xd7, 0xb0, 0xfe, 0x21, 0x5a, 0x7d, 0xe4, 0x84,
-	0xa9, 0xd4, 0xe8, 0x6e, 0x31, 0x15, 0xbe, 0xf4, 0x2e, 0xa2, 0xd7, 0xf2, 0x3a, 0xce, 0x95, 0xdf,
-	0xf2, 0xe2, 0x41, 0x42, 0x34, 0x3b, 0xbf, 0x2b, 0x76, 0x7e, 0x05, 0xe8, 0xdd, 0x11, 0x5b, 0x70,
-	0xe4, 0x75, 0x6a, 0x68, 0x81, 0xc0, 0xa9, 0x50, 0xe0, 0x8d, 0x54, 0xde, 0x37, 0xeb, 0x5d, 0xd4,
-	0x7e, 0x24, 0x8c, 0x8d, 0x06, 0x87, 0xbe, 0x2e, 0xc2, 0xa9, 0x21, 0x7d, 0x42, 0xaf, 0x3c, 0x8c,
-	0x8b, 0xf4, 0x1f, 0x53, 0x7e, 0x75, 0x24, 0x5f, 0x4d, 0xd8, 0x8f, 0x8a, 0xb0, 0x5b, 0x00, 0x5d,
-	0x18, 0xaf, 0x83, 0x98, 0xb5, 0xf0, 0x86, 0xfa, 0x6b, 0x6d, 0xd6, 0x9b, 0xe8, 0xa3, 0xc7, 0xc1,
-	0xd2, 0x30, 0x06, 0xfa, 0xb9, 0x08, 0x9f, 0xdb, 0x23, 0xa7, 0xc8, 0x7a, 0x58, 0xcb, 0xd9, 0xff,
-	0x66, 0x19, 0x8f, 0xec, 0xaf, 0x69, 0xfa, 0x4d, 0xd1, 0xf4, 0x0b, 0x40, 0xef, 0x8c, 0xd7, 0x82,
-	0x56, 0x65, 0xbc, 0x91, 0xfe, 0x91, 0x37, 0xeb, 0xeb, 0x68, 0xed, 0x71, 0xd0, 0xb5, 0x1f, 0x56,
-	0xf9, 0xd4, 0x9d, 0xdb, 0x60, 0xe2, 0xcf, 0xdb, 0xe0, 0x44, 0x4e, 0xe7, 0xef, 0xcb, 0xe7, 0xed,
-	0x85, 0x9b, 0x60, 0x6b, 0xdb, 0x28, 0xdc, 0xdb, 0x36, 0x0a, 0xf7, 0xb7, 0x0d, 0xf0, 0x69, 0xcf,
-	0x00, 0xb7, 0x7a, 0x06, 0xf8, 0xa3, 0x67, 0x80, 0xad, 0x9e, 0x01, 0xfe, 0xee, 0x19, 0xe0, 0xdf,
-	0x9e, 0x51, 0xb8, 0xdf, 0x33, 0xc0, 0xe7, 0x3b, 0x46, 0xe1, 0xce, 0x8e, 0x01, 0xb6, 0x76, 0x8c,
-	0xc2, 0xbd, 0x1d, 0xa3, 0x50, 0xbf, 0xe2, 0x72, 0xbf, 0xed, 0x5a, 0x31, 0xef, 0x08, 0x1a, 0x04,
-	0xc4, 0x8a, 0x42, 0x2c, 0x17, 0x2d, 0x1e, 0x74, 0x17, 0x7c, 0xfd, 0x7c, 0x5b, 0x18, 0x6c, 0x63,
-	0xbf, 0xe9, 0x72, 0x4c, 0x3f, 0x16, 0xba, 0xf3, 0x3d, 0x8f, 0xe5, 0xe6, 0xa4, 0x7c, 0x09, 0xbf,
-	0xfe, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x10, 0xb5, 0xa5, 0xde, 0x26, 0x0c, 0x00, 0x00,
+	// 649 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x54, 0xbf, 0x6b, 0x14, 0x4d,
+	0x18, 0xbe, 0xb9, 0xe4, 0x0b, 0xdf, 0xcd, 0x07, 0x1f, 0x32, 0x45, 0xbc, 0x5c, 0xe2, 0xe4, 0x3c,
+	0x0c, 0xa4, 0xc9, 0x0e, 0x44, 0x34, 0x06, 0x2b, 0x4d, 0x25, 0x09, 0x1a, 0x8e, 0x68, 0x30, 0xcd,
+	0x31, 0xb7, 0xf7, 0x66, 0xb3, 0xde, 0xde, 0xce, 0x64, 0x67, 0xf6, 0x74, 0x11, 0x41, 0x2c, 0xac,
+	0x45, 0x51, 0xb0, 0x10, 0xac, 0xc4, 0xd2, 0x3e, 0x4d, 0xc0, 0xc6, 0x32, 0x68, 0x93, 0xd2, 0xec,
+	0x59, 0x58, 0xe6, 0x4f, 0x90, 0x9b, 0xd9, 0x8b, 0xb9, 0x90, 0x0b, 0x24, 0x58, 0xd8, 0xbd, 0x33,
+	0xcf, 0xfb, 0xe3, 0x79, 0x9f, 0x99, 0xf7, 0xc5, 0x4e, 0x1b, 0x94, 0xe3, 0x0b, 0xa6, 0xdc, 0x0d,
+	0x68, 0x71, 0xa6, 0x85, 0x14, 0x81, 0xf0, 0x12, 0x26, 0x23, 0xbf, 0xcd, 0x35, 0xd4, 0xdc, 0x58,
+	0x69, 0xd1, 0xe2, 0xd2, 0x77, 0x64, 0x24, 0xb4, 0x20, 0xa3, 0xd6, 0xdf, 0xb1, 0xfe, 0x4e, 0xcf,
+	0xbf, 0x34, 0xe3, 0xf9, 0x7a, 0x23, 0xae, 0x3b, 0xae, 0x68, 0x31, 0x4f, 0x78, 0x82, 0x19, 0xf7,
+	0x7a, 0xbc, 0x6e, 0x4e, 0xe6, 0x60, 0x2c, 0x9b, 0xa6, 0x34, 0xe1, 0x09, 0xe1, 0x05, 0xc0, 0xb8,
+	0xf4, 0x19, 0x0f, 0x43, 0xa1, 0xb9, 0xf6, 0x45, 0xa8, 0x32, 0x74, 0x3c, 0x43, 0x0f, 0x72, 0x40,
+	0x4b, 0xea, 0x24, 0x03, 0xa7, 0xfa, 0x19, 0xbb, 0x81, 0x88, 0x1b, 0xb5, 0xc0, 0x0f, 0x9b, 0x4c,
+	0xd4, 0x1f, 0x80, 0xab, 0x7b, 0x39, 0xfa, 0xdd, 0x84, 0x3c, 0x5c, 0xa0, 0x32, 0xa0, 0x6b, 0x9d,
+	0x48, 0xe8, 0xf9, 0x8c, 0x1d, 0xf1, 0x39, 0x04, 0x4d, 0xf4, 0x43, 0x6d, 0x1e, 0xf8, 0x0d, 0xae,
+	0xc1, 0xa2, 0x95, 0xf7, 0x08, 0xd3, 0x25, 0x5f, 0xe9, 0x85, 0x2e, 0xb3, 0xdb, 0xa0, 0x1f, 0x8a,
+	0xa8, 0xb9, 0xc2, 0xbd, 0x45, 0x48, 0x54, 0x15, 0x36, 0x63, 0x50, 0x9a, 0x4c, 0xe0, 0x42, 0xc8,
+	0x5b, 0xa0, 0x24, 0x77, 0xa1, 0x88, 0xca, 0x68, 0xba, 0x50, 0xfd, 0x7d, 0x41, 0x16, 0x30, 0xb6,
+	0x5d, 0x75, 0x6b, 0x16, 0xf3, 0x65, 0x34, 0xfd, 0xff, 0xec, 0x25, 0xe7, 0x78, 0xe1, 0x9d, 0xe5,
+	0x48, 0xb4, 0xfd, 0x06, 0x44, 0x2b, 0x89, 0x84, 0x6a, 0xc1, 0xc4, 0x75, 0x4d, 0x32, 0x8e, 0x0b,
+	0x9b, 0x31, 0x44, 0x49, 0xad, 0x09, 0x49, 0x71, 0xc8, 0x94, 0xf8, 0xd7, 0x5c, 0x2c, 0x42, 0x52,
+	0xf9, 0x8c, 0x70, 0xf9, 0x18, 0x8a, 0xf7, 0x78, 0x10, 0xc3, 0xdf, 0x42, 0x92, 0x4c, 0xe2, 0xff,
+	0x2c, 0xd8, 0xee, 0xd2, 0x2a, 0x0e, 0x1b, 0x18, 0x9b, 0x2b, 0x43, 0xb4, 0x72, 0x05, 0x4f, 0x0e,
+	0xd4, 0x59, 0x49, 0x11, 0x2a, 0x20, 0x04, 0x0f, 0x37, 0x21, 0x51, 0x45, 0x54, 0x1e, 0x9a, 0x2e,
+	0x54, 0x8d, 0x5d, 0xb9, 0x8e, 0x2f, 0x9e, 0xd0, 0x7b, 0x16, 0x38, 0x8a, 0x47, 0x4c, 0xd9, 0x5e,
+	0x68, 0x76, 0x9a, 0x7d, 0xfd, 0x0f, 0x3e, 0xb7, 0x6c, 0x67, 0x63, 0xc1, 0x8c, 0xc6, 0x8d, 0xe5,
+	0x5b, 0xe4, 0x43, 0x1e, 0x9f, 0x1f, 0xc0, 0x84, 0x5c, 0x1d, 0xa4, 0xc9, 0xc9, 0x5f, 0xa4, 0x34,
+	0x77, 0xea, 0x38, 0xcb, 0xbc, 0xf2, 0x16, 0x3d, 0xfb, 0xf6, 0xe3, 0x55, 0xfe, 0x25, 0x22, 0x73,
+	0xbd, 0x29, 0x66, 0x76, 0x8a, 0xd9, 0xc1, 0xeb, 0x29, 0xf6, 0xf8, 0xc0, 0x7e, 0xc2, 0x42, 0x9b,
+	0xa8, 0xa6, 0xb9, 0xd7, 0x7d, 0x08, 0xb5, 0xb6, 0x4a, 0xee, 0xb2, 0xbe, 0xea, 0xcc, 0x0f, 0x75,
+	0x24, 0x94, 0x04, 0x57, 0xb3, 0x08, 0x78, 0xe3, 0x8c, 0x89, 0xc9, 0xa7, 0x3c, 0x1e, 0x1b, 0xa8,
+	0x3d, 0xb9, 0x76, 0x8a, 0x96, 0xfb, 0xbe, 0x6a, 0x69, 0xfe, 0x0c, 0x91, 0x99, 0x5c, 0xef, 0xac,
+	0x5c, 0x6f, 0x10, 0x99, 0x3f, 0x43, 0x57, 0xf6, 0x57, 0xac, 0xdd, 0x27, 0xab, 0x7f, 0x5c, 0x30,
+	0x9b, 0xba, 0x34, 0xb5, 0xbd, 0x85, 0x86, 0xbf, 0x6e, 0xa1, 0x0b, 0x03, 0x3a, 0xbc, 0x63, 0x96,
+	0xde, 0xcd, 0xe7, 0x68, 0x67, 0x8f, 0xe6, 0x76, 0xf7, 0x68, 0x6e, 0x7f, 0x8f, 0xa2, 0xa7, 0x29,
+	0x45, 0x1f, 0x53, 0x8a, 0xbe, 0xa4, 0x14, 0xed, 0xa4, 0x14, 0x7d, 0x4f, 0x29, 0xfa, 0x99, 0xd2,
+	0xdc, 0x7e, 0x4a, 0xd1, 0x8b, 0x0e, 0xcd, 0x6d, 0x77, 0x28, 0xda, 0xe9, 0xd0, 0xdc, 0x6e, 0x87,
+	0xe6, 0xd6, 0x96, 0x3c, 0x21, 0x9b, 0x9e, 0xd3, 0x16, 0x81, 0x86, 0x28, 0xe2, 0x4e, 0xac, 0x98,
+	0x31, 0xd6, 0x45, 0xd4, 0x9a, 0x91, 0xd9, 0xe4, 0xce, 0xf4, 0x60, 0x26, 0xeb, 0x9e, 0x60, 0xf0,
+	0x48, 0x67, 0x8d, 0x1e, 0x59, 0xa1, 0xf5, 0x11, 0xb3, 0x04, 0x2f, 0xff, 0x0a, 0x00, 0x00, 0xff,
+	0xff, 0x03, 0x60, 0xed, 0x42, 0x59, 0x06, 0x00, 0x00,
 }
 
 func (this *ListCloudNetworkTagKeysRequest) Equal(that interface{}) bool {
@@ -788,87 +425,6 @@ func (this *ListCloudNetworkTagValuesRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetAWSDCConnectionRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCConnectionRequest)
-	if !ok {
-		that2, ok := that.(GetAWSDCConnectionRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	if this.ConnectId != that1.ConnectId {
-		return false
-	}
-	return true
-}
-func (this *GetAWSDCVIFRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCVIFRequest)
-	if !ok {
-		that2, ok := that.(GetAWSDCVIFRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	if this.VifId != that1.VifId {
-		return false
-	}
-	return true
-}
-func (this *GetAWSDCGatewayRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCGatewayRequest)
-	if !ok {
-		that2, ok := that.(GetAWSDCGatewayRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Namespace != that1.Namespace {
-		return false
-	}
-	if this.GatewayId != that1.GatewayId {
-		return false
-	}
-	return true
-}
 func (this *ListCloudNetworkTagKeysResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -927,78 +483,6 @@ func (this *ListCloudNetworkTagValuesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *GetAWSDCConnectionResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCConnectionResponse)
-	if !ok {
-		that2, ok := that.(GetAWSDCConnectionResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ConnectionStatus.Equal(that1.ConnectionStatus) {
-		return false
-	}
-	return true
-}
-func (this *GetAWSDCVIFResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCVIFResponse)
-	if !ok {
-		that2, ok := that.(GetAWSDCVIFResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.VifStatus.Equal(that1.VifStatus) {
-		return false
-	}
-	return true
-}
-func (this *GetAWSDCGatewayResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*GetAWSDCGatewayResponse)
-	if !ok {
-		that2, ok := that.(GetAWSDCGatewayResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.GatewayStatus.Equal(that1.GatewayStatus) {
-		return false
-	}
-	return true
-}
 func (this *ListCloudNetworkTagKeysRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1024,39 +508,6 @@ func (this *ListCloudNetworkTagValuesRequest) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *GetAWSDCConnectionRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&topology.GetAWSDCConnectionRequest{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "ConnectId: "+fmt.Sprintf("%#v", this.ConnectId)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAWSDCVIFRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&topology.GetAWSDCVIFRequest{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "VifId: "+fmt.Sprintf("%#v", this.VifId)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAWSDCGatewayRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&topology.GetAWSDCGatewayRequest{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "GatewayId: "+fmt.Sprintf("%#v", this.GatewayId)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *ListCloudNetworkTagKeysResponse) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1074,42 +525,6 @@ func (this *ListCloudNetworkTagValuesResponse) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&topology.ListCloudNetworkTagValuesResponse{")
 	s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAWSDCConnectionResponse) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&topology.GetAWSDCConnectionResponse{")
-	if this.ConnectionStatus != nil {
-		s = append(s, "ConnectionStatus: "+fmt.Sprintf("%#v", this.ConnectionStatus)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAWSDCVIFResponse) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&topology.GetAWSDCVIFResponse{")
-	if this.VifStatus != nil {
-		s = append(s, "VifStatus: "+fmt.Sprintf("%#v", this.VifStatus)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAWSDCGatewayResponse) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&topology.GetAWSDCGatewayResponse{")
-	if this.GatewayStatus != nil {
-		s = append(s, "GatewayStatus: "+fmt.Sprintf("%#v", this.GatewayStatus)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1146,21 +561,6 @@ type PrivateCustomAPIClient interface {
 	// ListCloudNetworkTagValues retrieves cloud provider Values of tags.
 	// The tag values are retrieved based on the key
 	ListCloudNetworkTagValues(ctx context.Context, in *ListCloudNetworkTagValuesRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagValuesResponse, error)
-	// GetAWSDCConnection
-	//
-	// x-displayName: "Get AWS Direct Connect Connection"
-	// Retrieves AWS Direct Connect Connection
-	GetAWSDCConnection(ctx context.Context, in *GetAWSDCConnectionRequest, opts ...grpc.CallOption) (*GetAWSDCConnectionResponse, error)
-	// GetAWSDCVIF
-	//
-	// x-displayName: "Get AWS Direct Connect VIF"
-	// Retrieves AWS Direct Connect VIF
-	GetAWSDCVIF(ctx context.Context, in *GetAWSDCVIFRequest, opts ...grpc.CallOption) (*GetAWSDCVIFResponse, error)
-	// GetAWSDCGateway
-	//
-	// x-displayName: "Get AWS Direct Connect Gateway"
-	// Retrieves AWS Direct Connect Gateway
-	GetAWSDCGateway(ctx context.Context, in *GetAWSDCGatewayRequest, opts ...grpc.CallOption) (*GetAWSDCGatewayResponse, error)
 }
 
 type privateCustomAPIClient struct {
@@ -1189,33 +589,6 @@ func (c *privateCustomAPIClient) ListCloudNetworkTagValues(ctx context.Context, 
 	return out, nil
 }
 
-func (c *privateCustomAPIClient) GetAWSDCConnection(ctx context.Context, in *GetAWSDCConnectionRequest, opts ...grpc.CallOption) (*GetAWSDCConnectionResponse, error) {
-	out := new(GetAWSDCConnectionResponse)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCConnection", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *privateCustomAPIClient) GetAWSDCVIF(ctx context.Context, in *GetAWSDCVIFRequest, opts ...grpc.CallOption) (*GetAWSDCVIFResponse, error) {
-	out := new(GetAWSDCVIFResponse)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCVIF", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *privateCustomAPIClient) GetAWSDCGateway(ctx context.Context, in *GetAWSDCGatewayRequest, opts ...grpc.CallOption) (*GetAWSDCGatewayResponse, error) {
-	out := new(GetAWSDCGatewayResponse)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCGateway", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PrivateCustomAPIServer is the server API for PrivateCustomAPI service.
 type PrivateCustomAPIServer interface {
 	// ListCloudNetworkTagKeys
@@ -1230,21 +603,6 @@ type PrivateCustomAPIServer interface {
 	// ListCloudNetworkTagValues retrieves cloud provider Values of tags.
 	// The tag values are retrieved based on the key
 	ListCloudNetworkTagValues(context.Context, *ListCloudNetworkTagValuesRequest) (*ListCloudNetworkTagValuesResponse, error)
-	// GetAWSDCConnection
-	//
-	// x-displayName: "Get AWS Direct Connect Connection"
-	// Retrieves AWS Direct Connect Connection
-	GetAWSDCConnection(context.Context, *GetAWSDCConnectionRequest) (*GetAWSDCConnectionResponse, error)
-	// GetAWSDCVIF
-	//
-	// x-displayName: "Get AWS Direct Connect VIF"
-	// Retrieves AWS Direct Connect VIF
-	GetAWSDCVIF(context.Context, *GetAWSDCVIFRequest) (*GetAWSDCVIFResponse, error)
-	// GetAWSDCGateway
-	//
-	// x-displayName: "Get AWS Direct Connect Gateway"
-	// Retrieves AWS Direct Connect Gateway
-	GetAWSDCGateway(context.Context, *GetAWSDCGatewayRequest) (*GetAWSDCGatewayResponse, error)
 }
 
 // UnimplementedPrivateCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1256,15 +614,6 @@ func (*UnimplementedPrivateCustomAPIServer) ListCloudNetworkTagKeys(ctx context.
 }
 func (*UnimplementedPrivateCustomAPIServer) ListCloudNetworkTagValues(ctx context.Context, req *ListCloudNetworkTagValuesRequest) (*ListCloudNetworkTagValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCloudNetworkTagValues not implemented")
-}
-func (*UnimplementedPrivateCustomAPIServer) GetAWSDCConnection(ctx context.Context, req *GetAWSDCConnectionRequest) (*GetAWSDCConnectionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAWSDCConnection not implemented")
-}
-func (*UnimplementedPrivateCustomAPIServer) GetAWSDCVIF(ctx context.Context, req *GetAWSDCVIFRequest) (*GetAWSDCVIFResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAWSDCVIF not implemented")
-}
-func (*UnimplementedPrivateCustomAPIServer) GetAWSDCGateway(ctx context.Context, req *GetAWSDCGatewayRequest) (*GetAWSDCGatewayResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAWSDCGateway not implemented")
 }
 
 func RegisterPrivateCustomAPIServer(s *grpc.Server, srv PrivateCustomAPIServer) {
@@ -1307,60 +656,6 @@ func _PrivateCustomAPI_ListCloudNetworkTagValues_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PrivateCustomAPI_GetAWSDCConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAWSDCConnectionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivateCustomAPIServer).GetAWSDCConnection(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCConnection",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivateCustomAPIServer).GetAWSDCConnection(ctx, req.(*GetAWSDCConnectionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PrivateCustomAPI_GetAWSDCVIF_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAWSDCVIFRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivateCustomAPIServer).GetAWSDCVIF(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCVIF",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivateCustomAPIServer).GetAWSDCVIF(ctx, req.(*GetAWSDCVIFRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _PrivateCustomAPI_GetAWSDCGateway_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAWSDCGatewayRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivateCustomAPIServer).GetAWSDCGateway(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ves.io.schema.topology.PrivateCustomAPI/GetAWSDCGateway",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivateCustomAPIServer).GetAWSDCGateway(ctx, req.(*GetAWSDCGatewayRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 var _PrivateCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.topology.PrivateCustomAPI",
 	HandlerType: (*PrivateCustomAPIServer)(nil),
@@ -1372,18 +667,6 @@ var _PrivateCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCloudNetworkTagValues",
 			Handler:    _PrivateCustomAPI_ListCloudNetworkTagValues_Handler,
-		},
-		{
-			MethodName: "GetAWSDCConnection",
-			Handler:    _PrivateCustomAPI_GetAWSDCConnection_Handler,
-		},
-		{
-			MethodName: "GetAWSDCVIF",
-			Handler:    _PrivateCustomAPI_GetAWSDCVIF_Handler,
-		},
-		{
-			MethodName: "GetAWSDCGateway",
-			Handler:    _PrivateCustomAPI_GetAWSDCGateway_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1481,117 +764,6 @@ func (m *ListCloudNetworkTagValuesRequest) MarshalToSizedBuffer(dAtA []byte) (in
 	return len(dAtA) - i, nil
 }
 
-func (m *GetAWSDCConnectionRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCConnectionRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCConnectionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ConnectId) > 0 {
-		i -= len(m.ConnectId)
-		copy(dAtA[i:], m.ConnectId)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.ConnectId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAWSDCVIFRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCVIFRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCVIFRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.VifId) > 0 {
-		i -= len(m.VifId)
-		copy(dAtA[i:], m.VifId)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.VifId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAWSDCGatewayRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCGatewayRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCGatewayRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.GatewayId) > 0 {
-		i -= len(m.GatewayId)
-		copy(dAtA[i:], m.GatewayId)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.GatewayId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *ListCloudNetworkTagKeysResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1656,111 +828,6 @@ func (m *ListCloudNetworkTagValuesResponse) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 
-func (m *GetAWSDCConnectionResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCConnectionResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCConnectionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ConnectionStatus != nil {
-		{
-			size, err := m.ConnectionStatus.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintPrivateCustomapi(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAWSDCVIFResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCVIFResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCVIFResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.VifStatus != nil {
-		{
-			size, err := m.VifStatus.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintPrivateCustomapi(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAWSDCGatewayResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAWSDCGatewayResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAWSDCGatewayResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.GatewayStatus != nil {
-		{
-			size, err := m.GatewayStatus.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintPrivateCustomapi(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func encodeVarintPrivateCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPrivateCustomapi(v)
 	base := offset
@@ -1816,57 +883,6 @@ func (m *ListCloudNetworkTagValuesRequest) Size() (n int) {
 	return n
 }
 
-func (m *GetAWSDCConnectionRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	l = len(m.ConnectId)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	return n
-}
-
-func (m *GetAWSDCVIFRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	l = len(m.VifId)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	return n
-}
-
-func (m *GetAWSDCGatewayRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	l = len(m.GatewayId)
-	if l > 0 {
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	return n
-}
-
 func (m *ListCloudNetworkTagKeysResponse) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1893,45 +909,6 @@ func (m *ListCloudNetworkTagValuesResponse) Size() (n int) {
 			l = len(s)
 			n += 1 + l + sovPrivateCustomapi(uint64(l))
 		}
-	}
-	return n
-}
-
-func (m *GetAWSDCConnectionResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ConnectionStatus != nil {
-		l = m.ConnectionStatus.Size()
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	return n
-}
-
-func (m *GetAWSDCVIFResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.VifStatus != nil {
-		l = m.VifStatus.Size()
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
-	}
-	return n
-}
-
-func (m *GetAWSDCGatewayResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.GatewayStatus != nil {
-		l = m.GatewayStatus.Size()
-		n += 1 + l + sovPrivateCustomapi(uint64(l))
 	}
 	return n
 }
@@ -1967,39 +944,6 @@ func (this *ListCloudNetworkTagValuesRequest) String() string {
 	}, "")
 	return s
 }
-func (this *GetAWSDCConnectionRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCConnectionRequest{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`ConnectId:` + fmt.Sprintf("%v", this.ConnectId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetAWSDCVIFRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCVIFRequest{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`VifId:` + fmt.Sprintf("%v", this.VifId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetAWSDCGatewayRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCGatewayRequest{`,
-		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
-		`GatewayId:` + fmt.Sprintf("%v", this.GatewayId) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ListCloudNetworkTagKeysResponse) String() string {
 	if this == nil {
 		return "nil"
@@ -2016,36 +960,6 @@ func (this *ListCloudNetworkTagValuesResponse) String() string {
 	}
 	s := strings.Join([]string{`&ListCloudNetworkTagValuesResponse{`,
 		`Values:` + fmt.Sprintf("%v", this.Values) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetAWSDCConnectionResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCConnectionResponse{`,
-		`ConnectionStatus:` + strings.Replace(fmt.Sprintf("%v", this.ConnectionStatus), "DirectConnectConnectionStatusType", "cloud_link.DirectConnectConnectionStatusType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetAWSDCVIFResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCVIFResponse{`,
-		`VifStatus:` + strings.Replace(fmt.Sprintf("%v", this.VifStatus), "VirtualInterfaceStatusType", "cloud_link.VirtualInterfaceStatusType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *GetAWSDCGatewayResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&GetAWSDCGatewayResponse{`,
-		`GatewayStatus:` + strings.Replace(fmt.Sprintf("%v", this.GatewayStatus), "DirectConnectGatewayStatusType", "cloud_link.DirectConnectGatewayStatusType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2362,357 +1276,6 @@ func (m *ListCloudNetworkTagValuesRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *GetAWSDCConnectionRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCConnectionRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCConnectionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ConnectId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAWSDCVIFRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCVIFRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCVIFRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VifId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.VifId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAWSDCGatewayRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCGatewayRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCGatewayRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatewayId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GatewayId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *ListCloudNetworkTagKeysResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2858,273 +1421,6 @@ func (m *ListCloudNetworkTagValuesResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Values = append(m.Values, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAWSDCConnectionResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCConnectionResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCConnectionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionStatus", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ConnectionStatus == nil {
-				m.ConnectionStatus = &cloud_link.DirectConnectConnectionStatusType{}
-			}
-			if err := m.ConnectionStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAWSDCVIFResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCVIFResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCVIFResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VifStatus", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VifStatus == nil {
-				m.VifStatus = &cloud_link.VirtualInterfaceStatusType{}
-			}
-			if err := m.VifStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAWSDCGatewayResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPrivateCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAWSDCGatewayResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAWSDCGatewayResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GatewayStatus", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPrivateCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPrivateCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.GatewayStatus == nil {
-				m.GatewayStatus = &cloud_link.DirectConnectGatewayStatusType{}
-			}
-			if err := m.GatewayStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

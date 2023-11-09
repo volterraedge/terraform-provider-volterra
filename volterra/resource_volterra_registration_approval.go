@@ -30,12 +30,13 @@ const (
 )
 
 type approvalParams struct {
-	clusterName     string
-	clusterSize     int32
-	latitude        float32
-	longitude       float32
-	connectedRegion string
-	hostname        string
+	clusterName        string
+	clusterSize        int32
+	latitude           float32
+	longitude          float32
+	connectedRegion    string
+	hostname           string
+	privateNetworkName string
 }
 
 // resourceVolterraRegistrationApproval is implementation of Volterra's Node Registration Approval Resource
@@ -95,6 +96,10 @@ func resourceVolterraRegistrationApproval() *schema.Resource {
 					"SITE_TO_SITE_TUNNEL_SSL",
 				}, false),
 			},
+			"private_network_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -122,6 +127,10 @@ func resourceVolterraRegistrationApprovalCreate(d *schema.ResourceData, meta int
 	}
 	if v, ok := d.GetOk("hostname"); ok {
 		aParams.hostname = v.(string)
+	}
+
+	if v, ok := d.GetOk("private_network_name"); ok {
+		aParams.privateNetworkName = v.(string)
 	}
 
 	var retry, waitTime int32
@@ -248,23 +257,21 @@ func findRegistration(client *APIClient, approvalReq *ves_io_schema_registration
 	}
 	rsp := rspProto.(*ves_io_schema_registration.ListResponse)
 	for _, it := range rsp.Items {
-		if it.Object != nil || it.Object.Spec != nil || it.Object.Spec.GcSpec != nil || it.Object.Spec.GcSpec.Passport != nil || it.Object.Spec.GcSpec.Infra != nil {
-			if it.Object.Spec.GcSpec.Passport.ClusterName == aParams.clusterName && it.Object.Spec.GcSpec.Infra.Hostname == aParams.hostname {
-				approvalReq.Passport = it.Object.Spec.GcSpec.Passport
-				approvalReq.Passport.ClusterSize = aParams.clusterSize
+		if it.GetGetSpec().GetPassport().GetClusterName() == aParams.clusterName && it.GetGetSpec().GetInfra().GetHostname() == aParams.hostname {
+			approvalReq.Passport = it.GetSpec.Passport
+			approvalReq.Passport.ClusterSize = aParams.clusterSize
 
-				if aParams.latitude != 0 {
-					approvalReq.Passport.Latitude = aParams.latitude
-				}
-				if aParams.longitude != 0 {
-					approvalReq.Passport.Longitude = aParams.longitude
-				}
-				if aParams.connectedRegion != "" {
-					approvalReq.ConnectedRegion = aParams.connectedRegion
-				}
-				approvalReq.Name = it.Object.Metadata.Name
-				break
+			if aParams.latitude != 0 {
+				approvalReq.Passport.Latitude = aParams.latitude
 			}
+			if aParams.longitude != 0 {
+				approvalReq.Passport.Longitude = aParams.longitude
+			}
+			if aParams.connectedRegion != "" {
+				approvalReq.ConnectedRegion = aParams.connectedRegion
+			}
+			approvalReq.Name = it.Metadata.Name
+			break
 		}
 	}
 	return nil

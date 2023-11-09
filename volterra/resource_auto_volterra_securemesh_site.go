@@ -130,7 +130,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 						"bond_devices": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -167,17 +167,17 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 									"link_polling_interval": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"link_up_delay": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -244,13 +244,13 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 			"master_node_configuration": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"public_ip": {
@@ -288,7 +288,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -333,7 +333,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -347,7 +347,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -385,7 +385,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -465,14 +465,14 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -524,7 +524,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -573,7 +573,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -591,7 +591,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -621,7 +621,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -646,7 +646,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -666,12 +666,12 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -696,7 +696,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -780,7 +780,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									"interfaces": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -810,7 +810,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"monitor": {
@@ -874,7 +874,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"mtu": {
@@ -920,7 +920,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																		"dhcp_networks": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -985,7 +985,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"pool_settings": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"pools": {
@@ -1099,7 +1099,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1173,7 +1173,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1184,7 +1184,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6_auto_config": {
@@ -1223,7 +1223,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																								"dhcp_networks": {
 
 																									Type:     schema.TypeList,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -1432,7 +1432,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1506,7 +1506,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1672,7 +1672,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																		"dhcp_networks": {
 
 																			Type:     schema.TypeList,
-																			Optional: true,
+																			Required: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -1737,7 +1737,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"pool_settings": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"pools": {
@@ -1851,7 +1851,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1925,7 +1925,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1936,7 +1936,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"device": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"no_ipv6_address": {
@@ -1988,7 +1988,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"ip_address": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2062,7 +2062,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"ip_address": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -2130,7 +2130,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2163,7 +2163,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2295,7 +2295,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2376,7 +2376,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2545,7 +2545,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2626,7 +2626,7 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 												"static_routes": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 

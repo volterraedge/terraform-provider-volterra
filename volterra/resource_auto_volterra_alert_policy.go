@@ -126,7 +126,7 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 			"receivers": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -154,7 +154,7 @@ func resourceVolterraAlertPolicy() *schema.Resource {
 			"routes": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -683,7 +683,6 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 									alertlabelStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
-										//alertlabel[key.(string)].MatcherType = w.(string)
 										alertlabel[key.(string)].MatcherType = nil
 									}
 
@@ -1265,7 +1264,6 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 									alertlabelStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
-										//alertlabel[key.(string)].MatcherType = w.(string)
 										alertlabel[key.(string)].MatcherType = nil
 									}
 

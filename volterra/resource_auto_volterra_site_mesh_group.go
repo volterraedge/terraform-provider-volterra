@@ -143,7 +143,7 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 						"hub_mesh_group": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

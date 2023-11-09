@@ -406,12 +406,15 @@ type uamKubeConfigAPIInprocClient struct {
 }
 
 func (c *uamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig", nil)
 	return c.UamKubeConfigAPIServer.CreateGlobalKubeConfig(ctx, in)
 }
 func (c *uamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig", nil)
 	return c.UamKubeConfigAPIServer.ListGlobalKubeConfig(ctx, in)
 }
 func (c *uamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq, opts ...grpc.CallOption) (*KubeConfigStatusRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig", nil)
 	return c.UamKubeConfigAPIServer.RevokeGlobalKubeConfig(ctx, in)
 }
 

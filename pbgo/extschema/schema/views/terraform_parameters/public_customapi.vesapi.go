@@ -310,9 +310,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.terraform_parameters.CustomAPI.Get", nil)
 	return c.CustomAPIServer.Get(ctx, in)
 }
 func (c *customAPIInprocClient) GetStatus(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetStatusResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.terraform_parameters.CustomAPI.GetStatus", nil)
 	return c.CustomAPIServer.GetStatus(ctx, in)
 }
 

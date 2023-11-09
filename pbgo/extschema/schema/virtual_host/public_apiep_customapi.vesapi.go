@@ -1134,33 +1134,43 @@ type apiepCustomAPIInprocClient struct {
 }
 
 func (c *apiepCustomAPIInprocClient) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary", nil)
 	return c.ApiepCustomAPIServer.GetAPICallSummary(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq, opts ...grpc.CallOption) (*APIEndpointRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint", nil)
 	return c.ApiepCustomAPIServer.GetAPIEndpoint(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq, opts ...grpc.CallOption) (*APIEndpointLearntSchemaRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema", nil)
 	return c.ApiepCustomAPIServer.GetAPIEndpointLearntSchema(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpointPDF(ctx context.Context, in *APIEndpointPDFReq, opts ...grpc.CallOption) (*APIEndpointPDFRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF", nil)
 	return c.ApiepCustomAPIServer.GetAPIEndpointPDF(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *APIEndpointsReq, opts ...grpc.CallOption) (*APIEndpointsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints", nil)
 	return c.ApiepCustomAPIServer.GetAPIEndpoints(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsReq, opts ...grpc.CallOption) (*ApiEndpointsStatsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats", nil)
 	return c.ApiepCustomAPIServer.GetApiEndpointsStats(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec", nil)
 	return c.ApiepCustomAPIServer.GetSwaggerSpec(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq, opts ...grpc.CallOption) (*GetTopAPIEndpointsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints", nil)
 	return c.ApiepCustomAPIServer.GetTopAPIEndpoints(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq, opts ...grpc.CallOption) (*GetTopSensitiveDataRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData", nil)
 	return c.ApiepCustomAPIServer.GetTopSensitiveData(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetVulnerabilities(ctx context.Context, in *GetVulnerabilitiesReq, opts ...grpc.CallOption) (*GetVulnerabilitiesRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities", nil)
 	return c.ApiepCustomAPIServer.GetVulnerabilities(ctx, in)
 }
 

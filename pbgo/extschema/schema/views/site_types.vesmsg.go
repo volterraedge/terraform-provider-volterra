@@ -6080,6 +6080,182 @@ func OfflineSurvivabilityModeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *PrivateConnectConfigType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateConnectConfigType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateConnectConfigType) DeepCopy() *PrivateConnectConfigType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateConnectConfigType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateConnectConfigType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateConnectConfigType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateConnectConfigTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *PrivateConnectConfigType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudLinkDRefInfo()
+
+}
+
+func (m *PrivateConnectConfigType) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_link.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_link.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_link",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *PrivateConnectConfigType) GetCloudLinkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_link.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_link")
+	}
+
+	vref := m.GetCloudLink()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_link.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidatePrivateConnectConfigType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateConnectConfigType) CloudLinkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_link")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePrivateConnectConfigType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateConnectConfigType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateConnectConfigType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_link"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_link"))
+		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateConnectConfigTypeValidator = func() *ValidatePrivateConnectConfigType {
+	v := &ValidatePrivateConnectConfigType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCloudLink := v.CloudLinkValidationRuleHandler
+	rulesCloudLink := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCloudLink(rulesCloudLink)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PrivateConnectConfigType.cloud_link: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_link"] = vFn
+
+	return v
+}()
+
+func PrivateConnectConfigTypeValidator() db.Validator {
+	return DefaultPrivateConnectConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SecurityGroupType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

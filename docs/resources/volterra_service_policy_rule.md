@@ -21,28 +21,19 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
-
-  client_name_matcher {
-    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
-
-    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
-  }
+  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
+  any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+  any_ip = true
 
-  ip_prefix_list {
-    invert_match = true
-
-    ip_prefixes = ["192.168.20.0/24"]
-  }
   waf_action {
-    // One of the arguments from this list "none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control" must be set
-    none = true
+    // One of the arguments from this list "app_firewall_detection_control data_guard_control jwt_validation none waf_skip_processing waf_in_monitoring_mode" must be set
+    waf_in_monitoring_mode = true
   }
 }
 
@@ -111,9 +102,9 @@ Argument Reference
 
 `any_dst_ip` - (Optional) Any Destination IP (bool).
 
-`dst_ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Dst Ip Matcher ](#dst-ip-matcher) below for details.
+`dst_ip_matcher` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.. See [Dst Ip Matcher ](#dst-ip-matcher) below for details.
 
-`dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
+`dst_ip_prefix_list` - (Optional) The predicate evaluates to true if the destination address is covered by one or more of the IP Prefixes from the list.. See [Dst Ip Prefix List ](#dst-ip-prefix-list) below for details.
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -125,9 +116,9 @@ Argument Reference
 
 `any_ip` - (Optional) Any Source IP (bool).
 
-`ip_matcher` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
+`ip_matcher` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.. See [Ip Matcher ](#ip-matcher) below for details.
 
-`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 `ip_reputation_action` - (Optional) Specifies how IP Reputation is handled. See [Ip Reputation Action ](#ip-reputation-action) below for details.
 
@@ -136,6 +127,8 @@ Argument Reference
 `label_matcher` - (Optional) other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
 
 `mum_action` - (Optional) Specifies how Malicious User Mitigation is handled. See [Mum Action ](#mum-action) below for details.
+
+`origin_server_subsets_action` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
 
 `path` - (Optional) The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.. See [Path ](#path) below for details.
 
@@ -337,7 +330,7 @@ The predicate evaluates to true if the destination ASN is present in one of the 
 
 ### Dst Ip Matcher
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -345,11 +338,13 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 ### Dst Ip Prefix List
 
-The predicate evaluates to true if the destination address is covered by one or more of the IPv4 Prefixes from the list..
+The predicate evaluates to true if the destination address is covered by one or more of the IP Prefixes from the list..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Exclude Attack Type Contexts
 
@@ -427,7 +422,7 @@ The predicate evaluates to true if the actual HTTP method belongs is present in 
 
 ### Ip Matcher
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes in the IP Prefix Sets..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
@@ -435,11 +430,13 @@ The predicate evaluates to true if the client IPv4 Address is covered by one or 
 
 ### Ip Prefix List
 
-The predicate evaluates to true if the client IPv4 Address is covered by one or more of the IPv4 Prefixes from the list..
+The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list..
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Ip Reputation Action
 
@@ -465,6 +462,10 @@ Criteria for matching the values for the Arg. The match is successful if any of 
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
+### Jwt Validation
+
+Validate JWT for this request.
+
 ### L4 Dest Matcher
 
 IP matches one of the prefixes and the destination port belongs to the port range..
@@ -486,10 +487,6 @@ A list of L4 destinations used as match criteria. The match is considered succes
 other labels do not matter..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
-
-### Max Body Size None
-
-x-displayName: "Not Configured".
 
 ### Max Cookie Count None
 
@@ -536,10 +533,6 @@ x-displayName: "Not Configured".
 x-displayName: "Not Configured".
 
 ### Max Request Size None
-
-x-displayName: "Not Configured".
-
-### Max Upload File Size None
 
 x-displayName: "Not Configured".
 
@@ -633,10 +626,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value..
 
-`max_body_size_exceeds` - (Optional) x-example: "32768" (`Int`).
-
-`max_body_size_none` - (Optional) x-displayName: "Not Configured" (bool).
-
 `max_cookie_count_exceeds` - (Optional) x-example: "40" (`Int`).
 
 `max_cookie_count_none` - (Optional) x-displayName: "Not Configured" (bool).
@@ -685,10 +674,6 @@ Place limits on request based on the request attributes. The request matches if 
 
 `max_request_size_none` - (Optional) x-displayName: "Not Configured" (bool).
 
-`max_upload_file_size_exceeds` - (Optional) x-example: "1024" (`Int`).
-
-`max_upload_file_size_none` - (Optional) x-displayName: "Not Configured" (bool).
-
 `max_url_size_exceeds` - (Optional) x-example: "4096" (`Int`).
 
 `max_url_size_none` - (Optional) x-displayName: "Not Configured" (bool).
@@ -703,11 +688,11 @@ The predicate evaluates to true if the expressions in the label selector are tru
 
 Shape Protected Endpoint Action that include application traffic type and mitigation.
 
+`allow_goodbot` - (Required) Good bot (`Bool`).
+
 `app_traffic_type` - (Required) Traffic type (`String`).
 
 `flow_label` - (Required) Flow label (`String`).
-
-`good_bot` - (Required) Good bot (`String`).
 
 `mitigation` - (Required) Mitigation action for protected endpoint. See [Mitigation ](#mitigation) below for details.
 
@@ -784,6 +769,8 @@ App Firewall action to be enforced if the input request matches the rule..
 `app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `data_guard_control` - (Optional) Data Guard changes to be applied for this request. See [Data Guard Control ](#data-guard-control) below for details.
+
+`jwt_validation` - (Optional) Validate JWT for this request (bool).
 
 `none` - (Optional) Perform normal App Firewall processing for this request (bool).
 

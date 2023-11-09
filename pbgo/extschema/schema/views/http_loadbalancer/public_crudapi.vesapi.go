@@ -814,17 +814,18 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Create", nil)
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -833,12 +834,13 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Replace", nil)
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -846,12 +848,13 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Get", nil)
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -860,12 +863,13 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.List", nil)
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -874,12 +878,13 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Delete", nil)
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -888,22 +893,15 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 }
 
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
+	return &APIInprocClient{svc: svc}
 }
 
 // INPROC CRUD Client (satisfying server.CRUDClient interface)
 type crudAPIInprocClient struct {
-	svc svcfw.Service
+	cl APIClient
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
-	}
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -920,7 +918,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		}
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -941,12 +939,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -964,7 +956,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -974,12 +966,6 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -988,7 +974,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 	if err != nil {
 		return nil, errors.Wrap(err, "Get")
 	}
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -1064,12 +1050,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1084,7 +1064,7 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
 	}
 
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1098,12 +1078,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1114,7 +1088,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		return errors.Wrap(err, "Delete")
 	}
 
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1124,8 +1098,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -2572,6 +2545,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_typeDiscoveredAPISettings": {
+            "type": "object",
+            "description": "x-example: \"2\"\nConfigure Discovered API Settings.",
+            "title": "DiscoveredAPISettings",
+            "x-displayname": "Discovered API Settings",
+            "x-ves-proto-message": "ves.io.schema.app_type.DiscoveredAPISettings",
+            "properties": {
+                "purge_duration_for_inactive_discovered_apis": {
+                    "type": "integer",
+                    "description": " Inactive discovered API will be deleted after configured duration.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 7\n",
+                    "title": "purge_duration_for_inactive_discovered_apis",
+                    "format": "int64",
+                    "x-displayname": "Purge Duration for Inactive Discovered APIs",
+                    "x-ves-example": "2",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "7"
+                    }
+                }
+            }
+        },
         "app_typeKeyPattern": {
             "type": "object",
             "description": "Pattern to detect. Could be exact match or regex match.",
@@ -3081,6 +3075,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerAPIGroups": {
+            "type": "object",
+            "description": "x-displayName: \"API Groups\"",
+            "title": "api groups",
+            "properties": {
+                "api_groups": {
+                    "type": "array",
+                    "description": "x-displayName: \"API Groups\"\nx-required",
+                    "title": "api group",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "http_loadbalancerAPIProtectionRuleAction": {
             "type": "object",
             "description": "The action to take if the input request matches the rule.",
@@ -3392,6 +3401,7 @@ var APISwaggerJSON string = `{
             "description": "Specifies the settings used for API discovery",
             "title": "API Discovery Setting",
             "x-displayname": "API Discovery Setting",
+            "x-ves-displayorder": "1,6,5",
             "x-ves-oneof-field-learn_from_redirect_traffic": "[\"disable_learn_from_redirect_traffic\",\"enable_learn_from_redirect_traffic\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting",
             "properties": {
@@ -3400,6 +3410,12 @@ var APISwaggerJSON string = `{
                     "title": "Disable learning from redirected request traffic",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Learning From Redirect Traffic"
+                },
+                "discovered_api_settings": {
+                    "description": " Configure Discovered API Settings.",
+                    "title": "Discovered API Settings",
+                    "$ref": "#/definitions/app_typeDiscoveredAPISettings",
+                    "x-displayname": "Discovered API Settings"
                 },
                 "enable_learn_from_redirect_traffic": {
                     "description": "Exclusive with [disable_learn_from_redirect_traffic]\n Enable learning API patterns from traffic with redirect response codes 3xx",
@@ -3596,6 +3612,75 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Web and Mobile Traffic\"\nWeb and mobile traffic channel.",
                     "title": "WebMobileTrafficChannel",
                     "$ref": "#/definitions/http_loadbalancerWebMobileTrafficType"
+                }
+            }
+        },
+        "http_loadbalancerAudiences": {
+            "type": "object",
+            "description": "x-displayName: \"Audiences\"",
+            "title": "audiences",
+            "properties": {
+                "audiences": {
+                    "type": "array",
+                    "description": "x-displayName: \"Values\"\nx-example: \"value\"\nx-required",
+                    "title": "audiences",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerBasePathsType": {
+            "type": "object",
+            "description": "x-displayName: \"Base Paths\"",
+            "title": "base_paths",
+            "properties": {
+                "base_paths": {
+                    "type": "array",
+                    "description": "x-displayName: \"Prefix Values\"\nx-example: \"/basepath\"\nx-required",
+                    "title": "base_paths",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerBlindfoldEncryptionType": {
+            "type": "object",
+            "description": "x-displayName: \"Blindfold\"\nKey encrypted using our Blindfold technology",
+            "title": "blindfold encryption type",
+            "properties": {
+                "built_in": {
+                    "description": "x-displayName: \"Built-In\"\nUse Built-In policy to encrypt key",
+                    "title": "built_in",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "custom_policy": {
+                    "description": "x-displayName: \"Custom\"\nChoose custom policy to encrypt key",
+                    "title": "custom_policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"JWKS to Blindfold\"\nx-required",
+                    "title": "key"
+                }
+            }
+        },
+        "http_loadbalancerBotDefenseAdvancedType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Advanced\"\nBot Defense Advanced",
+            "title": "BotDefenseAdvancedType",
+            "properties": {
+                "mobile": {
+                    "description": "x-displayName: \"Infrastructure For Mobile\"\nSelect infrastructure for mobile.",
+                    "title": "Mobile",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "web": {
+                    "description": "x-displayName: \"Infrastructure For Web\"\nSelect infrastructure for web.",
+                    "title": "Web",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -4387,6 +4472,65 @@ var APISwaggerJSON string = `{
                     "title": "use_http_lb_user_id",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Use HTTP-LB User Identifier"
+                }
+            }
+        },
+        "http_loadbalancerJWKS": {
+            "type": "object",
+            "description": "x-displayName: \"JSON Web Key Set (JWKS)\"\nThe JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+            "title": "jwks",
+            "properties": {
+                "blindfold": {
+                    "description": "x-displayName: \"Blindfold\"\nEncrypt JWKS",
+                    "title": "blindfold",
+                    "$ref": "#/definitions/http_loadbalancerBlindfoldEncryptionType"
+                },
+                "cleartext": {
+                    "type": "string",
+                    "description": "x-displayName: \"Clear Text\"\nStore JWKS in the clear text",
+                    "title": "cleartext"
+                }
+            }
+        },
+        "http_loadbalancerJWTValidation": {
+            "type": "object",
+            "description": "x-displayName: \"JWT Validation\"\nJWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\nJWTs before they are passed to your API origin. JWT Validation will also stop requests with expired\ntokens or tokens that are not yet valid.",
+            "title": "JWT Validation",
+            "properties": {
+                "action": {
+                    "description": "x-displayName: \"Action\"\nx-required",
+                    "title": "action",
+                    "$ref": "#/definitions/schemaAction"
+                },
+                "auth_server_uri": {
+                    "type": "string",
+                    "description": "x-displayName: \"Authorization Server Metadata URI\"\nJWKS URI will be will be retrieved from this URI",
+                    "title": "auth server uri"
+                },
+                "jwks": {
+                    "type": "string",
+                    "description": "x-displayName: \"JSON Web Key Set (JWKS)\"\nThe JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+                    "title": "jwks"
+                },
+                "jwks_config": {
+                    "description": "x-displayName: \"JSON Web Key Set (JWKS)\"\nThe JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.",
+                    "title": "jwks_config",
+                    "$ref": "#/definitions/http_loadbalancerJWKS"
+                },
+                "reserved_claims": {
+                    "description": "x-displayName: \"Reserved Claims Validation\"\nConfiguration required for validation of reserved claims. If some claims are absent in\nthe token validation of these claims should be disabled.",
+                    "title": "reserved_claims",
+                    "$ref": "#/definitions/http_loadbalancerReservedClaims"
+                },
+                "target": {
+                    "description": "x-displayName: \"Target\"\nx-required\nDefine endpoints for which JWT token validation will be performed",
+                    "title": "target",
+                    "$ref": "#/definitions/http_loadbalancerTarget"
+                },
+                "token_location": {
+                    "description": "x-displayName: \"Token Location\"\nx-required\nDefine where in the HTTP request the JWT token will be extracted",
+                    "title": "token location",
+                    "$ref": "#/definitions/http_loadbalancerTokenLocation"
                 }
             }
         },
@@ -5273,6 +5417,43 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ReplaceResponse"
         },
+        "http_loadbalancerReservedClaims": {
+            "type": "object",
+            "description": "x-displayName: \"Reserved claims configuration\"\nConfigurable Validation of reserved Claims",
+            "title": "reserved claims",
+            "properties": {
+                "audience": {
+                    "description": "x-displayName: \"Exact Match\"",
+                    "title": "audience",
+                    "$ref": "#/definitions/http_loadbalancerAudiences"
+                },
+                "audience_disable": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "audience_disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "issuer": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Match\"",
+                    "title": "issuer"
+                },
+                "issuer_disable": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "issuer_disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "validate_period_disable": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "validate_period_disable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "validate_period_enable": {
+                    "description": "x-displayName: \"Enable\"",
+                    "title": "validate_period_enable",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "http_loadbalancerRouteSimpleAdvancedOptions": {
             "type": "object",
             "description": "Configure advanced options for route like path rewrite, hash policy, etc.",
@@ -5283,7 +5464,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-hash_policy_choice": "[\"common_hash_policy\",\"specific_hash_policy\"]",
             "x-ves-oneof-field-mirroring_choice": "[\"disable_mirroring\",\"mirror_policy\"]",
-            "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"retry_policy\"]",
+            "x-ves-oneof-field-retry_policy_choice": "[\"default_retry_policy\",\"no_retry_policy\",\"retry_policy\"]",
             "x-ves-oneof-field-rewrite_choice": "[\"disable_prefix_rewrite\",\"prefix_rewrite\"]",
             "x-ves-oneof-field-spdy_choice": "[\"disable_spdy\",\"enable_spdy\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\",\"inherited_waf\"]",
@@ -5327,7 +5508,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CORS Policy"
                 },
                 "default_retry_policy": {
-                    "description": "Exclusive with [retry_policy]\n Use system default retry policy",
+                    "description": "Exclusive with [no_retry_policy retry_policy]\n Use system default retry policy",
                     "title": "Use Default Retry Policy",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Use Default Retry Policy"
@@ -5408,6 +5589,12 @@ var APISwaggerJSON string = `{
                     "title": "Enable Mirroring",
                     "$ref": "#/definitions/viewshttp_loadbalancerMirrorPolicyType",
                     "x-displayname": "Enable Mirroring"
+                },
+                "no_retry_policy": {
+                    "description": "Exclusive with [default_retry_policy retry_policy]\n Do not configure retry policy",
+                    "title": "No retry policy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do not retry"
                 },
                 "prefix_rewrite": {
                     "type": "string",
@@ -5499,8 +5686,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Retract cluster with no healthy endpoints"
                 },
                 "retry_policy": {
-                    "description": "Exclusive with [default_retry_policy]\n Configure custom retry policy",
-                    "title": "Use Default Retry Policy",
+                    "description": "Exclusive with [default_retry_policy no_retry_policy]\n Configure custom retry policy",
+                    "title": "Custom Retry Policy",
                     "$ref": "#/definitions/schemaRetryPolicyType",
                     "x-displayname": "Custom Retry Policy"
                 },
@@ -5580,10 +5767,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Match LB port"
                 },
                 "path": {
-                    "description": " URI path of route",
+                    "description": " URI path of route\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "path",
                     "$ref": "#/definitions/ioschemaPathMatcherType",
-                    "x-displayname": "Path"
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "route_direct_response": {
                     "description": " Send direct response",
@@ -5628,10 +5819,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Match LB port"
                 },
                 "path": {
-                    "description": " URI path of route",
+                    "description": " URI path of route\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "path",
                     "$ref": "#/definitions/ioschemaPathMatcherType",
-                    "x-displayname": "Path"
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "route_redirect": {
                     "description": " Send redirect response",
@@ -5723,10 +5918,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "path": {
-                    "description": " URI path of route",
+                    "description": " URI path of route\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "path",
                     "$ref": "#/definitions/ioschemaPathMatcherType",
-                    "x-displayname": "Path"
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -6224,6 +6423,55 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "http_loadbalancerTarget": {
+            "type": "object",
+            "description": "x-displayName: \"Target\"\nDefine endpoints for which JWT token validation will be performed",
+            "title": "target",
+            "properties": {
+                "all_endpoint": {
+                    "description": "x-displayName: \"All Endpoints\"\nValidation will be performed for all requests on this LB",
+                    "title": "all_endpoint",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "api_groups": {
+                    "description": "x-displayName: \"API Groups\"\nValidation will be performed for the endpoints mentioned in the API Groups",
+                    "title": "api group",
+                    "$ref": "#/definitions/http_loadbalancerAPIGroups"
+                },
+                "base_paths": {
+                    "description": "x-displayName: \"Base Paths\"\nValidation will be performed for selected path prefixes",
+                    "title": "base paths",
+                    "$ref": "#/definitions/http_loadbalancerBasePathsType"
+                }
+            }
+        },
+        "http_loadbalancerTokenLocation": {
+            "type": "object",
+            "description": "x-displayName: \"Token Location\"\nLocation of JWT in Http request",
+            "title": "token location",
+            "properties": {
+                "bearer_token": {
+                    "description": "x-displayName: \"Bearer Token\"\nToken is found in Authorization HTTP header with Bearer authentication scheme",
+                    "title": "bearer token",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "cookie": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cookie Name\"\nToken is found in the cookie",
+                    "title": "cookie"
+                },
+                "header": {
+                    "type": "string",
+                    "description": "x-displayName: \"Header Name\"\nToken is found in the header",
+                    "title": "header"
+                },
+                "query_param": {
+                    "type": "string",
+                    "description": "x-displayName: \"Query Parameter Name\"\nToken is found in the query string parameter",
+                    "title": "query param"
                 }
             }
         },
@@ -7267,25 +7515,25 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_mtls use_mtls_obj]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "Enable MTLS With Inline Certificate"
+                    "x-displayname": "Enable by uploading a new certificate"
                 },
                 "use_mtls_obj": {
                     "description": "Exclusive with [no_mtls use_mtls]\n",
                     "title": "Enable MTLS With Certificate Object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable MTLS With Certificate Object"
+                    "x-displayname": "Enable by selecting a certificate"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided Root CA list",
                     "title": "Use Server Verification",
                     "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext",
-                    "x-displayname": "Use Custom CA List"
+                    "x-displayname": "Use Custom Root CA Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default trusted CA list",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default Root CA list",
                     "title": "F5XC Trusted CA",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use Default Trusted CA List"
+                    "x-displayname": "Use Default Root CA Certificate"
                 }
             }
         },
@@ -7298,18 +7546,18 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Trusted CA List for verification of Server's certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA for verification of Server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA certificates for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
-                    "title": "Trusted CAs",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Upload a new Root CA certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -9481,6 +9729,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaAction": {
+            "type": "object",
+            "description": "x-displayName: \"Action\"",
+            "title": "action",
+            "properties": {
+                "block": {
+                    "description": "x-displayName: \"Block\"\nBlock the request and report the issue",
+                    "title": "block",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "report": {
+                    "description": "x-displayName: \"Report\"\nAllow the request and report the issue",
+                    "title": "report",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
             "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
@@ -10073,10 +10338,13 @@ var APISwaggerJSON string = `{
                 },
                 "allow_methods": {
                     "type": "string",
-                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-",
+                    "description": " Specifies the content for the access-control-allow-methods header\n\nExample: - \"GET\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_valid_methods: true\n",
                     "title": "allow_methods",
                     "x-displayname": "Allow Methods",
-                    "x-ves-example": "GET"
+                    "x-ves-example": "GET",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_valid_methods": "true"
+                    }
                 },
                 "allow_origin": {
                     "type": "array",
@@ -12207,18 +12475,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Upload a new Root CA certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",

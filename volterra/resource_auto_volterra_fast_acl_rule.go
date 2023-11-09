@@ -63,7 +63,7 @@ func resourceVolterraFastAclRule() *schema.Resource {
 			"action": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -155,7 +155,7 @@ func resourceVolterraFastAclRule() *schema.Resource {
 			"port": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 

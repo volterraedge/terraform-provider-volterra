@@ -814,17 +814,18 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_lb_pool.API.Create", nil)
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -833,12 +834,13 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_lb_pool.API.Replace", nil)
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -846,12 +848,13 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_lb_pool.API.Get", nil)
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -860,12 +863,13 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_lb_pool.API.List", nil)
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -874,12 +878,13 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_lb_pool.API.Delete", nil)
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -888,22 +893,15 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 }
 
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
+	return &APIInprocClient{svc: svc}
 }
 
 // INPROC CRUD Client (satisfying server.CRUDClient interface)
 type crudAPIInprocClient struct {
-	svc svcfw.Service
+	cl APIClient
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
-	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
-	}
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -920,7 +918,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		}
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -941,12 +939,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -964,7 +956,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -974,12 +966,6 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -988,7 +974,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 	if err != nil {
 		return nil, errors.Wrap(err, "Get")
 	}
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -1064,12 +1050,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1084,7 +1064,7 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
 	}
 
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1098,12 +1078,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.dns_lb_pool.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.dns_lb_pool")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1114,7 +1088,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		return errors.Wrap(err, "Delete")
 	}
 
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1124,8 +1098,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -2508,22 +2481,22 @@ var APISwaggerJSON string = `{
             "description": "Create DNS Load Balancer Pool in a given namespace. If one already exist it will give a error.",
             "title": "Create DNS Load Balancer Pool",
             "x-displayname": "Create DNS Load Balancer Pool",
-            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\"]",
+            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\",\"srv_pool\"]",
             "x-ves-oneof-field-ttl_choice": "[\"ttl\",\"use_rrset_ttl\"]",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.CreateSpecType",
             "properties": {
                 "a_pool": {
-                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAPool",
                     "x-displayname": "A"
                 },
                 "aaaa_pool": {
-                    "description": "Exclusive with [a_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAAAAPool",
                     "x-displayname": "AAAA"
                 },
                 "cname_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolCNAMEPool",
                     "x-displayname": "CNAME"
                 },
@@ -2537,9 +2510,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "mx_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool cname_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolMXPool",
                     "x-displayname": "MX"
+                },
+                "srv_pool": {
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool mx_pool]\n",
+                    "$ref": "#/definitions/dns_lb_poolSRVPool",
+                    "x-displayname": "SRV"
                 },
                 "ttl": {
                     "type": "integer",
@@ -2690,22 +2668,22 @@ var APISwaggerJSON string = `{
             "description": "Get DNS Load Balancer Pool details.",
             "title": "Get DNS Load Balancer Pool",
             "x-displayname": "Get DNS Load Balancer Pool",
-            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\"]",
+            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\",\"srv_pool\"]",
             "x-ves-oneof-field-ttl_choice": "[\"ttl\",\"use_rrset_ttl\"]",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.GetSpecType",
             "properties": {
                 "a_pool": {
-                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAPool",
                     "x-displayname": "A"
                 },
                 "aaaa_pool": {
-                    "description": "Exclusive with [a_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAAAAPool",
                     "x-displayname": "AAAA"
                 },
                 "cname_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolCNAMEPool",
                     "x-displayname": "CNAME"
                 },
@@ -2727,9 +2705,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "mx_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool cname_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolMXPool",
                     "x-displayname": "MX"
+                },
+                "srv_pool": {
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool mx_pool]\n",
+                    "$ref": "#/definitions/dns_lb_poolSRVPool",
+                    "x-displayname": "SRV"
                 },
                 "ttl": {
                     "type": "integer",
@@ -2755,24 +2738,24 @@ var APISwaggerJSON string = `{
             "title": "DNS Load Balancer Pool specification",
             "x-displayname": "Specification",
             "x-ves-displayorder": "4,9,14,6",
-            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\"]",
+            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\",\"srv_pool\"]",
             "x-ves-oneof-field-ttl_choice": "[\"ttl\",\"use_rrset_ttl\"]",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.GlobalSpecType",
             "properties": {
                 "a_pool": {
-                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool srv_pool]\n",
                     "title": "A Pool",
                     "$ref": "#/definitions/dns_lb_poolAPool",
                     "x-displayname": "A"
                 },
                 "aaaa_pool": {
-                    "description": "Exclusive with [a_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool cname_pool mx_pool srv_pool]\n",
                     "title": "AAAA Pool",
                     "$ref": "#/definitions/dns_lb_poolAAAAPool",
                     "x-displayname": "AAAA"
                 },
                 "cname_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool mx_pool srv_pool]\n",
                     "title": "CNAME Pool",
                     "$ref": "#/definitions/dns_lb_poolCNAMEPool",
                     "x-displayname": "CNAME"
@@ -2797,10 +2780,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "mx_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool cname_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool srv_pool]\n",
                     "title": "MX Pool",
                     "$ref": "#/definitions/dns_lb_poolMXPool",
                     "x-displayname": "MX"
+                },
+                "srv_pool": {
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool mx_pool]\n",
+                    "title": "SRV Pool",
+                    "$ref": "#/definitions/dns_lb_poolSRVPool",
+                    "x-displayname": "SRV"
                 },
                 "ttl": {
                     "type": "integer",
@@ -3118,22 +3107,22 @@ var APISwaggerJSON string = `{
             "description": "Replace DNS Load Balancer Pool in a given namespace.",
             "title": "Replace DNS Load Balancer Pool",
             "x-displayname": "Replace DNS Load Balancer Pool",
-            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\"]",
+            "x-ves-oneof-field-pool_type_choice": "[\"a_pool\",\"aaaa_pool\",\"cname_pool\",\"mx_pool\",\"srv_pool\"]",
             "x-ves-oneof-field-ttl_choice": "[\"ttl\",\"use_rrset_ttl\"]",
             "x-ves-proto-message": "ves.io.schema.dns_lb_pool.ReplaceSpecType",
             "properties": {
                 "a_pool": {
-                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [aaaa_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAPool",
                     "x-displayname": "A"
                 },
                 "aaaa_pool": {
-                    "description": "Exclusive with [a_pool cname_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool cname_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolAAAAPool",
                     "x-displayname": "AAAA"
                 },
                 "cname_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool mx_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool mx_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolCNAMEPool",
                     "x-displayname": "CNAME"
                 },
@@ -3147,9 +3136,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "mx_pool": {
-                    "description": "Exclusive with [a_pool aaaa_pool cname_pool]\n",
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool srv_pool]\n",
                     "$ref": "#/definitions/dns_lb_poolMXPool",
                     "x-displayname": "MX"
+                },
+                "srv_pool": {
+                    "description": "Exclusive with [a_pool aaaa_pool cname_pool mx_pool]\n",
+                    "$ref": "#/definitions/dns_lb_poolSRVPool",
+                    "x-displayname": "SRV"
                 },
                 "ttl": {
                     "type": "integer",
@@ -3166,6 +3160,140 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [ttl]\n Use TTL specified in the RRSet of the DNS Load Balancer Record which uses the pool",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Use RRSet TTL"
+                }
+            }
+        },
+        "dns_lb_poolSRVMember": {
+            "type": "object",
+            "description": "SRV Record which can be a member of a SRV type pool",
+            "title": "SRVMember",
+            "x-displayname": "SRV member",
+            "x-ves-displayorder": "1,5,2,3,4,7,6",
+            "x-ves-proto-message": "ves.io.schema.dns_lb_pool.SRVMember",
+            "properties": {
+                "final_translation": {
+                    "type": "boolean",
+                    "description": " If this flag is true, the SRV record will not be translated further.",
+                    "title": "Final Translation",
+                    "format": "boolean",
+                    "x-displayname": "Final Translation"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Pool member name\n\nExample: - \"web server 1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "web server 1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port on which the service can be found\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Priority of the target. A lower number indicates a higher preference.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "ratio": {
+                    "type": "integer",
+                    "description": " Ratio\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "title": "Ratio",
+                    "format": "int64",
+                    "x-displayname": "Load Balancing Ratio",
+                    "x-ves-example": "10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
+                },
+                "target": {
+                    "type": "string",
+                    "description": " Domain name of the machine providing the service\n\nExample: - \"my.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$\n",
+                    "title": "Target",
+                    "x-displayname": "Target",
+                    "x-ves-example": "my.example.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.pattern": "^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$"
+                    }
+                },
+                "weight": {
+                    "type": "integer",
+                    "description": " Weight of the target. A higher number indicates a higher preference.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Weight",
+                    "format": "int64",
+                    "x-displayname": "Weight",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "dns_lb_poolSRVPool": {
+            "type": "object",
+            "title": "SRV Pool",
+            "x-displayname": "Pool for SRV Record",
+            "x-ves-proto-message": "ves.io.schema.dns_lb_pool.SRVPool",
+            "properties": {
+                "max_answers": {
+                    "type": "integer",
+                    "description": " Limit on number of Resource Records to be included in the response to query\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "Maximum Answers",
+                    "format": "int64",
+                    "x-displayname": "Maximum Answers",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "members": {
+                    "type": "array",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Collection of SRV record members",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/dns_lb_poolSRVMember"
+                    },
+                    "x-displayname": "Pool Members",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },

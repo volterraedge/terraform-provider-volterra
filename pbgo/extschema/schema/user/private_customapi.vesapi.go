@@ -310,9 +310,11 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomPrivateAPI.CascadeDelete", nil)
 	return c.CustomPrivateAPIServer.CascadeDelete(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest, opts ...grpc.CallOption) (*LastLoginUpdateResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin", nil)
 	return c.CustomPrivateAPIServer.UpdateLastLogin(ctx, in)
 }
 

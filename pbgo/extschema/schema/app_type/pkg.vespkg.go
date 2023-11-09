@@ -60,6 +60,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_type.CustomSections"] = CustomSectionsValidator()
 	vr["ves.io.schema.app_type.CustomSensitiveDataDetectionRule"] = CustomSensitiveDataDetectionRuleValidator()
 	vr["ves.io.schema.app_type.CustomSensitiveDataType"] = CustomSensitiveDataTypeValidator()
+	vr["ves.io.schema.app_type.DiscoveredAPISettings"] = DiscoveredAPISettingsValidator()
 	vr["ves.io.schema.app_type.DiscoveredSchema"] = DiscoveredSchemaValidator()
 	vr["ves.io.schema.app_type.Feature"] = FeatureValidator()
 	vr["ves.io.schema.app_type.GetSpecType"] = GetSpecTypeValidator()

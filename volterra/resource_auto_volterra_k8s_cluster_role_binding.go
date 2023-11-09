@@ -64,7 +64,7 @@ func resourceVolterraK8SClusterRoleBinding() *schema.Resource {
 			"k8s_cluster_role": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -87,7 +87,7 @@ func resourceVolterraK8SClusterRoleBinding() *schema.Resource {
 			"subjects": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -106,12 +106,12 @@ func resourceVolterraK8SClusterRoleBinding() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"namespace": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

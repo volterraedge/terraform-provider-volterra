@@ -21,15 +21,17 @@ resource "volterra_dns_lb_pool" "example" {
   namespace           = "staging"
   load_balancing_mode = ["load_balancing_mode"]
 
-  // One of the arguments from this list "aaaa_pool cname_pool mx_pool a_pool" must be set
+  // One of the arguments from this list "aaaa_pool cname_pool mx_pool srv_pool a_pool" must be set
 
   a_pool {
-    // One of the arguments from this list "disable_health_check health_check" must be set
+    // One of the arguments from this list "health_check disable_health_check" must be set
     disable_health_check = true
     max_answers          = "1"
 
     members {
+      disable     = true
       ip_endpoint = "8.8.8.8"
+      name        = "web server 1"
       priority    = "10"
       ratio       = "10"
     }
@@ -69,6 +71,8 @@ Argument Reference
 
 `mx_pool` - (Optional) x-displayName: "MX". See [Mx Pool ](#mx-pool) below for details.
 
+`srv_pool` - (Optional) x-displayName: "SRV". See [Srv Pool ](#srv-pool) below for details.
+
 `ttl` - (Optional) Custom TTL in seconds (default 30) for responses from this pool (`Int`).
 
 `use_rrset_ttl` - (Optional) Use TTL specified in the RRSet of the DNS Load Balancer Record which uses the pool (bool).
@@ -107,7 +111,11 @@ When health check is disabled, the pool member is presumed to be always healthy.
 
 x-required.
 
+`disable` - (Optional) A value of true will disable the pool-member (`Bool`).
+
 `ip_endpoint` - (Required) Public IP address (`String`).
+
+`name` - (Optional) Pool member name (`String`).
 
 `priority` - (Optional) Used if the pool’s load balancing mode is set to Priority (`Int`).
 
@@ -130,6 +138,14 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Srv Pool
+
+x-displayName: "SRV".
+
+`max_answers` - (Required) Limit on number of Resource Records to be included in the response to query (`Int`).
+
+`members` - (Required) x-required. See [Members ](#members) below for details.
 
 Attribute Reference
 -------------------

@@ -92,12 +92,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"role_arn": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"session_name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"session_tags": {
@@ -117,13 +117,13 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"access_key": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"secret_key": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -141,7 +141,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -171,7 +171,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -196,7 +196,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -216,12 +216,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -246,7 +246,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -267,13 +267,13 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"client_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"client_secret": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -291,7 +291,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -321,7 +321,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -346,7 +346,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -366,12 +366,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -396,7 +396,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -407,12 +407,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"subscription_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"tenant_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -427,18 +427,18 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"certificate_url": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"client_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"password": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -456,7 +456,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -486,7 +486,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -511,7 +511,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -531,12 +531,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -561,7 +561,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -572,12 +572,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 						"subscription_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"tenant_id": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -593,7 +593,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 						"credential_file": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -611,7 +611,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -641,7 +641,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -666,7 +666,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -686,12 +686,12 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -716,7 +716,7 @@ func resourceVolterraCloudCredentials() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

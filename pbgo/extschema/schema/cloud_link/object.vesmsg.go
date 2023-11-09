@@ -89,30 +89,6 @@ func (v *ValidateAWSStatusType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
-	if fv, exists := v.FldValidators["gateway_status"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("gateway_status"))
-		for idx, item := range m.GetGatewayStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["vif_status"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("vif_status"))
-		for idx, item := range m.GetVifStatus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	return nil
 }
 
@@ -121,10 +97,6 @@ var DefaultAWSStatusTypeValidator = func() *ValidateAWSStatusType {
 	v := &ValidateAWSStatusType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["connection_status"] = DirectConnectConnectionStatusTypeValidator().Validate
-
-	v.FldValidators["vif_status"] = VirtualInterfaceStatusTypeValidator().Validate
-
-	v.FldValidators["gateway_status"] = DirectConnectGatewayStatusTypeValidator().Validate
 
 	return v
 }()
@@ -407,6 +379,145 @@ func BGPPeerTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *Coordinates) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Coordinates) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Coordinates) DeepCopy() *Coordinates {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Coordinates{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Coordinates) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Coordinates) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CoordinatesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCoordinates struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCoordinates) LatitudeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for latitude")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCoordinates) LongitudeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewFloatValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for longitude")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCoordinates) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Coordinates)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Coordinates got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["latitude"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("latitude"))
+		if err := fv(ctx, m.GetLatitude(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["longitude"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("longitude"))
+		if err := fv(ctx, m.GetLongitude(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCoordinatesValidator = func() *ValidateCoordinates {
+	v := &ValidateCoordinates{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLatitude := v.LatitudeValidationRuleHandler
+	rulesLatitude := map[string]string{
+		"ves.io.schema.rules.float.gte": "-90.0",
+		"ves.io.schema.rules.float.lte": "90.0",
+	}
+	vFn, err = vrhLatitude(rulesLatitude)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Coordinates.latitude: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["latitude"] = vFn
+
+	vrhLongitude := v.LongitudeValidationRuleHandler
+	rulesLongitude := map[string]string{
+		"ves.io.schema.rules.float.gte": "-180.0",
+		"ves.io.schema.rules.float.lte": "180.0",
+	}
+	vFn, err = vrhLongitude(rulesLongitude)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Coordinates.longitude: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["longitude"] = vFn
+
+	return v
+}()
+
+func CoordinatesValidator() db.Validator {
+	return DefaultCoordinatesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DirectConnectConnectionStatusType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -480,6 +591,15 @@ func (v *ValidateDirectConnectConnectionStatusType) Validate(ctx context.Context
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["aws_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_path"))
+		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bandwidth"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bandwidth"))
@@ -511,6 +631,24 @@ func (v *ValidateDirectConnectConnectionStatusType) Validate(ctx context.Context
 
 		vOpts := append(opts, db.WithValidateField("connection_state"))
 		if err := fv(ctx, m.GetConnectionState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gateway_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gateway_status"))
+		if err := fv(ctx, m.GetGatewayStatus(), vOpts...); err != nil {
 			return err
 		}
 
@@ -591,6 +729,15 @@ func (v *ValidateDirectConnectConnectionStatusType) Validate(ctx context.Context
 
 	}
 
+	if fv, exists := v.FldValidators["vif_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vif_status"))
+		if err := fv(ctx, m.GetVifStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vlan"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vlan"))
@@ -636,6 +783,12 @@ var DefaultDirectConnectConnectionStatusTypeValidator = func() *ValidateDirectCo
 		panic(errMsg)
 	}
 	v.FldValidators["has_logical_redundancy"] = vFn
+
+	v.FldValidators["vif_status"] = VirtualInterfaceStatusTypeValidator().Validate
+
+	v.FldValidators["gateway_status"] = DirectConnectGatewayStatusTypeValidator().Validate
+
+	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	return v
 }()
@@ -713,6 +866,15 @@ func (v *ValidateDirectConnectGatewayStatusType) Validate(ctx context.Context, p
 
 		vOpts := append(opts, db.WithValidateField("amazon_asn"))
 		if err := fv(ctx, m.GetAmazonAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["aws_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_path"))
+		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1043,6 +1205,15 @@ func (v *ValidateVirtualInterfaceStatusType) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("attachment_state_change_error"))
 		if err := fv(ctx, m.GetAttachmentStateChangeError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["aws_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_path"))
+		if err := fv(ctx, m.GetAwsPath(), vOpts...); err != nil {
 			return err
 		}
 

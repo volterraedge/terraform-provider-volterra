@@ -105,7 +105,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						"api_definition": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -169,7 +169,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						"auth_config": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -221,7 +221,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												"prim_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -239,7 +239,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -269,7 +269,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -294,7 +294,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -314,12 +314,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -344,7 +344,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -355,13 +355,13 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"prim_key_expiry": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"sec_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -379,7 +379,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -409,7 +409,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -434,7 +434,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -454,12 +454,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -484,7 +484,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -495,7 +495,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"sec_key_expiry": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -730,7 +730,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"ignore_samesite": {
@@ -932,7 +932,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						"ddos_profile": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1252,7 +1252,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"secret_value": {
@@ -1276,7 +1276,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1306,7 +1306,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1331,7 +1331,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1351,12 +1351,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -1381,7 +1381,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1423,7 +1423,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"name": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"secret_value": {
@@ -1447,7 +1447,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1477,7 +1477,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1502,7 +1502,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1522,12 +1522,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -1552,7 +1552,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1768,7 +1768,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						"certificates": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1976,7 +1976,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -2025,7 +2025,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2043,7 +2043,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2073,7 +2073,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2098,7 +2098,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2118,12 +2118,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -2148,7 +2148,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2333,7 +2333,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 									"app_firewall": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

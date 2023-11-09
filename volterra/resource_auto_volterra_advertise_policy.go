@@ -74,7 +74,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 			"port_ranges": {
 
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 
 			"protocol": {
@@ -158,7 +158,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -207,7 +207,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -225,7 +225,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -255,7 +255,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -280,7 +280,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -300,12 +300,12 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -330,7 +330,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -504,7 +504,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -542,7 +542,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -597,7 +597,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

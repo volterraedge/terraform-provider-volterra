@@ -66,7 +66,7 @@ func createAddrAllocTestServer(t *testing.T, name string) (string, func()) {
 				AddressPool: []string{"129.254.192.0/22"},
 				AllocationMap: &ves_io_schema_addr_alloc.NodePrefixMapType{
 					Endpoints: map[string]*ves_io_schema_addr_alloc.NodePrefixType{
-						"ves-node-id-68fc55dd7b": &ves_io_schema_addr_alloc.NodePrefixType{Prefix: "169.254.192.0/30"},
+						"ves-node-id-68fc55dd7b": {Prefix: "169.254.192.0/30"},
 					},
 				},
 				AddressAllocationScheme: &ves_io_schema_addr_alloc.AllocationScheme{},
