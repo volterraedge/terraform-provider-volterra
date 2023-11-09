@@ -1008,30 +1008,39 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) APIEndpointPDF(ctx context.Context, in *APIEndpointPDFReq, opts ...grpc.CallOption) (*APIEndpointPDFRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.APIEndpointPDF", nil)
 	return c.CustomAPIServer.APIEndpointPDF(ctx, in)
 }
 func (c *customAPIInprocClient) APIEndpoints(ctx context.Context, in *APIEndpointsReq, opts ...grpc.CallOption) (*APIEndpointsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.APIEndpoints", nil)
 	return c.CustomAPIServer.APIEndpoints(ctx, in)
 }
 func (c *customAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq, opts ...grpc.CallOption) (*APIEndpointLearntSchemaRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema", nil)
 	return c.CustomAPIServer.GetAPIEndpointLearntSchema(ctx, in)
 }
 func (c *customAPIInprocClient) GetServiceAPIEndpointPDF(ctx context.Context, in *ServiceAPIEndpointPDFReq, opts ...grpc.CallOption) (*APIEndpointPDFRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF", nil)
 	return c.CustomAPIServer.GetServiceAPIEndpointPDF(ctx, in)
 }
 func (c *customAPIInprocClient) GetServiceAPIEndpoints(ctx context.Context, in *ServiceAPIEndpointsReq, opts ...grpc.CallOption) (*APIEndpointsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints", nil)
 	return c.CustomAPIServer.GetServiceAPIEndpoints(ctx, in)
 }
 func (c *customAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.GetSwaggerSpec", nil)
 	return c.CustomAPIServer.GetSwaggerSpec(ctx, in)
 }
 func (c *customAPIInprocClient) OverridePop(ctx context.Context, in *OverridePopReq, opts ...grpc.CallOption) (*OverridePopRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.OverridePop", nil)
 	return c.CustomAPIServer.OverridePop(ctx, in)
 }
 func (c *customAPIInprocClient) OverridePush(ctx context.Context, in *OverridePushReq, opts ...grpc.CallOption) (*OverridePushRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.OverridePush", nil)
 	return c.CustomAPIServer.OverridePush(ctx, in)
 }
 func (c *customAPIInprocClient) Overrides(ctx context.Context, in *OverridesReq, opts ...grpc.CallOption) (*OverridesRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_type.CustomAPI.Overrides", nil)
 	return c.CustomAPIServer.Overrides(ctx, in)
 }
 

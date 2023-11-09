@@ -211,6 +211,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) VerifyDnsDomain(ctx context.Context, in *VerifyDnsDomainRequest, opts ...grpc.CallOption) (*VerifyDnsDomainResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_domain.CustomAPI.VerifyDnsDomain", nil)
 	return c.CustomAPIServer.VerifyDnsDomain(ctx, in)
 }
 

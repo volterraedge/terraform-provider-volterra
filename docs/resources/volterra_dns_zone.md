@@ -29,30 +29,16 @@ resource "volterra_dns_zone" "example" {
       description = "Comment"
       ttl         = "3600"
 
-      // One of the arguments from this list "naptr_record eui64_record cert_record lb_record eui48_record loc_record alias_record srv_record txt_record dlv_record ns_record cds_record tlsa_record cname_record mx_record ptr_record ds_record afsdb_record a_record aaaa_record caa_record sshfp_record" must be set
+      // One of the arguments from this list "a_record ns_record ds_record afsdb_record alias_record cname_record mx_record naptr_record sshfp_record cert_record dlv_record aaaa_record srv_record lb_record loc_record eui48_record eui64_record tlsa_record caa_record ptr_record txt_record cds_record" must be set
 
-      loc_record {
-        name = "www or mail or * or ww* or *ab"
-
-        values {
-          altitude             = "20.3"
-          horizontal_precision = "30.00m"
-          latitude_degree      = "51"
-          latitude_hemisphere  = "N"
-          latitude_minute      = "30"
-          latitude_second      = "12.000"
-          location_diameter    = "30.00m"
-          longitude_degree     = "51"
-          longitude_hemisphere = "E"
-          longitude_minute     = "30"
-          longitude_second     = "12.000"
-          vertical_precision   = "10.00m"
-        }
+      cname_record {
+        name  = "www or mail or * or corp.web or *.b"
+        value = "example.com"
       }
     }
 
     dnssec_mode {
-      // One of the arguments from this list "disable enable" must be set
+      // One of the arguments from this list "enable disable" must be set
       disable = true
     }
 
@@ -67,11 +53,11 @@ resource "volterra_dns_zone" "example" {
         description = "Comment"
         ttl         = "3600"
 
-        // One of the arguments from this list "srv_record txt_record lb_record eui48_record loc_record alias_record cds_record tlsa_record dlv_record ns_record aaaa_record caa_record cname_record mx_record ptr_record ds_record afsdb_record a_record sshfp_record eui64_record cert_record naptr_record" must be set
+        // One of the arguments from this list "alias_record cname_record mx_record naptr_record aaaa_record srv_record lb_record loc_record sshfp_record cert_record dlv_record caa_record ptr_record txt_record cds_record eui48_record eui64_record tlsa_record a_record ns_record ds_record afsdb_record" must be set
 
-        alias_record {
-          name  = "name"
-          value = "example.com"
+        eui64_record {
+          name  = "www or mail or * or ww* or *ab"
+          value = "01-23-45-67-89-ab-cd-ef"
         }
       }
     }
@@ -110,23 +96,23 @@ Argument Reference
 
 x-displayName: "A".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) A Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
-`values` - (Required) x-required (`String`).
+`values` - (Required) A valid IPv4 address, for example: 1.1.1.1 (`String`).
 
 ### Aaaa Record
 
 x-displayName: "AAAA".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) AAAA Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
-`values` - (Required) x-required (`String`).
+`values` - (Required) A valid IPv6 address, for example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334 (`String`).
 
 ### Afsdb Record
 
 x-displayName: "AFSDB".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) AFSDB Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -134,9 +120,9 @@ x-displayName: "AFSDB".
 
 x-displayName: "ALIAS".
 
-`name` - (Optional) x-example: "" (`String`).
+`name` - (Optional) Alias Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
-`value` - (Optional) x-example: "example.com" (`String`).
+`value` - (Optional) A valid domain name, for example: example.com (`String`).
 
 ### Blindfold Secret Info
 
@@ -162,7 +148,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 x-displayName: "CAA".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) CAA Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Optional) x-displayName: "CAA Record Value". See [Values ](#values) below for details.
 
@@ -170,7 +156,7 @@ x-displayName: "CAA".
 
 x-displayName: "CDS".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) CDS Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -178,7 +164,7 @@ x-displayName: "CDS".
 
 x-displayName: "CERT".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) CERT Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -194,7 +180,7 @@ Clear Secret is used for the secrets that are not encrypted.
 
 x-displayName: "CNAME".
 
-`name` - (Required) x-required (`String`).
+`name` - (Required) CName Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `value` - (Optional) x-example: "example.com" (`String`).
 
@@ -262,7 +248,7 @@ DNSSEC disabled.
 
 x-displayName: "DLV".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) DLV Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) It uses the same format as the DS record.. See [Values ](#values) below for details.
 
@@ -278,7 +264,7 @@ dnssec_mode.
 
 x-displayName: "DS".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) DS Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -290,23 +276,23 @@ DNSSEC enable.
 
 x-displayName: "EUI48".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) EUI48 Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
-`value` - (Required) x-required (`String`).
+`value` - (Required) A valid eui48 identifier, for example: 01-23-45-67-89-ab (`String`).
 
 ### Eui64 Record
 
 x-displayName: "EUI64".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) EUI64 Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
-`value` - (Required) x-required (`String`).
+`value` - (Required) A valid EUI64 identifier, for example: 01-23-45-67-89-ab-cd-ef (`String`).
 
 ### Lb Record
 
 x-displayName: "DNS Load Balancer".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain. (`String`).
 
 `value` - (Optional) x-displayName: "DNS Load Balancer Record". See [ref](#ref) below for details.
 
@@ -314,7 +300,7 @@ x-displayName: "DNS Load Balancer".
 
 x-displayName: "LOC".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) LOC Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -332,7 +318,7 @@ x-required.
 
 x-displayName: "MX".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) MX Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -340,7 +326,7 @@ x-displayName: "MX".
 
 x-displayName: "NAPTR".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) NAPTR Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -348,7 +334,7 @@ x-displayName: "NAPTR".
 
 x-displayName: "NS".
 
-`name` - (Optional) x-example: "www or mail or * or corp.we" or *.b" (`String`).
+`name` - (Optional) NS Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required (`String`).
 
@@ -372,7 +358,7 @@ Primary DNS.
 
 x-displayName: "PTR".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) PTR Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required (`String`).
 
@@ -476,7 +462,7 @@ soa_parameters.
 
 x-displayName: "SRV".
 
-`name` - (Required) x-required (`String`).
+`name` - (Required) SRV Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -484,7 +470,7 @@ x-displayName: "SRV".
 
 x-displayName: "SSHFP".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) SSHFP Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -492,7 +478,7 @@ x-displayName: "SSHFP".
 
 x-displayName: "TLSA".
 
-`name` - (Optional) x-example: "www or mail or * or ww* or *ab" (`String`).
+`name` - (Optional) TLSA Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required. See [Values ](#values) below for details.
 
@@ -516,7 +502,7 @@ x-displayName: "TSIG key value in base 64 format".
 
 x-displayName: "TXT".
 
-`name` - (Optional) x-example: "www or mail or * or corp.web or *.b" (`String`).
+`name` - (Optional) TXT Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `values` - (Required) x-required (`String`).
 

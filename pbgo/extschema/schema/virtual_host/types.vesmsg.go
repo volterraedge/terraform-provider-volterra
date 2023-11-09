@@ -12164,6 +12164,15 @@ func (v *ValidateShapeBotDefenseConfigType) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mode"))
+		if err := fv(ctx, m.GetMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["reload_header_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("reload_header_name"))

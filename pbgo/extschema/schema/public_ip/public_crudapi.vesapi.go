@@ -595,16 +595,17 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.public_ip.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.public_ip.API.Replace", nil)
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -612,12 +613,13 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.public_ip.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.public_ip.API.Get", nil)
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -626,12 +628,13 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.public_ip.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.public_ip.API.List", nil)
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -640,13 +643,12 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 }
 
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
+	return &APIInprocClient{svc: svc}
 }
 
 // INPROC CRUD Client (satisfying server.CRUDClient interface)
 type crudAPIInprocClient struct {
-	svc svcfw.Service
+	cl APIClient
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
@@ -656,12 +658,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 }
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
-
-	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
-	}
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -680,7 +676,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -690,12 +686,6 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -704,7 +694,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 	if err != nil {
 		return nil, errors.Wrap(err, "Get")
 	}
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -780,12 +770,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.public_ip.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.public_ip")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -800,7 +784,7 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
 	}
 
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -819,8 +803,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {

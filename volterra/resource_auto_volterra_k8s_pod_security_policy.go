@@ -127,7 +127,7 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 									"path_prefix": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"read_only": {
@@ -241,12 +241,12 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 												"max_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"min_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -288,12 +288,12 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 												"max_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"min_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -431,12 +431,12 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 												"max_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"min_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -472,12 +472,12 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 
 												"max_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"min_id": {
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

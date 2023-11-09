@@ -113,7 +113,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512000",
+		"ves.io.schema.rules.string.max_len":        "512000",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {
@@ -232,7 +233,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512000",
+		"ves.io.schema.rules.string.max_len":        "512000",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {
@@ -351,7 +353,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512000",
+		"ves.io.schema.rules.string.max_len":        "512000",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {
@@ -458,7 +461,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhTrustedCaUrl := v.TrustedCaUrlValidationRuleHandler
 	rulesTrustedCaUrl := map[string]string{
-		"ves.io.schema.rules.string.max_len": "512000",
+		"ves.io.schema.rules.string.max_len":        "512000",
+		"ves.io.schema.rules.string.truststore_url": "true",
 	}
 	vFn, err = vrhTrustedCaUrl(rulesTrustedCaUrl)
 	if err != nil {

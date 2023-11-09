@@ -317,8 +317,8 @@ type WebhookConfig struct {
 	// x-displayName: "Webhook URL"
 	// x-example: "value"
 	// x-required
-	// URL to send API requests to
-	Url string `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	// Incoming webhook url to send alert notifications.
+	Url *schema.SecretType `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
 	// HTTP Configuration
 	//
 	// x-displayName: "HTTP Configuration"
@@ -355,11 +355,11 @@ func (m *WebhookConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WebhookConfig proto.InternalMessageInfo
 
-func (m *WebhookConfig) GetUrl() string {
+func (m *WebhookConfig) GetUrl() *schema.SecretType {
 	if m != nil {
 		return m.Url
 	}
-	return ""
+	return nil
 }
 
 func (m *WebhookConfig) GetHttpConfig() *HTTPConfig {
@@ -374,22 +374,23 @@ func (m *WebhookConfig) GetHttpConfig() *HTTPConfig {
 // x-displayName: "HTTP Configuration"
 // Configuration for HTTP endpoint
 type HTTPConfig struct {
-	// HTTP Authorization header
+	// HTTP Authentication header
 	//
-	// x-displayName: "Authorization"
+	// x-displayName: "Authentication"
 	// x-required
-	// HTTP Authorization header controls how to authorize to the HTTP endpoint
+	// HTTP Authentication header controls how to authenticate to the HTTP endpoint
 	//
 	// Types that are valid to be assigned to AuthChoice:
 	//	*HTTPConfig_NoAuthorization
 	//	*HTTPConfig_BasicAuth
-	//	*HTTPConfig_AuthConfig
+	//	*HTTPConfig_AuthToken
+	//	*HTTPConfig_ClientCertObj
 	AuthChoice isHTTPConfig_AuthChoice `protobuf_oneof:"auth_choice"`
 	// Enable HTTP2
 	//
 	// x-displayName: "Enable HTTP2"
 	// x-example: "value"
-	// Whether to enable HTTP2.
+	// Configure to use HTTP2 protocol.
 	EnableHttp2 bool `protobuf:"varint,4,opt,name=enable_http2,json=enableHttp2,proto3" json:"enable_http2,omitempty"`
 	// Follow Redirects
 	//
@@ -397,12 +398,15 @@ type HTTPConfig struct {
 	// x-example: "value"
 	// Configure whether HTTP requests follow HTTP 3xx redirects.
 	FollowRedirects bool `protobuf:"varint,5,opt,name=follow_redirects,json=followRedirects,proto3" json:"follow_redirects,omitempty"`
-	// TLS Config
+	// Enable TLS
 	//
-	// x-displayName: "TLS Config"
+	// x-displayName: "TLS"
 	// x-required
-	// Configures the TLS settings.
-	TlsConfig *TLSConfig `protobuf:"bytes,6,opt,name=tls_config,json=tlsConfig,proto3" json:"tls_config,omitempty"`
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*HTTPConfig_NoTls
+	//	*HTTPConfig_UseTls
+	TlsChoice isHTTPConfig_TlsChoice `protobuf_oneof:"tls_choice"`
 }
 
 func (m *HTTPConfig) Reset()      { *m = HTTPConfig{} }
@@ -439,6 +443,12 @@ type isHTTPConfig_AuthChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isHTTPConfig_TlsChoice interface {
+	isHTTPConfig_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type HTTPConfig_NoAuthorization struct {
 	NoAuthorization *schema.Empty `protobuf:"bytes,7,opt,name=no_authorization,json=noAuthorization,proto3,oneof" json:"no_authorization,omitempty"`
@@ -446,17 +456,35 @@ type HTTPConfig_NoAuthorization struct {
 type HTTPConfig_BasicAuth struct {
 	BasicAuth *HttpBasicAuth `protobuf:"bytes,2,opt,name=basic_auth,json=basicAuth,proto3,oneof" json:"basic_auth,omitempty"`
 }
-type HTTPConfig_AuthConfig struct {
-	AuthConfig *Authorization `protobuf:"bytes,8,opt,name=auth_config,json=authConfig,proto3,oneof" json:"auth_config,omitempty"`
+type HTTPConfig_AuthToken struct {
+	AuthToken *AuthToken `protobuf:"bytes,9,opt,name=auth_token,json=authToken,proto3,oneof" json:"auth_token,omitempty"`
+}
+type HTTPConfig_ClientCertObj struct {
+	ClientCertObj *ClientCertificateObj `protobuf:"bytes,10,opt,name=client_cert_obj,json=clientCertObj,proto3,oneof" json:"client_cert_obj,omitempty"`
+}
+type HTTPConfig_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,12,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type HTTPConfig_UseTls struct {
+	UseTls *TLSConfig `protobuf:"bytes,13,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
 }
 
 func (*HTTPConfig_NoAuthorization) isHTTPConfig_AuthChoice() {}
 func (*HTTPConfig_BasicAuth) isHTTPConfig_AuthChoice()       {}
-func (*HTTPConfig_AuthConfig) isHTTPConfig_AuthChoice()      {}
+func (*HTTPConfig_AuthToken) isHTTPConfig_AuthChoice()       {}
+func (*HTTPConfig_ClientCertObj) isHTTPConfig_AuthChoice()   {}
+func (*HTTPConfig_NoTls) isHTTPConfig_TlsChoice()            {}
+func (*HTTPConfig_UseTls) isHTTPConfig_TlsChoice()           {}
 
 func (m *HTTPConfig) GetAuthChoice() isHTTPConfig_AuthChoice {
 	if m != nil {
 		return m.AuthChoice
+	}
+	return nil
+}
+func (m *HTTPConfig) GetTlsChoice() isHTTPConfig_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
 	}
 	return nil
 }
@@ -475,9 +503,16 @@ func (m *HTTPConfig) GetBasicAuth() *HttpBasicAuth {
 	return nil
 }
 
-func (m *HTTPConfig) GetAuthConfig() *Authorization {
-	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthConfig); ok {
-		return x.AuthConfig
+func (m *HTTPConfig) GetAuthToken() *AuthToken {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_AuthToken); ok {
+		return x.AuthToken
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetClientCertObj() *ClientCertificateObj {
+	if x, ok := m.GetAuthChoice().(*HTTPConfig_ClientCertObj); ok {
+		return x.ClientCertObj
 	}
 	return nil
 }
@@ -496,9 +531,16 @@ func (m *HTTPConfig) GetFollowRedirects() bool {
 	return false
 }
 
-func (m *HTTPConfig) GetTlsConfig() *TLSConfig {
-	if m != nil {
-		return m.TlsConfig
+func (m *HTTPConfig) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*HTTPConfig_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *HTTPConfig) GetUseTls() *TLSConfig {
+	if x, ok := m.GetTlsChoice().(*HTTPConfig_UseTls); ok {
+		return x.UseTls
 	}
 	return nil
 }
@@ -508,8 +550,105 @@ func (*HTTPConfig) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*HTTPConfig_NoAuthorization)(nil),
 		(*HTTPConfig_BasicAuth)(nil),
-		(*HTTPConfig_AuthConfig)(nil),
+		(*HTTPConfig_AuthToken)(nil),
+		(*HTTPConfig_ClientCertObj)(nil),
+		(*HTTPConfig_NoTls)(nil),
+		(*HTTPConfig_UseTls)(nil),
 	}
+}
+
+// Client Certificate Object
+//
+// x-displayName: "Client Certificate Object"
+// Configuration for client certificate
+type ClientCertificateObj struct {
+	// certificate_object_refs
+	//
+	// x-displayName: "Certificate Object"
+	// Reference to client certificate object
+	UseTlsObj []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=use_tls_obj,json=useTlsObj,proto3" json:"use_tls_obj,omitempty"`
+}
+
+func (m *ClientCertificateObj) Reset()      { *m = ClientCertificateObj{} }
+func (*ClientCertificateObj) ProtoMessage() {}
+func (*ClientCertificateObj) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{7}
+}
+func (m *ClientCertificateObj) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ClientCertificateObj) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ClientCertificateObj) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientCertificateObj.Merge(m, src)
+}
+func (m *ClientCertificateObj) XXX_Size() int {
+	return m.Size()
+}
+func (m *ClientCertificateObj) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientCertificateObj.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientCertificateObj proto.InternalMessageInfo
+
+func (m *ClientCertificateObj) GetUseTlsObj() []*schema.ObjectRefType {
+	if m != nil {
+		return m.UseTlsObj
+	}
+	return nil
+}
+
+// CA Certificate Object
+//
+// x-displayName: "CA Certificate Object"
+// Configuration for CA certificate
+type CACertificateObj struct {
+	// certificate_object_refs
+	//
+	// x-displayName: "Certificate Object"
+	// Reference to client certificate object
+	TrustedCa []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=trusted_ca,json=trustedCa,proto3" json:"trusted_ca,omitempty"`
+}
+
+func (m *CACertificateObj) Reset()      { *m = CACertificateObj{} }
+func (*CACertificateObj) ProtoMessage() {}
+func (*CACertificateObj) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{8}
+}
+func (m *CACertificateObj) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CACertificateObj) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CACertificateObj) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CACertificateObj.Merge(m, src)
+}
+func (m *CACertificateObj) XXX_Size() int {
+	return m.Size()
+}
+func (m *CACertificateObj) XXX_DiscardUnknown() {
+	xxx_messageInfo_CACertificateObj.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CACertificateObj proto.InternalMessageInfo
+
+func (m *CACertificateObj) GetTrustedCa() []*schema.ObjectRefType {
+	if m != nil {
+		return m.TrustedCa
+	}
+	return nil
 }
 
 // TLS Config
@@ -517,55 +656,42 @@ func (*HTTPConfig) XXX_OneofWrappers() []interface{} {
 // x-displayName: "TLS Config"
 // Configures the token request's TLS settings.
 type TLSConfig struct {
-	// CA Cert
+	// sni choice
 	//
-	// x-displayName: "CA Cert"
-	// x-example: "value"
+	// x-displayName: "SNI Selection"
 	// x-required
-	// CA certificate to validate the server certificate with.
-	CaCert string `protobuf:"bytes,1,opt,name=ca_cert,json=caCert,proto3" json:"ca_cert,omitempty"`
-	// Client Cert
+	// Select SNI to be used for upstream connection
 	//
-	// x-displayName: "Client Cert"
-	// x-example: "value"
-	// x-required
-	// Cert for client cert authentication to the server.
-	ClientCert string `protobuf:"bytes,2,opt,name=client_cert,json=clientCert,proto3" json:"client_cert,omitempty"`
-	// Client Key
+	// Types that are valid to be assigned to SniChoice:
+	//	*TLSConfig_Sni
+	//	*TLSConfig_DisableSni
+	SniChoice isTLSConfig_SniChoice `protobuf_oneof:"sni_choice"`
+	// minimum_protocol_version
 	//
-	// x-displayName: "Client Key"
-	// x-required
-	// Key for client cert authentication to the server.
-	ClientKey *schema.SecretType `protobuf:"bytes,3,opt,name=client_key,json=clientKey,proto3" json:"client_key,omitempty"`
-	// Server Name
-	//
-	// x-displayName: "Server Name"
-	// x-example: "value"
-	// x-required
-	// ServerName extension to indicate the name of the server.
-	ServerName string `protobuf:"bytes,4,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	// Min Version
-	//
-	// x-displayName: "Min Version"
-	// x-example: "value"
-	// Minimum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS
-	// 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).
-	// If unset, Prometheus will use Go default minimum version, which is TLS 1.2.
+	// x-displayName: "Minimum TLS version"
+	// Minimum TLS protocol version.
 	MinVersion schema.TlsProtocol `protobuf:"varint,5,opt,name=min_version,json=minVersion,proto3,enum=ves.io.schema.TlsProtocol" json:"min_version,omitempty"`
-	// Max Version
+	// maximum_protocol_version
 	//
-	// x-displayName: "Max Version"
-	// x-example: "value"
-	// Maximum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS
-	// 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).
-	// If unset, Prometheus will use Go default maximum version, which is TLS 1.3.
+	// x-displayName: "Maximum TLS version"
+	// Maximum TLS protocol version.
 	MaxVersion schema.TlsProtocol `protobuf:"varint,6,opt,name=max_version,json=maxVersion,proto3,enum=ves.io.schema.TlsProtocol" json:"max_version,omitempty"`
+	// Server verification choice
+	//
+	// x-displayName: "Server Verification"
+	// x-required
+	// Choose whether to perform server verification.
+	//
+	// Types that are valid to be assigned to ServerValidationChoice:
+	//	*TLSConfig_UseServerVerification
+	//	*TLSConfig_VolterraTrustedCa
+	ServerValidationChoice isTLSConfig_ServerValidationChoice `protobuf_oneof:"server_validation_choice"`
 }
 
 func (m *TLSConfig) Reset()      { *m = TLSConfig{} }
 func (*TLSConfig) ProtoMessage() {}
 func (*TLSConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{7}
+	return fileDescriptor_ca1466d8d1f67094, []int{9}
 }
 func (m *TLSConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -590,32 +716,62 @@ func (m *TLSConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TLSConfig proto.InternalMessageInfo
 
-func (m *TLSConfig) GetCaCert() string {
-	if m != nil {
-		return m.CaCert
-	}
-	return ""
+type isTLSConfig_SniChoice interface {
+	isTLSConfig_SniChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isTLSConfig_ServerValidationChoice interface {
+	isTLSConfig_ServerValidationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
 }
 
-func (m *TLSConfig) GetClientCert() string {
-	if m != nil {
-		return m.ClientCert
-	}
-	return ""
+type TLSConfig_Sni struct {
+	Sni string `protobuf:"bytes,13,opt,name=sni,proto3,oneof" json:"sni,omitempty"`
+}
+type TLSConfig_DisableSni struct {
+	DisableSni *schema.Empty `protobuf:"bytes,12,opt,name=disable_sni,json=disableSni,proto3,oneof" json:"disable_sni,omitempty"`
+}
+type TLSConfig_UseServerVerification struct {
+	UseServerVerification *UpstreamTlsValidationContext `protobuf:"bytes,17,opt,name=use_server_verification,json=useServerVerification,proto3,oneof" json:"use_server_verification,omitempty"`
+}
+type TLSConfig_VolterraTrustedCa struct {
+	VolterraTrustedCa *schema.Empty `protobuf:"bytes,16,opt,name=volterra_trusted_ca,json=volterraTrustedCa,proto3,oneof" json:"volterra_trusted_ca,omitempty"`
 }
 
-func (m *TLSConfig) GetClientKey() *schema.SecretType {
+func (*TLSConfig_Sni) isTLSConfig_SniChoice()                                {}
+func (*TLSConfig_DisableSni) isTLSConfig_SniChoice()                         {}
+func (*TLSConfig_UseServerVerification) isTLSConfig_ServerValidationChoice() {}
+func (*TLSConfig_VolterraTrustedCa) isTLSConfig_ServerValidationChoice()     {}
+
+func (m *TLSConfig) GetSniChoice() isTLSConfig_SniChoice {
 	if m != nil {
-		return m.ClientKey
+		return m.SniChoice
+	}
+	return nil
+}
+func (m *TLSConfig) GetServerValidationChoice() isTLSConfig_ServerValidationChoice {
+	if m != nil {
+		return m.ServerValidationChoice
 	}
 	return nil
 }
 
-func (m *TLSConfig) GetServerName() string {
-	if m != nil {
-		return m.ServerName
+func (m *TLSConfig) GetSni() string {
+	if x, ok := m.GetSniChoice().(*TLSConfig_Sni); ok {
+		return x.Sni
 	}
 	return ""
+}
+
+func (m *TLSConfig) GetDisableSni() *schema.Empty {
+	if x, ok := m.GetSniChoice().(*TLSConfig_DisableSni); ok {
+		return x.DisableSni
+	}
+	return nil
 }
 
 func (m *TLSConfig) GetMinVersion() schema.TlsProtocol {
@@ -632,37 +788,51 @@ func (m *TLSConfig) GetMaxVersion() schema.TlsProtocol {
 	return schema.TLS_AUTO
 }
 
-// Authorization Configuration
-//
-// x-displayName: "Authorization Config"
-// Authorization header configuration.
-type Authorization struct {
-	// Authentication Type
-	//
-	// x-displayName: "Authentication Type"
-	// x-required
-	// Sets the authentication type.
-	//
-	// Types that are valid to be assigned to AuthType:
-	//	*Authorization_AuthTypeBearer
-	AuthType isAuthorization_AuthType `protobuf_oneof:"auth_type"`
-	// Credentials
-	//
-	// x-displayName: "Credentials"
-	// x-required
-	// Sets the credentials.
-	Credentials *schema.SecretType `protobuf:"bytes,2,opt,name=credentials,proto3" json:"credentials,omitempty"`
+func (m *TLSConfig) GetUseServerVerification() *UpstreamTlsValidationContext {
+	if x, ok := m.GetServerValidationChoice().(*TLSConfig_UseServerVerification); ok {
+		return x.UseServerVerification
+	}
+	return nil
 }
 
-func (m *Authorization) Reset()      { *m = Authorization{} }
-func (*Authorization) ProtoMessage() {}
-func (*Authorization) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{8}
+func (m *TLSConfig) GetVolterraTrustedCa() *schema.Empty {
+	if x, ok := m.GetServerValidationChoice().(*TLSConfig_VolterraTrustedCa); ok {
+		return x.VolterraTrustedCa
+	}
+	return nil
 }
-func (m *Authorization) XXX_Unmarshal(b []byte) error {
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*TLSConfig) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*TLSConfig_Sni)(nil),
+		(*TLSConfig_DisableSni)(nil),
+		(*TLSConfig_UseServerVerification)(nil),
+		(*TLSConfig_VolterraTrustedCa)(nil),
+	}
+}
+
+// UpstreamTlsValidationContext
+//
+// x-displayName: "TLS Validation Context for Servers"
+// Upstream TLS Validation Context
+type UpstreamTlsValidationContext struct {
+	// trusted_ca
+	//
+	// x-displayName: "Trusted CA List"
+	// Trusted CA List for verification of Server's certificate
+	CaCertObj *CACertificateObj `protobuf:"bytes,1,opt,name=ca_cert_obj,json=caCertObj,proto3" json:"ca_cert_obj,omitempty"`
+}
+
+func (m *UpstreamTlsValidationContext) Reset()      { *m = UpstreamTlsValidationContext{} }
+func (*UpstreamTlsValidationContext) ProtoMessage() {}
+func (*UpstreamTlsValidationContext) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{10}
+}
+func (m *UpstreamTlsValidationContext) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Authorization) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *UpstreamTlsValidationContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -670,57 +840,71 @@ func (m *Authorization) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 	}
 	return b[:n], nil
 }
-func (m *Authorization) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Authorization.Merge(m, src)
+func (m *UpstreamTlsValidationContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpstreamTlsValidationContext.Merge(m, src)
 }
-func (m *Authorization) XXX_Size() int {
+func (m *UpstreamTlsValidationContext) XXX_Size() int {
 	return m.Size()
 }
-func (m *Authorization) XXX_DiscardUnknown() {
-	xxx_messageInfo_Authorization.DiscardUnknown(m)
+func (m *UpstreamTlsValidationContext) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpstreamTlsValidationContext.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Authorization proto.InternalMessageInfo
+var xxx_messageInfo_UpstreamTlsValidationContext proto.InternalMessageInfo
 
-type isAuthorization_AuthType interface {
-	isAuthorization_AuthType()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type Authorization_AuthTypeBearer struct {
-	AuthTypeBearer *schema.Empty `protobuf:"bytes,4,opt,name=auth_type_bearer,json=authTypeBearer,proto3,oneof" json:"auth_type_bearer,omitempty"`
-}
-
-func (*Authorization_AuthTypeBearer) isAuthorization_AuthType() {}
-
-func (m *Authorization) GetAuthType() isAuthorization_AuthType {
+func (m *UpstreamTlsValidationContext) GetCaCertObj() *CACertificateObj {
 	if m != nil {
-		return m.AuthType
+		return m.CaCertObj
 	}
 	return nil
 }
 
-func (m *Authorization) GetAuthTypeBearer() *schema.Empty {
-	if x, ok := m.GetAuthType().(*Authorization_AuthTypeBearer); ok {
-		return x.AuthTypeBearer
-	}
-	return nil
+// Token Authentication
+//
+// x-displayName: "Access Token"
+// Authentication Token for access
+type AuthToken struct {
+	// token
+	//
+	// x-displayName: "Token"
+	// x-required
+	// F5XC Secret. URL for token, needs to be fetched from this path
+	Token *schema.SecretType `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
 }
 
-func (m *Authorization) GetCredentials() *schema.SecretType {
+func (m *AuthToken) Reset()      { *m = AuthToken{} }
+func (*AuthToken) ProtoMessage() {}
+func (*AuthToken) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca1466d8d1f67094, []int{11}
+}
+func (m *AuthToken) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AuthToken) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AuthToken) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthToken.Merge(m, src)
+}
+func (m *AuthToken) XXX_Size() int {
+	return m.Size()
+}
+func (m *AuthToken) XXX_DiscardUnknown() {
+	xxx_messageInfo_AuthToken.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AuthToken proto.InternalMessageInfo
+
+func (m *AuthToken) GetToken() *schema.SecretType {
 	if m != nil {
-		return m.Credentials
+		return m.Token
 	}
 	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*Authorization) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*Authorization_AuthTypeBearer)(nil),
-	}
 }
 
 // HTTP Basic Authorization
@@ -746,7 +930,7 @@ type HttpBasicAuth struct {
 func (m *HttpBasicAuth) Reset()      { *m = HttpBasicAuth{} }
 func (*HttpBasicAuth) ProtoMessage() {}
 func (*HttpBasicAuth) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{9}
+	return fileDescriptor_ca1466d8d1f67094, []int{12}
 }
 func (m *HttpBasicAuth) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -809,7 +993,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{10}
+	return fileDescriptor_ca1466d8d1f67094, []int{13}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -946,7 +1130,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{11}
+	return fileDescriptor_ca1466d8d1f67094, []int{14}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1083,7 +1267,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{12}
+	return fileDescriptor_ca1466d8d1f67094, []int{15}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1220,7 +1404,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ca1466d8d1f67094, []int{13}
+	return fileDescriptor_ca1466d8d1f67094, []int{16}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1347,8 +1531,11 @@ func init() {
 	proto.RegisterType((*SMSConfig)(nil), "ves.io.schema.alert_receiver.SMSConfig")
 	proto.RegisterType((*WebhookConfig)(nil), "ves.io.schema.alert_receiver.WebhookConfig")
 	proto.RegisterType((*HTTPConfig)(nil), "ves.io.schema.alert_receiver.HTTPConfig")
+	proto.RegisterType((*ClientCertificateObj)(nil), "ves.io.schema.alert_receiver.ClientCertificateObj")
+	proto.RegisterType((*CACertificateObj)(nil), "ves.io.schema.alert_receiver.CACertificateObj")
 	proto.RegisterType((*TLSConfig)(nil), "ves.io.schema.alert_receiver.TLSConfig")
-	proto.RegisterType((*Authorization)(nil), "ves.io.schema.alert_receiver.Authorization")
+	proto.RegisterType((*UpstreamTlsValidationContext)(nil), "ves.io.schema.alert_receiver.UpstreamTlsValidationContext")
+	proto.RegisterType((*AuthToken)(nil), "ves.io.schema.alert_receiver.AuthToken")
 	proto.RegisterType((*HttpBasicAuth)(nil), "ves.io.schema.alert_receiver.HttpBasicAuth")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.alert_receiver.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.alert_receiver.CreateSpecType")
@@ -1361,86 +1548,102 @@ func init() {
 }
 
 var fileDescriptor_ca1466d8d1f67094 = []byte{
-	// 1259 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6f, 0xdb, 0xc6,
-	0x12, 0xe6, 0x8a, 0xb2, 0x24, 0x0e, 0x23, 0x5b, 0x21, 0x82, 0x07, 0xc5, 0x31, 0x18, 0x3d, 0xe1,
-	0x01, 0x4f, 0xc9, 0xd3, 0x8f, 0x58, 0x2f, 0x49, 0xd3, 0x04, 0x30, 0x62, 0xa5, 0x69, 0x54, 0x37,
-	0x49, 0x03, 0xda, 0x48, 0x81, 0x16, 0x2d, 0xbb, 0xa2, 0xd6, 0x12, 0x11, 0x92, 0xcb, 0x2e, 0x57,
-	0xb2, 0x95, 0xa2, 0x45, 0xd0, 0x73, 0x0f, 0xf9, 0x1b, 0x7a, 0x2a, 0xfa, 0x07, 0xb4, 0x40, 0x95,
-	0x83, 0x8f, 0x45, 0x4f, 0x3e, 0xe6, 0xd8, 0x28, 0x97, 0xf6, 0x16, 0xb4, 0x39, 0x04, 0x3d, 0x15,
-	0x4b, 0x52, 0x8a, 0xe4, 0xb6, 0xb6, 0x03, 0x14, 0xbd, 0x24, 0x37, 0xee, 0xee, 0xf7, 0xcd, 0x7c,
-	0xb3, 0x33, 0x3b, 0x03, 0x42, 0xa9, 0x4f, 0x82, 0xaa, 0x4d, 0x6b, 0x81, 0xd5, 0x25, 0x2e, 0xae,
-	0x61, 0x87, 0x30, 0x6e, 0x32, 0x62, 0x11, 0xbb, 0x4f, 0x58, 0x8d, 0x0f, 0x7c, 0x12, 0x54, 0x7d,
-	0x46, 0x39, 0xd5, 0x96, 0x22, 0x64, 0x35, 0x42, 0x56, 0x67, 0x91, 0x8b, 0x95, 0x8e, 0xcd, 0xbb,
-	0xbd, 0x56, 0xd5, 0xa2, 0x6e, 0xad, 0x43, 0x3b, 0xb4, 0x16, 0x92, 0x5a, 0xbd, 0xcd, 0x70, 0x15,
-	0x2e, 0xc2, 0xaf, 0xc8, 0xd8, 0xe2, 0x89, 0x59, 0xb7, 0xd4, 0xe7, 0x36, 0xf5, 0x62, 0x4f, 0x8b,
-	0xc7, 0x67, 0x0f, 0xa7, 0x44, 0x2c, 0x2e, 0xcd, 0x1e, 0xf5, 0xb1, 0x63, 0xb7, 0x31, 0x27, 0xf1,
-	0x69, 0x61, 0xcf, 0xa9, 0x4d, 0xb6, 0xcc, 0x19, 0xd3, 0xc5, 0x2d, 0x50, 0xd7, 0x1d, 0x6c, 0xdd,
-	0xb9, 0x42, 0xbd, 0x4d, 0xbb, 0xa3, 0x2d, 0x83, 0xdc, 0x63, 0x4e, 0x1e, 0x15, 0x50, 0x49, 0xad,
-	0x1f, 0xaf, 0xce, 0x46, 0xb8, 0x4e, 0x2c, 0x46, 0xf8, 0xc6, 0xc0, 0x27, 0x8d, 0xe4, 0xee, 0x10,
-	0x21, 0x43, 0x60, 0xb5, 0x73, 0x90, 0xb6, 0xba, 0xd8, 0xf3, 0x88, 0x93, 0x4f, 0x14, 0x50, 0x49,
-	0x69, 0x9c, 0xf8, 0xee, 0xe7, 0x1d, 0xf9, 0x5f, 0xec, 0x58, 0x5d, 0xfb, 0xf0, 0x7d, 0x5c, 0xb9,
-	0x7b, 0xa6, 0xf2, 0x7a, 0xc5, 0xfc, 0xe0, 0x93, 0xe5, 0xf2, 0x85, 0x33, 0x9f, 0xfe, 0xc7, 0x18,
-	0x63, 0x8b, 0x1f, 0xc3, 0xc2, 0x2d, 0xdc, 0x21, 0xec, 0x8d, 0x1e, 0x1f, 0xc4, 0xce, 0x2f, 0x83,
-	0xca, 0x68, 0x8f, 0xdb, 0x5e, 0xc7, 0xbc, 0x43, 0x06, 0x87, 0x15, 0x01, 0x31, 0xe7, 0x6d, 0x32,
-	0xd0, 0x96, 0x22, 0xf9, 0x91, 0x0e, 0x10, 0x3a, 0xe6, 0x98, 0x7c, 0x3f, 0x56, 0x5a, 0xec, 0xc2,
-	0xfc, 0x3b, 0x7e, 0x70, 0x8d, 0x78, 0x36, 0x89, 0x3d, 0x5e, 0x80, 0x34, 0xf6, 0xed, 0x17, 0xf1,
-	0x96, 0xc2, 0xbe, 0x7d, 0xb0, 0xa7, 0x2a, 0xa8, 0x57, 0x5d, 0x6c, 0x3b, 0xb1, 0x9b, 0x93, 0x30,
-	0x47, 0xc4, 0x32, 0x74, 0xa2, 0x34, 0x14, 0x01, 0x4f, 0xb2, 0xc4, 0x47, 0xc8, 0x88, 0xf6, 0x8b,
-	0x2b, 0xa0, 0xac, 0xdf, 0x58, 0x9f, 0xe4, 0x60, 0xde, 0xa2, 0x1e, 0xc7, 0x16, 0x37, 0xbd, 0x9e,
-	0xdb, 0x22, 0x2c, 0xa6, 0x8d, 0xbd, 0xec, 0x24, 0x90, 0x91, 0x8d, 0x11, 0x37, 0x43, 0x40, 0xf1,
-	0x33, 0xc8, 0xbe, 0x4b, 0x5a, 0x5d, 0x4a, 0xc7, 0x79, 0x5c, 0x7a, 0x9e, 0xc7, 0x3f, 0xca, 0xd3,
-	0xde, 0x02, 0xb5, 0xcb, 0xb9, 0x6f, 0x5a, 0x21, 0x38, 0x2f, 0x87, 0xa1, 0x97, 0xaa, 0xfb, 0xd5,
-	0x73, 0xb5, 0xb9, 0xb1, 0x71, 0x2b, 0x32, 0x6e, 0x80, 0x20, 0x47, 0xdf, 0x6b, 0xc9, 0x4c, 0x22,
-	0x27, 0x17, 0xbf, 0x95, 0x01, 0x9e, 0x03, 0xb4, 0x55, 0xc8, 0x79, 0xd4, 0xc4, 0x3d, 0xde, 0xa5,
-	0xcc, 0xbe, 0x8b, 0x45, 0xbd, 0xe5, 0xd3, 0xa1, 0x93, 0x63, 0x7b, 0x9c, 0x5c, 0x75, 0x7d, 0x3e,
-	0x68, 0x4a, 0xc6, 0x82, 0x47, 0x57, 0xa7, 0xe1, 0xda, 0x75, 0x80, 0x16, 0x0e, 0x6c, 0x2b, 0xb4,
-	0x12, 0x5e, 0xb3, 0x5a, 0xff, 0xdf, 0x01, 0x0a, 0x39, 0xf7, 0x1b, 0x82, 0x23, 0x2c, 0x35, 0x25,
-	0x43, 0x69, 0x8d, 0x17, 0xda, 0x4d, 0x50, 0x85, 0x9d, 0x71, 0xc0, 0x99, 0xc3, 0x98, 0x9b, 0xd1,
-	0xd3, 0x94, 0x0c, 0x10, 0x16, 0xe2, 0x00, 0xff, 0x0d, 0x47, 0x88, 0x87, 0x5b, 0x0e, 0x31, 0xc5,
-	0x55, 0xd4, 0xf3, 0xc9, 0x02, 0x2a, 0x65, 0x0c, 0x35, 0xda, 0x13, 0x3a, 0xea, 0xda, 0x29, 0xc8,
-	0x6d, 0x52, 0xc7, 0xa1, 0x5b, 0x26, 0x23, 0x6d, 0x9b, 0x11, 0x8b, 0x07, 0xf9, 0xb9, 0x10, 0xb6,
-	0x10, 0xed, 0x1b, 0xe3, 0x6d, 0xed, 0x4d, 0x00, 0xee, 0x04, 0x63, 0x71, 0xa9, 0x50, 0xdc, 0x7f,
-	0xf7, 0x17, 0xb7, 0x71, 0x3d, 0xae, 0x16, 0x43, 0xe1, 0x4e, 0x10, 0x7d, 0x5e, 0x84, 0x5f, 0x56,
-	0xd2, 0xcb, 0xe5, 0xf3, 0xe5, 0xb3, 0xe5, 0x73, 0x8d, 0xc2, 0x38, 0xe2, 0x2e, 0xb5, 0x2d, 0xa2,
-	0x1d, 0xdd, 0x19, 0xa2, 0xb4, 0x28, 0xe0, 0xd1, 0x10, 0xcd, 0xbd, 0x56, 0xae, 0x97, 0x2f, 0xac,
-	0x25, 0x33, 0x28, 0x97, 0x28, 0x3e, 0x4d, 0x80, 0x32, 0x31, 0xa6, 0xad, 0x42, 0xda, 0xc2, 0xa6,
-	0x45, 0x18, 0x8f, 0x4b, 0xa7, 0xf4, 0x6c, 0x88, 0x92, 0x5f, 0x3e, 0x40, 0xaa, 0x4f, 0xdc, 0x72,
-	0xa1, 0x85, 0x03, 0x72, 0xfe, 0xac, 0xa8, 0xa6, 0x14, 0x4b, 0x96, 0xee, 0xdd, 0xcb, 0x4c, 0x15,
-	0x56, 0xca, 0xc2, 0x57, 0x08, 0xe3, 0xa2, 0xb6, 0x2c, 0xc7, 0x26, 0x1e, 0x8f, 0xcc, 0x24, 0x5e,
-	0xd0, 0x0c, 0x44, 0xe4, 0xd0, 0xd4, 0x0a, 0xc4, 0xab, 0xf0, 0x81, 0xca, 0x87, 0x7b, 0xa0, 0x4a,
-	0x44, 0x11, 0x6f, 0xf4, 0x24, 0xa8, 0x01, 0x61, 0x7d, 0xc2, 0x4c, 0x0f, 0xbb, 0x24, 0x4c, 0x92,
-	0x62, 0x40, 0xb4, 0x75, 0x13, 0xbb, 0x44, 0xbb, 0x04, 0xaa, 0x6b, 0x7b, 0x66, 0x9f, 0xb0, 0x40,
-	0x94, 0xa8, 0x48, 0xcf, 0x7c, 0x7d, 0x71, 0x8f, 0x87, 0x0d, 0x27, 0xb8, 0x25, 0x5a, 0xa5, 0x45,
-	0x1d, 0x03, 0x5c, 0xdb, 0xbb, 0x1d, 0xa1, 0x43, 0x32, 0xde, 0x9e, 0x90, 0x53, 0x87, 0x20, 0xe3,
-	0xed, 0x98, 0x5c, 0xfc, 0x06, 0x41, 0x76, 0xb6, 0xe0, 0x2f, 0x43, 0x2e, 0x4c, 0x98, 0x68, 0xee,
-	0x66, 0x8b, 0x60, 0x46, 0x58, 0xa8, 0xf8, 0xaf, 0xdf, 0xcc, 0xbc, 0xc0, 0x87, 0x91, 0x87, 0x68,
-	0x6d, 0x15, 0x54, 0x8b, 0x91, 0x36, 0xf1, 0xb8, 0x8d, 0x9d, 0x20, 0x7e, 0x33, 0x07, 0xde, 0xd7,
-	0x34, 0xa7, 0xb1, 0x08, 0xca, 0x44, 0x84, 0x96, 0xdd, 0x19, 0x22, 0x81, 0x91, 0x47, 0x43, 0x84,
-	0xce, 0xae, 0x25, 0x33, 0x72, 0x2e, 0x59, 0xdc, 0x86, 0xec, 0xcc, 0x3b, 0xd3, 0x4e, 0x83, 0xd2,
-	0x0b, 0xc6, 0x57, 0x1c, 0x15, 0x4d, 0xf6, 0xd9, 0x10, 0x49, 0x71, 0x8f, 0xcb, 0x5f, 0x36, 0x32,
-	0xe2, 0x3c, 0xbe, 0xef, 0x8c, 0x8f, 0x83, 0x60, 0x8b, 0xb2, 0xf6, 0x61, 0xe5, 0x4d, 0x08, 0xc5,
-	0x91, 0x0c, 0xf3, 0xd7, 0x1c, 0xda, 0xc2, 0xce, 0xba, 0x4f, 0x2c, 0x01, 0xd1, 0x56, 0x61, 0x2e,
-	0x10, 0xc3, 0x2b, 0x6e, 0xde, 0xa7, 0xf6, 0x7f, 0x33, 0x53, 0x73, 0xae, 0x29, 0x19, 0x11, 0x53,
-	0xbb, 0x01, 0x8a, 0x2f, 0xc6, 0x50, 0xbb, 0xc7, 0x07, 0xb1, 0xa6, 0xca, 0xfe, 0x66, 0xf6, 0x4c,
-	0x2d, 0xd1, 0x68, 0x26, 0x16, 0xb4, 0x35, 0xc8, 0x50, 0x3f, 0xe8, 0x88, 0x11, 0x13, 0x17, 0x6c,
-	0x79, 0x7f, 0x6b, 0xb3, 0x03, 0xa9, 0x29, 0x19, 0x13, 0xbe, 0x88, 0x2e, 0x9a, 0x1a, 0xc9, 0xc3,
-	0x44, 0x37, 0x35, 0x6f, 0x44, 0x74, 0x21, 0x53, 0xbb, 0x04, 0x72, 0xe0, 0x46, 0x7d, 0xe7, 0xc0,
-	0x96, 0x32, 0x19, 0x40, 0x4d, 0xc9, 0x10, 0x2c, 0xed, 0x36, 0xa4, 0xb7, 0xa2, 0xa1, 0x12, 0x37,
-	0xef, 0x03, 0x1a, 0xe6, 0xcc, 0x04, 0x6a, 0x64, 0xbf, 0x7e, 0x80, 0x94, 0x02, 0x3a, 0x3d, 0xd7,
-	0x26, 0x2e, 0x5d, 0x6e, 0x4a, 0xc6, 0xd8, 0x58, 0xe3, 0x18, 0x64, 0xc6, 0x1c, 0x2d, 0xb3, 0x33,
-	0x44, 0x68, 0x77, 0x88, 0x52, 0x6b, 0xc9, 0x4c, 0x2a, 0x97, 0x2e, 0xfe, 0x2a, 0xc3, 0xfc, 0x15,
-	0x46, 0x30, 0x27, 0xaf, 0x92, 0xfc, 0x4f, 0x27, 0x39, 0xf5, 0x37, 0x26, 0xf9, 0xe2, 0xd1, 0x1f,
-	0x56, 0xf6, 0xbc, 0xd6, 0x46, 0x7e, 0x2a, 0xef, 0x47, 0x3e, 0xff, 0x0d, 0x4d, 0x56, 0xc5, 0xa7,
-	0x32, 0x2c, 0x18, 0xc4, 0x77, 0xb0, 0xf5, 0x2a, 0xed, 0x2f, 0x51, 0xda, 0x9f, 0xc8, 0xa0, 0x5e,
-	0x23, 0xfc, 0x55, 0xca, 0x5f, 0x9a, 0x94, 0x37, 0xbe, 0x40, 0xbb, 0x8f, 0x74, 0xe9, 0xe1, 0x23,
-	0x5d, 0x7a, 0xf2, 0x48, 0x47, 0xf7, 0x46, 0x3a, 0xfa, 0x6a, 0xa4, 0xa3, 0xef, 0x47, 0x3a, 0xda,
-	0x1d, 0xe9, 0xe8, 0xe1, 0x48, 0x47, 0x3f, 0x8e, 0x74, 0xf4, 0xd3, 0x48, 0x97, 0x9e, 0x8c, 0x74,
-	0x74, 0xff, 0xb1, 0x2e, 0xed, 0x3e, 0xd6, 0xa5, 0x87, 0x8f, 0x75, 0xe9, 0x3d, 0xa3, 0x43, 0xfd,
-	0x3b, 0x9d, 0x6a, 0x9f, 0x3a, 0x9c, 0x30, 0x86, 0xab, 0xbd, 0xa0, 0x16, 0x7e, 0x6c, 0x52, 0xe6,
-	0x56, 0x7c, 0x46, 0xfb, 0x76, 0x9b, 0xb0, 0xca, 0xf8, 0xb8, 0xe6, 0xb7, 0x3a, 0xb4, 0x46, 0xb6,
-	0x79, 0xfc, 0xeb, 0xfb, 0xa7, 0xbf, 0xf3, 0xad, 0x54, 0xf8, 0x13, 0xfc, 0xff, 0xdf, 0x03, 0x00,
-	0x00, 0xff, 0xff, 0x77, 0x89, 0x70, 0xad, 0xf5, 0x0f, 0x00, 0x00,
+	// 1505 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4d, 0x6f, 0xdb, 0x46,
+	0x13, 0xd6, 0x5a, 0x1f, 0x96, 0x86, 0xb6, 0x25, 0xf3, 0xf5, 0xfb, 0x46, 0x71, 0x0c, 0xc5, 0xaf,
+	0x5a, 0xa0, 0x4e, 0xa3, 0x0f, 0x4b, 0x89, 0x9b, 0xc4, 0x01, 0x8c, 0x58, 0x6e, 0x6a, 0xd5, 0x4d,
+	0xe2, 0x80, 0x56, 0x5d, 0xf4, 0x93, 0x5d, 0xd1, 0x6b, 0x89, 0x36, 0xc5, 0x65, 0xc9, 0x95, 0x3f,
+	0x52, 0x04, 0x08, 0x7a, 0xee, 0x21, 0xc8, 0x5f, 0xe8, 0xa5, 0xc8, 0x4f, 0xa8, 0x2e, 0x3e, 0x16,
+	0x3d, 0x19, 0xe8, 0x25, 0xc7, 0x5a, 0x69, 0x81, 0xf6, 0x16, 0xe4, 0x14, 0xf4, 0x54, 0xec, 0x92,
+	0x94, 0x25, 0x21, 0x90, 0x5d, 0x14, 0xe8, 0x21, 0xc8, 0x4d, 0xcb, 0x7d, 0x9e, 0x67, 0x66, 0x76,
+	0x66, 0x77, 0x06, 0x82, 0x99, 0x1d, 0xe2, 0xe4, 0x74, 0x9a, 0x77, 0xb4, 0x3a, 0x69, 0xe0, 0x3c,
+	0x36, 0x88, 0xcd, 0x54, 0x9b, 0x68, 0x44, 0xdf, 0x21, 0x76, 0x9e, 0xed, 0x5b, 0xc4, 0xc9, 0x59,
+	0x36, 0x65, 0x54, 0x9e, 0x72, 0x91, 0x39, 0x17, 0x99, 0xeb, 0x45, 0x4e, 0x66, 0x6b, 0x3a, 0xab,
+	0x37, 0xab, 0x39, 0x8d, 0x36, 0xf2, 0x35, 0x5a, 0xa3, 0x79, 0x41, 0xaa, 0x36, 0x37, 0xc5, 0x4a,
+	0x2c, 0xc4, 0x2f, 0x57, 0x6c, 0xf2, 0x5c, 0xaf, 0x59, 0x6a, 0x31, 0x9d, 0x9a, 0x9e, 0xa5, 0xc9,
+	0xb3, 0xbd, 0x9b, 0x5d, 0x4e, 0x4c, 0x4e, 0xf5, 0x6e, 0xed, 0x60, 0x43, 0xdf, 0xc0, 0x8c, 0x78,
+	0xbb, 0xd3, 0x7d, 0xbb, 0x3a, 0xd9, 0x55, 0x7b, 0xa4, 0xd3, 0xbb, 0x20, 0xad, 0x19, 0x58, 0xdb,
+	0x5e, 0xa2, 0xe6, 0xa6, 0x5e, 0x93, 0x0b, 0x10, 0x6c, 0xda, 0x46, 0x12, 0x4d, 0xa3, 0x19, 0xa9,
+	0x78, 0x36, 0xd7, 0x1b, 0xe1, 0x1a, 0xd1, 0x6c, 0xc2, 0x2a, 0xfb, 0x16, 0x29, 0x85, 0x0e, 0x5b,
+	0x08, 0x29, 0x1c, 0x2b, 0xcf, 0xc1, 0xb0, 0x56, 0xc7, 0xa6, 0x49, 0x8c, 0xe4, 0xd0, 0x34, 0x9a,
+	0x89, 0x95, 0xce, 0xfd, 0xf0, 0xc7, 0x41, 0xf0, 0x7f, 0xf6, 0x44, 0x51, 0xfe, 0xe2, 0x53, 0x9c,
+	0xbd, 0x37, 0x9b, 0xbd, 0x96, 0x55, 0x3f, 0xff, 0xba, 0x90, 0xb9, 0x3a, 0x7b, 0xff, 0x4d, 0xc5,
+	0xc7, 0xa6, 0xbf, 0x82, 0xf8, 0x5d, 0x5c, 0x23, 0xf6, 0xbb, 0x4d, 0xb6, 0xef, 0x19, 0xbf, 0x01,
+	0x92, 0x4d, 0x9b, 0x4c, 0x37, 0x6b, 0xea, 0x36, 0xd9, 0x3f, 0xad, 0x13, 0xe0, 0x71, 0x3e, 0x20,
+	0xfb, 0xf2, 0x94, 0xeb, 0xbe, 0xeb, 0x07, 0x70, 0x3f, 0xc2, 0x76, 0xf0, 0xa1, 0xe7, 0x69, 0xba,
+	0x0e, 0x63, 0xab, 0x96, 0xb3, 0x4c, 0x4c, 0x9d, 0x78, 0x16, 0xaf, 0xc2, 0x30, 0xb6, 0xf4, 0xbf,
+	0x63, 0x2d, 0x82, 0x2d, 0xfd, 0x64, 0x4b, 0x39, 0x90, 0x6e, 0x36, 0xb0, 0x6e, 0x78, 0x66, 0xce,
+	0x43, 0x98, 0xf0, 0xa5, 0x30, 0x12, 0x2b, 0xc5, 0x38, 0x3c, 0x64, 0x0f, 0x7d, 0x89, 0x14, 0xf7,
+	0x7b, 0x7a, 0x01, 0x62, 0x6b, 0xb7, 0xd7, 0x3a, 0x39, 0x18, 0xd3, 0xa8, 0xc9, 0xb0, 0xc6, 0x54,
+	0xb3, 0xd9, 0xa8, 0x12, 0xdb, 0xa3, 0xf9, 0x56, 0x0e, 0x86, 0x90, 0x32, 0xea, 0x21, 0xee, 0x08,
+	0x40, 0xfa, 0x3b, 0x04, 0xa3, 0x1f, 0x91, 0x6a, 0x9d, 0x52, 0x3f, 0x91, 0xd7, 0x5d, 0xff, 0x42,
+	0x27, 0x45, 0x35, 0xc6, 0xa3, 0xea, 0x73, 0x5f, 0x7e, 0x1f, 0xa4, 0x3a, 0x63, 0x96, 0xaa, 0x09,
+	0xad, 0x64, 0x50, 0x88, 0xcc, 0xe4, 0x06, 0xd5, 0x7b, 0xae, 0x5c, 0xa9, 0xdc, 0x75, 0x6d, 0x2b,
+	0xc0, 0xc9, 0xee, 0xef, 0x95, 0x50, 0x14, 0x25, 0x86, 0x56, 0x42, 0xd1, 0xa1, 0x44, 0x30, 0xfd,
+	0x22, 0x04, 0x70, 0x0c, 0x93, 0x17, 0x21, 0x61, 0x52, 0x15, 0x37, 0x59, 0x9d, 0xda, 0xfa, 0x3d,
+	0xcc, 0xab, 0x32, 0x39, 0x2c, 0x4c, 0x4d, 0xf4, 0x99, 0xba, 0xd9, 0xb0, 0xd8, 0x7e, 0x39, 0xa0,
+	0xc4, 0x4d, 0xba, 0xd8, 0x0d, 0x97, 0x6f, 0x01, 0x54, 0xb1, 0xa3, 0x6b, 0x42, 0x45, 0x24, 0x43,
+	0x2a, 0x5e, 0x3c, 0xc1, 0x4f, 0xc6, 0xac, 0x12, 0xe7, 0x70, 0xa5, 0x72, 0x40, 0x89, 0x55, 0xfd,
+	0x85, 0x5c, 0x06, 0xe0, 0x3a, 0x2a, 0xa3, 0xdb, 0xc4, 0x4c, 0xc6, 0x84, 0xda, 0x5b, 0x83, 0xd5,
+	0x38, 0xaf, 0xc2, 0xe1, 0x5c, 0x09, 0xfb, 0x0b, 0xf9, 0x33, 0x88, 0x6b, 0x86, 0x4e, 0x4c, 0xa6,
+	0x6a, 0x1c, 0x4e, 0xab, 0x5b, 0x49, 0x10, 0x72, 0xc5, 0xc1, 0x72, 0x4b, 0x82, 0xb4, 0x44, 0x6c,
+	0xa6, 0x6f, 0xea, 0x1a, 0x66, 0x64, 0xb5, 0xba, 0x55, 0x0e, 0x28, 0xa3, 0x5a, 0xe7, 0xfb, 0x6a,
+	0x75, 0x4b, 0xfe, 0x3f, 0x8c, 0x10, 0x13, 0x57, 0x0d, 0xa2, 0xf2, 0x83, 0x2e, 0x8a, 0x24, 0x47,
+	0x15, 0xc9, 0xfd, 0xc6, 0xe3, 0x2b, 0xca, 0x17, 0x20, 0xb1, 0x49, 0x0d, 0x83, 0xee, 0xaa, 0x36,
+	0xd9, 0xd0, 0x6d, 0xa2, 0x31, 0x27, 0x19, 0x16, 0xb0, 0xb8, 0xfb, 0x5d, 0xf1, 0x3f, 0xcb, 0x59,
+	0x88, 0x98, 0x54, 0x65, 0x86, 0x93, 0x1c, 0x19, 0x70, 0xf8, 0x48, 0x09, 0x9b, 0xb4, 0x62, 0x38,
+	0x72, 0x09, 0x86, 0x9b, 0x0e, 0x11, 0xf8, 0xd1, 0xd3, 0x9c, 0x50, 0xe5, 0x96, 0x57, 0xd7, 0x65,
+	0xa4, 0x44, 0x9a, 0x0e, 0xa9, 0x18, 0xce, 0xfc, 0xc8, 0xf3, 0x85, 0x58, 0x61, 0x2e, 0x53, 0x28,
+	0x64, 0x2e, 0x67, 0xe6, 0x4a, 0x6f, 0x80, 0x24, 0x8e, 0x5d, 0xab, 0x53, 0x5d, 0x23, 0xf2, 0xc4,
+	0x41, 0x0b, 0x0d, 0x1f, 0xb6, 0x50, 0xbc, 0xdd, 0x42, 0xd1, 0x2b, 0x99, 0x62, 0xe6, 0x5a, 0xa6,
+	0x30, 0x5b, 0x3a, 0x0f, 0xc0, 0x0c, 0xc7, 0xc7, 0x8c, 0x1f, 0xb4, 0xd0, 0xe8, 0x61, 0x0b, 0x49,
+	0xed, 0x16, 0x0a, 0x17, 0x8a, 0x99, 0xc2, 0xa5, 0x4e, 0xa1, 0x45, 0x13, 0xb1, 0x95, 0x50, 0x34,
+	0x92, 0x18, 0x5e, 0x09, 0x45, 0xe3, 0x89, 0xc4, 0x4a, 0x28, 0x2a, 0x25, 0x46, 0xd2, 0x26, 0x4c,
+	0xbc, 0xec, 0x6c, 0xe5, 0x75, 0x90, 0xbc, 0x68, 0x44, 0x92, 0xd0, 0x74, 0x70, 0x46, 0x2a, 0x4e,
+	0xf5, 0x45, 0xb4, 0x5a, 0xdd, 0x22, 0x1a, 0x53, 0xc8, 0xa6, 0xb8, 0x31, 0xc9, 0xc7, 0xf7, 0x25,
+	0xed, 0x58, 0x45, 0xdc, 0x9d, 0x47, 0x68, 0x28, 0x81, 0x94, 0x98, 0x1b, 0xde, 0x6a, 0x75, 0x2b,
+	0xdd, 0x80, 0xc4, 0xd2, 0x62, 0x9f, 0xad, 0x8f, 0x01, 0x98, 0xdd, 0x74, 0x18, 0xd9, 0x50, 0x35,
+	0x7c, 0x2a, 0x53, 0x53, 0x8f, 0xef, 0xc7, 0x8f, 0x29, 0xaa, 0xa1, 0x3b, 0xac, 0xdb, 0x9c, 0xb7,
+	0xb5, 0x84, 0xd3, 0x8f, 0x42, 0x10, 0xeb, 0x1c, 0xb4, 0x7c, 0x11, 0x82, 0x8e, 0xa9, 0x8b, 0xf4,
+	0xc4, 0x4a, 0x67, 0x5e, 0xb4, 0x50, 0xc0, 0x7b, 0x70, 0xea, 0xfe, 0x4d, 0x4f, 0x3e, 0x18, 0x2a,
+	0x07, 0x14, 0x8e, 0x92, 0xaf, 0x80, 0xb4, 0xa1, 0x3b, 0xa2, 0x9a, 0x38, 0x69, 0x64, 0xe0, 0x05,
+	0x04, 0x0f, 0xba, 0x66, 0xea, 0xf2, 0x75, 0x90, 0x1a, 0xba, 0xa9, 0xee, 0x10, 0xdb, 0xe1, 0x37,
+	0x97, 0x57, 0xd7, 0x58, 0x71, 0xb2, 0x8f, 0x58, 0x31, 0x9c, 0xbb, 0xbc, 0xcf, 0x68, 0xd4, 0x50,
+	0xa0, 0xa1, 0x9b, 0xeb, 0x2e, 0x5a, 0x90, 0xf1, 0x5e, 0x87, 0x1c, 0x39, 0x05, 0x19, 0xef, 0xf9,
+	0x64, 0x06, 0x67, 0x78, 0xd2, 0x1c, 0x62, 0xef, 0x10, 0x9b, 0x6b, 0xb8, 0x87, 0xcc, 0x85, 0xc6,
+	0x85, 0xfb, 0xf3, 0x83, 0x4b, 0xf2, 0x43, 0xcb, 0x61, 0x36, 0xc1, 0x8d, 0x8a, 0xe1, 0xac, 0xbb,
+	0xfd, 0x52, 0xa7, 0xe6, 0x12, 0x35, 0x19, 0xd9, 0x63, 0x65, 0xa4, 0xfc, 0xb7, 0xe9, 0x90, 0x35,
+	0xa1, 0xbd, 0xde, 0x25, 0x2d, 0xbf, 0x07, 0xff, 0xd9, 0xa1, 0x06, 0x23, 0xb6, 0x8d, 0xd5, 0xae,
+	0x3c, 0x26, 0x06, 0x5e, 0x9a, 0x71, 0x9f, 0x52, 0xf1, 0x73, 0x35, 0x2f, 0x3d, 0x5f, 0x88, 0x16,
+	0x66, 0x33, 0x85, 0xcb, 0x99, 0xc2, 0x1c, 0x2f, 0x6b, 0xc7, 0xd4, 0xfb, 0xcb, 0x1a, 0x44, 0x59,
+	0x5f, 0xca, 0x14, 0x8a, 0xa5, 0x2c, 0x24, 0xfd, 0x38, 0x3b, 0xae, 0x76, 0xc3, 0x13, 0xde, 0x4d,
+	0x09, 0x17, 0xde, 0xc9, 0x14, 0xae, 0xac, 0x84, 0xa2, 0x90, 0x90, 0xdc, 0xca, 0x4f, 0x9b, 0x30,
+	0x35, 0x28, 0x52, 0xf9, 0x0e, 0x48, 0x1a, 0x3e, 0x7e, 0xa0, 0xdc, 0x06, 0x98, 0x3b, 0xe1, 0x81,
+	0xea, 0x2b, 0x6a, 0x25, 0xa6, 0x61, 0xef, 0x59, 0x4a, 0x97, 0x20, 0xd6, 0x79, 0x0e, 0xe5, 0x39,
+	0x08, 0xbb, 0xcf, 0xe8, 0x29, 0xfb, 0xaa, 0x8b, 0x4e, 0xef, 0xc1, 0x68, 0xcf, 0x03, 0x2d, 0xbf,
+	0x0d, 0xfc, 0x56, 0xd9, 0xaa, 0x89, 0x1b, 0xc4, 0xeb, 0x83, 0xa3, 0x5d, 0x15, 0x9d, 0xbc, 0xa1,
+	0x44, 0xf9, 0xfe, 0x1d, 0xdc, 0x20, 0xf2, 0x75, 0x88, 0x5a, 0xd8, 0x71, 0x76, 0xa9, 0xbd, 0xe1,
+	0xf5, 0x82, 0x13, 0xcd, 0x76, 0x08, 0xe9, 0x9f, 0x83, 0x30, 0xb6, 0x6c, 0xd0, 0x2a, 0x36, 0xd6,
+	0x2c, 0xa2, 0x71, 0x88, 0xbc, 0x08, 0x61, 0x87, 0xcf, 0x46, 0x5e, 0x0c, 0x17, 0x06, 0x1f, 0x4d,
+	0xd7, 0x18, 0x55, 0x0e, 0x28, 0x2e, 0x53, 0xbe, 0x0d, 0x31, 0x8b, 0x4f, 0x39, 0x1b, 0x4d, 0xb6,
+	0xef, 0xf9, 0x94, 0x1d, 0x2c, 0xd3, 0x37, 0x14, 0xf1, 0xbe, 0xd2, 0x51, 0x90, 0x57, 0x20, 0x4a,
+	0x2d, 0xa7, 0xc6, 0x27, 0x18, 0xaf, 0x2b, 0x67, 0x06, 0xab, 0xf5, 0xce, 0x3b, 0xe5, 0x80, 0xd2,
+	0xe1, 0xf3, 0xe8, 0xdc, 0xa1, 0x24, 0x74, 0x9a, 0xe8, 0xba, 0xc6, 0x19, 0x1e, 0x9d, 0x60, 0xf2,
+	0x21, 0xc3, 0x69, 0xb8, 0x8d, 0xe5, 0xc4, 0x3e, 0xd0, 0x99, 0x6f, 0xc4, 0xc3, 0xd3, 0x70, 0xe4,
+	0x65, 0x18, 0xde, 0x75, 0x47, 0x16, 0xaf, 0xeb, 0x9f, 0xd0, 0xb8, 0x7b, 0xe6, 0x9b, 0x72, 0x40,
+	0xf1, 0xd9, 0xa5, 0x09, 0x88, 0xfa, 0x20, 0x39, 0x7a, 0xd0, 0x42, 0xe8, 0xb0, 0x85, 0x22, 0x6e,
+	0x0f, 0x48, 0xff, 0x1a, 0x84, 0xb1, 0x25, 0x9b, 0x60, 0x46, 0x5e, 0x67, 0xf5, 0xdf, 0xce, 0x6a,
+	0xe4, 0x9f, 0x64, 0x75, 0x7e, 0xfc, 0xa7, 0x85, 0xbe, 0xfb, 0x58, 0x4a, 0x76, 0x25, 0x7a, 0xe4,
+	0x9b, 0x3f, 0x51, 0x67, 0x95, 0xfe, 0x2d, 0x08, 0x71, 0x85, 0x58, 0x06, 0xd6, 0x5e, 0xe7, 0xf9,
+	0x55, 0xce, 0xf3, 0x51, 0x10, 0xa4, 0x65, 0xc2, 0x5e, 0xe7, 0xf8, 0xd5, 0xcd, 0x71, 0xe9, 0x5b,
+	0x74, 0x78, 0x94, 0x0a, 0x3c, 0x39, 0x4a, 0x05, 0x9e, 0x1d, 0xa5, 0xd0, 0x83, 0x76, 0x0a, 0x7d,
+	0xdf, 0x4e, 0xa1, 0x1f, 0xdb, 0x29, 0x74, 0xd8, 0x4e, 0xa1, 0x27, 0xed, 0x14, 0xfa, 0xa5, 0x9d,
+	0x42, 0xbf, 0xb7, 0x53, 0x81, 0x67, 0xed, 0x14, 0x7a, 0xf8, 0x34, 0x15, 0x38, 0x7c, 0x9a, 0x0a,
+	0x3c, 0x79, 0x9a, 0x0a, 0x7c, 0xa2, 0xd4, 0xa8, 0xb5, 0x5d, 0xcb, 0xf9, 0x33, 0x57, 0xae, 0xe9,
+	0xe4, 0xc5, 0x8f, 0x4d, 0x6a, 0x37, 0xb2, 0x96, 0x4d, 0x77, 0xf4, 0x0d, 0x62, 0x67, 0xfd, 0xed,
+	0xbc, 0x55, 0xad, 0xd1, 0x3c, 0xd9, 0x63, 0xde, 0xbf, 0x23, 0x2f, 0xfd, 0xc7, 0xa7, 0x1a, 0x11,
+	0xff, 0x93, 0x5c, 0xfa, 0x2b, 0x00, 0x00, 0xff, 0xff, 0x5e, 0x0c, 0xe6, 0x8d, 0x18, 0x12, 0x00,
+	0x00,
 }
 
 func (this *SlackConfig) Equal(that interface{}) bool {
@@ -1591,7 +1794,7 @@ func (this *WebhookConfig) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Url != that1.Url {
+	if !this.Url.Equal(that1.Url) {
 		return false
 	}
 	if !this.HttpConfig.Equal(that1.HttpConfig) {
@@ -1633,7 +1836,13 @@ func (this *HTTPConfig) Equal(that interface{}) bool {
 	if this.FollowRedirects != that1.FollowRedirects {
 		return false
 	}
-	if !this.TlsConfig.Equal(that1.TlsConfig) {
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
 		return false
 	}
 	return true
@@ -1686,14 +1895,14 @@ func (this *HTTPConfig_BasicAuth) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *HTTPConfig_AuthConfig) Equal(that interface{}) bool {
+func (this *HTTPConfig_AuthToken) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*HTTPConfig_AuthConfig)
+	that1, ok := that.(*HTTPConfig_AuthToken)
 	if !ok {
-		that2, ok := that.(HTTPConfig_AuthConfig)
+		that2, ok := that.(HTTPConfig_AuthToken)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1705,8 +1914,138 @@ func (this *HTTPConfig_AuthConfig) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.AuthConfig.Equal(that1.AuthConfig) {
+	if !this.AuthToken.Equal(that1.AuthToken) {
 		return false
+	}
+	return true
+}
+func (this *HTTPConfig_ClientCertObj) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_ClientCertObj)
+	if !ok {
+		that2, ok := that.(HTTPConfig_ClientCertObj)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientCertObj.Equal(that1.ClientCertObj) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_NoTls)
+	if !ok {
+		that2, ok := that.(HTTPConfig_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *HTTPConfig_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HTTPConfig_UseTls)
+	if !ok {
+		that2, ok := that.(HTTPConfig_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *ClientCertificateObj) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ClientCertificateObj)
+	if !ok {
+		that2, ok := that.(ClientCertificateObj)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.UseTlsObj) != len(that1.UseTlsObj) {
+		return false
+	}
+	for i := range this.UseTlsObj {
+		if !this.UseTlsObj[i].Equal(that1.UseTlsObj[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *CACertificateObj) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CACertificateObj)
+	if !ok {
+		that2, ok := that.(CACertificateObj)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.TrustedCa) != len(that1.TrustedCa) {
+		return false
+	}
+	for i := range this.TrustedCa {
+		if !this.TrustedCa[i].Equal(that1.TrustedCa[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1729,16 +2068,13 @@ func (this *TLSConfig) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.CaCert != that1.CaCert {
+	if that1.SniChoice == nil {
+		if this.SniChoice != nil {
+			return false
+		}
+	} else if this.SniChoice == nil {
 		return false
-	}
-	if this.ClientCert != that1.ClientCert {
-		return false
-	}
-	if !this.ClientKey.Equal(that1.ClientKey) {
-		return false
-	}
-	if this.ServerName != that1.ServerName {
+	} else if !this.SniChoice.Equal(that1.SniChoice) {
 		return false
 	}
 	if this.MinVersion != that1.MinVersion {
@@ -1747,16 +2083,25 @@ func (this *TLSConfig) Equal(that interface{}) bool {
 	if this.MaxVersion != that1.MaxVersion {
 		return false
 	}
+	if that1.ServerValidationChoice == nil {
+		if this.ServerValidationChoice != nil {
+			return false
+		}
+	} else if this.ServerValidationChoice == nil {
+		return false
+	} else if !this.ServerValidationChoice.Equal(that1.ServerValidationChoice) {
+		return false
+	}
 	return true
 }
-func (this *Authorization) Equal(that interface{}) bool {
+func (this *TLSConfig_Sni) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*Authorization)
+	that1, ok := that.(*TLSConfig_Sni)
 	if !ok {
-		that2, ok := that.(Authorization)
+		that2, ok := that.(TLSConfig_Sni)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1768,28 +2113,19 @@ func (this *Authorization) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if that1.AuthType == nil {
-		if this.AuthType != nil {
-			return false
-		}
-	} else if this.AuthType == nil {
-		return false
-	} else if !this.AuthType.Equal(that1.AuthType) {
-		return false
-	}
-	if !this.Credentials.Equal(that1.Credentials) {
+	if this.Sni != that1.Sni {
 		return false
 	}
 	return true
 }
-func (this *Authorization_AuthTypeBearer) Equal(that interface{}) bool {
+func (this *TLSConfig_DisableSni) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*Authorization_AuthTypeBearer)
+	that1, ok := that.(*TLSConfig_DisableSni)
 	if !ok {
-		that2, ok := that.(Authorization_AuthTypeBearer)
+		that2, ok := that.(TLSConfig_DisableSni)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1801,7 +2137,103 @@ func (this *Authorization_AuthTypeBearer) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.AuthTypeBearer.Equal(that1.AuthTypeBearer) {
+	if !this.DisableSni.Equal(that1.DisableSni) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfig_UseServerVerification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfig_UseServerVerification)
+	if !ok {
+		that2, ok := that.(TLSConfig_UseServerVerification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseServerVerification.Equal(that1.UseServerVerification) {
+		return false
+	}
+	return true
+}
+func (this *TLSConfig_VolterraTrustedCa) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TLSConfig_VolterraTrustedCa)
+	if !ok {
+		that2, ok := that.(TLSConfig_VolterraTrustedCa)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VolterraTrustedCa.Equal(that1.VolterraTrustedCa) {
+		return false
+	}
+	return true
+}
+func (this *UpstreamTlsValidationContext) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpstreamTlsValidationContext)
+	if !ok {
+		that2, ok := that.(UpstreamTlsValidationContext)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CaCertObj.Equal(that1.CaCertObj) {
+		return false
+	}
+	return true
+}
+func (this *AuthToken) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AuthToken)
+	if !ok {
+		that2, ok := that.(AuthToken)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Token.Equal(that1.Token) {
 		return false
 	}
 	return true
@@ -2594,7 +3026,9 @@ func (this *WebhookConfig) GoString() string {
 	}
 	s := make([]string, 0, 6)
 	s = append(s, "&alert_receiver.WebhookConfig{")
-	s = append(s, "Url: "+fmt.Sprintf("%#v", this.Url)+",\n")
+	if this.Url != nil {
+		s = append(s, "Url: "+fmt.Sprintf("%#v", this.Url)+",\n")
+	}
 	if this.HttpConfig != nil {
 		s = append(s, "HttpConfig: "+fmt.Sprintf("%#v", this.HttpConfig)+",\n")
 	}
@@ -2605,15 +3039,15 @@ func (this *HTTPConfig) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&alert_receiver.HTTPConfig{")
 	if this.AuthChoice != nil {
 		s = append(s, "AuthChoice: "+fmt.Sprintf("%#v", this.AuthChoice)+",\n")
 	}
 	s = append(s, "EnableHttp2: "+fmt.Sprintf("%#v", this.EnableHttp2)+",\n")
 	s = append(s, "FollowRedirects: "+fmt.Sprintf("%#v", this.FollowRedirects)+",\n")
-	if this.TlsConfig != nil {
-		s = append(s, "TlsConfig: "+fmt.Sprintf("%#v", this.TlsConfig)+",\n")
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2634,13 +3068,61 @@ func (this *HTTPConfig_BasicAuth) GoString() string {
 		`BasicAuth:` + fmt.Sprintf("%#v", this.BasicAuth) + `}`}, ", ")
 	return s
 }
-func (this *HTTPConfig_AuthConfig) GoString() string {
+func (this *HTTPConfig_AuthToken) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&alert_receiver.HTTPConfig_AuthConfig{` +
-		`AuthConfig:` + fmt.Sprintf("%#v", this.AuthConfig) + `}`}, ", ")
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_AuthToken{` +
+		`AuthToken:` + fmt.Sprintf("%#v", this.AuthToken) + `}`}, ", ")
 	return s
+}
+func (this *HTTPConfig_ClientCertObj) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_ClientCertObj{` +
+		`ClientCertObj:` + fmt.Sprintf("%#v", this.ClientCertObj) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *HTTPConfig_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.HTTPConfig_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *ClientCertificateObj) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&alert_receiver.ClientCertificateObj{")
+	if this.UseTlsObj != nil {
+		s = append(s, "UseTlsObj: "+fmt.Sprintf("%#v", this.UseTlsObj)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CACertificateObj) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&alert_receiver.CACertificateObj{")
+	if this.TrustedCa != nil {
+		s = append(s, "TrustedCa: "+fmt.Sprintf("%#v", this.TrustedCa)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *TLSConfig) GoString() string {
 	if this == nil {
@@ -2648,39 +3130,72 @@ func (this *TLSConfig) GoString() string {
 	}
 	s := make([]string, 0, 10)
 	s = append(s, "&alert_receiver.TLSConfig{")
-	s = append(s, "CaCert: "+fmt.Sprintf("%#v", this.CaCert)+",\n")
-	s = append(s, "ClientCert: "+fmt.Sprintf("%#v", this.ClientCert)+",\n")
-	if this.ClientKey != nil {
-		s = append(s, "ClientKey: "+fmt.Sprintf("%#v", this.ClientKey)+",\n")
+	if this.SniChoice != nil {
+		s = append(s, "SniChoice: "+fmt.Sprintf("%#v", this.SniChoice)+",\n")
 	}
-	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
 	s = append(s, "MinVersion: "+fmt.Sprintf("%#v", this.MinVersion)+",\n")
 	s = append(s, "MaxVersion: "+fmt.Sprintf("%#v", this.MaxVersion)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Authorization) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&alert_receiver.Authorization{")
-	if this.AuthType != nil {
-		s = append(s, "AuthType: "+fmt.Sprintf("%#v", this.AuthType)+",\n")
-	}
-	if this.Credentials != nil {
-		s = append(s, "Credentials: "+fmt.Sprintf("%#v", this.Credentials)+",\n")
+	if this.ServerValidationChoice != nil {
+		s = append(s, "ServerValidationChoice: "+fmt.Sprintf("%#v", this.ServerValidationChoice)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *Authorization_AuthTypeBearer) GoString() string {
+func (this *TLSConfig_Sni) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&alert_receiver.Authorization_AuthTypeBearer{` +
-		`AuthTypeBearer:` + fmt.Sprintf("%#v", this.AuthTypeBearer) + `}`}, ", ")
+	s := strings.Join([]string{`&alert_receiver.TLSConfig_Sni{` +
+		`Sni:` + fmt.Sprintf("%#v", this.Sni) + `}`}, ", ")
 	return s
+}
+func (this *TLSConfig_DisableSni) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.TLSConfig_DisableSni{` +
+		`DisableSni:` + fmt.Sprintf("%#v", this.DisableSni) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfig_UseServerVerification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.TLSConfig_UseServerVerification{` +
+		`UseServerVerification:` + fmt.Sprintf("%#v", this.UseServerVerification) + `}`}, ", ")
+	return s
+}
+func (this *TLSConfig_VolterraTrustedCa) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&alert_receiver.TLSConfig_VolterraTrustedCa{` +
+		`VolterraTrustedCa:` + fmt.Sprintf("%#v", this.VolterraTrustedCa) + `}`}, ", ")
+	return s
+}
+func (this *UpstreamTlsValidationContext) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&alert_receiver.UpstreamTlsValidationContext{")
+	if this.CaCertObj != nil {
+		s = append(s, "CaCertObj: "+fmt.Sprintf("%#v", this.CaCertObj)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AuthToken) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&alert_receiver.AuthToken{")
+	if this.Token != nil {
+		s = append(s, "Token: "+fmt.Sprintf("%#v", this.Token)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func (this *HttpBasicAuth) GoString() string {
 	if this == nil {
@@ -3149,6 +3664,18 @@ func (m *WebhookConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Url != nil {
+		{
+			size, err := m.Url.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.HttpConfig != nil {
 		{
 			size, err := m.HttpConfig.MarshalToSizedBuffer(dAtA[:i])
@@ -3160,13 +3687,6 @@ func (m *WebhookConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x1a
-	}
-	if len(m.Url) > 0 {
-		i -= len(m.Url)
-		copy(dAtA[i:], m.Url)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Url)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -3191,6 +3711,15 @@ func (m *HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.AuthChoice != nil {
 		{
 			size := m.AuthChoice.Size()
@@ -3199,18 +3728,6 @@ func (m *HTTPConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
-	}
-	if m.TlsConfig != nil {
-		{
-			size, err := m.TlsConfig.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
 	}
 	if m.FollowRedirects {
 		i--
@@ -3277,16 +3794,16 @@ func (m *HTTPConfig_NoAuthorization) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
-func (m *HTTPConfig_AuthConfig) MarshalTo(dAtA []byte) (int, error) {
+func (m *HTTPConfig_AuthToken) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *HTTPConfig_AuthConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *HTTPConfig_AuthToken) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.AuthConfig != nil {
+	if m.AuthToken != nil {
 		{
-			size, err := m.AuthConfig.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.AuthToken.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3294,10 +3811,147 @@ func (m *HTTPConfig_AuthConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x42
+		dAtA[i] = 0x4a
 	}
 	return len(dAtA) - i, nil
 }
+func (m *HTTPConfig_ClientCertObj) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_ClientCertObj) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClientCertObj != nil {
+		{
+			size, err := m.ClientCertObj.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *HTTPConfig_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HTTPConfig_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ClientCertificateObj) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ClientCertificateObj) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ClientCertificateObj) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.UseTlsObj) > 0 {
+		for iNdEx := len(m.UseTlsObj) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UseTlsObj[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CACertificateObj) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CACertificateObj) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CACertificateObj) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.TrustedCa) > 0 {
+		for iNdEx := len(m.TrustedCa) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedCa[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *TLSConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3318,6 +3972,24 @@ func (m *TLSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ServerValidationChoice != nil {
+		{
+			size := m.ServerValidationChoice.Size()
+			i -= size
+			if _, err := m.ServerValidationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SniChoice != nil {
+		{
+			size := m.SniChoice.Size()
+			i -= size
+			if _, err := m.SniChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.MaxVersion != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaxVersion))
 		i--
@@ -3328,16 +4000,19 @@ func (m *TLSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x28
 	}
-	if len(m.ServerName) > 0 {
-		i -= len(m.ServerName)
-		copy(dAtA[i:], m.ServerName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerName)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.ClientKey != nil {
+	return len(dAtA) - i, nil
+}
+
+func (m *TLSConfig_DisableSni) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfig_DisableSni) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableSni != nil {
 		{
-			size, err := m.ClientKey.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.DisableSni.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3345,26 +4020,71 @@ func (m *TLSConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ClientCert) > 0 {
-		i -= len(m.ClientCert)
-		copy(dAtA[i:], m.ClientCert)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ClientCert)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.CaCert) > 0 {
-		i -= len(m.CaCert)
-		copy(dAtA[i:], m.CaCert)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CaCert)))
-		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x62
 	}
 	return len(dAtA) - i, nil
 }
+func (m *TLSConfig_Sni) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
 
-func (m *Authorization) Marshal() (dAtA []byte, err error) {
+func (m *TLSConfig_Sni) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Sni)
+	copy(dAtA[i:], m.Sni)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Sni)))
+	i--
+	dAtA[i] = 0x6a
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfig_VolterraTrustedCa) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfig_VolterraTrustedCa) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.VolterraTrustedCa != nil {
+		{
+			size, err := m.VolterraTrustedCa.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *TLSConfig_UseServerVerification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *TLSConfig_UseServerVerification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseServerVerification != nil {
+		{
+			size, err := m.UseServerVerification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UpstreamTlsValidationContext) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -3374,28 +4094,19 @@ func (m *Authorization) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Authorization) MarshalTo(dAtA []byte) (int, error) {
+func (m *UpstreamTlsValidationContext) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Authorization) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *UpstreamTlsValidationContext) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AuthType != nil {
+	if m.CaCertObj != nil {
 		{
-			size := m.AuthType.Size()
-			i -= size
-			if _, err := m.AuthType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Credentials != nil {
-		{
-			size, err := m.Credentials.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.CaCertObj.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3403,21 +4114,34 @@ func (m *Authorization) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *Authorization_AuthTypeBearer) MarshalTo(dAtA []byte) (int, error) {
+func (m *AuthToken) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AuthToken) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Authorization_AuthTypeBearer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *AuthToken) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.AuthTypeBearer != nil {
+	_ = i
+	var l int
+	_ = l
+	if m.Token != nil {
 		{
-			size, err := m.AuthTypeBearer.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Token.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -3425,10 +4149,11 @@ func (m *Authorization_AuthTypeBearer) MarshalToSizedBuffer(dAtA []byte) (int, e
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
+
 func (m *HttpBasicAuth) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4197,12 +4922,12 @@ func (m *WebhookConfig) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Url)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.HttpConfig != nil {
 		l = m.HttpConfig.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Url != nil {
+		l = m.Url.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4223,9 +4948,8 @@ func (m *HTTPConfig) Size() (n int) {
 	if m.FollowRedirects {
 		n += 2
 	}
-	if m.TlsConfig != nil {
-		l = m.TlsConfig.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
 	}
 	return n
 }
@@ -4254,77 +4978,177 @@ func (m *HTTPConfig_NoAuthorization) Size() (n int) {
 	}
 	return n
 }
-func (m *HTTPConfig_AuthConfig) Size() (n int) {
+func (m *HTTPConfig_AuthToken) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.AuthConfig != nil {
-		l = m.AuthConfig.Size()
+	if m.AuthToken != nil {
+		l = m.AuthToken.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
+func (m *HTTPConfig_ClientCertObj) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientCertObj != nil {
+		l = m.ClientCertObj.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *HTTPConfig_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ClientCertificateObj) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.UseTlsObj) > 0 {
+		for _, e := range m.UseTlsObj {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *CACertificateObj) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.TrustedCa) > 0 {
+		for _, e := range m.TrustedCa {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *TLSConfig) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.CaCert)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ClientCert)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.ClientKey != nil {
-		l = m.ClientKey.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ServerName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.MinVersion != 0 {
 		n += 1 + sovTypes(uint64(m.MinVersion))
 	}
 	if m.MaxVersion != 0 {
 		n += 1 + sovTypes(uint64(m.MaxVersion))
 	}
+	if m.SniChoice != nil {
+		n += m.SniChoice.Size()
+	}
+	if m.ServerValidationChoice != nil {
+		n += m.ServerValidationChoice.Size()
+	}
 	return n
 }
 
-func (m *Authorization) Size() (n int) {
+func (m *TLSConfig_DisableSni) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Credentials != nil {
-		l = m.Credentials.Size()
+	if m.DisableSni != nil {
+		l = m.DisableSni.Size()
 		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.AuthType != nil {
-		n += m.AuthType.Size()
 	}
 	return n
 }
-
-func (m *Authorization_AuthTypeBearer) Size() (n int) {
+func (m *TLSConfig_Sni) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.AuthTypeBearer != nil {
-		l = m.AuthTypeBearer.Size()
+	l = len(m.Sni)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *TLSConfig_VolterraTrustedCa) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.VolterraTrustedCa != nil {
+		l = m.VolterraTrustedCa.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *TLSConfig_UseServerVerification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseServerVerification != nil {
+		l = m.UseServerVerification.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *UpstreamTlsValidationContext) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CaCertObj != nil {
+		l = m.CaCertObj.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
+
+func (m *AuthToken) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Token != nil {
+		l = m.Token.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *HttpBasicAuth) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4743,8 +5567,8 @@ func (this *WebhookConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WebhookConfig{`,
-		`Url:` + fmt.Sprintf("%v", this.Url) + `,`,
 		`HttpConfig:` + strings.Replace(this.HttpConfig.String(), "HTTPConfig", "HTTPConfig", 1) + `,`,
+		`Url:` + strings.Replace(fmt.Sprintf("%v", this.Url), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4757,7 +5581,7 @@ func (this *HTTPConfig) String() string {
 		`AuthChoice:` + fmt.Sprintf("%v", this.AuthChoice) + `,`,
 		`EnableHttp2:` + fmt.Sprintf("%v", this.EnableHttp2) + `,`,
 		`FollowRedirects:` + fmt.Sprintf("%v", this.FollowRedirects) + `,`,
-		`TlsConfig:` + strings.Replace(this.TlsConfig.String(), "TLSConfig", "TLSConfig", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4782,12 +5606,72 @@ func (this *HTTPConfig_NoAuthorization) String() string {
 	}, "")
 	return s
 }
-func (this *HTTPConfig_AuthConfig) String() string {
+func (this *HTTPConfig_AuthToken) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&HTTPConfig_AuthConfig{`,
-		`AuthConfig:` + strings.Replace(fmt.Sprintf("%v", this.AuthConfig), "Authorization", "Authorization", 1) + `,`,
+	s := strings.Join([]string{`&HTTPConfig_AuthToken{`,
+		`AuthToken:` + strings.Replace(fmt.Sprintf("%v", this.AuthToken), "AuthToken", "AuthToken", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_ClientCertObj) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_ClientCertObj{`,
+		`ClientCertObj:` + strings.Replace(fmt.Sprintf("%v", this.ClientCertObj), "ClientCertificateObj", "ClientCertificateObj", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HTTPConfig_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HTTPConfig_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "TLSConfig", "TLSConfig", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ClientCertificateObj) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForUseTlsObj := "[]*ObjectRefType{"
+	for _, f := range this.UseTlsObj {
+		repeatedStringForUseTlsObj += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForUseTlsObj += "}"
+	s := strings.Join([]string{`&ClientCertificateObj{`,
+		`UseTlsObj:` + repeatedStringForUseTlsObj + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CACertificateObj) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForTrustedCa := "[]*ObjectRefType{"
+	for _, f := range this.TrustedCa {
+		repeatedStringForTrustedCa += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForTrustedCa += "}"
+	s := strings.Join([]string{`&CACertificateObj{`,
+		`TrustedCa:` + repeatedStringForTrustedCa + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4797,33 +5681,70 @@ func (this *TLSConfig) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&TLSConfig{`,
-		`CaCert:` + fmt.Sprintf("%v", this.CaCert) + `,`,
-		`ClientCert:` + fmt.Sprintf("%v", this.ClientCert) + `,`,
-		`ClientKey:` + strings.Replace(fmt.Sprintf("%v", this.ClientKey), "SecretType", "schema.SecretType", 1) + `,`,
-		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
 		`MinVersion:` + fmt.Sprintf("%v", this.MinVersion) + `,`,
 		`MaxVersion:` + fmt.Sprintf("%v", this.MaxVersion) + `,`,
+		`SniChoice:` + fmt.Sprintf("%v", this.SniChoice) + `,`,
+		`ServerValidationChoice:` + fmt.Sprintf("%v", this.ServerValidationChoice) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *Authorization) String() string {
+func (this *TLSConfig_DisableSni) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&Authorization{`,
-		`Credentials:` + strings.Replace(fmt.Sprintf("%v", this.Credentials), "SecretType", "schema.SecretType", 1) + `,`,
-		`AuthType:` + fmt.Sprintf("%v", this.AuthType) + `,`,
+	s := strings.Join([]string{`&TLSConfig_DisableSni{`,
+		`DisableSni:` + strings.Replace(fmt.Sprintf("%v", this.DisableSni), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *Authorization_AuthTypeBearer) String() string {
+func (this *TLSConfig_Sni) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&Authorization_AuthTypeBearer{`,
-		`AuthTypeBearer:` + strings.Replace(fmt.Sprintf("%v", this.AuthTypeBearer), "Empty", "schema.Empty", 1) + `,`,
+	s := strings.Join([]string{`&TLSConfig_Sni{`,
+		`Sni:` + fmt.Sprintf("%v", this.Sni) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfig_VolterraTrustedCa) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfig_VolterraTrustedCa{`,
+		`VolterraTrustedCa:` + strings.Replace(fmt.Sprintf("%v", this.VolterraTrustedCa), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TLSConfig_UseServerVerification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TLSConfig_UseServerVerification{`,
+		`UseServerVerification:` + strings.Replace(fmt.Sprintf("%v", this.UseServerVerification), "UpstreamTlsValidationContext", "UpstreamTlsValidationContext", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpstreamTlsValidationContext) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpstreamTlsValidationContext{`,
+		`CaCertObj:` + strings.Replace(this.CaCertObj.String(), "CACertificateObj", "CACertificateObj", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AuthToken) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AuthToken{`,
+		`Token:` + strings.Replace(fmt.Sprintf("%v", this.Token), "SecretType", "schema.SecretType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5689,38 +6610,6 @@ func (m *WebhookConfig) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: WebhookConfig: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Url = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field HttpConfig", wireType)
@@ -5754,6 +6643,42 @@ func (m *WebhookConfig) Unmarshal(dAtA []byte) error {
 				m.HttpConfig = &HTTPConfig{}
 			}
 			if err := m.HttpConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Url == nil {
+				m.Url = &schema.SecretType{}
+			}
+			if err := m.Url.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5885,42 +6810,6 @@ func (m *HTTPConfig) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.FollowRedirects = bool(v != 0)
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TlsConfig == nil {
-				m.TlsConfig = &TLSConfig{}
-			}
-			if err := m.TlsConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NoAuthorization", wireType)
@@ -5956,9 +6845,9 @@ func (m *HTTPConfig) Unmarshal(dAtA []byte) error {
 			}
 			m.AuthChoice = &HTTPConfig_NoAuthorization{v}
 			iNdEx = postIndex
-		case 8:
+		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthConfig", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthToken", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5985,11 +6874,290 @@ func (m *HTTPConfig) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &Authorization{}
+			v := &AuthToken{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.AuthChoice = &HTTPConfig_AuthConfig{v}
+			m.AuthChoice = &HTTPConfig_AuthToken{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertObj", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ClientCertificateObj{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AuthChoice = &HTTPConfig_ClientCertObj{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &HTTPConfig_NoTls{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &TLSConfig{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &HTTPConfig_UseTls{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ClientCertificateObj) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ClientCertificateObj: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ClientCertificateObj: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTlsObj", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UseTlsObj = append(m.UseTlsObj, &schema.ObjectRefType{})
+			if err := m.UseTlsObj[len(m.UseTlsObj)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CACertificateObj) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CACertificateObj: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CACertificateObj: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedCa", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedCa = append(m.TrustedCa, &schema.ObjectRefType{})
+			if err := m.TrustedCa[len(m.TrustedCa)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6044,138 +7212,6 @@ func (m *TLSConfig) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: TLSConfig: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CaCert", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CaCert = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientCert", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientCert = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ClientKey == nil {
-				m.ClientKey = &schema.SecretType{}
-			}
-			if err := m.ClientKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServerName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ServerName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 5:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MinVersion", wireType)
@@ -6214,98 +7250,9 @@ func (m *TLSConfig) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Authorization) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Authorization: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Authorization: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
+		case 12:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Credentials", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Credentials == nil {
-				m.Credentials = &schema.SecretType{}
-			}
-			if err := m.Credentials.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthTypeBearer", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableSni", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -6336,7 +7283,287 @@ func (m *Authorization) Unmarshal(dAtA []byte) error {
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.AuthType = &Authorization_AuthTypeBearer{v}
+			m.SniChoice = &TLSConfig_DisableSni{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sni", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SniChoice = &TLSConfig_Sni{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VolterraTrustedCa", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServerValidationChoice = &TLSConfig_VolterraTrustedCa{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseServerVerification", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &UpstreamTlsValidationContext{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServerValidationChoice = &TLSConfig_UseServerVerification{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpstreamTlsValidationContext) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpstreamTlsValidationContext: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpstreamTlsValidationContext: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaCertObj", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CaCertObj == nil {
+				m.CaCertObj = &CACertificateObj{}
+			}
+			if err := m.CaCertObj.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AuthToken) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AuthToken: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AuthToken: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Token", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Token == nil {
+				m.Token = &schema.SecretType{}
+			}
+			if err := m.Token.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

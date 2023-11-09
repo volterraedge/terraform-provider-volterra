@@ -233,7 +233,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"cloudlink_network_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -254,7 +254,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"vif_id": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"other_region": {
@@ -295,6 +295,44 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+					},
+				},
+			},
+
+			"private_connectivity": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cloud_link": {
+
+							Type:     schema.TypeSet,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -482,7 +520,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"port_ranges": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -531,7 +569,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"port_ranges": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -566,19 +604,19 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 						"aws_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"aws_az_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"inside_subnet": {
@@ -603,7 +641,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -631,7 +669,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"outside_subnet": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -650,7 +688,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -686,7 +724,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -765,7 +803,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -810,7 +848,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -824,7 +862,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -862,7 +900,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -942,14 +980,14 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -1001,7 +1039,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -1050,7 +1088,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -1068,7 +1106,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -1098,7 +1136,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -1123,7 +1161,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1143,12 +1181,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -1173,7 +1211,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -1251,7 +1289,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1363,7 +1401,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1441,7 +1479,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1474,7 +1512,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1519,7 +1557,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1631,7 +1669,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1769,7 +1807,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"port_ranges": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1804,19 +1842,19 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 						"aws_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"aws_az_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"disk_size": {
@@ -1846,7 +1884,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -1927,7 +1965,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"port_ranges": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1962,19 +2000,19 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 						"aws_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"aws_az_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"disk_size": {
@@ -2004,7 +2042,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -2060,7 +2098,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2105,7 +2143,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2119,7 +2157,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2157,7 +2195,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2237,14 +2275,14 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -2296,7 +2334,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -2345,7 +2383,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -2363,7 +2401,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2393,7 +2431,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2418,7 +2456,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2438,12 +2476,12 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -2468,7 +2506,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2575,7 +2613,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2608,7 +2646,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2653,7 +2691,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2765,7 +2803,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2866,7 +2904,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 												"storage_class_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2943,7 +2981,7 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 
 									"primary_ipv4": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -3402,6 +3440,45 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
 					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
 					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("private_connectivity"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.CreateSpecType_PrivateConnectivity{}
+		directConnectChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
+		createSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cloudLink := &ves_io_schema_views.ObjectRefType{}
+				directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+				for _, set := range sl {
+					cloudLinkMapStrToI := set.(map[string]interface{})
+
+					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+						cloudLink.Name = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+						cloudLink.Namespace = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+						cloudLink.Tenant = w.(string)
+					}
+
 				}
 
 			}
@@ -7790,6 +7867,45 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					vifChoiceInt := &ves_io_schema_views.DirectConnectConfigType_StandardVifs{}
 					vifChoiceInt.StandardVifs = &ves_io_schema.Empty{}
 					directConnectChoiceInt.DirectConnectEnabled.VifChoice = vifChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("private_connectivity"); ok && !directConnectChoiceTypeFound {
+
+		directConnectChoiceTypeFound = true
+		directConnectChoiceInt := &ves_io_schema_views_aws_vpc_site.ReplaceSpecType_PrivateConnectivity{}
+		directConnectChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
+		updateSpec.DirectConnectChoice = directConnectChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cloudLink := &ves_io_schema_views.ObjectRefType{}
+				directConnectChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+				for _, set := range sl {
+					cloudLinkMapStrToI := set.(map[string]interface{})
+
+					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+						cloudLink.Name = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+						cloudLink.Namespace = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+						cloudLink.Tenant = w.(string)
+					}
+
 				}
 
 			}

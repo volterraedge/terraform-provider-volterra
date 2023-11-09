@@ -504,15 +504,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.CascadeDelete", nil)
 	return c.CustomAPIServer.CascadeDelete(ctx, in)
 }
 func (c *customAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess", nil)
 	return c.CustomAPIServer.EvaluateAPIAccess(ctx, in)
 }
 func (c *customAPIInprocClient) LookupUserRoles(ctx context.Context, in *LookupUserRolesReq, opts ...grpc.CallOption) (*LookupUserRolesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.LookupUserRoles", nil)
 	return c.CustomAPIServer.LookupUserRoles(ctx, in)
 }
 func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.SuggestValues", nil)
 	return c.CustomAPIServer.SuggestValues(ctx, in)
 }
 

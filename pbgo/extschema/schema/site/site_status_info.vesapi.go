@@ -217,6 +217,7 @@ type customSiteStatusAPIInprocClient struct {
 }
 
 func (c *customSiteStatusAPIInprocClient) SiteStatusMetrics(ctx context.Context, in *SiteStatusMetricsRequest, opts ...grpc.CallOption) (*SiteStatusMetricsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomSiteStatusAPI.SiteStatusMetrics", nil)
 	return c.CustomSiteStatusAPIServer.SiteStatusMetrics(ctx, in)
 }
 

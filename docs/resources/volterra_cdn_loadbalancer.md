@@ -24,11 +24,14 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  http {
-    dns_volterra_managed = true
+  https_auto_cert {
+    add_hsts      = true
+    http_redirect = true
 
-    // One of the arguments from this list "port port_ranges" must be set
-    port = "80"
+    tls_config {
+      // One of the arguments from this list "tls_12_plus tls_11_plus" must be set
+      tls_12_plus = true
+    }
   }
   origin_pool {
     follow_origin_redirect = true
@@ -154,9 +157,43 @@ Block list of countries.
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
+### Cache Bypass
+
+Bypass Caching of content from the origin.
+
 ### Cache Disabled
 
 Disable Caching of content from the origin.
+
+### Cache Options
+
+Cache Options.
+
+`cache_rules` - (Required) Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.. See [Cache Rules ](#cache-rules) below for details.
+
+`default_cache_action` - (Required) Default value for Cache action.. See [Default Cache Action ](#default-cache-action) below for details.
+
+### Cache Rule Expression
+
+The Cache Rule Expression Terms that are ANDed.
+
+`headers` - (Optional) Configure cache rule headers to match the criteria. See [Headers ](#headers) below for details.
+
+`path_match` - (Optional) URI path of route. See [Path Match ](#path-match) below for details.
+
+`query_params` - (Optional) List of (key, value) query parameters. See [Query Params ](#query-params) below for details.
+
+### Cache Rules
+
+Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs..
+
+`cache_bypass` - (Optional) Bypass Caching of content from the origin (bool).
+
+`eligible_for_cache` - (Optional) Eligible for caching the content. See [Eligible For Cache ](#eligible-for-cache) below for details.
+
+`rule_expression_list` - (Required) Expressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs... See [Rule Expression List ](#rule-expression-list) below for details.
+
+`rule_name` - (Required) Name of the Cache Rule (`String`).
 
 ### Cache Ttl Options
 
@@ -200,6 +237,12 @@ Use hash algorithms in the custom order. F5XC will try to fetch ocsp response fr
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
+### Default Cache Action
+
+Default value for Cache action..
+
+`eligible_for_cache` - (Optional) Eligible for caching the content. See [Eligible For Cache ](#eligible-for-cache) below for details.
+
 ### Disable Auth
 
 No Authenticaiton.
@@ -211,6 +254,18 @@ This is the default behavior if no choice is selected..
 ### Disable Sni
 
 Do not use SNI..
+
+### Eligible For Cache
+
+Eligible for caching the content.
+
+`hostname_uri` - (Optional) . See [Hostname Uri ](#hostname-uri) below for details.
+
+`scheme_hostname_request_uri` - (Optional) . See [Scheme Hostname Request Uri ](#scheme-hostname-request-uri) below for details.
+
+`scheme_hostname_uri` - (Optional) . See [Scheme Hostname Uri ](#scheme-hostname-uri) below for details.
+
+`scheme_hostname_uri_query` - (Optional) . See [Scheme Hostname Uri Query ](#scheme-hostname-uri-query) below for details.
 
 ### Geo Filtering
 
@@ -237,6 +292,30 @@ Request/Response header related options.
 `response_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [Response Headers To Add ](#response-headers-to-add) below for details.
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
+
+### Headers
+
+Configure cache rule headers to match the criteria.
+
+`invert_match` - (Optional) Invert the result of the match to detect missing header or non-matching value (`Bool`).
+
+`name` - (Required) Name of the header (`String`).
+
+`exact` - (Optional) Header value to match exactly (`String`).
+
+`presence` - (Optional) If true, check for presence of header (`Bool`).
+
+`regex` - (Optional) Regex match of the header value in re2 format (`String`).
+
+### Hostname Uri
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
 
 ### Http
 
@@ -304,6 +383,8 @@ Logging related options.
 
 More options like header manipulation, compression etc..
 
+`cache_options` - (Optional) Cache Options. See [Cache Options ](#cache-options) below for details.
+
 `cache_ttl_options` - (Optional) Cache Options. See [Cache Ttl Options ](#cache-ttl-options) below for details.
 
 `header_options` - (Optional) Request/Response header related options. See [Header Options ](#header-options) below for details.
@@ -350,6 +431,16 @@ List of original servers.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
+### Path Match
+
+URI path of route.
+
+`path` - (Optional) Exact path value to match (`String`).
+
+`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
+
+`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -388,6 +479,16 @@ Token is found in the Query-Param.
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
+### Query Params
+
+List of (key, value) query parameters.
+
+`key` - (Required) In the above example, assignee_username is the key (`String`).
+
+`exact` - (Optional) Exact match value for the query parameter key (`String`).
+
+`regex` - (Optional) Regex match value for the query parameter key (`String`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -421,6 +522,44 @@ Headers specified at this level are applied after headers from matched Route are
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Secret Value ](#secret-value) below for details.
 
 `value` - (Optional) Value of the HTTP header. (`String`).
+
+### Rule Expression List
+
+Expressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs...
+
+`cache_rule_expression` - (Required) The Cache Rule Expression Terms that are ANDed. See [Cache Rule Expression ](#cache-rule-expression) below for details.
+
+`expression_name` - (Required) Name of the Expressions items that are ANDed (`String`).
+
+### Scheme Hostname Request Uri
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+
+### Scheme Hostname Uri
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+
+### Scheme Hostname Uri Query
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
 
 ### Secret Key
 
@@ -514,17 +653,17 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-x-displayName: "Enable MTLS With Inline Certificate".
+x-displayName: "Enable by uploading a new certificate".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
 ### Use Server Verification
 
-Perform origin server verification using the provided trusted CA list.
+Perform origin server verification using the provided Root CA list.
 
-`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+`trusted_ca` - (Optional) Select/Add a Root CA for verification of Server's certificate. See [ref](#ref) below for details.
 
-`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca_url` - (Optional) Inline Root CA certificate for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -536,15 +675,15 @@ Origin servers use TLS.
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable by uploading a new certificate". See [Use Mtls ](#use-mtls) below for details.
 
-`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
+`use_mtls_obj` - (Optional) x-displayName: "Enable by selecting a certificate". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 
-`use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
+`use_server_verification` - (Optional) Perform origin server verification using the provided Root CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
-`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default trusted CA list (bool).
+`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default Root CA list (bool).
 
 `disable_sni` - (Optional) Do not use SNI. (bool).
 
@@ -570,7 +709,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Volterra Trusted Ca
 
-Perform origin server verification using F5XC default trusted CA list.
+Perform origin server verification using F5XC default Root CA list.
 
 ### Wingman Secret Info
 

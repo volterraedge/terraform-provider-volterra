@@ -113,7 +113,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -143,7 +143,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -168,7 +168,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -188,12 +188,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -218,7 +218,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -236,7 +236,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 						"port": {
 
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"datadog_default_server": {
@@ -270,12 +270,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 									"ip_address": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"port": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -290,12 +290,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 									"port": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"server_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -359,7 +359,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -389,7 +389,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -414,7 +414,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -434,12 +434,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -464,7 +464,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -491,12 +491,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"server_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -523,7 +523,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -553,7 +553,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -578,7 +578,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -598,12 +598,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -628,7 +628,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -668,12 +668,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 									"port": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"server_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -737,7 +737,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -767,7 +767,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -792,7 +792,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -812,12 +812,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -842,7 +842,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -869,12 +869,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"server_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -889,12 +889,12 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 									"port": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"server_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -912,13 +912,13 @@ func resourceVolterraLogReceiver() *schema.Resource {
 
 						"network": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"site": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

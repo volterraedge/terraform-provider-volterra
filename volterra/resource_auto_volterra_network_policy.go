@@ -65,7 +65,7 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 			"endpoint": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -236,7 +236,7 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -252,7 +252,7 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -506,7 +506,7 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -522,7 +522,7 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

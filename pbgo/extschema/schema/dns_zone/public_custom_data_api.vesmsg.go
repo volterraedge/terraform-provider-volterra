@@ -300,6 +300,16 @@ type ValidateDnsZoneMetricsResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDnsZoneMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDnsZoneMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DnsZoneMetricsResponse)
 	if !ok {
@@ -326,12 +336,40 @@ func (v *ValidateDnsZoneMetricsResponse) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDnsZoneMetricsResponseValidator = func() *ValidateDnsZoneMetricsResponse {
 	v := &ValidateDnsZoneMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsZoneMetricsResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()

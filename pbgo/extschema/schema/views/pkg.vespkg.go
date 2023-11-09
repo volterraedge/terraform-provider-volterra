@@ -47,6 +47,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.GlobalNetworkConnectionType"] = GlobalNetworkConnectionTypeValidator()
 	vr["ves.io.schema.views.HostedVIFConfigType"] = HostedVIFConfigTypeValidator()
 	vr["ves.io.schema.views.OfflineSurvivabilityModeType"] = OfflineSurvivabilityModeTypeValidator()
+	vr["ves.io.schema.views.PrivateConnectConfigType"] = PrivateConnectConfigTypeValidator()
 	vr["ves.io.schema.views.SecurityGroupType"] = SecurityGroupTypeValidator()
 	vr["ves.io.schema.views.SiteStaticRoutesListType"] = SiteStaticRoutesListTypeValidator()
 	vr["ves.io.schema.views.SiteStaticRoutesType"] = SiteStaticRoutesTypeValidator()

@@ -74,6 +74,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.url_matcher",
 		"spec.virtual_host_matcher",
 		"spec.waf_action.data_guard_control",
+		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
 	}
 
@@ -103,6 +104,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.url_matcher",
 		"spec.virtual_host_matcher",
 		"spec.waf_action.data_guard_control",
+		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
 	}
 

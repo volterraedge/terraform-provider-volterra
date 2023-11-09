@@ -1256,6 +1256,15 @@ func (v *ValidateBusinessLogicMarkupSetting) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["discovered_api_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovered_api_settings"))
+		if err := fv(ctx, m.GetDiscoveredApiSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetLearnFromRedirectTraffic().(type) {
 	case *BusinessLogicMarkupSetting_Disable:
 		if fv, exists := v.FldValidators["learn_from_redirect_traffic.disable"]; exists {
@@ -1299,6 +1308,8 @@ var DefaultBusinessLogicMarkupSettingValidator = func() *ValidateBusinessLogicMa
 	v := &ValidateBusinessLogicMarkupSetting{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["sensitive_data_detection_rules"] = SensitiveDataDetectionRulesValidator().Validate
+
+	v.FldValidators["discovered_api_settings"] = DiscoveredAPISettingsValidator().Validate
 
 	return v
 }()
@@ -2414,6 +2425,114 @@ var DefaultCustomSensitiveDataTypeValidator = func() *ValidateCustomSensitiveDat
 
 func CustomSensitiveDataTypeValidator() db.Validator {
 	return DefaultCustomSensitiveDataTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DiscoveredAPISettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DiscoveredAPISettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DiscoveredAPISettings) DeepCopy() *DiscoveredAPISettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DiscoveredAPISettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DiscoveredAPISettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DiscoveredAPISettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DiscoveredAPISettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDiscoveredAPISettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDiscoveredAPISettings) PurgeDurationForInactiveDiscoveredApisValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for purge_duration_for_inactive_discovered_apis")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDiscoveredAPISettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DiscoveredAPISettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DiscoveredAPISettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["purge_duration_for_inactive_discovered_apis"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("purge_duration_for_inactive_discovered_apis"))
+		if err := fv(ctx, m.GetPurgeDurationForInactiveDiscoveredApis(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDiscoveredAPISettingsValidator = func() *ValidateDiscoveredAPISettings {
+	v := &ValidateDiscoveredAPISettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPurgeDurationForInactiveDiscoveredApis := v.PurgeDurationForInactiveDiscoveredApisValidationRuleHandler
+	rulesPurgeDurationForInactiveDiscoveredApis := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "7",
+	}
+	vFn, err = vrhPurgeDurationForInactiveDiscoveredApis(rulesPurgeDurationForInactiveDiscoveredApis)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DiscoveredAPISettings.purge_duration_for_inactive_discovered_apis: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["purge_duration_for_inactive_discovered_apis"] = vFn
+
+	return v
+}()
+
+func DiscoveredAPISettingsValidator() db.Validator {
+	return DefaultDiscoveredAPISettingsValidator
 }
 
 // augmented methods on protoc/std generated struct

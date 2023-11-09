@@ -27,6 +27,266 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *BigIqInstanceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BigIqInstanceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *BigIqInstanceType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting BigIqInstanceType.password")
+	}
+
+	return nil
+}
+
+func (m *BigIqInstanceType) DeepCopy() *BigIqInstanceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BigIqInstanceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BigIqInstanceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BigIqInstanceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BigIqInstanceTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBigIqInstanceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBigIqInstanceType) UsernameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for username")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIqInstanceType) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIqInstanceType) LicensePoolNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for license_pool_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIqInstanceType) SkuNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sku_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIqInstanceType) LicenseServerIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for license_server_ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIqInstanceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BigIqInstanceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BigIqInstanceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["license_pool_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("license_pool_name"))
+		if err := fv(ctx, m.GetLicensePoolName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["license_server_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("license_server_ip"))
+		if err := fv(ctx, m.GetLicenseServerIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("password"))
+		if err := fv(ctx, m.GetPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sku_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sku_name"))
+		if err := fv(ctx, m.GetSkuName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["username"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("username"))
+		if err := fv(ctx, m.GetUsername(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBigIqInstanceTypeValidator = func() *ValidateBigIqInstanceType {
+	v := &ValidateBigIqInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUsername := v.UsernameValidationRuleHandler
+	rulesUsername := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhUsername(rulesUsername)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIqInstanceType.username: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["username"] = vFn
+
+	vrhPassword := v.PasswordValidationRuleHandler
+	rulesPassword := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPassword(rulesPassword)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIqInstanceType.password: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["password"] = vFn
+
+	vrhLicensePoolName := v.LicensePoolNameValidationRuleHandler
+	rulesLicensePoolName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhLicensePoolName(rulesLicensePoolName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIqInstanceType.license_pool_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["license_pool_name"] = vFn
+
+	vrhSkuName := v.SkuNameValidationRuleHandler
+	rulesSkuName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhSkuName(rulesSkuName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIqInstanceType.sku_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sku_name"] = vFn
+
+	vrhLicenseServerIp := v.LicenseServerIpValidationRuleHandler
+	rulesLicenseServerIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ip":        "true",
+		"ves.io.schema.rules.string.not_in":    "0.0.0.0",
+	}
+	vFn, err = vrhLicenseServerIp(rulesLicenseServerIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIqInstanceType.license_server_ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["license_server_ip"] = vFn
+
+	return v
+}()
+
+func BigIqInstanceTypeValidator() db.Validator {
+	return DefaultBigIqInstanceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2806,6 +3066,10 @@ func (m *F5BigIpAppStackBareMetalType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting F5BigIpAppStackBareMetalType.admin_password")
 	}
 
+	if err := m.GetBigiqInstance().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting F5BigIpAppStackBareMetalType.bigiq_instance")
+	}
+
 	return nil
 }
 
@@ -3053,6 +3317,27 @@ func (v *ValidateF5BigIpAppStackBareMetalType) PublicDownloadUrlValidationRuleHa
 	return validatorFn, nil
 }
 
+func (v *ValidateF5BigIpAppStackBareMetalType) BigiqInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bigiq_instance")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := BigIqInstanceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateF5BigIpAppStackBareMetalType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*F5BigIpAppStackBareMetalType)
 	if !ok {
@@ -3089,6 +3374,15 @@ func (v *ValidateF5BigIpAppStackBareMetalType) Validate(ctx context.Context, pm 
 
 		vOpts := append(opts, db.WithValidateField("bare_metal_site"))
 		if err := fv(ctx, m.GetBareMetalSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bigiq_instance"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigiq_instance"))
+		if err := fv(ctx, m.GetBigiqInstance(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3198,6 +3492,7 @@ var DefaultF5BigIpAppStackBareMetalTypeValidator = func() *ValidateF5BigIpAppSta
 	vrhPublicDownloadUrl := v.PublicDownloadUrlValidationRuleHandler
 	rulesPublicDownloadUrl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.uri":       "true",
 	}
 	vFn, err = vrhPublicDownloadUrl(rulesPublicDownloadUrl)
 	if err != nil {
@@ -3205,6 +3500,17 @@ var DefaultF5BigIpAppStackBareMetalTypeValidator = func() *ValidateF5BigIpAppSta
 		panic(errMsg)
 	}
 	v.FldValidators["public_download_url"] = vFn
+
+	vrhBigiqInstance := v.BigiqInstanceValidationRuleHandler
+	rulesBigiqInstance := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBigiqInstance(rulesBigiqInstance)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for F5BigIpAppStackBareMetalType.bigiq_instance: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bigiq_instance"] = vFn
 
 	return v
 }()
@@ -8568,11 +8874,33 @@ func (v *ValidateServiceNodesBareMetalType) NodeNameValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateServiceNodesBareMetalType) LicenseKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateServiceNodesBareMetalType) BmVirtualCpuCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(BMNodeVirtualCpuCount)
+		return int32(i)
+	}
+	// BMNodeVirtualCpuCount_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, BMNodeVirtualCpuCount_name, conv)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for license_key")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bm_virtual_cpu_count")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServiceNodesBareMetalType) BmNodeMemorySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(BMNodeMemorySize)
+		return int32(i)
+	}
+	// BMNodeMemorySize_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, BMNodeMemorySize_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bm_node_memory_size")
 	}
 
 	return validatorFn, nil
@@ -8592,6 +8920,24 @@ func (v *ValidateServiceNodesBareMetalType) Validate(ctx context.Context, pm int
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["bm_node_memory_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bm_node_memory_size"))
+		if err := fv(ctx, m.GetBmNodeMemorySize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bm_virtual_cpu_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bm_virtual_cpu_count"))
+		if err := fv(ctx, m.GetBmVirtualCpuCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["external_interface"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("external_interface"))
@@ -8605,15 +8951,6 @@ func (v *ValidateServiceNodesBareMetalType) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("internal_interface"))
 		if err := fv(ctx, m.GetInternalInterface(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["license_key"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("license_key"))
-		if err := fv(ctx, m.GetLicenseKey(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8657,17 +8994,27 @@ var DefaultServiceNodesBareMetalTypeValidator = func() *ValidateServiceNodesBare
 	}
 	v.FldValidators["node_name"] = vFn
 
-	vrhLicenseKey := v.LicenseKeyValidationRuleHandler
-	rulesLicenseKey := map[string]string{
+	vrhBmVirtualCpuCount := v.BmVirtualCpuCountValidationRuleHandler
+	rulesBmVirtualCpuCount := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.pattern":   "^(([A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{5}-[A-Z]{7})|([A-Z][0-9]{4}-[0-9]{5}-[0-9]{5}-[0-9]{5}-[0-9]{7}))$",
 	}
-	vFn, err = vrhLicenseKey(rulesLicenseKey)
+	vFn, err = vrhBmVirtualCpuCount(rulesBmVirtualCpuCount)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceNodesBareMetalType.license_key: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceNodesBareMetalType.bm_virtual_cpu_count: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["license_key"] = vFn
+	v.FldValidators["bm_virtual_cpu_count"] = vFn
+
+	vrhBmNodeMemorySize := v.BmNodeMemorySizeValidationRuleHandler
+	rulesBmNodeMemorySize := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBmNodeMemorySize(rulesBmNodeMemorySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServiceNodesBareMetalType.bm_node_memory_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bm_node_memory_size"] = vFn
 
 	v.FldValidators["internal_interface"] = InterfaceDetailsValidator().Validate
 

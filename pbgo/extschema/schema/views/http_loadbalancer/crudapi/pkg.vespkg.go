@@ -29,7 +29,35 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
+		"spec.gc_spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
+		"spec.gc_spec.jwt_validation.jwks",
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectCreateReq"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Get"] = []string{
+		"spec.gc_spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.jwt_validation.jwks",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.jwt_validation.jwks",
+	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = "ves.io.schema.views.http_loadbalancer.crudapi.ObjectReplaceReq"
 

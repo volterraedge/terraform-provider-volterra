@@ -213,6 +213,7 @@ type namespaceMLCustomAPIInprocClient struct {
 }
 
 func (c *namespaceMLCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsNSReq, opts ...grpc.CallOption) (*ApiEndpointsStatsNSRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStats", nil)
 	return c.NamespaceMLCustomAPIServer.GetApiEndpointsStats(ctx, in)
 }
 

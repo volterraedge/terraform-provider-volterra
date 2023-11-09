@@ -2218,66 +2218,87 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) AccessLogAggregationQuery(ctx context.Context, in *AccessLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AccessLogAggregationQuery", nil)
 	return c.CustomAPIServer.AccessLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) AccessLogQueryV2(ctx context.Context, in *AccessLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AccessLogQueryV2", nil)
 	return c.CustomAPIServer.AccessLogQueryV2(ctx, in)
 }
 func (c *customAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AccessLogScrollQuery", nil)
 	return c.CustomAPIServer.AccessLogScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.AuditLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLogRequestV2, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogQueryV2", nil)
 	return c.CustomAPIServer.AuditLogQueryV2(ctx, in)
 }
 func (c *customAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogScrollQuery", nil)
 	return c.CustomAPIServer.AuditLogScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context, in *FirewallLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery", nil)
 	return c.CustomAPIServer.FirewallLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) FirewallLogQuery(ctx context.Context, in *FirewallLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogQuery", nil)
 	return c.CustomAPIServer.FirewallLogQuery(ctx, in)
 }
 func (c *customAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery", nil)
 	return c.CustomAPIServer.FirewallLogScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.K8SAuditLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogQuery", nil)
 	return c.CustomAPIServer.K8SAuditLogQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery", nil)
 	return c.CustomAPIServer.K8SAuditLogScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery", nil)
 	return c.CustomAPIServer.K8SEventsAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SEventsQuery(ctx context.Context, in *K8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsQuery", nil)
 	return c.CustomAPIServer.K8SEventsQuery(ctx, in)
 }
 func (c *customAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery", nil)
 	return c.CustomAPIServer.K8SEventsScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.VK8SAuditLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SAuditLogQuery(ctx context.Context, in *VK8SAuditLogRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery", nil)
 	return c.CustomAPIServer.VK8SAuditLogQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery", nil)
 	return c.CustomAPIServer.VK8SAuditLogScrollQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery", nil)
 	return c.CustomAPIServer.VK8SEventsAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEventsRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsQuery", nil)
 	return c.CustomAPIServer.VK8SEventsQuery(ctx, in)
 }
 func (c *customAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery", nil)
 	return c.CustomAPIServer.VK8SEventsScrollQuery(ctx, in)
 }
 

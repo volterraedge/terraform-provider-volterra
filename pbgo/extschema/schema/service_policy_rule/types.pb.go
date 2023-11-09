@@ -47,7 +47,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Client Selection"
 	// x-required
-	// Select clients for which the rule the will be applied.
+	// Select clients for which the rule will be applied.
 	//
 	// Types that are valid to be assigned to ClientChoice:
 	//	*GlobalSpecType_AnyClient
@@ -2094,7 +2094,6 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 type GetSpecType struct {
 	Action policy.RuleAction `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.policy.RuleAction" json:"action,omitempty"`
 	// Types that are valid to be assigned to ClientChoice:
-	//
 	//	*GetSpecType_AnyClient
 	//	*GetSpecType_ClientName
 	//	*GetSpecType_IpThreatCategoryList
@@ -2109,25 +2108,21 @@ type GetSpecType struct {
 	QueryParams    []*policy.QueryParameterMatcherType `protobuf:"bytes,7,rep,name=query_params,json=queryParams,proto3" json:"query_params,omitempty"`
 	HttpMethod     *policy.HttpMethodMatcherType       `protobuf:"bytes,8,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`
 	// Types that are valid to be assigned to IpChoice:
-	//
 	//	*GetSpecType_AnyIp
 	//	*GetSpecType_IpPrefixList
 	//	*GetSpecType_IpMatcher
 	IpChoice isGetSpecType_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to DstIpChoice:
-	//
 	//	*GetSpecType_AnyDstIp
 	//	*GetSpecType_DstIpPrefixList
 	//	*GetSpecType_DstIpMatcher
 	DstIpChoice isGetSpecType_DstIpChoice `protobuf_oneof:"dst_ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
-	//
 	//	*GetSpecType_AnyAsn
 	//	*GetSpecType_AsnList
 	//	*GetSpecType_AsnMatcher
 	AsnChoice isGetSpecType_AsnChoice `protobuf_oneof:"asn_choice"`
 	// Types that are valid to be assigned to DstAsnChoice:
-	//
 	//	*GetSpecType_AnyDstAsn
 	//	*GetSpecType_DstAsnList
 	//	*GetSpecType_DstAsnMatcher

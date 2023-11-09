@@ -279,6 +279,35 @@ func (m *BgpPeer) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *BgpPeer) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.AuthChoice = nil
+
+	return copy.string()
+}
+
+func (m *BgpPeer) GoString() string {
+	copy := m.DeepCopy()
+	copy.AuthChoice = nil
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *BgpPeer) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.AuthChoice = nil
+
+	return nil
+}
+
 func (m *BgpPeer) DeepCopy() *BgpPeer {
 	if m == nil {
 		return nil
@@ -537,6 +566,32 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetAuthChoice().(type) {
+	case *BgpPeer_NoAuthentication:
+		if fv, exists := v.FldValidators["auth_choice.no_authentication"]; exists {
+			val := m.GetAuthChoice().(*BgpPeer_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpPeer_Md5AuthKey:
+		if fv, exists := v.FldValidators["auth_choice.md5_auth_key"]; exists {
+			val := m.GetAuthChoice().(*BgpPeer_Md5AuthKey).Md5AuthKey
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("md5_auth_key"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -982,6 +1037,22 @@ func (m *CreateSpecType) ToJSON() (string, error) {
 
 func (m *CreateSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CreateSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetPeers() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.peers idx %v", idx)
+		}
+	}
+
+	return nil
 }
 
 func (m *CreateSpecType) DeepCopy() *CreateSpecType {
@@ -2068,6 +2139,22 @@ func (m *GetSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *GetSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetPeers() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.peers idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
 func (m *GetSpecType) DeepCopy() *GetSpecType {
 	if m == nil {
 		return nil
@@ -2356,6 +2443,28 @@ func (m *GlobalSpecType) ToJSON() (string, error) {
 
 func (m *GlobalSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GlobalSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetBgpPeers() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.bgp_peers idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetPeers() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.peers idx %v", idx)
+		}
+	}
+
+	return nil
 }
 
 func (m *GlobalSpecType) DeepCopy() *GlobalSpecType {
@@ -3158,6 +3267,20 @@ func (m *Peer) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *Peer) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetExternal().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting Peer.external")
+	}
+
+	return nil
+}
+
 func (m *Peer) DeepCopy() *Peer {
 	if m == nil {
 		return nil
@@ -3434,6 +3557,35 @@ func (m *PeerExternal) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *PeerExternal) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.AuthChoice = nil
+
+	return copy.string()
+}
+
+func (m *PeerExternal) GoString() string {
+	copy := m.DeepCopy()
+	copy.AuthChoice = nil
+
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *PeerExternal) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.AuthChoice = nil
+
+	return nil
+}
+
 func (m *PeerExternal) DeepCopy() *PeerExternal {
 	if m == nil {
 		return nil
@@ -3673,6 +3825,32 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 		vOpts := append(opts, db.WithValidateField("asn"))
 		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetAuthChoice().(type) {
+	case *PeerExternal_NoAuthentication:
+		if fv, exists := v.FldValidators["auth_choice.no_authentication"]; exists {
+			val := m.GetAuthChoice().(*PeerExternal_NoAuthentication).NoAuthentication
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("no_authentication"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_Md5AuthKey:
+		if fv, exists := v.FldValidators["auth_choice.md5_auth_key"]; exists {
+			val := m.GetAuthChoice().(*PeerExternal_Md5AuthKey).Md5AuthKey
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("md5_auth_key"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4275,6 +4453,22 @@ func (m *ReplaceSpecType) ToJSON() (string, error) {
 
 func (m *ReplaceSpecType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ReplaceSpecType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetPeers() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.peers idx %v", idx)
+		}
+	}
+
+	return nil
 }
 
 func (m *ReplaceSpecType) DeepCopy() *ReplaceSpecType {

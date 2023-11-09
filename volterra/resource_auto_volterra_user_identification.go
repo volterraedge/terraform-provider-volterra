@@ -63,7 +63,7 @@ func resourceVolterraUserIdentification() *schema.Resource {
 			"rules": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 

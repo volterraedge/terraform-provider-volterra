@@ -22,14 +22,7 @@ resource "volterra_aws_vpc_site" "example" {
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      dns          = true
-      network_type = "network_type"
-    }
-  }
+  default_blocked_services = true
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -38,8 +31,20 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
-  direct_connect_disabled = true
+
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
+
+  direct_connect_enabled {
+    // One of the arguments from this list "auto_asn custom_asn" must be set
+    custom_asn = "64512"
+
+    cloud_aggregated_prefix = ["10.0.0.0/20"]
+
+    dc_connect_aggregated_prefix = ["20.0.0.0/20"]
+
+    // One of the arguments from this list "hosted_vifs standard_vifs manual_gw" must be set
+    standard_vifs = true
+  }
   // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
   egress_gateway_default = true
   instance_type          = ["a1.xlarge"]
@@ -50,12 +55,12 @@ resource "volterra_aws_vpc_site" "example" {
   // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
   f5xc_security_group = true
 
-  // One of the arguments from this list "voltstack_cluster ingress_gw ingress_egress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "disable_allowed_vip_port use_http_port use_https_port use_http_https_port custom_ports" must be set
-      use_http_https_port = true
+      use_http_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -122,6 +127,8 @@ Argument Reference
 `direct_connect_disabled` - (Optional) Direct Connect feature is disabled (bool).
 
 `direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
+
+`private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity ](#private-connectivity) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
 
@@ -705,6 +712,12 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 `interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Interception Rules ](#interception-rules) below for details.
 
+### Private Connectivity
+
+Enable Private Connectivity to Site.
+
+`cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -743,7 +756,7 @@ Use same region as that of the Site.
 
 Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
 
-`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+`cloudlink_network_name` - (Required) CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up. (`String`).
 
 ### Site Registration Over Internet
 

@@ -219,6 +219,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) DnsZoneMetrics(ctx context.Context, in *DnsZoneMetricsRequest, opts ...grpc.CallOption) (*DnsZoneMetricsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneMetrics", nil)
 	return c.CustomDataAPIServer.DnsZoneMetrics(ctx, in)
 }
 
@@ -503,6 +504,16 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/dns_zoneMetricsData"
                     },
                     "x-displayname": "Data"
+                },
+                "step": {
+                    "type": "string",
+                    "description": " Actual step size used in the response.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "30m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },

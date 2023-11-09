@@ -221,6 +221,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) Metrics(ctx context.Context, in *MetricsRequest, opts ...grpc.CallOption) (*MetricsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dc_cluster_group.CustomDataAPI.Metrics", nil)
 	return c.CustomDataAPIServer.Metrics(ctx, in)
 }
 

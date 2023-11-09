@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.k8s_manifest_params.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.k8s_manifest_params.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.k8s_manifest_params.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.k8s_manifest_params.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.k8s_manifest_params.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.k8s_manifest_params.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.k8s_manifest_params.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -2824,6 +2803,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "Big-IP Device Parameters",
             "x-ves-proto-message": "ves.io.schema.views.k8s_manifest_params.BigIpBareMetalDeviceK8sParams",
             "properties": {
+                "bigiq_tcplb_vip": {
+                    "type": "string",
+                    "description": " IP address from the TCP Load Balancer created and configured to talk to BIG-IQ\n\nExample: - \"192.168.0.77\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIG-IQ TCP Load Balancer IP",
+                    "x-displayname": "IP Address from TCP Load Balancer",
+                    "x-ves-example": "192.168.0.77",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "external_network_gateway": {
                     "type": "string",
                     "description": " External network interface default gateway\n\nExample: - \"10.2.3.0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2868,12 +2858,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "license_key": {
+                "memory_size": {
                     "type": "string",
-                    "description": " License key for the BIG-IP\n\nExample: - \"X1507-61193-79022-21602-7036987\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "BIG-IP License Key",
-                    "x-displayname": "License Key",
-                    "x-ves-example": "X1507-61193-79022-21602-7036987",
+                    "description": " Amount of memory to assign to the service node\n\nExample: - 16GB-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Memory Size",
+                    "x-displayname": "Memory (GB)",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2907,6 +2896,16 @@ var APISwaggerJSON string = `{
                     "title": "Node Name",
                     "x-displayname": "Node Name",
                     "x-ves-example": "node1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vcpu_count": {
+                    "type": "string",
+                    "description": " Number of virtual CPU's to assign the service node\n\nExample: - 4-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Virtual CPU Count",
+                    "x-displayname": "Number of Virtual CPUs",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

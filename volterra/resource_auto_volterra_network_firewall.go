@@ -71,7 +71,7 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 						"fast_acls": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -133,7 +133,7 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 						"forward_proxy_policies": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -195,7 +195,7 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 						"enhanced_firewall_policies": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -228,7 +228,7 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 						"network_policies": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

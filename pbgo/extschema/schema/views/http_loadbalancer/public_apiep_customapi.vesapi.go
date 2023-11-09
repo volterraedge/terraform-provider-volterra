@@ -311,9 +311,11 @@ type apiepLBCustomAPIInprocClient struct {
 }
 
 func (c *apiepLBCustomAPIInprocClient) GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq, opts ...grpc.CallOption) (*GetAPIEndpointsForGroupsRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups", nil)
 	return c.ApiepLBCustomAPIServer.GetAPIEndpointsForGroups(ctx, in)
 }
 func (c *apiepLBCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec", nil)
 	return c.ApiepLBCustomAPIServer.GetSwaggerSpec(ctx, in)
 }
 

@@ -205,7 +205,7 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 						"rules": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -231,7 +231,7 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 												"nfv_service": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -436,7 +436,7 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -452,7 +452,7 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

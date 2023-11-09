@@ -3537,7 +3537,7 @@ type CustomAPIClient interface {
 	// ListInactiveUsers
 	//
 	// x-displayName: "ListInactiveUsers"
-	// Returns list of users for which no login events was found for specified in config period of time.
+	// Returns list of users for which no login events was found for last 90 days of time.
 	// It consider all users within current tenant.
 	ListInactiveUsers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserList, error)
 	// Tenant escalation document
@@ -3934,7 +3934,7 @@ type CustomAPIServer interface {
 	// ListInactiveUsers
 	//
 	// x-displayName: "ListInactiveUsers"
-	// Returns list of users for which no login events was found for specified in config period of time.
+	// Returns list of users for which no login events was found for last 90 days of time.
 	// It consider all users within current tenant.
 	ListInactiveUsers(context.Context, *Empty) (*UserList, error)
 	// Tenant escalation document

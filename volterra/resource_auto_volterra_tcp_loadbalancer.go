@@ -71,7 +71,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"advertise_where": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -94,13 +94,13 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"network": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"site": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -162,7 +162,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 												"virtual_network": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -199,13 +199,13 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 												"network": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"virtual_site": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -327,7 +327,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"public_ip": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -446,7 +446,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 									"certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -762,13 +762,13 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -817,7 +817,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -835,7 +835,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -865,7 +865,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -890,7 +890,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -910,12 +910,12 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -940,7 +940,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1209,7 +1209,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"cluster": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1237,7 +1237,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"pool": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1284,7 +1284,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 			"port_ranges": {
 
 				Type:     schema.TypeString,
-				Optional: true,
+				Required: true,
 			},
 
 			"active_service_policies": {
@@ -1297,7 +1297,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"policies": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

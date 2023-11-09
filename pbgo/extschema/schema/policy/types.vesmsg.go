@@ -11392,6 +11392,17 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *WafAction_JwtValidation:
+		if fv, exists := v.FldValidators["action_type.jwt_validation"]; exists {
+			val := m.GetActionType().(*WafAction_JwtValidation).JwtValidation
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("jwt_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

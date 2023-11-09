@@ -210,6 +210,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) ForceDeleteNFVService(ctx context.Context, in *ForceDeleteNFVServiceRequest, opts ...grpc.CallOption) (*ForceDeleteNFVServiceResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.CustomAPI.ForceDeleteNFVService", nil)
 	return c.CustomAPIServer.ForceDeleteNFVService(ctx, in)
 }
 

@@ -52,6 +52,7 @@ func testAWSTGWSiteConfig(resourceName, name string) string {
 			name = "%[2]s"
 			namespace = "system"
 			aws_parameters {
+			  ssh_key = "ssh"
 			  aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 			  aws_region = "us-east-1"
 			  az_nodes {

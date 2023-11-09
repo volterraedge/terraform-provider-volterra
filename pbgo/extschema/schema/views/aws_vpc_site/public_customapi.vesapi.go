@@ -413,12 +413,15 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_vpc_site.CustomAPI.SetCloudSiteInfo", nil)
 	return c.CustomAPIServer.SetCloudSiteInfo(ctx, in)
 }
 func (c *customAPIInprocClient) SetVIPInfo(ctx context.Context, in *SetVIPInfoRequest, opts ...grpc.CallOption) (*SetVIPInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVIPInfo", nil)
 	return c.CustomAPIServer.SetVIPInfo(ctx, in)
 }
 func (c *customAPIInprocClient) SetVPCK8SHostnames(ctx context.Context, in *SetVPCK8SHostnamesRequest, opts ...grpc.CallOption) (*SetVPCK8SHostnamesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVPCK8SHostnames", nil)
 	return c.CustomAPIServer.SetVPCK8SHostnames(ctx, in)
 }
 

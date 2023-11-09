@@ -212,6 +212,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.gcp_vpc_site.CustomAPI.SetCloudSiteInfo", nil)
 	return c.CustomAPIServer.SetCloudSiteInfo(ctx, in)
 }
 

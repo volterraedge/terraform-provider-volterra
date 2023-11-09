@@ -73,7 +73,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 						"metadata": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -89,7 +89,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -98,7 +98,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 						"spec": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -173,7 +173,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 												"asn_sets": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -334,7 +334,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -386,7 +386,7 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 												"prefix_sets": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 

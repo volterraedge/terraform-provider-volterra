@@ -693,6 +693,72 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesAlertReceiverWebhookUrl:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_webhook_url"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverWebhookUrl).VesAlertReceiverWebhookUrl
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_webhook_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesAlertReceiverWebhookHttpConfigAuthChoiceBasicAuthPassword:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_webhook_http_config_auth_choice_basic_auth_password"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverWebhookHttpConfigAuthChoiceBasicAuthPassword).VesAlertReceiverWebhookHttpConfigAuthChoiceBasicAuthPassword
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_webhook_http_config_auth_choice_basic_auth_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesAlertReceiverWebhookHttpConfigAuthChoiceAuthTokenToken:
+		if fv, exists := v.FldValidators["choice.ves_alert_receiver_webhook_http_config_auth_choice_auth_token_token"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesAlertReceiverWebhookHttpConfigAuthChoiceAuthTokenToken).VesAlertReceiverWebhookHttpConfigAuthChoiceAuthTokenToken
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_alert_receiver_webhook_http_config_auth_choice_auth_token_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesCloudLinkAwsByocBgpAuthToken:
+		if fv, exists := v.FldValidators["choice.ves_cloud_link_aws_byoc_bgp_auth_token"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesCloudLinkAwsByocBgpAuthToken).VesCloudLinkAwsByocBgpAuthToken
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_cloud_link_aws_byoc_bgp_auth_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesCertificatePrivateKey:
+		if fv, exists := v.FldValidators["choice.ves_certificate_private_key"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesCertificatePrivateKey).VesCertificatePrivateKey
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_certificate_private_key"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BFSecretChoice_VesIoNfvServiceBigIqLicBmAdminPassword:
+		if fv, exists := v.FldValidators["choice.ves_io_nfv_service_big_iq_lic_bm_admin_password"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesIoNfvServiceBigIqLicBmAdminPassword).VesIoNfvServiceBigIqLicBmAdminPassword
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_io_nfv_service_big_iq_lic_bm_admin_password"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1833,6 +1899,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("mobile_integrator"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_DataDelivery:
+		if fv, exists := v.FldValidators["choice.data_delivery"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_DataDelivery).DataDelivery
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("data_delivery"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

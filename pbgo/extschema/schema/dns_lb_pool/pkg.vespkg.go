@@ -39,6 +39,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_lb_pool.MXMember"] = MXMemberValidator()
 	vr["ves.io.schema.dns_lb_pool.MXPool"] = MXPoolValidator()
 	vr["ves.io.schema.dns_lb_pool.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.dns_lb_pool.SRVMember"] = SRVMemberValidator()
+	vr["ves.io.schema.dns_lb_pool.SRVPool"] = SRVPoolValidator()
 
 }
 

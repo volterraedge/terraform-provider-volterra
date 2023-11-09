@@ -211,6 +211,7 @@ type privateConfigKubeConfigAPIInprocClient struct {
 }
 
 func (c *privateConfigKubeConfigAPIInprocClient) GlobalAccessEnabled(ctx context.Context, in *GlobalAccessCheckRequest, opts ...grpc.CallOption) (*GlobalAccessCheckResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.PrivateConfigKubeConfigAPI.GlobalAccessEnabled", nil)
 	return c.PrivateConfigKubeConfigAPIServer.GlobalAccessEnabled(ctx, in)
 }
 

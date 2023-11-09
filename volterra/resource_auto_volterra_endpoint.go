@@ -108,7 +108,7 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 						"discovery_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"service_name": {
@@ -189,7 +189,7 @@ func resourceVolterraEndpoint() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -227,7 +227,7 @@ func resourceVolterraEndpoint() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -282,7 +282,7 @@ func resourceVolterraEndpoint() *schema.Resource {
 									"ref": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

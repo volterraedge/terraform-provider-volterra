@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.aws_tgw_site.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -2679,6 +2658,78 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "aws_tgw_siteAWSTGWSpokeAttachmentListType": {
+            "type": "object",
+            "description": "List of AWSTGWSpokeAttachmentType",
+            "title": "List of AWSTGWSpokeAttachmentType",
+            "x-displayname": "AWSTGWSpokeAttachmentListType",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentListType",
+            "properties": {
+                "attachments": {
+                    "type": "array",
+                    "description": " List of VPC attachments to transit gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "vpc_list",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentType"
+                    },
+                    "x-displayname": "VPC List",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "aws_tgw_siteAWSTGWSpokeAttachmentType": {
+            "type": "object",
+            "description": "Spoke VPCs to be attached to this TGW",
+            "title": "AWS TGW Spoke Type",
+            "x-displayname": "AWS TGW Spoke VPC Type",
+            "x-ves-oneof-field-credential_choice": "[\"cred\",\"use_site_credential\"]",
+            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentType",
+            "properties": {
+                "cred": {
+                    "description": "Exclusive with [use_site_credential]\n Other Cloud Credentials",
+                    "title": "Other Cloud Credentials",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Other Cloud Credentials"
+                },
+                "enable_segment": {
+                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
+                    "title": "Segment",
+                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                    "x-displayname": "Segment"
+                },
+                "isolated_segment": {
+                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
+                    "title": "Isolated Network",
+                    "$ref": "#/definitions/cloud_connectIsolatedType",
+                    "x-displayname": "Isolated segment"
+                },
+                "spokes": {
+                    "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "use_site_credential": {
+                    "description": "Exclusive with [cred]\n Attach VPC from same credential as site",
+                    "title": "Site Cloud Credentials",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Site Cloud Credentials"
+                }
+            }
+        },
         "aws_tgw_siteAWSVPNTunnelConfigType": {
             "type": "object",
             "description": "x-displayName: \"AWS VPN Tunnel Config\"\nRemote IP for VPN tunnels of a node",
@@ -3294,6 +3345,206 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.aws_tgw_site.crudapi.ErrorCode"
+        },
+        "cloud_connectAWSRouteTableListType": {
+            "type": "object",
+            "description": "AWS Route Table List",
+            "title": "AWS Route Table List",
+            "x-displayname": "AWS Route Table List",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSRouteTableListType",
+            "properties": {
+                "route_tables": {
+                    "type": "array",
+                    "description": " Route Tables \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of route tables",
+                    "minItems": 1,
+                    "maxItems": 200,
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSRouteTableType"
+                    },
+                    "x-displayname": "List of route tables",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "200",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAWSRouteTableType": {
+            "type": "object",
+            "description": "AWS Route Table",
+            "title": "AWS Route Table",
+            "x-displayname": "AWS Route Table",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSRouteTableType",
+            "properties": {
+                "route_table_id": {
+                    "type": "string",
+                    "description": " Route table ID\n\nExample: - \"rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Route table ID",
+                    "maxLength": 64,
+                    "x-displayname": "Route table ID",
+                    "x-ves-example": "rtb-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                },
+                "static_routes": {
+                    "type": "array",
+                    "description": " List of Static Routes\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_routes",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Static Routes",
+                    "x-ves-example": "10.1.1.0/24",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "50",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAWSSubnetIDListType": {
+            "type": "object",
+            "description": "AWS Subnet IDs",
+            "title": "AWS Subnet IDs",
+            "x-displayname": "AWS Subnet IDs",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSubnetIDListType",
+            "properties": {
+                "subnet_ids": {
+                    "type": "array",
+                    "description": " List of subnet IDs\n\nExample: - \"subnet-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of subnet IDs",
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "List of subnet IDs",
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+                        "ves.io.schema.rules.repeated.max_items": "4",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAWSVPCAttachmentListType": {
+            "type": "object",
+            "description": "Spoke VPCs to be attached to the AWS TGW Site",
+            "title": "Spoke VPCs",
+            "x-displayname": "Spoke VPCs",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentListType",
+            "properties": {
+                "vpc_list": {
+                    "type": "array",
+                    "description": " List of VPC attachments to transit gateway\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "title": "vpc_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSVPCAttachmentType"
+                    },
+                    "x-displayname": "VPC List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
+                }
+            }
+        },
+        "cloud_connectAWSVPCAttachmentType": {
+            "type": "object",
+            "description": "VPC attachments to transit gateway",
+            "title": "AWS VPC attachment",
+            "x-displayname": "VPC",
+            "x-ves-oneof-field-routing_choice": "[\"manual_routing\",\"routing_ids\"]",
+            "x-ves-oneof-field-subnet_choice": "[\"all_subnets\",\"subnet_ids\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
+            "properties": {
+                "all_subnets": {
+                    "description": "Exclusive with [subnet_ids]\n All subnets are routed to transit gateway.",
+                    "title": "All subnets",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All subnets"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key, label defined in shared namespace and unknown key.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 40\n",
+                    "title": "Labels For VPC ID",
+                    "x-displayname": "Labels For VPC ID",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "40"
+                    }
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [routing_ids]\n Manual routing",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Manual routing"
+                },
+                "routing_ids": {
+                    "description": "Exclusive with [manual_routing]\n Routing tables automatically managed",
+                    "title": "Routing tables",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Routing tables"
+                },
+                "subnet_ids": {
+                    "description": "Exclusive with [all_subnets]\n Specific subnets are routed to transit gateway.",
+                    "title": "Specific subnets",
+                    "$ref": "#/definitions/cloud_connectAWSSubnetIDListType",
+                    "x-displayname": "Specific subnets"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " Information about existing VPC\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "VPC ID",
+                    "maxLength": 64,
+                    "x-displayname": "VPC ID",
+                    "x-ves-example": "vpc-12345678901234567",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
+        "cloud_connectEnableSegmentType": {
+            "type": "object",
+            "description": "Enable Segment Type",
+            "title": "Enable Segment Type",
+            "x-displayname": "Enable Segment Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.EnableSegmentType",
+            "properties": {
+                "segment": {
+                    "description": " Segment connected to",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment"
+                }
+            }
+        },
+        "cloud_connectIsolatedType": {
+            "type": "object",
+            "description": "Network is isolated by default",
+            "title": "Isolated Type",
+            "x-displayname": "Isolated",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.IsolatedType"
         },
         "crudapiObjectCreateReq": {
             "type": "object",
@@ -5390,16 +5641,16 @@ var APISwaggerJSON string = `{
         },
         "viewsCloudLinkADNType": {
             "type": "object",
-            "title": "Cloud Link ADN Network Config",
-            "x-displayname": "Cloud Link ADN Network Config",
+            "title": "CloudLink ADN Network Config",
+            "x-displayname": "CloudLink ADN Network Config",
             "x-ves-proto-message": "ves.io.schema.views.CloudLinkADNType",
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " Cloud Link ADN Network Name for private access connectivity to F5XC ADN.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "Cloud Link ADN Network Name",
+                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "CloudLink ADN Network Name",
                     "maxLength": 64,
-                    "x-displayname": "Cloud Link ADN Network Name",
+                    "x-displayname": "CloudLink ADN Network Name",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -5801,6 +6052,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsPrivateConnectConfigType": {
+            "type": "object",
+            "description": "x-displayName: \"Private Connect Configuration\"\nPrivate Connect Configuration",
+            "title": "PrivateConnectConfigType",
+            "properties": {
+                "cloud_link": {
+                    "description": "x-displayName: \"Associate Cloud Link\"\nx-required\nReference to Cloud Link",
+                    "title": "Associate Cloud Link",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
         "viewsSecurityGroupType": {
             "type": "object",
             "description": "Enter pre created security groups for slo(Site Local Outside) and sli(Site Local Inside) interface. Supported only for sites deployed on existing VPC",
@@ -5961,6 +6224,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-vpc_attach": "[\"disable_vpc_attachment\",\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6015,6 +6279,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
                 },
+                "disable_vpc_attachment": {
+                    "description": "Exclusive with [spoke_attachments vpc_attachments]\n Disable VPC attachment to AWS TGW Site",
+                    "title": "Disable VPC Attachment",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable VPC Attachments"
+                },
                 "error_description": {
                     "type": "string",
                     "description": " Description of error on site\n\nExample: - \"value\"-",
@@ -6057,6 +6327,16 @@ var APISwaggerJSON string = `{
                     "title": "site_state",
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
+                },
+                "spoke_attachments": {
+                    "description": "Exclusive with [disable_vpc_attachment vpc_attachments]\n VPC Attachments to AWS TGW site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Enable VPC Attachments",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
+                    "x-displayname": "Enable VPC Attachments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "suggested_action": {
                     "type": "string",
@@ -6115,7 +6395,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the AWS TGW Site",
+                    "description": "Exclusive with [disable_vpc_attachment spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
                     "x-displayname": "Spoke VPCs"

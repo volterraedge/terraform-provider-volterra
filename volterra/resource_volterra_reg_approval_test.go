@@ -149,7 +149,7 @@ func GetMauriceFixtureOpts(etcdURL string) []generic.ConfigOpt {
 
 		GetCRUDAPIsFn: func(sf svcfw.Service) map[string][]*server.CRUDServerCfg {
 			return map[string][]*server.CRUDServerCfg{
-				schema_registration.ObjectType: []*server.CRUDServerCfg{
+				schema_registration.ObjectType: {
 					server.NewCRUDServerCfg(
 						db.DefaultTableName(schema_registration.ObjectType),
 						server.CRUDWithPublic,
@@ -158,7 +158,7 @@ func GetMauriceFixtureOpts(etcdURL string) []generic.ConfigOpt {
 						db.DefaultTableName(schema_registration.ObjectType),
 					),
 				},
-				schema_token.ObjectType: []*server.CRUDServerCfg{
+				schema_token.ObjectType: {
 					server.NewCRUDServerCfg(
 						db.DefaultTableName(schema_token.ObjectType),
 						server.CRUDWithPublic,
@@ -268,9 +268,24 @@ func (s *MauriceCustomAPI) ListRegistrationsByState(ctx context.Context, r *sche
 	}
 	obj := e.(*schema_registration.DBObject)
 
+	ri := &schema_registration.ListResponseItem{
+		Tenant:         tenant,
+		Namespace:      svcfw.SystemNSVal,
+		Name:           obj.Metadata.Name,
+		Uid:            rUID,
+		Description:    obj.GetMetadata().GetDescription(),
+		Disabled:       obj.GetMetadata().GetDisable(),
+		Labels:         obj.GetMetadata().GetLabels(),
+		Annotations:    obj.GetMetadata().GetAnnotations(),
+		Metadata:       &ves_io_schema.ObjectGetMetaType{},
+		SystemMetadata: &ves_io_schema.SystemObjectGetMetaType{},
+		GetSpec:        &schema_registration.GetSpecType{},
+	}
+	ri.GetSpec.FromGlobalSpecTypeWithoutDeepCopy(obj.GetSpec().GetGcSpec())
+	ri.Metadata.FromObjectMetaTypeWithoutDeepCopy(obj.GetMetadata())
+	ri.SystemMetadata.FromSystemObjectMetaTypeWithoutDeepCopy(obj.GetSystemMetadata())
 	// return single list item with PENDING state
-	return &schema_registration.ListResponse{Items: []*schema_registration.ListResponseItem{
-		&schema_registration.ListResponseItem{Tenant: tenant, Namespace: svcfw.SystemNSVal, Name: obj.Metadata.Name, Object: obj.Object}}}, nil
+	return &schema_registration.ListResponse{Items: []*schema_registration.ListResponseItem{ri}}, nil
 }
 
 func (s *MauriceCustomAPI) RegistrationConfig(ctx context.Context, r *schema_registration.ConfigReq) (*schema_registration.ConfigResp, error) {
@@ -293,8 +308,23 @@ func (s *MauriceCustomAPI) ListRegistrationsBySite(ctx context.Context, r *schem
 		return nil, fmt.Errorf("Reg %s does not exists", newReg.SystemMetadata.Uid)
 	}
 	obj := e.(*schema_registration.DBObject)
+	ri := &schema_registration.ListResponseItem{
+		Tenant:         tenant,
+		Namespace:      svcfw.SystemNSVal,
+		Name:           obj.Metadata.Name,
+		Uid:            rUID,
+		Description:    obj.GetMetadata().GetDescription(),
+		Disabled:       obj.GetMetadata().GetDisable(),
+		Labels:         obj.GetMetadata().GetLabels(),
+		Annotations:    obj.GetMetadata().GetAnnotations(),
+		Metadata:       &ves_io_schema.ObjectGetMetaType{},
+		SystemMetadata: &ves_io_schema.SystemObjectGetMetaType{},
+		GetSpec:        &schema_registration.GetSpecType{},
+	}
+	ri.GetSpec.FromGlobalSpecTypeWithoutDeepCopy(obj.GetSpec().GetGcSpec())
+	ri.Metadata.FromObjectMetaTypeWithoutDeepCopy(obj.GetMetadata())
+	ri.SystemMetadata.FromSystemObjectMetaTypeWithoutDeepCopy(obj.GetSystemMetadata())
 
 	// return single list item with PENDING state
-	return &schema_registration.ListResponse{Items: []*schema_registration.ListResponseItem{
-		&schema_registration.ListResponseItem{Tenant: tenant, Namespace: svcfw.SystemNSVal, Name: obj.Metadata.Name, Object: obj.Object}}}, nil
+	return &schema_registration.ListResponse{Items: []*schema_registration.ListResponseItem{ri}}, nil
 }

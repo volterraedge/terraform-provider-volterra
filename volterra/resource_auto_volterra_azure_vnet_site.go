@@ -277,13 +277,13 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"azure_az": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"disk_size": {
@@ -319,7 +319,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -334,7 +334,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -376,7 +376,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -391,7 +391,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -410,7 +410,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"dc_cluster_group_inside_vn": {
@@ -475,7 +475,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -520,7 +520,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -534,7 +534,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -572,7 +572,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -652,14 +652,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -711,7 +711,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -760,7 +760,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -778,7 +778,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -808,7 +808,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -833,7 +833,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -853,12 +853,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -883,7 +883,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -986,14 +986,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 												"connections": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"metadata": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1009,7 +1009,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1049,7 +1049,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1079,7 +1079,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -1104,7 +1104,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -1124,12 +1124,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -1154,7 +1154,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -1188,7 +1188,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"cloudlink_network_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1244,7 +1244,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -1302,7 +1302,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -1388,12 +1388,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"resource_group": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"vnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1421,7 +1421,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1533,7 +1533,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1611,7 +1611,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1644,7 +1644,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1689,7 +1689,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1801,7 +1801,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1925,7 +1925,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"dc_cluster_group_inside_vn": {
@@ -1990,7 +1990,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2035,7 +2035,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2049,7 +2049,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2087,7 +2087,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2167,14 +2167,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -2226,7 +2226,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -2275,7 +2275,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -2293,7 +2293,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2323,7 +2323,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2348,7 +2348,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2368,12 +2368,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -2398,7 +2398,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2501,14 +2501,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 												"connections": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"metadata": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2524,7 +2524,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2564,7 +2564,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -2594,7 +2594,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"store_provider": {
@@ -2619,7 +2619,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"url": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -2639,12 +2639,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"location": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"provider": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 
 																								"secret_encoding": {
@@ -2669,7 +2669,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																								"name": {
 																									Type:     schema.TypeString,
-																									Optional: true,
+																									Required: true,
 																								},
 																							},
 																						},
@@ -2703,7 +2703,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"cloudlink_network_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2759,7 +2759,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -2817,7 +2817,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -2903,12 +2903,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"resource_group": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"vnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2936,7 +2936,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -3048,7 +3048,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -3126,7 +3126,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -3159,7 +3159,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -3228,7 +3228,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3243,7 +3243,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -3259,7 +3259,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"node_number": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"outside_subnet": {
@@ -3290,7 +3290,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3305,7 +3305,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -3343,7 +3343,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -3455,7 +3455,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -3580,13 +3580,13 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"azure_az": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"disk_size": {
@@ -3622,7 +3622,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3637,7 +3637,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -3656,7 +3656,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"performance_enhancement_mode": {
@@ -3709,7 +3709,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"node": {
@@ -3752,7 +3752,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3767,7 +3767,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -3783,7 +3783,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"node_number": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"update_domain": {
@@ -3845,13 +3845,13 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 						"az_nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"azure_az": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"disk_size": {
@@ -3887,7 +3887,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -3902,7 +3902,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -3921,7 +3921,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"dc_cluster_group": {
@@ -3963,7 +3963,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4008,7 +4008,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4022,7 +4022,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -4060,7 +4060,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -4140,14 +4140,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -4199,7 +4199,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -4248,7 +4248,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -4266,7 +4266,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4296,7 +4296,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -4321,7 +4321,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4341,12 +4341,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -4371,7 +4371,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -4478,7 +4478,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4511,7 +4511,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4556,7 +4556,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4668,7 +4668,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -4769,7 +4769,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 												"storage_class_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -4790,7 +4790,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"dc_cluster_group": {
@@ -4832,7 +4832,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4877,7 +4877,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4891,7 +4891,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -4929,7 +4929,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -5009,14 +5009,14 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -5068,7 +5068,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -5117,7 +5117,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -5135,7 +5135,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -5165,7 +5165,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -5190,7 +5190,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -5210,12 +5210,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -5240,7 +5240,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -5347,7 +5347,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -5380,7 +5380,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -5449,7 +5449,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"subnet_name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -5464,7 +5464,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -5480,7 +5480,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"node_number": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 
 									"update_domain": {
@@ -5507,7 +5507,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -5619,7 +5619,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -5720,7 +5720,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 												"storage_class_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -5767,7 +5767,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 			"vnet": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -5780,12 +5780,12 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"resource_group": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"vnet_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -5812,7 +5812,7 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 
 									"primary_ipv4": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

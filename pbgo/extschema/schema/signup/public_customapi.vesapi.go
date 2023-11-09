@@ -890,27 +890,35 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*Object, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.Create", nil)
 	return c.CustomAPIServer.Create(ctx, in)
 }
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.Get", nil)
 	return c.CustomAPIServer.Get(ctx, in)
 }
 func (c *customAPIInprocClient) ListCities(ctx context.Context, in *ListCitiesRequest, opts ...grpc.CallOption) (*ListCitiesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.ListCities", nil)
 	return c.CustomAPIServer.ListCities(ctx, in)
 }
 func (c *customAPIInprocClient) ListCountries(ctx context.Context, in *ListCountriesRequest, opts ...grpc.CallOption) (*ListCountriesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.ListCountries", nil)
 	return c.CustomAPIServer.ListCountries(ctx, in)
 }
 func (c *customAPIInprocClient) ListStates(ctx context.Context, in *ListStatesRequest, opts ...grpc.CallOption) (*ListStatesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.ListStates", nil)
 	return c.CustomAPIServer.ListStates(ctx, in)
 }
 func (c *customAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendPasswordEmailRequest, opts ...grpc.CallOption) (*SendPasswordEmailResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.SendPasswordEmail", nil)
 	return c.CustomAPIServer.SendPasswordEmail(ctx, in)
 }
 func (c *customAPIInprocClient) ValidateContact(ctx context.Context, in *ValidateContactRequest, opts ...grpc.CallOption) (*ValidateContactResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.ValidateContact", nil)
 	return c.CustomAPIServer.ValidateContact(ctx, in)
 }
 func (c *customAPIInprocClient) ValidateRegistration(ctx context.Context, in *ValidateRegistrationRequest, opts ...grpc.CallOption) (*ValidateRegistrationResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.ValidateRegistration", nil)
 	return c.CustomAPIServer.ValidateRegistration(ctx, in)
 }
 

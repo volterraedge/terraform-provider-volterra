@@ -25,6 +25,138 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *Action) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Action) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Action) DeepCopy() *Action {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Action{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Action) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Action) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAction) ActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Action)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Action got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action_choice"]; exists {
+		val := m.GetActionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("action_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetActionChoice().(type) {
+	case *Action_Block:
+		if fv, exists := v.FldValidators["action_choice.block"]; exists {
+			val := m.GetActionChoice().(*Action_Block).Block
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Action_Report:
+		if fv, exists := v.FldValidators["action_choice.report"]; exists {
+			val := m.GetActionChoice().(*Action_Report).Report
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("report"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActionValidator = func() *ValidateAction {
+	v := &ValidateAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhActionChoice := v.ActionChoiceValidationRuleHandler
+	rulesActionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhActionChoice(rulesActionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Action.action_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action_choice"] = vFn
+
+	return v
+}()
+
+func ActionValidator() db.Validator {
+	return DefaultActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AppFirewallRefType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3464,6 +3596,16 @@ func (v *ValidateCorsPolicy) AllowOriginRegexValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateCorsPolicy) AllowMethodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allow_methods")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCorsPolicy) MaximumAgeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
@@ -3610,6 +3752,17 @@ var DefaultCorsPolicyValidator = func() *ValidateCorsPolicy {
 		panic(errMsg)
 	}
 	v.FldValidators["allow_origin_regex"] = vFn
+
+	vrhAllowMethods := v.AllowMethodsValidationRuleHandler
+	rulesAllowMethods := map[string]string{
+		"ves.io.schema.rules.string.http_valid_methods": "true",
+	}
+	vFn, err = vrhAllowMethods(rulesAllowMethods)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CorsPolicy.allow_methods: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allow_methods"] = vFn
 
 	vrhMaximumAge := v.MaximumAgeValidationRuleHandler
 	rulesMaximumAge := map[string]string{

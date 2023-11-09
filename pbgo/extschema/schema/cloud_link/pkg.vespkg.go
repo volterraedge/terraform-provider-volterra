@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -15,6 +16,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_link.AWSStatusType"] = AWSStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.AzureStatusType"] = AzureStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.BGPPeerType"] = BGPPeerTypeValidator()
+	vr["ves.io.schema.cloud_link.Coordinates"] = CoordinatesValidator()
 	vr["ves.io.schema.cloud_link.DirectConnectConnectionStatusType"] = DirectConnectConnectionStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.DirectConnectGatewayStatusType"] = DirectConnectGatewayStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.SpecType"] = SpecTypeValidator()
@@ -33,6 +35,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_link.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cloud_link.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_link.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.cloud_link.AssociatedSitesRequest"] = AssociatedSitesRequestValidator()
+	vr["ves.io.schema.cloud_link.AssociatedSitesResponse"] = AssociatedSitesResponseValidator()
+	vr["ves.io.schema.cloud_link.ReapplyConfigRequest"] = ReapplyConfigRequestValidator()
+	vr["ves.io.schema.cloud_link.ReapplyConfigResponse"] = ReapplyConfigResponseValidator()
 
 	vr["ves.io.schema.cloud_link.AWSBYOCListType"] = AWSBYOCListTypeValidator()
 	vr["ves.io.schema.cloud_link.AWSBYOCType"] = AWSBYOCTypeValidator()
@@ -67,7 +74,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.aws.byoc.connections.#.auth_key.secret_encoding_type",
 		"spec.aws.byoc.connections.#.auth_key.vault_secret_info",
 		"spec.aws.byoc.connections.#.auth_key.wingman_secret_info",
+		"spec.aws.byoc.connections.#.enable_sitelink",
 		"spec.aws.byoc.connections.#.ipv6",
+		"spec.aws.byoc.connections.#.jumbo_mtu",
+		"spec.aws.byoc.connections.#.metadata.disable",
 		"spec.aws.f5xc_managed",
 		"spec.azure",
 	}
@@ -83,7 +93,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.aws.byoc.connections.#.auth_key.secret_encoding_type",
 		"spec.aws.byoc.connections.#.auth_key.vault_secret_info",
 		"spec.aws.byoc.connections.#.auth_key.wingman_secret_info",
+		"spec.aws.byoc.connections.#.enable_sitelink",
 		"spec.aws.byoc.connections.#.ipv6",
+		"spec.aws.byoc.connections.#.jumbo_mtu",
+		"spec.aws.byoc.connections.#.metadata.disable",
 		"spec.aws.f5xc_managed",
 		"spec.azure",
 	}
@@ -94,6 +107,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cloud_link.API"] = "config"
+	sm["ves.io.schema.cloud_link.CustomDataAPI"] = "config"
 
 }
 
@@ -128,6 +142,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.cloud_link.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_link.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.cloud_link.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.cloud_link.Object"] = CustomDataAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.cloud_link.CustomDataAPI"] = NewCustomDataAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.cloud_link.CustomDataAPI"] = NewCustomDataAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.cloud_link.CustomDataAPI"] = RegisterCustomDataAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_link.CustomDataAPI"] = RegisterGwCustomDataAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.cloud_link.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomDataAPIServer(svc)
+		}
 
 	}()
 

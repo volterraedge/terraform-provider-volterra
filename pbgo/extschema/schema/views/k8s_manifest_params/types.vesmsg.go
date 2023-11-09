@@ -73,16 +73,6 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) NodeNameValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
-func (v *ValidateBigIpBareMetalDeviceK8SParams) LicenseKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for license_key")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateBigIpBareMetalDeviceK8SParams) InternalNetworkSelfipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -143,6 +133,36 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) NadForInternalInterfaceValidatio
 	return validatorFn, nil
 }
 
+func (v *ValidateBigIpBareMetalDeviceK8SParams) BigiqTcplbVipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bigiq_tcplb_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIpBareMetalDeviceK8SParams) VcpuCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vcpu_count")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBigIpBareMetalDeviceK8SParams) MemorySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for memory_size")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateBigIpBareMetalDeviceK8SParams) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*BigIpBareMetalDeviceK8SParams)
 	if !ok {
@@ -155,6 +175,15 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) Validate(ctx context.Context, pm
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bigiq_tcplb_vip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigiq_tcplb_vip"))
+		if err := fv(ctx, m.GetBigiqTcplbVip(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["external_network_gateway"]; exists {
@@ -193,10 +222,10 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) Validate(ctx context.Context, pm
 
 	}
 
-	if fv, exists := v.FldValidators["license_key"]; exists {
+	if fv, exists := v.FldValidators["memory_size"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("license_key"))
-		if err := fv(ctx, m.GetLicenseKey(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("memory_size"))
+		if err := fv(ctx, m.GetMemorySize(), vOpts...); err != nil {
 			return err
 		}
 
@@ -229,6 +258,15 @@ func (v *ValidateBigIpBareMetalDeviceK8SParams) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["vcpu_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vcpu_count"))
+		if err := fv(ctx, m.GetVcpuCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -254,17 +292,6 @@ var DefaultBigIpBareMetalDeviceK8SParamsValidator = func() *ValidateBigIpBareMet
 		panic(errMsg)
 	}
 	v.FldValidators["node_name"] = vFn
-
-	vrhLicenseKey := v.LicenseKeyValidationRuleHandler
-	rulesLicenseKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhLicenseKey(rulesLicenseKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpBareMetalDeviceK8SParams.license_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["license_key"] = vFn
 
 	vrhInternalNetworkSelfip := v.InternalNetworkSelfipValidationRuleHandler
 	rulesInternalNetworkSelfip := map[string]string{
@@ -331,6 +358,39 @@ var DefaultBigIpBareMetalDeviceK8SParamsValidator = func() *ValidateBigIpBareMet
 		panic(errMsg)
 	}
 	v.FldValidators["nad_for_internal_interface"] = vFn
+
+	vrhBigiqTcplbVip := v.BigiqTcplbVipValidationRuleHandler
+	rulesBigiqTcplbVip := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBigiqTcplbVip(rulesBigiqTcplbVip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpBareMetalDeviceK8SParams.bigiq_tcplb_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bigiq_tcplb_vip"] = vFn
+
+	vrhVcpuCount := v.VcpuCountValidationRuleHandler
+	rulesVcpuCount := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVcpuCount(rulesVcpuCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpBareMetalDeviceK8SParams.vcpu_count: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vcpu_count"] = vFn
+
+	vrhMemorySize := v.MemorySizeValidationRuleHandler
+	rulesMemorySize := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMemorySize(rulesMemorySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BigIpBareMetalDeviceK8SParams.memory_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["memory_size"] = vFn
 
 	return v
 }()

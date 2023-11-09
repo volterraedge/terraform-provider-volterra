@@ -244,7 +244,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"endpoint_subsets": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -342,7 +342,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 			"origin_servers": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -367,13 +367,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"service_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"site_locator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -449,7 +449,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"endpoint": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -500,13 +500,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"service_name": {
 
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"service_selector": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -526,7 +526,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"site_locator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -626,7 +626,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"site_locator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -701,7 +701,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"dns_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"inside_network": {
@@ -724,7 +724,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"site_locator": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -821,7 +821,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"dns_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"refresh_interval": {
@@ -842,7 +842,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"virtual_network": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -886,13 +886,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"dns_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"private_network": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -970,13 +970,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -1025,7 +1025,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1043,7 +1043,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1073,7 +1073,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1098,7 +1098,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1118,12 +1118,12 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1148,7 +1148,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1258,7 +1258,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 						"tls_config": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

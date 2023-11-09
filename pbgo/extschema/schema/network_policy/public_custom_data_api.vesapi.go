@@ -219,6 +219,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) NetworkPolicyHits(ctx context.Context, in *NetworkPolicyHitsRequest, opts ...grpc.CallOption) (*NetworkPolicyHitsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_policy.CustomDataAPI.NetworkPolicyHits", nil)
 	return c.CustomDataAPIServer.NetworkPolicyHits(ctx, in)
 }
 

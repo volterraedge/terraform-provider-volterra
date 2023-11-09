@@ -69,7 +69,7 @@ func resourceVolterraProtocolInspection() *schema.Resource {
 			"enable_disable_compliance_checks": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -108,7 +108,7 @@ func resourceVolterraProtocolInspection() *schema.Resource {
 			"enable_disable_signatures": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 

@@ -51,10 +51,14 @@ import (
 	ves_io_schema_certificate_chain_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain/crudapi"
 	ves_io_schema_certified_hardware "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware"
 	ves_io_schema_certified_hardware_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware/crudapi"
+	ves_io_schema_cloud_connect "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect"
+	ves_io_schema_cloud_connect_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect/crudapi"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
 	ves_io_schema_cloud_credentials_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi"
 	ves_io_schema_cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
 	ves_io_schema_cloud_link_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link/crudapi"
+	ves_io_schema_cloud_re_region "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region"
+	ves_io_schema_cloud_re_region_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region/crudapi"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_cluster_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi"
 	ves_io_schema_contact "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact"
@@ -237,6 +241,8 @@ import (
 	ves_io_schema_views_aws_vpc_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site/crudapi"
 	ves_io_schema_views_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
 	ves_io_schema_views_azure_vnet_site_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site/crudapi"
+	ves_io_schema_views_bot_defense_app_infrastructure "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure"
+	ves_io_schema_views_bot_defense_app_infrastructure_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure/crudapi"
 	ves_io_schema_views_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 	ves_io_schema_views_cdn_loadbalancer_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log"
 	ves_io_schema_views_cdn_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/crudapi"
@@ -341,10 +347,14 @@ func init() {
 	ves_io_schema_certificate_chain_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_certified_hardware.InitializeMDRegistry(MDR, true)
 	ves_io_schema_certified_hardware_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_connect.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_connect_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_credentials.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_credentials_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_link.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cloud_link_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_re_region.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cloud_re_region_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_contact.InitializeMDRegistry(MDR, true)
@@ -527,6 +537,8 @@ func init() {
 	ves_io_schema_views_aws_vpc_site_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_azure_vnet_site.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_azure_vnet_site_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_views_bot_defense_app_infrastructure.InitializeMDRegistry(MDR, true)
+	ves_io_schema_views_bot_defense_app_infrastructure_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_cdn_loadbalancer.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_cdn_loadbalancer_access_log.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_cdn_loadbalancer_crudapi.InitializeMDRegistry(MDR, true)

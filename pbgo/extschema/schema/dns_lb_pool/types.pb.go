@@ -92,6 +92,7 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_AaaaPool
 	//	*GlobalSpecType_CnamePool
 	//	*GlobalSpecType_MxPool
+	//	*GlobalSpecType_SrvPool
 	PoolTypeChoice isGlobalSpecType_PoolTypeChoice `protobuf_oneof:"pool_type_choice"`
 	// Load Balancing Mode
 	//
@@ -168,6 +169,9 @@ type GlobalSpecType_CnamePool struct {
 type GlobalSpecType_MxPool struct {
 	MxPool *MXPool `protobuf:"bytes,13,opt,name=mx_pool,json=mxPool,proto3,oneof" json:"mx_pool,omitempty"`
 }
+type GlobalSpecType_SrvPool struct {
+	SrvPool *SRVPool `protobuf:"bytes,17,opt,name=srv_pool,json=srvPool,proto3,oneof" json:"srv_pool,omitempty"`
+}
 type GlobalSpecType_UseRrsetTtl struct {
 	UseRrsetTtl *schema.Empty `protobuf:"bytes,15,opt,name=use_rrset_ttl,json=useRrsetTtl,proto3,oneof" json:"use_rrset_ttl,omitempty"`
 }
@@ -179,6 +183,7 @@ func (*GlobalSpecType_APool) isGlobalSpecType_PoolTypeChoice()     {}
 func (*GlobalSpecType_AaaaPool) isGlobalSpecType_PoolTypeChoice()  {}
 func (*GlobalSpecType_CnamePool) isGlobalSpecType_PoolTypeChoice() {}
 func (*GlobalSpecType_MxPool) isGlobalSpecType_PoolTypeChoice()    {}
+func (*GlobalSpecType_SrvPool) isGlobalSpecType_PoolTypeChoice()   {}
 func (*GlobalSpecType_UseRrsetTtl) isGlobalSpecType_TtlChoice()    {}
 func (*GlobalSpecType_Ttl) isGlobalSpecType_TtlChoice()            {}
 
@@ -223,6 +228,13 @@ func (m *GlobalSpecType) GetMxPool() *MXPool {
 	return nil
 }
 
+func (m *GlobalSpecType) GetSrvPool() *SRVPool {
+	if x, ok := m.GetPoolTypeChoice().(*GlobalSpecType_SrvPool); ok {
+		return x.SrvPool
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetLoadBalancingMode() LoadBalancingMode {
 	if m != nil {
 		return m.LoadBalancingMode
@@ -258,6 +270,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_AaaaPool)(nil),
 		(*GlobalSpecType_CnamePool)(nil),
 		(*GlobalSpecType_MxPool)(nil),
+		(*GlobalSpecType_SrvPool)(nil),
 		(*GlobalSpecType_UseRrsetTtl)(nil),
 		(*GlobalSpecType_Ttl)(nil),
 	}
@@ -544,6 +557,66 @@ func (m *MXPool) GetMaxAnswers() uint32 {
 	return 0
 }
 
+// SRV Pool
+//
+// x-displayName: "Pool for SRV Record"
+type SRVPool struct {
+	// Collection of SRV record members
+	//
+	// x-displayName: "Pool Members"
+	// x-required
+	Members []*SRVMember `protobuf:"bytes,1,rep,name=members,proto3" json:"members,omitempty"`
+	// Maximum Answers
+	//
+	// x-displayName: "Maximum Answers"
+	// x-example: "1"
+	// x-required
+	// Limit on number of Resource Records to be included in the response to query
+	MaxAnswers uint32 `protobuf:"varint,2,opt,name=max_answers,json=maxAnswers,proto3" json:"max_answers,omitempty"`
+}
+
+func (m *SRVPool) Reset()      { *m = SRVPool{} }
+func (*SRVPool) ProtoMessage() {}
+func (*SRVPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a8f0dcaab98ebde2, []int{5}
+}
+func (m *SRVPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SRVPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SRVPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SRVPool.Merge(m, src)
+}
+func (m *SRVPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *SRVPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_SRVPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SRVPool proto.InternalMessageInfo
+
+func (m *SRVPool) GetMembers() []*SRVMember {
+	if m != nil {
+		return m.Members
+	}
+	return nil
+}
+
+func (m *SRVPool) GetMaxAnswers() uint32 {
+	if m != nil {
+		return m.MaxAnswers
+	}
+	return 0
+}
+
 // AddressMember
 //
 // x-displayName: "IP Endpoint"
@@ -585,7 +658,7 @@ type AddressMember struct {
 func (m *AddressMember) Reset()      { *m = AddressMember{} }
 func (*AddressMember) ProtoMessage() {}
 func (*AddressMember) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{5}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{6}
 }
 func (m *AddressMember) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -679,7 +752,7 @@ type MXMember struct {
 func (m *MXMember) Reset()      { *m = MXMember{} }
 func (*MXMember) ProtoMessage() {}
 func (*MXMember) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{6}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{7}
 }
 func (m *MXMember) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -765,7 +838,7 @@ type CNAMEMember struct {
 func (m *CNAMEMember) Reset()      { *m = CNAMEMember{} }
 func (*CNAMEMember) ProtoMessage() {}
 func (*CNAMEMember) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{7}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{8}
 }
 func (m *CNAMEMember) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -818,6 +891,135 @@ func (m *CNAMEMember) GetName() string {
 	return ""
 }
 
+// SRVMember
+//
+// x-displayName: "SRV member"
+// SRV Record which can be a member of a SRV type pool
+type SRVMember struct {
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "web server 1"
+	// Pool member name
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Priority
+	//
+	// x-displayName: "Priority"
+	// x-example: "10"
+	// Priority of the target. A lower number indicates a higher preference.
+	// x-required
+	Priority uint32 `protobuf:"varint,2,opt,name=priority,proto3" json:"priority,omitempty"`
+	// Weight
+	//
+	// x-displayName: "Weight"
+	// x-example: "10"
+	// Weight of the target. A higher number indicates a higher preference.
+	// x-required
+	Weight uint32 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
+	// Port
+	//
+	// x-displayName: "Port"
+	// x-example: "10"
+	// Port on which the service can be found
+	// x-required
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+	// Target
+	//
+	// x-displayName: "Target"
+	// x-example: "my.example.com"
+	// Domain name of the machine providing the service
+	// x-required
+	Target string `protobuf:"bytes,5,opt,name=target,proto3" json:"target,omitempty"`
+	// Final Translation
+	//
+	// x-displayName: "Final Translation"
+	// If this flag is true, the SRV record will not be translated further.
+	FinalTranslation bool `protobuf:"varint,6,opt,name=final_translation,json=finalTranslation,proto3" json:"final_translation,omitempty"`
+	// Ratio
+	//
+	// x-displayName: "Load Balancing Ratio"
+	// x-example: "10"
+	// Ratio
+	Ratio uint32 `protobuf:"varint,7,opt,name=ratio,proto3" json:"ratio,omitempty"`
+}
+
+func (m *SRVMember) Reset()      { *m = SRVMember{} }
+func (*SRVMember) ProtoMessage() {}
+func (*SRVMember) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a8f0dcaab98ebde2, []int{9}
+}
+func (m *SRVMember) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SRVMember) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SRVMember) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SRVMember.Merge(m, src)
+}
+func (m *SRVMember) XXX_Size() int {
+	return m.Size()
+}
+func (m *SRVMember) XXX_DiscardUnknown() {
+	xxx_messageInfo_SRVMember.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SRVMember proto.InternalMessageInfo
+
+func (m *SRVMember) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *SRVMember) GetPriority() uint32 {
+	if m != nil {
+		return m.Priority
+	}
+	return 0
+}
+
+func (m *SRVMember) GetWeight() uint32 {
+	if m != nil {
+		return m.Weight
+	}
+	return 0
+}
+
+func (m *SRVMember) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *SRVMember) GetTarget() string {
+	if m != nil {
+		return m.Target
+	}
+	return ""
+}
+
+func (m *SRVMember) GetFinalTranslation() bool {
+	if m != nil {
+		return m.FinalTranslation
+	}
+	return false
+}
+
+func (m *SRVMember) GetRatio() uint32 {
+	if m != nil {
+		return m.Ratio
+	}
+	return 0
+}
+
 // Create DNS Load Balancer Pool
 //
 // x-displayName: "Create DNS Load Balancer Pool"
@@ -828,6 +1030,7 @@ type CreateSpecType struct {
 	//	*CreateSpecType_AaaaPool
 	//	*CreateSpecType_CnamePool
 	//	*CreateSpecType_MxPool
+	//	*CreateSpecType_SrvPool
 	PoolTypeChoice    isCreateSpecType_PoolTypeChoice `protobuf_oneof:"pool_type_choice"`
 	LoadBalancingMode LoadBalancingMode               `protobuf:"varint,4,opt,name=load_balancing_mode,json=loadBalancingMode,proto3,enum=ves.io.schema.dns_lb_pool.LoadBalancingMode" json:"load_balancing_mode,omitempty"`
 	// Types that are valid to be assigned to TtlChoice:
@@ -839,7 +1042,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{8}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{10}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -889,6 +1092,9 @@ type CreateSpecType_CnamePool struct {
 type CreateSpecType_MxPool struct {
 	MxPool *MXPool `protobuf:"bytes,13,opt,name=mx_pool,json=mxPool,proto3,oneof" json:"mx_pool,omitempty"`
 }
+type CreateSpecType_SrvPool struct {
+	SrvPool *SRVPool `protobuf:"bytes,17,opt,name=srv_pool,json=srvPool,proto3,oneof" json:"srv_pool,omitempty"`
+}
 type CreateSpecType_UseRrsetTtl struct {
 	UseRrsetTtl *schema.Empty `protobuf:"bytes,15,opt,name=use_rrset_ttl,json=useRrsetTtl,proto3,oneof" json:"use_rrset_ttl,omitempty"`
 }
@@ -900,6 +1106,7 @@ func (*CreateSpecType_APool) isCreateSpecType_PoolTypeChoice()     {}
 func (*CreateSpecType_AaaaPool) isCreateSpecType_PoolTypeChoice()  {}
 func (*CreateSpecType_CnamePool) isCreateSpecType_PoolTypeChoice() {}
 func (*CreateSpecType_MxPool) isCreateSpecType_PoolTypeChoice()    {}
+func (*CreateSpecType_SrvPool) isCreateSpecType_PoolTypeChoice()   {}
 func (*CreateSpecType_UseRrsetTtl) isCreateSpecType_TtlChoice()    {}
 func (*CreateSpecType_Ttl) isCreateSpecType_TtlChoice()            {}
 
@@ -944,6 +1151,13 @@ func (m *CreateSpecType) GetMxPool() *MXPool {
 	return nil
 }
 
+func (m *CreateSpecType) GetSrvPool() *SRVPool {
+	if x, ok := m.GetPoolTypeChoice().(*CreateSpecType_SrvPool); ok {
+		return x.SrvPool
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetLoadBalancingMode() LoadBalancingMode {
 	if m != nil {
 		return m.LoadBalancingMode
@@ -972,6 +1186,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_AaaaPool)(nil),
 		(*CreateSpecType_CnamePool)(nil),
 		(*CreateSpecType_MxPool)(nil),
+		(*CreateSpecType_SrvPool)(nil),
 		(*CreateSpecType_UseRrsetTtl)(nil),
 		(*CreateSpecType_Ttl)(nil),
 	}
@@ -987,6 +1202,7 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_AaaaPool
 	//	*ReplaceSpecType_CnamePool
 	//	*ReplaceSpecType_MxPool
+	//	*ReplaceSpecType_SrvPool
 	PoolTypeChoice    isReplaceSpecType_PoolTypeChoice `protobuf_oneof:"pool_type_choice"`
 	LoadBalancingMode LoadBalancingMode                `protobuf:"varint,4,opt,name=load_balancing_mode,json=loadBalancingMode,proto3,enum=ves.io.schema.dns_lb_pool.LoadBalancingMode" json:"load_balancing_mode,omitempty"`
 	// Types that are valid to be assigned to TtlChoice:
@@ -998,7 +1214,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{9}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{11}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1048,6 +1264,9 @@ type ReplaceSpecType_CnamePool struct {
 type ReplaceSpecType_MxPool struct {
 	MxPool *MXPool `protobuf:"bytes,13,opt,name=mx_pool,json=mxPool,proto3,oneof" json:"mx_pool,omitempty"`
 }
+type ReplaceSpecType_SrvPool struct {
+	SrvPool *SRVPool `protobuf:"bytes,17,opt,name=srv_pool,json=srvPool,proto3,oneof" json:"srv_pool,omitempty"`
+}
 type ReplaceSpecType_UseRrsetTtl struct {
 	UseRrsetTtl *schema.Empty `protobuf:"bytes,15,opt,name=use_rrset_ttl,json=useRrsetTtl,proto3,oneof" json:"use_rrset_ttl,omitempty"`
 }
@@ -1059,6 +1278,7 @@ func (*ReplaceSpecType_APool) isReplaceSpecType_PoolTypeChoice()     {}
 func (*ReplaceSpecType_AaaaPool) isReplaceSpecType_PoolTypeChoice()  {}
 func (*ReplaceSpecType_CnamePool) isReplaceSpecType_PoolTypeChoice() {}
 func (*ReplaceSpecType_MxPool) isReplaceSpecType_PoolTypeChoice()    {}
+func (*ReplaceSpecType_SrvPool) isReplaceSpecType_PoolTypeChoice()   {}
 func (*ReplaceSpecType_UseRrsetTtl) isReplaceSpecType_TtlChoice()    {}
 func (*ReplaceSpecType_Ttl) isReplaceSpecType_TtlChoice()            {}
 
@@ -1103,6 +1323,13 @@ func (m *ReplaceSpecType) GetMxPool() *MXPool {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetSrvPool() *SRVPool {
+	if x, ok := m.GetPoolTypeChoice().(*ReplaceSpecType_SrvPool); ok {
+		return x.SrvPool
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetLoadBalancingMode() LoadBalancingMode {
 	if m != nil {
 		return m.LoadBalancingMode
@@ -1131,6 +1358,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_AaaaPool)(nil),
 		(*ReplaceSpecType_CnamePool)(nil),
 		(*ReplaceSpecType_MxPool)(nil),
+		(*ReplaceSpecType_SrvPool)(nil),
 		(*ReplaceSpecType_UseRrsetTtl)(nil),
 		(*ReplaceSpecType_Ttl)(nil),
 	}
@@ -1146,6 +1374,7 @@ type GetSpecType struct {
 	//	*GetSpecType_AaaaPool
 	//	*GetSpecType_CnamePool
 	//	*GetSpecType_MxPool
+	//	*GetSpecType_SrvPool
 	PoolTypeChoice    isGetSpecType_PoolTypeChoice `protobuf_oneof:"pool_type_choice"`
 	LoadBalancingMode LoadBalancingMode            `protobuf:"varint,4,opt,name=load_balancing_mode,json=loadBalancingMode,proto3,enum=ves.io.schema.dns_lb_pool.LoadBalancingMode" json:"load_balancing_mode,omitempty"`
 	// Types that are valid to be assigned to TtlChoice:
@@ -1158,7 +1387,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a8f0dcaab98ebde2, []int{10}
+	return fileDescriptor_a8f0dcaab98ebde2, []int{12}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1208,6 +1437,9 @@ type GetSpecType_CnamePool struct {
 type GetSpecType_MxPool struct {
 	MxPool *MXPool `protobuf:"bytes,13,opt,name=mx_pool,json=mxPool,proto3,oneof" json:"mx_pool,omitempty"`
 }
+type GetSpecType_SrvPool struct {
+	SrvPool *SRVPool `protobuf:"bytes,17,opt,name=srv_pool,json=srvPool,proto3,oneof" json:"srv_pool,omitempty"`
+}
 type GetSpecType_UseRrsetTtl struct {
 	UseRrsetTtl *schema.Empty `protobuf:"bytes,15,opt,name=use_rrset_ttl,json=useRrsetTtl,proto3,oneof" json:"use_rrset_ttl,omitempty"`
 }
@@ -1219,6 +1451,7 @@ func (*GetSpecType_APool) isGetSpecType_PoolTypeChoice()     {}
 func (*GetSpecType_AaaaPool) isGetSpecType_PoolTypeChoice()  {}
 func (*GetSpecType_CnamePool) isGetSpecType_PoolTypeChoice() {}
 func (*GetSpecType_MxPool) isGetSpecType_PoolTypeChoice()    {}
+func (*GetSpecType_SrvPool) isGetSpecType_PoolTypeChoice()   {}
 func (*GetSpecType_UseRrsetTtl) isGetSpecType_TtlChoice()    {}
 func (*GetSpecType_Ttl) isGetSpecType_TtlChoice()            {}
 
@@ -1263,6 +1496,13 @@ func (m *GetSpecType) GetMxPool() *MXPool {
 	return nil
 }
 
+func (m *GetSpecType) GetSrvPool() *SRVPool {
+	if x, ok := m.GetPoolTypeChoice().(*GetSpecType_SrvPool); ok {
+		return x.SrvPool
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetLoadBalancingMode() LoadBalancingMode {
 	if m != nil {
 		return m.LoadBalancingMode
@@ -1298,6 +1538,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_AaaaPool)(nil),
 		(*GetSpecType_CnamePool)(nil),
 		(*GetSpecType_MxPool)(nil),
+		(*GetSpecType_SrvPool)(nil),
 		(*GetSpecType_UseRrsetTtl)(nil),
 		(*GetSpecType_Ttl)(nil),
 	}
@@ -1316,12 +1557,16 @@ func init() {
 	golang_proto.RegisterType((*CNAMEPool)(nil), "ves.io.schema.dns_lb_pool.CNAMEPool")
 	proto.RegisterType((*MXPool)(nil), "ves.io.schema.dns_lb_pool.MXPool")
 	golang_proto.RegisterType((*MXPool)(nil), "ves.io.schema.dns_lb_pool.MXPool")
+	proto.RegisterType((*SRVPool)(nil), "ves.io.schema.dns_lb_pool.SRVPool")
+	golang_proto.RegisterType((*SRVPool)(nil), "ves.io.schema.dns_lb_pool.SRVPool")
 	proto.RegisterType((*AddressMember)(nil), "ves.io.schema.dns_lb_pool.AddressMember")
 	golang_proto.RegisterType((*AddressMember)(nil), "ves.io.schema.dns_lb_pool.AddressMember")
 	proto.RegisterType((*MXMember)(nil), "ves.io.schema.dns_lb_pool.MXMember")
 	golang_proto.RegisterType((*MXMember)(nil), "ves.io.schema.dns_lb_pool.MXMember")
 	proto.RegisterType((*CNAMEMember)(nil), "ves.io.schema.dns_lb_pool.CNAMEMember")
 	golang_proto.RegisterType((*CNAMEMember)(nil), "ves.io.schema.dns_lb_pool.CNAMEMember")
+	proto.RegisterType((*SRVMember)(nil), "ves.io.schema.dns_lb_pool.SRVMember")
+	golang_proto.RegisterType((*SRVMember)(nil), "ves.io.schema.dns_lb_pool.SRVMember")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.dns_lb_pool.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.dns_lb_pool.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.dns_lb_pool.ReplaceSpecType")
@@ -1338,97 +1583,112 @@ func init() {
 }
 
 var fileDescriptor_a8f0dcaab98ebde2 = []byte{
-	// 1433 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xdf, 0x6f, 0xd3, 0x56,
-	0x14, 0xce, 0x75, 0x9c, 0xc4, 0x39, 0xe9, 0x0f, 0xf7, 0xb6, 0x80, 0x09, 0xc8, 0x84, 0xb0, 0xa1,
-	0xa8, 0x33, 0x49, 0xd3, 0x16, 0x36, 0xaa, 0xa9, 0x52, 0x53, 0x3a, 0xda, 0x6a, 0xfd, 0x21, 0x37,
-	0x93, 0xb6, 0x69, 0xc3, 0x73, 0xe2, 0xdb, 0xc4, 0xc3, 0x8e, 0x2d, 0xdb, 0x2d, 0xed, 0x03, 0x12,
-	0xe2, 0x69, 0x9a, 0x34, 0x69, 0xda, 0x1f, 0xb0, 0xa7, 0x3d, 0x6c, 0xfc, 0x03, 0xd3, 0x96, 0x3d,
-	0xf4, 0x71, 0xe2, 0xa9, 0x8f, 0x88, 0xa7, 0x91, 0xbe, 0x6c, 0x6f, 0x88, 0x27, 0xc4, 0x1e, 0x3a,
-	0xf9, 0xc6, 0x69, 0x93, 0x14, 0x5a, 0x06, 0x12, 0x12, 0x52, 0xdf, 0xae, 0xef, 0x39, 0xe7, 0xbb,
-	0xdf, 0xf9, 0xce, 0xf1, 0xd5, 0xb1, 0xe1, 0xdd, 0x75, 0xe2, 0x66, 0x75, 0x2b, 0xe7, 0x96, 0xab,
-	0xc4, 0x54, 0x73, 0x5a, 0xcd, 0x55, 0x8c, 0x92, 0x62, 0x5b, 0x96, 0x91, 0xf3, 0x36, 0x6d, 0xe2,
-	0x66, 0x6d, 0xc7, 0xf2, 0x2c, 0x7c, 0xba, 0xe9, 0x96, 0x6d, 0xba, 0x65, 0xdb, 0xdc, 0x92, 0x97,
-	0x2a, 0xba, 0x57, 0x5d, 0x2b, 0x65, 0xcb, 0x96, 0x99, 0xab, 0x58, 0x15, 0x2b, 0x47, 0x23, 0x4a,
-	0x6b, 0xab, 0xf4, 0x89, 0x3e, 0xd0, 0x55, 0x13, 0x29, 0x79, 0xae, 0x62, 0x59, 0x15, 0x83, 0xec,
-	0x7b, 0x79, 0xba, 0x49, 0x5c, 0x4f, 0x35, 0xed, 0xc0, 0xe1, 0x54, 0x27, 0xa3, 0x1a, 0xf1, 0x02,
-	0xc3, 0x99, 0x4e, 0x83, 0x65, 0x7b, 0xba, 0x55, 0x0b, 0x08, 0x26, 0x4f, 0x77, 0x1a, 0xdb, 0xb8,
-	0x27, 0xcf, 0x76, 0x9a, 0xd6, 0x55, 0x43, 0xd7, 0x54, 0x8f, 0x04, 0xd6, 0x54, 0x97, 0x55, 0x27,
-	0xb7, 0x94, 0x4e, 0xe8, 0x73, 0x07, 0x3d, 0xdc, 0xf6, 0x03, 0xd2, 0xbf, 0x45, 0xa0, 0xef, 0xba,
-	0x61, 0x95, 0x54, 0x63, 0xc5, 0x26, 0xe5, 0xe2, 0xa6, 0x4d, 0xf0, 0x55, 0x88, 0xaa, 0x54, 0x1e,
-	0x01, 0x52, 0x28, 0x93, 0x18, 0x4d, 0x65, 0x5f, 0x28, 0x60, 0x76, 0x6a, 0xd9, 0xb2, 0x8c, 0xd9,
-	0x90, 0x1c, 0x51, 0xfd, 0x05, 0x2e, 0x40, 0x5c, 0x55, 0xd5, 0x20, 0x3a, 0x41, 0xa3, 0x2f, 0x1c,
-	0x16, 0x3d, 0x35, 0xd5, 0x02, 0xe0, 0xfc, 0x38, 0x8a, 0x31, 0x03, 0x50, 0xae, 0xa9, 0x26, 0x69,
-	0x82, 0xf4, 0x50, 0x90, 0x77, 0x0e, 0x01, 0x99, 0x5e, 0x9c, 0x5a, 0x98, 0x09, 0x50, 0xe2, 0x34,
-	0x92, 0xc2, 0x7c, 0x08, 0x31, 0x73, 0xa3, 0x89, 0xd1, 0x4b, 0x31, 0xce, 0x1f, 0x82, 0xb1, 0xf0,
-	0x69, 0x00, 0x10, 0x35, 0x37, 0x68, 0xf4, 0x17, 0x30, 0x68, 0x58, 0xaa, 0xa6, 0x94, 0x54, 0x43,
-	0xad, 0x95, 0xf5, 0x5a, 0x45, 0x31, 0x2d, 0x8d, 0x08, 0x6c, 0x0a, 0x65, 0xfa, 0x46, 0xa5, 0x43,
-	0x90, 0x3e, 0xb6, 0x54, 0xad, 0xd0, 0x0a, 0x5a, 0xb0, 0x34, 0x22, 0x0f, 0x18, 0xdd, 0x5b, 0x78,
-	0x02, 0x7a, 0xd7, 0x5c, 0xa2, 0x38, 0x8e, 0x4b, 0x3c, 0xc5, 0xf3, 0x0c, 0xa1, 0x9f, 0x32, 0x1c,
-	0xea, 0xc2, 0x9d, 0x31, 0x6d, 0x6f, 0x73, 0x16, 0xc9, 0x89, 0x35, 0x97, 0xc8, 0xbe, 0x6f, 0xd1,
-	0x33, 0x70, 0x0e, 0xc2, 0x7e, 0x44, 0x38, 0x85, 0x32, 0xbd, 0x85, 0x33, 0x0f, 0xeb, 0x88, 0x19,
-	0x1b, 0x79, 0x5a, 0x47, 0xa1, 0x6f, 0xfe, 0x40, 0xe8, 0xf7, 0x7f, 0xb6, 0xc2, 0xdc, 0x70, 0x54,
-	0xd8, 0xdd, 0xdd, 0xdd, 0x8d, 0xcd, 0x22, 0xd9, 0xf7, 0xc4, 0xab, 0x80, 0x29, 0xc1, 0xfd, 0x74,
-	0x88, 0xe3, 0x0a, 0x7c, 0x2a, 0x9c, 0x49, 0x8c, 0xa6, 0xbb, 0x4e, 0xa4, 0xfd, 0x91, 0x5d, 0x2a,
-	0x7d, 0x4d, 0xca, 0x9e, 0x4c, 0x56, 0xfd, 0x76, 0x28, 0x0c, 0xdd, 0xbb, 0x3d, 0x70, 0x00, 0x40,
-	0xe6, 0xb5, 0x9a, 0xbb, 0x9f, 0x2b, 0x71, 0xdc, 0x89, 0xc4, 0x93, 0x49, 0x6e, 0x5c, 0xba, 0x2a,
-	0xe5, 0xc7, 0xa5, 0x2b, 0x85, 0xf7, 0x80, 0xf7, 0xe5, 0x50, 0xfc, 0x56, 0x53, 0xca, 0x55, 0x4b,
-	0x2f, 0x13, 0x7c, 0x6a, 0xab, 0x8e, 0x60, 0xbb, 0x8e, 0xe2, 0x8d, 0x3a, 0x4a, 0xe4, 0x47, 0xa4,
-	0x7c, 0x5e, 0xca, 0x8f, 0x4a, 0xf9, 0xb1, 0x82, 0x08, 0xe0, 0x79, 0x46, 0xcb, 0x8d, 0xdf, 0xaa,
-	0xa3, 0xf0, 0x76, 0x1d, 0xf5, 0x35, 0xea, 0x88, 0xcd, 0x5f, 0x96, 0xc6, 0xe6, 0x59, 0x0e, 0xf1,
-	0xcc, 0x3c, 0xcb, 0x45, 0xf9, 0xd8, 0x3c, 0xcb, 0xc5, 0x79, 0x98, 0x67, 0xb9, 0x3e, 0xbe, 0x3f,
-	0xfd, 0x2f, 0x03, 0x11, 0xda, 0x3f, 0xb8, 0x04, 0x31, 0x93, 0x98, 0x25, 0x3f, 0x31, 0x44, 0x13,
-	0xcb, 0x1c, 0xd6, 0x75, 0x9a, 0xe6, 0x10, 0xd7, 0x5d, 0xa0, 0x01, 0x05, 0xd1, 0x17, 0x2d, 0xf2,
-	0x03, 0x62, 0xf8, 0x54, 0x6b, 0xc5, 0xa1, 0xd6, 0x4a, 0x40, 0x72, 0x0b, 0x18, 0xcf, 0xc2, 0x90,
-	0xa6, 0xbb, 0x6a, 0xc9, 0x20, 0x4a, 0x95, 0xa8, 0x86, 0x57, 0x55, 0xca, 0x55, 0x52, 0xbe, 0x49,
-	0x2b, 0xf1, 0xa2, 0xda, 0x85, 0x64, 0x1c, 0xc4, 0xcc, 0xd2, 0x90, 0x69, 0x3f, 0x02, 0x2b, 0xd0,
-	0xd3, 0x81, 0xc0, 0x52, 0x84, 0x97, 0xa9, 0xc5, 0xc9, 0x7b, 0xb7, 0x07, 0x83, 0x54, 0xda, 0x11,
-	0x66, 0x43, 0x72, 0xa2, 0xda, 0x76, 0xc0, 0x65, 0x48, 0x98, 0xea, 0x86, 0xa2, 0xd6, 0xdc, 0x5b,
-	0xbe, 0x24, 0x11, 0xda, 0x2b, 0x43, 0x0f, 0xeb, 0x08, 0xe5, 0xfd, 0x56, 0xf1, 0xb3, 0x8b, 0x0e,
-	0xb3, 0x42, 0x2a, 0x83, 0x64, 0x30, 0xd5, 0x8d, 0xa9, 0xa6, 0x5f, 0xe1, 0x22, 0x0c, 0xb6, 0xa3,
-	0xb6, 0x0a, 0xd2, 0x1f, 0x14, 0x84, 0x69, 0xd4, 0x51, 0x78, 0x4c, 0x1a, 0x9f, 0x67, 0x39, 0x86,
-	0x0f, 0xa7, 0x7f, 0x45, 0xc0, 0xb5, 0x5e, 0xe0, 0x37, 0x52, 0x80, 0x57, 0xcb, 0xaa, 0xc9, 0x76,
-	0x9e, 0xe5, 0xc2, 0x3c, 0x3b, 0xcf, 0x72, 0x2c, 0x1f, 0x49, 0x9b, 0x10, 0xdf, 0xbb, 0x34, 0xf0,
-	0x57, 0xdd, 0xcc, 0x2f, 0x1e, 0x75, 0xd7, 0xfc, 0x4f, 0xde, 0xe9, 0x1f, 0x11, 0x44, 0x9b, 0x17,
-	0x0c, 0xfe, 0xb2, 0xfb, 0xb0, 0x0b, 0x87, 0x5e, 0x4a, 0xaf, 0xa9, 0x10, 0xf3, 0x72, 0x0a, 0xa5,
-	0xb7, 0x19, 0xe8, 0xed, 0xa8, 0x09, 0x1e, 0x86, 0x84, 0x6e, 0x2b, 0xa4, 0xa6, 0xd9, 0x96, 0x5e,
-	0xf3, 0x04, 0x94, 0x42, 0x99, 0x78, 0x21, 0xee, 0xc7, 0xb3, 0x0e, 0x63, 0x23, 0x19, 0x74, 0x7b,
-	0x26, 0x30, 0xe2, 0x0c, 0x44, 0x1c, 0xd5, 0xd3, 0xad, 0xa0, 0x20, 0xb8, 0xe3, 0x38, 0x76, 0x98,
-	0x11, 0x34, 0xb9, 0xe9, 0x80, 0x47, 0x80, 0xb3, 0x1d, 0xdd, 0x72, 0x74, 0x6f, 0x53, 0x88, 0xee,
-	0x71, 0x63, 0xf2, 0x23, 0x2d, 0xef, 0xc8, 0x70, 0x58, 0xd8, 0x45, 0xf2, 0x9e, 0x17, 0x16, 0x20,
-	0x16, 0xbc, 0x3f, 0x42, 0x2c, 0x85, 0x32, 0x9c, 0xdc, 0x7a, 0xc4, 0x22, 0xb0, 0xfe, 0x55, 0x2f,
-	0x70, 0x94, 0x1a, 0xd0, 0x68, 0x27, 0x2c, 0xdc, 0x61, 0x64, 0xba, 0x3f, 0x71, 0xfb, 0xc9, 0x64,
-	0x3c, 0x2f, 0x7d, 0x20, 0x5d, 0x96, 0xae, 0x48, 0xef, 0xdf, 0xaf, 0x23, 0x13, 0x04, 0x88, 0x05,
-	0x49, 0x26, 0x7b, 0x3b, 0xd2, 0x03, 0x1e, 0xd8, 0x45, 0xd5, 0x24, 0x3c, 0x4a, 0x46, 0x9b, 0xa8,
-	0xc0, 0x43, 0x44, 0xf6, 0x29, 0x27, 0x63, 0x41, 0x72, 0x70, 0x12, 0xb8, 0xe5, 0x80, 0x55, 0x12,
-	0xf6, 0xf3, 0x80, 0x13, 0xc0, 0x5d, 0x6b, 0x52, 0xd2, 0x92, 0xf1, 0x3d, 0xb6, 0xe9, 0x6f, 0x19,
-	0xe0, 0x5a, 0xf5, 0xc3, 0xe7, 0x21, 0xaa, 0x59, 0xa6, 0xaa, 0xd7, 0xba, 0x84, 0xac, 0x22, 0x39,
-	0x30, 0xe0, 0x7c, 0x9b, 0x34, 0xcd, 0xb2, 0x9d, 0xe8, 0x94, 0xc6, 0xaf, 0xdb, 0xee, 0x6e, 0xb8,
-	0x4d, 0x9b, 0x3d, 0xdd, 0xc3, 0x47, 0xe9, 0xde, 0xd2, 0x8a, 0x7d, 0x81, 0x56, 0x37, 0x9e, 0x4c,
-	0xc6, 0xf2, 0xd2, 0xb8, 0x34, 0x2a, 0x8d, 0xdd, 0xaf, 0xa3, 0x65, 0xc0, 0x10, 0xbd, 0x46, 0x69,
-	0x25, 0xb9, 0x16, 0xf3, 0xd7, 0xd1, 0x28, 0xfd, 0x13, 0x03, 0x89, 0xb6, 0x37, 0xe7, 0x65, 0xf4,
-	0xd8, 0x4b, 0x8e, 0x39, 0x2a, 0xb9, 0x2b, 0x30, 0xb0, 0xaa, 0xd7, 0x54, 0x43, 0xf1, 0x1c, 0xb5,
-	0xe6, 0x1a, 0xfe, 0x5e, 0x8d, 0x4a, 0xc2, 0x15, 0xe2, 0x0f, 0xeb, 0x28, 0xb2, 0xaa, 0x1a, 0x2e,
-	0x91, 0x79, 0xea, 0x53, 0xdc, 0x77, 0x39, 0x52, 0x14, 0xbb, 0x43, 0x94, 0xd2, 0x2b, 0x8b, 0x92,
-	0x81, 0x81, 0x8f, 0xfc, 0xb3, 0x53, 0x6d, 0x87, 0x27, 0x07, 0x9f, 0x43, 0x3a, 0xfd, 0x0b, 0x0b,
-	0x7d, 0xd3, 0x0e, 0x51, 0x3d, 0x72, 0x3c, 0x8a, 0xbd, 0x15, 0xa3, 0x18, 0x6e, 0x1b, 0xc5, 0x82,
-	0x69, 0x6b, 0x62, 0xe0, 0xfe, 0x64, 0xd7, 0x3c, 0x5d, 0xc8, 0x3c, 0x67, 0x16, 0x1a, 0xba, 0xfb,
-	0x0c, 0x1d, 0xd8, 0x2d, 0x9c, 0xed, 0x18, 0x84, 0xfa, 0xee, 0x3e, 0x43, 0x6d, 0xcf, 0xed, 0x03,
-	0x50, 0xfa, 0x1e, 0x0b, 0xfd, 0x32, 0xb1, 0x0d, 0xb5, 0x7c, 0xdc, 0x2c, 0xc7, 0xcd, 0x72, 0x44,
-	0xb3, 0x3c, 0x65, 0x21, 0x71, 0x9d, 0x78, 0xc7, 0x8d, 0xf2, 0xb6, 0x36, 0x0a, 0x5e, 0x7e, 0xbd,
-	0x6f, 0xb8, 0xe7, 0x7c, 0xad, 0xbd, 0x99, 0xd6, 0x1b, 0xbe, 0x01, 0x03, 0x07, 0x04, 0xc3, 0xfd,
-	0x90, 0x90, 0x97, 0x3e, 0x59, 0xbc, 0xa6, 0xc8, 0x4b, 0x85, 0xb9, 0x45, 0x3e, 0x84, 0x79, 0xe8,
-	0x91, 0xa7, 0x8a, 0x73, 0x4b, 0xca, 0xc2, 0xcc, 0x42, 0x61, 0x46, 0xe6, 0x11, 0xc6, 0xd0, 0xb7,
-	0x52, 0x9c, 0x2a, 0xce, 0x4d, 0x2b, 0xcb, 0x33, 0xf2, 0xca, 0xdc, 0x4a, 0x91, 0x67, 0x70, 0x0f,
-	0x70, 0xcb, 0xf2, 0xdc, 0x92, 0x3c, 0x57, 0xfc, 0x8c, 0x0f, 0x27, 0xd9, 0xad, 0x3a, 0x0a, 0x15,
-	0xbe, 0x43, 0xdb, 0x8f, 0xc4, 0xd0, 0x83, 0x47, 0x62, 0xe8, 0xf1, 0x23, 0x11, 0xdd, 0x69, 0x88,
-	0xe8, 0xe7, 0x86, 0x88, 0xfe, 0x6c, 0x88, 0x68, 0xbb, 0x21, 0xa2, 0x07, 0x0d, 0x11, 0xfd, 0xd5,
-	0x10, 0xd1, 0xdf, 0x0d, 0x31, 0xf4, 0xb8, 0x21, 0xa2, 0xef, 0x77, 0xc4, 0xd0, 0xd6, 0x8e, 0x88,
-	0xb6, 0x77, 0xc4, 0xd0, 0x83, 0x1d, 0x31, 0xf4, 0xf9, 0x52, 0xc5, 0xb2, 0x6f, 0x56, 0xb2, 0xeb,
-	0x96, 0xe1, 0x11, 0xc7, 0x51, 0xb3, 0x6b, 0x6e, 0x8e, 0x2e, 0x56, 0x2d, 0xc7, 0xbc, 0x64, 0x3b,
-	0xd6, 0xba, 0xae, 0x11, 0xe7, 0x52, 0xcb, 0x9c, 0xb3, 0x4b, 0x15, 0x2b, 0x47, 0x36, 0xbc, 0xe0,
-	0x6f, 0xca, 0xc1, 0xff, 0x4e, 0xa5, 0x28, 0xfd, 0xab, 0x32, 0xf6, 0x5f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x65, 0xd0, 0xda, 0x2b, 0x9b, 0x12, 0x00, 0x00,
+	// 1666 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6c, 0xdb, 0xd6,
+	0x1d, 0xd6, 0xa3, 0x28, 0x8a, 0xfa, 0x29, 0x96, 0xe9, 0x17, 0xb7, 0x63, 0xd5, 0x82, 0x55, 0xd5,
+	0xac, 0x50, 0x0d, 0x5a, 0xb2, 0x6c, 0xc7, 0x59, 0x8c, 0xc1, 0x81, 0x99, 0x78, 0xb5, 0x8d, 0x39,
+	0x36, 0x68, 0xed, 0x5f, 0x9b, 0x98, 0xa3, 0xa4, 0x67, 0x89, 0x2b, 0x29, 0x12, 0x24, 0xed, 0x38,
+	0xed, 0x8c, 0x15, 0x3d, 0x0d, 0x03, 0x06, 0x0c, 0xbb, 0xec, 0x56, 0xec, 0xb0, 0xc3, 0xd0, 0xeb,
+	0x0e, 0xc3, 0xa6, 0x1d, 0x7c, 0x1c, 0x72, 0xf2, 0x31, 0xc8, 0x69, 0x51, 0x2e, 0xfb, 0x73, 0x29,
+	0x72, 0x1a, 0x3a, 0x0c, 0x1e, 0xf8, 0x44, 0xc9, 0x92, 0x2d, 0xcb, 0x5d, 0x82, 0xe6, 0x12, 0xdf,
+	0x48, 0xbe, 0xef, 0xf7, 0xbd, 0xef, 0xf7, 0xbd, 0x4f, 0x4f, 0x78, 0x0f, 0xbe, 0xb9, 0x4b, 0xbc,
+	0xbc, 0x61, 0x17, 0xbc, 0x4a, 0x9d, 0x58, 0x7a, 0xa1, 0xda, 0xf0, 0x34, 0xb3, 0xac, 0x39, 0xb6,
+	0x6d, 0x16, 0xfc, 0xfb, 0x0e, 0xf1, 0xf2, 0x8e, 0x6b, 0xfb, 0x36, 0x7e, 0xad, 0x0d, 0xcb, 0xb7,
+	0x61, 0xf9, 0x1e, 0x58, 0x7a, 0xb2, 0x66, 0xf8, 0xf5, 0x9d, 0x72, 0xbe, 0x62, 0x5b, 0x85, 0x9a,
+	0x5d, 0xb3, 0x0b, 0xb4, 0xa2, 0xbc, 0xb3, 0x4d, 0xdf, 0xe8, 0x0b, 0x7d, 0x6a, 0x33, 0xa5, 0xdf,
+	0xac, 0xd9, 0x76, 0xcd, 0x24, 0xc7, 0x28, 0xdf, 0xb0, 0x88, 0xe7, 0xeb, 0x96, 0x13, 0x02, 0xbe,
+	0xd1, 0xaf, 0xa8, 0x41, 0xfc, 0x70, 0xe0, 0xf5, 0xfe, 0x01, 0xdb, 0xf1, 0x0d, 0xbb, 0x11, 0x0a,
+	0x4c, 0xbf, 0xd6, 0x3f, 0xd8, 0xa3, 0x3d, 0xfd, 0x46, 0xff, 0xd0, 0xae, 0x6e, 0x1a, 0x55, 0xdd,
+	0x27, 0xe1, 0x68, 0xe6, 0xc4, 0xa8, 0x41, 0xee, 0x69, 0xfd, 0xd4, 0x6f, 0x9e, 0x46, 0x78, 0xbd,
+	0x13, 0x64, 0xff, 0x1b, 0x83, 0xd4, 0x7b, 0xa6, 0x5d, 0xd6, 0xcd, 0x4d, 0x87, 0x54, 0x4a, 0xf7,
+	0x1d, 0x82, 0xaf, 0x03, 0xa7, 0x53, 0x7b, 0x44, 0xc8, 0xa0, 0x5c, 0x72, 0x3a, 0x93, 0x3f, 0xd3,
+	0xc0, 0xfc, 0xe2, 0x86, 0x6d, 0x9b, 0xcb, 0x11, 0x35, 0xa6, 0x07, 0x0f, 0x58, 0x81, 0x84, 0xae,
+	0xeb, 0x61, 0x75, 0x92, 0x56, 0xbf, 0x3d, 0xac, 0x7a, 0x71, 0xb1, 0x43, 0xc0, 0x07, 0x75, 0x94,
+	0x63, 0x09, 0xa0, 0xd2, 0xd0, 0x2d, 0xd2, 0x26, 0xb9, 0x44, 0x49, 0xae, 0x0c, 0x21, 0xb9, 0x79,
+	0x7b, 0x71, 0x6d, 0x29, 0x64, 0x49, 0xd0, 0x4a, 0x4a, 0xf3, 0x6d, 0x88, 0x5b, 0x7b, 0x6d, 0x8e,
+	0x11, 0xca, 0xf1, 0xd6, 0x10, 0x8e, 0xb5, 0x1f, 0x86, 0x04, 0x9c, 0xb5, 0x47, 0xab, 0x6f, 0x00,
+	0xef, 0xb9, 0xbb, 0xed, 0xf2, 0x31, 0x5a, 0x9e, 0x1d, 0x52, 0xbe, 0xa9, 0x7e, 0x3f, 0xac, 0x8f,
+	0x7b, 0xee, 0x2e, 0x25, 0xb8, 0x03, 0x97, 0x4d, 0x5b, 0xaf, 0x6a, 0x65, 0xdd, 0xd4, 0x1b, 0x15,
+	0xa3, 0x51, 0xd3, 0x2c, 0xbb, 0x4a, 0x44, 0x36, 0x83, 0x72, 0xa9, 0x69, 0x79, 0x08, 0xd7, 0x77,
+	0x6d, 0xbd, 0xaa, 0x74, 0x8a, 0xd6, 0xec, 0x2a, 0x51, 0xc7, 0xcc, 0x93, 0x9f, 0xf0, 0x3c, 0x8c,
+	0xec, 0x78, 0x44, 0x73, 0x5d, 0x8f, 0xf8, 0x9a, 0xef, 0x9b, 0xe2, 0x28, 0xd5, 0x38, 0x7e, 0x82,
+	0x77, 0xc9, 0x72, 0xfc, 0xfb, 0xcb, 0x48, 0x4d, 0xee, 0x78, 0x44, 0x0d, 0xb0, 0x25, 0xdf, 0xc4,
+	0x05, 0x88, 0x06, 0x15, 0xd1, 0x0c, 0xca, 0x8d, 0x28, 0xaf, 0x3f, 0x6a, 0x22, 0x66, 0x66, 0xea,
+	0xdf, 0x4d, 0x14, 0xf9, 0xf9, 0x5f, 0x10, 0xfa, 0xf3, 0x3f, 0x0e, 0xa2, 0xfc, 0x04, 0x27, 0x1e,
+	0x1d, 0x1d, 0x1d, 0xc5, 0x97, 0x91, 0x1a, 0x20, 0xf1, 0x36, 0x60, 0x2a, 0xf0, 0xb8, 0x1d, 0xe2,
+	0x7a, 0xa2, 0x90, 0x89, 0x0e, 0x70, 0x85, 0x06, 0x2c, 0xbf, 0x5e, 0xfe, 0x09, 0xa9, 0xf8, 0x2a,
+	0xd9, 0x0e, 0xf2, 0xa4, 0x8c, 0x7f, 0xbe, 0x3f, 0x76, 0x8a, 0x40, 0x15, 0xaa, 0x0d, 0xef, 0xb8,
+	0x57, 0xe2, 0x7a, 0xf3, 0xc9, 0xa7, 0x0b, 0xfc, 0xac, 0x7c, 0x5d, 0x2e, 0xce, 0xca, 0x73, 0x4a,
+	0x1e, 0x84, 0xc0, 0x0e, 0x2d, 0xc8, 0xaa, 0x56, 0xa9, 0xdb, 0x46, 0x85, 0xe0, 0xf4, 0x41, 0x13,
+	0xc1, 0x61, 0x13, 0x25, 0x5a, 0x4d, 0x94, 0x2a, 0x4e, 0xc9, 0xc5, 0xa2, 0x5c, 0x9c, 0x96, 0x8b,
+	0x33, 0x72, 0xf1, 0x9a, 0x22, 0x01, 0xf8, 0xbe, 0xd9, 0x41, 0x0a, 0x07, 0x4d, 0x14, 0x3d, 0x6c,
+	0xa2, 0x54, 0xab, 0x89, 0xd8, 0xe2, 0x55, 0x79, 0x66, 0x95, 0xe5, 0x91, 0xc0, 0xac, 0xb2, 0x3c,
+	0x27, 0xc4, 0x57, 0x59, 0x3e, 0x21, 0xc0, 0x2a, 0xcb, 0xa7, 0x84, 0xd1, 0xec, 0x7f, 0x18, 0x88,
+	0xd1, 0x0c, 0xe2, 0x32, 0xc4, 0x2d, 0x62, 0x95, 0x83, 0xde, 0x10, 0xed, 0x2d, 0x37, 0x2c, 0xb9,
+	0xd5, 0xaa, 0x4b, 0x3c, 0x6f, 0x8d, 0x16, 0x28, 0x52, 0xe0, 0x5b, 0xec, 0xd7, 0x88, 0x11, 0x32,
+	0x9d, 0x27, 0x1e, 0x75, 0x9e, 0x44, 0xa4, 0x76, 0x88, 0xf1, 0x32, 0x8c, 0x57, 0x0d, 0x4f, 0x2f,
+	0x9b, 0x44, 0xab, 0x13, 0xdd, 0xf4, 0xeb, 0x5a, 0xa5, 0x4e, 0x2a, 0x1f, 0xd2, 0xc5, 0x38, 0x6b,
+	0xf9, 0x22, 0x2a, 0x0e, 0x6b, 0x96, 0x69, 0xc9, 0xcd, 0xa0, 0x02, 0x6b, 0x70, 0xa9, 0x8f, 0x81,
+	0x1d, 0x18, 0xd2, 0x41, 0xcb, 0xf1, 0xea, 0xe7, 0xfb, 0x97, 0xc3, 0x56, 0x7a, 0x19, 0x96, 0x23,
+	0x6a, 0xb2, 0xde, 0x33, 0xc1, 0x55, 0x48, 0x5a, 0xfa, 0x9e, 0xa6, 0x37, 0xbc, 0x7b, 0x81, 0x25,
+	0x31, 0x1a, 0x97, 0xf1, 0x47, 0x4d, 0x84, 0x8a, 0x41, 0x5a, 0x82, 0xee, 0xb8, 0x09, 0x56, 0xcc,
+	0xe4, 0x90, 0x0a, 0x96, 0xbe, 0xb7, 0xd8, 0xc6, 0x29, 0xef, 0xc0, 0xe5, 0x5e, 0xd6, 0xce, 0x82,
+	0x8c, 0x86, 0x0b, 0xc2, 0xb4, 0x9a, 0x28, 0x3a, 0x23, 0xcf, 0xae, 0xb2, 0x3c, 0x23, 0x44, 0xb3,
+	0x7f, 0x44, 0xc0, 0x77, 0x36, 0x81, 0x17, 0xb2, 0x00, 0xcf, 0xd6, 0x55, 0x5b, 0xed, 0x2a, 0xcb,
+	0x47, 0x05, 0x76, 0x95, 0xe5, 0x59, 0x21, 0x96, 0xb5, 0x20, 0xd1, 0xdd, 0x78, 0xf0, 0x8f, 0x4f,
+	0x2a, 0x7f, 0xe7, 0xbc, 0xfd, 0xea, 0xff, 0xd4, 0x9d, 0xfd, 0x0c, 0x01, 0xd7, 0xde, 0xa4, 0xf0,
+	0xdd, 0x93, 0x93, 0xbd, 0x3d, 0x74, 0x63, 0x7b, 0x4e, 0x87, 0x98, 0xaf, 0xe6, 0x50, 0xf6, 0xb7,
+	0x08, 0xe2, 0xe1, 0x36, 0x88, 0xb7, 0x4e, 0x2a, 0xbc, 0x32, 0x7c, 0xef, 0x7c, 0x41, 0x12, 0x0f,
+	0x19, 0x18, 0xe9, 0x8b, 0x0d, 0x9e, 0x80, 0xa4, 0xe1, 0x68, 0xa4, 0x51, 0x75, 0x6c, 0xa3, 0xe1,
+	0x8b, 0x28, 0x83, 0x72, 0x09, 0x25, 0x11, 0xd4, 0xb3, 0x2e, 0xe3, 0x20, 0x15, 0x0c, 0x67, 0x29,
+	0x1c, 0xc4, 0x39, 0x88, 0xb9, 0xba, 0x6f, 0xd8, 0x61, 0x66, 0x70, 0xdf, 0x74, 0xec, 0x04, 0x23,
+	0x56, 0xd5, 0x36, 0x00, 0x4f, 0x01, 0xef, 0xb8, 0x86, 0xed, 0x1a, 0xfe, 0x7d, 0x91, 0xeb, 0x6a,
+	0x63, 0x8a, 0x53, 0x1d, 0x74, 0x6c, 0x22, 0x2a, 0x1e, 0x21, 0xb5, 0x8b, 0xc2, 0x22, 0xc4, 0xc3,
+	0x9f, 0xb8, 0x18, 0xcf, 0xa0, 0x1c, 0xaf, 0x76, 0x5e, 0xb1, 0x04, 0x6c, 0xf0, 0x8f, 0x26, 0xf2,
+	0x54, 0x1a, 0xd0, 0x6a, 0x37, 0x2a, 0x7e, 0xc2, 0xa8, 0xf4, 0xfb, 0xfc, 0xfe, 0xd3, 0x85, 0x44,
+	0x51, 0xfe, 0x96, 0x7c, 0x55, 0x9e, 0x93, 0xaf, 0x3d, 0x68, 0x22, 0x0b, 0x44, 0x88, 0x87, 0x4d,
+	0xa6, 0x47, 0xfa, 0xda, 0x03, 0x01, 0xd8, 0xdb, 0xba, 0x45, 0x04, 0x94, 0xe6, 0xda, 0xac, 0x20,
+	0x40, 0x4c, 0x0d, 0x24, 0xa7, 0xe3, 0x61, 0x73, 0xf0, 0x2a, 0xf0, 0x1b, 0xa1, 0xaa, 0x34, 0x1c,
+	0xf7, 0x01, 0xaf, 0x00, 0x7f, 0xab, 0x2d, 0xa9, 0x9a, 0x4e, 0x74, 0xd5, 0x66, 0x7f, 0xc1, 0x00,
+	0xdf, 0x89, 0x18, 0x7e, 0x0b, 0xb8, 0xaa, 0x6d, 0xe9, 0x46, 0xe3, 0x84, 0x91, 0x75, 0xa4, 0x86,
+	0x03, 0xb8, 0xd8, 0x63, 0x4d, 0x7b, 0xd9, 0x5e, 0xe9, 0xb7, 0x26, 0x58, 0xb7, 0xa3, 0xa3, 0x68,
+	0x8f, 0x37, 0x5d, 0xdf, 0xa3, 0xe7, 0xf9, 0xde, 0xf1, 0x8a, 0x3d, 0xc3, 0xab, 0xad, 0xa7, 0x0b,
+	0xf1, 0xa2, 0x3c, 0x2b, 0x4f, 0xcb, 0x33, 0x0f, 0x9a, 0x68, 0x03, 0x30, 0x70, 0xb7, 0xa8, 0xac,
+	0x34, 0xdf, 0x51, 0xfe, 0x3c, 0x1e, 0x65, 0x7f, 0xc7, 0x40, 0xb2, 0xe7, 0xc7, 0xfd, 0x55, 0xfc,
+	0xe8, 0x36, 0xc7, 0x9c, 0xd7, 0xdc, 0x1c, 0x8c, 0x6d, 0x1b, 0x0d, 0xdd, 0xd4, 0x7c, 0x57, 0x6f,
+	0x78, 0x66, 0xf0, 0xad, 0x41, 0x2d, 0xe1, 0x95, 0xc4, 0xa3, 0x26, 0x8a, 0x6d, 0xeb, 0xa6, 0x47,
+	0x54, 0x81, 0x62, 0x4a, 0xc7, 0x90, 0x73, 0x4d, 0x71, 0xfa, 0x4c, 0x29, 0x3f, 0xb3, 0x29, 0x39,
+	0x18, 0xfb, 0x4e, 0x30, 0x77, 0xa6, 0x67, 0xf2, 0xf4, 0xe5, 0x01, 0xa2, 0xb3, 0xff, 0x64, 0x21,
+	0xd1, 0xfd, 0xd1, 0x77, 0xf5, 0xa1, 0xc1, 0xfa, 0x9e, 0x25, 0x31, 0x93, 0xc0, 0xdd, 0x23, 0x46,
+	0xad, 0xee, 0x87, 0x91, 0x39, 0xa3, 0x20, 0x04, 0xe1, 0x77, 0x81, 0x75, 0x6c, 0xd7, 0xa7, 0x0e,
+	0x9d, 0x09, 0xa6, 0x10, 0xfc, 0x1b, 0x04, 0x9c, 0xaf, 0xbb, 0x35, 0xe2, 0xd3, 0x5d, 0x20, 0xa1,
+	0xfc, 0x2c, 0xc0, 0x7c, 0xe4, 0xee, 0x4d, 0xef, 0x6e, 0x7d, 0x90, 0xbf, 0x7b, 0xe5, 0xa7, 0x5b,
+	0xb9, 0x0f, 0xf4, 0xc9, 0x8f, 0x16, 0x27, 0xdf, 0x9f, 0x9a, 0xbc, 0x7e, 0xf7, 0xe3, 0xe2, 0xfe,
+	0xf1, 0x9b, 0x36, 0x79, 0xf7, 0xe3, 0x29, 0x79, 0x6e, 0x7a, 0xff, 0xdd, 0xdc, 0x9d, 0x7c, 0xcf,
+	0xe7, 0xb3, 0x50, 0x13, 0x37, 0x8e, 0x71, 0xfd, 0x98, 0x0e, 0xe2, 0x4e, 0xfe, 0xc6, 0x15, 0x35,
+	0x94, 0x33, 0x38, 0x1e, 0xdc, 0xf9, 0xf1, 0xe8, 0x06, 0x30, 0x7e, 0x4e, 0x00, 0xe7, 0xff, 0x80,
+	0x9e, 0x2e, 0x8c, 0x14, 0xe5, 0xab, 0x41, 0x52, 0xe4, 0x59, 0xf9, 0x9a, 0x3c, 0xf7, 0xa0, 0x89,
+	0x3e, 0x43, 0x03, 0xc2, 0x81, 0x81, 0x2b, 0x51, 0x55, 0x41, 0x84, 0xda, 0xfa, 0xce, 0xdc, 0x57,
+	0x30, 0x70, 0x3f, 0xa0, 0xcb, 0x10, 0x60, 0xdb, 0x0b, 0x02, 0x29, 0x60, 0x37, 0x6c, 0xd7, 0x0f,
+	0xf8, 0x02, 0xd7, 0x9f, 0x37, 0x6c, 0xa9, 0x9b, 0x2e, 0xd1, 0x7d, 0x72, 0x71, 0xbc, 0x79, 0x39,
+	0x8e, 0x37, 0xb8, 0xe7, 0x78, 0x13, 0x9e, 0x60, 0xe6, 0xc7, 0x1e, 0x2c, 0x9c, 0x38, 0xe4, 0x2a,
+	0xb9, 0x01, 0xe7, 0x8b, 0xf1, 0x4f, 0xbf, 0x44, 0xa7, 0xbe, 0x2a, 0x6f, 0xf4, 0x9d, 0x2c, 0x52,
+	0x9f, 0x7e, 0x89, 0x7a, 0xde, 0x7b, 0x4f, 0x14, 0xd9, 0x7f, 0xb1, 0x30, 0xaa, 0x12, 0xc7, 0xd4,
+	0x2b, 0x17, 0x69, 0xbb, 0x48, 0xdb, 0xd7, 0x9d, 0xb6, 0x3f, 0xc5, 0x20, 0xf9, 0x1e, 0xf1, 0x2f,
+	0x92, 0xf6, 0xd2, 0x26, 0x0d, 0x6f, 0x3c, 0xdf, 0xcd, 0xcc, 0x80, 0x3b, 0x98, 0x17, 0x93, 0xdd,
+	0x89, 0x2d, 0x18, 0x3b, 0x65, 0x18, 0x1e, 0x85, 0xa4, 0xba, 0xfe, 0xbd, 0xdb, 0xb7, 0x34, 0x75,
+	0x5d, 0x59, 0xb9, 0x2d, 0x44, 0xb0, 0x00, 0x97, 0xd4, 0xc5, 0xd2, 0xca, 0xba, 0xb6, 0xb6, 0xb4,
+	0xa6, 0x2c, 0xa9, 0x02, 0xc2, 0x18, 0x52, 0x9b, 0xa5, 0xc5, 0xd2, 0xca, 0x4d, 0x6d, 0x63, 0x49,
+	0xdd, 0x5c, 0xd9, 0x2c, 0x09, 0x0c, 0xbe, 0x04, 0xfc, 0x86, 0xba, 0xb2, 0xae, 0xae, 0x94, 0x7e,
+	0x24, 0x44, 0xd3, 0xec, 0x41, 0x13, 0x45, 0x94, 0x5f, 0xa2, 0xc3, 0xc7, 0x52, 0xe4, 0xe1, 0x63,
+	0x29, 0xf2, 0xc5, 0x63, 0x09, 0x7d, 0xd2, 0x92, 0xd0, 0xef, 0x5b, 0x12, 0xfa, 0x6b, 0x4b, 0x42,
+	0x87, 0x2d, 0x09, 0x3d, 0x6c, 0x49, 0xe8, 0x6f, 0x2d, 0x09, 0xfd, 0xbd, 0x25, 0x45, 0xbe, 0x68,
+	0x49, 0xe8, 0x57, 0x4f, 0xa4, 0xc8, 0xc1, 0x13, 0x09, 0x1d, 0x3e, 0x91, 0x22, 0x0f, 0x9f, 0x48,
+	0x91, 0xf7, 0xd7, 0x6b, 0xb6, 0xf3, 0x61, 0x2d, 0xbf, 0x6b, 0x9b, 0x3e, 0x71, 0x5d, 0x3d, 0xbf,
+	0xe3, 0x15, 0xe8, 0xc3, 0xb6, 0xed, 0x5a, 0x93, 0x8e, 0x6b, 0xef, 0x1a, 0x55, 0xe2, 0x4e, 0x76,
+	0x86, 0x0b, 0x4e, 0xb9, 0x66, 0x17, 0xc8, 0x9e, 0x1f, 0x5e, 0xb2, 0x9e, 0xbe, 0x8e, 0x2e, 0x73,
+	0xf4, 0xb2, 0x75, 0xe6, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xfc, 0xf2, 0x72, 0xc0, 0xb2, 0x16,
+	0x00, 0x00,
 }
 
 func (x LoadBalancingMode) String() string {
@@ -1580,6 +1840,30 @@ func (this *GlobalSpecType_MxPool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.MxPool.Equal(that1.MxPool) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_SrvPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SrvPool)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SrvPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SrvPool.Equal(that1.SrvPool) {
 		return false
 	}
 	return true
@@ -1814,6 +2098,38 @@ func (this *MXPool) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SRVPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SRVPool)
+	if !ok {
+		that2, ok := that.(SRVPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Members) != len(that1.Members) {
+		return false
+	}
+	for i := range this.Members {
+		if !this.Members[i].Equal(that1.Members[i]) {
+			return false
+		}
+	}
+	if this.MaxAnswers != that1.MaxAnswers {
+		return false
+	}
+	return true
+}
 func (this *AddressMember) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1912,6 +2228,48 @@ func (this *CNAMEMember) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *SRVMember) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SRVMember)
+	if !ok {
+		that2, ok := that.(SRVMember)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Priority != that1.Priority {
+		return false
+	}
+	if this.Weight != that1.Weight {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	if this.Target != that1.Target {
+		return false
+	}
+	if this.FinalTranslation != that1.FinalTranslation {
+		return false
+	}
+	if this.Ratio != that1.Ratio {
 		return false
 	}
 	return true
@@ -2050,6 +2408,30 @@ func (this *CreateSpecType_MxPool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.MxPool.Equal(that1.MxPool) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_SrvPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_SrvPool)
+	if !ok {
+		that2, ok := that.(CreateSpecType_SrvPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SrvPool.Equal(that1.SrvPool) {
 		return false
 	}
 	return true
@@ -2236,6 +2618,30 @@ func (this *ReplaceSpecType_MxPool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.MxPool.Equal(that1.MxPool) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_SrvPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_SrvPool)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_SrvPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SrvPool.Equal(that1.SrvPool) {
 		return false
 	}
 	return true
@@ -2434,6 +2840,30 @@ func (this *GetSpecType_MxPool) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_SrvPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_SrvPool)
+	if !ok {
+		that2, ok := that.(GetSpecType_SrvPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SrvPool.Equal(that1.SrvPool) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType_UseRrsetTtl) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2486,7 +2916,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 13)
 	s = append(s, "&dns_lb_pool.GlobalSpecType{")
 	if this.PoolTypeChoice != nil {
 		s = append(s, "PoolTypeChoice: "+fmt.Sprintf("%#v", this.PoolTypeChoice)+",\n")
@@ -2531,6 +2961,14 @@ func (this *GlobalSpecType_MxPool) GoString() string {
 	}
 	s := strings.Join([]string{`&dns_lb_pool.GlobalSpecType_MxPool{` +
 		`MxPool:` + fmt.Sprintf("%#v", this.MxPool) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_SrvPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_pool.GlobalSpecType_SrvPool{` +
+		`SrvPool:` + fmt.Sprintf("%#v", this.SrvPool) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_UseRrsetTtl) GoString() string {
@@ -2619,6 +3057,19 @@ func (this *MXPool) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *SRVPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_lb_pool.SRVPool{")
+	if this.Members != nil {
+		s = append(s, "Members: "+fmt.Sprintf("%#v", this.Members)+",\n")
+	}
+	s = append(s, "MaxAnswers: "+fmt.Sprintf("%#v", this.MaxAnswers)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AddressMember) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2659,11 +3110,27 @@ func (this *CNAMEMember) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *CreateSpecType) GoString() string {
+func (this *SRVMember) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 11)
+	s = append(s, "&dns_lb_pool.SRVMember{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Priority: "+fmt.Sprintf("%#v", this.Priority)+",\n")
+	s = append(s, "Weight: "+fmt.Sprintf("%#v", this.Weight)+",\n")
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	s = append(s, "Target: "+fmt.Sprintf("%#v", this.Target)+",\n")
+	s = append(s, "FinalTranslation: "+fmt.Sprintf("%#v", this.FinalTranslation)+",\n")
+	s = append(s, "Ratio: "+fmt.Sprintf("%#v", this.Ratio)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CreateSpecType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
 	s = append(s, "&dns_lb_pool.CreateSpecType{")
 	if this.PoolTypeChoice != nil {
 		s = append(s, "PoolTypeChoice: "+fmt.Sprintf("%#v", this.PoolTypeChoice)+",\n")
@@ -2707,6 +3174,14 @@ func (this *CreateSpecType_MxPool) GoString() string {
 		`MxPool:` + fmt.Sprintf("%#v", this.MxPool) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_SrvPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_pool.CreateSpecType_SrvPool{` +
+		`SrvPool:` + fmt.Sprintf("%#v", this.SrvPool) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_UseRrsetTtl) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2727,7 +3202,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&dns_lb_pool.ReplaceSpecType{")
 	if this.PoolTypeChoice != nil {
 		s = append(s, "PoolTypeChoice: "+fmt.Sprintf("%#v", this.PoolTypeChoice)+",\n")
@@ -2771,6 +3246,14 @@ func (this *ReplaceSpecType_MxPool) GoString() string {
 		`MxPool:` + fmt.Sprintf("%#v", this.MxPool) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_SrvPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_pool.ReplaceSpecType_SrvPool{` +
+		`SrvPool:` + fmt.Sprintf("%#v", this.SrvPool) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_UseRrsetTtl) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2791,7 +3274,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 13)
 	s = append(s, "&dns_lb_pool.GetSpecType{")
 	if this.PoolTypeChoice != nil {
 		s = append(s, "PoolTypeChoice: "+fmt.Sprintf("%#v", this.PoolTypeChoice)+",\n")
@@ -2838,6 +3321,14 @@ func (this *GetSpecType_MxPool) GoString() string {
 		`MxPool:` + fmt.Sprintf("%#v", this.MxPool) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_SrvPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&dns_lb_pool.GetSpecType_SrvPool{` +
+		`SrvPool:` + fmt.Sprintf("%#v", this.SrvPool) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType_UseRrsetTtl) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2882,6 +3373,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PoolTypeChoice != nil {
+		{
+			size := m.PoolTypeChoice.Size()
+			i -= size
+			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.DnsLoadBalancers) > 0 {
 		for iNdEx := len(m.DnsLoadBalancers) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2903,15 +3403,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.TtlChoice.Size()
 			i -= size
 			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.PoolTypeChoice != nil {
-		{
-			size := m.PoolTypeChoice.Size()
-			i -= size
-			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3038,6 +3529,29 @@ func (m *GlobalSpecType_UseRrsetTtl) MarshalToSizedBuffer(dAtA []byte) (int, err
 		}
 		i--
 		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_SrvPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_SrvPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SrvPool != nil {
+		{
+			size, err := m.SrvPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
 	}
 	return len(dAtA) - i, nil
 }
@@ -3255,6 +3769,48 @@ func (m *MXPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SRVPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SRVPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SRVPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxAnswers != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxAnswers))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Members) > 0 {
+		for iNdEx := len(m.Members) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Members[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AddressMember) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3411,6 +3967,73 @@ func (m *CNAMEMember) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *SRVMember) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SRVMember) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SRVMember) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ratio != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Ratio))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.FinalTranslation {
+		i--
+		if m.FinalTranslation {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.Target) > 0 {
+		i -= len(m.Target)
+		copy(dAtA[i:], m.Target)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Target)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Weight != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Weight))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Priority != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Priority))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3431,20 +4054,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.TtlChoice != nil {
-		{
-			size := m.TtlChoice.Size()
-			i -= size
-			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.PoolTypeChoice != nil {
 		{
 			size := m.PoolTypeChoice.Size()
 			i -= size
 			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.TtlChoice != nil {
+		{
+			size := m.TtlChoice.Size()
+			i -= size
+			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3574,6 +4197,29 @@ func (m *CreateSpecType_UseRrsetTtl) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_SrvPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SrvPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SrvPool != nil {
+		{
+			size, err := m.SrvPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3594,20 +4240,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.TtlChoice != nil {
-		{
-			size := m.TtlChoice.Size()
-			i -= size
-			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.PoolTypeChoice != nil {
 		{
 			size := m.PoolTypeChoice.Size()
 			i -= size
 			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.TtlChoice != nil {
+		{
+			size := m.TtlChoice.Size()
+			i -= size
+			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3737,6 +4383,29 @@ func (m *ReplaceSpecType_UseRrsetTtl) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_SrvPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SrvPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SrvPool != nil {
+		{
+			size, err := m.SrvPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3757,6 +4426,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.PoolTypeChoice != nil {
+		{
+			size := m.PoolTypeChoice.Size()
+			i -= size
+			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.DnsLoadBalancers) > 0 {
 		for iNdEx := len(m.DnsLoadBalancers) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -3778,15 +4456,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.TtlChoice.Size()
 			i -= size
 			if _, err := m.TtlChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.PoolTypeChoice != nil {
-		{
-			size := m.PoolTypeChoice.Size()
-			i -= size
-			if _, err := m.PoolTypeChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3916,6 +4585,29 @@ func (m *GetSpecType_UseRrsetTtl) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_SrvPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SrvPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SrvPool != nil {
+		{
+			size, err := m.SrvPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -4020,6 +4712,18 @@ func (m *GlobalSpecType_UseRrsetTtl) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_SrvPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SrvPool != nil {
+		l = m.SrvPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *APool) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4116,6 +4820,24 @@ func (m *MXPool) Size() (n int) {
 	return n
 }
 
+func (m *SRVPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Members) > 0 {
+		for _, e := range m.Members {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.MaxAnswers != 0 {
+		n += 1 + sovTypes(uint64(m.MaxAnswers))
+	}
+	return n
+}
+
 func (m *AddressMember) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4184,6 +4906,38 @@ func (m *CNAMEMember) Size() (n int) {
 	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SRVMember) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Priority != 0 {
+		n += 1 + sovTypes(uint64(m.Priority))
+	}
+	if m.Weight != 0 {
+		n += 1 + sovTypes(uint64(m.Weight))
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	l = len(m.Target)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.FinalTranslation {
+		n += 2
+	}
+	if m.Ratio != 0 {
+		n += 1 + sovTypes(uint64(m.Ratio))
 	}
 	return n
 }
@@ -4275,6 +5029,18 @@ func (m *CreateSpecType_UseRrsetTtl) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_SrvPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SrvPool != nil {
+		l = m.SrvPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4359,6 +5125,18 @@ func (m *ReplaceSpecType_UseRrsetTtl) Size() (n int) {
 	if m.UseRrsetTtl != nil {
 		l = m.UseRrsetTtl.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_SrvPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SrvPool != nil {
+		l = m.SrvPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -4455,6 +5233,18 @@ func (m *GetSpecType_UseRrsetTtl) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_SrvPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SrvPool != nil {
+		l = m.SrvPool.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -4536,6 +5326,16 @@ func (this *GlobalSpecType_UseRrsetTtl) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_UseRrsetTtl{`,
 		`UseRrsetTtl:` + strings.Replace(fmt.Sprintf("%v", this.UseRrsetTtl), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_SrvPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SrvPool{`,
+		`SrvPool:` + strings.Replace(fmt.Sprintf("%v", this.SrvPool), "SRVPool", "SRVPool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4624,6 +5424,22 @@ func (this *MXPool) String() string {
 	}, "")
 	return s
 }
+func (this *SRVPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForMembers := "[]*SRVMember{"
+	for _, f := range this.Members {
+		repeatedStringForMembers += strings.Replace(f.String(), "SRVMember", "SRVMember", 1) + ","
+	}
+	repeatedStringForMembers += "}"
+	s := strings.Join([]string{`&SRVPool{`,
+		`Members:` + repeatedStringForMembers + `,`,
+		`MaxAnswers:` + fmt.Sprintf("%v", this.MaxAnswers) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AddressMember) String() string {
 	if this == nil {
 		return "nil"
@@ -4660,6 +5476,22 @@ func (this *CNAMEMember) String() string {
 		`Ratio:` + fmt.Sprintf("%v", this.Ratio) + `,`,
 		`FinalTranslation:` + fmt.Sprintf("%v", this.FinalTranslation) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SRVMember) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SRVMember{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Priority:` + fmt.Sprintf("%v", this.Priority) + `,`,
+		`Weight:` + fmt.Sprintf("%v", this.Weight) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`Target:` + fmt.Sprintf("%v", this.Target) + `,`,
+		`FinalTranslation:` + fmt.Sprintf("%v", this.FinalTranslation) + `,`,
+		`Ratio:` + fmt.Sprintf("%v", this.Ratio) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4736,6 +5568,16 @@ func (this *CreateSpecType_UseRrsetTtl) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_SrvPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_SrvPool{`,
+		`SrvPool:` + strings.Replace(fmt.Sprintf("%v", this.SrvPool), "SRVPool", "SRVPool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4804,6 +5646,16 @@ func (this *ReplaceSpecType_UseRrsetTtl) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_UseRrsetTtl{`,
 		`UseRrsetTtl:` + strings.Replace(fmt.Sprintf("%v", this.UseRrsetTtl), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_SrvPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_SrvPool{`,
+		`SrvPool:` + strings.Replace(fmt.Sprintf("%v", this.SrvPool), "SRVPool", "SRVPool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4882,6 +5734,16 @@ func (this *GetSpecType_UseRrsetTtl) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_UseRrsetTtl{`,
 		`UseRrsetTtl:` + strings.Replace(fmt.Sprintf("%v", this.UseRrsetTtl), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_SrvPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_SrvPool{`,
+		`SrvPool:` + strings.Replace(fmt.Sprintf("%v", this.SrvPool), "SRVPool", "SRVPool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5170,6 +6032,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.DnsLoadBalancers[len(m.DnsLoadBalancers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SrvPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SRVPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PoolTypeChoice = &GlobalSpecType_SrvPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -5623,6 +6520,112 @@ func (m *MXPool) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Members = append(m.Members, &MXMember{})
+			if err := m.Members[len(m.Members)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxAnswers", wireType)
+			}
+			m.MaxAnswers = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxAnswers |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SRVPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SRVPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SRVPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Members", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Members = append(m.Members, &SRVMember{})
 			if err := m.Members[len(m.Members)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6156,6 +7159,219 @@ func (m *CNAMEMember) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *SRVMember) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SRVMember: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SRVMember: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Priority", wireType)
+			}
+			m.Priority = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Priority |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
+			}
+			m.Weight = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Weight |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Target", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Target = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FinalTranslation", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.FinalTranslation = bool(v != 0)
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ratio", wireType)
+			}
+			m.Ratio = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Ratio |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -6398,6 +7614,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.TtlChoice = &CreateSpecType_UseRrsetTtl{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SrvPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SRVPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PoolTypeChoice = &CreateSpecType_SrvPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6665,6 +7916,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.TtlChoice = &ReplaceSpecType_UseRrsetTtl{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SrvPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SRVPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PoolTypeChoice = &ReplaceSpecType_SrvPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6966,6 +8252,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.DnsLoadBalancers[len(m.DnsLoadBalancers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SrvPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SRVPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.PoolTypeChoice = &GetSpecType_SrvPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

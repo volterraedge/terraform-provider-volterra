@@ -1834,6 +1834,26 @@ func (v *ValidateCreateSpecType) OutsideVipV6ValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1920,6 +1940,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
+		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_vip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
@@ -1951,6 +1980,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2236,6 +2274,28 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip_v6"] = vFn
+
+	vrhInsideNameserverV6 := v.InsideNameserverV6ValidationRuleHandler
+	rulesInsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideNameserverV6(rulesInsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.inside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4027,6 +4087,26 @@ func (v *ValidateGetSpecType) OutsideVipV6ValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4138,6 +4218,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
+		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_vip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
@@ -4204,6 +4293,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4596,6 +4694,28 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip_v6"] = vFn
+
+	vrhInsideNameserverV6 := v.InsideNameserverV6ValidationRuleHandler
+	rulesInsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideNameserverV6(rulesInsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.inside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -5611,6 +5731,26 @@ func (v *ValidateGlobalSpecType) OutsideVipV6ValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5762,6 +5902,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("inside_nameserver"))
 		if err := fv(ctx, m.GetInsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
+		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5934,6 +6083,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6543,6 +6701,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip_v6"] = vFn
+
+	vrhInsideNameserverV6 := v.InsideNameserverV6ValidationRuleHandler
+	rulesInsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideNameserverV6(rulesInsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.inside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -9094,6 +9274,26 @@ func (v *ValidateReplaceSpecType) OutsideVipV6ValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -9171,6 +9371,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
+		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["inside_vip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("inside_vip"))
@@ -9202,6 +9411,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9476,6 +9694,28 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip_v6"] = vFn
+
+	vrhInsideNameserverV6 := v.InsideNameserverV6ValidationRuleHandler
+	rulesInsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideNameserverV6(rulesInsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.inside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -11248,10 +11488,12 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
+	m.InsideNameserverV6 = f.GetInsideNameserverV6()
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
+	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
@@ -11288,10 +11530,12 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
+	f.InsideNameserverV6 = m1.InsideNameserverV6
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
+	f.OutsideNameserverV6 = m1.OutsideNameserverV6
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region
@@ -11328,6 +11572,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 
 	m.InsideNameserver = f.GetInsideNameserver()
+	m.InsideNameserverV6 = f.GetInsideNameserverV6()
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
 	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
@@ -11336,6 +11581,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.MultusEnabled = f.GetMultusEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
+	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
@@ -11381,6 +11627,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.DesiredPoolCount = m1.DesiredPoolCount
 
 	f.InsideNameserver = m1.InsideNameserver
+	f.InsideNameserverV6 = m1.InsideNameserverV6
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
 	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
@@ -11389,6 +11636,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.MultusEnabled = m1.MultusEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
+	f.OutsideNameserverV6 = m1.OutsideNameserverV6
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region
@@ -11427,10 +11675,12 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
 	m.DesiredPoolCount = f.GetDesiredPoolCount()
 	m.InsideNameserver = f.GetInsideNameserver()
+	m.InsideNameserverV6 = f.GetInsideNameserverV6()
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
+	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.Region = f.GetRegion()
@@ -11466,10 +11716,12 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork
 	f.DesiredPoolCount = m1.DesiredPoolCount
 	f.InsideNameserver = m1.InsideNameserver
+	f.InsideNameserverV6 = m1.InsideNameserverV6
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
+	f.OutsideNameserverV6 = m1.OutsideNameserverV6
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
 	f.Region = m1.Region

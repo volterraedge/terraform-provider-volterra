@@ -334,7 +334,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -371,7 +371,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 						"gcp_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"gcp_zone_names": {
@@ -394,7 +394,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -408,7 +408,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -446,7 +446,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -526,14 +526,14 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -585,7 +585,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -634,7 +634,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -652,7 +652,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -682,7 +682,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -707,7 +707,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -727,12 +727,12 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -757,7 +757,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -841,7 +841,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -856,7 +856,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -890,7 +890,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1002,7 +1002,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1086,7 +1086,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"subnet_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1101,7 +1101,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"primary_ipv4": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"subnet_name": {
@@ -1125,7 +1125,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1158,7 +1158,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1208,7 +1208,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1223,7 +1223,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1263,7 +1263,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1375,7 +1375,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1453,7 +1453,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"subnet_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1468,7 +1468,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"primary_ipv4": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"subnet_name": {
@@ -1544,7 +1544,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 						"gcp_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"gcp_zone_names": {
@@ -1573,7 +1573,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1588,7 +1588,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1628,7 +1628,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"subnet_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1643,7 +1643,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"primary_ipv4": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"subnet_name": {
@@ -1749,7 +1749,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"forward_proxy_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1786,7 +1786,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 						"gcp_certified_hw": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"gcp_zone_names": {
@@ -1809,7 +1809,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"global_network_connections": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1823,7 +1823,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1861,7 +1861,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"global_vn": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1941,14 +1941,14 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 																					"interception_rules": {
 
 																						Type:     schema.TypeList,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
 																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Required: true,
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
@@ -2000,7 +2000,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																					"certificate_url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"description": {
@@ -2049,7 +2049,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 																					"private_key": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -2067,7 +2067,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2097,7 +2097,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"store_provider": {
@@ -2122,7 +2122,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"url": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2142,12 +2142,12 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"location": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"provider": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 
 																											"secret_encoding": {
@@ -2172,7 +2172,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 																											"name": {
 																												Type:     schema.TypeString,
-																												Optional: true,
+																												Required: true,
 																											},
 																										},
 																									},
@@ -2279,7 +2279,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"enhanced_firewall_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2312,7 +2312,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"network_policies": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2362,7 +2362,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 									"static_route_list": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2474,7 +2474,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 															"subnets": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2552,7 +2552,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2567,7 +2567,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2607,7 +2607,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"subnet_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2622,7 +2622,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"primary_ipv4": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"subnet_name": {
@@ -2675,7 +2675,7 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 
 												"storage_class_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

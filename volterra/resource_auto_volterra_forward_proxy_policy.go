@@ -157,7 +157,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"port_ranges": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"prefixes": {
@@ -290,7 +290,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 									"port_ranges": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"prefixes": {
@@ -399,13 +399,13 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 						"rules": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"action": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"all_destinations": {
@@ -684,7 +684,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -700,7 +700,7 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

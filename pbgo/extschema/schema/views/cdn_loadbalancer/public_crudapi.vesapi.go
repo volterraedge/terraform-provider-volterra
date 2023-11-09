@@ -814,17 +814,18 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.API.Create", nil)
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -833,12 +834,13 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.API.Replace", nil)
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -846,12 +848,13 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.API.Get", nil)
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -860,12 +863,13 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.API.List", nil)
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -874,12 +878,13 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.API.Delete", nil)
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -888,22 +893,15 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 }
 
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
+	return &APIInprocClient{svc: svc}
 }
 
 // INPROC CRUD Client (satisfying server.CRUDClient interface)
 type crudAPIInprocClient struct {
-	svc svcfw.Service
+	cl APIClient
 }
 
 func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
-	}
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -920,7 +918,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		}
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -941,12 +939,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -964,7 +956,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -974,12 +966,6 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -988,7 +974,7 @@ func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...se
 	if err != nil {
 		return nil, errors.Wrap(err, "Get")
 	}
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -1064,12 +1050,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1084,7 +1064,7 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
 	}
 
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1098,12 +1078,6 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.views.cdn_loadbalancer")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1114,7 +1088,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 		return errors.Wrap(err, "Delete")
 	}
 
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
@@ -1124,8 +1098,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -2250,6 +2223,84 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerCDNCacheRule": {
+            "type": "object",
+            "description": "x-displayName: \"Cache Rule\"\nThis defines a CDN Cache Rule",
+            "title": "Cache Rule",
+            "properties": {
+                "cache_bypass": {
+                    "description": "x-displayName: \"Bypass Cache\"\nBypass Caching of content from the origin",
+                    "title": "Bypass Cache",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "eligible_for_cache": {
+                    "description": "x-displayName: \"Eligible For Cache\"\nEligible for caching the content",
+                    "title": "Eligible For Cache",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheEligibleOptions"
+                },
+                "rule_expression_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Expressions\"\nx-required\nExpressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs..",
+                    "title": "Expression List",
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerCDNCacheRuleExpressionList"
+                    }
+                },
+                "rule_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Rule Name\"\nx-required\nx-example: \"Rule-1\"\nName of the Cache Rule",
+                    "title": "Rule Name"
+                }
+            }
+        },
+        "cdn_loadbalancerCDNCacheRuleExpression": {
+            "type": "object",
+            "description": "x-displayName: \"Cache Rule Expression\"\nSelect one of the field options",
+            "title": "CDNCacheRuleExpression",
+            "properties": {
+                "headers": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cache Headers\"\nConfigure cache rule headers to match the criteria",
+                    "title": "Cache Headers",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaHeaderMatcherType"
+                    }
+                },
+                "path_match": {
+                    "description": "x-displayName: \"Path Match\"\nURI path of route",
+                    "title": "path_match",
+                    "$ref": "#/definitions/ioschemaPathMatcherType"
+                },
+                "query_params": {
+                    "type": "array",
+                    "description": "x-displayName: \"Query Parameters\"\nList of (key, value) query parameters",
+                    "title": "query_params",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaQueryParameterMatcherType"
+                    }
+                }
+            }
+        },
+        "cdn_loadbalancerCDNCacheRuleExpressionList": {
+            "type": "object",
+            "description": "x-displayName: \"Cache Rule Expression List\"\nCDN Cache Rule Expressions.",
+            "title": "Cache Rule Expression List",
+            "properties": {
+                "cache_rule_expression": {
+                    "type": "array",
+                    "description": "x-displayName: \"Terms\"\nx-required\nThe Cache Rule Expression Terms that are ANDed",
+                    "title": "Terms",
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerCDNCacheRuleExpression"
+                    }
+                },
+                "expression_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Expression Name\"\nx-required\nx-example: \"Expression-1\"\nName of the Expressions items that are ANDed",
+                    "title": "Expression Name"
+                }
+            }
+        },
         "cdn_loadbalancerCDNCustomAuthentication": {
             "type": "object",
             "description": "Custom  Authentication",
@@ -2494,6 +2545,77 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerCacheEligibleOptions": {
+            "type": "object",
+            "description": "x-displayName: \"Cache Action Options\"\nList of options for Cache Action",
+            "title": "Cache Action Options",
+            "properties": {
+                "hostname_uri": {
+                    "description": "x-displayName: \"Hostname + URI\"",
+                    "title": "Hostname + URI",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                },
+                "scheme_hostname_request_uri": {
+                    "description": "x-displayName: \"Scheme + Hostname + Request + URI\"",
+                    "title": "Scheme + Proxy Host + Request URI",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                },
+                "scheme_hostname_uri": {
+                    "description": "x-displayName: \"Scheme + Hostname + URI\"",
+                    "title": "Scheme + Hostname + URI",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                },
+                "scheme_hostname_uri_query": {
+                    "description": "x-displayName: \"Scheme + Hostname + URI + Query\"",
+                    "title": "Scheme + Hostname + URI + Query",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                }
+            }
+        },
+        "cdn_loadbalancerCacheOptions": {
+            "type": "object",
+            "description": "x-displayName: \"Cache Options\"\nThis defines the options related to content caching",
+            "title": "Cache options",
+            "properties": {
+                "cache_rules": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cache Rules\"\nx-required\nRules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.",
+                    "title": "List of Cache rules(These rules are ORed)",
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerCDNCacheRule"
+                    }
+                },
+                "default_cache_action": {
+                    "description": "x-displayName: \"Default Cache Action\"\nx-required\nDefault value for Cache action.",
+                    "title": "Default Cache Action",
+                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction"
+                }
+            }
+        },
+        "cdn_loadbalancerCacheTTLEnableProps": {
+            "type": "object",
+            "description": "x-displayName: \"Cache TTL Enable Props\"\nCache TTL Enable Values",
+            "title": "Cache TTL Enable Props",
+            "properties": {
+                "cache_override": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Cache Override\"\nHonour Cache Override",
+                    "title": "Cache Override",
+                    "format": "boolean"
+                },
+                "cache_ttl": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cache TTL\"\nx-required\nx-example: \"5m, 60s, 120s, 3h, 1d, 15d\"\nCache TTL value is used to cache the resource/content for the specified amount of time\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
+                    "title": "Cache TTL Key"
+                },
+                "set_cookie": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Set-Cookie\"\nWhen enabled, the upstream cookie is sent to the client",
+                    "title": "Set Cookie",
+                    "format": "boolean"
+                }
+            }
+        },
         "cdn_loadbalancerCacheTTLOptionsType": {
             "type": "object",
             "description": "This defines the options related to content caching",
@@ -2632,6 +2754,30 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "cdn_loadbalancerDefaultCacheAction": {
+            "type": "object",
+            "description": "x-displayName: \"Default Cache Action\"\nThis defines a Default Cache Action",
+            "title": "Default Cache Action",
+            "properties": {
+                "eligible_for_cache": {
+                    "description": "x-displayName: \"Eligible For Cache\"\nEligible for caching the content",
+                    "title": "Eligible For Cache",
+                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheTTLProps"
+                }
+            }
+        },
+        "cdn_loadbalancerDefaultCacheTTLProps": {
+            "type": "object",
+            "description": "x-displayName: \"Default Cache TTL Props\"\nDefault Cache TTL Enable Values",
+            "title": "Default Cache TTL Props",
+            "properties": {
+                "cache_ttl": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cache TTL\"\nx-required\nx-example: \"5m, 60s, 120s, 3h, 1d, 15d\"\nCache TTL value is used to cache the resource/content for the specified amount of time\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
+                    "title": "Cache TTL Key"
                 }
             }
         },
@@ -3201,6 +3347,40 @@ var APISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
+        "ioschemaHeaderMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Header to Match\"\nHeader match is done using the name of the header and its value.\nThe value match is done using one of the following\n    regex match on value\n    exact match of value\n    presence of header\n\nHeader Match can also be inverse of above, which be used to check\n    missing header or\n    non-matching value",
+            "title": "HeaderMatcherType",
+            "properties": {
+                "exact": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact\"\nx-example: \"application/json\"\nHeader value to match exactly",
+                    "title": "exact"
+                },
+                "invert_match": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"NOT of match\"\nInvert the result of the match to detect missing header or non-matching value",
+                    "title": "invert_match",
+                    "format": "boolean"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"Content-Type\"\nName of the header",
+                    "title": "name"
+                },
+                "presence": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Presence\"\nIf true, check for presence of header",
+                    "title": "presence",
+                    "format": "boolean"
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex\"\nRegex match of the header value in re2 format",
+                    "title": "regex"
+                }
+            }
+        },
         "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
@@ -3242,6 +3422,50 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "ioschemaPathMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Path to Match\"\nPath match of the URI can be either be, Prefix match or exact match or regular expression match",
+            "title": "PathMatcherType",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-example: \"/logout\"\nExact path value to match",
+                    "title": "path"
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Prefix\"\nx-example: \"/register/\"\nPath prefix to match (e.g. the value / will match on all paths)",
+                    "title": "prefix"
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex\"\nRegular expression of path match (e.g. the value .* will match on all paths)",
+                    "title": "regex"
+                }
+            }
+        },
+        "ioschemaQueryParameterMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Query Parameter to Match\"\nQuery parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
+            "title": "QueryParameterMatcherType",
+            "properties": {
+                "exact": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact\"\nExact match value for the query parameter key",
+                    "title": "exact"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nx-required\nx-example: \"assignee_username\"\nQuery parameter key\nIn the above example, assignee_username is the key",
+                    "title": "key"
+                },
+                "regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex\"\nRegex match value for the query parameter key",
+                    "title": "regex"
                 }
             }
         },
@@ -3400,25 +3624,25 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [no_mtls use_mtls_obj]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "Enable MTLS With Inline Certificate"
+                    "x-displayname": "Enable by uploading a new certificate"
                 },
                 "use_mtls_obj": {
                     "description": "Exclusive with [no_mtls use_mtls]\n",
                     "title": "Enable MTLS With Certificate Object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable MTLS With Certificate Object"
+                    "x-displayname": "Enable by selecting a certificate"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided trusted CA list",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided Root CA list",
                     "title": "Use Server Verification",
                     "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext",
-                    "x-displayname": "Use Custom CA List"
+                    "x-displayname": "Use Custom Root CA Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default trusted CA list",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default Root CA list",
                     "title": "F5XC Trusted CA",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use Default Trusted CA List"
+                    "x-displayname": "Use Default Root CA Certificate"
                 }
             }
         },
@@ -3431,18 +3655,18 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Trusted CA List for verification of Server's certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA for verification of Server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA certificates for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
-                    "title": "Trusted CAs",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Upload a new Root CA certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -5124,7 +5348,8 @@ var APISwaggerJSON string = `{
                     "description": " Cache Options",
                     "title": "Cache Options",
                     "$ref": "#/definitions/cdn_loadbalancerCacheTTLOptionsType",
-                    "x-displayname": "Cache Options"
+                    "x-displayname": "Cache Options",
+                    "x-ves-deprecated": "Replaced by new filed cache_options"
                 },
                 "header_options": {
                     "description": " Request/Response header related options",

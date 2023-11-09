@@ -23,19 +23,49 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli" must be set
-    do_not_advertise_on_internet = true
-    domain_suffix                = "foo.com"
+    // One of the arguments from this list "advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip" must be set
 
-    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    advertise_on_slo_sli {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+      no_mtls = true
 
-    advertise_on_public {
-      public_ip {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+      tls_certificates {
+        certificate_url = "value"
+        description     = "Certificate used in production environment"
+
+        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
+
+        disable_ocsp_stapling {}
+        private_key {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+
+          blindfold_secret_info {
+            decryption_provider = "value"
+            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+            store_provider      = "value"
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
+        default_security = true
       }
     }
+
+    domain_suffix = "foo.com"
+
+    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    advertise_on_public_default_vip = true
+
     // One of the arguments from this list "default_https_port https_port" must be set
     default_https_port = true
   }
@@ -53,7 +83,7 @@ resource "volterra_apm" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
         blindfold_secret_info {
           decryption_provider = "value"
@@ -77,10 +107,10 @@ resource "volterra_apm" "example" {
         disable_advertise_on_slo_ip = true
 
         // One of the arguments from this list "automatic_vip configured_vip" must be set
-        configured_vip = "10.1.2.6/32"
+        automatic_vip = true
 
-        // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
-        no_tcp_ports = true
+        // One of the arguments from this list "custom_tcp_ports no_tcp_ports default_tcp_ports http_port https_port" must be set
+        default_tcp_ports = true
 
         // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
         no_udp_ports = true
@@ -94,7 +124,7 @@ resource "volterra_apm" "example" {
         node_name            = "node1"
 
         // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
-        tunnel_prefix = "10.1.2.4/30"
+        automatic_prefix = true
       }
 
       ssh_key = "ssh-rsa AAAAB..."
@@ -107,7 +137,7 @@ resource "volterra_apm" "example" {
     // One of the arguments from this list "market_place_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "best_plus_payg_1gbps BestPlusPayG200Mbps" must be set
+      // One of the arguments from this list "BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
       BestPlusPayG200Mbps = true
     }
   }
@@ -286,6 +316,20 @@ Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site.
 
 F5 Best Plus with all modules in 1Gbps flavor.
 
+### Bigiq Instance
+
+Details of BIG-IQ Instance used for activating licenses..
+
+`license_pool_name` - (Required) Name of Utility Pool on BIG-IQ (`String`).
+
+`license_server_ip` - (Required) IP Address from the TCP Load Balancer which is configured to communicate with License Server (`String`).
+
+`password` - (Required) Password of the user used to access BIG-IQ to activate the license. See [Password ](#password) below for details.
+
+`sku_name` - (Required) License offering name aka SKU name (`String`).
+
+`username` - (Required) User Name used to access BIG-IQ to activate the license (`String`).
+
 ### Blindfold Secret Info
 
 Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
@@ -412,6 +456,8 @@ Virtual BIG-IP specification for App Stack Bare Metal Site.
 
 `bare_metal_site` - (Required) Reference to bare metal site on which BIG-IP should be deployed. See [ref](#ref) below for details.
 
+`bigiq_instance` - (Required) Details of BIG-IQ Instance used for activating licenses.. See [Bigiq Instance ](#bigiq-instance) below for details.
+
 `nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
 `public_download_url` - (Required) Public URL where BIG-IP VE image (qcow2) is hosted (`String`).
@@ -514,6 +560,22 @@ Specify how and where the service nodes are spawned.
 
 `tunnel_prefix` - (Optional) Enter IP prefix for the tunnel, it has to be /30 (`String`).
 
+### Password
+
+Password of the user used to access BIG-IQ to activate the license.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -588,9 +650,9 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca` - (Optional) Trusted CA List. See [ref](#ref) below for details.
+`trusted_ca` - (Optional) Select/Add a Root CA certificate. See [ref](#ref) below for details.
 
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
+`trusted_ca_url` - (Optional) Inline Root CA certificate (`String`).
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
 

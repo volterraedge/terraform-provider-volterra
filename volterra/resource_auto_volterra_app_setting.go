@@ -101,14 +101,14 @@ func resourceVolterraAppSetting() *schema.Resource {
 			"app_type_settings": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"app_type_ref": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -283,7 +283,7 @@ func resourceVolterraAppSetting() *schema.Resource {
 												"cooling_off_period": {
 
 													Type:     schema.TypeInt,
-													Optional: true,
+													Required: true,
 												},
 
 												"exclude_failed_login_activity": {
@@ -301,7 +301,7 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 															"login_failures_threshold": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -322,7 +322,7 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 															"forbidden_requests_threshold": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -383,7 +383,7 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 															"nonexistent_requests_threshold": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},

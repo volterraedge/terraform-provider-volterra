@@ -1477,45 +1477,59 @@ type namespaceCustomAPIInprocClient struct {
 }
 
 func (c *namespaceCustomAPIInprocClient) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory", nil)
 	return c.NamespaceCustomAPIServer.ApplicationInventory(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete", nil)
 	return c.NamespaceCustomAPIServer.CascadeDelete(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies", nil)
 	return c.NamespaceCustomAPIServer.GetActiveAlertPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies", nil)
 	return c.NamespaceCustomAPIServer.GetActiveNetworkPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*GetActiveServicePoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies", nil)
 	return c.NamespaceCustomAPIServer.GetActiveServicePolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.Context, in *GetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*GetFastACLsForInternetVIPsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs", nil)
 	return c.NamespaceCustomAPIServer.GetFastACLsForInternetVIPs(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) NetworkingInventory(ctx context.Context, in *NetworkingInventoryRequest, opts ...grpc.CallOption) (*NetworkingInventoryResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory", nil)
 	return c.NamespaceCustomAPIServer.NetworkingInventory(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*SetActiveAlertPoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies", nil)
 	return c.NamespaceCustomAPIServer.SetActiveAlertPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies", nil)
 	return c.NamespaceCustomAPIServer.SetActiveNetworkPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Context, in *SetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*SetActiveServicePoliciesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies", nil)
 	return c.NamespaceCustomAPIServer.SetActiveServicePolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*SetFastACLsForInternetVIPsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs", nil)
 	return c.NamespaceCustomAPIServer.SetFastACLsForInternetVIPs(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues", nil)
 	return c.NamespaceCustomAPIServer.SuggestValues(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic", nil)
 	return c.NamespaceCustomAPIServer.UpdateAllowAdvertiseOnPublic(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) ValidateRules(ctx context.Context, in *ValidateRulesReq, opts ...grpc.CallOption) (*ValidateRulesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ValidateRules", nil)
 	return c.NamespaceCustomAPIServer.ValidateRules(ctx, in)
 }
 
@@ -4042,6 +4056,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Networking related objects inventory response",
             "x-ves-proto-message": "ves.io.schema.namespace.NetworkingInventoryResponse",
             "properties": {
+                "cloud_links": {
+                    "type": "integer",
+                    "description": " Number of CloudLinks",
+                    "title": "CloudLinks",
+                    "format": "int64",
+                    "x-displayname": "CloudLinks"
+                },
                 "dc_cluster_groups": {
                     "type": "integer",
                     "description": " Number of DC cluster groups configured",

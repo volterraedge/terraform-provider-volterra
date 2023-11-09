@@ -5,7 +5,7 @@ Volterra terraform provider can be used to configure Volterra Objects amd these 
 
 ## Authenticating to Volterra
 
-Volterra terraform provider supports authenticating to Volterra using API Credential P12 file. Learn more on [how to generate api certificate](https://volterra.io/docs/how-to/user-mgmt/credentials).
+Volterra terraform provider supports authenticating to Volterra using API Credential P12 file. Learn more on [how to generate api certificate](https://docs.cloud.f5.com/docs/how-to/user-mgmt/credentials).
 
 
 ## Example Usage

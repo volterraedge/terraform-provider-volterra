@@ -85,7 +85,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 						"api_key": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -103,7 +103,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -133,7 +133,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -158,7 +158,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -178,12 +178,12 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -208,7 +208,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -219,7 +219,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 						"url": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -235,7 +235,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 						"routing_key": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -253,7 +253,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -283,7 +283,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -308,7 +308,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -328,12 +328,12 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -358,7 +358,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -369,7 +369,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 						"url": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -384,13 +384,13 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 						"channel": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"url": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -408,7 +408,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -438,7 +438,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -463,7 +463,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -483,12 +483,12 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -513,7 +513,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -550,27 +550,21 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 						"http_config": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"auth_config": {
+									"auth_token": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"auth_type_bearer": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"credentials": {
+												"token": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -588,7 +582,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -618,7 +612,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -643,7 +637,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -663,12 +657,12 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -693,7 +687,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -715,7 +709,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 												"password": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -733,7 +727,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -763,7 +757,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -788,7 +782,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -808,12 +802,12 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -838,7 +832,7 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -849,7 +843,45 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 
 												"user_name": {
 													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+
+									"client_cert_obj": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"use_tls_obj": {
+
+													Type:     schema.TypeList,
 													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 											},
 										},
@@ -871,157 +903,18 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 										Optional: true,
 									},
 
-									"tls_config": {
+									"no_tls": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"use_tls": {
 
 										Type:     schema.TypeSet,
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
-
-												"ca_cert": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"client_cert": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"client_key": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"blindfold_secret_info_internal": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"blindfold_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"clear_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"url": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"location": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-
-																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-														},
-													},
-												},
 
 												"max_version": {
 													Type:     schema.TypeString,
@@ -1033,7 +926,68 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 													Optional: true,
 												},
 
-												"server_name": {
+												"use_server_verification": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ca_cert_obj": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"trusted_ca": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"kind": {
+																						Type:     schema.TypeString,
+																						Computed: true,
+																					},
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"volterra_trusted_ca": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"disable_sni": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"sni": {
+
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -1045,8 +999,138 @@ func resourceVolterraAlertReceiver() *schema.Resource {
 						},
 
 						"url": {
-							Type:     schema.TypeString,
-							Optional: true,
+
+							Type:     schema.TypeSet,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"blindfold_secret_info_internal": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"location": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"store_provider": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"blindfold_secret_info": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"location": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"store_provider": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"clear_secret_info": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"provider": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"url": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"location": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"provider": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"secret_encoding": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"version": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 					},
 				},
@@ -1748,44 +1832,30 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 					authChoiceTypeFound := false
 
-					if v, ok := httpConfigMapStrToI["auth_config"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+					if v, ok := httpConfigMapStrToI["auth_token"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
 
 						authChoiceTypeFound = true
-						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_AuthConfig{}
-						authChoiceInt.AuthConfig = &ves_io_schema_alert_receiver.Authorization{}
+						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_AuthToken{}
+						authChoiceInt.AuthToken = &ves_io_schema_alert_receiver.AuthToken{}
 						httpConfig.AuthChoice = authChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							authTypeTypeFound := false
-
-							if v, ok := cs["auth_type_bearer"]; ok && !isIntfNil(v) && !authTypeTypeFound {
-
-								authTypeTypeFound = true
-
-								if v.(bool) {
-									authTypeInt := &ves_io_schema_alert_receiver.Authorization_AuthTypeBearer{}
-									authTypeInt.AuthTypeBearer = &ves_io_schema.Empty{}
-									authChoiceInt.AuthConfig.AuthType = authTypeInt
-								}
-
-							}
-
-							if v, ok := cs["credentials"]; ok && !isIntfNil(v) {
+							if v, ok := cs["token"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
-								credentials := &ves_io_schema.SecretType{}
-								authChoiceInt.AuthConfig.Credentials = credentials
+								token := &ves_io_schema.SecretType{}
+								authChoiceInt.AuthToken.Token = token
 								for _, set := range sl {
-									credentialsMapStrToI := set.(map[string]interface{})
+									tokenMapStrToI := set.(map[string]interface{})
 
-									if v, ok := credentialsMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+									if v, ok := tokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										credentials.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+										token.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
@@ -1805,20 +1875,20 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+									if v, ok := tokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
 
-										credentials.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+										token.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
 
 									}
 
 									secretInfoOneofTypeFound := false
 
-									if v, ok := credentialsMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
 										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -1846,12 +1916,12 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
 										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -1873,12 +1943,12 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
 										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -1918,12 +1988,12 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
 										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -2138,6 +2208,53 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 					}
 
+					if v, ok := httpConfigMapStrToI["client_cert_obj"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_ClientCertObj{}
+						authChoiceInt.ClientCertObj = &ves_io_schema_alert_receiver.ClientCertificateObj{}
+						httpConfig.AuthChoice = authChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["use_tls_obj"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								useTlsObjInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								authChoiceInt.ClientCertObj.UseTlsObj = useTlsObjInt
+								for i, ps := range sl {
+
+									utoMapToStrVal := ps.(map[string]interface{})
+									useTlsObjInt[i] = &ves_io_schema.ObjectRefType{}
+
+									useTlsObjInt[i].Kind = "certificate"
+
+									if v, ok := utoMapToStrVal["name"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Name = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := httpConfigMapStrToI["no_authorization"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
 
 						authChoiceTypeFound = true
@@ -2158,181 +2275,93 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 						httpConfig.FollowRedirects = w.(bool)
 					}
 
-					if v, ok := httpConfigMapStrToI["tls_config"]; ok && !isIntfNil(v) {
+					tlsChoiceTypeFound := false
+
+					if v, ok := httpConfigMapStrToI["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+						tlsChoiceTypeFound = true
+
+						if v.(bool) {
+							tlsChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_NoTls{}
+							tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+							httpConfig.TlsChoice = tlsChoiceInt
+						}
+
+					}
+
+					if v, ok := httpConfigMapStrToI["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+						tlsChoiceTypeFound = true
+						tlsChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_UseTls{}
+						tlsChoiceInt.UseTls = &ves_io_schema_alert_receiver.TLSConfig{}
+						httpConfig.TlsChoice = tlsChoiceInt
 
 						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_alert_receiver.TLSConfig{}
-						httpConfig.TlsConfig = tlsConfig
 						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
+							cs := set.(map[string]interface{})
 
-							if w, ok := tlsConfigMapStrToI["ca_cert"]; ok && !isIntfNil(w) {
-								tlsConfig.CaCert = w.(string)
+							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+								tlsChoiceInt.UseTls.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
 							}
 
-							if w, ok := tlsConfigMapStrToI["client_cert"]; ok && !isIntfNil(w) {
-								tlsConfig.ClientCert = w.(string)
+							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+								tlsChoiceInt.UseTls.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
 							}
 
-							if v, ok := tlsConfigMapStrToI["client_key"]; ok && !isIntfNil(v) {
+							serverValidationChoiceTypeFound := false
+
+							if v, ok := cs["use_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+								serverValidationChoiceTypeFound = true
+								serverValidationChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_UseServerVerification{}
+								serverValidationChoiceInt.UseServerVerification = &ves_io_schema_alert_receiver.UpstreamTlsValidationContext{}
+								tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
 
 								sl := v.(*schema.Set).List()
-								clientKey := &ves_io_schema.SecretType{}
-								tlsConfig.ClientKey = clientKey
 								for _, set := range sl {
-									clientKeyMapStrToI := set.(map[string]interface{})
+									cs := set.(map[string]interface{})
 
-									if v, ok := clientKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										clientKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										clientKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := clientKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
+									if v, ok := cs["ca_cert_obj"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
+										caCertObj := &ves_io_schema_alert_receiver.CACertificateObj{}
+										serverValidationChoiceInt.UseServerVerification.CaCertObj = caCertObj
 										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											caCertObjMapStrToI := set.(map[string]interface{})
 
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+											if v, ok := caCertObjMapStrToI["trusted_ca"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+												sl := v.([]interface{})
+												trustedCaInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+												caCertObj.TrustedCa = trustedCaInt
+												for i, ps := range sl {
 
-											}
+													tcMapToStrVal := ps.(map[string]interface{})
+													trustedCaInt[i] = &ves_io_schema.ObjectRefType{}
 
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+													trustedCaInt[i].Kind = "trusted_ca_list"
 
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													if v, ok := tcMapToStrVal["name"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Name = v.(string)
+													}
 
-											}
+													if v, ok := tcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Namespace = v.(string)
+													}
 
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+													if v, ok := tcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Tenant = v.(string)
+													}
 
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													if v, ok := tcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Uid = v.(string)
+													}
 
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+												}
 
 											}
 
@@ -2344,20 +2373,41 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["max_version"]; ok && !isIntfNil(v) {
+							if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
 
-								tlsConfig.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+								serverValidationChoiceTypeFound = true
+
+								if v.(bool) {
+									serverValidationChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_VolterraTrustedCa{}
+									serverValidationChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["min_version"]; ok && !isIntfNil(v) {
+							sniChoiceTypeFound := false
 
-								tlsConfig.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+							if v, ok := cs["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+								sniChoiceTypeFound = true
+
+								if v.(bool) {
+									sniChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_DisableSni{}
+									sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+								}
 
 							}
 
-							if w, ok := tlsConfigMapStrToI["server_name"]; ok && !isIntfNil(w) {
-								tlsConfig.ServerName = w.(string)
+							if v, ok := cs["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+								sniChoiceTypeFound = true
+								sniChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_Sni{}
+
+								tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+
+								sniChoiceInt.Sni = v.(string)
+
 							}
 
 						}
@@ -2370,7 +2420,171 @@ func resourceVolterraAlertReceiverCreate(d *schema.ResourceData, meta interface{
 
 			if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
-				receiverInt.Webhook.Url = v.(string)
+				sl := v.(*schema.Set).List()
+				url := &ves_io_schema.SecretType{}
+				receiverInt.Webhook.Url = url
+				for _, set := range sl {
+					urlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+						url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+						for _, set := range sl {
+							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+							}
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.Location = w.(string)
+							}
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.StoreProvider = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+						url.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+					}
+
+					secretInfoOneofTypeFound := false
+
+					if v, ok := urlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+							}
+
+							if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+							}
+
+							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+							}
+
+							if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+							}
+
+							if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+							}
+
+							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+							}
+
+							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 
@@ -3114,44 +3328,30 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 					authChoiceTypeFound := false
 
-					if v, ok := httpConfigMapStrToI["auth_config"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+					if v, ok := httpConfigMapStrToI["auth_token"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
 
 						authChoiceTypeFound = true
-						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_AuthConfig{}
-						authChoiceInt.AuthConfig = &ves_io_schema_alert_receiver.Authorization{}
+						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_AuthToken{}
+						authChoiceInt.AuthToken = &ves_io_schema_alert_receiver.AuthToken{}
 						httpConfig.AuthChoice = authChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
-							authTypeTypeFound := false
-
-							if v, ok := cs["auth_type_bearer"]; ok && !isIntfNil(v) && !authTypeTypeFound {
-
-								authTypeTypeFound = true
-
-								if v.(bool) {
-									authTypeInt := &ves_io_schema_alert_receiver.Authorization_AuthTypeBearer{}
-									authTypeInt.AuthTypeBearer = &ves_io_schema.Empty{}
-									authChoiceInt.AuthConfig.AuthType = authTypeInt
-								}
-
-							}
-
-							if v, ok := cs["credentials"]; ok && !isIntfNil(v) {
+							if v, ok := cs["token"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
-								credentials := &ves_io_schema.SecretType{}
-								authChoiceInt.AuthConfig.Credentials = credentials
+								token := &ves_io_schema.SecretType{}
+								authChoiceInt.AuthToken.Token = token
 								for _, set := range sl {
-									credentialsMapStrToI := set.(map[string]interface{})
+									tokenMapStrToI := set.(map[string]interface{})
 
-									if v, ok := credentialsMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+									if v, ok := tokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
 										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										credentials.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+										token.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
 										for _, set := range sl {
 											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
 
@@ -3171,20 +3371,20 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+									if v, ok := tokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
 
-										credentials.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+										token.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
 
 									}
 
 									secretInfoOneofTypeFound := false
 
-									if v, ok := credentialsMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
 										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -3212,12 +3412,12 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
 										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -3239,12 +3439,12 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
 										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -3284,12 +3484,12 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
-									if v, ok := credentialsMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									if v, ok := tokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 										secretInfoOneofTypeFound = true
 										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
 										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										credentials.SecretInfoOneof = secretInfoOneofInt
+										token.SecretInfoOneof = secretInfoOneofInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
@@ -3504,6 +3704,53 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 					}
 
+					if v, ok := httpConfigMapStrToI["client_cert_obj"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+						authChoiceTypeFound = true
+						authChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_ClientCertObj{}
+						authChoiceInt.ClientCertObj = &ves_io_schema_alert_receiver.ClientCertificateObj{}
+						httpConfig.AuthChoice = authChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["use_tls_obj"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								useTlsObjInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								authChoiceInt.ClientCertObj.UseTlsObj = useTlsObjInt
+								for i, ps := range sl {
+
+									utoMapToStrVal := ps.(map[string]interface{})
+									useTlsObjInt[i] = &ves_io_schema.ObjectRefType{}
+
+									useTlsObjInt[i].Kind = "certificate"
+
+									if v, ok := utoMapToStrVal["name"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Name = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := utoMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										useTlsObjInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := httpConfigMapStrToI["no_authorization"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
 
 						authChoiceTypeFound = true
@@ -3524,181 +3771,93 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 						httpConfig.FollowRedirects = w.(bool)
 					}
 
-					if v, ok := httpConfigMapStrToI["tls_config"]; ok && !isIntfNil(v) {
+					tlsChoiceTypeFound := false
+
+					if v, ok := httpConfigMapStrToI["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+						tlsChoiceTypeFound = true
+
+						if v.(bool) {
+							tlsChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_NoTls{}
+							tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+							httpConfig.TlsChoice = tlsChoiceInt
+						}
+
+					}
+
+					if v, ok := httpConfigMapStrToI["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+						tlsChoiceTypeFound = true
+						tlsChoiceInt := &ves_io_schema_alert_receiver.HTTPConfig_UseTls{}
+						tlsChoiceInt.UseTls = &ves_io_schema_alert_receiver.TLSConfig{}
+						httpConfig.TlsChoice = tlsChoiceInt
 
 						sl := v.(*schema.Set).List()
-						tlsConfig := &ves_io_schema_alert_receiver.TLSConfig{}
-						httpConfig.TlsConfig = tlsConfig
 						for _, set := range sl {
-							tlsConfigMapStrToI := set.(map[string]interface{})
+							cs := set.(map[string]interface{})
 
-							if w, ok := tlsConfigMapStrToI["ca_cert"]; ok && !isIntfNil(w) {
-								tlsConfig.CaCert = w.(string)
+							if v, ok := cs["max_version"]; ok && !isIntfNil(v) {
+
+								tlsChoiceInt.UseTls.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
 							}
 
-							if w, ok := tlsConfigMapStrToI["client_cert"]; ok && !isIntfNil(w) {
-								tlsConfig.ClientCert = w.(string)
+							if v, ok := cs["min_version"]; ok && !isIntfNil(v) {
+
+								tlsChoiceInt.UseTls.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+
 							}
 
-							if v, ok := tlsConfigMapStrToI["client_key"]; ok && !isIntfNil(v) {
+							serverValidationChoiceTypeFound := false
+
+							if v, ok := cs["use_server_verification"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
+
+								serverValidationChoiceTypeFound = true
+								serverValidationChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_UseServerVerification{}
+								serverValidationChoiceInt.UseServerVerification = &ves_io_schema_alert_receiver.UpstreamTlsValidationContext{}
+								tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
 
 								sl := v.(*schema.Set).List()
-								clientKey := &ves_io_schema.SecretType{}
-								tlsConfig.ClientKey = clientKey
 								for _, set := range sl {
-									clientKeyMapStrToI := set.(map[string]interface{})
+									cs := set.(map[string]interface{})
 
-									if v, ok := clientKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-										sl := v.(*schema.Set).List()
-										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-										clientKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-										for _, set := range sl {
-											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.Location = w.(string)
-											}
-
-											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-												blindfoldSecretInfoInternal.StoreProvider = w.(string)
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-										clientKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-									}
-
-									secretInfoOneofTypeFound := false
-
-									if v, ok := clientKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
+									if v, ok := cs["ca_cert_obj"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
+										caCertObj := &ves_io_schema_alert_receiver.CACertificateObj{}
+										serverValidationChoiceInt.UseServerVerification.CaCertObj = caCertObj
 										for _, set := range sl {
-											cs := set.(map[string]interface{})
+											caCertObjMapStrToI := set.(map[string]interface{})
 
-											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+											if v, ok := caCertObjMapStrToI["trusted_ca"]; ok && !isIntfNil(v) {
 
-												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+												sl := v.([]interface{})
+												trustedCaInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+												caCertObj.TrustedCa = trustedCaInt
+												for i, ps := range sl {
 
-											}
+													tcMapToStrVal := ps.(map[string]interface{})
+													trustedCaInt[i] = &ves_io_schema.ObjectRefType{}
 
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+													trustedCaInt[i].Kind = "trusted_ca_list"
 
-												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+													if v, ok := tcMapToStrVal["name"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Name = v.(string)
+													}
 
-											}
+													if v, ok := tcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Namespace = v.(string)
+													}
 
-											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+													if v, ok := tcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Tenant = v.(string)
+													}
 
-												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+													if v, ok := tcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														trustedCaInt[i].Uid = v.(string)
+													}
 
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-											}
-
-											if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-											}
-
-											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-											}
-
-											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-											}
-
-											if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-											}
-
-										}
-
-									}
-
-									if v, ok := clientKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-										secretInfoOneofTypeFound = true
-										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-										clientKey.SecretInfoOneof = secretInfoOneofInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+												}
 
 											}
 
@@ -3710,20 +3869,41 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["max_version"]; ok && !isIntfNil(v) {
+							if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !serverValidationChoiceTypeFound {
 
-								tlsConfig.MaxVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+								serverValidationChoiceTypeFound = true
+
+								if v.(bool) {
+									serverValidationChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_VolterraTrustedCa{}
+									serverValidationChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.ServerValidationChoice = serverValidationChoiceInt
+								}
 
 							}
 
-							if v, ok := tlsConfigMapStrToI["min_version"]; ok && !isIntfNil(v) {
+							sniChoiceTypeFound := false
 
-								tlsConfig.MinVersion = ves_io_schema.TlsProtocol(ves_io_schema.TlsProtocol_value[v.(string)])
+							if v, ok := cs["disable_sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+								sniChoiceTypeFound = true
+
+								if v.(bool) {
+									sniChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_DisableSni{}
+									sniChoiceInt.DisableSni = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+								}
 
 							}
 
-							if w, ok := tlsConfigMapStrToI["server_name"]; ok && !isIntfNil(w) {
-								tlsConfig.ServerName = w.(string)
+							if v, ok := cs["sni"]; ok && !isIntfNil(v) && !sniChoiceTypeFound {
+
+								sniChoiceTypeFound = true
+								sniChoiceInt := &ves_io_schema_alert_receiver.TLSConfig_Sni{}
+
+								tlsChoiceInt.UseTls.SniChoice = sniChoiceInt
+
+								sniChoiceInt.Sni = v.(string)
+
 							}
 
 						}
@@ -3736,7 +3916,171 @@ func resourceVolterraAlertReceiverUpdate(d *schema.ResourceData, meta interface{
 
 			if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
-				receiverInt.Webhook.Url = v.(string)
+				sl := v.(*schema.Set).List()
+				url := &ves_io_schema.SecretType{}
+				receiverInt.Webhook.Url = url
+				for _, set := range sl {
+					urlMapStrToI := set.(map[string]interface{})
+
+					if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+						url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+						for _, set := range sl {
+							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+							}
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.Location = w.(string)
+							}
+
+							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+								blindfoldSecretInfoInternal.StoreProvider = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+						url.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+					}
+
+					secretInfoOneofTypeFound := false
+
+					if v, ok := urlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+						secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+							}
+
+							if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+							}
+
+							if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+						secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+							}
+
+							if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+						secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+							}
+
+							if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+							}
+
+							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+							}
+
+							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
+							if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+							}
+
+						}
+
+					}
+
+					if v, ok := urlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+						secretInfoOneofTypeFound = true
+						secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+						secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+						url.SecretInfoOneof = secretInfoOneofInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
 
 			}
 

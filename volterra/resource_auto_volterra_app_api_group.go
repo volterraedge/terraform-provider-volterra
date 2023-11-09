@@ -79,12 +79,12 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 									"method": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"path": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -99,12 +99,12 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 									"method": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"path": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -149,7 +149,7 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -166,7 +166,7 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 			"elements": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -182,7 +182,7 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 						"path_regex": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -198,7 +198,7 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 						"api_definition": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -237,7 +237,7 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 						"http_loadbalancer": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

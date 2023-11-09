@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.nfv_service.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -2844,6 +2823,59 @@ var APISwaggerJSON string = `{
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.k8s_manifest_params.DeployStatus"
         },
+        "nfv_serviceBMNodeMemorySize": {
+            "type": "string",
+            "description": "x-displayName: \"Bare Metal ServiceNode Memory Size\"\nEnum to define amount of memory to be assigned to the node\n\n - BM_8_GB_MEMORY: 8 GB\n\nx-displayName: \"8 GB\"\n - BM_16_GB_MEMORY: 16 GB\n\nx-displayName: \"16 GB\"\n - BM_32_GB_MEMORY: 32 GB\n\nx-displayName: \"32 GB\"",
+            "title": "Option to select amount of memory",
+            "enum": [
+                "BM_8_GB_MEMORY",
+                "BM_16_GB_MEMORY",
+                "BM_32_GB_MEMORY"
+            ],
+            "default": "BM_8_GB_MEMORY"
+        },
+        "nfv_serviceBMNodeVirtualCpuCount": {
+            "type": "string",
+            "description": "x-displayName: \"Bare Metal ServiceNode Virtual CPU Count\"\nEnum to define number of virtual CPU's to be assigned to the node\n\n - BM_4_VCPU: 4 virtual CPUs\n\nx-displayName: \"4 vCPU\"\n - BM_8_VCPU: 8 virtual CPUs\n\nx-displayName: \"8 vCPU\"",
+            "title": "Option to select number of virtual CPUs",
+            "enum": [
+                "BM_4_VCPU",
+                "BM_8_VCPU"
+            ],
+            "default": "BM_4_VCPU"
+        },
+        "nfv_serviceBigIqInstanceType": {
+            "type": "object",
+            "description": "x-displayName: \"License Server Details\"\nSpecification for BIG-IQ Instance, where and what",
+            "title": "BIG-IQ Instance configured as License Server for BIG-IP License Activation",
+            "properties": {
+                "license_pool_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"License Pool Name\"\nx-example: \"apm_msp_license_pool1\"\nx-required\nName of Utility Pool on BIG-IQ",
+                    "title": "License Pool Name"
+                },
+                "license_server_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"License Server IP\"\nx-example: \"192.168.0.77\"\nx-required\nIP Address from the TCP Load Balancer which is configured to communicate with License Server",
+                    "title": "TCP Load Balancer IP Address"
+                },
+                "password": {
+                    "description": "x-displayName: \"Password\"\nx-example: \"admin123\"\nx-required\nPassword of the user used to access BIG-IQ to activate the license",
+                    "title": "Password",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
+                "sku_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Offering Name\"\nx-example: \"F5-BIG-MSP-A-BT-1G-EXTHSM-1\"\nx-required\nLicense offering name aka SKU name",
+                    "title": "Offering Name"
+                },
+                "username": {
+                    "type": "string",
+                    "description": "x-displayName: \"User Name\"\nx-example: \"admin\"\nx-required\nUser Name used to access BIG-IQ to activate the license",
+                    "title": "User Name"
+                }
+            }
+        },
         "nfv_serviceEndpointRefType": {
             "type": "object",
             "description": "x-displayName: \"Endpoint Ref type\"\nA reference from a node to a endpoint.",
@@ -3198,6 +3230,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"App Stack Bare Metal Site\"\nx-required\nReference to bare metal site on which BIG-IP should be deployed",
                     "title": "App Stack Bare Metal Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "bigiq_instance": {
+                    "description": "x-displayName: \"License Server Details\"\nx-required\nDetails of BIG-IQ Instance used for activating licenses.",
+                    "title": "BIG-IQ Instance configured as License Server for BIG-IP License Activation",
+                    "$ref": "#/definitions/nfv_serviceBigIqInstanceType"
                 },
                 "nodes": {
                     "type": "array",
@@ -3843,6 +3880,16 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Service Nodes\"\nSpecification for service nodes, how and where",
             "title": "Service Nodes in App Stack Bare Metal",
             "properties": {
+                "bm_node_memory_size": {
+                    "description": "x-displayName: \"Memory Size\"\nx-required",
+                    "title": "Amount of memory to assign to the Node",
+                    "$ref": "#/definitions/nfv_serviceBMNodeMemorySize"
+                },
+                "bm_virtual_cpu_count": {
+                    "description": "x-displayName: \"Number of Virtual CPUs\"\nx-required",
+                    "title": "Number of Virtual CPUs to assign to the Node",
+                    "$ref": "#/definitions/nfv_serviceBMNodeVirtualCpuCount"
+                },
                 "external_interface": {
                     "description": "x-displayName: \"External Interface\"",
                     "title": "BIG-IP External interface details",
@@ -3852,11 +3899,6 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Internal Interface\"",
                     "title": "BIG-IP Internal interface details",
                     "$ref": "#/definitions/nfv_serviceInterfaceDetails"
-                },
-                "license_key": {
-                    "type": "string",
-                    "description": "x-displayName: \"License Key\"\nx-example: \"X1507-61193-79022-21602-7036987\"\nx-required\nBIG-IP VE base key",
-                    "title": "BIG-IP License Key"
                 },
                 "node_name": {
                     "type": "string",
@@ -5280,18 +5322,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Upload a new Root CA certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",

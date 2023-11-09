@@ -406,12 +406,15 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAlertReceiverRequest, opts ...grpc.CallOption) (*ConfirmAlertReceiverResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver", nil)
 	return c.CustomAPIServer.ConfirmAlertReceiver(ctx, in)
 }
 func (c *customAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest, opts ...grpc.CallOption) (*TestAlertReceiverResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver", nil)
 	return c.CustomAPIServer.TestAlertReceiver(ctx, in)
 }
 func (c *customAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertReceiverRequest, opts ...grpc.CallOption) (*VerifyAlertReceiverResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver", nil)
 	return c.CustomAPIServer.VerifyAlertReceiver(ctx, in)
 }
 

@@ -515,15 +515,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CreateObject(ctx context.Context, in *CreateObjectRequest, opts ...grpc.CallOption) (*CreateObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.CreateObject", nil)
 	return c.CustomAPIServer.CreateObject(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.DeleteObject", nil)
 	return c.CustomAPIServer.DeleteObject(ctx, in)
 }
 func (c *customAPIInprocClient) GetObject(ctx context.Context, in *GetObjectRequest, opts ...grpc.CallOption) (*GetObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.GetObject", nil)
 	return c.CustomAPIServer.GetObject(ctx, in)
 }
 func (c *customAPIInprocClient) ListObjects(ctx context.Context, in *ListObjectsRequest, opts ...grpc.CallOption) (*ListObjectsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.ListObjects", nil)
 	return c.CustomAPIServer.ListObjects(ctx, in)
 }
 

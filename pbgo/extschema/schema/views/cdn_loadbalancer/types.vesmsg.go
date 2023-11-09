@@ -102,6 +102,15 @@ func (v *ValidateAdvancedOptionsType) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cache_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_options"))
+		if err := fv(ctx, m.GetCacheOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cache_ttl_options"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cache_ttl_options"))
@@ -152,6 +161,8 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 	v.FldValidators["logging_options"] = LoggingOptionsTypeValidator().Validate
 
 	v.FldValidators["cache_ttl_options"] = CacheTTLOptionsTypeValidator().Validate
+
+	v.FldValidators["cache_options"] = CacheOptionsValidator().Validate
 
 	return v
 }()
@@ -281,6 +292,643 @@ var DefaultAuthenticationOptionsValidator = func() *ValidateAuthenticationOption
 
 func AuthenticationOptionsValidator() db.Validator {
 	return DefaultAuthenticationOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNCacheRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNCacheRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNCacheRule) DeepCopy() *CDNCacheRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNCacheRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNCacheRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNCacheRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNCacheRuleValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNCacheRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNCacheRule) CacheActionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_actions")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRule) RuleNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rule_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRule) RuleExpressionListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rule_expression_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRuleExpressionList, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleExpressionListValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rule_expression_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRuleExpressionList)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRuleExpressionList, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rule_expression_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rule_expression_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNCacheRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNCacheRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_actions"]; exists {
+		val := m.GetCacheActions()
+		vOpts := append(opts,
+			db.WithValidateField("cache_actions"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCacheActions().(type) {
+	case *CDNCacheRule_CacheBypass:
+		if fv, exists := v.FldValidators["cache_actions.cache_bypass"]; exists {
+			val := m.GetCacheActions().(*CDNCacheRule_CacheBypass).CacheBypass
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("cache_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CDNCacheRule_EligibleForCache:
+		if fv, exists := v.FldValidators["cache_actions.eligible_for_cache"]; exists {
+			val := m.GetCacheActions().(*CDNCacheRule_EligibleForCache).EligibleForCache
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("eligible_for_cache"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_expression_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("rule_expression_list"))
+		if err := fv(ctx, m.GetRuleExpressionList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rule_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rule_name"))
+		if err := fv(ctx, m.GetRuleName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNCacheRuleValidator = func() *ValidateCDNCacheRule {
+	v := &ValidateCDNCacheRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheActions := v.CacheActionsValidationRuleHandler
+	rulesCacheActions := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCacheActions(rulesCacheActions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRule.cache_actions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_actions"] = vFn
+
+	vrhRuleName := v.RuleNameValidationRuleHandler
+	rulesRuleName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFn, err = vrhRuleName(rulesRuleName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRule.rule_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rule_name"] = vFn
+
+	vrhRuleExpressionList := v.RuleExpressionListValidationRuleHandler
+	rulesRuleExpressionList := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRuleExpressionList(rulesRuleExpressionList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRule.rule_expression_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rule_expression_list"] = vFn
+
+	v.FldValidators["cache_actions.eligible_for_cache"] = CacheEligibleOptionsValidator().Validate
+
+	return v
+}()
+
+func CDNCacheRuleValidator() db.Validator {
+	return DefaultCDNCacheRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNCacheRuleExpression) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNCacheRuleExpression) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNCacheRuleExpression) DeepCopy() *CDNCacheRuleExpression {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNCacheRuleExpression{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNCacheRuleExpression) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNCacheRuleExpression) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNCacheRuleExpressionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNCacheRuleExpression struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNCacheRuleExpression) QueryParamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for query_params")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.QueryParameterMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.QueryParameterMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for query_params")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.QueryParameterMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.QueryParameterMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated query_params")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items query_params")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRuleExpression) HeadersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for headers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.HeaderMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for headers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated headers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items headers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRuleExpression) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNCacheRuleExpression)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNCacheRuleExpression got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["headers"]; exists {
+		vOpts := append(opts, db.WithValidateField("headers"))
+		if err := fv(ctx, m.GetHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path_match"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path_match"))
+		if err := fv(ctx, m.GetPathMatch(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_params"]; exists {
+		vOpts := append(opts, db.WithValidateField("query_params"))
+		if err := fv(ctx, m.GetQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNCacheRuleExpressionValidator = func() *ValidateCDNCacheRuleExpression {
+	v := &ValidateCDNCacheRuleExpression{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhQueryParams := v.QueryParamsValidationRuleHandler
+	rulesQueryParams := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhQueryParams(rulesQueryParams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRuleExpression.query_params: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["query_params"] = vFn
+
+	vrhHeaders := v.HeadersValidationRuleHandler
+	rulesHeaders := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHeaders(rulesHeaders)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRuleExpression.headers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["headers"] = vFn
+
+	v.FldValidators["path_match"] = ves_io_schema.PathMatcherTypeValidator().Validate
+
+	return v
+}()
+
+func CDNCacheRuleExpressionValidator() db.Validator {
+	return DefaultCDNCacheRuleExpressionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNCacheRuleExpressionList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNCacheRuleExpressionList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNCacheRuleExpressionList) DeepCopy() *CDNCacheRuleExpressionList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNCacheRuleExpressionList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNCacheRuleExpressionList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNCacheRuleExpressionList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNCacheRuleExpressionListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNCacheRuleExpressionList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNCacheRuleExpressionList) ExpressionNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expression_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRuleExpressionList) CacheRuleExpressionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rule_expression")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRuleExpression, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleExpressionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rule_expression")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRuleExpression)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRuleExpression, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rule_expression")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rule_expression")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNCacheRuleExpressionList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNCacheRuleExpressionList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNCacheRuleExpressionList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_rule_expression"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rule_expression"))
+		if err := fv(ctx, m.GetCacheRuleExpression(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expression_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expression_name"))
+		if err := fv(ctx, m.GetExpressionName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNCacheRuleExpressionListValidator = func() *ValidateCDNCacheRuleExpressionList {
+	v := &ValidateCDNCacheRuleExpressionList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpressionName := v.ExpressionNameValidationRuleHandler
+	rulesExpressionName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFn, err = vrhExpressionName(rulesExpressionName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRuleExpressionList.expression_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expression_name"] = vFn
+
+	vrhCacheRuleExpression := v.CacheRuleExpressionValidationRuleHandler
+	rulesCacheRuleExpression := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRuleExpression(rulesCacheRuleExpression)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNCacheRuleExpressionList.cache_rule_expression: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rule_expression"] = vFn
+
+	return v
+}()
+
+func CDNCacheRuleExpressionListValidator() db.Validator {
+	return DefaultCDNCacheRuleExpressionListValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1038,6 +1686,478 @@ var DefaultCDNTLSConfigValidator = func() *ValidateCDNTLSConfig {
 
 func CDNTLSConfigValidator() db.Validator {
 	return DefaultCDNTLSConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CacheEligibleOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CacheEligibleOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CacheEligibleOptions) DeepCopy() *CacheEligibleOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CacheEligibleOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CacheEligibleOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CacheEligibleOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CacheEligibleOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCacheEligibleOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCacheEligibleOptions) EligibleForCacheValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for eligible_for_cache")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCacheEligibleOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CacheEligibleOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CacheEligibleOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["eligible_for_cache"]; exists {
+		val := m.GetEligibleForCache()
+		vOpts := append(opts,
+			db.WithValidateField("eligible_for_cache"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEligibleForCache().(type) {
+	case *CacheEligibleOptions_SchemeHostnameUri:
+		if fv, exists := v.FldValidators["eligible_for_cache.scheme_hostname_uri"]; exists {
+			val := m.GetEligibleForCache().(*CacheEligibleOptions_SchemeHostnameUri).SchemeHostnameUri
+			vOpts := append(opts,
+				db.WithValidateField("eligible_for_cache"),
+				db.WithValidateField("scheme_hostname_uri"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CacheEligibleOptions_SchemeHostnameRequestUri:
+		if fv, exists := v.FldValidators["eligible_for_cache.scheme_hostname_request_uri"]; exists {
+			val := m.GetEligibleForCache().(*CacheEligibleOptions_SchemeHostnameRequestUri).SchemeHostnameRequestUri
+			vOpts := append(opts,
+				db.WithValidateField("eligible_for_cache"),
+				db.WithValidateField("scheme_hostname_request_uri"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CacheEligibleOptions_HostnameUri:
+		if fv, exists := v.FldValidators["eligible_for_cache.hostname_uri"]; exists {
+			val := m.GetEligibleForCache().(*CacheEligibleOptions_HostnameUri).HostnameUri
+			vOpts := append(opts,
+				db.WithValidateField("eligible_for_cache"),
+				db.WithValidateField("hostname_uri"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CacheEligibleOptions_SchemeHostnameUriQuery:
+		if fv, exists := v.FldValidators["eligible_for_cache.scheme_hostname_uri_query"]; exists {
+			val := m.GetEligibleForCache().(*CacheEligibleOptions_SchemeHostnameUriQuery).SchemeHostnameUriQuery
+			vOpts := append(opts,
+				db.WithValidateField("eligible_for_cache"),
+				db.WithValidateField("scheme_hostname_uri_query"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCacheEligibleOptionsValidator = func() *ValidateCacheEligibleOptions {
+	v := &ValidateCacheEligibleOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEligibleForCache := v.EligibleForCacheValidationRuleHandler
+	rulesEligibleForCache := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEligibleForCache(rulesEligibleForCache)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CacheEligibleOptions.eligible_for_cache: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["eligible_for_cache"] = vFn
+
+	v.FldValidators["eligible_for_cache.scheme_hostname_uri"] = CacheTTLEnablePropsValidator().Validate
+	v.FldValidators["eligible_for_cache.scheme_hostname_request_uri"] = CacheTTLEnablePropsValidator().Validate
+	v.FldValidators["eligible_for_cache.hostname_uri"] = CacheTTLEnablePropsValidator().Validate
+	v.FldValidators["eligible_for_cache.scheme_hostname_uri_query"] = CacheTTLEnablePropsValidator().Validate
+
+	return v
+}()
+
+func CacheEligibleOptionsValidator() db.Validator {
+	return DefaultCacheEligibleOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CacheOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CacheOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CacheOptions) DeepCopy() *CacheOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CacheOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CacheOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CacheOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CacheOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCacheOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCacheOptions) DefaultCacheActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for default_cache_action")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DefaultCacheActionValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCacheOptions) CacheRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCacheOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CacheOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CacheOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rules"))
+		if err := fv(ctx, m.GetCacheRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCacheOptionsValidator = func() *ValidateCacheOptions {
+	v := &ValidateCacheOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDefaultCacheAction := v.DefaultCacheActionValidationRuleHandler
+	rulesDefaultCacheAction := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDefaultCacheAction(rulesDefaultCacheAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CacheOptions.default_cache_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["default_cache_action"] = vFn
+
+	vrhCacheRules := v.CacheRulesValidationRuleHandler
+	rulesCacheRules := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRules(rulesCacheRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CacheOptions.cache_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rules"] = vFn
+
+	return v
+}()
+
+func CacheOptionsValidator() db.Validator {
+	return DefaultCacheOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CacheTTLEnableProps) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CacheTTLEnableProps) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CacheTTLEnableProps) DeepCopy() *CacheTTLEnableProps {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CacheTTLEnableProps{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CacheTTLEnableProps) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CacheTTLEnableProps) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CacheTTLEnablePropsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCacheTTLEnableProps struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCacheTTLEnableProps) CacheTtlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCacheTTLEnableProps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CacheTTLEnableProps)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CacheTTLEnableProps got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_override"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_override"))
+		if err := fv(ctx, m.GetCacheOverride(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cache_ttl"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_ttl"))
+		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["set_cookie"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("set_cookie"))
+		if err := fv(ctx, m.GetSetCookie(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCacheTTLEnablePropsValidator = func() *ValidateCacheTTLEnableProps {
+	v := &ValidateCacheTTLEnableProps{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheTtl := v.CacheTtlValidationRuleHandler
+	rulesCacheTtl := map[string]string{
+		"ves.io.schema.rules.message.required":     "true",
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhCacheTtl(rulesCacheTtl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CacheTTLEnableProps.cache_ttl: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_ttl"] = vFn
+
+	return v
+}()
+
+func CacheTTLEnablePropsValidator() db.Validator {
+	return DefaultCacheTTLEnablePropsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1850,6 +2970,237 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DefaultCacheAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DefaultCacheAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DefaultCacheAction) DeepCopy() *DefaultCacheAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DefaultCacheAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DefaultCacheAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DefaultCacheAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DefaultCacheActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDefaultCacheAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDefaultCacheAction) CacheActionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_actions")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDefaultCacheAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DefaultCacheAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DefaultCacheAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_actions"]; exists {
+		val := m.GetCacheActions()
+		vOpts := append(opts,
+			db.WithValidateField("cache_actions"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCacheActions().(type) {
+	case *DefaultCacheAction_EligibleForCache:
+		if fv, exists := v.FldValidators["cache_actions.eligible_for_cache"]; exists {
+			val := m.GetCacheActions().(*DefaultCacheAction_EligibleForCache).EligibleForCache
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("eligible_for_cache"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDefaultCacheActionValidator = func() *ValidateDefaultCacheAction {
+	v := &ValidateDefaultCacheAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheActions := v.CacheActionsValidationRuleHandler
+	rulesCacheActions := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCacheActions(rulesCacheActions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DefaultCacheAction.cache_actions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_actions"] = vFn
+
+	v.FldValidators["cache_actions.eligible_for_cache"] = DefaultCacheTTLPropsValidator().Validate
+
+	return v
+}()
+
+func DefaultCacheActionValidator() db.Validator {
+	return DefaultDefaultCacheActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DefaultCacheTTLProps) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DefaultCacheTTLProps) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DefaultCacheTTLProps) DeepCopy() *DefaultCacheTTLProps {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DefaultCacheTTLProps{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DefaultCacheTTLProps) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DefaultCacheTTLProps) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DefaultCacheTTLPropsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDefaultCacheTTLProps struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDefaultCacheTTLProps) CacheTtlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDefaultCacheTTLProps) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DefaultCacheTTLProps)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DefaultCacheTTLProps got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_ttl"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cache_ttl"))
+		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDefaultCacheTTLPropsValidator = func() *ValidateDefaultCacheTTLProps {
+	v := &ValidateDefaultCacheTTLProps{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheTtl := v.CacheTtlValidationRuleHandler
+	rulesCacheTtl := map[string]string{
+		"ves.io.schema.rules.message.required":     "true",
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhCacheTtl(rulesCacheTtl)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DefaultCacheTTLProps.cache_ttl: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_ttl"] = vFn
+
+	return v
+}()
+
+func DefaultCacheTTLPropsValidator() db.Validator {
+	return DefaultDefaultCacheTTLPropsValidator
 }
 
 // augmented methods on protoc/std generated struct

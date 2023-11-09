@@ -100,7 +100,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						"port_ranges": {
 
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},
@@ -133,13 +133,13 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -188,7 +188,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -206,7 +206,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -236,7 +236,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -261,7 +261,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -281,12 +281,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -311,7 +311,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -400,6 +400,290 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"cache_options": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cache_rules": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cache_bypass": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"eligible_for_cache": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"hostname_uri": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"set_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"scheme_hostname_request_uri": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"set_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"scheme_hostname_uri": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"set_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"scheme_hostname_uri_query": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"set_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"rule_expression_list": {
+
+													Type:     schema.TypeList,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cache_rule_expression": {
+
+																Type:     schema.TypeList,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"headers": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"invert_match": {
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+
+																					"exact": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"presence": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"regex": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"path_match": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"path": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"query_params": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+
+																					"exact": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"regex": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"expression_name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"rule_name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+
+									"default_cache_action": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"eligible_for_cache": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cache_ttl": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"cache_ttl_options": {
 
 							Type:     schema.TypeSet,
@@ -449,7 +733,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_value": {
@@ -473,7 +757,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -503,7 +787,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -528,7 +812,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -548,12 +832,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -578,7 +862,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -620,7 +904,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_value": {
@@ -644,7 +928,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -674,7 +958,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -699,7 +983,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -719,12 +1003,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -749,7 +1033,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -893,7 +1177,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -923,7 +1207,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -948,7 +1232,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -968,12 +1252,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -998,7 +1282,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1010,7 +1294,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															"secret_key": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1028,7 +1312,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1058,7 +1342,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1083,7 +1367,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1103,12 +1387,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1133,7 +1417,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1157,7 +1441,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1172,7 +1456,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1187,7 +1471,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																		"key": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1348,7 +1632,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 			"origin_pool": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1365,7 +1649,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						"origin_servers": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1400,7 +1684,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 												"dns_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"refresh_interval": {
@@ -1417,13 +1701,13 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						"public_name": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"dns_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"refresh_interval": {
@@ -1463,13 +1747,13 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 												"tls_certificates": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"certificate_url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"description": {
@@ -1518,7 +1802,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 															"private_key": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1536,7 +1820,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1566,7 +1850,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -1591,7 +1875,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1611,12 +1895,12 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -1641,7 +1925,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1751,7 +2035,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 									"tls_config": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2316,6 +2600,407 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		createSpec.MoreOption = moreOption
 		for _, set := range sl {
 			moreOptionMapStrToI := set.(map[string]interface{})
+
+			if v, ok := moreOptionMapStrToI["cache_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cacheOptions := &ves_io_schema_views_cdn_loadbalancer.CacheOptions{}
+				moreOption.CacheOptions = cacheOptions
+				for _, set := range sl {
+					cacheOptionsMapStrToI := set.(map[string]interface{})
+
+					if v, ok := cacheOptionsMapStrToI["cache_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						cacheRules := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRule, len(sl))
+						cacheOptions.CacheRules = cacheRules
+						for i, set := range sl {
+							cacheRules[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule{}
+							cacheRulesMapStrToI := set.(map[string]interface{})
+
+							cacheActionsTypeFound := false
+
+							if v, ok := cacheRulesMapStrToI["cache_bypass"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+
+								if v.(bool) {
+									cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule_CacheBypass{}
+									cacheActionsInt.CacheBypass = &ves_io_schema.Empty{}
+									cacheRules[i].CacheActions = cacheActionsInt
+								}
+
+							}
+
+							if v, ok := cacheRulesMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule_EligibleForCache{}
+								cacheActionsInt.EligibleForCache = &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions{}
+								cacheRules[i].CacheActions = cacheActionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									eligibleForCacheTypeFound := false
+
+									if v, ok := cs["hostname_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_HostnameUri{}
+										eligibleForCacheInt.HostnameUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_request_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameRequestUri{}
+										eligibleForCacheInt.SchemeHostnameRequestUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameUri{}
+										eligibleForCacheInt.SchemeHostnameUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_uri_query"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameUriQuery{}
+										eligibleForCacheInt.SchemeHostnameUriQuery = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cacheRulesMapStrToI["rule_expression_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ruleExpressionList := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpressionList, len(sl))
+								cacheRules[i].RuleExpressionList = ruleExpressionList
+								for i, set := range sl {
+									ruleExpressionList[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpressionList{}
+									ruleExpressionListMapStrToI := set.(map[string]interface{})
+
+									if v, ok := ruleExpressionListMapStrToI["cache_rule_expression"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										cacheRuleExpression := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression, len(sl))
+										ruleExpressionList[i].CacheRuleExpression = cacheRuleExpression
+										for i, set := range sl {
+											cacheRuleExpression[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression{}
+											cacheRuleExpressionMapStrToI := set.(map[string]interface{})
+
+											if v, ok := cacheRuleExpressionMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+												cacheRuleExpression[i].Headers = headers
+												for i, set := range sl {
+													headers[i] = &ves_io_schema.HeaderMatcherType{}
+													headersMapStrToI := set.(map[string]interface{})
+
+													if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+														headers[i].InvertMatch = w.(bool)
+													}
+
+													if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+														headers[i].Name = w.(string)
+													}
+
+													valueMatchTypeFound := false
+
+													if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Exact = v.(string)
+
+													}
+
+													if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Presence = v.(bool)
+
+													}
+
+													if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cacheRuleExpressionMapStrToI["path_match"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												pathMatch := &ves_io_schema.PathMatcherType{}
+												cacheRuleExpression[i].PathMatch = pathMatch
+												for _, set := range sl {
+													pathMatchMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMatchMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMatchMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMatchMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cacheRuleExpressionMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												queryParams := make([]*ves_io_schema.QueryParameterMatcherType, len(sl))
+												cacheRuleExpression[i].QueryParams = queryParams
+												for i, set := range sl {
+													queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
+													queryParamsMapStrToI := set.(map[string]interface{})
+
+													if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+														queryParams[i].Key = w.(string)
+													}
+
+													valueMatchTypeFound := false
+
+													if v, ok := queryParamsMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Exact{}
+
+														queryParams[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Exact = v.(string)
+
+													}
+
+													if v, ok := queryParamsMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Regex{}
+
+														queryParams[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if w, ok := ruleExpressionListMapStrToI["expression_name"]; ok && !isIntfNil(w) {
+										ruleExpressionList[i].ExpressionName = w.(string)
+									}
+
+								}
+
+							}
+
+							if w, ok := cacheRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								cacheRules[i].RuleName = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cacheOptionsMapStrToI["default_cache_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						defaultCacheAction := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction{}
+						cacheOptions.DefaultCacheAction = defaultCacheAction
+						for _, set := range sl {
+							defaultCacheActionMapStrToI := set.(map[string]interface{})
+
+							cacheActionsTypeFound := false
+
+							if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_EligibleForCache{}
+								cacheActionsInt.EligibleForCache = &ves_io_schema_views_cdn_loadbalancer.DefaultCacheTTLProps{}
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+										cacheActionsInt.EligibleForCache.CacheTtl = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := moreOptionMapStrToI["cache_ttl_options"]; ok && !isIntfNil(v) {
 
@@ -4721,6 +5406,407 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		updateSpec.MoreOption = moreOption
 		for _, set := range sl {
 			moreOptionMapStrToI := set.(map[string]interface{})
+
+			if v, ok := moreOptionMapStrToI["cache_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cacheOptions := &ves_io_schema_views_cdn_loadbalancer.CacheOptions{}
+				moreOption.CacheOptions = cacheOptions
+				for _, set := range sl {
+					cacheOptionsMapStrToI := set.(map[string]interface{})
+
+					if v, ok := cacheOptionsMapStrToI["cache_rules"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						cacheRules := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRule, len(sl))
+						cacheOptions.CacheRules = cacheRules
+						for i, set := range sl {
+							cacheRules[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule{}
+							cacheRulesMapStrToI := set.(map[string]interface{})
+
+							cacheActionsTypeFound := false
+
+							if v, ok := cacheRulesMapStrToI["cache_bypass"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+
+								if v.(bool) {
+									cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule_CacheBypass{}
+									cacheActionsInt.CacheBypass = &ves_io_schema.Empty{}
+									cacheRules[i].CacheActions = cacheActionsInt
+								}
+
+							}
+
+							if v, ok := cacheRulesMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.CDNCacheRule_EligibleForCache{}
+								cacheActionsInt.EligibleForCache = &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions{}
+								cacheRules[i].CacheActions = cacheActionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									eligibleForCacheTypeFound := false
+
+									if v, ok := cs["hostname_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_HostnameUri{}
+										eligibleForCacheInt.HostnameUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.HostnameUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_request_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameRequestUri{}
+										eligibleForCacheInt.SchemeHostnameRequestUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameRequestUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameUri{}
+										eligibleForCacheInt.SchemeHostnameUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUri.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_hostname_uri_query"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeHostnameUriQuery{}
+										eligibleForCacheInt.SchemeHostnameUriQuery = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeHostnameUriQuery.SetCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := cacheRulesMapStrToI["rule_expression_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								ruleExpressionList := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpressionList, len(sl))
+								cacheRules[i].RuleExpressionList = ruleExpressionList
+								for i, set := range sl {
+									ruleExpressionList[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpressionList{}
+									ruleExpressionListMapStrToI := set.(map[string]interface{})
+
+									if v, ok := ruleExpressionListMapStrToI["cache_rule_expression"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										cacheRuleExpression := make([]*ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression, len(sl))
+										ruleExpressionList[i].CacheRuleExpression = cacheRuleExpression
+										for i, set := range sl {
+											cacheRuleExpression[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression{}
+											cacheRuleExpressionMapStrToI := set.(map[string]interface{})
+
+											if v, ok := cacheRuleExpressionMapStrToI["headers"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
+												cacheRuleExpression[i].Headers = headers
+												for i, set := range sl {
+													headers[i] = &ves_io_schema.HeaderMatcherType{}
+													headersMapStrToI := set.(map[string]interface{})
+
+													if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
+														headers[i].InvertMatch = w.(bool)
+													}
+
+													if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
+														headers[i].Name = w.(string)
+													}
+
+													valueMatchTypeFound := false
+
+													if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Exact = v.(string)
+
+													}
+
+													if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Presence = v.(bool)
+
+													}
+
+													if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+
+														headers[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cacheRuleExpressionMapStrToI["path_match"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												pathMatch := &ves_io_schema.PathMatcherType{}
+												cacheRuleExpression[i].PathMatch = pathMatch
+												for _, set := range sl {
+													pathMatchMapStrToI := set.(map[string]interface{})
+
+													pathMatchTypeFound := false
+
+													if v, ok := pathMatchMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Path = v.(string)
+
+													}
+
+													if v, ok := pathMatchMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Prefix = v.(string)
+
+													}
+
+													if v, ok := pathMatchMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+
+														pathMatchTypeFound = true
+														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+
+														pathMatch.PathMatch = pathMatchInt
+
+														pathMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+											if v, ok := cacheRuleExpressionMapStrToI["query_params"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												queryParams := make([]*ves_io_schema.QueryParameterMatcherType, len(sl))
+												cacheRuleExpression[i].QueryParams = queryParams
+												for i, set := range sl {
+													queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
+													queryParamsMapStrToI := set.(map[string]interface{})
+
+													if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
+														queryParams[i].Key = w.(string)
+													}
+
+													valueMatchTypeFound := false
+
+													if v, ok := queryParamsMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Exact{}
+
+														queryParams[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Exact = v.(string)
+
+													}
+
+													if v, ok := queryParamsMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+
+														valueMatchTypeFound = true
+														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Regex{}
+
+														queryParams[i].ValueMatch = valueMatchInt
+
+														valueMatchInt.Regex = v.(string)
+
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if w, ok := ruleExpressionListMapStrToI["expression_name"]; ok && !isIntfNil(w) {
+										ruleExpressionList[i].ExpressionName = w.(string)
+									}
+
+								}
+
+							}
+
+							if w, ok := cacheRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								cacheRules[i].RuleName = w.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cacheOptionsMapStrToI["default_cache_action"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						defaultCacheAction := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction{}
+						cacheOptions.DefaultCacheAction = defaultCacheAction
+						for _, set := range sl {
+							defaultCacheActionMapStrToI := set.(map[string]interface{})
+
+							cacheActionsTypeFound := false
+
+							if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_EligibleForCache{}
+								cacheActionsInt.EligibleForCache = &ves_io_schema_views_cdn_loadbalancer.DefaultCacheTTLProps{}
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+										cacheActionsInt.EligibleForCache.CacheTtl = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := moreOptionMapStrToI["cache_ttl_options"]; ok && !isIntfNil(v) {
 

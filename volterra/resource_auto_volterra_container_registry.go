@@ -68,7 +68,7 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 			"password": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -86,7 +86,7 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"store_provider": {
@@ -116,7 +116,7 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"store_provider": {
@@ -141,7 +141,7 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 
 									"url": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -161,12 +161,12 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"provider": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"secret_encoding": {
@@ -191,7 +191,7 @@ func resourceVolterraContainerRegistry() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

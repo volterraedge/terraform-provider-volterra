@@ -1123,6 +1123,10 @@ func (m *CreateSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *CreateSpecType_SrvPool:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -1251,6 +1255,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_SrvPool:
+		if fv, exists := v.FldValidators["pool_type_choice.srv_pool"]; exists {
+			val := m.GetPoolTypeChoice().(*CreateSpecType_SrvPool).SrvPool
+			vOpts := append(opts,
+				db.WithValidateField("pool_type_choice"),
+				db.WithValidateField("srv_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1355,6 +1370,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["pool_type_choice.aaaa_pool"] = AAAAPoolValidator().Validate
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
+	v.FldValidators["pool_type_choice.srv_pool"] = SRVPoolValidator().Validate
 
 	return v
 }()
@@ -1506,6 +1522,10 @@ func (m *GetSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *GetSpecType_SrvPool:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -1646,6 +1666,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_SrvPool:
+		if fv, exists := v.FldValidators["pool_type_choice.srv_pool"]; exists {
+			val := m.GetPoolTypeChoice().(*GetSpecType_SrvPool).SrvPool
+			vOpts := append(opts,
+				db.WithValidateField("pool_type_choice"),
+				db.WithValidateField("srv_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1750,6 +1781,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["pool_type_choice.aaaa_pool"] = AAAAPoolValidator().Validate
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
+	v.FldValidators["pool_type_choice.srv_pool"] = SRVPoolValidator().Validate
 
 	v.FldValidators["dns_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1903,6 +1935,10 @@ func (m *GlobalSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *GlobalSpecType_SrvPool:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -2043,6 +2079,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_SrvPool:
+		if fv, exists := v.FldValidators["pool_type_choice.srv_pool"]; exists {
+			val := m.GetPoolTypeChoice().(*GlobalSpecType_SrvPool).SrvPool
+			vOpts := append(opts,
+				db.WithValidateField("pool_type_choice"),
+				db.WithValidateField("srv_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2147,6 +2194,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["pool_type_choice.aaaa_pool"] = AAAAPoolValidator().Validate
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
+	v.FldValidators["pool_type_choice.srv_pool"] = SRVPoolValidator().Validate
 
 	v.FldValidators["dns_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2611,6 +2659,10 @@ func (m *ReplaceSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *ReplaceSpecType_SrvPool:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -2739,6 +2791,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_SrvPool:
+		if fv, exists := v.FldValidators["pool_type_choice.srv_pool"]; exists {
+			val := m.GetPoolTypeChoice().(*ReplaceSpecType_SrvPool).SrvPool
+			vOpts := append(opts,
+				db.WithValidateField("pool_type_choice"),
+				db.WithValidateField("srv_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2843,12 +2906,466 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["pool_type_choice.aaaa_pool"] = AAAAPoolValidator().Validate
 	v.FldValidators["pool_type_choice.cname_pool"] = CNAMEPoolValidator().Validate
 	v.FldValidators["pool_type_choice.mx_pool"] = MXPoolValidator().Validate
+	v.FldValidators["pool_type_choice.srv_pool"] = SRVPoolValidator().Validate
 
 	return v
 }()
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SRVMember) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SRVMember) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SRVMember) DeepCopy() *SRVMember {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SRVMember{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SRVMember) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SRVMember) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SRVMemberValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSRVMember struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSRVMember) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) WeightValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for weight")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) TargetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for target")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) RatioValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ratio")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVMember) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SRVMember)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SRVMember got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["final_translation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("final_translation"))
+		if err := fv(ctx, m.GetFinalTranslation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["priority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("priority"))
+		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ratio"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ratio"))
+		if err := fv(ctx, m.GetRatio(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["target"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("target"))
+		if err := fv(ctx, m.GetTarget(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["weight"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("weight"))
+		if err := fv(ctx, m.GetWeight(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSRVMemberValidator = func() *ValidateSRVMember {
+	v := &ValidateSRVMember{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhPriority := v.PriorityValidationRuleHandler
+	rulesPriority := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPriority(rulesPriority)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.priority: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["priority"] = vFn
+
+	vrhWeight := v.WeightValidationRuleHandler
+	rulesWeight := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhWeight(rulesWeight)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.weight: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["weight"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhTarget := v.TargetValidationRuleHandler
+	rulesTarget := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.pattern":   "^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\.?$",
+	}
+	vFn, err = vrhTarget(rulesTarget)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.target: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["target"] = vFn
+
+	vrhRatio := v.RatioValidationRuleHandler
+	rulesRatio := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhRatio(rulesRatio)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVMember.ratio: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ratio"] = vFn
+
+	return v
+}()
+
+func SRVMemberValidator() db.Validator {
+	return DefaultSRVMemberValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SRVPool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SRVPool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SRVPool) DeepCopy() *SRVPool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SRVPool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SRVPool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SRVPool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SRVPoolValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSRVPool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSRVPool) MembersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for members")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SRVMember, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SRVMemberValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for members")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SRVMember)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SRVMember, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated members")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items members")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVPool) MaxAnswersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_answers")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSRVPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SRVPool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SRVPool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_answers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_answers"))
+		if err := fv(ctx, m.GetMaxAnswers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["members"]; exists {
+		vOpts := append(opts, db.WithValidateField("members"))
+		if err := fv(ctx, m.GetMembers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSRVPoolValidator = func() *ValidateSRVPool {
+	v := &ValidateSRVPool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMembers := v.MembersValidationRuleHandler
+	rulesMembers := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhMembers(rulesMembers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVPool.members: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["members"] = vFn
+
+	vrhMaxAnswers := v.MaxAnswersValidationRuleHandler
+	rulesMaxAnswers := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "32",
+	}
+	vFn, err = vrhMaxAnswers(rulesMaxAnswers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SRVPool.max_answers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_answers"] = vFn
+
+	return v
+}()
+
+func SRVPoolValidator() db.Validator {
+	return DefaultSRVPoolValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
@@ -2868,6 +3385,9 @@ func (r *CreateSpecType) SetPoolTypeChoiceToGlobalSpecType(o *GlobalSpecType) er
 
 	case *CreateSpecType_MxPool:
 		o.PoolTypeChoice = &GlobalSpecType_MxPool{MxPool: of.MxPool}
+
+	case *CreateSpecType_SrvPool:
+		o.PoolTypeChoice = &GlobalSpecType_SrvPool{SrvPool: of.SrvPool}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2891,6 +3411,9 @@ func (r *CreateSpecType) GetPoolTypeChoiceFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_MxPool:
 		r.PoolTypeChoice = &CreateSpecType_MxPool{MxPool: of.MxPool}
+
+	case *GlobalSpecType_SrvPool:
+		r.PoolTypeChoice = &CreateSpecType_SrvPool{SrvPool: of.SrvPool}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2988,6 +3511,9 @@ func (r *GetSpecType) SetPoolTypeChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *GetSpecType_MxPool:
 		o.PoolTypeChoice = &GlobalSpecType_MxPool{MxPool: of.MxPool}
 
+	case *GetSpecType_SrvPool:
+		o.PoolTypeChoice = &GlobalSpecType_SrvPool{SrvPool: of.SrvPool}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -3010,6 +3536,9 @@ func (r *GetSpecType) GetPoolTypeChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_MxPool:
 		r.PoolTypeChoice = &GetSpecType_MxPool{MxPool: of.MxPool}
+
+	case *GlobalSpecType_SrvPool:
+		r.PoolTypeChoice = &GetSpecType_SrvPool{SrvPool: of.SrvPool}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -3109,6 +3638,9 @@ func (r *ReplaceSpecType) SetPoolTypeChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *ReplaceSpecType_MxPool:
 		o.PoolTypeChoice = &GlobalSpecType_MxPool{MxPool: of.MxPool}
 
+	case *ReplaceSpecType_SrvPool:
+		o.PoolTypeChoice = &GlobalSpecType_SrvPool{SrvPool: of.SrvPool}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -3131,6 +3663,9 @@ func (r *ReplaceSpecType) GetPoolTypeChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_MxPool:
 		r.PoolTypeChoice = &ReplaceSpecType_MxPool{MxPool: of.MxPool}
+
+	case *GlobalSpecType_SrvPool:
+		r.PoolTypeChoice = &ReplaceSpecType_SrvPool{SrvPool: of.SrvPool}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

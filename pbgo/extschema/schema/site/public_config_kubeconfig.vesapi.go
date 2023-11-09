@@ -311,9 +311,11 @@ type configKubeConfigAPIInprocClient struct {
 }
 
 func (c *configKubeConfigAPIInprocClient) CreateLocalKubeConfig(ctx context.Context, in *CreateKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig", nil)
 	return c.ConfigKubeConfigAPIServer.CreateLocalKubeConfig(ctx, in)
 }
 func (c *configKubeConfigAPIInprocClient) ListLocalKubeConfig(ctx context.Context, in *ListKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig", nil)
 	return c.ConfigKubeConfigAPIServer.ListLocalKubeConfig(ctx, in)
 }
 

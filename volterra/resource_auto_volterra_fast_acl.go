@@ -95,7 +95,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 						"destination_type": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -155,7 +155,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 												"ports": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -268,7 +268,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 						"network_type": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -336,7 +336,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 									"action": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -428,7 +428,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -444,7 +444,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -581,7 +581,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 									"public_ip_refs": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -624,7 +624,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 									"action": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -716,7 +716,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -732,7 +732,7 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},

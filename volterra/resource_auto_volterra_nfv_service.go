@@ -84,7 +84,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"public_ip": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -238,13 +238,13 @@ func resourceVolterraNfvService() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -293,7 +293,7 @@ func resourceVolterraNfvService() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -311,7 +311,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -341,7 +341,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -366,7 +366,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -386,12 +386,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -416,7 +416,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -609,13 +609,13 @@ func resourceVolterraNfvService() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -664,7 +664,7 @@ func resourceVolterraNfvService() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -682,7 +682,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -712,7 +712,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -737,7 +737,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -757,12 +757,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -787,7 +787,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -980,13 +980,13 @@ func resourceVolterraNfvService() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -1035,7 +1035,7 @@ func resourceVolterraNfvService() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1053,7 +1053,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1083,7 +1083,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1108,7 +1108,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1128,12 +1128,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1158,7 +1158,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1351,13 +1351,13 @@ func resourceVolterraNfvService() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -1406,7 +1406,7 @@ func resourceVolterraNfvService() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1424,7 +1424,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1454,7 +1454,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1479,7 +1479,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1499,12 +1499,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1529,7 +1529,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1616,7 +1616,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 						"domain_suffix": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"advertise_on_public": {
@@ -1629,7 +1629,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"public_ip": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1694,7 +1694,7 @@ func resourceVolterraNfvService() *schema.Resource {
 						"admin_password": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1712,7 +1712,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1742,7 +1742,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -1767,7 +1767,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1787,12 +1787,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -1817,7 +1817,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1828,7 +1828,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 						"admin_username": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"endpoint_service": {
@@ -1865,7 +1865,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"configured_vip": {
 
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"custom_tcp_ports": {
@@ -1944,13 +1944,13 @@ func resourceVolterraNfvService() *schema.Resource {
 						"byol_image": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"image": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"license": {
@@ -1974,7 +1974,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2004,7 +2004,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2029,7 +2029,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2049,12 +2049,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -2079,7 +2079,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2094,32 +2094,32 @@ func resourceVolterraNfvService() *schema.Resource {
 						"market_place_image": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"awaf_pay_g200_mbps": {
 
 										Type:     schema.TypeBool,
-										Optional: true,
+										Required: true,
 									},
 
 									"awaf_pay_g3_gbps": {
 
 										Type:     schema.TypeBool,
-										Optional: true,
+										Required: true,
 									},
 
 									"best_plus_pay_g200_mbps": {
 
 										Type:     schema.TypeBool,
-										Optional: true,
+										Required: true,
 									},
 
 									"best_plus_payg_1gbps": {
 
 										Type:     schema.TypeBool,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -2128,13 +2128,13 @@ func resourceVolterraNfvService() *schema.Resource {
 						"nodes": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"aws_az_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"mgmt_subnet": {
@@ -2159,7 +2159,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"ipv4": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"ipv6": {
@@ -2181,7 +2181,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 									"node_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"automatic_prefix": {
@@ -2209,7 +2209,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"aws_tgw_site": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2242,7 +2242,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"aws_vpc_site": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2267,7 +2267,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 						"ssh_key": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"tags": {
@@ -2288,19 +2288,19 @@ func resourceVolterraNfvService() *schema.Resource {
 						"pan_ami_bundle1": {
 
 							Type:     schema.TypeBool,
-							Optional: true,
+							Required: true,
 						},
 
 						"pan_ami_bundle2": {
 
 							Type:     schema.TypeBool,
-							Optional: true,
+							Required: true,
 						},
 
 						"aws_tgw_site": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -2322,7 +2322,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 						"instance_type": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"disable_panaroma": {
@@ -2341,7 +2341,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"authorization_key": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2359,7 +2359,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2389,7 +2389,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2414,7 +2414,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2434,12 +2434,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -2464,7 +2464,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2480,7 +2480,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 									"server": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"template_stack_name": {
@@ -2494,20 +2494,20 @@ func resourceVolterraNfvService() *schema.Resource {
 						"service_nodes": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"nodes": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"aws_az_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"mgmt_subnet": {
@@ -2532,7 +2532,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -2554,7 +2554,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"node_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2573,7 +2573,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"admin_password": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2591,7 +2591,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2621,7 +2621,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2646,7 +2646,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2666,12 +2666,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -2696,7 +2696,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2707,7 +2707,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 									"admin_username": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"autogenerated_ssh_keys": {
@@ -2726,7 +2726,7 @@ func resourceVolterraNfvService() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2744,7 +2744,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2774,7 +2774,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -2799,7 +2799,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2819,12 +2819,12 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -2849,7 +2849,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2860,7 +2860,7 @@ func resourceVolterraNfvService() *schema.Resource {
 
 												"public_key": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2872,7 +2872,7 @@ func resourceVolterraNfvService() *schema.Resource {
 						"ssh_key": {
 
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"tags": {
@@ -2911,7 +2911,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"public_ip": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2972,18 +2972,18 @@ func resourceVolterraNfvService() *schema.Resource {
 						"node_ssh_ports": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"node_name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"ssh_port": {
 										Type:     schema.TypeInt,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

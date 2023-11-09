@@ -515,15 +515,19 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) CreateObject(ctx context.Context, in *CreateObjectRequest, opts ...grpc.CallOption) (*CreateObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomPrivateAPI.CreateObject", nil)
 	return c.CustomPrivateAPIServer.CreateObject(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomPrivateAPI.DeleteObject", nil)
 	return c.CustomPrivateAPIServer.DeleteObject(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) GetObject(ctx context.Context, in *GetObjectRequest, opts ...grpc.CallOption) (*GetObjectResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomPrivateAPI.GetObject", nil)
 	return c.CustomPrivateAPIServer.GetObject(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) ListObjects(ctx context.Context, in *ListObjectsRequest, opts ...grpc.CallOption) (*ListObjectsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomPrivateAPI.ListObjects", nil)
 	return c.CustomPrivateAPIServer.ListObjects(ctx, in)
 }
 

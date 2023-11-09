@@ -210,6 +210,7 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) SignupFreemiumSSOTenant(ctx context.Context, in *SignupFreemiumSSOTenantRequest, opts ...grpc.CallOption) (*SignupFreemiumSSOTenantResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomPrivateAPI.SignupFreemiumSSOTenant", nil)
 	return c.CustomPrivateAPIServer.SignupFreemiumSSOTenant(ctx, in)
 }
 

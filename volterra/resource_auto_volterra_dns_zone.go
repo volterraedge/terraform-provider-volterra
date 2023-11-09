@@ -155,18 +155,18 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"hostname": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"subtype": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -250,7 +250,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -263,7 +263,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -278,7 +278,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -293,7 +293,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -301,12 +301,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"ds_key_algorithm": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"key_tag": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -330,28 +330,28 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"algorithm": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"cert_key_tag": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 
 															"cert_type": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"certificate": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -369,7 +369,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"value": {
@@ -395,7 +395,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -408,7 +408,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -423,7 +423,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -438,7 +438,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -446,12 +446,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"ds_key_algorithm": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"key_tag": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -475,7 +475,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -488,7 +488,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -503,7 +503,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -518,7 +518,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"digest": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -526,12 +526,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"ds_key_algorithm": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"key_tag": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -554,7 +554,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"value": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -574,7 +574,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"value": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -633,13 +633,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"altitude": {
 																Type:     schema.TypeFloat,
-																Optional: true,
+																Required: true,
 															},
 
 															"horizontal_precision": {
@@ -649,12 +649,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"latitude_degree": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 
 															"latitude_hemisphere": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"latitude_minute": {
@@ -674,12 +674,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"longitude_degree": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 
 															"longitude_hemisphere": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"longitude_minute": {
@@ -718,7 +718,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -753,23 +753,23 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"flags": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"order": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 
 															"preference": {
 																Type:     schema.TypeInt,
-																Optional: true,
+																Required: true,
 															},
 
 															"regexp": {
@@ -852,13 +852,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -903,13 +903,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"algorithm": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"fingerprint": {
@@ -917,31 +917,31 @@ func resourceVolterraDnsZone() *schema.Resource {
 																Optional: true,
 															},
 
-															"sha1_digest": {
+															"sha1_fingerprint": {
 
 																Type:     schema.TypeSet,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
-																		"digest": {
+																		"fingerprint": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
 															},
 
-															"sha256_digest": {
+															"sha256_fingerprint": {
 
 																Type:     schema.TypeSet,
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
-																		"digest": {
+																		"fingerprint": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -949,7 +949,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"fingerprinttype": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -973,28 +973,28 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"values": {
 
 													Type:     schema.TypeList,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"certificate_association_data": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"certificate_usage": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"matching_type": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"selector": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1066,7 +1066,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 									"metadata": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1082,7 +1082,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -1170,18 +1170,18 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"hostname": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"subtype": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1265,7 +1265,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1278,7 +1278,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1293,7 +1293,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1308,7 +1308,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1316,12 +1316,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"ds_key_algorithm": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"key_tag": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1345,28 +1345,28 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"algorithm": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"cert_key_tag": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"cert_type": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"certificate": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1384,7 +1384,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"value": {
@@ -1410,7 +1410,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1423,7 +1423,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1438,7 +1438,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1453,7 +1453,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1461,12 +1461,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"ds_key_algorithm": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"key_tag": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1490,7 +1490,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1503,7 +1503,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1518,7 +1518,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1533,7 +1533,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																					"digest": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1541,12 +1541,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"ds_key_algorithm": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"key_tag": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1569,7 +1569,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"value": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1589,7 +1589,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"value": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1648,13 +1648,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"altitude": {
 																			Type:     schema.TypeFloat,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"horizontal_precision": {
@@ -1664,12 +1664,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"latitude_degree": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"latitude_hemisphere": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"latitude_minute": {
@@ -1689,12 +1689,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"longitude_degree": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"longitude_hemisphere": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"longitude_minute": {
@@ -1733,7 +1733,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1768,23 +1768,23 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"flags": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"order": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"preference": {
 																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"regexp": {
@@ -1867,13 +1867,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1918,13 +1918,13 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"algorithm": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"fingerprint": {
@@ -1932,31 +1932,31 @@ func resourceVolterraDnsZone() *schema.Resource {
 																			Optional: true,
 																		},
 
-																		"sha1_digest": {
+																		"sha1_fingerprint": {
 
 																			Type:     schema.TypeSet,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
-																					"digest": {
+																					"fingerprint": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
 																		},
 
-																		"sha256_digest": {
+																		"sha256_fingerprint": {
 
 																			Type:     schema.TypeSet,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
-																					"digest": {
+																					"fingerprint": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -1964,7 +1964,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"fingerprinttype": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1988,28 +1988,28 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"values": {
 
 																Type:     schema.TypeList,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"certificate_association_data": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"certificate_usage": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"matching_type": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"selector": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -2141,7 +2141,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -2171,7 +2171,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"store_provider": {
@@ -2196,7 +2196,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2216,12 +2216,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"location": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"provider": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"secret_encoding": {
@@ -2246,7 +2246,7 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -3374,20 +3374,20 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 									fingerprintTypeTypeFound := false
 
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+									if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Digest{}
-										fingerprintTypeInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+										fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
 										values[i].FingerprintType = fingerprintTypeInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
 											cs := set.(map[string]interface{})
 
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-												fingerprintTypeInt.Sha1Digest.Digest = v.(string)
+												fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
 
 											}
 
@@ -3395,20 +3395,20 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 									}
 
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+									if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Digest{}
-										fingerprintTypeInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+										fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
 										values[i].FingerprintType = fingerprintTypeInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
 											cs := set.(map[string]interface{})
 
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-												fingerprintTypeInt.Sha256Digest.Digest = v.(string)
+												fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
 
 											}
 
@@ -4625,20 +4625,20 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 											fingerprintTypeTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+											if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Digest{}
-												fingerprintTypeInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+												fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
 												values[i].FingerprintType = fingerprintTypeInt
 
 												sl := v.(*schema.Set).List()
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha1Digest.Digest = v.(string)
+														fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
 
 													}
 
@@ -4646,20 +4646,20 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 											}
 
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+											if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Digest{}
-												fingerprintTypeInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+												fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
 												values[i].FingerprintType = fingerprintTypeInt
 
 												sl := v.(*schema.Set).List()
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha256Digest.Digest = v.(string)
+														fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
 
 													}
 
@@ -6202,20 +6202,20 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 									fingerprintTypeTypeFound := false
 
-									if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+									if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Digest{}
-										fingerprintTypeInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+										fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
 										values[i].FingerprintType = fingerprintTypeInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
 											cs := set.(map[string]interface{})
 
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-												fingerprintTypeInt.Sha1Digest.Digest = v.(string)
+												fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
 
 											}
 
@@ -6223,20 +6223,20 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 									}
 
-									if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+									if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 										fingerprintTypeTypeFound = true
-										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Digest{}
-										fingerprintTypeInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+										fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+										fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
 										values[i].FingerprintType = fingerprintTypeInt
 
 										sl := v.(*schema.Set).List()
 										for _, set := range sl {
 											cs := set.(map[string]interface{})
 
-											if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+											if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-												fingerprintTypeInt.Sha256Digest.Digest = v.(string)
+												fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
 
 											}
 
@@ -7453,20 +7453,20 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 											fingerprintTypeTypeFound := false
 
-											if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+											if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Digest{}
-												fingerprintTypeInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha1Fingerprint{}
+												fingerprintTypeInt.Sha1Fingerprint = &ves_io_schema_dns_zone.SHA1Fingerprint{}
 												values[i].FingerprintType = fingerprintTypeInt
 
 												sl := v.(*schema.Set).List()
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha1Digest.Digest = v.(string)
+														fingerprintTypeInt.Sha1Fingerprint.Fingerprint = v.(string)
 
 													}
 
@@ -7474,20 +7474,20 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 											}
 
-											if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
+											if v, ok := valuesMapStrToI["sha256_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
 
 												fingerprintTypeTypeFound = true
-												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Digest{}
-												fingerprintTypeInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+												fingerprintTypeInt := &ves_io_schema_dns_zone.SSHFPRecordValue_Sha256Fingerprint{}
+												fingerprintTypeInt.Sha256Fingerprint = &ves_io_schema_dns_zone.SHA256Fingerprint{}
 												values[i].FingerprintType = fingerprintTypeInt
 
 												sl := v.(*schema.Set).List()
 												for _, set := range sl {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+													if v, ok := cs["fingerprint"]; ok && !isIntfNil(v) {
 
-														fingerprintTypeInt.Sha256Digest.Digest = v.(string)
+														fingerprintTypeInt.Sha256Fingerprint.Fingerprint = v.(string)
 
 													}
 

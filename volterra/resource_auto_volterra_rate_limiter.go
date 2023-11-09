@@ -63,7 +63,7 @@ func resourceVolterraRateLimiter() *schema.Resource {
 			"limits": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -74,12 +74,12 @@ func resourceVolterraRateLimiter() *schema.Resource {
 
 						"total_number": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"unit": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 					},
 				},

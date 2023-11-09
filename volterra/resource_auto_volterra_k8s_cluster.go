@@ -71,7 +71,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 						"cluster_wide_apps": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -96,13 +96,13 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 															"local_domain": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"password": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -120,7 +120,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -150,7 +150,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"store_provider": {
@@ -175,7 +175,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																					"url": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -195,12 +195,12 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																					"location": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"provider": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 
 																					"secret_encoding": {
@@ -225,7 +225,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																					"name": {
 																						Type:     schema.TypeString,
-																						Optional: true,
+																						Required: true,
 																					},
 																				},
 																			},
@@ -319,7 +319,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 						"cluster_role_bindings": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -358,7 +358,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 						"cluster_roles": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -446,7 +446,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 						"local_domain": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"default_port": {
@@ -480,7 +480,7 @@ func resourceVolterraK8SCluster() *schema.Resource {
 						"pod_security_policies": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 

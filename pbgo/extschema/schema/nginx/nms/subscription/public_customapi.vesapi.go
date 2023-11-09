@@ -304,9 +304,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.nms.subscription.CustomAPI.Subscribe", nil)
 	return c.CustomAPIServer.Subscribe(ctx, in)
 }
 func (c *customAPIInprocClient) Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*UnsubscribeResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.nms.subscription.CustomAPI.Unsubscribe", nil)
 	return c.CustomAPIServer.Unsubscribe(ctx, in)
 }
 

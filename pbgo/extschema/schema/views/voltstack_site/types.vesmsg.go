@@ -55,6 +55,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.custom_storage_config")
 	}
 
+	if err := m.GetLocalControlPlane().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.local_control_plane")
+	}
+
 	return nil
 }
 
@@ -1313,6 +1317,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetCustomStorageConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.custom_storage_config")
+	}
+
+	if err := m.GetLocalControlPlane().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.local_control_plane")
 	}
 
 	return nil
@@ -3039,6 +3047,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetCustomStorageConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.custom_storage_config")
+	}
+
+	if err := m.GetLocalControlPlane().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.local_control_plane")
 	}
 
 	return nil
@@ -5011,6 +5023,10 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.custom_storage_config")
 	}
 
+	if err := m.GetLocalControlPlane().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.local_control_plane")
+	}
+
 	return nil
 }
 
@@ -5417,6 +5433,14 @@ func (v *ValidateReplaceSpecType) NetworkCfgChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for network_cfg_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SriovInterfaceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sriov_interface_choice")
 	}
 	return validatorFn, nil
 }
@@ -5861,6 +5885,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["sriov_interface_choice"]; exists {
+		val := m.GetSriovInterfaceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sriov_interface_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSriovInterfaceChoice().(type) {
+	case *ReplaceSpecType_DefaultSriovInterface:
+		if fv, exists := v.FldValidators["sriov_interface_choice.default_sriov_interface"]; exists {
+			val := m.GetSriovInterfaceChoice().(*ReplaceSpecType_DefaultSriovInterface).DefaultSriovInterface
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("default_sriov_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SriovInterfaces:
+		if fv, exists := v.FldValidators["sriov_interface_choice.sriov_interfaces"]; exists {
+			val := m.GetSriovInterfaceChoice().(*ReplaceSpecType_SriovInterfaces).SriovInterfaces
+			vOpts := append(opts,
+				db.WithValidateField("sriov_interface_choice"),
+				db.WithValidateField("sriov_interfaces"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["storage_cfg_choice"]; exists {
 		val := m.GetStorageCfgChoice()
 		vOpts := append(opts,
@@ -6068,6 +6128,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["network_cfg_choice"] = vFn
 
+	vrhSriovInterfaceChoice := v.SriovInterfaceChoiceValidationRuleHandler
+	rulesSriovInterfaceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSriovInterfaceChoice(rulesSriovInterfaceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.sriov_interface_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sriov_interface_choice"] = vFn
+
 	vrhStorageCfgChoice := v.StorageCfgChoiceValidationRuleHandler
 	rulesStorageCfgChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6151,6 +6222,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["network_cfg_choice.custom_network_config"] = VssNetworkConfigurationValidator().Validate
+
+	v.FldValidators["sriov_interface_choice.sriov_interfaces"] = ves_io_schema_fleet.SriovInterfacesListTypeValidator().Validate
 
 	v.FldValidators["storage_cfg_choice.custom_storage_config"] = VssStorageConfigurationValidator().Validate
 
@@ -9970,6 +10043,41 @@ func (r *ReplaceSpecType) GetNetworkCfgChoiceFromGlobalSpecType(o *GlobalSpecTyp
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSriovInterfaceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SriovInterfaceChoice.(type) {
+	case nil:
+		o.SriovInterfaceChoice = nil
+
+	case *ReplaceSpecType_DefaultSriovInterface:
+		o.SriovInterfaceChoice = &GlobalSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *ReplaceSpecType_SriovInterfaces:
+		o.SriovInterfaceChoice = &GlobalSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSriovInterfaceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SriovInterfaceChoice.(type) {
+	case nil:
+		r.SriovInterfaceChoice = nil
+
+	case *GlobalSpecType_DefaultSriovInterface:
+		r.SriovInterfaceChoice = &ReplaceSpecType_DefaultSriovInterface{DefaultSriovInterface: of.DefaultSriovInterface}
+
+	case *GlobalSpecType_SriovInterfaces:
+		r.SriovInterfaceChoice = &ReplaceSpecType_SriovInterfaces{SriovInterfaces: of.SriovInterfaces}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetStorageCfgChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.StorageCfgChoice.(type) {
 	case nil:
@@ -10096,6 +10204,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.GetSriovInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.GetVmChoiceFromGlobalSpecType(f)
@@ -10130,6 +10239,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	m1.SetSriovInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)

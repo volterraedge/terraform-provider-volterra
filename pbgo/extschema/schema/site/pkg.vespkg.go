@@ -143,6 +143,63 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"object",
 	}
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "object.spec.gc_spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "replace_form.spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "replace_form.spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+		{
+			FieldPath:           "spec.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+		},
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

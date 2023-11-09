@@ -26,6 +26,168 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *CloneReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloneReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloneReq) DeepCopy() *CloneReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloneReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloneReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloneReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloneReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCloneReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloneReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloneReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloneReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloneReqValidator = func() *ValidateCloneReq {
+	v := &ValidateCloneReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CloneReqValidator() db.Validator {
+	return DefaultCloneReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CloneResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloneResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloneResp) DeepCopy() *CloneResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloneResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloneResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloneResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloneRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCloneResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloneResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloneResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloneResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["failed_zones"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("failed_zones"))
+		for idx, item := range m.GetFailedZones() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["success_zones"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("success_zones"))
+		for idx, item := range m.GetSuccessZones() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloneRespValidator = func() *ValidateCloneResp {
+	v := &ValidateCloneResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CloneRespValidator() db.Validator {
+	return DefaultCloneRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *F5CSDNSZoneConfiguration) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

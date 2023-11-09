@@ -29,6 +29,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.crudapi.API.Create"] = "ves.io.schema.bgp.crudapi.ObjectCreateReq"
+
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.crudapi.API.Replace"] = "ves.io.schema.bgp.crudapi.ObjectReplaceReq"
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

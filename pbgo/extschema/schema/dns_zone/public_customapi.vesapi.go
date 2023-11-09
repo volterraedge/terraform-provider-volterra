@@ -34,6 +34,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCCloneFromDNSDomain(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CloneReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.CloneReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.CloneFromDNSDomain(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCGetLocalZoneFile(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetLocalZoneFileRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -100,6 +109,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
+
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
 
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
@@ -119,6 +130,88 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCCloneFromDNSDomain(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CloneReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.CloneReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CloneResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.CloneResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCGetLocalZoneFile(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -481,6 +574,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["CloneFromDNSDomain"] = ccl.doRPCCloneFromDNSDomain
+
 	rpcFns["GetLocalZoneFile"] = ccl.doRPCGetLocalZoneFile
 
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
@@ -501,16 +596,24 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
+func (c *customAPIInprocClient) CloneFromDNSDomain(ctx context.Context, in *CloneReq, opts ...grpc.CallOption) (*CloneResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain", nil)
+	return c.CustomAPIServer.CloneFromDNSDomain(ctx, in)
+}
 func (c *customAPIInprocClient) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest, opts ...grpc.CallOption) (*GetLocalZoneFileResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile", nil)
 	return c.CustomAPIServer.GetLocalZoneFile(ctx, in)
 }
 func (c *customAPIInprocClient) GetRemoteZoneFile(ctx context.Context, in *GetRemoteZoneFileRequest, opts ...grpc.CallOption) (*GetRemoteZoneFileResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile", nil)
 	return c.CustomAPIServer.GetRemoteZoneFile(ctx, in)
 }
 func (c *customAPIInprocClient) ImportAXFR(ctx context.Context, in *ImportAXFRRequest, opts ...grpc.CallOption) (*ImportAXFRResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportAXFR", nil)
 	return c.CustomAPIServer.ImportAXFR(ctx, in)
 }
 func (c *customAPIInprocClient) ImportF5CSZone(ctx context.Context, in *ImportF5CSZoneRequest, opts ...grpc.CallOption) (*ImportF5CSZoneResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportF5CSZone", nil)
 	return c.CustomAPIServer.ImportF5CSZone(ctx, in)
 }
 
@@ -535,6 +638,55 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customAPISrv) CloneFromDNSDomain(ctx context.Context, in *CloneReq) (*CloneResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CloneResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.CloneReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.CloneFromDNSDomain' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CloneFromDNSDomain(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.CloneResp", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest) (*GetLocalZoneFileResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -755,6 +907,90 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/dns_zone/clone_from_dns_domain": {
+            "post": {
+                "summary": "Clone from DNSDomain",
+                "description": "cloning dns domain to DNSZone.",
+                "operationId": "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneCloneResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneCloneReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-clonefromdnsdomain"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain"
+            },
+            "x-displayname": "DNS Zone Custom API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/dns_zone/import": {
             "post": {
                 "summary": "Import F5 Cloud Services DNS Zone",
@@ -1243,7 +1479,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " CERT Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1300,7 +1536,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "flags": {
                     "type": "integer",
-                    "description": "\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 255\n",
+                    "description": " This flag should be an integer between 0 and 255.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 255\n",
                     "title": "Certification authority authorization flags",
                     "format": "int64",
                     "x-displayname": "Flags",
@@ -1335,39 +1571,56 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneCloneReq": {
+            "type": "object",
+            "description": "Clone Request",
+            "title": "Clone Request",
+            "x-displayname": "Clone Request",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.CloneReq"
+        },
+        "dns_zoneCloneResp": {
+            "type": "object",
+            "description": "Clone Response",
+            "title": "Clone Response",
+            "x-displayname": "Response",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.CloneResp",
+            "properties": {
+                "failed_zones": {
+                    "type": "array",
+                    "description": " Zones failed",
+                    "title": "Zones failed",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Zones failed"
+                },
+                "success_zones": {
+                    "type": "array",
+                    "description": " Zones succeeded",
+                    "title": "Zones succeeded",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Zones succeeded"
+                }
+            }
+        },
         "dns_zoneDLVResourceRecord": {
             "type": "object",
-            "description": "DNS DLV Record",
+            "description": "x-displayName: \"DNS DLV Record\"\nDNS DLV Record",
             "title": "DLVResourceRecord",
-            "x-displayname": "DNS DLV Record",
-            "x-ves-proto-message": "ves.io.schema.dns_zone.DLVResourceRecord",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
-                    "title": "Record Name",
-                    "x-displayname": "Record Name (Excluding Domain name)",
-                    "x-ves-example": "www or mail or * or ww* or *ab",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
-                    }
+                    "description": "x-displayName: \"Record Name (Excluding Domain name)\"\nx-example: \"www or mail or * or ww* or *ab\"\nDLV Record name, please provide only the specific subdomain or record name without the base domain.",
+                    "title": "Record Name"
                 },
                 "values": {
                     "type": "array",
-                    "description": " It uses the same format as the DS record.\n\nExample: - \"values\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": "x-displayName: \"DLV Value\"\nx-example: \"values\"\nx-required\nIt uses the same format as the DS record.",
                     "title": "DLV Value",
-                    "minItems": 1,
-                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/dns_zoneDSRecordValue"
-                    },
-                    "x-displayname": "DLV Value",
-                    "x-ves-example": "values",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "100",
-                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 }
             }
@@ -1381,7 +1634,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " AAAA Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1391,7 +1644,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
-                    "description": "\nExample: - \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A valid IPv6 address, for example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334\n\nExample: - \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IPv6 addresses",
                     "minItems": 1,
                     "maxItems": 100,
@@ -1420,7 +1673,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " AFSDB Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1457,7 +1710,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " A Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1467,7 +1720,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
-                    "description": "\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A valid IPv4 address, for example: 1.1.1.1\n\nExample: - \"1.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "IPv4 addresses",
                     "minItems": 1,
                     "maxItems": 100,
@@ -1495,7 +1748,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "value": {
                     "type": "string",
-                    "description": "\n\nExample: - \"example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 255\n",
+                    "description": " A valid domain name, for example: example.com\n\nExample: - \"example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 255\n",
                     "title": "Domain",
                     "maxLength": 255,
                     "x-displayname": "Domain",
@@ -1515,7 +1768,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " CAA Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1547,7 +1800,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " CDS Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1582,7 +1835,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " CName Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1615,7 +1868,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " DS Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1651,7 +1904,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " EUI48 Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1661,7 +1914,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
-                    "description": "\nExample: - \"01-23-45-67-89-ab\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 17\n  ves.io.schema.rules.string.min_len: 17\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$\n",
+                    "description": " A valid eui48 identifier, for example: 01-23-45-67-89-ab\n\nExample: - \"01-23-45-67-89-ab\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 17\n  ves.io.schema.rules.string.min_len: 17\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){5}([0-9A-Fa-f]{2})$\n",
                     "title": "EUI48 Identifier",
                     "minLength": 17,
                     "maxLength": 17,
@@ -1686,7 +1939,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " EUI64 Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1696,7 +1949,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "value": {
                     "type": "string",
-                    "description": "\nExample: - \"01-23-45-67-89-ab-cd-ef\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 23\n  ves.io.schema.rules.string.min_len: 23\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){7}([0-9A-Fa-f]{2})$\n",
+                    "description": " A valid EUI64 identifier, for example: 01-23-45-67-89-ab-cd-ef\n\nExample: - \"01-23-45-67-89-ab-cd-ef\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 23\n  ves.io.schema.rules.string.min_len: 23\n  ves.io.schema.rules.string.pattern: ^([0-9A-Fa-f]{2}-){7}([0-9A-Fa-f]{2})$\n",
                     "title": "EUI64 Identifier",
                     "minLength": 23,
                     "maxLength": 23,
@@ -1721,12 +1974,13 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " Load Balancer record name (except for SRV DNS Load balancer record) should be a simple record name and not a subdomain of a subdomain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n",
                     "title": "Record Name",
+                    "maxLength": 255,
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.pattern": "^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}"
+                        "ves.io.schema.rules.string.max_len": "255"
                     }
                 },
                 "value": {
@@ -1745,7 +1999,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " LOC Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1781,7 +2035,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " MX Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1815,7 +2069,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " NAPTR Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -1851,7 +2105,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.we\" or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " NS Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.we\" or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.we\" or *.b",
@@ -1889,7 +2143,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " PTR Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1955,7 +2209,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-_]{1,63})([.][a-zA-Z0-9-_]{1,63})*$\n",
+                    "description": " SRV Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([*]|[a-zA-Z0-9-_]{1,63})([.][a-zA-Z0-9-_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -1993,7 +2247,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
+                    "description": " TXT Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or corp.web or *.b\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^([*]|[a-zA-Z0-9-/_]{1,63})([.][a-zA-Z0-9-/_]{1,63})*$\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or corp.web or *.b",
@@ -2471,7 +2725,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "domain": {
                     "type": "string",
-                    "description": "\n\nExample: - \"mail.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "description": " Mail exchanger domain name, please provide the full hostname, for example: mail.example.com\n\nExample: - \"mail.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
                     "title": "Domain",
                     "x-displayname": "Domain",
                     "x-ves-example": "mail.example.com",
@@ -2629,53 +2883,53 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "title": "RRSet is a set of Resource Record Sets for specific type",
             "x-displayname": "Resource Record Set",
-            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"afsdb_record\",\"alias_record\",\"caa_record\",\"cds_record\",\"cert_record\",\"cname_record\",\"dlv_record\",\"ds_record\",\"eui48_record\",\"eui64_record\",\"lb_record\",\"loc_record\",\"mx_record\",\"naptr_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"sshfp_record\",\"tlsa_record\",\"txt_record\"]",
+            "x-ves-oneof-field-type_record_set": "[\"a_record\",\"aaaa_record\",\"afsdb_record\",\"alias_record\",\"caa_record\",\"cds_record\",\"cert_record\",\"cname_record\",\"ds_record\",\"eui48_record\",\"eui64_record\",\"lb_record\",\"loc_record\",\"mx_record\",\"naptr_record\",\"ns_record\",\"ptr_record\",\"srv_record\",\"sshfp_record\",\"tlsa_record\",\"txt_record\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.RRSet",
             "properties": {
                 "a_record": {
-                    "description": "Exclusive with [aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "A Record",
                     "$ref": "#/definitions/dns_zoneDNSAResourceRecord",
                     "x-displayname": "A"
                 },
                 "aaaa_record": {
-                    "description": "Exclusive with [a_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "AAAA Record",
                     "$ref": "#/definitions/dns_zoneDNSAAAAResourceRecord",
                     "x-displayname": "AAAA"
                 },
                 "afsdb_record": {
-                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "AFSDB Record",
                     "$ref": "#/definitions/dns_zoneDNSAFSDBRecord",
                     "x-displayname": "AFSDB"
                 },
                 "alias_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "ALIAS Record",
                     "$ref": "#/definitions/dns_zoneDNSAliasResourceRecord",
                     "x-displayname": "ALIAS"
                 },
                 "caa_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CAA Record",
                     "$ref": "#/definitions/dns_zoneDNSCAAResourceRecord",
                     "x-displayname": "CAA"
                 },
                 "cds_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CDS Record",
                     "$ref": "#/definitions/dns_zoneDNSCDSRecord",
                     "x-displayname": "CDS"
                 },
                 "cert_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CERT Record",
                     "$ref": "#/definitions/dns_zoneCERTResourceRecord",
                     "x-displayname": "CERT"
                 },
                 "cname_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "CNAME Record",
                     "$ref": "#/definitions/dns_zoneDNSCNAMEResourceRecord",
                     "x-displayname": "CNAME"
@@ -2687,80 +2941,74 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Comment",
                     "x-ves-example": "Comment"
                 },
-                "dlv_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
-                    "title": "DLV Record",
-                    "$ref": "#/definitions/dns_zoneDLVResourceRecord",
-                    "x-displayname": "DLV"
-                },
                 "ds_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "DS Record",
                     "$ref": "#/definitions/dns_zoneDNSDSRecord",
                     "x-displayname": "DS"
                 },
                 "eui48_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "EUI48 Record",
                     "$ref": "#/definitions/dns_zoneDNSEUI48ResourceRecord",
                     "x-displayname": "EUI48"
                 },
                 "eui64_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "EUI64 Record",
                     "$ref": "#/definitions/dns_zoneDNSEUI64ResourceRecord",
                     "x-displayname": "EUI64"
                 },
                 "lb_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "DNS LB Record",
                     "$ref": "#/definitions/dns_zoneDNSLBResourceRecord",
                     "x-displayname": "DNS Load Balancer"
                 },
                 "loc_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "LOC Record",
                     "$ref": "#/definitions/dns_zoneDNSLOCResourceRecord",
                     "x-displayname": "LOC"
                 },
                 "mx_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "MX Record",
                     "$ref": "#/definitions/dns_zoneDNSMXResourceRecord",
                     "x-displayname": "MX"
                 },
                 "naptr_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "NAPTR Record",
                     "$ref": "#/definitions/dns_zoneDNSNAPTRResourceRecord",
                     "x-displayname": "NAPTR"
                 },
                 "ns_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ptr_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "NS Record",
                     "$ref": "#/definitions/dns_zoneDNSNSResourceRecord",
                     "x-displayname": "NS"
                 },
                 "ptr_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record srv_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record srv_record sshfp_record tlsa_record txt_record]\n",
                     "title": "PTR Record",
                     "$ref": "#/definitions/dns_zoneDNSPTRResourceRecord",
                     "x-displayname": "PTR"
                 },
                 "srv_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record sshfp_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record sshfp_record tlsa_record txt_record]\n",
                     "title": "SRV Record",
                     "$ref": "#/definitions/dns_zoneDNSSRVResourceRecord",
                     "x-displayname": "SRV"
                 },
                 "sshfp_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record tlsa_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record tlsa_record txt_record]\n",
                     "title": "SSHFP Record",
                     "$ref": "#/definitions/dns_zoneSSHFPResourceRecord",
                     "x-displayname": "SSHFP"
                 },
                 "tlsa_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record txt_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record txt_record]\n",
                     "title": "TLSA Record",
                     "$ref": "#/definitions/dns_zoneTLSAResourceRecord",
                     "x-displayname": "TLSA"
@@ -2778,7 +3026,7 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "txt_record": {
-                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record]\n",
+                    "description": "Exclusive with [a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record]\n",
                     "title": "TXT Record",
                     "$ref": "#/definitions/dns_zoneDNSTXTResourceRecord",
                     "x-displayname": "TXT"
@@ -2839,6 +3087,29 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneSHA1Fingerprint": {
+            "type": "object",
+            "title": "SHA1 Fingerprint",
+            "x-displayname": "SHA1 Fingerprint",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SHA1Fingerprint",
+            "properties": {
+                "fingerprint": {
+                    "type": "string",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"addf120b430021c36c232c99ef8d926aea2acd6b\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 40\n  ves.io.schema.rules.string.min_len: 40\n",
+                    "title": "Fingerprint",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "x-displayname": "Fingerprint",
+                    "x-ves-example": "addf120b430021c36c232c99ef8d926aea2acd6b",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "40",
+                        "ves.io.schema.rules.string.min_len": "40"
+                    }
+                }
+            }
+        },
         "dns_zoneSHA256Digest": {
             "type": "object",
             "title": "SHA256 Digest",
@@ -2852,6 +3123,29 @@ var CustomAPISwaggerJSON string = `{
                     "minLength": 64,
                     "maxLength": 64,
                     "x-displayname": "Digest",
+                    "x-ves-example": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "64"
+                    }
+                }
+            }
+        },
+        "dns_zoneSHA256Fingerprint": {
+            "type": "object",
+            "title": "SHA256 Fingerprint",
+            "x-displayname": "SHA256 Fingerprint",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.SHA256Fingerprint",
+            "properties": {
+                "fingerprint": {
+                    "type": "string",
+                    "description": " The 'fingerprint' is the DS key and the actual contents of the DS record. \n\nExample: - \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 64\n",
+                    "title": "Fingerprint",
+                    "minLength": 64,
+                    "maxLength": 64,
+                    "x-displayname": "Fingerprint",
                     "x-ves-example": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2985,12 +3279,12 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "target": {
                     "type": "string",
-                    "description": " Hostname of the machine providing the service\n\nExample: - \"my.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^$|^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$\n",
+                    "description": " Hostname of the machine providing the service\n\nExample: - \"my.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$\n",
                     "title": "Target",
                     "x-displayname": "Target",
                     "x-ves-example": "my.example.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.pattern": "^$|^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$"
+                        "ves.io.schema.rules.string.pattern": "^[.]$|^([a-zA-Z0-9]{1}[a-zA-Z0-9_-]{0,62})(\\\\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*?(\\\\.[a-zA-Z]{1}[a-zA-Z0-9]{0,62})\\\\.?$"
                     }
                 },
                 "weight": {
@@ -3025,22 +3319,20 @@ var CustomAPISwaggerJSON string = `{
         },
         "dns_zoneSSHFPFingerprintType": {
             "type": "string",
-            "description": "SSHFP Fingerprint Type must be compatible with the specified values.\n\n - INVALIDFINGERPRINTTYPE: INVALIDFINGERPRINTTYPE\n\n - SHA1ALGORITHM: SHA1ALGORITHM\n\n - SHA256ALGORITHM: SHA256ALGORITHM\n",
+            "description": "x-displayName: \"SSHFP Fingerprint Type\"\nSSHFP Fingerprint Type must be compatible with the specified values.\n\n - INVALIDFINGERPRINTTYPE: INVALIDFINGERPRINTTYPE\n\nx-displayName: \"Invalid Fingerprint Type\"\n - SHA1ALGORITHM: SHA1ALGORITHM\n\nx-displayName: \"SHA1\"\n - SHA256ALGORITHM: SHA256ALGORITHM\n\nx-displayName: \"SHA256\"",
             "title": "SSHFP Fingerprint Type",
             "enum": [
                 "INVALIDFINGERPRINTTYPE",
                 "SHA1ALGORITHM",
                 "SHA256ALGORITHM"
             ],
-            "default": "INVALIDFINGERPRINTTYPE",
-            "x-displayname": "SSHFP Fingerprint Type",
-            "x-ves-proto-enum": "ves.io.schema.dns_zone.SSHFPFingerprintType"
+            "default": "INVALIDFINGERPRINTTYPE"
         },
         "dns_zoneSSHFPRecordValue": {
             "type": "object",
             "title": "SSHFPRecordValue",
             "x-displayname": "SSHFPRecordValue",
-            "x-ves-oneof-field-fingerprint_type": "[\"sha1_digest\",\"sha256_digest\"]",
+            "x-ves-oneof-field-fingerprint_type": "[\"sha1_fingerprint\",\"sha256_fingerprint\"]",
             "x-ves-proto-message": "ves.io.schema.dns_zone.SSHFPRecordValue",
             "properties": {
                 "algorithm": {
@@ -3054,44 +3346,17 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "fingerprint": {
-                    "type": "string",
-                    "description": " The hexadecimal representation of the hash result of the SSH key as text.\n\nExample: - \"Ab100cFg\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pattern: ^[A-Fa-f0-9]+$\n",
-                    "title": "Fingerprint",
-                    "minLength": 1,
-                    "maxLength": 4096,
-                    "x-displayname": "Fingerprint",
-                    "x-ves-example": "Ab100cFg",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "4096",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.pattern": "^[A-Fa-f0-9]+$"
-                    }
+                "sha1_fingerprint": {
+                    "description": "Exclusive with [sha256_fingerprint]\n",
+                    "title": "SHA1 Fingerprint",
+                    "$ref": "#/definitions/dns_zoneSHA1Fingerprint",
+                    "x-displayname": "SHA1 Fingerprint"
                 },
-                "fingerprinttype": {
-                    "description": " Algorithm used to calculate the fingerprint of the public key.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Fingerprint Type",
-                    "$ref": "#/definitions/dns_zoneSSHFPFingerprintType",
-                    "x-displayname": "Fingerprint Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.not_in": "0",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "sha1_digest": {
-                    "description": "Exclusive with [sha256_digest]\n",
-                    "title": "SHA1 Digest",
-                    "$ref": "#/definitions/dns_zoneSHA1Digest",
-                    "x-displayname": "SHA1 Digest"
-                },
-                "sha256_digest": {
-                    "description": "Exclusive with [sha1_digest]\n",
+                "sha256_fingerprint": {
+                    "description": "Exclusive with [sha1_fingerprint]\n",
                     "title": "SHA256 Digest",
-                    "$ref": "#/definitions/dns_zoneSHA256Digest",
-                    "x-displayname": "SHA256 Digest"
+                    "$ref": "#/definitions/dns_zoneSHA256Fingerprint",
+                    "x-displayname": "SHA256 Fingerprint"
                 }
             }
         },
@@ -3104,7 +3369,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " SSHFP Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",
@@ -3280,7 +3545,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": "\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
+                    "description": " TLSA Record name, please provide only the specific subdomain or record name without the base domain.\n\nExample: - \"www or mail or * or ww* or *ab\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^([a-zA-Z0-9*?]|([a-zA-Z0-9?*]+-[a-zA-Z0-9*?]+)){0,253}\n",
                     "title": "Record Name",
                     "x-displayname": "Record Name (Excluding Domain name)",
                     "x-ves-example": "www or mail or * or ww* or *ab",

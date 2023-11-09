@@ -406,6 +406,93 @@ func BytesRulesValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DateRangeRules) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DateRangeRules) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DateRangeRules) DeepCopy() *DateRangeRules {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DateRangeRules{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DateRangeRules) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DateRangeRules) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DateRangeRulesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDateRangeRules struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDateRangeRules) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DateRangeRules)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DateRangeRules got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_duration"))
+		if err := fv(ctx, m.GetMaxDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["min_duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_duration"))
+		if err := fv(ctx, m.GetMinDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDateRangeRulesValidator = func() *ValidateDateRangeRules {
+	v := &ValidateDateRangeRules{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DateRangeRulesValidator() db.Validator {
+	return DefaultDateRangeRulesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DoubleRules) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1983,19 +2070,10 @@ func (v *ValidateMessageRules) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["date_range_max_days"]; exists {
+	if fv, exists := v.FldValidators["date_range"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("date_range_max_days"))
-		if err := fv(ctx, m.GetDateRangeMaxDays(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["date_range_min_days"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("date_range_min_days"))
-		if err := fv(ctx, m.GetDateRangeMinDays(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("date_range"))
+		if err := fv(ctx, m.GetDateRange(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3531,6 +3609,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("ipv6_globally_routable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_HttpValidMethods:
+		if fv, exists := v.FldValidators["well_known.http_valid_methods"]; exists {
+			val := m.GetWellKnown().(*StringRules_HttpValidMethods).HttpValidMethods
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("http_valid_methods"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

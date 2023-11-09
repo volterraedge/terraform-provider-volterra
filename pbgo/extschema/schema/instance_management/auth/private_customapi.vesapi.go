@@ -403,12 +403,15 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) LookupAuthConfig(ctx context.Context, in *LookupAuthConfigRequest, opts ...grpc.CallOption) (*LookupAuthConfigResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupAuthConfig", nil)
 	return c.CustomPrivateAPIServer.LookupAuthConfig(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) LookupUserStatus(ctx context.Context, in *LookupUserStatusRequest, opts ...grpc.CallOption) (*LookupUserStatusResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupUserStatus", nil)
 	return c.CustomPrivateAPIServer.LookupUserStatus(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) ValidateAPICredential(ctx context.Context, in *ValidateAPICredentialRequest, opts ...grpc.CallOption) (*ValidateAPICredentialResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.auth.CustomPrivateAPI.ValidateAPICredential", nil)
 	return c.CustomPrivateAPIServer.ValidateAPICredential(ctx, in)
 }
 

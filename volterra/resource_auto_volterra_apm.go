@@ -79,7 +79,7 @@ func resourceVolterraApm() *schema.Resource {
 									"public_ip": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -233,13 +233,13 @@ func resourceVolterraApm() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -288,7 +288,7 @@ func resourceVolterraApm() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -306,7 +306,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -336,7 +336,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -361,7 +361,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -381,12 +381,12 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -411,7 +411,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -604,13 +604,13 @@ func resourceVolterraApm() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -659,7 +659,7 @@ func resourceVolterraApm() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -677,7 +677,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -707,7 +707,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -732,7 +732,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -752,12 +752,12 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -782,7 +782,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -975,13 +975,13 @@ func resourceVolterraApm() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -1030,7 +1030,7 @@ func resourceVolterraApm() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1048,7 +1048,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1078,7 +1078,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1103,7 +1103,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1123,12 +1123,12 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1153,7 +1153,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1346,13 +1346,13 @@ func resourceVolterraApm() *schema.Resource {
 									"tls_certificates": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"description": {
@@ -1401,7 +1401,7 @@ func resourceVolterraApm() *schema.Resource {
 												"private_key": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1419,7 +1419,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1449,7 +1449,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"store_provider": {
@@ -1474,7 +1474,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"url": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1494,12 +1494,12 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"location": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"provider": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"secret_encoding": {
@@ -1524,7 +1524,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"name": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 																	},
 																},
@@ -1611,7 +1611,7 @@ func resourceVolterraApm() *schema.Resource {
 
 						"domain_suffix": {
 							Type:     schema.TypeString,
-							Optional: true,
+							Required: true,
 						},
 
 						"advertise_on_public": {
@@ -1624,7 +1624,7 @@ func resourceVolterraApm() *schema.Resource {
 									"public_ip": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1689,14 +1689,14 @@ func resourceVolterraApm() *schema.Resource {
 						"apm_aws_site": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"admin_password": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1714,7 +1714,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1744,7 +1744,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -1769,7 +1769,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1789,12 +1789,12 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -1819,7 +1819,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -1830,20 +1830,20 @@ func resourceVolterraApm() *schema.Resource {
 
 									"admin_username": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"aws_tgw_site": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"aws_tgw_site": {
 
 													Type:     schema.TypeSet,
-													Optional: true,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1979,13 +1979,13 @@ func resourceVolterraApm() *schema.Resource {
 									"nodes": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"aws_az_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"mgmt_subnet": {
@@ -2010,7 +2010,7 @@ func resourceVolterraApm() *schema.Resource {
 
 																		"ipv4": {
 																			Type:     schema.TypeString,
-																			Optional: true,
+																			Required: true,
 																		},
 
 																		"ipv6": {
@@ -2032,7 +2032,7 @@ func resourceVolterraApm() *schema.Resource {
 
 												"node_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 
 												"automatic_prefix": {
@@ -2052,7 +2052,7 @@ func resourceVolterraApm() *schema.Resource {
 
 									"ssh_key": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"tags": {
@@ -2098,14 +2098,14 @@ func resourceVolterraApm() *schema.Resource {
 						"f5_bare_metal_site": {
 
 							Type:     schema.TypeSet,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"admin_password": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2123,7 +2123,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2153,7 +2153,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"store_provider": {
@@ -2178,7 +2178,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"url": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2198,12 +2198,12 @@ func resourceVolterraApm() *schema.Resource {
 
 															"location": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"provider": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 
 															"secret_encoding": {
@@ -2228,7 +2228,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"name": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2239,13 +2239,13 @@ func resourceVolterraApm() *schema.Resource {
 
 									"admin_username": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"bare_metal_site": {
 
 										Type:     schema.TypeSet,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -2265,12 +2265,187 @@ func resourceVolterraApm() *schema.Resource {
 										},
 									},
 
+									"bigiq_instance": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"license_pool_name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"license_server_ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"password": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"blindfold_secret_info_internal": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"location": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"store_provider": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"blindfold_secret_info": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"location": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"store_provider": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"clear_secret_info": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"provider": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"url": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"location": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"provider": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"secret_encoding": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"version": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"sku_name": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"username": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+											},
+										},
+									},
+
 									"nodes": {
 
 										Type:     schema.TypeList,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"bm_node_memory_size": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"bm_virtual_cpu_count": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
 
 												"external_interface": {
 
@@ -2282,7 +2457,7 @@ func resourceVolterraApm() *schema.Resource {
 															"interface": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2309,7 +2484,7 @@ func resourceVolterraApm() *schema.Resource {
 
 															"network_self_ip": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
@@ -2325,7 +2500,7 @@ func resourceVolterraApm() *schema.Resource {
 															"interface": {
 
 																Type:     schema.TypeSet,
-																Optional: true,
+																Required: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -2352,20 +2527,15 @@ func resourceVolterraApm() *schema.Resource {
 
 															"network_self_ip": {
 																Type:     schema.TypeString,
-																Optional: true,
+																Required: true,
 															},
 														},
 													},
 												},
 
-												"license_key": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
 												"node_name": {
 													Type:     schema.TypeString,
-													Optional: true,
+													Required: true,
 												},
 											},
 										},
@@ -2373,12 +2543,12 @@ func resourceVolterraApm() *schema.Resource {
 
 									"public_download_url": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"ssh_key": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -5420,6 +5590,204 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 					}
 
+					if v, ok := f5BareMetalSiteMapStrToI["bigiq_instance"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						bigiqInstance := &ves_io_schema_nfv_service.BigIqInstanceType{}
+						f5BareMetalSite.BigiqInstance = bigiqInstance
+						for _, set := range sl {
+							bigiqInstanceMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bigiqInstanceMapStrToI["license_pool_name"]; ok && !isIntfNil(w) {
+								bigiqInstance.LicensePoolName = w.(string)
+							}
+
+							if w, ok := bigiqInstanceMapStrToI["license_server_ip"]; ok && !isIntfNil(w) {
+								bigiqInstance.LicenseServerIp = w.(string)
+							}
+
+							if v, ok := bigiqInstanceMapStrToI["password"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								password := &ves_io_schema.SecretType{}
+								bigiqInstance.Password = password
+								for _, set := range sl {
+									passwordMapStrToI := set.(map[string]interface{})
+
+									if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+										sl := v.(*schema.Set).List()
+										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+										password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+										for _, set := range sl {
+											blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+											if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+												blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+											}
+
+											if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+												blindfoldSecretInfoInternal.Location = w.(string)
+											}
+
+											if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+												blindfoldSecretInfoInternal.StoreProvider = w.(string)
+											}
+
+										}
+
+									}
+
+									if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+										password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+									}
+
+									secretInfoOneofTypeFound := false
+
+									if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+										secretInfoOneofTypeFound = true
+										secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+										secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+										password.SecretInfoOneof = secretInfoOneofInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+											}
+
+											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+											}
+
+											if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+										secretInfoOneofTypeFound = true
+										secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+										secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+										password.SecretInfoOneof = secretInfoOneofInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+											}
+
+											if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+										secretInfoOneofTypeFound = true
+										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+										password.SecretInfoOneof = secretInfoOneofInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+											}
+
+											if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+											}
+
+											if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+											}
+
+											if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+											}
+
+											if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+											}
+
+										}
+
+									}
+
+									if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+										secretInfoOneofTypeFound = true
+										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+										password.SecretInfoOneof = secretInfoOneofInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if w, ok := bigiqInstanceMapStrToI["sku_name"]; ok && !isIntfNil(w) {
+								bigiqInstance.SkuName = w.(string)
+							}
+
+							if w, ok := bigiqInstanceMapStrToI["username"]; ok && !isIntfNil(w) {
+								bigiqInstance.Username = w.(string)
+							}
+
+						}
+
+					}
+
 					if v, ok := f5BareMetalSiteMapStrToI["nodes"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
@@ -5428,6 +5796,18 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 						for i, set := range sl {
 							nodes[i] = &ves_io_schema_nfv_service.ServiceNodesBareMetalType{}
 							nodesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := nodesMapStrToI["bm_node_memory_size"]; ok && !isIntfNil(v) {
+
+								nodes[i].BmNodeMemorySize = ves_io_schema_nfv_service.BMNodeMemorySize(ves_io_schema_nfv_service.BMNodeMemorySize_value[v.(string)])
+
+							}
+
+							if v, ok := nodesMapStrToI["bm_virtual_cpu_count"]; ok && !isIntfNil(v) {
+
+								nodes[i].BmVirtualCpuCount = ves_io_schema_nfv_service.BMNodeVirtualCpuCount(ves_io_schema_nfv_service.BMNodeVirtualCpuCount_value[v.(string)])
+
+							}
 
 							if v, ok := nodesMapStrToI["external_interface"]; ok && !isIntfNil(v) {
 
@@ -5511,10 +5891,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 								}
 
-							}
-
-							if w, ok := nodesMapStrToI["license_key"]; ok && !isIntfNil(w) {
-								nodes[i].LicenseKey = w.(string)
 							}
 
 							if w, ok := nodesMapStrToI["node_name"]; ok && !isIntfNil(w) {

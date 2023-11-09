@@ -26,29 +26,29 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *Authorization) ToJSON() (string, error) {
+func (m *AuthToken) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *Authorization) ToYAML() (string, error) {
+func (m *AuthToken) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
 // Redact squashes sensitive info in m (in-place)
-func (m *Authorization) Redact(ctx context.Context) error {
+func (m *AuthToken) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
 	}
 
-	if err := m.GetCredentials().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting Authorization.credentials")
+	if err := m.GetToken().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting AuthToken.token")
 	}
 
 	return nil
 }
 
-func (m *Authorization) DeepCopy() *Authorization {
+func (m *AuthToken) DeepCopy() *AuthToken {
 	if m == nil {
 		return nil
 	}
@@ -56,7 +56,7 @@ func (m *Authorization) DeepCopy() *Authorization {
 	if err != nil {
 		return nil
 	}
-	c := &Authorization{}
+	c := &AuthToken{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -64,34 +64,26 @@ func (m *Authorization) DeepCopy() *Authorization {
 	return c
 }
 
-func (m *Authorization) DeepCopyProto() proto.Message {
+func (m *AuthToken) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *Authorization) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AuthorizationValidator().Validate(ctx, m, opts...)
+func (m *AuthToken) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AuthTokenValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAuthorization struct {
+type ValidateAuthToken struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAuthorization) AuthTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for auth_type")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAuthorization) CredentialsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateAuthToken) TokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for credentials")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for token")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
@@ -108,49 +100,24 @@ func (v *ValidateAuthorization) CredentialsValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateAuthorization) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*Authorization)
+func (v *ValidateAuthToken) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AuthToken)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *Authorization got type %s", t)
+			return fmt.Errorf("Expected type *AuthToken got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["auth_type"]; exists {
-		val := m.GetAuthType()
-		vOpts := append(opts,
-			db.WithValidateField("auth_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["token"]; exists {
 
-	switch m.GetAuthType().(type) {
-	case *Authorization_AuthTypeBearer:
-		if fv, exists := v.FldValidators["auth_type.auth_type_bearer"]; exists {
-			val := m.GetAuthType().(*Authorization_AuthTypeBearer).AuthTypeBearer
-			vOpts := append(opts,
-				db.WithValidateField("auth_type"),
-				db.WithValidateField("auth_type_bearer"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["credentials"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("credentials"))
-		if err := fv(ctx, m.GetCredentials(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("token"))
+		if err := fv(ctx, m.GetToken(), vOpts...); err != nil {
 			return err
 		}
 
@@ -160,8 +127,8 @@ func (v *ValidateAuthorization) Validate(ctx context.Context, pm interface{}, op
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAuthorizationValidator = func() *ValidateAuthorization {
-	v := &ValidateAuthorization{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultAuthTokenValidator = func() *ValidateAuthToken {
+	v := &ValidateAuthToken{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -171,33 +138,418 @@ var DefaultAuthorizationValidator = func() *ValidateAuthorization {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhAuthType := v.AuthTypeValidationRuleHandler
-	rulesAuthType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhAuthType(rulesAuthType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Authorization.auth_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["auth_type"] = vFn
-
-	vrhCredentials := v.CredentialsValidationRuleHandler
-	rulesCredentials := map[string]string{
+	vrhToken := v.TokenValidationRuleHandler
+	rulesToken := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhCredentials(rulesCredentials)
+	vFn, err = vrhToken(rulesToken)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Authorization.credentials: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AuthToken.token: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["credentials"] = vFn
+	v.FldValidators["token"] = vFn
 
 	return v
 }()
 
-func AuthorizationValidator() db.Validator {
-	return DefaultAuthorizationValidator
+func AuthTokenValidator() db.Validator {
+	return DefaultAuthTokenValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CACertificateObj) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CACertificateObj) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CACertificateObj) DeepCopy() *CACertificateObj {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CACertificateObj{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CACertificateObj) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CACertificateObj) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CACertificateObjValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CACertificateObj) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTrustedCaDRefInfo()
+
+}
+
+func (m *CACertificateObj) GetTrustedCaDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTrustedCa()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("CACertificateObj.trusted_ca[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "trusted_ca_list.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "trusted_ca",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetTrustedCaDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CACertificateObj) GetTrustedCaDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "trusted_ca_list.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: trusted_ca_list")
+	}
+	for _, ref := range m.GetTrustedCa() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateCACertificateObj struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCACertificateObj) TrustedCaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_ca")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_ca")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_ca")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_ca")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCACertificateObj) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CACertificateObj)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CACertificateObj got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["trusted_ca"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_ca"))
+		if err := fv(ctx, m.GetTrustedCa(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCACertificateObjValidator = func() *ValidateCACertificateObj {
+	v := &ValidateCACertificateObj{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTrustedCa := v.TrustedCaValidationRuleHandler
+	rulesTrustedCa := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhTrustedCa(rulesTrustedCa)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CACertificateObj.trusted_ca: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_ca"] = vFn
+
+	return v
+}()
+
+func CACertificateObjValidator() db.Validator {
+	return DefaultCACertificateObjValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ClientCertificateObj) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientCertificateObj) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientCertificateObj) DeepCopy() *ClientCertificateObj {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientCertificateObj{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientCertificateObj) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientCertificateObj) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientCertificateObjValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ClientCertificateObj) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetUseTlsObjDRefInfo()
+
+}
+
+func (m *ClientCertificateObj) GetUseTlsObjDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetUseTlsObj()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ClientCertificateObj.use_tls_obj[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "certificate.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "use_tls_obj",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetUseTlsObjDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ClientCertificateObj) GetUseTlsObjDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "certificate.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: certificate")
+	}
+	for _, ref := range m.GetUseTlsObj() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateClientCertificateObj struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientCertificateObj) UseTlsObjValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for use_tls_obj")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for use_tls_obj")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated use_tls_obj")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items use_tls_obj")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateClientCertificateObj) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientCertificateObj)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientCertificateObj got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["use_tls_obj"]; exists {
+		vOpts := append(opts, db.WithValidateField("use_tls_obj"))
+		if err := fv(ctx, m.GetUseTlsObj(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientCertificateObjValidator = func() *ValidateClientCertificateObj {
+	v := &ValidateClientCertificateObj{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUseTlsObj := v.UseTlsObjValidationRuleHandler
+	rulesUseTlsObj := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhUseTlsObj(rulesUseTlsObj)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientCertificateObj.use_tls_obj: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["use_tls_obj"] = vFn
+
+	return v
+}()
+
+func ClientCertificateObjValidator() db.Validator {
+	return DefaultClientCertificateObjValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -261,6 +613,58 @@ func (m *CreateSpecType) DeepCopyProto() proto.Message {
 
 func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return CreateSpecTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *CreateSpecType_Slack:
+
+		return nil, nil
+
+	case *CreateSpecType_Pagerduty:
+
+		return nil, nil
+
+	case *CreateSpecType_Opsgenie:
+
+		return nil, nil
+
+	case *CreateSpecType_Email:
+
+		return nil, nil
+
+	case *CreateSpecType_Sms:
+
+		return nil, nil
+
+	case *CreateSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 type ValidateCreateSpecType struct {
@@ -579,6 +983,58 @@ func (m *GetSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GetSpecType_Slack:
+
+		return nil, nil
+
+	case *GetSpecType_Pagerduty:
+
+		return nil, nil
+
+	case *GetSpecType_Opsgenie:
+
+		return nil, nil
+
+	case *GetSpecType_Email:
+
+		return nil, nil
+
+	case *GetSpecType_Sms:
+
+		return nil, nil
+
+	case *GetSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -788,6 +1244,58 @@ func (m *GlobalSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 	return GlobalSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *GlobalSpecType_Slack:
+
+		return nil, nil
+
+	case *GlobalSpecType_Pagerduty:
+
+		return nil, nil
+
+	case *GlobalSpecType_Opsgenie:
+
+		return nil, nil
+
+	case *GlobalSpecType_Email:
+
+		return nil, nil
+
+	case *GlobalSpecType_Sms:
+
+		return nil, nil
+
+	case *GlobalSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -955,12 +1463,8 @@ func (m *HTTPConfig) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting HTTPConfig.basic_auth")
 	}
 
-	if err := m.GetTlsConfig().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting HTTPConfig.tls_config")
-	}
-
-	if err := m.GetAuthConfig().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting HTTPConfig.auth_config")
+	if err := m.GetAuthToken().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting HTTPConfig.auth_token")
 	}
 
 	return nil
@@ -993,6 +1497,90 @@ func (m *HTTPConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error
 	return HTTPConfigValidator().Validate(ctx, m, opts...)
 }
 
+func (m *HTTPConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetAuthChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetAuthChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTlsChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTlsChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HTTPConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetAuthChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetAuthChoice().(type) {
+	case *HTTPConfig_BasicAuth:
+
+		return nil, nil
+
+	case *HTTPConfig_NoAuthorization:
+
+		return nil, nil
+
+	case *HTTPConfig_AuthToken:
+
+		return nil, nil
+
+	case *HTTPConfig_ClientCertObj:
+		drInfos, err := m.GetClientCertObj().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetClientCertObj().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "client_cert_obj." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HTTPConfig) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTlsChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetTlsChoice().(type) {
+	case *HTTPConfig_NoTls:
+
+		return nil, nil
+
+	case *HTTPConfig_UseTls:
+		drInfos, err := m.GetUseTls().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_tls." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateHTTPConfig struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1005,24 +1593,11 @@ func (v *ValidateHTTPConfig) AuthChoiceValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
-func (v *ValidateHTTPConfig) TlsConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateHTTPConfig) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tls_config")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := TLSConfigValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
 	return validatorFn, nil
 }
 
@@ -1073,12 +1648,23 @@ func (v *ValidateHTTPConfig) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
-	case *HTTPConfig_AuthConfig:
-		if fv, exists := v.FldValidators["auth_choice.auth_config"]; exists {
-			val := m.GetAuthChoice().(*HTTPConfig_AuthConfig).AuthConfig
+	case *HTTPConfig_AuthToken:
+		if fv, exists := v.FldValidators["auth_choice.auth_token"]; exists {
+			val := m.GetAuthChoice().(*HTTPConfig_AuthToken).AuthToken
 			vOpts := append(opts,
 				db.WithValidateField("auth_choice"),
-				db.WithValidateField("auth_config"),
+				db.WithValidateField("auth_token"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPConfig_ClientCertObj:
+		if fv, exists := v.FldValidators["auth_choice.client_cert_obj"]; exists {
+			val := m.GetAuthChoice().(*HTTPConfig_ClientCertObj).ClientCertObj
+			vOpts := append(opts,
+				db.WithValidateField("auth_choice"),
+				db.WithValidateField("client_cert_obj"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1105,11 +1691,38 @@ func (v *ValidateHTTPConfig) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
-	if fv, exists := v.FldValidators["tls_config"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tls_config"))
-		if err := fv(ctx, m.GetTlsConfig(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *HTTPConfig_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*HTTPConfig_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *HTTPConfig_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*HTTPConfig_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1140,19 +1753,22 @@ var DefaultHTTPConfigValidator = func() *ValidateHTTPConfig {
 	}
 	v.FldValidators["auth_choice"] = vFn
 
-	vrhTlsConfig := v.TlsConfigValidationRuleHandler
-	rulesTlsConfig := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhTlsConfig(rulesTlsConfig)
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPConfig.tls_config: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPConfig.tls_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["tls_config"] = vFn
+	v.FldValidators["tls_choice"] = vFn
 
 	v.FldValidators["auth_choice.basic_auth"] = HttpBasicAuthValidator().Validate
-	v.FldValidators["auth_choice.auth_config"] = AuthorizationValidator().Validate
+	v.FldValidators["auth_choice.auth_token"] = AuthTokenValidator().Validate
+	v.FldValidators["auth_choice.client_cert_obj"] = ClientCertificateObjValidator().Validate
+
+	v.FldValidators["tls_choice.use_tls"] = TLSConfigValidator().Validate
 
 	return v
 }()
@@ -1713,6 +2329,58 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 	return ReplaceSpecTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetReceiverDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetReceiver() == nil {
+		return nil, nil
+	}
+	switch m.GetReceiver().(type) {
+	case *ReplaceSpecType_Slack:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Pagerduty:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Opsgenie:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Email:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Sms:
+
+		return nil, nil
+
+	case *ReplaceSpecType_Webhook:
+		drInfos, err := m.GetWebhook().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "webhook." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2139,20 +2807,6 @@ func (m *TLSConfig) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-// Redact squashes sensitive info in m (in-place)
-func (m *TLSConfig) Redact(ctx context.Context) error {
-	// clear fields with confidential option set (at message or field level)
-	if m == nil {
-		return nil
-	}
-
-	if err := m.GetClientKey().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting TLSConfig.client_key")
-	}
-
-	return nil
-}
-
 func (m *TLSConfig) DeepCopy() *TLSConfig {
 	if m == nil {
 		return nil
@@ -2180,59 +2834,68 @@ func (m *TLSConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error 
 	return TLSConfigValidator().Validate(ctx, m, opts...)
 }
 
+func (m *TLSConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServerValidationChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TLSConfig) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServerValidationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServerValidationChoice().(type) {
+	case *TLSConfig_VolterraTrustedCa:
+
+		return nil, nil
+
+	case *TLSConfig_UseServerVerification:
+		drInfos, err := m.GetUseServerVerification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "use_server_verification." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateTLSConfig struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateTLSConfig) CaCertValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateTLSConfig) ServerValidationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ca_cert")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_validation_choice")
 	}
-
 	return validatorFn, nil
 }
 
-func (v *ValidateTLSConfig) ClientCertValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+func (v *ValidateTLSConfig) SniChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for client_cert")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni_choice")
 	}
-
 	return validatorFn, nil
 }
 
-func (v *ValidateTLSConfig) ClientKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateTLSConfig) SniChoiceSniValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Sni, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for client_key")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sni")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateTLSConfig) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
-	}
-
-	return validatorFn, nil
+	return oValidatorFn_Sni, nil
 }
 
 func (v *ValidateTLSConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2247,33 +2910,6 @@ func (v *ValidateTLSConfig) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["ca_cert"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ca_cert"))
-		if err := fv(ctx, m.GetCaCert(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["client_cert"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("client_cert"))
-		if err := fv(ctx, m.GetClientCert(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["client_key"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("client_key"))
-		if err := fv(ctx, m.GetClientKey(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["max_version"]; exists {
@@ -2294,11 +2930,74 @@ func (v *ValidateTLSConfig) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
-	if fv, exists := v.FldValidators["server_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("server_name"))
-		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["server_validation_choice"]; exists {
+		val := m.GetServerValidationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("server_validation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetServerValidationChoice().(type) {
+	case *TLSConfig_VolterraTrustedCa:
+		if fv, exists := v.FldValidators["server_validation_choice.volterra_trusted_ca"]; exists {
+			val := m.GetServerValidationChoice().(*TLSConfig_VolterraTrustedCa).VolterraTrustedCa
+			vOpts := append(opts,
+				db.WithValidateField("server_validation_choice"),
+				db.WithValidateField("volterra_trusted_ca"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfig_UseServerVerification:
+		if fv, exists := v.FldValidators["server_validation_choice.use_server_verification"]; exists {
+			val := m.GetServerValidationChoice().(*TLSConfig_UseServerVerification).UseServerVerification
+			vOpts := append(opts,
+				db.WithValidateField("server_validation_choice"),
+				db.WithValidateField("use_server_verification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sni_choice"]; exists {
+		val := m.GetSniChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sni_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSniChoice().(type) {
+	case *TLSConfig_DisableSni:
+		if fv, exists := v.FldValidators["sni_choice.disable_sni"]; exists {
+			val := m.GetSniChoice().(*TLSConfig_DisableSni).DisableSni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("disable_sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TLSConfig_Sni:
+		if fv, exists := v.FldValidators["sni_choice.sni"]; exists {
+			val := m.GetSniChoice().(*TLSConfig_Sni).Sni
+			vOpts := append(opts,
+				db.WithValidateField("sni_choice"),
+				db.WithValidateField("sni"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2318,59 +3017,155 @@ var DefaultTLSConfigValidator = func() *ValidateTLSConfig {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhCaCert := v.CaCertValidationRuleHandler
-	rulesCaCert := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "131072",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+	vrhServerValidationChoice := v.ServerValidationChoiceValidationRuleHandler
+	rulesServerValidationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhCaCert(rulesCaCert)
+	vFn, err = vrhServerValidationChoice(rulesServerValidationChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.ca_cert: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.server_validation_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["ca_cert"] = vFn
+	v.FldValidators["server_validation_choice"] = vFn
 
-	vrhClientCert := v.ClientCertValidationRuleHandler
-	rulesClientCert := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "131072",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+	vrhSniChoice := v.SniChoiceValidationRuleHandler
+	rulesSniChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhClientCert(rulesClientCert)
+	vFn, err = vrhSniChoice(rulesSniChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.client_cert: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.sni_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["client_cert"] = vFn
+	v.FldValidators["sni_choice"] = vFn
 
-	vrhClientKey := v.ClientKeyValidationRuleHandler
-	rulesClientKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhSniChoiceSni := v.SniChoiceSniValidationRuleHandler
+	rulesSniChoiceSni := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
 	}
-	vFn, err = vrhClientKey(rulesClientKey)
+	vFnMap["sni_choice.sni"], err = vrhSniChoiceSni(rulesSniChoiceSni)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.client_key: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field TLSConfig.sni_choice_sni: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["client_key"] = vFn
 
-	vrhServerName := v.ServerNameValidationRuleHandler
-	rulesServerName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhServerName(rulesServerName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for TLSConfig.server_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["server_name"] = vFn
+	v.FldValidators["sni_choice.sni"] = vFnMap["sni_choice.sni"]
+
+	v.FldValidators["server_validation_choice.use_server_verification"] = UpstreamTlsValidationContextValidator().Validate
 
 	return v
 }()
 
 func TLSConfigValidator() db.Validator {
 	return DefaultTLSConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpstreamTlsValidationContext) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpstreamTlsValidationContext) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpstreamTlsValidationContext) DeepCopy() *UpstreamTlsValidationContext {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpstreamTlsValidationContext{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpstreamTlsValidationContext) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpstreamTlsValidationContext) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpstreamTlsValidationContextValidator().Validate(ctx, m, opts...)
+}
+
+func (m *UpstreamTlsValidationContext) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCaCertObjDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *UpstreamTlsValidationContext) GetCaCertObjDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCaCertObj() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCaCertObj().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCaCertObj().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ca_cert_obj." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateUpstreamTlsValidationContext struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpstreamTlsValidationContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpstreamTlsValidationContext)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpstreamTlsValidationContext got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ca_cert_obj"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ca_cert_obj"))
+		if err := fv(ctx, m.GetCaCertObj(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpstreamTlsValidationContextValidator = func() *ValidateUpstreamTlsValidationContext {
+	v := &ValidateUpstreamTlsValidationContext{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["ca_cert_obj"] = CACertificateObjValidator().Validate
+
+	return v
+}()
+
+func UpstreamTlsValidationContextValidator() db.Validator {
+	return DefaultUpstreamTlsValidationContextValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2392,6 +3187,10 @@ func (m *WebhookConfig) Redact(ctx context.Context) error {
 
 	if err := m.GetHttpConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting WebhookConfig.http_config")
+	}
+
+	if err := m.GetUrl().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting WebhookConfig.url")
 	}
 
 	return nil
@@ -2424,18 +3223,35 @@ func (m *WebhookConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 	return WebhookConfigValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateWebhookConfig struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateWebhookConfig) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for url")
+func (m *WebhookConfig) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
 	}
 
-	return validatorFn, nil
+	return m.GetHttpConfigDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *WebhookConfig) GetHttpConfigDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetHttpConfig() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetHttpConfig().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHttpConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "http_config." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateWebhookConfig struct {
+	FldValidators map[string]db.ValidatorFunc
 }
 
 func (v *ValidateWebhookConfig) HttpConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2450,6 +3266,27 @@ func (v *ValidateWebhookConfig) HttpConfigValidationRuleHandler(rules map[string
 		}
 
 		if err := HTTPConfigValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWebhookConfig) UrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for url")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 
@@ -2506,6 +3343,17 @@ var DefaultWebhookConfigValidator = func() *ValidateWebhookConfig {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhHttpConfig := v.HttpConfigValidationRuleHandler
+	rulesHttpConfig := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhHttpConfig(rulesHttpConfig)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebhookConfig.http_config: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_config"] = vFn
+
 	vrhUrl := v.UrlValidationRuleHandler
 	rulesUrl := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2517,17 +3365,6 @@ var DefaultWebhookConfigValidator = func() *ValidateWebhookConfig {
 		panic(errMsg)
 	}
 	v.FldValidators["url"] = vFn
-
-	vrhHttpConfig := v.HttpConfigValidationRuleHandler
-	rulesHttpConfig := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhHttpConfig(rulesHttpConfig)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for WebhookConfig.http_config: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["http_config"] = vFn
 
 	return v
 }()

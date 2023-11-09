@@ -39,6 +39,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.DnsZoneMetricsResponse"] = DnsZoneMetricsResponseValidator()
 	vr["ves.io.schema.dns_zone.MetricsData"] = MetricsDataValidator()
 
+	vr["ves.io.schema.dns_zone.CloneReq"] = CloneReqValidator()
+	vr["ves.io.schema.dns_zone.CloneResp"] = CloneRespValidator()
 	vr["ves.io.schema.dns_zone.F5CSDNSZoneConfiguration"] = F5CSDNSZoneConfigurationValidator()
 	vr["ves.io.schema.dns_zone.GetLocalZoneFileRequest"] = GetLocalZoneFileRequestValidator()
 	vr["ves.io.schema.dns_zone.GetLocalZoneFileResponse"] = GetLocalZoneFileResponseValidator()
@@ -87,7 +89,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_zone.RRSetGroup"] = RRSetGroupValidator()
 	vr["ves.io.schema.dns_zone.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.dns_zone.SHA1Digest"] = SHA1DigestValidator()
+	vr["ves.io.schema.dns_zone.SHA1Fingerprint"] = SHA1FingerprintValidator()
 	vr["ves.io.schema.dns_zone.SHA256Digest"] = SHA256DigestValidator()
+	vr["ves.io.schema.dns_zone.SHA256Fingerprint"] = SHA256FingerprintValidator()
 	vr["ves.io.schema.dns_zone.SHA384Digest"] = SHA384DigestValidator()
 	vr["ves.io.schema.dns_zone.SOARecordParameterConfig"] = SOARecordParameterConfigValidator()
 	vr["ves.io.schema.dns_zone.SRVService"] = SRVServiceValidator()
@@ -116,7 +120,22 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.API.Create"] = []string{
+		"spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.API.Create"] = []string{
+		"spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.secondary.zone_file",
 	}
 
@@ -133,13 +152,52 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.API.Create"] = "ves.io.schema.dns_zone.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.API.Get"] = []string{
+		"create_form.spec.primary.default_rr_set_group.#.dlv_record",
+		"create_form.spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"create_form.spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"create_form.spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"create_form.spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"create_form.spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"object",
+		"replace_form.spec.primary.default_rr_set_group.#.dlv_record",
+		"replace_form.spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"replace_form.spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"replace_form.spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"replace_form.spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"replace_form.spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.secondary.zone_file",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.API.List"] = []string{
+		"items.#.get_spec.primary.default_rr_set_group.#.dlv_record",
+		"items.#.get_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"items.#.get_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"items.#.get_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"items.#.get_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"items.#.get_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.get_spec.secondary.zone_file",
+		"items.#.object.spec.gc_spec.primary.default_rr_set_group.#.dlv_record",
+		"items.#.object.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"items.#.object.spec.gc_spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"items.#.object.spec.gc_spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"items.#.object.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"items.#.object.spec.gc_spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"items.#.object.spec.gc_spec.secondary.zone_file",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.dns_zone.API.Replace"] = []string{
+		"spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.API.Replace"] = []string{
@@ -154,6 +212,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.API.Replace"] = "ves.io.schema.dns_zone.ReplaceRequest"
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = []string{
+		"configuration.default_rr_set_group.#.dlv_record",
+		"configuration.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"configuration.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"configuration.rr_set_group.#.rr_set.#.dlv_record",
+		"configuration.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"configuration.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = []string{
 		"tsig_configuration.tsig_key_value.blindfold_secret_info_internal",
 		"tsig_configuration.tsig_key_value.secret_encoding_type",
@@ -164,6 +231,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.dns_zone.CustomAPI.ImportAXFR"] = "ves.io.schema.dns_zone.ImportAXFRRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_zone.CustomAPI.ImportF5CSZone"] = []string{
+		"spec.primary.default_rr_set_group.#.dlv_record",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.default_rr_set_group.#.sshfp_record.values.#.fingerprinttype",
+		"spec.primary.rr_set_group.#.rr_set.#.dlv_record",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprint",
+		"spec.primary.rr_set_group.#.rr_set.#.sshfp_record.values.#.fingerprinttype",
 		"spec.secondary.zone_file",
 	}
 

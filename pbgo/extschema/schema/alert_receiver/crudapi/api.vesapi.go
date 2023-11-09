@@ -138,6 +138,7 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
+
 	return r, nil
 }
 
@@ -299,6 +300,7 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -710,6 +712,7 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
+
 	return rspo, nil
 }
 
@@ -778,46 +781,50 @@ func NewCRUDAPIRestClient(baseURL string, cl http.Client) server.CRUDClient {
 
 // INPROC Client (satisfying APIClient interface)
 type APIInprocClient struct {
-	crudCl *crudAPIInprocClient
+	svc svcfw.Service
 }
 
 func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts ...grpc.CallOption) (*ObjectCreateRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.crudapi.API.Create", nil)
 	return oah.Create(ctx, req)
 }
 
 func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, opts ...grpc.CallOption) (*ObjectReplaceRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.crudapi.API.Replace", nil)
 	return oah.Replace(ctx, req)
 }
 
 func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...grpc.CallOption) (*ObjectGetRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.crudapi.API.Get", nil)
 	return oah.Get(ctx, req)
 }
 
 func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...grpc.CallOption) (*ObjectListRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
+	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
 	}
 
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.crudapi.API.List", nil)
 	return oah.List(ctx, req)
 }
 
@@ -826,32 +833,26 @@ func (c *APIInprocClient) ListStream(ctx context.Context, req *ObjectListReq, op
 }
 
 func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts ...grpc.CallOption) (*ObjectDeleteRsp, error) {
-	ah := c.crudCl.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
-	}
-
-	return oah.Delete(ctx, req)
-}
-
-func NewAPIInprocClient(svc svcfw.Service) APIClient {
-	crudCl := newCRUDAPIInprocClient(svc)
-	return &APIInprocClient{crudCl}
-}
-
-// INPROC CRUD Client (satisfying server.CRUDClient interface)
-type crudAPIInprocClient struct {
-	svc svcfw.Service
-}
-
-func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
-
 	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
 	oah, ok := ah.(*APISrv)
 	if !ok {
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
 	}
+
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.crudapi.API.Delete", nil)
+	return oah.Delete(ctx, req)
+}
+
+func NewAPIInprocClient(svc svcfw.Service) APIClient {
+	return &APIInprocClient{svc: svc}
+}
+
+// INPROC CRUD Client (satisfying server.CRUDClient interface)
+type crudAPIInprocClient struct {
+	cl APIClient
+}
+
+func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
@@ -863,7 +864,7 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 		return nil, errors.Wrap(err, "Creating new create request")
 	}
 
-	rsp, err := oah.Create(ctx, req)
+	rsp, err := c.cl.Create(ctx, req)
 	if rsp != nil {
 		if cco.OutCallResponse != nil {
 			cco.OutCallResponse.ProtoMsg = rsp
@@ -878,12 +879,6 @@ func (c *crudAPIInprocClient) Create(ctx context.Context, e db.Entry, opts ...se
 
 func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
-	}
-
 	req, err := NewObjectReplaceReq(e)
 	if err != nil {
 		return errors.Wrap(err, "Creating new replace request")
@@ -894,7 +889,7 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 	}
 	req.ResourceVersion = cco.ResourceVersion
 
-	rsp, err := oah.Replace(ctx, req)
+	rsp, err := c.cl.Replace(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -903,18 +898,12 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 }
 
 func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*ObjectGetRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 	req := NewObjectGetReq(key, opts...)
-	rsp, err := oah.Get(ctx, req)
+	rsp, err := c.cl.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -990,11 +979,6 @@ func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUD
 }
 
 func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ObjectListRsp, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
-	}
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1003,13 +987,14 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if err != nil {
 		return nil, err
 	}
-	rsp, err := oah.List(ctx, req)
+	rsp, err := c.cl.List(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
+
 	return rsp, err
 }
 
@@ -1019,19 +1004,13 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	ah := c.svc.GetAPIHandler("ves.io.schema.alert_receiver.crudapi.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		return fmt.Errorf("No CRUD Server for ves.io.schema.alert_receiver.crudapi")
-	}
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
 
 	req := NewObjectDeleteReq(key)
-	rsp, err := oah.Delete(ctx, req)
+	rsp, err := c.cl.Delete(ctx, req)
 	if cco.OutCallResponse != nil {
 		cco.OutCallResponse.ProtoMsg = rsp
 	}
@@ -1040,8 +1019,7 @@ func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...se
 }
 
 func newCRUDAPIInprocClient(svc svcfw.Service) *crudAPIInprocClient {
-	crcl := &crudAPIInprocClient{svc: svc}
-	return crcl
+	return &crudAPIInprocClient{cl: NewAPIInprocClient(svc)}
 }
 
 func NewCRUDAPIInprocClient(svc svcfw.Service) server.CRUDClient {
@@ -1188,6 +1166,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
+
 	return rsp, merr
 }
 
@@ -2598,28 +2577,65 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "alert_receiverAuthorization": {
+        "alert_receiverAuthToken": {
             "type": "object",
-            "description": "Authorization header configuration.",
-            "title": "Authorization Configuration",
-            "x-displayname": "Authorization Config",
-            "x-ves-oneof-field-auth_type": "[\"auth_type_bearer\"]",
-            "x-ves-proto-message": "ves.io.schema.alert_receiver.Authorization",
+            "description": "Authentication Token for access",
+            "title": "Token Authentication",
+            "x-displayname": "Access Token",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.AuthToken",
             "properties": {
-                "auth_type_bearer": {
-                    "description": "Exclusive with []\n Sets the authentication type.",
-                    "title": "Bearer authentication type",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Bearer authentication type"
-                },
-                "credentials": {
-                    "description": " Sets the credentials.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Credentials",
+                "token": {
+                    "description": " F5XC Secret. URL for token, needs to be fetched from this path\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "token",
                     "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Credentials",
+                    "x-displayname": "Token",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "alert_receiverCACertificateObj": {
+            "type": "object",
+            "description": "Configuration for CA certificate",
+            "title": "CA Certificate Object",
+            "x-displayname": "CA Certificate Object",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.CACertificateObj",
+            "properties": {
+                "trusted_ca": {
+                    "type": "array",
+                    "description": " Reference to client certificate object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "certificate_object_refs",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Certificate Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "alert_receiverClientCertificateObj": {
+            "type": "object",
+            "description": "Configuration for client certificate",
+            "title": "Client Certificate Object",
+            "x-displayname": "Client Certificate Object",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.ClientCertificateObj",
+            "properties": {
+                "use_tls_obj": {
+                    "type": "array",
+                    "description": " Reference to client certificate object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "certificate_object_refs",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Certificate Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
             }
@@ -2693,25 +2709,32 @@ var APISwaggerJSON string = `{
             "description": "Configuration for HTTP endpoint",
             "title": "HTTP Configuration",
             "x-displayname": "HTTP Configuration",
-            "x-ves-displayorder": "1,6,4,5",
-            "x-ves-oneof-field-auth_choice": "[\"auth_config\",\"basic_auth\",\"no_authorization\"]",
+            "x-ves-displayorder": "15,11,4,5",
+            "x-ves-oneof-field-auth_choice": "[\"auth_token\",\"basic_auth\",\"client_cert_obj\",\"no_authorization\"]",
+            "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.HTTPConfig",
             "properties": {
-                "auth_config": {
-                    "description": "Exclusive with [basic_auth no_authorization]\n Authorization header configuration",
-                    "title": "Authorization Config",
-                    "$ref": "#/definitions/alert_receiverAuthorization",
-                    "x-displayname": "Authorization Config"
+                "auth_token": {
+                    "description": "Exclusive with [basic_auth client_cert_obj no_authorization]\n Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token)",
+                    "title": "Token Authentication",
+                    "$ref": "#/definitions/alert_receiverAuthToken",
+                    "x-displayname": "Token Authentication"
                 },
                 "basic_auth": {
-                    "description": "Exclusive with [auth_config no_authorization]\n Use HTTP Basic Auth for authorization to the HTTP(s) server",
-                    "title": "Basic Authorization",
+                    "description": "Exclusive with [auth_token client_cert_obj no_authorization]\n Use HTTP Basic Auth for authentication to the HTTP(s) server",
+                    "title": "Basic Authentication",
                     "$ref": "#/definitions/alert_receiverHttpBasicAuth",
-                    "x-displayname": "Basic Authorization"
+                    "x-displayname": "Basic Authentication"
+                },
+                "client_cert_obj": {
+                    "description": "Exclusive with [auth_token basic_auth no_authorization]\n Use certificate and key files for client cert authentication to the server.",
+                    "title": "Enable TLS Auth With Certificate Object",
+                    "$ref": "#/definitions/alert_receiverClientCertificateObj",
+                    "x-displayname": "Enable TLS Auth With Certificate Object"
                 },
                 "enable_http2": {
                     "type": "boolean",
-                    "description": " Whether to enable HTTP2.\n\nExample: - \"value\"-",
+                    "description": " Configure to use HTTP2 protocol.\n\nExample: - \"value\"-",
                     "title": "Enable HTTP2",
                     "format": "boolean",
                     "x-displayname": "Enable HTTP2",
@@ -2726,20 +2749,22 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "no_authorization": {
-                    "description": "Exclusive with [auth_config basic_auth]\n Do not use authorization to the HTTP(s) server",
-                    "title": "No Authorization",
+                    "description": "Exclusive with [auth_token basic_auth client_cert_obj]\n Do not use authentication to the HTTP(s) server",
+                    "title": "No Authentication",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "No Authorization"
+                    "x-displayname": "None"
                 },
-                "tls_config": {
-                    "description": " Configures the TLS settings.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "TLS Config",
+                "no_tls": {
+                    "description": "Exclusive with [use_tls]\n",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "use_tls": {
+                    "description": "Exclusive with [no_tls]\n",
+                    "title": "Use TLS",
                     "$ref": "#/definitions/alert_receiverTLSConfig",
-                    "x-displayname": "TLS Config",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Enable"
                 }
             }
         },
@@ -2938,70 +2963,66 @@ var APISwaggerJSON string = `{
             "description": "Configures the token request's TLS settings.",
             "title": "TLS Config",
             "x-displayname": "TLS Config",
+            "x-ves-displayorder": "10,14,15",
+            "x-ves-oneof-field-server_validation_choice": "[\"use_server_verification\",\"volterra_trusted_ca\"]",
+            "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\"]",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.TLSConfig",
             "properties": {
-                "ca_cert": {
-                    "type": "string",
-                    "description": " CA certificate to validate the server certificate with.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "CA Cert",
-                    "maxLength": 131072,
-                    "x-displayname": "CA Cert",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
-                },
-                "client_cert": {
-                    "type": "string",
-                    "description": " Cert for client cert authentication to the server.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Client Cert",
-                    "maxLength": 131072,
-                    "x-displayname": "Client Cert",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
-                },
-                "client_key": {
-                    "description": " Key for client cert authentication to the server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Client Key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Client Key",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                "disable_sni": {
+                    "description": "Exclusive with [sni]\n Do not use SNI.",
+                    "title": "disable_sni",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No SNI"
                 },
                 "max_version": {
-                    "description": " Maximum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS\n 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).\n If unset, Prometheus will use Go default maximum version, which is TLS 1.3.\n\nExample: - \"value\"-",
-                    "title": "Max Version",
+                    "description": " Maximum TLS protocol version.",
+                    "title": "maximum_protocol_version",
                     "$ref": "#/definitions/schemaTlsProtocol",
-                    "x-displayname": "Max Version",
-                    "x-ves-example": "value"
+                    "x-displayname": "Maximum TLS version"
                 },
                 "min_version": {
-                    "description": " Minimum acceptable TLS version. Accepted values: TLS10 (TLS 1.0), TLS11 (TLS\n 1.1), TLS12 (TLS 1.2), TLS13 (TLS 1.3).\n If unset, Prometheus will use Go default minimum version, which is TLS 1.2.\n\nExample: - \"value\"-",
-                    "title": "Min Version",
+                    "description": " Minimum TLS protocol version.",
+                    "title": "minimum_protocol_version",
                     "$ref": "#/definitions/schemaTlsProtocol",
-                    "x-displayname": "Min Version",
-                    "x-ves-example": "value"
+                    "x-displayname": "Minimum TLS version"
                 },
-                "server_name": {
+                "sni": {
                     "type": "string",
-                    "description": " ServerName extension to indicate the name of the server.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Server Name",
-                    "x-displayname": "Server Name",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
+                    "description": "Exclusive with [disable_sni]\n SNI value to be used.\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "sni",
+                    "maxLength": 256,
+                    "x-displayname": "SNI Value",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "use_server_verification": {
+                    "description": "Exclusive with [volterra_trusted_ca]\n Perform server verification using the provided trusted CA list",
+                    "title": "Use Server Verification",
+                    "$ref": "#/definitions/alert_receiverUpstreamTlsValidationContext",
+                    "x-displayname": "Use Custom CA List"
+                },
+                "volterra_trusted_ca": {
+                    "description": "Exclusive with [use_server_verification]\n Perform server verification using F5XC default trusted CA list",
+                    "title": "F5XC Trusted CA",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Use Default Trusted CA List"
+                }
+            }
+        },
+        "alert_receiverUpstreamTlsValidationContext": {
+            "type": "object",
+            "description": "Upstream TLS Validation Context",
+            "title": "UpstreamTlsValidationContext",
+            "x-displayname": "TLS Validation Context for Servers",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.UpstreamTlsValidationContext",
+            "properties": {
+                "ca_cert_obj": {
+                    "description": " Trusted CA List for verification of Server's certificate",
+                    "title": "trusted_ca",
+                    "$ref": "#/definitions/alert_receiverCACertificateObj",
+                    "x-displayname": "Trusted CA List"
                 }
             }
         },
@@ -3023,9 +3044,9 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "url": {
-                    "type": "string",
-                    "description": " URL to send API requests to\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": " Incoming webhook url to send alert notifications.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "URL",
+                    "$ref": "#/definitions/schemaSecretType",
                     "x-displayname": "Webhook URL",
                     "x-ves-example": "value",
                     "x-ves-required": "true",

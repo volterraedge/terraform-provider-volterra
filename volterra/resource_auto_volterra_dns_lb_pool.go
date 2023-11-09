@@ -104,13 +104,13 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 						"max_answers": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"members": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -121,7 +121,7 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 									"ip_endpoint": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
@@ -154,13 +154,13 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 						"max_answers": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"members": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -171,7 +171,7 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 									"ip_endpoint": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
@@ -205,13 +205,13 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 						"members": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"domain": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"final_translation": {
@@ -244,19 +244,19 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 
 						"max_answers": {
 							Type:     schema.TypeInt,
-							Optional: true,
+							Required: true,
 						},
 
 						"members": {
 
 							Type:     schema.TypeList,
-							Optional: true,
+							Required: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"domain": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"name": {
@@ -272,6 +272,66 @@ func resourceVolterraDnsLbPool() *schema.Resource {
 									"ratio": {
 										Type:     schema.TypeInt,
 										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"srv_pool": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"max_answers": {
+							Type:     schema.TypeInt,
+							Required: true,
+						},
+
+						"members": {
+
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"final_translation": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"port": {
+										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"priority": {
+										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"ratio": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"target": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+
+									"weight": {
+										Type:     schema.TypeInt,
+										Required: true,
 									},
 								},
 							},
@@ -598,6 +658,68 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
 						members[i].Ratio = uint32(w.(int))
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("srv_pool"); ok && !poolTypeChoiceTypeFound {
+
+		poolTypeChoiceTypeFound = true
+		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_SrvPool{}
+		poolTypeChoiceInt.SrvPool = &ves_io_schema_dns_lb_pool.SRVPool{}
+		createSpec.PoolTypeChoice = poolTypeChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+
+				poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
+				poolTypeChoiceInt.SrvPool.Members = members
+				for i, set := range sl {
+					members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
+					membersMapStrToI := set.(map[string]interface{})
+
+					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+						members[i].FinalTranslation = w.(bool)
+					}
+
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
+						members[i].Port = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+						members[i].Priority = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+						members[i].Ratio = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
+						members[i].Target = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
+						members[i].Weight = uint32(w.(int))
 					}
 
 				}
@@ -980,6 +1102,68 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
 						members[i].Ratio = uint32(w.(int))
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("srv_pool"); ok && !poolTypeChoiceTypeFound {
+
+		poolTypeChoiceTypeFound = true
+		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_SrvPool{}
+		poolTypeChoiceInt.SrvPool = &ves_io_schema_dns_lb_pool.SRVPool{}
+		updateSpec.PoolTypeChoice = poolTypeChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["max_answers"]; ok && !isIntfNil(v) {
+
+				poolTypeChoiceInt.SrvPool.MaxAnswers = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["members"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				members := make([]*ves_io_schema_dns_lb_pool.SRVMember, len(sl))
+				poolTypeChoiceInt.SrvPool.Members = members
+				for i, set := range sl {
+					members[i] = &ves_io_schema_dns_lb_pool.SRVMember{}
+					membersMapStrToI := set.(map[string]interface{})
+
+					if w, ok := membersMapStrToI["final_translation"]; ok && !isIntfNil(w) {
+						members[i].FinalTranslation = w.(bool)
+					}
+
+					if w, ok := membersMapStrToI["name"]; ok && !isIntfNil(w) {
+						members[i].Name = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["port"]; ok && !isIntfNil(w) {
+						members[i].Port = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["priority"]; ok && !isIntfNil(w) {
+						members[i].Priority = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["ratio"]; ok && !isIntfNil(w) {
+						members[i].Ratio = uint32(w.(int))
+					}
+
+					if w, ok := membersMapStrToI["target"]; ok && !isIntfNil(w) {
+						members[i].Target = w.(string)
+					}
+
+					if w, ok := membersMapStrToI["weight"]; ok && !isIntfNil(w) {
+						members[i].Weight = uint32(w.(int))
 					}
 
 				}

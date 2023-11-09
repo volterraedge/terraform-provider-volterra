@@ -76,6 +76,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.target_service",
 	}
 
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Create"] = "ves.io.schema.bgp.CreateRequest"
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.bgp.API.Get"] = []string{
 		"object",
 	}
@@ -91,6 +93,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.metadata.disable",
 		"spec.peers.#.target_service",
 	}
+
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Replace"] = "ves.io.schema.bgp.ReplaceRequest"
 
 }
 

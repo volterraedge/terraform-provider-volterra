@@ -219,6 +219,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) ForwardProxyPolicyHits(ctx context.Context, in *ForwardProxyPolicyHitsRequest, opts ...grpc.CallOption) (*ForwardProxyPolicyHitsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.forward_proxy_policy.CustomDataAPI.ForwardProxyPolicyHits", nil)
 	return c.CustomDataAPIServer.ForwardProxyPolicyHits(ctx, in)
 }
 

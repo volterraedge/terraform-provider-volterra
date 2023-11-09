@@ -28,9 +28,16 @@ resource "volterra_aws_tgw_site" "example" {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
-      reserved_inside_subnet = true
-      disk_size              = "80"
 
+      inside_subnet {
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
+      }
+      disk_size = "80"
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -39,10 +46,13 @@ resource "volterra_aws_tgw_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
       workload_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
-        existing_subnet_id = "subnet-12345678901234567"
+
+        subnet_param {
+          ipv4 = "10.1.2.0/24"
+          ipv6 = "1234:568:abcd:9100::/64"
+        }
       }
     }
 
@@ -60,7 +70,7 @@ resource "volterra_aws_tgw_site" "example" {
     // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
     f5xc_security_group = true
 
-    // One of the arguments from this list "vpc_id new_vpc" must be set
+    // One of the arguments from this list "new_vpc vpc_id" must be set
 
     new_vpc {
       allocate_ipv6 = true
@@ -82,12 +92,17 @@ resource "volterra_aws_tgw_site" "example" {
     nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "blocked_services default_blocked_services block_all_services" must be set
-  default_blocked_services = true
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
 
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled" must be set
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "dns ssh web_user_interface" must be set
+      ssh          = true
+      network_type = "network_type"
+    }
+  }
+  // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
   direct_connect_disabled = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
 }
@@ -127,6 +142,8 @@ Argument Reference
 
 `direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
+`private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity ](#private-connectivity) below for details.
+
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
@@ -144,6 +161,8 @@ Argument Reference
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 
 `vn_config` - (Optional) Site Network related details will be configured. See [Vn Config ](#vn-config) below for details.
+
+`disable_vpc_attachment` - (Optional) Disable VPC attachment to AWS TGW Site (bool).
 
 `vpc_attachments` - (Optional) Spoke VPCs to be attached to the AWS TGW Site. See [Vpc Attachments ](#vpc-attachments) below for details.
 
@@ -170,6 +189,10 @@ Enable Forward Proxy for this site and manage policies.
 Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
+
+### All Subnets
+
+All subnets are routed to transit gateway..
 
 ### Allowed Vip Port
 
@@ -559,6 +582,10 @@ L3 performance mode enhancement to use jumbo frame.
 
 and a user associate AWS DirectConnect Gateway with it..
 
+### Manual Routing
+
+Manual routing.
+
 ### New Tgw
 
 Details needed to create new TGW.
@@ -697,6 +724,12 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 `interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Interception Rules ](#interception-rules) below for details.
 
+### Private Connectivity
+
+Enable Private Connectivity to Site.
+
+`cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -727,6 +760,20 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Autogenerate and reserve a subnet from the Primary CIDR.
 
+### Route Tables
+
+Route Tables .
+
+`route_table_id` - (Optional) Route table ID (`String`).
+
+`static_routes` - (Required) List of Static Routes (`String`).
+
+### Routing Ids
+
+Routing tables automatically managed.
+
+`route_tables` - (Required) Route Tables . See [Route Tables ](#route-tables) below for details.
+
 ### Same As Site Region
 
 Use same region as that of the Site.
@@ -735,7 +782,7 @@ Use same region as that of the Site.
 
 Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
 
-`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+`cloudlink_network_name` - (Required) CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up. (`String`).
 
 ### Site Registration Over Internet
 
@@ -776,6 +823,12 @@ List of Static routes.
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
+
+### Subnet Ids
+
+Specific subnets are routed to transit gateway..
+
+`subnet_ids` - (Required) List of subnet IDs (`String`).
 
 ### Subnet Param
 
@@ -854,6 +907,10 @@ Only HTTP Port (80) will be allowed..
 ### Use Https Port
 
 Only HTTPS Port (443) will be allowed..
+
+### Use Site Credential
+
+Attach VPC from same credential as site.
 
 ### Use System Defaults
 
@@ -941,7 +998,15 @@ List of VPC attachments to transit gateway.
 
 `labels` - (Optional) These labels used must be from known key, label defined in shared namespace and unknown key. (`String`).
 
-`vpc_id` - (Optional) Information about existing VPC (`String`).
+`manual_routing` - (Optional) Manual routing (bool).
+
+`routing_ids` - (Optional) Routing tables automatically managed. See [Routing Ids ](#routing-ids) below for details.
+
+`all_subnets` - (Optional) All subnets are routed to transit gateway. (bool).
+
+`subnet_ids` - (Optional) Specific subnets are routed to transit gateway.. See [Subnet Ids ](#subnet-ids) below for details.
+
+`vpc_id` - (Required) Information about existing VPC (`String`).
 
 ### Web User Interface
 

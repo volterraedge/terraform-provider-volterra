@@ -124,7 +124,7 @@ func resourceVolterraCertificate() *schema.Resource {
 			"private_key": {
 
 				Type:     schema.TypeSet,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -142,7 +142,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"store_provider": {
@@ -172,7 +172,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"store_provider": {
@@ -197,7 +197,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 									"url": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},
@@ -217,12 +217,12 @@ func resourceVolterraCertificate() *schema.Resource {
 
 									"location": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"provider": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 
 									"secret_encoding": {
@@ -247,7 +247,7 @@ func resourceVolterraCertificate() *schema.Resource {
 
 									"name": {
 										Type:     schema.TypeString,
-										Optional: true,
+										Required: true,
 									},
 								},
 							},

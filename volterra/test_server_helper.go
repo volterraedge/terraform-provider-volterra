@@ -4,7 +4,9 @@ package volterra
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"testing"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/acctest"
 
@@ -39,6 +41,8 @@ var (
 	tenant = "acmecorp"
 )
 
+const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 // APIStimulus is a type holding all RPC stimulus keyed by RPC Name
 type APIStimulus map[string]*RPCStimulus
 
@@ -55,12 +59,34 @@ type apiCredentialCustomAPIServer struct {
 	sf svcfw.Service
 }
 
+func randomFunc() string {
+	source := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(source)
+	length := 7
+	result := make([]byte, length)
+	for i := 0; i < length; i++ {
+		result[i] = charset[random.Intn(len(charset))]
+	}
+	randomString := string(result)
+	return randomString
+}
+
 func newAPICredentialCustomAPIServer(sf svcfw.Service) server.APIHandler {
 	return &apiCredentialCustomAPIServer{sf: sf}
 }
 
+var (
+	rspCreateResponse = ves_io_schema_api_credential.CreateResponse{}
+)
+
+func getCreateResponseAPICredential(name string) {
+	rspCreateResponse = ves_io_schema_api_credential.CreateResponse{
+		Name: fmt.Sprintf("%s-%s", name, randomFunc()),
+	}
+}
+
 func (s *apiCredentialCustomAPIServer) Create(ctx context.Context, req *ves_io_schema_api_credential.CreateRequest) (*ves_io_schema_api_credential.CreateResponse, error) {
-	return &ves_io_schema_api_credential.CreateResponse{}, nil
+	return &rspCreateResponse, nil
 }
 
 func (s *apiCredentialCustomAPIServer) Get(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.GetResponse, error) {

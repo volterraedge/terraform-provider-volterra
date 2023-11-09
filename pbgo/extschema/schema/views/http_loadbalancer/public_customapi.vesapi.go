@@ -503,15 +503,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule", nil)
 	return c.CustomAPIServer.DeleteDoSAutoMitigationRule(ctx, in)
 }
 func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo", nil)
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
 }
 func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules", nil)
 	return c.CustomAPIServer.GetDoSAutoMitigationRules(ctx, in)
 }
 func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig", nil)
 	return c.CustomAPIServer.GetSecurityConfig(ctx, in)
 }
 

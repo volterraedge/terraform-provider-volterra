@@ -211,6 +211,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.CustomAPI.GetDnsInfo", nil)
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
 }
 

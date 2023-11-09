@@ -509,15 +509,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCreateRequest, opts ...grpc.CallOption) (*Object, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomCreate", nil)
 	return c.CustomAPIServer.CustomCreate(ctx, in)
 }
 func (c *customAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequest, opts ...grpc.CallOption) (*CustomGetResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomGet", nil)
 	return c.CustomAPIServer.CustomGet(ctx, in)
 }
 func (c *customAPIInprocClient) CustomList(ctx context.Context, in *CustomListRequest, opts ...grpc.CallOption) (*CustomListResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomList", nil)
 	return c.CustomAPIServer.CustomList(ctx, in)
 }
 func (c *customAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*Object, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomReplace", nil)
 	return c.CustomAPIServer.CustomReplace(ctx, in)
 }
 
