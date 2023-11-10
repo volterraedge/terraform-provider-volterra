@@ -14,6 +14,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/moul/http2curl"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/errors"
@@ -221,23 +222,23 @@ func getclientOpts(c *Config) ([]vesapi.ConfigOpt, error) {
 }
 
 // Client returns a new volt api client, which will be used to access public API's
-func (c *Config) Client() (*APIClient, error) {
+func (c *Config) Client() (*APIClient, diag.Diagnostics) {
 
 	var clOpts []vesapi.ConfigOpt
 	clOpts, err := getclientOpts(c)
 	if err != nil {
-		return nil, errors.Wrap(err, "Building client options")
+		return nil, diag.FromErr(errors.Wrap(err, "Building client options"))
 	}
 	if c.test {
 		clOpts, err = getTestClientOpts(c.url, c.tenant)
 		if err != nil {
-			return nil, errors.Wrap(err, "Building client options")
+			return nil, diag.FromErr(errors.Wrap(err, "Building client options"))
 		}
 	}
 
 	voltAPICl, err := vesapi.NewAPIClient(c.url, ves_io_schema_combined.MDR, clOpts...)
 	if err != nil {
-		return nil, errors.Wrap(err, "Creating new Volterra APIClient")
+		return nil, diag.FromErr(errors.Wrap(err, "Creating new Volterra APIClient"))
 	}
 
 	apiCl := &APIClient{

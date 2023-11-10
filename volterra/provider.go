@@ -2,10 +2,12 @@
 package volterra
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -108,22 +110,17 @@ func Provider() *schema.Provider {
 			"volterra_parse_aws_cgw_configuration": dataSourceVolterraParseAWSCGWConfiguration(),
 			"volterra_http_loadbalancer_state":     dataSourceVolterraHttpLoadbalancerState(),
 		},
+		ConfigureContextFunc: providerConfigure,
 	}
 
-	provider.ConfigureFunc = func(d *schema.ResourceData) (interface{}, error) {
-		terraformVersion := provider.TerraformVersion
-		if terraformVersion == "" {
-			// Terraform 0.12 introduced this field to the protocol
-			// We can therefore assume that if it's missing it's 0.10 or 0.11
-			terraformVersion = "0.11+compatible"
-		}
-		return providerConfigure(d, terraformVersion)
+	if provider.TerraformVersion == "" {
+		provider.TerraformVersion = "0.11+compatible"
 	}
 
 	return provider
 }
 
-func providerConfigure(d *schema.ResourceData, terraformVersion string) (interface{}, error) {
+func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 
 	config := Config{}
 	if v, ok := d.GetOk("url"); ok {
@@ -152,11 +149,11 @@ func providerConfigure(d *schema.ResourceData, terraformVersion string) (interfa
 	} else if v, ok := d.GetOk("api_cert"); ok {
 		config.apiCert = fmt.Sprintf("file:///%s", v.(string))
 		if v, ok = d.GetOk("api_key"); !ok {
-			return nil, fmt.Errorf("api_key must be provided with api_cert as provider config")
+			return nil, diag.FromErr(fmt.Errorf("api_key must be provided with api_cert as provider config"))
 		}
 		config.apiKey = fmt.Sprintf("file:///%s", v.(string))
 	} else {
-		return nil, fmt.Errorf("neither api_p12 bundle or api_cert/api_key is provided as provider config")
+		return nil, diag.FromErr(fmt.Errorf("neither api_p12 bundle or api_cert/api_key is provided as provider config"))
 	}
 
 	if v, ok := d.GetOk("api_ca_cert"); ok {
