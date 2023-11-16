@@ -46,6 +46,8 @@ Argument Reference
 
 `port` - (Optional) Port to advertise. (`Int`).
 
+`port_ranges` - (Optinal) Each port range consists of a single port or two ports separated by "-". (`String`).
+
 `protocol` - (Optional) Protocol to advertise. (`String`).
 
 `public_ip` - (Optional) This field is mutually exclusive with where and address fields.. See [ref](#ref) below for details.

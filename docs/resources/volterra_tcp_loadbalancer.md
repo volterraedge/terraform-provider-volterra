@@ -88,6 +88,8 @@ Argument Reference
 
 `listen_port` - (Optional) Listen Port for this load balancer (`Int`).
 
+`port_ranges` - (Optinal) Each port range consists of a single port or two ports separated by "-". (`String`).
+
 `tcp` - (Optional) TCP Load Balancer. (bool).
 
 `tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
@@ -220,9 +222,9 @@ Origin pools and weights used for this load balancer..
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
+`cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
-`pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+`pool` - (Optional) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 

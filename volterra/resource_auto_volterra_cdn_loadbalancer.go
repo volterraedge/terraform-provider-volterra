@@ -100,7 +100,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						"port_ranges": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 					},
 				},
@@ -410,7 +410,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 									"cache_rules": {
 
 										Type:     schema.TypeList,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

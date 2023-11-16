@@ -297,9 +297,9 @@ Specify origin server with K8s service name and site information.
 
 `vk8s_networks` - (Optional) origin server are on vK8s network on the site (bool).
 
-`service_name` - (Required) Both namespace and cluster-id are optional. (`String`).
+`service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
 
-`service_selector` - (Required) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
+`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 

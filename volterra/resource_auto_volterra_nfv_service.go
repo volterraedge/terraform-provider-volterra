@@ -1865,7 +1865,7 @@ func resourceVolterraNfvService() *schema.Resource {
 									"configured_vip": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"custom_tcp_ports": {
@@ -1944,7 +1944,7 @@ func resourceVolterraNfvService() *schema.Resource {
 						"byol_image": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -2094,32 +2094,32 @@ func resourceVolterraNfvService() *schema.Resource {
 						"market_place_image": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"awaf_pay_g200_mbps": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"awaf_pay_g3_gbps": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"best_plus_pay_g200_mbps": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"best_plus_payg_1gbps": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 								},
 							},
@@ -2288,13 +2288,13 @@ func resourceVolterraNfvService() *schema.Resource {
 						"pan_ami_bundle1": {
 
 							Type:     schema.TypeBool,
-							Required: true,
+							Optional: true,
 						},
 
 						"pan_ami_bundle2": {
 
 							Type:     schema.TypeBool,
-							Required: true,
+							Optional: true,
 						},
 
 						"aws_tgw_site": {
@@ -2872,7 +2872,7 @@ func resourceVolterraNfvService() *schema.Resource {
 						"ssh_key": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 
 						"tags": {
