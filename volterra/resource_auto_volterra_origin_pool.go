@@ -500,13 +500,13 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"service_name": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"service_selector": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

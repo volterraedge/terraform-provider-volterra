@@ -169,7 +169,7 @@ Disable Caching of content from the origin.
 
 Cache Options.
 
-`cache_rules` - (Required) Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.. See [Cache Rules ](#cache-rules) below for details.
+`cache_rules` - (Optional) Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.. See [Cache Rules ](#cache-rules) below for details.
 
 `default_cache_action` - (Required) Default value for Cache action.. See [Default Cache Action ](#default-cache-action) below for details.
 
@@ -325,7 +325,7 @@ CDN Distribution serving content over HTTP.
 
 `port` - (Optional) HTTP port to Listen. (`Int`).
 
-`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 ### Https
 

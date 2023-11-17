@@ -1209,7 +1209,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"cluster": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1237,7 +1237,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 						"pool": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1284,7 +1284,7 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 			"port_ranges": {
 
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 
 			"active_service_policies": {

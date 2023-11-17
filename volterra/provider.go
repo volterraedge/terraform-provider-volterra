@@ -121,7 +121,6 @@ func Provider() *schema.Provider {
 }
 
 func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
-
 	config := Config{}
 	if v, ok := d.GetOk("url"); ok {
 		config.url = v.(string)

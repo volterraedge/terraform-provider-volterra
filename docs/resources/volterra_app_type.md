@@ -158,15 +158,15 @@ Common attributes for the rule including name and description..
 
 The custom data detection config specifies targets, scopes & the pattern to be detected..
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
+`any_domain` - (Optional) The rule will apply for all domains. (bool).
 
-`specific_domain` - (Required) For example: api.example.com (`String`).
+`specific_domain` - (Optional) For example: api.example.com (`String`).
 
-`key_pattern` - (Required) Search for pattern across all field names in the specified sections.. See [Key Pattern ](#key-pattern) below for details.
+`key_pattern` - (Optional) Search for pattern across all field names in the specified sections.. See [Key Pattern ](#key-pattern) below for details.
 
-`key_value_pattern` - (Required) Search for specific field and value patterns in the specified sections.. See [Key Value Pattern ](#key-value-pattern) below for details.
+`key_value_pattern` - (Optional) Search for specific field and value patterns in the specified sections.. See [Key Value Pattern ](#key-value-pattern) below for details.
 
-`value_pattern` - (Required) Search for pattern across all field values in the specified sections.. See [Value Pattern ](#value-pattern) below for details.
+`value_pattern` - (Optional) Search for pattern across all field values in the specified sections.. See [Value Pattern ](#value-pattern) below for details.
 
 `all_request_sections` - (Optional) x-displayName: "All Request" (bool).
 
@@ -176,13 +176,13 @@ The custom data detection config specifies targets, scopes & the pattern to be d
 
 `custom_sections` - (Optional) x-displayName: "Custom Sections". See [Custom Sections ](#custom-sections) below for details.
 
-`any_target` - (Required) The rule will be applied for all requests on this LB. (bool).
+`any_target` - (Optional) The rule will be applied for all requests on this LB. (bool).
 
-`api_endpoint_target` - (Required) The rule is applied only for the specified api endpoints.. See [Api Endpoint Target ](#api-endpoint-target) below for details.
+`api_endpoint_target` - (Optional) The rule is applied only for the specified api endpoints.. See [Api Endpoint Target ](#api-endpoint-target) below for details.
 
 `api_group` - (Optional) Custom groups can be created if user tags paths or operations with "x-volterra-api-group" extensions inside swaggers. (`String`).
 
-`base_path` - (Required) The rule is applied only for the requests matching the specified base path. (`String`).
+`base_path` - (Optional) The rule is applied only for the requests matching the specified base path. (`String`).
 
 ### Sensitive Data Detection Rules
 

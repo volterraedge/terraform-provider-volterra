@@ -143,19 +143,19 @@ func resourceVolterraAppType() *schema.Resource {
 															"any_domain": {
 
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"specific_domain": {
 
 																Type:     schema.TypeString,
-																Required: true,
+																Optional: true,
 															},
 
 															"key_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -177,7 +177,7 @@ func resourceVolterraAppType() *schema.Resource {
 															"key_value_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -231,7 +231,7 @@ func resourceVolterraAppType() *schema.Resource {
 															"value_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -291,13 +291,13 @@ func resourceVolterraAppType() *schema.Resource {
 															"any_target": {
 
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"api_endpoint_target": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -328,7 +328,7 @@ func resourceVolterraAppType() *schema.Resource {
 															"base_path": {
 
 																Type:     schema.TypeString,
-																Required: true,
+																Optional: true,
 															},
 														},
 													},

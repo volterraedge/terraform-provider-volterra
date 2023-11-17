@@ -71,7 +71,6 @@ func testConfigDataSourceVHDNSInfo(name, ns string) string {
 			}
 		}
 		port = 80
-		port_ranges = "80,443"
 		protocol = "TCP"
 	}
 

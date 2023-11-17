@@ -22,9 +22,11 @@ provider "volterra" {
 
 * `api_p12_file` - API credential p12 file path. Either api p12 file or (`api_cert` and `api_key`) must be given. This can also be sourced from `VOLT_API_P12_FILE` env variable. When using api_p12_file, password for the p12 file must be passed as the environment variable `VES_P12_PASSWORD` (`String`).
 
-* `api_cert` - API certificate file path. `api_cert` and `api_key` combo must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
+* `api_cert` - API certificate file path. `api_cert`, `api_key` and `api_ca_cert` trio must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
 
 * `api_key` - API certificate private key file path. This can also be sourced from `VOLT_API_KEY` env variable (`String`).
+
+* `api_ca_cert` - API CA certificate file path. This can also be sourced from `VOLT_API_CA_CERT` env variable (`String`).
 
 * `url` - (Required) Tenant API url file path. This can also be sourced from `VOLT_API_URL` env variable (`String`).
 

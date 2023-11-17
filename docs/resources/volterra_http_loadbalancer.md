@@ -597,9 +597,9 @@ If request matches any of these rules, skipping second category rules..
 
 `client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Client Matcher ](#client-matcher) below for details.
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
+`any_domain` - (Optional) The rule will apply for all domains. (bool).
 
-`specific_domain` - (Required) For example: api.example.com (`String`).
+`specific_domain` - (Optional) For example: api.example.com (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
@@ -631,9 +631,9 @@ For API groups, refer to API Definition which includes API groups derived from u
 
 `client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Client Matcher ](#client-matcher) below for details.
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
+`any_domain` - (Optional) The rule will apply for all domains. (bool).
 
-`specific_domain` - (Required) For example: api.example.com (`String`).
+`specific_domain` - (Optional) For example: api.example.com (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
 
@@ -811,11 +811,11 @@ Define rules to block IP Prefixes or AS numbers..
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-`as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
+`as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
-`http_header` - (Required) Request header name and value pairs. See [Http Header ](#http-header) below for details.
+`http_header` - (Optional) Request header name and value pairs. See [Http Header ](#http-header) below for details.
 
-`ip_prefix` - (Required) IPv4 prefix string. (`String`).
+`ip_prefix` - (Optional) IPv4 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 
@@ -1193,9 +1193,9 @@ Define manual mitigation rules to block L7 DDos attacks..
 
 `block` - (Optional) Block user for a duration determined by the expiration time (bool).
 
-`ddos_client_source` - (Required) Combination of Region, ASN and TLS Fingerprints. See [Ddos Client Source ](#ddos-client-source) below for details.
+`ddos_client_source` - (Optional) Combination of Region, ASN and TLS Fingerprints. See [Ddos Client Source ](#ddos-client-source) below for details.
 
-`ip_prefix_list` - (Required) IPv4 prefix string.. See [Ip Prefix List ](#ip-prefix-list) below for details.
+`ip_prefix_list` - (Optional) IPv4 prefix string.. See [Ip Prefix List ](#ip-prefix-list) below for details.
 
 ### Default Captcha Challenge Parameters
 
@@ -1267,9 +1267,9 @@ Origin Pools used when no route is specified (default route).
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
+`cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
-`pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+`pool` - (Optional) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 
@@ -1739,7 +1739,7 @@ HTTP Load Balancer..
 
 `port` - (Optional) HTTP port to Listen. (`Int`).
 
-`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 ### Http1 Config
 
@@ -1801,7 +1801,7 @@ User is responsible for managing DNS to this load balancer..
 
 `port` - (Optional) HTTPS port to Listen. (`Int`).
 
-`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
@@ -1843,7 +1843,7 @@ or a DNS CNAME record should be created in your DNS provider's portal..
 
 `port` - (Optional) HTTPS port to Listen. (`Int`).
 
-`port_ranges` - (Required) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
@@ -2031,9 +2031,9 @@ Specify origin server with K8s service name and site information.
 
 `vk8s_networks` - (Optional) origin server are on vK8s network on the site (bool).
 
-`service_name` - (Required) Both namespace and cluster-id are optional. (`String`).
+`service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
 
-`service_selector` - (Required) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
+`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
 
@@ -2227,11 +2227,11 @@ No mitigation actions..
 
 x-displayName: "Custom Fall Through Rule List".
 
-`action_block` - (Required) Block the request and issue an API security event (bool).
+`action_block` - (Optional) Block the request and issue an API security event (bool).
 
-`action_report` - (Required) Continue processing the request and issue an API security event (bool).
+`action_report` - (Optional) Continue processing the request and issue an API security event (bool).
 
-`action_skip` - (Required) Continue processing the request (bool).
+`action_skip` - (Optional) Continue processing the request (bool).
 
 `api_endpoint` - (Optional) The API endpoint (Path + Method) which this validation applies to. See [Api Endpoint ](#api-endpoint) below for details.
 
@@ -2411,9 +2411,9 @@ List of Origin Pools.
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
+`cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
-`pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+`pool` - (Optional) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 
@@ -2847,15 +2847,15 @@ Secret Value of the HTTP header..
 
 The custom data detection config specifies targets, scopes & the pattern to be detected..
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
+`any_domain` - (Optional) The rule will apply for all domains. (bool).
 
-`specific_domain` - (Required) For example: api.example.com (`String`).
+`specific_domain` - (Optional) For example: api.example.com (`String`).
 
-`key_pattern` - (Required) Search for pattern across all field names in the specified sections.. See [Key Pattern ](#key-pattern) below for details.
+`key_pattern` - (Optional) Search for pattern across all field names in the specified sections.. See [Key Pattern ](#key-pattern) below for details.
 
-`key_value_pattern` - (Required) Search for specific field and value patterns in the specified sections.. See [Key Value Pattern ](#key-value-pattern) below for details.
+`key_value_pattern` - (Optional) Search for specific field and value patterns in the specified sections.. See [Key Value Pattern ](#key-value-pattern) below for details.
 
-`value_pattern` - (Required) Search for pattern across all field values in the specified sections.. See [Value Pattern ](#value-pattern) below for details.
+`value_pattern` - (Optional) Search for pattern across all field values in the specified sections.. See [Value Pattern ](#value-pattern) below for details.
 
 `all_request_sections` - (Optional) x-displayName: "All Request" (bool).
 
@@ -2865,13 +2865,13 @@ The custom data detection config specifies targets, scopes & the pattern to be d
 
 `custom_sections` - (Optional) x-displayName: "Custom Sections". See [Custom Sections ](#custom-sections) below for details.
 
-`any_target` - (Required) The rule will be applied for all requests on this LB. (bool).
+`any_target` - (Optional) The rule will be applied for all requests on this LB. (bool).
 
-`api_endpoint_target` - (Required) The rule is applied only for the specified api endpoints.. See [Api Endpoint Target ](#api-endpoint-target) below for details.
+`api_endpoint_target` - (Optional) The rule is applied only for the specified api endpoints.. See [Api Endpoint Target ](#api-endpoint-target) below for details.
 
 `api_group` - (Optional) Custom groups can be created if user tags paths or operations with "x-volterra-api-group" extensions inside swaggers. (`String`).
 
-`base_path` - (Required) The rule is applied only for the requests matching the specified base path. (`String`).
+`base_path` - (Optional) The rule is applied only for the requests matching the specified base path. (`String`).
 
 ### Sensitive Data Detection Rules
 
@@ -2893,9 +2893,9 @@ For matching also specific endpoints you can use the API endpoint rules set bell
 
 `base_path` - (Required) Prefix of the request path. (`String`).
 
-`any_domain` - (Required) The rule will apply for all domains. (bool).
+`any_domain` - (Optional) The rule will apply for all domains. (bool).
 
-`specific_domain` - (Required) The rule will apply for a specific domain. (`String`).
+`specific_domain` - (Optional) The rule will apply for a specific domain. (`String`).
 
 `inline_rate_limiter` - (Optional) Specify rate values for the rule.. See [Inline Rate Limiter ](#inline-rate-limiter) below for details.
 
@@ -3203,11 +3203,11 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-`as_number` - (Required) RFC 6793 defined 4-byte AS number (`Int`).
+`as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
-`http_header` - (Required) Request header name and value pairs. See [Http Header ](#http-header) below for details.
+`http_header` - (Optional) Request header name and value pairs. See [Http Header ](#http-header) below for details.
 
-`ip_prefix` - (Required) IPv4 prefix string. (`String`).
+`ip_prefix` - (Optional) IPv4 prefix string. (`String`).
 
 `user_identifier` - (Optional) Identify user based on user identifier. User identifier value needs to be copied from security event. (`String`).
 

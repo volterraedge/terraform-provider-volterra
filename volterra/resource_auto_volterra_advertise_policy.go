@@ -74,7 +74,7 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 			"port_ranges": {
 
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 
 			"protocol": {

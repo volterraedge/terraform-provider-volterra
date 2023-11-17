@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/moul/http2curl"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/errors"

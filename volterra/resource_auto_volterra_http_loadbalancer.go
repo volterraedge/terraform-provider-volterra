@@ -507,19 +507,19 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"action_block": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"action_report": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"action_skip": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"api_endpoint": {
@@ -813,19 +813,19 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"action_block": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"action_report": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"action_skip": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"api_endpoint": {
@@ -946,13 +946,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"any_domain": {
 
 													Type:     schema.TypeBool,
-													Required: true,
+													Optional: true,
 												},
 
 												"specific_domain": {
 
 													Type:     schema.TypeString,
-													Required: true,
+													Optional: true,
 												},
 
 												"metadata": {
@@ -1270,19 +1270,19 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"any_domain": {
 
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"specific_domain": {
 
 																Type:     schema.TypeString,
-																Required: true,
+																Optional: true,
 															},
 
 															"key_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1304,7 +1304,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"key_value_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1358,7 +1358,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"value_pattern": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1418,13 +1418,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"any_target": {
 
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"api_endpoint_target": {
 
 																Type:     schema.TypeSet,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1455,7 +1455,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"base_path": {
 
 																Type:     schema.TypeString,
-																Required: true,
+																Optional: true,
 															},
 														},
 													},
@@ -1807,13 +1807,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"metadata": {
@@ -2368,13 +2368,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"metadata": {
@@ -2690,13 +2690,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"as_number": {
 
 							Type:     schema.TypeInt,
-							Required: true,
+							Optional: true,
 						},
 
 						"http_header": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -2744,7 +2744,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"ip_prefix": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 
 						"user_identifier": {
@@ -5696,8 +5696,8 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"enable_auto_mitigation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+										Type:     schema.TypeBool,
+										Optional: true,
 						},
 					},
 				},
@@ -5749,7 +5749,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"ddos_client_source": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -5829,7 +5829,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"ip_prefix_list": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -5879,7 +5879,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"cluster": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -5907,7 +5907,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"pool": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -6691,7 +6691,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"port_ranges": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 
 						"append_server_name": {
@@ -7513,7 +7513,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"port_ranges": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 
 						"append_server_name": {
@@ -7738,19 +7738,19 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"any_domain": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"specific_domain": {
 
 																			Type:     schema.TypeString,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"key_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -7772,7 +7772,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"key_value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -7826,7 +7826,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -7886,13 +7886,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"any_target": {
 
 																			Type:     schema.TypeBool,
-																			Required: true,
+																			Optional: true,
 																		},
 
 																		"api_endpoint_target": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -7923,7 +7923,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"base_path": {
 
 																			Type:     schema.TypeString,
-																			Required: true,
+																			Optional: true,
 																		},
 																	},
 																},
@@ -7989,8 +7989,8 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 									"enable_auto_mitigation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+													Type:     schema.TypeBool,
+													Optional: true,
 									},
 								},
 							},
@@ -8992,13 +8992,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"service_name": {
 
 													Type:     schema.TypeString,
-													Required: true,
+													Optional: true,
 												},
 
 												"service_selector": {
 
 													Type:     schema.TypeSet,
-													Required: true,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -9856,7 +9856,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"cluster": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -9884,7 +9884,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"pool": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -10348,13 +10348,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"inline_rate_limiter": {
@@ -10516,13 +10516,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"inline_rate_limiter": {
@@ -12105,7 +12105,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"cluster": {
 
 													Type:     schema.TypeSet,
-													Required: true,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -12133,7 +12133,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"pool": {
 
 													Type:     schema.TypeSet,
-													Required: true,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -12340,13 +12340,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"as_number": {
 
 							Type:     schema.TypeInt,
-							Required: true,
+							Optional: true,
 						},
 
 						"http_header": {
 
 							Type:     schema.TypeSet,
-							Required: true,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -12394,7 +12394,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						"ip_prefix": {
 
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
 
 						"user_identifier": {

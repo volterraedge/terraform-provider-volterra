@@ -459,7 +459,7 @@ External service type is Endpoint service.
 
 `automatic_vip` - (Optional) System will automatically select a VIP (bool).
 
-`configured_vip` - (Required) Enter IP address for the default VIP (`String`).
+`configured_vip` - (Optional) Enter IP address for the default VIP (`String`).
 
 `custom_tcp_ports` - (Optional) select custom tcp ports. See [Custom Tcp Ports ](#custom-tcp-ports) below for details.
 
@@ -485,9 +485,9 @@ Virtual F5 BigIP service to be deployed on AWS.
 
 `endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
 
-`byol_image` - (Required) Select the BigIp bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
+`byol_image` - (Optional) Select the BigIp bring your own license image to be used for this service. See [Byol Image ](#byol-image) below for details.
 
-`market_place_image` - (Required) Select the BigIp pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
+`market_place_image` - (Optional) Select the BigIp pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
 
 `nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
 
@@ -571,9 +571,9 @@ User given public and private SSH keys.
 
 Select the BigIp pay as you go image to be used for this service.
 
-`AWAFPayG200Mbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (bool).
+`AWAFPayG200Mbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps) (bool).
 
-`AWAFPayG3Gbps` - (Required) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (bool).
+`AWAFPayG3Gbps` - (Optional) F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps) (bool).
 
 ### Medium Security
 
@@ -623,9 +623,9 @@ Specify how and where the service nodes are spawned.
 
 Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud.
 
-`pan_ami_bundle1` - (Required) VM-Series Next-Generation Firewall Bundle 1 (bool).
+`pan_ami_bundle1` - (Optional) VM-Series Next-Generation Firewall Bundle 1 (bool).
 
-`pan_ami_bundle2` - (Required) VM-Series Next-Generation Firewall Bundle 2 (bool).
+`pan_ami_bundle2` - (Optional) VM-Series Next-Generation Firewall Bundle 2 (bool).
 
 `aws_tgw_site` - (Required) Select AWS transit gateway site. See [ref](#ref) below for details.
 
@@ -639,7 +639,7 @@ Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud.
 
 `auto_setup` - (Optional) Auto Setup API Access & Users. With this firewall api access and given admin user will be auto setup. See [Auto Setup ](#auto-setup) below for details.
 
-`ssh_key` - (Required) its corresponding ssh private key. (`String`).
+`ssh_key` - (Optional) its corresponding ssh private key. (`String`).
 
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
 
