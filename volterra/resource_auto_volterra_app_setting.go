@@ -280,6 +280,18 @@ func resourceVolterraAppSetting() *schema.Resource {
 													Optional: true,
 												},
 
+												"exclude_bot_defense_activity": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"include_bot_defense_activity": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"cooling_off_period": {
 
 													Type:     schema.TypeInt,
@@ -387,6 +399,18 @@ func resourceVolterraAppSetting() *schema.Resource {
 															},
 														},
 													},
+												},
+
+												"exclude_rate_limit": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"include_rate_limit": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
 												},
 
 												"exclude_waf_activity": {
@@ -805,6 +829,32 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							botDefenseActivityChoiceTypeFound := false
+
+							if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+								botDefenseActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
+									botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+								botDefenseActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
+									botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+								}
+
+							}
+
 							coolingOffPeriodSettingTypeFound := false
 
 							if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
@@ -998,6 +1048,32 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 
 									}
 
+								}
+
+							}
+
+							rateLimitChoiceTypeFound := false
+
+							if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+								rateLimitChoiceTypeFound = true
+
+								if v.(bool) {
+									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
+									rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+								rateLimitChoiceTypeFound = true
+
+								if v.(bool) {
+									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
+									rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
 								}
 
 							}
@@ -1474,6 +1550,32 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							botDefenseActivityChoiceTypeFound := false
+
+							if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+								botDefenseActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBotDefenseActivity{}
+									botDefenseActivityChoiceInt.ExcludeBotDefenseActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
+
+								botDefenseActivityChoiceTypeFound = true
+
+								if v.(bool) {
+									botDefenseActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeBotDefenseActivity{}
+									botDefenseActivityChoiceInt.IncludeBotDefenseActivity = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.BotDefenseActivityChoice = botDefenseActivityChoiceInt
+								}
+
+							}
+
 							coolingOffPeriodSettingTypeFound := false
 
 							if v, ok := cs["cooling_off_period"]; ok && !isIntfNil(v) && !coolingOffPeriodSettingTypeFound {
@@ -1667,6 +1769,32 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 
 									}
 
+								}
+
+							}
+
+							rateLimitChoiceTypeFound := false
+
+							if v, ok := cs["exclude_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+								rateLimitChoiceTypeFound = true
+
+								if v.(bool) {
+									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeRateLimit{}
+									rateLimitChoiceInt.ExcludeRateLimit = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["include_rate_limit"]; ok && !isIntfNil(v) && !rateLimitChoiceTypeFound {
+
+								rateLimitChoiceTypeFound = true
+
+								if v.(bool) {
+									rateLimitChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeRateLimit{}
+									rateLimitChoiceInt.IncludeRateLimit = &ves_io_schema.Empty{}
+									maliciousUserDetectionInt.EnableDetection.RateLimitChoice = rateLimitChoiceInt
 								}
 
 							}

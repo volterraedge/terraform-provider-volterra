@@ -477,6 +477,176 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"segment": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ref": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"segment_site": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"segment": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"site": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"segment_vsite": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"segment": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"vsite": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"site": {
 
 							Type:     schema.TypeSet,
@@ -1190,6 +1360,211 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
+
+			if v, ok := whereMapStrToI["segment"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Segment{}
+				refOrSelectorInt.Segment = &ves_io_schema.SegementRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.Segment.Ref = refIntNew
+						for i, ps := range sl {
+
+							rMapToStrVal := ps.(map[string]interface{})
+							refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+							refIntNew[i].Kind = "segment"
+
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refIntNew[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refIntNew[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refIntNew[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := whereMapStrToI["segment_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_SegmentSite{}
+				refOrSelectorInt.SegmentSite = &ves_io_schema.SiteSegmentRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentSite.Segment = segmentInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentInt[i] = &ves_io_schema.ObjectRefType{}
+
+							segmentInt[i].Kind = "segment"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								segmentInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						siteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentSite.Site = siteInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							siteInt[i] = &ves_io_schema.ObjectRefType{}
+
+							siteInt[i].Kind = "site"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								siteInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								siteInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								siteInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								siteInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := whereMapStrToI["segment_vsite"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_SegmentVsite{}
+				refOrSelectorInt.SegmentVsite = &ves_io_schema.VSiteSegmentRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentVsite.Segment = segmentInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentInt[i] = &ves_io_schema.ObjectRefType{}
+
+							segmentInt[i].Kind = "segment"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								segmentInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["vsite"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						vsiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentVsite.Vsite = vsiteInt
+						for i, ps := range sl {
+
+							vMapToStrVal := ps.(map[string]interface{})
+							vsiteInt[i] = &ves_io_schema.ObjectRefType{}
+
+							vsiteInt[i].Kind = "virtual_site"
+
+							if v, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Name = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 
@@ -1996,6 +2371,211 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 			whereMapStrToI := set.(map[string]interface{})
 
 			refOrSelectorTypeFound := false
+
+			if v, ok := whereMapStrToI["segment"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_Segment{}
+				refOrSelectorInt.Segment = &ves_io_schema.SegementRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["ref"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.Segment.Ref = refIntNew
+						for i, ps := range sl {
+
+							rMapToStrVal := ps.(map[string]interface{})
+							refIntNew[i] = &ves_io_schema.ObjectRefType{}
+
+							refIntNew[i].Kind = "segment"
+
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refIntNew[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refIntNew[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refIntNew[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := whereMapStrToI["segment_site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_SegmentSite{}
+				refOrSelectorInt.SegmentSite = &ves_io_schema.SiteSegmentRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentSite.Segment = segmentInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentInt[i] = &ves_io_schema.ObjectRefType{}
+
+							segmentInt[i].Kind = "segment"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								segmentInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						siteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentSite.Site = siteInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							siteInt[i] = &ves_io_schema.ObjectRefType{}
+
+							siteInt[i].Kind = "site"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								siteInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								siteInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								siteInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								siteInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := whereMapStrToI["segment_vsite"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
+
+				refOrSelectorTypeFound = true
+				refOrSelectorInt := &ves_io_schema.NetworkSiteRefSelector_SegmentVsite{}
+				refOrSelectorInt.SegmentVsite = &ves_io_schema.VSiteSegmentRefType{}
+				where.RefOrSelector = refOrSelectorInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentVsite.Segment = segmentInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentInt[i] = &ves_io_schema.ObjectRefType{}
+
+							segmentInt[i].Kind = "segment"
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								segmentInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["vsite"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						vsiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+						refOrSelectorInt.SegmentVsite.Vsite = vsiteInt
+						for i, ps := range sl {
+
+							vMapToStrVal := ps.(map[string]interface{})
+							vsiteInt[i] = &ves_io_schema.ObjectRefType{}
+
+							vsiteInt[i].Kind = "virtual_site"
+
+							if v, ok := vMapToStrVal["name"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Name = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := vMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								vsiteInt[i].Uid = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := whereMapStrToI["site"]; ok && !isIntfNil(v) && !refOrSelectorTypeFound {
 

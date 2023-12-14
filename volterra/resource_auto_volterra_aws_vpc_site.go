@@ -334,6 +334,18 @@ func resourceVolterraAwsVpcSite() *schema.Resource {
 								},
 							},
 						},
+
+						"inside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"outside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -3479,6 +3491,32 @@ func resourceVolterraAwsVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 						cloudLink.Tenant = w.(string)
 					}
 
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 				}
 
 			}
@@ -7906,6 +7944,32 @@ func resourceVolterraAwsVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						cloudLink.Tenant = w.(string)
 					}
 
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 				}
 
 			}

@@ -265,6 +265,62 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				},
 			},
 
+			"private_connect_disabled": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"private_connectivity": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cloud_link": {
+
+							Type:     schema.TypeSet,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:     schema.TypeString,
+										Computed: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"inside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"outside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"ingress_egress_gw": {
 
 				Type:     schema.TypeSet,
@@ -3097,6 +3153,87 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 				os.OperatingSystemVersionChoice = operatingSystemVersionChoiceInt
 
 				operatingSystemVersionChoiceInt.OperatingSystemVersion = v.(string)
+
+			}
+
+		}
+
+	}
+
+	//private_connectivity_choice
+
+	privateConnectivityChoiceTypeFound := false
+
+	if v, ok := d.GetOk("private_connect_disabled"); ok && !privateConnectivityChoiceTypeFound {
+
+		privateConnectivityChoiceTypeFound = true
+
+		if v.(bool) {
+			privateConnectivityChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_PrivateConnectDisabled{}
+			privateConnectivityChoiceInt.PrivateConnectDisabled = &ves_io_schema.Empty{}
+			createSpec.PrivateConnectivityChoice = privateConnectivityChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("private_connectivity"); ok && !privateConnectivityChoiceTypeFound {
+
+		privateConnectivityChoiceTypeFound = true
+		privateConnectivityChoiceInt := &ves_io_schema_views_gcp_vpc_site.CreateSpecType_PrivateConnectivity{}
+		privateConnectivityChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
+		createSpec.PrivateConnectivityChoice = privateConnectivityChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cloudLink := &ves_io_schema_views.ObjectRefType{}
+				privateConnectivityChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+				for _, set := range sl {
+					cloudLinkMapStrToI := set.(map[string]interface{})
+
+					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+						cloudLink.Name = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+						cloudLink.Namespace = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+						cloudLink.Tenant = w.(string)
+					}
+
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
 
 			}
 
@@ -6888,6 +7025,85 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					offlineSurvivabilityModeChoiceInt := &ves_io_schema_views.OfflineSurvivabilityModeType_NoOfflineSurvivabilityMode{}
 					offlineSurvivabilityModeChoiceInt.NoOfflineSurvivabilityMode = &ves_io_schema.Empty{}
 					offlineSurvivabilityMode.OfflineSurvivabilityModeChoice = offlineSurvivabilityModeChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	privateConnectivityChoiceTypeFound := false
+
+	if v, ok := d.GetOk("private_connect_disabled"); ok && !privateConnectivityChoiceTypeFound {
+
+		privateConnectivityChoiceTypeFound = true
+
+		if v.(bool) {
+			privateConnectivityChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_PrivateConnectDisabled{}
+			privateConnectivityChoiceInt.PrivateConnectDisabled = &ves_io_schema.Empty{}
+			updateSpec.PrivateConnectivityChoice = privateConnectivityChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("private_connectivity"); ok && !privateConnectivityChoiceTypeFound {
+
+		privateConnectivityChoiceTypeFound = true
+		privateConnectivityChoiceInt := &ves_io_schema_views_gcp_vpc_site.ReplaceSpecType_PrivateConnectivity{}
+		privateConnectivityChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
+		updateSpec.PrivateConnectivityChoice = privateConnectivityChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				cloudLink := &ves_io_schema_views.ObjectRefType{}
+				privateConnectivityChoiceInt.PrivateConnectivity.CloudLink = cloudLink
+				for _, set := range sl {
+					cloudLinkMapStrToI := set.(map[string]interface{})
+
+					if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
+						cloudLink.Name = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
+						cloudLink.Namespace = w.(string)
+					}
+
+					if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
+						cloudLink.Tenant = w.(string)
+					}
+
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 				}
 
 			}

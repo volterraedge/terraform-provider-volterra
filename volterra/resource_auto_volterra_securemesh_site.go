@@ -1564,6 +1564,29 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"segment_network": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"site_local_inside_network": {
 
 																Type:     schema.TypeBool,
@@ -2279,6 +2302,11 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 										Optional: true,
 									},
 
+									"nameserver_v6": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
 									"no_static_routes": {
 
 										Type:     schema.TypeBool,
@@ -2525,6 +2553,11 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 									},
 
 									"nameserver": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"nameserver_v6": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -5061,6 +5094,39 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 									}
 
+									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -6119,6 +6185,12 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 					}
 
+					if v, ok := cs["nameserver_v6"]; ok && !isIntfNil(v) {
+
+						sliChoiceInt.SliConfig.NameserverV6 = v.(string)
+
+					}
+
 					staticRouteChoiceTypeFound := false
 
 					if v, ok := cs["no_static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
@@ -6481,6 +6553,12 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 					if v, ok := cs["nameserver"]; ok && !isIntfNil(v) {
 
 						sloChoiceInt.SloConfig.Nameserver = v.(string)
+
+					}
+
+					if v, ok := cs["nameserver_v6"]; ok && !isIntfNil(v) {
+
+						sloChoiceInt.SloConfig.NameserverV6 = v.(string)
 
 					}
 
@@ -9216,6 +9294,39 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 									}
 
+									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -10274,6 +10385,12 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 					}
 
+					if v, ok := cs["nameserver_v6"]; ok && !isIntfNil(v) {
+
+						sliChoiceInt.SliConfig.NameserverV6 = v.(string)
+
+					}
+
 					staticRouteChoiceTypeFound := false
 
 					if v, ok := cs["no_static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
@@ -10636,6 +10753,12 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["nameserver"]; ok && !isIntfNil(v) {
 
 						sloChoiceInt.SloConfig.Nameserver = v.(string)
+
+					}
+
+					if v, ok := cs["nameserver_v6"]; ok && !isIntfNil(v) {
+
+						sloChoiceInt.SloConfig.NameserverV6 = v.(string)
 
 					}
 

@@ -586,6 +586,11 @@ func resourceVolterraFleet() *schema.Resource {
 										Required: true,
 									},
 
+									"number_of_vfio_vfs": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
 									"number_of_vfs": {
 										Type:     schema.TypeInt,
 										Required: true,
@@ -4102,6 +4107,10 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
 						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfio_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfioVfs = uint32(w.(int))
 					}
 
 					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
@@ -8415,6 +8424,10 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
 						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfio_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfioVfs = uint32(w.(int))
 					}
 
 					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {

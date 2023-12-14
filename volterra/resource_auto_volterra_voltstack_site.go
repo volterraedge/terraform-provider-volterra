@@ -1693,6 +1693,29 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"segment_network": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"site_local_inside_network": {
 
 																Type:     schema.TypeBool,
@@ -2542,6 +2565,11 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"outside_nameserver_v6": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"outside_vip": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -3069,6 +3097,11 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 									"interface_name": {
 										Type:     schema.TypeString,
 										Required: true,
+									},
+
+									"number_of_vfio_vfs": {
+										Type:     schema.TypeInt,
+										Optional: true,
 									},
 
 									"number_of_vfs": {
@@ -6287,6 +6320,29 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"segment_network": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"namespace": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																		"tenant": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
 															"site_local_inside_network": {
 
 																Type:     schema.TypeBool,
@@ -8900,6 +8956,39 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -10106,6 +10195,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["outside_nameserver_v6"]; ok && !isIntfNil(v) {
+
+				networkCfgChoiceInt.CustomNetworkConfig.OutsideNameserverV6 = v.(string)
+
+			}
+
 			if v, ok := cs["outside_vip"]; ok && !isIntfNil(v) {
 
 				networkCfgChoiceInt.CustomNetworkConfig.OutsideVip = v.(string)
@@ -10910,6 +11005,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
 						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfio_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfioVfs = uint32(w.(int))
 					}
 
 					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
@@ -15133,6 +15232,39 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := storageInterfaceMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										storageInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
 									if v, ok := storageInterfaceMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -17900,6 +18032,39 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 									}
 
+									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
+										}
+
+									}
+
 									if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
 										networkChoiceTypeFound = true
@@ -19106,6 +19271,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 			}
 
+			if v, ok := cs["outside_nameserver_v6"]; ok && !isIntfNil(v) {
+
+				networkCfgChoiceInt.CustomNetworkConfig.OutsideNameserverV6 = v.(string)
+
+			}
+
 			if v, ok := cs["outside_vip"]; ok && !isIntfNil(v) {
 
 				networkCfgChoiceInt.CustomNetworkConfig.OutsideVip = v.(string)
@@ -19869,6 +20040,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 					if w, ok := sriovInterfaceMapStrToI["interface_name"]; ok && !isIntfNil(w) {
 						sriovInterface[i].InterfaceName = w.(string)
+					}
+
+					if w, ok := sriovInterfaceMapStrToI["number_of_vfio_vfs"]; ok && !isIntfNil(w) {
+						sriovInterface[i].NumberOfVfioVfs = uint32(w.(int))
 					}
 
 					if w, ok := sriovInterfaceMapStrToI["number_of_vfs"]; ok && !isIntfNil(w) {
@@ -24086,6 +24261,39 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 											networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
 											networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
 											storageInterface.NetworkChoice = networkChoiceInt
+										}
+
+									}
+
+									if v, ok := storageInterfaceMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+										networkChoiceTypeFound = true
+										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
+										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
+										storageInterface.NetworkChoice = networkChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Name = v.(string)
+
+											}
+
+											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
+
+											}
+
+											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
+
+											}
+
 										}
 
 									}

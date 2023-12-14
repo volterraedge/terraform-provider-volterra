@@ -60,11 +60,71 @@ func resourceVolterraApiDefinition() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"api_inventory_exclusion_list": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"method": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"path": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+
+			"api_inventory_inclusion_list": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"method": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"path": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+
+			"non_api_endpoints": {
+
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"method": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
+						"path": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+
 			"swagger_specs": {
 
 				Type: schema.TypeList,
 
-				Required: true,
+				Optional: true,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -124,6 +184,78 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//api_inventory_exclusion_list
+	if v, ok := d.GetOk("api_inventory_exclusion_list"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiInventoryExclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		createSpec.ApiInventoryExclusionList = apiInventoryExclusionList
+		for i, set := range sl {
+			apiInventoryExclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+				apiInventoryExclusionList[i].Path = w.(string)
+			}
+
+		}
+
+	}
+
+	//api_inventory_inclusion_list
+	if v, ok := d.GetOk("api_inventory_inclusion_list"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiInventoryInclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		createSpec.ApiInventoryInclusionList = apiInventoryInclusionList
+		for i, set := range sl {
+			apiInventoryInclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+				apiInventoryInclusionList[i].Path = w.(string)
+			}
+
+		}
+
+	}
+
+	//non_api_endpoints
+	if v, ok := d.GetOk("non_api_endpoints"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		nonApiEndpoints := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		createSpec.NonApiEndpoints = nonApiEndpoints
+		for i, set := range sl {
+			nonApiEndpoints[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			nonApiEndpointsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
+				nonApiEndpoints[i].Path = w.(string)
+			}
+
+		}
+
 	}
 
 	//swagger_specs
@@ -233,6 +365,75 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("api_inventory_exclusion_list"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiInventoryExclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		updateSpec.ApiInventoryExclusionList = apiInventoryExclusionList
+		for i, set := range sl {
+			apiInventoryExclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				apiInventoryExclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := apiInventoryExclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+				apiInventoryExclusionList[i].Path = w.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("api_inventory_inclusion_list"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiInventoryInclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		updateSpec.ApiInventoryInclusionList = apiInventoryInclusionList
+		for i, set := range sl {
+			apiInventoryInclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
+
+			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				apiInventoryInclusionList[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := apiInventoryInclusionListMapStrToI["path"]; ok && !isIntfNil(w) {
+				apiInventoryInclusionList[i].Path = w.(string)
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("non_api_endpoints"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		nonApiEndpoints := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		updateSpec.NonApiEndpoints = nonApiEndpoints
+		for i, set := range sl {
+			nonApiEndpoints[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			nonApiEndpointsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+				nonApiEndpoints[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+			}
+
+			if w, ok := nonApiEndpointsMapStrToI["path"]; ok && !isIntfNil(w) {
+				nonApiEndpoints[i].Path = w.(string)
+			}
+
+		}
+
 	}
 
 	if v, ok := d.GetOk("swagger_specs"); ok && !isIntfNil(v) {

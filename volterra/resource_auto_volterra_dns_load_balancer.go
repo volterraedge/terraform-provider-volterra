@@ -61,6 +61,29 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"fallback_pool": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"record_type": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -264,6 +287,29 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//fallback_pool
+	if v, ok := d.GetOk("fallback_pool"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		fallbackPoolInt := &ves_io_schema_views.ObjectRefType{}
+		createSpec.FallbackPool = fallbackPoolInt
+
+		for _, set := range sl {
+			fpMapToStrVal := set.(map[string]interface{})
+			if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Name = val.(string)
+			}
+			if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Namespace = val.(string)
+			}
+
+			if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Tenant = val.(string)
+			}
+		}
+
 	}
 
 	//record_type
@@ -578,6 +624,28 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("fallback_pool"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		fallbackPoolInt := &ves_io_schema_views.ObjectRefType{}
+		updateSpec.FallbackPool = fallbackPoolInt
+
+		for _, set := range sl {
+			fpMapToStrVal := set.(map[string]interface{})
+			if val, ok := fpMapToStrVal["name"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Name = val.(string)
+			}
+			if val, ok := fpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Namespace = val.(string)
+			}
+
+			if val, ok := fpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+				fallbackPoolInt.Tenant = val.(string)
+			}
+		}
+
 	}
 
 	if v, ok := d.GetOk("record_type"); ok && !isIntfNil(v) {

@@ -444,7 +444,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Required: true,
 																		},
 
-																		"set_cookie": {
+																		"ignore_response_cookie": {
 																			Type:     schema.TypeBool,
 																			Optional: true,
 																		},
@@ -469,7 +469,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Required: true,
 																		},
 
-																		"set_cookie": {
+																		"ignore_response_cookie": {
 																			Type:     schema.TypeBool,
 																			Optional: true,
 																		},
@@ -494,7 +494,7 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Required: true,
 																		},
 
-																		"set_cookie": {
+																		"ignore_response_cookie": {
 																			Type:     schema.TypeBool,
 																			Optional: true,
 																		},
@@ -519,7 +519,57 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Required: true,
 																		},
 
-																		"set_cookie": {
+																		"ignore_response_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"scheme_proxy_host_request_uri": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"ignore_response_cookie": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"scheme_proxy_host_uri": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cache_override": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"cache_ttl": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"ignore_response_cookie": {
 																			Type:     schema.TypeBool,
 																			Optional: true,
 																		},
@@ -544,39 +594,159 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
-																		"headers": {
+																		"cache_headers": {
 
 																			Type:     schema.TypeList,
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
-																					"invert_match": {
-																						Type:     schema.TypeBool,
+																					"name": {
+																						Type:     schema.TypeString,
 																						Optional: true,
 																					},
+
+																					"operator": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"contains": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_contain": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_end_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_equal": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_start_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"endswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"equals": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"match_regex": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"startswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"cookie_matcher": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
 
 																					"name": {
 																						Type:     schema.TypeString,
 																						Required: true,
 																					},
 
-																					"exact": {
+																					"operator": {
 
-																						Type:     schema.TypeString,
+																						Type:     schema.TypeSet,
 																						Optional: true,
-																					},
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
 
-																					"presence": {
+																								"contains": {
 
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																					},
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
 
-																					"regex": {
+																								"does_not_contain": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_end_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_equal": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_start_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"endswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"equals": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"match_regex": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"startswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
 																					},
 																				},
 																			},
@@ -589,28 +759,74 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
-																					"path": {
+																					"operator": {
 
-																						Type:     schema.TypeString,
+																						Type:     schema.TypeSet,
 																						Optional: true,
-																					},
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
 
-																					"prefix": {
+																								"contains": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
-																					},
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
 
-																					"regex": {
+																								"does_not_contain": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_end_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_equal": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_start_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"endswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"equals": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"match_regex": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"startswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
 																					},
 																				},
 																			},
 																		},
 
-																		"query_params": {
+																		"query_parameters": {
 
 																			Type:     schema.TypeList,
 																			Optional: true,
@@ -622,16 +838,68 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 																						Required: true,
 																					},
 
-																					"exact": {
+																					"operator": {
 
-																						Type:     schema.TypeString,
+																						Type:     schema.TypeSet,
 																						Optional: true,
-																					},
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
 
-																					"regex": {
+																								"contains": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_contain": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_end_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_equal": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"does_not_start_with": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"endswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"equals": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"match_regex": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+
+																								"startswith": {
+
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
 																					},
 																				},
 																			},
@@ -662,6 +930,24 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"cache_disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"cache_ttl_default": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"cache_ttl_override": {
+
+													Type:     schema.TypeString,
+													Optional: true,
+												},
 
 												"eligible_for_cache": {
 
@@ -1639,6 +1925,26 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 						"follow_origin_redirect": {
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"more_origin_options": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable_byte_range_request": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"websocket_proxy": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
 						},
 
 						"origin_request_timeout": {
@@ -2668,9 +2974,9 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.HostnameUri.SetCookie = v.(bool)
+												eligibleForCacheInt.HostnameUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -2701,9 +3007,9 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameRequestUri.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -2734,9 +3040,9 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameUri.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -2767,9 +3073,75 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameUriQuery.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_proxy_host_request_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeProxyHostRequestUri{}
+										eligibleForCacheInt.SchemeProxyHostRequestUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.IgnoreResponseCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_proxy_host_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeProxyHostUri{}
+										eligibleForCacheInt.SchemeProxyHostUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -2799,55 +3171,261 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											cacheRuleExpression[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression{}
 											cacheRuleExpressionMapStrToI := set.(map[string]interface{})
 
-											if v, ok := cacheRuleExpressionMapStrToI["headers"]; ok && !isIntfNil(v) {
+											if v, ok := cacheRuleExpressionMapStrToI["cache_headers"]; ok && !isIntfNil(v) {
 
 												sl := v.([]interface{})
-												headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
-												cacheRuleExpression[i].Headers = headers
+												cacheHeaders := make([]*ves_io_schema_views_cdn_loadbalancer.CacheHeaderMatcherType, len(sl))
+												cacheRuleExpression[i].CacheHeaders = cacheHeaders
 												for i, set := range sl {
-													headers[i] = &ves_io_schema.HeaderMatcherType{}
-													headersMapStrToI := set.(map[string]interface{})
+													cacheHeaders[i] = &ves_io_schema_views_cdn_loadbalancer.CacheHeaderMatcherType{}
+													cacheHeadersMapStrToI := set.(map[string]interface{})
 
-													if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
-														headers[i].InvertMatch = w.(bool)
-													}
+													if v, ok := cacheHeadersMapStrToI["name"]; ok && !isIntfNil(v) {
 
-													if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
-														headers[i].Name = w.(string)
-													}
-
-													valueMatchTypeFound := false
-
-													if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
-
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
-
-														headers[i].ValueMatch = valueMatchInt
-
-														valueMatchInt.Exact = v.(string)
+														cacheHeaders[i].Name = ves_io_schema_views_cdn_loadbalancer.HeaderOptions(ves_io_schema_views_cdn_loadbalancer.HeaderOptions_value[v.(string)])
 
 													}
 
-													if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+													if v, ok := cacheHeadersMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														cacheHeaders[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														headers[i].ValueMatch = valueMatchInt
+															cacheOperatorTypeFound := false
 
-														valueMatchInt.Presence = v.(bool)
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Contains = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
-													if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+												}
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+											}
 
-														headers[i].ValueMatch = valueMatchInt
+											if v, ok := cacheRuleExpressionMapStrToI["cookie_matcher"]; ok && !isIntfNil(v) {
 
-														valueMatchInt.Regex = v.(string)
+												sl := v.([]interface{})
+												cookieMatcher := make([]*ves_io_schema_views_cdn_loadbalancer.CacheCookieMatcherType, len(sl))
+												cacheRuleExpression[i].CookieMatcher = cookieMatcher
+												for i, set := range sl {
+													cookieMatcher[i] = &ves_io_schema_views_cdn_loadbalancer.CacheCookieMatcherType{}
+													cookieMatcherMapStrToI := set.(map[string]interface{})
+
+													if w, ok := cookieMatcherMapStrToI["name"]; ok && !isIntfNil(w) {
+														cookieMatcher[i].Name = w.(string)
+													}
+
+													if v, ok := cookieMatcherMapStrToI["operator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														cookieMatcher[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
+
+															cacheOperatorTypeFound := false
+
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Contains = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -2858,43 +3436,121 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											if v, ok := cacheRuleExpressionMapStrToI["path_match"]; ok && !isIntfNil(v) {
 
 												sl := v.(*schema.Set).List()
-												pathMatch := &ves_io_schema.PathMatcherType{}
+												pathMatch := &ves_io_schema_views_cdn_loadbalancer.CDNPathMatcherType{}
 												cacheRuleExpression[i].PathMatch = pathMatch
 												for _, set := range sl {
 													pathMatchMapStrToI := set.(map[string]interface{})
 
-													pathMatchTypeFound := false
+													if v, ok := pathMatchMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-													if v, ok := pathMatchMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														pathMatch.Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+															cacheOperatorTypeFound := false
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Path = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := pathMatchMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+																cacheOperatorInt.Contains = v.(string)
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+															}
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Prefix = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := pathMatchMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+																cacheOperatorInt.DoesNotContain = v.(string)
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+															}
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Regex = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -2902,40 +3558,129 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cacheRuleExpressionMapStrToI["query_params"]; ok && !isIntfNil(v) {
+											if v, ok := cacheRuleExpressionMapStrToI["query_parameters"]; ok && !isIntfNil(v) {
 
 												sl := v.([]interface{})
-												queryParams := make([]*ves_io_schema.QueryParameterMatcherType, len(sl))
-												cacheRuleExpression[i].QueryParams = queryParams
+												queryParameters := make([]*ves_io_schema_views_cdn_loadbalancer.CacheQueryParameterMatcherType, len(sl))
+												cacheRuleExpression[i].QueryParameters = queryParameters
 												for i, set := range sl {
-													queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
-													queryParamsMapStrToI := set.(map[string]interface{})
+													queryParameters[i] = &ves_io_schema_views_cdn_loadbalancer.CacheQueryParameterMatcherType{}
+													queryParametersMapStrToI := set.(map[string]interface{})
 
-													if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
-														queryParams[i].Key = w.(string)
+													if w, ok := queryParametersMapStrToI["key"]; ok && !isIntfNil(w) {
+														queryParameters[i].Key = w.(string)
 													}
 
-													valueMatchTypeFound := false
+													if v, ok := queryParametersMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-													if v, ok := queryParamsMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														queryParameters[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Exact{}
+															cacheOperatorTypeFound := false
 
-														queryParams[i].ValueMatch = valueMatchInt
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														valueMatchInt.Exact = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := queryParamsMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+																cacheOperatorInt.Contains = v.(string)
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Regex{}
+															}
 
-														queryParams[i].ValueMatch = valueMatchInt
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														valueMatchInt.Regex = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -2972,6 +3717,40 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 							defaultCacheActionMapStrToI := set.(map[string]interface{})
 
 							cacheActionsTypeFound := false
+
+							if v, ok := defaultCacheActionMapStrToI["cache_disabled"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+
+								if v.(bool) {
+									cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheDisabled{}
+									cacheActionsInt.CacheDisabled = &ves_io_schema.Empty{}
+									defaultCacheAction.CacheActions = cacheActionsInt
+								}
+
+							}
+
+							if v, ok := defaultCacheActionMapStrToI["cache_ttl_default"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheTtlDefault{}
+
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								cacheActionsInt.CacheTtlDefault = v.(string)
+
+							}
+
+							if v, ok := defaultCacheActionMapStrToI["cache_ttl_override"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheTtlOverride{}
+
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								cacheActionsInt.CacheTtlOverride = v.(string)
+
+							}
 
 							if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
 
@@ -4224,6 +5003,26 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 				originPool.FollowOriginRedirect = w.(bool)
 			}
 
+			if v, ok := originPoolMapStrToI["more_origin_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				moreOriginOptions := &ves_io_schema_views_cdn_loadbalancer.OriginAdvancedConfiguration{}
+				originPool.MoreOriginOptions = moreOriginOptions
+				for _, set := range sl {
+					moreOriginOptionsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := moreOriginOptionsMapStrToI["disable_byte_range_request"]; ok && !isIntfNil(w) {
+						moreOriginOptions.DisableByteRangeRequest = w.(bool)
+					}
+
+					if w, ok := moreOriginOptionsMapStrToI["websocket_proxy"]; ok && !isIntfNil(w) {
+						moreOriginOptions.WebsocketProxy = w.(bool)
+					}
+
+				}
+
+			}
+
 			if w, ok := originPoolMapStrToI["origin_request_timeout"]; ok && !isIntfNil(w) {
 				originPool.OriginRequestTimeout = w.(string)
 			}
@@ -5474,9 +6273,9 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.HostnameUri.SetCookie = v.(bool)
+												eligibleForCacheInt.HostnameUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -5507,9 +6306,9 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameRequestUri.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameRequestUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -5540,9 +6339,9 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameUri.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -5573,9 +6372,75 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cs["set_cookie"]; ok && !isIntfNil(v) {
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
 
-												eligibleForCacheInt.SchemeHostnameUriQuery.SetCookie = v.(bool)
+												eligibleForCacheInt.SchemeHostnameUriQuery.IgnoreResponseCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_proxy_host_request_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeProxyHostRequestUri{}
+										eligibleForCacheInt.SchemeProxyHostRequestUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostRequestUri.IgnoreResponseCookie = v.(bool)
+
+											}
+
+										}
+
+									}
+
+									if v, ok := cs["scheme_proxy_host_uri"]; ok && !isIntfNil(v) && !eligibleForCacheTypeFound {
+
+										eligibleForCacheTypeFound = true
+										eligibleForCacheInt := &ves_io_schema_views_cdn_loadbalancer.CacheEligibleOptions_SchemeProxyHostUri{}
+										eligibleForCacheInt.SchemeProxyHostUri = &ves_io_schema_views_cdn_loadbalancer.CacheTTLEnableProps{}
+										cacheActionsInt.EligibleForCache.EligibleForCache = eligibleForCacheInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["cache_override"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.CacheOverride = v.(bool)
+
+											}
+
+											if v, ok := cs["cache_ttl"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.CacheTtl = v.(string)
+
+											}
+
+											if v, ok := cs["ignore_response_cookie"]; ok && !isIntfNil(v) {
+
+												eligibleForCacheInt.SchemeProxyHostUri.IgnoreResponseCookie = v.(bool)
 
 											}
 
@@ -5605,55 +6470,261 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											cacheRuleExpression[i] = &ves_io_schema_views_cdn_loadbalancer.CDNCacheRuleExpression{}
 											cacheRuleExpressionMapStrToI := set.(map[string]interface{})
 
-											if v, ok := cacheRuleExpressionMapStrToI["headers"]; ok && !isIntfNil(v) {
+											if v, ok := cacheRuleExpressionMapStrToI["cache_headers"]; ok && !isIntfNil(v) {
 
 												sl := v.([]interface{})
-												headers := make([]*ves_io_schema.HeaderMatcherType, len(sl))
-												cacheRuleExpression[i].Headers = headers
+												cacheHeaders := make([]*ves_io_schema_views_cdn_loadbalancer.CacheHeaderMatcherType, len(sl))
+												cacheRuleExpression[i].CacheHeaders = cacheHeaders
 												for i, set := range sl {
-													headers[i] = &ves_io_schema.HeaderMatcherType{}
-													headersMapStrToI := set.(map[string]interface{})
+													cacheHeaders[i] = &ves_io_schema_views_cdn_loadbalancer.CacheHeaderMatcherType{}
+													cacheHeadersMapStrToI := set.(map[string]interface{})
 
-													if w, ok := headersMapStrToI["invert_match"]; ok && !isIntfNil(w) {
-														headers[i].InvertMatch = w.(bool)
-													}
+													if v, ok := cacheHeadersMapStrToI["name"]; ok && !isIntfNil(v) {
 
-													if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
-														headers[i].Name = w.(string)
-													}
-
-													valueMatchTypeFound := false
-
-													if v, ok := headersMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
-
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Exact{}
-
-														headers[i].ValueMatch = valueMatchInt
-
-														valueMatchInt.Exact = v.(string)
+														cacheHeaders[i].Name = ves_io_schema_views_cdn_loadbalancer.HeaderOptions(ves_io_schema_views_cdn_loadbalancer.HeaderOptions_value[v.(string)])
 
 													}
 
-													if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+													if v, ok := cacheHeadersMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Presence{}
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														cacheHeaders[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														headers[i].ValueMatch = valueMatchInt
+															cacheOperatorTypeFound := false
 
-														valueMatchInt.Presence = v.(bool)
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Contains = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
-													if v, ok := headersMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+												}
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.HeaderMatcherType_Regex{}
+											}
 
-														headers[i].ValueMatch = valueMatchInt
+											if v, ok := cacheRuleExpressionMapStrToI["cookie_matcher"]; ok && !isIntfNil(v) {
 
-														valueMatchInt.Regex = v.(string)
+												sl := v.([]interface{})
+												cookieMatcher := make([]*ves_io_schema_views_cdn_loadbalancer.CacheCookieMatcherType, len(sl))
+												cacheRuleExpression[i].CookieMatcher = cookieMatcher
+												for i, set := range sl {
+													cookieMatcher[i] = &ves_io_schema_views_cdn_loadbalancer.CacheCookieMatcherType{}
+													cookieMatcherMapStrToI := set.(map[string]interface{})
+
+													if w, ok := cookieMatcherMapStrToI["name"]; ok && !isIntfNil(w) {
+														cookieMatcher[i].Name = w.(string)
+													}
+
+													if v, ok := cookieMatcherMapStrToI["operator"]; ok && !isIntfNil(v) {
+
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														cookieMatcher[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
+
+															cacheOperatorTypeFound := false
+
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Contains = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -5664,43 +6735,121 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											if v, ok := cacheRuleExpressionMapStrToI["path_match"]; ok && !isIntfNil(v) {
 
 												sl := v.(*schema.Set).List()
-												pathMatch := &ves_io_schema.PathMatcherType{}
+												pathMatch := &ves_io_schema_views_cdn_loadbalancer.CDNPathMatcherType{}
 												cacheRuleExpression[i].PathMatch = pathMatch
 												for _, set := range sl {
 													pathMatchMapStrToI := set.(map[string]interface{})
 
-													pathMatchTypeFound := false
+													if v, ok := pathMatchMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-													if v, ok := pathMatchMapStrToI["path"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														pathMatch.Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Path{}
+															cacheOperatorTypeFound := false
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Path = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := pathMatchMapStrToI["prefix"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+																cacheOperatorInt.Contains = v.(string)
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Prefix{}
+															}
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Prefix = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := pathMatchMapStrToI["regex"]; ok && !isIntfNil(v) && !pathMatchTypeFound {
+																cacheOperatorInt.DoesNotContain = v.(string)
 
-														pathMatchTypeFound = true
-														pathMatchInt := &ves_io_schema.PathMatcherType_Regex{}
+															}
 
-														pathMatch.PathMatch = pathMatchInt
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														pathMatchInt.Regex = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -5708,40 +6857,129 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											}
 
-											if v, ok := cacheRuleExpressionMapStrToI["query_params"]; ok && !isIntfNil(v) {
+											if v, ok := cacheRuleExpressionMapStrToI["query_parameters"]; ok && !isIntfNil(v) {
 
 												sl := v.([]interface{})
-												queryParams := make([]*ves_io_schema.QueryParameterMatcherType, len(sl))
-												cacheRuleExpression[i].QueryParams = queryParams
+												queryParameters := make([]*ves_io_schema_views_cdn_loadbalancer.CacheQueryParameterMatcherType, len(sl))
+												cacheRuleExpression[i].QueryParameters = queryParameters
 												for i, set := range sl {
-													queryParams[i] = &ves_io_schema.QueryParameterMatcherType{}
-													queryParamsMapStrToI := set.(map[string]interface{})
+													queryParameters[i] = &ves_io_schema_views_cdn_loadbalancer.CacheQueryParameterMatcherType{}
+													queryParametersMapStrToI := set.(map[string]interface{})
 
-													if w, ok := queryParamsMapStrToI["key"]; ok && !isIntfNil(w) {
-														queryParams[i].Key = w.(string)
+													if w, ok := queryParametersMapStrToI["key"]; ok && !isIntfNil(w) {
+														queryParameters[i].Key = w.(string)
 													}
 
-													valueMatchTypeFound := false
+													if v, ok := queryParametersMapStrToI["operator"]; ok && !isIntfNil(v) {
 
-													if v, ok := queryParamsMapStrToI["exact"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+														sl := v.(*schema.Set).List()
+														operator := &ves_io_schema_views_cdn_loadbalancer.CacheOperator{}
+														queryParameters[i].Operator = operator
+														for _, set := range sl {
+															operatorMapStrToI := set.(map[string]interface{})
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Exact{}
+															cacheOperatorTypeFound := false
 
-														queryParams[i].ValueMatch = valueMatchInt
+															if v, ok := operatorMapStrToI["Contains"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														valueMatchInt.Exact = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Contains{}
 
-													}
+																operator.CacheOperator = cacheOperatorInt
 
-													if v, ok := queryParamsMapStrToI["regex"]; ok && !isIntfNil(v) && !valueMatchTypeFound {
+																cacheOperatorInt.Contains = v.(string)
 
-														valueMatchTypeFound = true
-														valueMatchInt := &ves_io_schema.QueryParameterMatcherType_Regex{}
+															}
 
-														queryParams[i].ValueMatch = valueMatchInt
+															if v, ok := operatorMapStrToI["DoesNotContain"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
 
-														valueMatchInt.Regex = v.(string)
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotContain{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotContain = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEndWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEndWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEndWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotEqual"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotEqual{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotEqual = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["DoesNotStartWith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_DoesNotStartWith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.DoesNotStartWith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Endswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Endswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Endswith = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Equals"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Equals{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Equals = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["MatchRegex"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_MatchRegex{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.MatchRegex = v.(string)
+
+															}
+
+															if v, ok := operatorMapStrToI["Startswith"]; ok && !isIntfNil(v) && !cacheOperatorTypeFound {
+
+																cacheOperatorTypeFound = true
+																cacheOperatorInt := &ves_io_schema_views_cdn_loadbalancer.CacheOperator_Startswith{}
+
+																operator.CacheOperator = cacheOperatorInt
+
+																cacheOperatorInt.Startswith = v.(string)
+
+															}
+
+														}
 
 													}
 
@@ -5778,6 +7016,40 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 							defaultCacheActionMapStrToI := set.(map[string]interface{})
 
 							cacheActionsTypeFound := false
+
+							if v, ok := defaultCacheActionMapStrToI["cache_disabled"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+
+								if v.(bool) {
+									cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheDisabled{}
+									cacheActionsInt.CacheDisabled = &ves_io_schema.Empty{}
+									defaultCacheAction.CacheActions = cacheActionsInt
+								}
+
+							}
+
+							if v, ok := defaultCacheActionMapStrToI["cache_ttl_default"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheTtlDefault{}
+
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								cacheActionsInt.CacheTtlDefault = v.(string)
+
+							}
+
+							if v, ok := defaultCacheActionMapStrToI["cache_ttl_override"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
+
+								cacheActionsTypeFound = true
+								cacheActionsInt := &ves_io_schema_views_cdn_loadbalancer.DefaultCacheAction_CacheTtlOverride{}
+
+								defaultCacheAction.CacheActions = cacheActionsInt
+
+								cacheActionsInt.CacheTtlOverride = v.(string)
+
+							}
 
 							if v, ok := defaultCacheActionMapStrToI["eligible_for_cache"]; ok && !isIntfNil(v) && !cacheActionsTypeFound {
 
@@ -7027,6 +8299,26 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 			if w, ok := originPoolMapStrToI["follow_origin_redirect"]; ok && !isIntfNil(w) {
 				originPool.FollowOriginRedirect = w.(bool)
+			}
+
+			if v, ok := originPoolMapStrToI["more_origin_options"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				moreOriginOptions := &ves_io_schema_views_cdn_loadbalancer.OriginAdvancedConfiguration{}
+				originPool.MoreOriginOptions = moreOriginOptions
+				for _, set := range sl {
+					moreOriginOptionsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := moreOriginOptionsMapStrToI["disable_byte_range_request"]; ok && !isIntfNil(w) {
+						moreOriginOptions.DisableByteRangeRequest = w.(bool)
+					}
+
+					if w, ok := moreOriginOptionsMapStrToI["websocket_proxy"]; ok && !isIntfNil(w) {
+						moreOriginOptions.WebsocketProxy = w.(bool)
+					}
+
+				}
+
 			}
 
 			if w, ok := originPoolMapStrToI["origin_request_timeout"]; ok && !isIntfNil(w) {

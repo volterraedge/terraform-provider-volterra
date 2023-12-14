@@ -21,6 +21,7 @@ import (
 	ves_io_schema_certificate "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate"
 	ves_io_schema_certificate_chain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
+	ves_io_schema_cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_container_registry "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
 	ves_io_schema_crl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/crl"
@@ -100,6 +101,7 @@ func getVolterraResourceMap() map[string]*schema.Resource {
 		"volterra_certificate":               resourceVolterraCertificate(),
 		"volterra_certificate_chain":         resourceVolterraCertificateChain(),
 		"volterra_cloud_credentials":         resourceVolterraCloudCredentials(),
+		"volterra_cloud_link":                resourceVolterraCloudLink(),
 		"volterra_cluster":                   resourceVolterraCluster(),
 		"volterra_container_registry":        resourceVolterraContainerRegistry(),
 		"volterra_crl":                       resourceVolterraCrl(),
@@ -181,6 +183,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_certificate.ObjectType,
 		ves_io_schema_certificate_chain.ObjectType,
 		ves_io_schema_cloud_credentials.ObjectType,
+		ves_io_schema_cloud_link.ObjectType,
 		ves_io_schema_cluster.ObjectType,
 		ves_io_schema_container_registry.ObjectType,
 		ves_io_schema_crl.ObjectType,
