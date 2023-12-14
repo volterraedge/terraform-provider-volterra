@@ -4,7 +4,6 @@
 package cloud_link
 
 import (
-	encoding_binary "encoding/binary"
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -177,6 +176,7 @@ type StatusObject struct {
 	// Types that are valid to be assigned to CloudLinkStatus:
 	//	*StatusObject_AwsStatus
 	//	*StatusObject_AzureStatus
+	//	*StatusObject_GcpStatus
 	CloudLinkStatus isStatusObject_CloudLinkStatus `protobuf_oneof:"cloud_link_status"`
 }
 
@@ -221,9 +221,13 @@ type StatusObject_AwsStatus struct {
 type StatusObject_AzureStatus struct {
 	AzureStatus *AzureStatusType `protobuf:"bytes,6,opt,name=azure_status,json=azureStatus,proto3,oneof" json:"azure_status,omitempty"`
 }
+type StatusObject_GcpStatus struct {
+	GcpStatus *GCPStatusType `protobuf:"bytes,7,opt,name=gcp_status,json=gcpStatus,proto3,oneof" json:"gcp_status,omitempty"`
+}
 
 func (*StatusObject_AwsStatus) isStatusObject_CloudLinkStatus()   {}
 func (*StatusObject_AzureStatus) isStatusObject_CloudLinkStatus() {}
+func (*StatusObject_GcpStatus) isStatusObject_CloudLinkStatus()   {}
 
 func (m *StatusObject) GetCloudLinkStatus() isStatusObject_CloudLinkStatus {
 	if m != nil {
@@ -267,11 +271,19 @@ func (m *StatusObject) GetAzureStatus() *AzureStatusType {
 	return nil
 }
 
+func (m *StatusObject) GetGcpStatus() *GCPStatusType {
+	if x, ok := m.GetCloudLinkStatus().(*StatusObject_GcpStatus); ok {
+		return x.GcpStatus
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*StatusObject) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*StatusObject_AwsStatus)(nil),
 		(*StatusObject_AzureStatus)(nil),
+		(*StatusObject_GcpStatus)(nil),
 	}
 }
 
@@ -285,6 +297,28 @@ type AWSStatusType struct {
 	// x-displayName: "CloudLink Direct Connect Connection Status"
 	// Status reported by Amazon Web Services (AWS) CloudLink Connection
 	ConnectionStatus []*DirectConnectConnectionStatusType `protobuf:"bytes,2,rep,name=connection_status,json=connectionStatus,proto3" json:"connection_status,omitempty"`
+	// Suggested Action
+	//
+	// x-displayName: "Suggested Action"
+	// x-example: "value"
+	// Suggested action for customer on error
+	SuggestedAction string `protobuf:"bytes,5,opt,name=suggested_action,json=suggestedAction,proto3" json:"suggested_action,omitempty"`
+	// Error Description
+	//
+	// x-displayName: "Error Description"
+	// x-example: "value"
+	// Description of error on site
+	ErrorDescription string `protobuf:"bytes,6,opt,name=error_description,json=errorDescription,proto3" json:"error_description,omitempty"`
+	// CloudLink State
+	//
+	// x-displayName: "CloudLink State"
+	// State of the connections with the CloudLink deployment
+	CloudLinkState CloudLinkState `protobuf:"varint,7,opt,name=cloud_link_state,json=cloudLinkState,proto3,enum=ves.io.schema.cloud_link.CloudLinkState" json:"cloud_link_state,omitempty"`
+	// CloudLink Deployment Status
+	//
+	// x-displayName: "Status"
+	// Status of the CloudLink deployment
+	DeploymentStatus CloudLinkDeploymentStatus `protobuf:"varint,8,opt,name=deployment_status,json=deploymentStatus,proto3,enum=ves.io.schema.cloud_link.CloudLinkDeploymentStatus" json:"deployment_status,omitempty"`
 }
 
 func (m *AWSStatusType) Reset()      { *m = AWSStatusType{} }
@@ -320,6 +354,34 @@ func (m *AWSStatusType) GetConnectionStatus() []*DirectConnectConnectionStatusTy
 		return m.ConnectionStatus
 	}
 	return nil
+}
+
+func (m *AWSStatusType) GetSuggestedAction() string {
+	if m != nil {
+		return m.SuggestedAction
+	}
+	return ""
+}
+
+func (m *AWSStatusType) GetErrorDescription() string {
+	if m != nil {
+		return m.ErrorDescription
+	}
+	return ""
+}
+
+func (m *AWSStatusType) GetCloudLinkState() CloudLinkState {
+	if m != nil {
+		return m.CloudLinkState
+	}
+	return UP
+}
+
+func (m *AWSStatusType) GetDeploymentStatus() CloudLinkDeploymentStatus {
+	if m != nil {
+		return m.DeploymentStatus
+	}
+	return IN_PROGRESS
 }
 
 // CloudLink Direct Connect Connection Status
@@ -405,11 +467,6 @@ type DirectConnectConnectionStatusType struct {
 	// x-displayName: "Direct Connect Gateway Status"
 	// Status reported by Amazon Web Services (AWS) Direct Connect Gateway Status and associations related to this Cloud Link
 	GatewayStatus *DirectConnectGatewayStatusType `protobuf:"bytes,15,opt,name=gateway_status,json=gatewayStatus,proto3" json:"gateway_status,omitempty"`
-	// CloudLink Connection Coordinates
-	//
-	// x-displayName: "CloudLink Connection Coordinates"
-	// Coordinates of the CloudLink Connection based on connection's physical location
-	Coordinates *Coordinates `protobuf:"bytes,16,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 	// AWS Object Link
 	//
 	// x-displayName: "AWS Object Link"
@@ -546,13 +603,6 @@ func (m *DirectConnectConnectionStatusType) GetVifStatus() *VirtualInterfaceStat
 func (m *DirectConnectConnectionStatusType) GetGatewayStatus() *DirectConnectGatewayStatusType {
 	if m != nil {
 		return m.GatewayStatus
-	}
-	return nil
-}
-
-func (m *DirectConnectConnectionStatusType) GetCoordinates() *Coordinates {
-	if m != nil {
-		return m.Coordinates
 	}
 	return nil
 }
@@ -876,15 +926,15 @@ type BGPPeerType struct {
 	// x-displayName: "Address Family"
 	// The address family setup for the BGP peer.
 	AddressFamily string `protobuf:"bytes,1,opt,name=address_family,json=addressFamily,proto3" json:"address_family,omitempty"`
-	// AWS Router Peer IP
+	// Cloud Provider Router Peer IP
 	//
-	// x-displayName: "AWS Router Peer IP"
-	// The BGP peer IP configured on the AWS endpoint
-	AmazonAddress string `protobuf:"bytes,2,opt,name=amazon_address,json=amazonAddress,proto3" json:"amazon_address,omitempty"`
-	// Amazon Web Services (AWS) ASN
+	// x-displayName: "Cloud Provider Router Peer IP"
+	// The BGP peer IP configured on the cloud provider endpoint
+	CloudProviderAddress string `protobuf:"bytes,8,opt,name=cloud_provider_address,json=cloudProviderAddress,proto3" json:"cloud_provider_address,omitempty"`
+	// Cloud Provider ASN
 	//
-	// x-displayName: "Amazon Web Services (AWS) ASN"
-	// The autonomous system number (ASN) for the Amazon side of the connection
+	// x-displayName: "Cloud Provider ASN"
+	// The autonomous system number (ASN) for the cloud provider side of the connection
 	Asn uint32 `protobuf:"varint,3,opt,name=asn,proto3" json:"asn,omitempty"`
 	// BGP Peer IP
 	//
@@ -943,9 +993,9 @@ func (m *BGPPeerType) GetAddressFamily() string {
 	return ""
 }
 
-func (m *BGPPeerType) GetAmazonAddress() string {
+func (m *BGPPeerType) GetCloudProviderAddress() string {
 	if m != nil {
-		return m.AmazonAddress
+		return m.CloudProviderAddress
 	}
 	return ""
 }
@@ -1104,67 +1154,6 @@ func (m *DirectConnectGatewayStatusType) GetAwsPath() string {
 	return ""
 }
 
-// Connection Coordinates
-//
-// x-displayName: "Connection Coordinates"
-// Coordinates of the Direct Connect Connection location
-type Coordinates struct {
-	// latitude
-	//
-	// x-displayName: "Latitude"
-	// x-example: "10.0"
-	// Latitude of the Direct Connect Connection location
-	Latitude float32 `protobuf:"fixed32,1,opt,name=latitude,proto3" json:"latitude,omitempty"`
-	// longitude
-	//
-	// x-displayName: "Longitude"
-	// x-example: "20.0"
-	// longitude of Direct Connect Connection location
-	Longitude float32 `protobuf:"fixed32,2,opt,name=longitude,proto3" json:"longitude,omitempty"`
-}
-
-func (m *Coordinates) Reset()      { *m = Coordinates{} }
-func (*Coordinates) ProtoMessage() {}
-func (*Coordinates) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c87a7a97fd6ae754, []int{8}
-}
-func (m *Coordinates) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Coordinates) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *Coordinates) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Coordinates.Merge(m, src)
-}
-func (m *Coordinates) XXX_Size() int {
-	return m.Size()
-}
-func (m *Coordinates) XXX_DiscardUnknown() {
-	xxx_messageInfo_Coordinates.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Coordinates proto.InternalMessageInfo
-
-func (m *Coordinates) GetLatitude() float32 {
-	if m != nil {
-		return m.Latitude
-	}
-	return 0
-}
-
-func (m *Coordinates) GetLongitude() float32 {
-	if m != nil {
-		return m.Longitude
-	}
-	return 0
-}
-
 // Azure Cloud Link Status
 //
 // x-displayName: "Azure Cloud Link Status"
@@ -1175,7 +1164,7 @@ type AzureStatusType struct {
 func (m *AzureStatusType) Reset()      { *m = AzureStatusType{} }
 func (*AzureStatusType) ProtoMessage() {}
 func (*AzureStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c87a7a97fd6ae754, []int{9}
+	return fileDescriptor_c87a7a97fd6ae754, []int{8}
 }
 func (m *AzureStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1200,6 +1189,345 @@ func (m *AzureStatusType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AzureStatusType proto.InternalMessageInfo
 
+// CloudLink GCP Cloud Interconnect Connection Status
+//
+// x-displayName: "CloudLink GCP Cloud Interconnect Connection Status"
+// Status reported by Google Cloud Platform (GCP) Cloud Interconnect attachment related to this Cloud Link
+type GCPCloudInterconnectAttachmentStatusType struct {
+	// GCP Cloud Interconnect Attachment Name
+	//
+	// x-displayName: "GCP Cloud Interconnect Attachment Name"
+	// The name of the GCP Cloud Interconnect Attachment
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Admin Enabled
+	//
+	// x-displayName: "Admin Enabled"
+	// Whether the GCP Cloud Interconnect attachment is administratively enabled
+	AdminEnabled bool `protobuf:"varint,2,opt,name=admin_enabled,json=adminEnabled,proto3" json:"admin_enabled,omitempty"`
+	// Operational Status
+	//
+	// x-displayName: "Operational Status"
+	// Provisioning status of this GCP Cloud Interconnect attachment
+	OperationalStatus string `protobuf:"bytes,3,opt,name=operational_status,json=operationalStatus,proto3" json:"operational_status,omitempty"`
+	// Type
+	//
+	// x-displayName: "Type"
+	// x-required
+	// Type of GCP Cloud Interconnect attachment
+	Type string `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`
+	// Router
+	//
+	// x-displayName: "Project"
+	// Name of the GCP Cloud Router to which this GCP Cloud Interconnect is connected
+	Router string `protobuf:"bytes,5,opt,name=router,proto3" json:"router,omitempty"`
+	// GCP Cloud Interconnect
+	//
+	// x-displayName: "GCP Cloud Interconnect"
+	// Name of the underlying GCP Cloud Interconnect that this attachment is attached to
+	Interconnect string `protobuf:"bytes,6,opt,name=interconnect,proto3" json:"interconnect,omitempty"`
+	// Bandwidth
+	//
+	// x-displayName: "Bandwidth"
+	// Provisioned bandwidth capacity for this GCP Cloud Interconnect attachment
+	Bandwidth string `protobuf:"bytes,7,opt,name=bandwidth,proto3" json:"bandwidth,omitempty"`
+	// Encryption
+	//
+	// x-displayName: "Encryption"
+	// Encryption type for this GCP Cloud Interconnect attachment
+	Encryption string `protobuf:"bytes,8,opt,name=encryption,proto3" json:"encryption,omitempty"`
+	// Virtual Local Area Network (VLAN)
+	//
+	// x-displayName: "Virtual Local Area Network (VLAN)"
+	// Virtual Local Area Network number for the GCP Cloud Interconnect attachment.
+	// This tag is required for any traffic traversing the GCP Cloud Router via this connection.
+	Vlan uint32 `protobuf:"varint,9,opt,name=vlan,proto3" json:"vlan,omitempty"`
+	// Maximum Transmission Unit (MTU)
+	//
+	// x-displayName: "Maximum Transmission Unit (MTU)"
+	// Maximum Transmission Unit (MTU) for the GCP Cloud Interconnect attachment.
+	Mtu uint32 `protobuf:"varint,10,opt,name=mtu,proto3" json:"mtu,omitempty"`
+	// Stack Type
+	//
+	// x-displayName: "Stack Type"
+	// TCP/IP Stack Type of the GCP Cloud Interconnect attachment.  Defaults to IPV4_ONLY.
+	StackType string `protobuf:"bytes,11,opt,name=stack_type,json=stackType,proto3" json:"stack_type,omitempty"`
+	// Cloud Router IP Address
+	//
+	// x-displayName: "Cloud Router IP Address"
+	// IP address of this interconnect attachment on the GCP Cloud Router
+	CloudRouterIp string `protobuf:"bytes,12,opt,name=cloud_router_ip,json=cloudRouterIp,proto3" json:"cloud_router_ip,omitempty"`
+	// Customer Router IP Address
+	//
+	// x-displayName: "Customer Router IP Address"
+	// IP address of this interconnect attachment on the customer side
+	CustomerRouterIp string `protobuf:"bytes,13,opt,name=customer_router_ip,json=customerRouterIp,proto3" json:"customer_router_ip,omitempty"`
+	// Availability Domain
+	//
+	// x-displayName: "Availability Domain"
+	// Desired availability domain this attachment. Defaults to AVAILABILITY_DOMAIN_ANY.
+	AvailabilityDomain string `protobuf:"bytes,14,opt,name=availability_domain,json=availabilityDomain,proto3" json:"availability_domain,omitempty"`
+	// Partner Metadata
+	//
+	// x-displayName: "Partner Metadata"
+	// Partner information for this GCP Cloud Interconnect attachment
+	PartnerMetadata *GCPPartnerMetadata `protobuf:"bytes,15,opt,name=partner_metadata,json=partnerMetadata,proto3" json:"partner_metadata,omitempty"`
+	// Partner ASN
+	//
+	// x-displayName: "Partner ASN"
+	// Partner Autonomous System Number (ASN) for this GCP Cloud Interconnect attachment
+	PartnerAsn uint32 `protobuf:"varint,16,opt,name=partner_asn,json=partnerAsn,proto3" json:"partner_asn,omitempty"`
+	// GCP Cloud Interconnect Attachment State
+	//
+	// x-displayName: "GCP Cloud Interconnect Attachment State"
+	// The state of the GCP Cloud Interconnect Attachment.
+	AttachmentState string `protobuf:"bytes,17,opt,name=attachment_state,json=attachmentState,proto3" json:"attachment_state,omitempty"`
+	// Dataplane Version
+	//
+	// x-displayName: "GCP Cloud Interconnect Dataplane Version"
+	// The dataplane version of the GCP Cloud Interconnect Attachment.
+	DataplaneVersion int32 `protobuf:"varint,18,opt,name=dataplane_version,json=dataplaneVersion,proto3" json:"dataplane_version,omitempty"`
+	// BGP Peers
+	//
+	// x-displayName: "BGP Peers"
+	// BGP peer status for this GCP Cloud Interconnect.
+	BgpPeers []*BGPPeerType `protobuf:"bytes,19,rep,name=bgp_peers,json=bgpPeers,proto3" json:"bgp_peers,omitempty"`
+	// Labels
+	//
+	// x-displayName: "Labels"
+	// x-example: "dev: staging"
+	// Labels are user-defined keys and values associated with this GCP Cloud Interconnect attachment
+	Labels map[string]string `protobuf:"bytes,20,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) Reset() {
+	*m = GCPCloudInterconnectAttachmentStatusType{}
+}
+func (*GCPCloudInterconnectAttachmentStatusType) ProtoMessage() {}
+func (*GCPCloudInterconnectAttachmentStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c87a7a97fd6ae754, []int{9}
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPCloudInterconnectAttachmentStatusType.Merge(m, src)
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPCloudInterconnectAttachmentStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPCloudInterconnectAttachmentStatusType proto.InternalMessageInfo
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetAdminEnabled() bool {
+	if m != nil {
+		return m.AdminEnabled
+	}
+	return false
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetOperationalStatus() string {
+	if m != nil {
+		return m.OperationalStatus
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetType() string {
+	if m != nil {
+		return m.Type
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetRouter() string {
+	if m != nil {
+		return m.Router
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetInterconnect() string {
+	if m != nil {
+		return m.Interconnect
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetBandwidth() string {
+	if m != nil {
+		return m.Bandwidth
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetEncryption() string {
+	if m != nil {
+		return m.Encryption
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetVlan() uint32 {
+	if m != nil {
+		return m.Vlan
+	}
+	return 0
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetMtu() uint32 {
+	if m != nil {
+		return m.Mtu
+	}
+	return 0
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetStackType() string {
+	if m != nil {
+		return m.StackType
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetCloudRouterIp() string {
+	if m != nil {
+		return m.CloudRouterIp
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetCustomerRouterIp() string {
+	if m != nil {
+		return m.CustomerRouterIp
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetAvailabilityDomain() string {
+	if m != nil {
+		return m.AvailabilityDomain
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetPartnerMetadata() *GCPPartnerMetadata {
+	if m != nil {
+		return m.PartnerMetadata
+	}
+	return nil
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetPartnerAsn() uint32 {
+	if m != nil {
+		return m.PartnerAsn
+	}
+	return 0
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetAttachmentState() string {
+	if m != nil {
+		return m.AttachmentState
+	}
+	return ""
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetDataplaneVersion() int32 {
+	if m != nil {
+		return m.DataplaneVersion
+	}
+	return 0
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetBgpPeers() []*BGPPeerType {
+	if m != nil {
+		return m.BgpPeers
+	}
+	return nil
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+// GCP Cloud Link Status
+//
+// x-displayName: "GCP Cloud Link Status"
+// Status reported by associated GCP cloud components
+type GCPStatusType struct {
+	// CloudLink GCP Cloud Interconnect Status
+	//
+	// x-displayName: "CloudLink GCP Cloud Interconnect Connection Status"
+	// Status reported by Google Cloud Platform (GCP) CloudLink Connection
+	ConnectionStatus []*GCPCloudInterconnectAttachmentStatusType `protobuf:"bytes,2,rep,name=connection_status,json=connectionStatus,proto3" json:"connection_status,omitempty"`
+	// CloudLink State
+	//
+	// x-displayName: "CloudLink State"
+	// State of the connections with the CloudLink deployment
+	CloudLinkState CloudLinkState `protobuf:"varint,3,opt,name=cloud_link_state,json=cloudLinkState,proto3,enum=ves.io.schema.cloud_link.CloudLinkState" json:"cloud_link_state,omitempty"`
+}
+
+func (m *GCPStatusType) Reset()      { *m = GCPStatusType{} }
+func (*GCPStatusType) ProtoMessage() {}
+func (*GCPStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c87a7a97fd6ae754, []int{10}
+}
+func (m *GCPStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPStatusType.Merge(m, src)
+}
+func (m *GCPStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPStatusType proto.InternalMessageInfo
+
+func (m *GCPStatusType) GetConnectionStatus() []*GCPCloudInterconnectAttachmentStatusType {
+	if m != nil {
+		return m.ConnectionStatus
+	}
+	return nil
+}
+
+func (m *GCPStatusType) GetCloudLinkState() CloudLinkState {
+	if m != nil {
+		return m.CloudLinkState
+	}
+	return UP
+}
+
 func init() {
 	proto.RegisterType((*Object)(nil), "ves.io.schema.cloud_link.Object")
 	golang_proto.RegisterType((*Object)(nil), "ves.io.schema.cloud_link.Object")
@@ -1221,10 +1549,14 @@ func init() {
 	golang_proto.RegisterType((*BGPPeerType)(nil), "ves.io.schema.cloud_link.BGPPeerType")
 	proto.RegisterType((*DirectConnectGatewayStatusType)(nil), "ves.io.schema.cloud_link.DirectConnectGatewayStatusType")
 	golang_proto.RegisterType((*DirectConnectGatewayStatusType)(nil), "ves.io.schema.cloud_link.DirectConnectGatewayStatusType")
-	proto.RegisterType((*Coordinates)(nil), "ves.io.schema.cloud_link.Coordinates")
-	golang_proto.RegisterType((*Coordinates)(nil), "ves.io.schema.cloud_link.Coordinates")
 	proto.RegisterType((*AzureStatusType)(nil), "ves.io.schema.cloud_link.AzureStatusType")
 	golang_proto.RegisterType((*AzureStatusType)(nil), "ves.io.schema.cloud_link.AzureStatusType")
+	proto.RegisterType((*GCPCloudInterconnectAttachmentStatusType)(nil), "ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType")
+	golang_proto.RegisterType((*GCPCloudInterconnectAttachmentStatusType)(nil), "ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType.LabelsEntry")
+	proto.RegisterType((*GCPStatusType)(nil), "ves.io.schema.cloud_link.GCPStatusType")
+	golang_proto.RegisterType((*GCPStatusType)(nil), "ves.io.schema.cloud_link.GCPStatusType")
 }
 
 func init() {
@@ -1235,128 +1567,171 @@ func init() {
 }
 
 var fileDescriptor_c87a7a97fd6ae754 = []byte{
-	// 1926 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0x4f, 0x6c, 0x1b, 0xc7,
-	0xf5, 0xe6, 0x8a, 0x94, 0xc4, 0x7d, 0xfc, 0x23, 0x6a, 0x2c, 0x2b, 0x2b, 0x46, 0x66, 0x68, 0x3a,
-	0xfe, 0x59, 0xfe, 0xc1, 0xa2, 0x6a, 0x57, 0x48, 0x63, 0xb5, 0x75, 0x21, 0x2a, 0x8e, 0xa2, 0xc0,
-	0x76, 0x8c, 0x55, 0x5a, 0x21, 0x45, 0x51, 0x62, 0xb8, 0x3b, 0x5c, 0x6e, 0xb4, 0xdc, 0xd9, 0xce,
-	0xce, 0x52, 0x51, 0x80, 0x02, 0xbd, 0xb5, 0x87, 0x1c, 0xda, 0x4b, 0x51, 0x14, 0x3d, 0xf5, 0x92,
-	0xa2, 0xbd, 0xe6, 0x54, 0x5f, 0x12, 0xf7, 0x52, 0xe4, 0x64, 0xf4, 0xe4, 0x63, 0x2d, 0x5f, 0x5a,
-	0xf4, 0x12, 0xf4, 0x5e, 0xa0, 0x98, 0xd9, 0x5d, 0x72, 0xb9, 0x24, 0x6d, 0xa3, 0x2e, 0x7a, 0x11,
-	0x66, 0xdf, 0xfb, 0xde, 0x37, 0x33, 0x6f, 0xde, 0xfb, 0x66, 0x44, 0xb8, 0x3c, 0x20, 0x7e, 0xd3,
-	0xa6, 0x5b, 0xbe, 0xd1, 0x23, 0x7d, 0xbc, 0x65, 0x38, 0x34, 0x30, 0xdb, 0x8e, 0xed, 0x1e, 0x6f,
-	0xd1, 0xce, 0x87, 0xc4, 0xe0, 0x4d, 0x8f, 0x51, 0x4e, 0x91, 0x16, 0xc2, 0x9a, 0x21, 0xac, 0x39,
-	0x82, 0x55, 0x37, 0x2d, 0x9b, 0xf7, 0x82, 0x4e, 0xd3, 0xa0, 0xfd, 0x2d, 0x8b, 0x5a, 0x74, 0x4b,
-	0x06, 0x74, 0x82, 0xae, 0xfc, 0x92, 0x1f, 0x72, 0x14, 0x12, 0x55, 0x5f, 0x9f, 0x39, 0x1f, 0x3f,
-	0xf5, 0x88, 0x1f, 0xa1, 0x5e, 0x1d, 0x47, 0x51, 0x8f, 0xdb, 0xd4, 0x8d, 0x9d, 0x6b, 0xe3, 0xce,
-	0x64, 0xdc, 0xfa, 0xb8, 0x6b, 0x80, 0x1d, 0xdb, 0xc4, 0x9c, 0x44, 0xde, 0x46, 0xca, 0x4b, 0x7c,
-	0xe2, 0x0e, 0x52, 0xe4, 0xf5, 0x14, 0xc6, 0x26, 0x27, 0xed, 0x71, 0xc4, 0x6b, 0x93, 0x08, 0x3f,
-	0xb9, 0x88, 0xc6, 0x3f, 0x14, 0x58, 0x78, 0x4f, 0x26, 0x0f, 0xdd, 0x84, 0x7c, 0x9f, 0x70, 0x6c,
-	0x62, 0x8e, 0x35, 0xa5, 0xae, 0x6c, 0x14, 0x6e, 0x5c, 0x68, 0x8e, 0x67, 0x32, 0x04, 0xde, 0x25,
-	0x1c, 0xbf, 0x7f, 0xea, 0x11, 0x7d, 0x08, 0x47, 0x77, 0x60, 0xc9, 0x3f, 0xf5, 0x39, 0xe9, 0xb7,
-	0x87, 0x0c, 0x73, 0x92, 0xe1, 0x52, 0x8a, 0xe1, 0x50, 0xa2, 0x52, 0x3c, 0xe5, 0x30, 0xf6, 0x6e,
-	0xcc, 0xf6, 0x06, 0xe4, 0x7c, 0x8f, 0x18, 0x5a, 0x56, 0x52, 0x34, 0x9a, 0xb3, 0x8e, 0xb3, 0x79,
-	0xe8, 0x11, 0x43, 0x32, 0x48, 0xfc, 0x4e, 0xfd, 0xd7, 0xdf, 0x99, 0x37, 0x49, 0x9f, 0x5e, 0x7f,
-	0xf8, 0x85, 0x36, 0x57, 0x51, 0xbe, 0xfc, 0x42, 0x2b, 0x0f, 0x88, 0xbf, 0x69, 0xd3, 0x4d, 0x97,
-	0xf0, 0x13, 0xca, 0x8e, 0x1b, 0x77, 0x21, 0x1f, 0xc7, 0xa0, 0x5d, 0x58, 0xb4, 0x8c, 0xb6, 0x9c,
-	0x28, 0x5c, 0xeb, 0xc6, 0xec, 0x89, 0xf6, 0x1d, 0xda, 0xc1, 0xce, 0x70, 0xba, 0x05, 0xcb, 0x10,
-	0xe3, 0xc6, 0x1f, 0xb2, 0x50, 0x3c, 0xe4, 0x98, 0x07, 0xfe, 0x0b, 0xa7, 0x30, 0x84, 0x4f, 0x4d,
-	0x61, 0x21, 0x2c, 0xe2, 0x36, 0x23, 0x5d, 0x5f, 0x9b, 0xab, 0x67, 0x37, 0x0a, 0x37, 0xd6, 0xa7,
-	0x1e, 0x80, 0x4e, 0xba, 0x22, 0xb8, 0x55, 0xfa, 0xfd, 0x8f, 0x61, 0xb4, 0x48, 0x1d, 0x68, 0xec,
-	0xf5, 0xd1, 0xb7, 0x00, 0x0c, 0xea, 0x9a, 0xb6, 0xac, 0x05, 0x2d, 0x3b, 0x95, 0x6c, 0x2f, 0x06,
-	0xc8, 0x95, 0x24, 0xf0, 0xe8, 0x1d, 0x00, 0x7c, 0xe2, 0xb7, 0x7d, 0xb9, 0x56, 0x6d, 0x5e, 0x6e,
-	0xe4, 0xca, 0xec, 0xec, 0xec, 0x1e, 0x1d, 0x86, 0xdb, 0x12, 0x44, 0xef, 0x64, 0x74, 0x15, 0x9f,
-	0xf8, 0xa1, 0x01, 0xdd, 0x83, 0x22, 0xfe, 0x38, 0x60, 0x24, 0xe6, 0x5a, 0x90, 0x5c, 0x57, 0x9f,
-	0xc1, 0x25, 0xd0, 0x63, 0x6c, 0x05, 0x3c, 0x32, 0xed, 0xac, 0xfd, 0xe5, 0x56, 0x05, 0xca, 0x50,
-	0x8c, 0xd3, 0xd6, 0x0c, 0x6c, 0xf3, 0x9f, 0xb7, 0xb2, 0xd7, 0xaf, 0x6d, 0xb7, 0xd6, 0x60, 0x79,
-	0xc4, 0x13, 0xcd, 0x87, 0x72, 0x8f, 0x1e, 0x28, 0xb9, 0x77, 0x73, 0xf9, 0x5c, 0x65, 0xbe, 0xf1,
-	0x1b, 0x05, 0x4a, 0x63, 0x4b, 0x45, 0x3d, 0x58, 0x36, 0xa8, 0xeb, 0x12, 0x43, 0x6c, 0x3b, 0x5e,
-	0x62, 0x98, 0xf9, 0x6f, 0xce, 0x5e, 0xe2, 0x5b, 0x36, 0x23, 0x06, 0xdf, 0x0b, 0x03, 0xf7, 0x86,
-	0xf1, 0x23, 0x5e, 0xbd, 0x62, 0xa4, 0xac, 0x3b, 0xe7, 0x1f, 0x3e, 0x50, 0x96, 0x61, 0x09, 0x60,
-	0xf7, 0xe8, 0xb0, 0x1e, 0xe5, 0x46, 0xb9, 0xf1, 0x6e, 0x2e, 0x9f, 0xad, 0xc4, 0xcb, 0xfb, 0x54,
-	0x85, 0x8b, 0xcf, 0xa5, 0x46, 0xeb, 0xa0, 0x76, 0xb0, 0x6b, 0x9e, 0xd8, 0x26, 0xef, 0xc9, 0x12,
-	0x53, 0xf5, 0x91, 0x01, 0x5d, 0x82, 0x52, 0x62, 0x43, 0xb6, 0x29, 0x2b, 0x5b, 0xd5, 0x8b, 0x23,
-	0xe3, 0x81, 0x89, 0xae, 0xc0, 0x52, 0x02, 0xe4, 0xe2, 0x3e, 0x91, 0x9d, 0xa6, 0xea, 0xe5, 0x91,
-	0xf9, 0x1e, 0xee, 0x13, 0xf4, 0x53, 0x05, 0x2a, 0xa9, 0xfc, 0x10, 0x2d, 0x27, 0xa0, 0xad, 0x1f,
-	0xfc, 0xf1, 0xef, 0x9f, 0x67, 0x8f, 0xd8, 0x77, 0xf5, 0x3c, 0x65, 0x26, 0x61, 0xb6, 0x6b, 0xe9,
-	0x2a, 0x23, 0x3f, 0x0a, 0x88, 0xcf, 0x89, 0xa9, 0x2f, 0x7a, 0xc4, 0x35, 0xa5, 0x0d, 0x0f, 0xb0,
-	0xed, 0xe0, 0x8e, 0x43, 0xf4, 0x9c, 0x49, 0x4f, 0x5c, 0x3d, 0x6f, 0x12, 0x87, 0x70, 0xe1, 0x5a,
-	0x94, 0x23, 0x62, 0xea, 0x79, 0x46, 0x44, 0xd9, 0x8a, 0xb0, 0xc0, 0x3d, 0x76, 0x05, 0x6a, 0x69,
-	0x3c, 0x7f, 0x04, 0xbd, 0x07, 0xab, 0x3d, 0xec, 0xb7, 0x1d, 0x6a, 0xd9, 0x06, 0x76, 0xda, 0x8c,
-	0x98, 0x81, 0x6b, 0x62, 0xd7, 0x38, 0x95, 0xc5, 0xa9, 0xb6, 0xd6, 0xc4, 0x72, 0x56, 0x18, 0x1a,
-	0x51, 0x64, 0x4f, 0x89, 0xaf, 0xcf, 0xb9, 0x54, 0x5f, 0xe9, 0x61, 0xff, 0x4e, 0x18, 0xa7, 0x0f,
-	0xc3, 0x50, 0x15, 0xf2, 0x0e, 0x35, 0xb0, 0x98, 0x41, 0xd6, 0xa4, 0xaa, 0x0f, 0xbf, 0xd1, 0x45,
-	0x28, 0x7a, 0x98, 0x71, 0x97, 0xb0, 0x30, 0x39, 0x8b, 0xd2, 0x5f, 0x88, 0x6c, 0x32, 0x33, 0x97,
-	0xa0, 0xe4, 0x31, 0x3a, 0xb0, 0xcd, 0x18, 0x93, 0x0f, 0xf3, 0x1c, 0x1b, 0x25, 0x68, 0x15, 0x16,
-	0x18, 0xb1, 0xc4, 0x0c, 0xaa, 0xf4, 0x46, 0x5f, 0xe8, 0x03, 0xc8, 0x71, 0x6c, 0xf9, 0x1a, 0xc8,
-	0x42, 0xbb, 0xfd, 0x12, 0x85, 0xd6, 0x7c, 0x1f, 0x5b, 0xfe, 0x6d, 0x97, 0xb3, 0x53, 0x5d, 0x52,
-	0x22, 0x04, 0xb9, 0x81, 0x83, 0x5d, 0xad, 0x50, 0x57, 0x36, 0x4a, 0xba, 0x1c, 0xa3, 0x26, 0x9c,
-	0xfb, 0x30, 0xe8, 0x77, 0x68, 0xbb, 0xcb, 0x70, 0x9f, 0xb4, 0x0d, 0xec, 0x89, 0xf3, 0xd0, 0x8a,
-	0x75, 0x65, 0x23, 0xaf, 0x2f, 0x4b, 0xd7, 0xdb, 0xc2, 0xb3, 0x17, 0x3a, 0xc4, 0xde, 0xe8, 0x89,
-	0xd8, 0x3c, 0x36, 0x0c, 0x1a, 0xb8, 0x5c, 0x2b, 0x85, 0x7b, 0x93, 0xc6, 0xdd, 0xd0, 0x86, 0x0e,
-	0x01, 0x06, 0x76, 0x37, 0x6e, 0x99, 0xb2, 0xec, 0xea, 0xed, 0xd9, 0x3b, 0xf9, 0x9e, 0xcd, 0x78,
-	0x80, 0x9d, 0x03, 0x97, 0x13, 0xd6, 0xc5, 0x46, 0xa2, 0xc1, 0x75, 0x75, 0x60, 0x77, 0xa3, 0x86,
-	0x68, 0x43, 0xd9, 0xc2, 0x9c, 0x9c, 0xe0, 0xd3, 0x98, 0x78, 0x49, 0x12, 0xbf, 0xf9, 0x82, 0x29,
-	0xda, 0x0f, 0x83, 0x13, 0xe4, 0x25, 0x2b, 0x69, 0x42, 0xfb, 0x50, 0x30, 0x28, 0x65, 0xa6, 0xed,
-	0x62, 0x4e, 0x7c, 0xad, 0x22, 0xd9, 0x2f, 0xcf, 0x66, 0xdf, 0x1b, 0x81, 0xf5, 0x64, 0x24, 0x5a,
-	0x83, 0xbc, 0x10, 0x48, 0x0f, 0xf3, 0x9e, 0xb6, 0x2c, 0xd3, 0xb3, 0x88, 0x4f, 0xfc, 0xfb, 0x98,
-	0xf7, 0xaa, 0xdf, 0x00, 0x75, 0x78, 0x2a, 0xa8, 0x02, 0xd9, 0x63, 0x72, 0x1a, 0xf5, 0xa9, 0x18,
-	0xa2, 0x15, 0x98, 0x1f, 0x60, 0x27, 0x20, 0x51, 0x67, 0x86, 0x1f, 0x3b, 0x73, 0x6f, 0x2a, 0x3b,
-	0x9f, 0x2a, 0x5f, 0x3e, 0x50, 0x7e, 0xab, 0x40, 0x1d, 0x4a, 0xa3, 0xb3, 0xae, 0x1f, 0xbc, 0x55,
-	0x5d, 0x4a, 0x35, 0x35, 0xbc, 0x0e, 0x4b, 0x09, 0x84, 0xa8, 0xb5, 0xea, 0xf2, 0x44, 0x4f, 0xc3,
-	0xff, 0x41, 0x25, 0x81, 0x92, 0x7d, 0x54, 0x45, 0x93, 0x0d, 0x0d, 0x1a, 0xa8, 0xad, 0x58, 0x40,
-	0xaa, 0x85, 0x84, 0xbc, 0xc0, 0x2a, 0xe4, 0xef, 0x44, 0x4d, 0x51, 0x85, 0x51, 0xc3, 0x34, 0x7e,
-	0x06, 0x50, 0x9d, 0x7d, 0xa2, 0x68, 0x07, 0xca, 0xd8, 0x34, 0x19, 0xf1, 0xfd, 0x76, 0x17, 0xf7,
-	0x6d, 0x27, 0xda, 0x7f, 0xeb, 0x9c, 0x68, 0xd2, 0x32, 0x2b, 0xea, 0x39, 0xdb, 0x1b, 0x6c, 0xcb,
-	0xbf, 0x6f, 0xe8, 0xa5, 0x08, 0xfa, 0xb6, 0x44, 0xa2, 0xcb, 0x50, 0xc6, 0x7d, 0xfc, 0x31, 0x75,
-	0xdb, 0x91, 0x3d, 0xca, 0x53, 0x29, 0xb4, 0xee, 0x86, 0x46, 0x74, 0x01, 0x20, 0x86, 0xf9, 0xae,
-	0x54, 0xaf, 0x9c, 0xae, 0x46, 0x10, 0xdf, 0x45, 0xaf, 0xc0, 0x62, 0xc7, 0xf2, 0xa4, 0x2f, 0x27,
-	0x3b, 0x61, 0xa1, 0x63, 0x79, 0xc2, 0x31, 0xa1, 0x8f, 0xf3, 0x53, 0xf4, 0xf1, 0x26, 0xac, 0x99,
-	0xb2, 0xac, 0xda, 0x91, 0xb9, 0x1d, 0x57, 0xa5, 0x6d, 0x46, 0x62, 0xb1, 0x6a, 0x4e, 0xa9, 0xbb,
-	0x03, 0x13, 0x7d, 0x1b, 0x5e, 0x9d, 0x11, 0x9a, 0x50, 0x12, 0x6d, 0x5a, 0xb0, 0x54, 0x8c, 0x5f,
-	0x2a, 0xf0, 0xca, 0x20, 0x4c, 0x6c, 0xdb, 0x8e, 0x33, 0x1b, 0xe9, 0xae, 0x54, 0x98, 0xd6, 0x0f,
-	0x45, 0x0e, 0x3f, 0x60, 0x47, 0xf2, 0xba, 0xee, 0xda, 0xac, 0x2f, 0x55, 0x76, 0x40, 0x98, 0xdd,
-	0x3d, 0x95, 0xaa, 0xfa, 0x92, 0xca, 0x7b, 0x7e, 0x30, 0xe5, 0x5c, 0xc9, 0x98, 0x5c, 0xaa, 0x29,
-	0xb9, 0x1c, 0xc9, 0x1c, 0x8c, 0xc9, 0x9c, 0x1e, 0xc9, 0x5c, 0x41, 0xca, 0xdc, 0xad, 0xff, 0x44,
-	0x1c, 0x66, 0xea, 0x5b, 0x31, 0xa1, 0x6f, 0x5f, 0x83, 0x95, 0xc9, 0x9c, 0xd9, 0x66, 0x24, 0x5b,
-	0x28, 0xbd, 0xa1, 0x03, 0x13, 0x6d, 0xc3, 0xea, 0x64, 0x84, 0x3c, 0xa0, 0xb2, 0x8c, 0x59, 0x49,
-	0xc7, 0xc8, 0xc3, 0x39, 0x9a, 0x16, 0x25, 0x9e, 0xd2, 0x52, 0xa5, 0xd4, 0xd6, 0x45, 0x71, 0x34,
-	0xeb, 0xac, 0xaa, 0x2f, 0x7a, 0xcc, 0x1e, 0x60, 0x4e, 0xf4, 0x05, 0x2f, 0xe8, 0x38, 0xb6, 0xa1,
-	0x2f, 0x72, 0x86, 0x5d, 0xdf, 0xe6, 0x93, 0xc4, 0xb2, 0x5f, 0x5a, 0xa0, 0x8a, 0x6a, 0xf5, 0x08,
-	0x61, 0x42, 0x93, 0xb2, 0xcf, 0xd6, 0xa4, 0xd6, 0xfe, 0xfd, 0xfb, 0x84, 0xb0, 0xf0, 0xf5, 0xd8,
-	0xb1, 0x3c, 0xf1, 0xe1, 0xcf, 0x12, 0xf9, 0xe5, 0x59, 0x22, 0x5f, 0x81, 0x6c, 0x9f, 0x07, 0x1a,
-	0x92, 0x79, 0x14, 0xc3, 0x49, 0xd9, 0x3f, 0x37, 0x45, 0xf6, 0x3f, 0x82, 0xd7, 0x52, 0xf5, 0x8d,
-	0x39, 0xc7, 0x46, 0xaf, 0x4f, 0x5c, 0x1e, 0xd5, 0xe9, 0x8a, 0x4c, 0xc6, 0x75, 0x91, 0x8c, 0x6b,
-	0xec, 0xff, 0x75, 0x35, 0x04, 0x88, 0xba, 0xcb, 0x87, 0x43, 0x62, 0xea, 0xaa, 0x49, 0x86, 0xc6,
-	0x70, 0x48, 0x4c, 0x7d, 0x7d, 0xac, 0x2d, 0x76, 0x87, 0xbc, 0x61, 0x05, 0xee, 0xc2, 0x85, 0xf4,
-	0x54, 0x6d, 0xa3, 0x87, 0x5d, 0x8b, 0xb4, 0x09, 0x63, 0x94, 0x69, 0xe7, 0xe5, 0x72, 0xab, 0x78,
-	0x3c, 0x6e, 0x4f, 0x42, 0x6e, 0x0b, 0xc4, 0x98, 0x68, 0xaf, 0xfe, 0x77, 0x44, 0xbb, 0xf1, 0xaf,
-	0x2c, 0x14, 0x12, 0x27, 0xf2, 0xbf, 0xd0, 0xbe, 0x0a, 0x64, 0x63, 0xd1, 0x2b, 0xe9, 0x62, 0x88,
-	0x6a, 0x50, 0x88, 0x0b, 0x48, 0x14, 0x7e, 0x2e, 0x7a, 0x15, 0x86, 0xb5, 0x71, 0x60, 0x8a, 0x7b,
-	0x75, 0xe8, 0x0f, 0x0f, 0x29, 0x7c, 0x35, 0xdd, 0x14, 0x8b, 0xda, 0x66, 0x37, 0x9e, 0x27, 0x20,
-	0x53, 0xa4, 0xa3, 0x18, 0xb1, 0x87, 0x87, 0x73, 0x13, 0x40, 0x4c, 0x90, 0x78, 0xe3, 0xab, 0xad,
-	0xaa, 0x20, 0x3f, 0xcf, 0xce, 0xe9, 0x73, 0x81, 0x17, 0x49, 0xd0, 0x50, 0x65, 0xc4, 0xda, 0xa2,
-	0x2b, 0xf9, 0x2a, 0x54, 0x8c, 0xc0, 0xe7, 0xb4, 0x2f, 0x2a, 0x2f, 0xda, 0x76, 0x28, 0x93, 0x4b,
-	0xb1, 0x3d, 0xda, 0xf8, 0xce, 0x2f, 0xc4, 0x05, 0xf9, 0x89, 0x02, 0x0d, 0x28, 0xef, 0xca, 0x8c,
-	0xd4, 0x23, 0x4f, 0xb5, 0x92, 0xce, 0x9c, 0xbc, 0xfc, 0xa2, 0xf0, 0x21, 0x0a, 0x4d, 0x4e, 0x25,
-	0xb8, 0x5a, 0xfb, 0xf7, 0xeb, 0x62, 0x2b, 0xd1, 0x15, 0x59, 0x49, 0x27, 0x0b, 0xaa, 0x00, 0x02,
-	0x13, 0x2e, 0xb8, 0x5a, 0x4c, 0xee, 0xb5, 0xf1, 0xab, 0x2c, 0xd4, 0x9e, 0xfd, 0x06, 0x49, 0xdd,
-	0x55, 0x4a, 0xfa, 0xae, 0x7a, 0xe6, 0x6d, 0x33, 0xf7, 0x32, 0xb7, 0x4d, 0xf6, 0x39, 0xb7, 0x0d,
-	0x85, 0xf5, 0x19, 0xe1, 0xc9, 0x97, 0x7e, 0x53, 0x9c, 0xe3, 0x55, 0x76, 0xe5, 0x45, 0x2b, 0x63,
-	0xcd, 0x9c, 0x91, 0x0e, 0x82, 0xae, 0x01, 0x9a, 0xd2, 0xb8, 0xe1, 0x8d, 0x5a, 0xf1, 0xd3, 0xed,
-	0x3a, 0x21, 0x48, 0x8b, 0x53, 0x04, 0x29, 0xd9, 0xd3, 0xf9, 0xb1, 0x9e, 0x6e, 0xf4, 0xa1, 0x90,
-	0x78, 0xbf, 0xa1, 0x4d, 0xc8, 0x3b, 0x98, 0xdb, 0x3c, 0x30, 0x89, 0x3c, 0x84, 0xb9, 0xd6, 0xb2,
-	0xd8, 0x59, 0x11, 0xe0, 0x42, 0x26, 0xf3, 0x59, 0x6b, 0x33, 0x93, 0xf9, 0xec, 0xa1, 0x3e, 0x84,
-	0xa0, 0x2d, 0x50, 0x1d, 0xea, 0x5a, 0x21, 0x7e, 0x2e, 0x8d, 0xdf, 0xde, 0xdb, 0xcc, 0x64, 0xb6,
-	0xff, 0xa4, 0x8f, 0x30, 0x8d, 0x65, 0x58, 0x4a, 0xfd, 0xef, 0xda, 0xfa, 0x44, 0x79, 0xf4, 0xa4,
-	0x96, 0x79, 0xfc, 0xa4, 0x96, 0xf9, 0xea, 0x49, 0x4d, 0xf9, 0xc9, 0x59, 0x4d, 0xf9, 0xdd, 0x59,
-	0x4d, 0xf9, 0xf3, 0x59, 0x4d, 0x79, 0x74, 0x56, 0x53, 0x1e, 0x9f, 0xd5, 0x94, 0xbf, 0x9e, 0xd5,
-	0x94, 0xbf, 0x9d, 0xd5, 0x32, 0x5f, 0x9d, 0xd5, 0x94, 0x9f, 0x3f, 0xad, 0x65, 0x3e, 0x7f, 0x5a,
-	0x53, 0x1e, 0x3d, 0xad, 0x65, 0x1e, 0x3f, 0xad, 0x65, 0xbe, 0x7f, 0xcf, 0xa2, 0xde, 0xb1, 0xd5,
-	0x1c, 0x50, 0x87, 0x13, 0xc6, 0x70, 0x33, 0xf0, 0xb7, 0xe4, 0xa0, 0x4b, 0x59, 0x7f, 0x33, 0xfe,
-	0x4f, 0x63, 0x33, 0x76, 0x6f, 0x79, 0x1d, 0x8b, 0x6e, 0x91, 0x8f, 0x78, 0xf4, 0x53, 0xcf, 0xc4,
-	0x6f, 0x56, 0x9d, 0x05, 0xf9, 0x8b, 0xcf, 0xd7, 0xff, 0x1d, 0x00, 0x00, 0xff, 0xff, 0xdc, 0x0c,
-	0xc2, 0x59, 0x46, 0x13, 0x00, 0x00,
+	// 2619 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x59, 0xcf, 0x6f, 0x1b, 0xc7,
+	0xf5, 0xd7, 0x8a, 0x94, 0x48, 0x3e, 0x89, 0xe4, 0x72, 0x2c, 0x2b, 0x6b, 0x46, 0xa6, 0x19, 0x26,
+	0x71, 0x94, 0xc4, 0xa4, 0x6c, 0x47, 0xdf, 0x7c, 0x63, 0xb5, 0x4d, 0x21, 0xfe, 0x88, 0x42, 0xc3,
+	0x96, 0xd9, 0x91, 0x6c, 0x23, 0x45, 0xdb, 0xed, 0x70, 0x77, 0xb4, 0xda, 0x88, 0xdc, 0xdd, 0xee,
+	0x2e, 0xa9, 0x30, 0x40, 0x81, 0x02, 0x2d, 0xda, 0x14, 0x28, 0xda, 0x9e, 0x8a, 0x1e, 0x7a, 0x69,
+	0x0e, 0x6d, 0x91, 0x3f, 0xa1, 0xb9, 0x24, 0x39, 0x15, 0x39, 0x19, 0x3d, 0x05, 0x3d, 0xd5, 0x72,
+	0x0f, 0x2d, 0x7a, 0x09, 0x72, 0xe9, 0xad, 0x28, 0x66, 0x66, 0x97, 0x5c, 0x52, 0xa4, 0xed, 0xc6,
+	0xbd, 0x48, 0xb3, 0xef, 0xd7, 0xce, 0xbc, 0x1f, 0x9f, 0xf7, 0x66, 0x09, 0xcf, 0xf7, 0xa9, 0x57,
+	0x31, 0xed, 0x0d, 0x4f, 0x3b, 0xa4, 0x5d, 0xb2, 0xa1, 0x75, 0xec, 0x9e, 0xae, 0x76, 0x4c, 0xeb,
+	0x68, 0xc3, 0x6e, 0xbf, 0x4d, 0x35, 0xbf, 0xe2, 0xb8, 0xb6, 0x6f, 0x23, 0x45, 0x88, 0x55, 0x84,
+	0x58, 0x65, 0x24, 0x96, 0x2f, 0x1b, 0xa6, 0x7f, 0xd8, 0x6b, 0x57, 0x34, 0xbb, 0xbb, 0x61, 0xd8,
+	0x86, 0xbd, 0xc1, 0x15, 0xda, 0xbd, 0x03, 0xfe, 0xc4, 0x1f, 0xf8, 0x4a, 0x18, 0xca, 0x3f, 0x37,
+	0xf3, 0x7d, 0xfe, 0xc0, 0xa1, 0x5e, 0x20, 0xf5, 0xf4, 0xb8, 0x94, 0xed, 0xf8, 0xa6, 0x6d, 0x85,
+	0xcc, 0x73, 0xe3, 0xcc, 0xa8, 0xde, 0xda, 0x38, 0xab, 0x4f, 0x3a, 0xa6, 0x4e, 0x7c, 0x1a, 0x70,
+	0x4b, 0x13, 0x5c, 0xea, 0x51, 0xab, 0x3f, 0x61, 0xbc, 0x38, 0x21, 0x63, 0xd2, 0x63, 0x75, 0x5c,
+	0xe2, 0xc2, 0x69, 0x09, 0x2f, 0xba, 0x89, 0xd2, 0x17, 0xf3, 0xb0, 0x78, 0x8b, 0x3b, 0x0f, 0x5d,
+	0x83, 0x64, 0x97, 0xfa, 0x44, 0x27, 0x3e, 0x51, 0xa4, 0xa2, 0xb4, 0xbe, 0x74, 0xf5, 0x7c, 0x65,
+	0xdc, 0x93, 0x42, 0xf0, 0x26, 0xf5, 0xc9, 0xfe, 0xc0, 0xa1, 0x78, 0x28, 0x8e, 0x6e, 0x40, 0xd6,
+	0x1b, 0x78, 0x3e, 0xed, 0xaa, 0x43, 0x0b, 0xf3, 0xdc, 0xc2, 0xb3, 0x13, 0x16, 0xf6, 0xb8, 0xd4,
+	0x84, 0x9d, 0x8c, 0xd0, 0xbd, 0x19, 0x5a, 0x7b, 0x15, 0xe2, 0x9e, 0x43, 0x35, 0x25, 0xc6, 0x4d,
+	0x94, 0x2a, 0xb3, 0xc2, 0x59, 0xd9, 0x73, 0xa8, 0xc6, 0x2d, 0x70, 0xf9, 0xad, 0xdf, 0x49, 0xef,
+	0x7d, 0x5d, 0xfa, 0xe4, 0x63, 0x65, 0x5e, 0x96, 0x3e, 0xfd, 0x58, 0xc9, 0xf4, 0xa9, 0x57, 0x36,
+	0xed, 0xb2, 0x45, 0xfd, 0x63, 0xdb, 0x3d, 0xfa, 0xcb, 0xc7, 0xca, 0x8f, 0x25, 0xf8, 0xa1, 0x04,
+	0x4d, 0x26, 0x5b, 0x31, 0x34, 0x95, 0xff, 0x17, 0xd6, 0x1c, 0xd7, 0xee, 0x9b, 0x3a, 0x75, 0x2b,
+	0xe4, 0xd8, 0x8b, 0xbc, 0x40, 0x65, 0x9e, 0xaa, 0xb4, 0x07, 0xb6, 0x56, 0xd1, 0x6c, 0xcb, 0xa2,
+	0x9a, 0x70, 0x2d, 0xe9, 0xf9, 0x87, 0xea, 0x11, 0x1d, 0xa0, 0x57, 0x83, 0x57, 0x70, 0x8d, 0x32,
+	0xd3, 0x28, 0x33, 0xa3, 0x65, 0x43, 0x13, 0xff, 0xc9, 0xb1, 0x57, 0x66, 0xda, 0xe5, 0xb6, 0xe1,
+	0x94, 0x99, 0x56, 0xd9, 0xb7, 0x8f, 0xa8, 0x55, 0xba, 0x09, 0xc9, 0x70, 0xeb, 0x68, 0x1b, 0x12,
+	0xc1, 0x5e, 0x02, 0x97, 0xad, 0xcf, 0x3e, 0xef, 0x4e, 0xc7, 0x6e, 0x93, 0xce, 0xf0, 0xd4, 0x8b,
+	0x86, 0xc6, 0xd6, 0xa5, 0x7f, 0xc5, 0x60, 0x79, 0xcf, 0x27, 0x7e, 0xcf, 0x7b, 0xec, 0x48, 0x0a,
+	0xf1, 0xa9, 0x91, 0x5c, 0x12, 0xb5, 0xa4, 0xba, 0xf4, 0xc0, 0x53, 0xe6, 0x8b, 0xb1, 0xf5, 0xa5,
+	0xab, 0x6b, 0x53, 0xf3, 0x00, 0xd3, 0x03, 0xa6, 0x5c, 0x4d, 0x7f, 0xf0, 0x7d, 0x18, 0x6d, 0x12,
+	0x83, 0x1d, 0x72, 0x3d, 0xf4, 0x55, 0x00, 0xcd, 0xb6, 0x74, 0x93, 0xfb, 0x4d, 0x89, 0x4d, 0x35,
+	0x56, 0x0b, 0x05, 0xf8, 0x4e, 0x22, 0xf2, 0xe8, 0x4d, 0x00, 0x72, 0xec, 0xa9, 0x1e, 0xdf, 0xab,
+	0xb2, 0xc0, 0x0f, 0xf2, 0xc2, 0x6c, 0xef, 0x6c, 0xdf, 0xdd, 0x13, 0xc7, 0x62, 0x86, 0xde, 0x9c,
+	0xc3, 0x29, 0x72, 0xec, 0x09, 0x02, 0xda, 0x85, 0x65, 0xf2, 0x6e, 0xcf, 0xa5, 0xa1, 0xad, 0x45,
+	0x6e, 0xeb, 0xc5, 0x87, 0xd8, 0x62, 0xd2, 0x63, 0xd6, 0x96, 0xc8, 0x88, 0xc4, 0x76, 0x66, 0x68,
+	0x4e, 0x68, 0x2d, 0xf1, 0xa8, 0x9d, 0xed, 0xd4, 0x5a, 0xe3, 0x3b, 0x33, 0x34, 0x47, 0x10, 0xb6,
+	0x9e, 0xfe, 0xf3, 0xeb, 0x32, 0x64, 0x60, 0x39, 0x0c, 0x40, 0xa5, 0x67, 0xea, 0x5f, 0xbc, 0xbe,
+	0x70, 0xe5, 0xd2, 0x2b, 0x97, 0x36, 0xab, 0xe7, 0x20, 0x17, 0x49, 0x46, 0xf1, 0x36, 0x14, 0xbf,
+	0xf7, 0xa1, 0x14, 0xbf, 0x1e, 0x4f, 0xc6, 0xe5, 0x85, 0xd2, 0x07, 0x31, 0x48, 0x8f, 0x1d, 0x1b,
+	0x1d, 0x42, 0x6e, 0x94, 0xaa, 0xe1, 0x06, 0x45, 0x14, 0xbf, 0x32, 0x7b, 0x83, 0x75, 0xd3, 0xa5,
+	0x9a, 0x5f, 0x13, 0x8a, 0xb5, 0xa1, 0xfe, 0xc8, 0x2e, 0x96, 0xb5, 0x09, 0x2a, 0x7a, 0x11, 0x64,
+	0xaf, 0x67, 0x18, 0xd4, 0xf3, 0xa9, 0xae, 0x12, 0xce, 0xe1, 0x31, 0x4a, 0xe1, 0xec, 0x90, 0xbe,
+	0xcd, 0xc9, 0xe8, 0x65, 0xc8, 0x51, 0xd7, 0xb5, 0x5d, 0x55, 0xa7, 0x9e, 0xe6, 0x9a, 0x1c, 0xa1,
+	0x78, 0x0c, 0x52, 0x58, 0xe6, 0x8c, 0xfa, 0x88, 0x8e, 0x30, 0xc8, 0x13, 0x87, 0xa6, 0xdc, 0xc3,
+	0x99, 0x87, 0x55, 0x46, 0x8d, 0x2d, 0x6f, 0x98, 0xd6, 0x11, 0xdb, 0x1c, 0xc5, 0x19, 0x6d, 0xec,
+	0x19, 0x7d, 0x17, 0x72, 0x3a, 0x75, 0x3a, 0xf6, 0xa0, 0x4b, 0x2d, 0x3f, 0xf4, 0x4a, 0x92, 0x1b,
+	0x7d, 0xe5, 0x31, 0x8c, 0xd6, 0x87, 0xba, 0xe2, 0xec, 0x58, 0xd6, 0x27, 0x28, 0x5b, 0x67, 0x3f,
+	0xf9, 0x50, 0xca, 0x41, 0x16, 0x60, 0xfb, 0xee, 0x5e, 0x31, 0xf0, 0x90, 0x74, 0xf5, 0x7a, 0x3c,
+	0x19, 0x93, 0xc3, 0x60, 0xfd, 0x2d, 0x09, 0xcf, 0x3c, 0xd2, 0xd1, 0x68, 0x0d, 0x52, 0x6d, 0x62,
+	0xe9, 0xc7, 0xa6, 0xee, 0x1f, 0xf2, 0xe2, 0x4d, 0xe1, 0x11, 0x01, 0x3d, 0x0b, 0xe9, 0x48, 0x78,
+	0x4d, 0x9d, 0x63, 0x46, 0x0a, 0x2f, 0x8f, 0x88, 0x4d, 0x1d, 0xbd, 0x00, 0xd9, 0x88, 0x90, 0x45,
+	0xba, 0x94, 0x43, 0x69, 0x0a, 0x67, 0x46, 0xe4, 0x5d, 0xd2, 0xa5, 0xe8, 0x27, 0x12, 0xc8, 0x13,
+	0xd9, 0x42, 0x95, 0x38, 0x13, 0xad, 0x7e, 0xeb, 0x8f, 0xff, 0xf8, 0x28, 0x76, 0xd7, 0xbd, 0x8d,
+	0x93, 0xb6, 0xab, 0x53, 0xd7, 0xb4, 0x0c, 0x9c, 0x72, 0xe9, 0xf7, 0x7a, 0x3c, 0xac, 0x38, 0xe1,
+	0x50, 0x4b, 0xe7, 0x34, 0xd2, 0x27, 0x66, 0x87, 0xb4, 0x3b, 0x14, 0xc7, 0x75, 0xfb, 0xd8, 0xc2,
+	0x49, 0x9d, 0x76, 0xa8, 0xcf, 0x58, 0x09, 0xbe, 0xa2, 0x3a, 0x4e, 0xba, 0x94, 0x01, 0x02, 0x53,
+	0xeb, 0x59, 0x47, 0x16, 0x93, 0xca, 0x8e, 0x67, 0x13, 0x45, 0xb7, 0x60, 0xf5, 0x90, 0x78, 0x6a,
+	0xc7, 0x36, 0x4c, 0x8d, 0x74, 0x54, 0x97, 0xea, 0x3d, 0x4b, 0x27, 0x96, 0x36, 0x10, 0x29, 0x55,
+	0x3d, 0xc7, 0xb6, 0xb3, 0xe2, 0xa2, 0x91, 0x89, 0xd8, 0x80, 0x7a, 0x78, 0xde, 0xb2, 0xf1, 0xca,
+	0x21, 0xf1, 0x6e, 0x08, 0x3d, 0x3c, 0x54, 0x43, 0x79, 0x48, 0x76, 0x6c, 0x8d, 0x44, 0x32, 0x6d,
+	0xf8, 0x8c, 0x9e, 0x81, 0x65, 0x87, 0xb8, 0xbe, 0x45, 0x5d, 0xe1, 0x9c, 0x04, 0xe7, 0x2f, 0x05,
+	0x34, 0xee, 0x99, 0x67, 0x21, 0x1d, 0xf6, 0x04, 0x21, 0x93, 0x14, 0x7e, 0x0e, 0x89, 0x5c, 0x68,
+	0x15, 0x16, 0x5d, 0x6a, 0xb0, 0x37, 0xa4, 0x38, 0x37, 0x78, 0x42, 0x6f, 0x41, 0xdc, 0x27, 0x86,
+	0xa7, 0x00, 0x2f, 0xbb, 0xc6, 0x13, 0x94, 0x5d, 0x65, 0x9f, 0x18, 0x5e, 0xc3, 0xf2, 0xdd, 0x01,
+	0xe6, 0x26, 0x11, 0x82, 0x78, 0xbf, 0x43, 0x2c, 0x65, 0xa9, 0x28, 0xad, 0xa7, 0x31, 0x5f, 0xa3,
+	0x0a, 0x9c, 0x79, 0xbb, 0xd7, 0x6d, 0xdb, 0xea, 0x81, 0x4b, 0xba, 0x54, 0xd5, 0x88, 0xc3, 0xe2,
+	0xa1, 0x2c, 0x17, 0xa5, 0xf5, 0x24, 0xce, 0x71, 0xd6, 0x1b, 0x8c, 0x53, 0x13, 0x0c, 0x76, 0x36,
+	0xfb, 0x98, 0x1d, 0x9e, 0x68, 0x9a, 0xdd, 0xb3, 0x7c, 0x25, 0x2d, 0xce, 0xc6, 0x89, 0xdb, 0x82,
+	0x86, 0xf6, 0x00, 0xfa, 0xe6, 0x41, 0x58, 0x2a, 0x19, 0x8e, 0x70, 0x9b, 0xb3, 0x4f, 0x72, 0xc7,
+	0x74, 0xfd, 0x1e, 0xe9, 0x34, 0x2d, 0x9f, 0xba, 0x07, 0x44, 0x8b, 0x40, 0x27, 0x4e, 0xf5, 0xcd,
+	0x83, 0xa0, 0x20, 0x54, 0xc8, 0x18, 0xc4, 0xa7, 0xc7, 0x64, 0x10, 0x1a, 0xce, 0x72, 0xc3, 0xaf,
+	0x3d, 0xa6, 0x8b, 0x76, 0x84, 0x72, 0xc4, 0x78, 0xda, 0x88, 0x92, 0xd0, 0x39, 0x48, 0xb2, 0x8e,
+	0xe1, 0x10, 0xff, 0x50, 0xc9, 0xf1, 0x53, 0x25, 0xc8, 0xb1, 0xd7, 0x22, 0xfe, 0x61, 0xfe, 0xff,
+	0x21, 0x35, 0x74, 0x26, 0x92, 0x21, 0x76, 0x44, 0x07, 0x41, 0x79, 0xb1, 0x25, 0x5a, 0x81, 0x85,
+	0x3e, 0xe9, 0xf4, 0x68, 0x50, 0x50, 0xe2, 0x61, 0x6b, 0xfe, 0x35, 0x69, 0xeb, 0xf7, 0xd2, 0xa7,
+	0x1f, 0x4a, 0xef, 0x4b, 0x50, 0x84, 0xf4, 0x28, 0x44, 0xc5, 0x66, 0x3d, 0x9f, 0x9d, 0xa8, 0x45,
+	0x78, 0x0e, 0xb2, 0x11, 0x09, 0x96, 0x22, 0xf9, 0xdc, 0xa9, 0x52, 0x84, 0x8b, 0x20, 0x47, 0xa4,
+	0x78, 0xfa, 0xe7, 0xd1, 0xe9, 0x3a, 0x04, 0x05, 0x52, 0xd5, 0xb0, 0xee, 0xf3, 0x4b, 0x11, 0x54,
+	0x80, 0x55, 0x48, 0xde, 0x08, 0x72, 0x39, 0x0f, 0xa3, 0x3c, 0xbf, 0x1e, 0x4f, 0xca, 0x72, 0xae,
+	0xf4, 0x1e, 0x40, 0x7e, 0x76, 0x38, 0xd0, 0x16, 0x64, 0x88, 0xae, 0xbb, 0xd4, 0xf3, 0xd4, 0x03,
+	0xd2, 0x35, 0x3b, 0x81, 0x17, 0xaa, 0x67, 0x58, 0x85, 0x65, 0xdc, 0x65, 0x1c, 0x37, 0x9d, 0xfe,
+	0x26, 0xff, 0xfb, 0x2a, 0x4e, 0x07, 0xa2, 0x6f, 0x70, 0x49, 0xf4, 0x3c, 0x64, 0x48, 0x97, 0xbc,
+	0x6b, 0x5b, 0x6a, 0x40, 0x0f, 0xbc, 0x95, 0x16, 0xd4, 0x6d, 0x41, 0x44, 0xe7, 0x01, 0x42, 0x31,
+	0xcf, 0xe2, 0xd0, 0x13, 0xc7, 0xa9, 0x40, 0xc4, 0xb3, 0xd0, 0x53, 0x90, 0x68, 0x1b, 0x0e, 0xe7,
+	0xc5, 0x79, 0x1a, 0x2f, 0xb6, 0x0d, 0x87, 0x31, 0x4e, 0x81, 0xdb, 0xc2, 0x14, 0x70, 0xbb, 0x06,
+	0xe7, 0x74, 0x9e, 0x13, 0x6a, 0x40, 0x56, 0xc3, 0x94, 0x32, 0xf5, 0xa0, 0xd2, 0x57, 0xf5, 0x29,
+	0x49, 0xd3, 0xd4, 0xd1, 0xd7, 0xe0, 0xe9, 0x19, 0xaa, 0x11, 0x18, 0x50, 0xa6, 0x29, 0xf3, 0x72,
+	0xff, 0x95, 0x04, 0x4f, 0xf5, 0x85, 0x63, 0x55, 0x33, 0xf4, 0x6c, 0x00, 0x9a, 0x1c, 0x1e, 0xaa,
+	0xdf, 0x61, 0x3e, 0x7c, 0xcb, 0xbd, 0xcb, 0xa7, 0x98, 0x03, 0xd3, 0xed, 0x72, 0x88, 0xec, 0x53,
+	0xd7, 0x3c, 0x18, 0x70, 0x48, 0x7c, 0x42, 0xd8, 0x3c, 0xdb, 0x9f, 0x12, 0x57, 0x3a, 0x86, 0x75,
+	0xa9, 0x09, 0xac, 0x1b, 0x61, 0x14, 0x8c, 0x61, 0x14, 0x0e, 0x30, 0x6a, 0x89, 0x63, 0xd4, 0xeb,
+	0x5f, 0xa6, 0xb2, 0x67, 0x82, 0xd3, 0x72, 0x04, 0x9c, 0x2e, 0xc3, 0xca, 0x69, 0x9f, 0x99, 0x7a,
+	0x80, 0x39, 0x68, 0xf2, 0x40, 0x4d, 0x1d, 0x6d, 0xc2, 0xea, 0x69, 0x0d, 0x1e, 0xa0, 0x0c, 0xd7,
+	0x59, 0x99, 0xd4, 0xe1, 0xc1, 0xb9, 0x3b, 0x4d, 0x8b, 0x8d, 0xef, 0x1c, 0x62, 0x52, 0xd5, 0x67,
+	0x58, 0x68, 0xd6, 0xdc, 0x3c, 0x4e, 0x38, 0xae, 0xd9, 0x67, 0x33, 0xc2, 0xa2, 0xd3, 0x6b, 0x77,
+	0x4c, 0x0d, 0x27, 0x7c, 0x97, 0x58, 0x9e, 0xe9, 0x9f, 0x36, 0xcc, 0xeb, 0xa5, 0x0a, 0x29, 0x96,
+	0xad, 0x0e, 0xa5, 0xae, 0xa7, 0xc8, 0xdc, 0x5b, 0xcf, 0xcf, 0xf6, 0x56, 0x75, 0xa7, 0xd5, 0xa2,
+	0xd4, 0x15, 0x43, 0x75, 0xdb, 0x70, 0xd8, 0x83, 0x37, 0x0b, 0xa1, 0x73, 0xb3, 0x10, 0x5a, 0x86,
+	0x58, 0xd7, 0xef, 0x29, 0x88, 0xfb, 0x91, 0x2d, 0x4f, 0x63, 0xf6, 0x99, 0x29, 0x98, 0xfd, 0x0e,
+	0x5c, 0x98, 0xc8, 0x6f, 0xe2, 0xfb, 0x44, 0x3b, 0x1c, 0x0e, 0x3d, 0x54, 0x59, 0xe1, 0xce, 0xb8,
+	0xc2, 0x9c, 0x71, 0xc9, 0x7d, 0x09, 0xa7, 0x84, 0x00, 0xcb, 0xbb, 0xa4, 0x58, 0x52, 0x1d, 0xa7,
+	0x74, 0x3a, 0x24, 0x8a, 0x25, 0xd5, 0xf1, 0xda, 0x58, 0x59, 0x6c, 0x0f, 0xed, 0x8a, 0x0c, 0xdc,
+	0x86, 0xf3, 0x93, 0xaf, 0x52, 0xb5, 0x43, 0x62, 0x19, 0x54, 0xe5, 0xf3, 0x9d, 0x72, 0x96, 0x6f,
+	0x37, 0x4f, 0xc6, 0xf5, 0x6a, 0x5c, 0xa4, 0xc1, 0x24, 0xc6, 0xa0, 0x7b, 0xf5, 0x7f, 0x03, 0xdd,
+	0xa5, 0xf7, 0xe3, 0xb0, 0x14, 0x89, 0xc8, 0x13, 0x61, 0xdf, 0x26, 0xac, 0x8e, 0xdf, 0x15, 0x87,
+	0x18, 0x28, 0x46, 0x83, 0x15, 0xce, 0x6d, 0x05, 0xcc, 0x10, 0x0a, 0x65, 0x88, 0x85, 0x18, 0x98,
+	0xc6, 0x6c, 0x89, 0x0a, 0xb0, 0x14, 0xe6, 0x13, 0xab, 0x83, 0x78, 0x30, 0xe1, 0x89, 0x54, 0x69,
+	0xea, 0xac, 0x47, 0x0e, 0xf9, 0x22, 0x66, 0x62, 0x02, 0xba, 0xc6, 0xf6, 0xb8, 0xe9, 0x5e, 0x7d,
+	0x14, 0x9e, 0x4c, 0x41, 0x92, 0xe5, 0xc0, 0xba, 0x88, 0xd5, 0x35, 0x00, 0xf6, 0x82, 0xc8, 0x4d,
+	0x28, 0x55, 0xcd, 0x33, 0xe3, 0x67, 0xdd, 0x33, 0x78, 0xbe, 0xe7, 0x04, 0x88, 0x34, 0x04, 0x1d,
+	0xb6, 0xb7, 0xd1, 0xc8, 0xaf, 0xf5, 0x3c, 0xdf, 0xee, 0x46, 0x4e, 0x2f, 0x50, 0x33, 0x1b, 0xd2,
+	0x83, 0x83, 0x6f, 0xfd, 0x96, 0x75, 0xcd, 0xdf, 0x48, 0x70, 0x15, 0x56, 0xf9, 0x18, 0x5d, 0x0c,
+	0x3d, 0x53, 0x0c, 0x24, 0xf2, 0xca, 0x2c, 0x87, 0xf2, 0x0e, 0x19, 0x98, 0x1b, 0x4a, 0xa3, 0xd3,
+	0xaf, 0x86, 0x12, 0x64, 0xaa, 0x3b, 0xad, 0x22, 0x3b, 0x5a, 0xd0, 0x47, 0xe5, 0x49, 0xe7, 0x41,
+	0x1e, 0x80, 0xc9, 0x88, 0x03, 0xe4, 0x97, 0xa3, 0x67, 0xbf, 0x1e, 0x4f, 0xce, 0xcb, 0xb1, 0xd2,
+	0xaf, 0x63, 0x50, 0x78, 0xf8, 0x94, 0x31, 0xd1, 0xd0, 0xa4, 0xc9, 0x86, 0xf6, 0xd0, 0x96, 0x34,
+	0xff, 0x24, 0x2d, 0x29, 0xf6, 0x88, 0x96, 0x64, 0xc3, 0xda, 0x0c, 0xf5, 0xe8, 0x2c, 0x5f, 0x61,
+	0xd1, 0x7d, 0xd1, 0x7d, 0xe1, 0x71, 0xf3, 0xe5, 0x9c, 0x3e, 0xc3, 0x1d, 0x14, 0x5d, 0x02, 0x34,
+	0xa5, 0xba, 0x83, 0xab, 0x9c, 0x37, 0x59, 0xd3, 0xa7, 0x50, 0x2b, 0x31, 0x05, 0xb5, 0xa2, 0x85,
+	0x9f, 0x1c, 0x2b, 0xfc, 0x52, 0x0e, 0xb2, 0x13, 0x17, 0xf1, 0xd2, 0x8f, 0x00, 0xd6, 0x77, 0x6a,
+	0x2d, 0x9e, 0x53, 0x1c, 0xa8, 0xb5, 0x69, 0x88, 0x14, 0xc4, 0x0d, 0x41, 0x9c, 0xbb, 0x51, 0x80,
+	0x05, 0x5f, 0xb3, 0x3d, 0x11, 0xbd, 0x6b, 0x5a, 0x2a, 0xb5, 0xd8, 0xf9, 0x45, 0x80, 0x92, 0x78,
+	0x99, 0x13, 0x1b, 0x82, 0x86, 0xca, 0x80, 0x6c, 0x87, 0xba, 0xbc, 0x85, 0x92, 0x4e, 0x58, 0x2b,
+	0x22, 0x1a, 0xb9, 0x08, 0x27, 0xa8, 0x8b, 0x6d, 0x88, 0xf3, 0x56, 0x23, 0xdc, 0x5d, 0x66, 0xee,
+	0x5e, 0x77, 0x2f, 0xe2, 0x54, 0xbd, 0x51, 0x6f, 0xd6, 0xb6, 0xf7, 0x1b, 0x75, 0x9c, 0x68, 0x6d,
+	0xe3, 0xfd, 0xdd, 0x06, 0xc6, 0x72, 0xb0, 0x50, 0x5b, 0xf8, 0xd6, 0x9d, 0x66, 0xbd, 0x81, 0x31,
+	0x57, 0xe5, 0x7d, 0xda, 0xee, 0xf9, 0xd4, 0x0d, 0x86, 0x9e, 0xe0, 0x09, 0x95, 0x60, 0xd9, 0x8c,
+	0x1c, 0x33, 0x70, 0xf5, 0x18, 0x6d, 0xfc, 0xca, 0x98, 0x98, 0xbc, 0x32, 0x6e, 0x02, 0x50, 0x4b,
+	0x73, 0x07, 0xe2, 0xd6, 0x2d, 0x06, 0x95, 0x15, 0xb6, 0xc5, 0xac, 0x9b, 0xc6, 0xf1, 0xdd, 0x5b,
+	0xbb, 0x0d, 0xbc, 0xd0, 0x6c, 0xed, 0x35, 0x6a, 0x38, 0x22, 0x87, 0x8a, 0x41, 0x2f, 0x67, 0xf3,
+	0x44, 0xba, 0xba, 0xcc, 0xe4, 0x13, 0x2f, 0x2d, 0x28, 0xff, 0xbe, 0xb0, 0x2e, 0x05, 0x9d, 0xfd,
+	0x39, 0xd1, 0xa4, 0x80, 0x0b, 0x20, 0x26, 0x90, 0x7e, 0x69, 0xa9, 0x9a, 0xba, 0xb2, 0xb9, 0x79,
+	0xf9, 0xd2, 0x95, 0xff, 0xbb, 0x7c, 0x59, 0x34, 0xae, 0xf3, 0x00, 0x9e, 0x4f, 0x34, 0xf1, 0x29,
+	0x8d, 0x5f, 0x5b, 0x52, 0x38, 0xc5, 0x29, 0x3c, 0x42, 0x17, 0x21, 0x2b, 0x40, 0x40, 0x1c, 0x57,
+	0x35, 0x1d, 0x3e, 0x3d, 0xa4, 0x70, 0x9a, 0x93, 0x31, 0xa7, 0x36, 0x1d, 0x96, 0x77, 0xc3, 0xf2,
+	0x1f, 0x89, 0x8a, 0x21, 0x62, 0x08, 0x0c, 0x43, 0xe9, 0x0d, 0x38, 0x13, 0x24, 0xb8, 0xd9, 0x31,
+	0xfd, 0x81, 0xaa, 0xdb, 0x5d, 0x62, 0x5a, 0xc1, 0xfc, 0x80, 0xa2, 0xac, 0x3a, 0xe7, 0xa0, 0xbb,
+	0x20, 0x87, 0x37, 0xc2, 0xe1, 0x87, 0x33, 0x71, 0x35, 0xb9, 0xf4, 0xd0, 0xaf, 0x3a, 0x2d, 0xa1,
+	0x14, 0x7e, 0xb9, 0xc4, 0x59, 0x67, 0x9c, 0x80, 0x2e, 0x40, 0x78, 0xad, 0xe4, 0xd0, 0x21, 0xf3,
+	0x3e, 0x00, 0x01, 0x89, 0x61, 0xc7, 0x2f, 0x24, 0x90, 0x4f, 0x75, 0x69, 0x7e, 0x75, 0xa9, 0xea,
+	0xcc, 0xa7, 0xaa, 0xfb, 0x6d, 0xbc, 0xb8, 0x5d, 0xdb, 0x6f, 0xde, 0x69, 0xe0, 0xf4, 0xed, 0x5d,
+	0x9e, 0x35, 0x7b, 0xcd, 0x5b, 0xbb, 0x8d, 0x3a, 0xce, 0xb6, 0x1a, 0xbb, 0xf5, 0xe6, 0xee, 0x8e,
+	0x1a, 0xe6, 0x96, 0x12, 0xe6, 0x16, 0x6e, 0x7c, 0xe3, 0x76, 0x63, 0x6f, 0x5f, 0xc5, 0x8d, 0x5a,
+	0xa3, 0x79, 0xa7, 0x51, 0xc7, 0x72, 0x28, 0x5a, 0xbb, 0xbd, 0xb7, 0x7f, 0xeb, 0x66, 0x03, 0xe3,
+	0x44, 0xbd, 0xf1, 0xc6, 0xed, 0xdd, 0xda, 0x3e, 0xce, 0x4e, 0xf4, 0x64, 0xf4, 0x32, 0xe4, 0xd8,
+	0xd6, 0x9d, 0x0e, 0xb1, 0xa8, 0xda, 0xa7, 0xae, 0xc7, 0xd2, 0x86, 0x8d, 0x22, 0x0b, 0x58, 0x1e,
+	0x32, 0xee, 0x08, 0xfa, 0xf8, 0x74, 0x74, 0xe6, 0xcb, 0x4d, 0x47, 0x07, 0xb0, 0xd8, 0x21, 0x6d,
+	0xda, 0xf1, 0x94, 0x15, 0x6e, 0x60, 0xf7, 0xa1, 0x2e, 0x7f, 0xac, 0xca, 0xaf, 0xdc, 0xe0, 0x06,
+	0xc5, 0x70, 0x1a, 0x58, 0xcf, 0x5f, 0x83, 0xa5, 0x08, 0xf9, 0xbf, 0xba, 0x03, 0xfe, 0x9c, 0x75,
+	0xb3, 0x9f, 0x4a, 0x70, 0x1e, 0x72, 0xa2, 0x9b, 0x89, 0x54, 0x13, 0x77, 0xbc, 0x64, 0x58, 0xba,
+	0x70, 0x11, 0xd6, 0xa2, 0x3b, 0x2b, 0x8e, 0xb6, 0x26, 0x24, 0x17, 0x05, 0x1e, 0xb1, 0x06, 0x17,
+	0x61, 0x0d, 0xaf, 0x80, 0x93, 0x79, 0x30, 0xfb, 0x0a, 0x58, 0xfa, 0xa7, 0x04, 0xe9, 0xb1, 0xaf,
+	0x8a, 0xc8, 0x9e, 0xfd, 0xe1, 0xaf, 0xfa, 0xe4, 0x0e, 0x9d, 0xf2, 0xfd, 0x6f, 0xda, 0x77, 0xba,
+	0xd8, 0x93, 0x7d, 0xa7, 0x1b, 0x7d, 0x45, 0xdb, 0xa9, 0xb5, 0x46, 0x5f, 0xd1, 0xaa, 0x3f, 0x93,
+	0xee, 0xdd, 0x2f, 0xcc, 0x7d, 0x76, 0xbf, 0x30, 0xf7, 0xf9, 0xfd, 0x82, 0xf4, 0x83, 0x93, 0x82,
+	0xf4, 0x87, 0x93, 0x82, 0xf4, 0xa7, 0x93, 0x82, 0x74, 0xef, 0xa4, 0x20, 0x7d, 0x76, 0x52, 0x90,
+	0xfe, 0x7a, 0x52, 0x90, 0xfe, 0x7e, 0x52, 0x98, 0xfb, 0xfc, 0xa4, 0x20, 0xfd, 0xf2, 0x41, 0x61,
+	0xee, 0xa3, 0x07, 0x05, 0xe9, 0xde, 0x83, 0xc2, 0xdc, 0x67, 0x0f, 0x0a, 0x73, 0xdf, 0xdc, 0x35,
+	0x6c, 0xe7, 0xc8, 0xa8, 0xf4, 0xed, 0x8e, 0x4f, 0x5d, 0x97, 0x54, 0x7a, 0xde, 0x06, 0x5f, 0x1c,
+	0xd8, 0x6e, 0xb7, 0x1c, 0x4e, 0x1f, 0xe5, 0x90, 0xbd, 0xe1, 0xb4, 0x0d, 0x7b, 0x83, 0xbe, 0xe3,
+	0x07, 0xbf, 0x99, 0x9c, 0xfa, 0xf1, 0xa7, 0xbd, 0xc8, 0x7f, 0x3a, 0x79, 0xe5, 0x3f, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0x42, 0x45, 0x4c, 0x8c, 0x8f, 0x1a, 0x00, 0x00,
 }
 
 func (this *Object) Equal(that interface{}) bool {
@@ -1510,6 +1885,30 @@ func (this *StatusObject_AzureStatus) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *StatusObject_GcpStatus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*StatusObject_GcpStatus)
+	if !ok {
+		that2, ok := that.(StatusObject_GcpStatus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.GcpStatus.Equal(that1.GcpStatus) {
+		return false
+	}
+	return true
+}
 func (this *AWSStatusType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1536,6 +1935,18 @@ func (this *AWSStatusType) Equal(that interface{}) bool {
 		if !this.ConnectionStatus[i].Equal(that1.ConnectionStatus[i]) {
 			return false
 		}
+	}
+	if this.SuggestedAction != that1.SuggestedAction {
+		return false
+	}
+	if this.ErrorDescription != that1.ErrorDescription {
+		return false
+	}
+	if this.CloudLinkState != that1.CloudLinkState {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
+		return false
 	}
 	return true
 }
@@ -1606,9 +2017,6 @@ func (this *DirectConnectConnectionStatusType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.GatewayStatus.Equal(that1.GatewayStatus) {
-		return false
-	}
-	if !this.Coordinates.Equal(that1.Coordinates) {
 		return false
 	}
 	if this.AwsPath != that1.AwsPath {
@@ -1735,7 +2143,7 @@ func (this *BGPPeerType) Equal(that interface{}) bool {
 	if this.AddressFamily != that1.AddressFamily {
 		return false
 	}
-	if this.AmazonAddress != that1.AmazonAddress {
+	if this.CloudProviderAddress != that1.CloudProviderAddress {
 		return false
 	}
 	if this.Asn != that1.Asn {
@@ -1797,33 +2205,6 @@ func (this *DirectConnectGatewayStatusType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *Coordinates) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Coordinates)
-	if !ok {
-		that2, ok := that.(Coordinates)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Latitude != that1.Latitude {
-		return false
-	}
-	if this.Longitude != that1.Longitude {
-		return false
-	}
-	return true
-}
 func (this *AzureStatusType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1841,6 +2222,129 @@ func (this *AzureStatusType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *GCPCloudInterconnectAttachmentStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPCloudInterconnectAttachmentStatusType)
+	if !ok {
+		that2, ok := that.(GCPCloudInterconnectAttachmentStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.AdminEnabled != that1.AdminEnabled {
+		return false
+	}
+	if this.OperationalStatus != that1.OperationalStatus {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.Router != that1.Router {
+		return false
+	}
+	if this.Interconnect != that1.Interconnect {
+		return false
+	}
+	if this.Bandwidth != that1.Bandwidth {
+		return false
+	}
+	if this.Encryption != that1.Encryption {
+		return false
+	}
+	if this.Vlan != that1.Vlan {
+		return false
+	}
+	if this.Mtu != that1.Mtu {
+		return false
+	}
+	if this.StackType != that1.StackType {
+		return false
+	}
+	if this.CloudRouterIp != that1.CloudRouterIp {
+		return false
+	}
+	if this.CustomerRouterIp != that1.CustomerRouterIp {
+		return false
+	}
+	if this.AvailabilityDomain != that1.AvailabilityDomain {
+		return false
+	}
+	if !this.PartnerMetadata.Equal(that1.PartnerMetadata) {
+		return false
+	}
+	if this.PartnerAsn != that1.PartnerAsn {
+		return false
+	}
+	if this.AttachmentState != that1.AttachmentState {
+		return false
+	}
+	if this.DataplaneVersion != that1.DataplaneVersion {
+		return false
+	}
+	if len(this.BgpPeers) != len(that1.BgpPeers) {
+		return false
+	}
+	for i := range this.BgpPeers {
+		if !this.BgpPeers[i].Equal(that1.BgpPeers[i]) {
+			return false
+		}
+	}
+	if len(this.Labels) != len(that1.Labels) {
+		return false
+	}
+	for i := range this.Labels {
+		if this.Labels[i] != that1.Labels[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *GCPStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPStatusType)
+	if !ok {
+		that2, ok := that.(GCPStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ConnectionStatus) != len(that1.ConnectionStatus) {
+		return false
+	}
+	for i := range this.ConnectionStatus {
+		if !this.ConnectionStatus[i].Equal(that1.ConnectionStatus[i]) {
+			return false
+		}
+	}
+	if this.CloudLinkState != that1.CloudLinkState {
 		return false
 	}
 	return true
@@ -1879,7 +2383,7 @@ func (this *StatusObject) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 10)
 	s = append(s, "&cloud_link.StatusObject{")
 	if this.Metadata != nil {
 		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
@@ -1912,15 +2416,27 @@ func (this *StatusObject_AzureStatus) GoString() string {
 		`AzureStatus:` + fmt.Sprintf("%#v", this.AzureStatus) + `}`}, ", ")
 	return s
 }
+func (this *StatusObject_GcpStatus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.StatusObject_GcpStatus{` +
+		`GcpStatus:` + fmt.Sprintf("%#v", this.GcpStatus) + `}`}, ", ")
+	return s
+}
 func (this *AWSStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_link.AWSStatusType{")
 	if this.ConnectionStatus != nil {
 		s = append(s, "ConnectionStatus: "+fmt.Sprintf("%#v", this.ConnectionStatus)+",\n")
 	}
+	s = append(s, "SuggestedAction: "+fmt.Sprintf("%#v", this.SuggestedAction)+",\n")
+	s = append(s, "ErrorDescription: "+fmt.Sprintf("%#v", this.ErrorDescription)+",\n")
+	s = append(s, "CloudLinkState: "+fmt.Sprintf("%#v", this.CloudLinkState)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1928,7 +2444,7 @@ func (this *DirectConnectConnectionStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 21)
+	s := make([]string, 0, 20)
 	s = append(s, "&cloud_link.DirectConnectConnectionStatusType{")
 	s = append(s, "Bandwidth: "+fmt.Sprintf("%#v", this.Bandwidth)+",\n")
 	s = append(s, "ConnectionId: "+fmt.Sprintf("%#v", this.ConnectionId)+",\n")
@@ -1960,9 +2476,6 @@ func (this *DirectConnectConnectionStatusType) GoString() string {
 	}
 	if this.GatewayStatus != nil {
 		s = append(s, "GatewayStatus: "+fmt.Sprintf("%#v", this.GatewayStatus)+",\n")
-	}
-	if this.Coordinates != nil {
-		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
 	}
 	s = append(s, "AwsPath: "+fmt.Sprintf("%#v", this.AwsPath)+",\n")
 	s = append(s, "}")
@@ -2020,7 +2533,7 @@ func (this *BGPPeerType) GoString() string {
 	s := make([]string, 0, 11)
 	s = append(s, "&cloud_link.BGPPeerType{")
 	s = append(s, "AddressFamily: "+fmt.Sprintf("%#v", this.AddressFamily)+",\n")
-	s = append(s, "AmazonAddress: "+fmt.Sprintf("%#v", this.AmazonAddress)+",\n")
+	s = append(s, "CloudProviderAddress: "+fmt.Sprintf("%#v", this.CloudProviderAddress)+",\n")
 	s = append(s, "Asn: "+fmt.Sprintf("%#v", this.Asn)+",\n")
 	s = append(s, "BgpPeerId: "+fmt.Sprintf("%#v", this.BgpPeerId)+",\n")
 	s = append(s, "BgpPeerState: "+fmt.Sprintf("%#v", this.BgpPeerState)+",\n")
@@ -2045,23 +2558,70 @@ func (this *DirectConnectGatewayStatusType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *Coordinates) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&cloud_link.Coordinates{")
-	s = append(s, "Latitude: "+fmt.Sprintf("%#v", this.Latitude)+",\n")
-	s = append(s, "Longitude: "+fmt.Sprintf("%#v", this.Longitude)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *AzureStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 4)
 	s = append(s, "&cloud_link.AzureStatusType{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GCPCloudInterconnectAttachmentStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 24)
+	s = append(s, "&cloud_link.GCPCloudInterconnectAttachmentStatusType{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "AdminEnabled: "+fmt.Sprintf("%#v", this.AdminEnabled)+",\n")
+	s = append(s, "OperationalStatus: "+fmt.Sprintf("%#v", this.OperationalStatus)+",\n")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "Router: "+fmt.Sprintf("%#v", this.Router)+",\n")
+	s = append(s, "Interconnect: "+fmt.Sprintf("%#v", this.Interconnect)+",\n")
+	s = append(s, "Bandwidth: "+fmt.Sprintf("%#v", this.Bandwidth)+",\n")
+	s = append(s, "Encryption: "+fmt.Sprintf("%#v", this.Encryption)+",\n")
+	s = append(s, "Vlan: "+fmt.Sprintf("%#v", this.Vlan)+",\n")
+	s = append(s, "Mtu: "+fmt.Sprintf("%#v", this.Mtu)+",\n")
+	s = append(s, "StackType: "+fmt.Sprintf("%#v", this.StackType)+",\n")
+	s = append(s, "CloudRouterIp: "+fmt.Sprintf("%#v", this.CloudRouterIp)+",\n")
+	s = append(s, "CustomerRouterIp: "+fmt.Sprintf("%#v", this.CustomerRouterIp)+",\n")
+	s = append(s, "AvailabilityDomain: "+fmt.Sprintf("%#v", this.AvailabilityDomain)+",\n")
+	if this.PartnerMetadata != nil {
+		s = append(s, "PartnerMetadata: "+fmt.Sprintf("%#v", this.PartnerMetadata)+",\n")
+	}
+	s = append(s, "PartnerAsn: "+fmt.Sprintf("%#v", this.PartnerAsn)+",\n")
+	s = append(s, "AttachmentState: "+fmt.Sprintf("%#v", this.AttachmentState)+",\n")
+	s = append(s, "DataplaneVersion: "+fmt.Sprintf("%#v", this.DataplaneVersion)+",\n")
+	if this.BgpPeers != nil {
+		s = append(s, "BgpPeers: "+fmt.Sprintf("%#v", this.BgpPeers)+",\n")
+	}
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	if this.Labels != nil {
+		s = append(s, "Labels: "+mapStringForLabels+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GCPStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_link.GCPStatusType{")
+	if this.ConnectionStatus != nil {
+		s = append(s, "ConnectionStatus: "+fmt.Sprintf("%#v", this.ConnectionStatus)+",\n")
+	}
+	s = append(s, "CloudLinkState: "+fmt.Sprintf("%#v", this.CloudLinkState)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2281,6 +2841,27 @@ func (m *StatusObject_AzureStatus) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *StatusObject_GcpStatus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *StatusObject_GcpStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.GcpStatus != nil {
+		{
+			size, err := m.GcpStatus.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintObject(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AWSStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2301,6 +2882,30 @@ func (m *AWSStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.DeploymentStatus != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.DeploymentStatus))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.CloudLinkState != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.CloudLinkState))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.ErrorDescription) > 0 {
+		i -= len(m.ErrorDescription)
+		copy(dAtA[i:], m.ErrorDescription)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.ErrorDescription)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.SuggestedAction) > 0 {
+		i -= len(m.SuggestedAction)
+		copy(dAtA[i:], m.SuggestedAction)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.SuggestedAction)))
+		i--
+		dAtA[i] = 0x2a
+	}
 	if len(m.ConnectionStatus) > 0 {
 		for iNdEx := len(m.ConnectionStatus) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2346,20 +2951,6 @@ func (m *DirectConnectConnectionStatusType) MarshalToSizedBuffer(dAtA []byte) (i
 		dAtA[i] = 0x1
 		i--
 		dAtA[i] = 0x8a
-	}
-	if m.Coordinates != nil {
-		{
-			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintObject(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x82
 	}
 	if m.GatewayStatus != nil {
 		{
@@ -2727,6 +3318,13 @@ func (m *BGPPeerType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.CloudProviderAddress) > 0 {
+		i -= len(m.CloudProviderAddress)
+		copy(dAtA[i:], m.CloudProviderAddress)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.CloudProviderAddress)))
+		i--
+		dAtA[i] = 0x42
+	}
 	if len(m.CustomerAddress) > 0 {
 		i -= len(m.CustomerAddress)
 		copy(dAtA[i:], m.CustomerAddress)
@@ -2759,13 +3357,6 @@ func (m *BGPPeerType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintObject(dAtA, i, uint64(m.Asn))
 		i--
 		dAtA[i] = 0x18
-	}
-	if len(m.AmazonAddress) > 0 {
-		i -= len(m.AmazonAddress)
-		copy(dAtA[i:], m.AmazonAddress)
-		i = encodeVarintObject(dAtA, i, uint64(len(m.AmazonAddress)))
-		i--
-		dAtA[i] = 0x12
 	}
 	if len(m.AddressFamily) > 0 {
 		i -= len(m.AddressFamily)
@@ -2847,41 +3438,6 @@ func (m *DirectConnectGatewayStatusType) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
-func (m *Coordinates) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Coordinates) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Coordinates) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Longitude != 0 {
-		i -= 4
-		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Longitude))))
-		i--
-		dAtA[i] = 0x15
-	}
-	if m.Latitude != 0 {
-		i -= 4
-		encoding_binary.LittleEndian.PutUint32(dAtA[i:], uint32(math.Float32bits(float32(m.Latitude))))
-		i--
-		dAtA[i] = 0xd
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *AzureStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2902,6 +3458,245 @@ func (m *AzureStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Labels) > 0 {
+		keysForLabels := make([]string, 0, len(m.Labels))
+		for k := range m.Labels {
+			keysForLabels = append(keysForLabels, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+		for iNdEx := len(keysForLabels) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Labels[string(keysForLabels[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintObject(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForLabels[iNdEx])
+			copy(dAtA[i:], keysForLabels[iNdEx])
+			i = encodeVarintObject(dAtA, i, uint64(len(keysForLabels[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintObject(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xa2
+		}
+	}
+	if len(m.BgpPeers) > 0 {
+		for iNdEx := len(m.BgpPeers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BgpPeers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintObject(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0x9a
+		}
+	}
+	if m.DataplaneVersion != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.DataplaneVersion))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x90
+	}
+	if len(m.AttachmentState) > 0 {
+		i -= len(m.AttachmentState)
+		copy(dAtA[i:], m.AttachmentState)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.AttachmentState)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if m.PartnerAsn != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.PartnerAsn))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x80
+	}
+	if m.PartnerMetadata != nil {
+		{
+			size, err := m.PartnerMetadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintObject(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	if len(m.AvailabilityDomain) > 0 {
+		i -= len(m.AvailabilityDomain)
+		copy(dAtA[i:], m.AvailabilityDomain)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.AvailabilityDomain)))
+		i--
+		dAtA[i] = 0x72
+	}
+	if len(m.CustomerRouterIp) > 0 {
+		i -= len(m.CustomerRouterIp)
+		copy(dAtA[i:], m.CustomerRouterIp)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.CustomerRouterIp)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if len(m.CloudRouterIp) > 0 {
+		i -= len(m.CloudRouterIp)
+		copy(dAtA[i:], m.CloudRouterIp)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.CloudRouterIp)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.StackType) > 0 {
+		i -= len(m.StackType)
+		copy(dAtA[i:], m.StackType)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.StackType)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.Mtu != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.Mtu))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.Vlan != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.Vlan))
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.Encryption) > 0 {
+		i -= len(m.Encryption)
+		copy(dAtA[i:], m.Encryption)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Encryption)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.Bandwidth) > 0 {
+		i -= len(m.Bandwidth)
+		copy(dAtA[i:], m.Bandwidth)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Bandwidth)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Interconnect) > 0 {
+		i -= len(m.Interconnect)
+		copy(dAtA[i:], m.Interconnect)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Interconnect)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Router) > 0 {
+		i -= len(m.Router)
+		copy(dAtA[i:], m.Router)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Router)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Type) > 0 {
+		i -= len(m.Type)
+		copy(dAtA[i:], m.Type)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Type)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.OperationalStatus) > 0 {
+		i -= len(m.OperationalStatus)
+		copy(dAtA[i:], m.OperationalStatus)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.OperationalStatus)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.AdminEnabled {
+		i--
+		if m.AdminEnabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintObject(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GCPStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CloudLinkState != 0 {
+		i = encodeVarintObject(dAtA, i, uint64(m.CloudLinkState))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.ConnectionStatus) > 0 {
+		for iNdEx := len(m.ConnectionStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ConnectionStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintObject(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -3002,6 +3797,18 @@ func (m *StatusObject_AzureStatus) Size() (n int) {
 	}
 	return n
 }
+func (m *StatusObject_GcpStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GcpStatus != nil {
+		l = m.GcpStatus.Size()
+		n += 1 + l + sovObject(uint64(l))
+	}
+	return n
+}
 func (m *AWSStatusType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3013,6 +3820,20 @@ func (m *AWSStatusType) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovObject(uint64(l))
 		}
+	}
+	l = len(m.SuggestedAction)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.ErrorDescription)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	if m.CloudLinkState != 0 {
+		n += 1 + sovObject(uint64(m.CloudLinkState))
+	}
+	if m.DeploymentStatus != 0 {
+		n += 1 + sovObject(uint64(m.DeploymentStatus))
 	}
 	return n
 }
@@ -3084,10 +3905,6 @@ func (m *DirectConnectConnectionStatusType) Size() (n int) {
 	if m.GatewayStatus != nil {
 		l = m.GatewayStatus.Size()
 		n += 1 + l + sovObject(uint64(l))
-	}
-	if m.Coordinates != nil {
-		l = m.Coordinates.Size()
-		n += 2 + l + sovObject(uint64(l))
 	}
 	l = len(m.AwsPath)
 	if l > 0 {
@@ -3204,10 +4021,6 @@ func (m *BGPPeerType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovObject(uint64(l))
 	}
-	l = len(m.AmazonAddress)
-	if l > 0 {
-		n += 1 + l + sovObject(uint64(l))
-	}
 	if m.Asn != 0 {
 		n += 1 + sovObject(uint64(m.Asn))
 	}
@@ -3224,6 +4037,10 @@ func (m *BGPPeerType) Size() (n int) {
 		n += 1 + l + sovObject(uint64(l))
 	}
 	l = len(m.CustomerAddress)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.CloudProviderAddress)
 	if l > 0 {
 		n += 1 + l + sovObject(uint64(l))
 	}
@@ -3266,27 +4083,120 @@ func (m *DirectConnectGatewayStatusType) Size() (n int) {
 	return n
 }
 
-func (m *Coordinates) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Latitude != 0 {
-		n += 5
-	}
-	if m.Longitude != 0 {
-		n += 5
-	}
-	return n
-}
-
 func (m *AzureStatusType) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *GCPCloudInterconnectAttachmentStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	if m.AdminEnabled {
+		n += 2
+	}
+	l = len(m.OperationalStatus)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.Type)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.Router)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.Interconnect)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.Bandwidth)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.Encryption)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	if m.Vlan != 0 {
+		n += 1 + sovObject(uint64(m.Vlan))
+	}
+	if m.Mtu != 0 {
+		n += 1 + sovObject(uint64(m.Mtu))
+	}
+	l = len(m.StackType)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.CloudRouterIp)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.CustomerRouterIp)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	l = len(m.AvailabilityDomain)
+	if l > 0 {
+		n += 1 + l + sovObject(uint64(l))
+	}
+	if m.PartnerMetadata != nil {
+		l = m.PartnerMetadata.Size()
+		n += 1 + l + sovObject(uint64(l))
+	}
+	if m.PartnerAsn != 0 {
+		n += 2 + sovObject(uint64(m.PartnerAsn))
+	}
+	l = len(m.AttachmentState)
+	if l > 0 {
+		n += 2 + l + sovObject(uint64(l))
+	}
+	if m.DataplaneVersion != 0 {
+		n += 2 + sovObject(uint64(m.DataplaneVersion))
+	}
+	if len(m.BgpPeers) > 0 {
+		for _, e := range m.BgpPeers {
+			l = e.Size()
+			n += 2 + l + sovObject(uint64(l))
+		}
+	}
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovObject(uint64(len(k))) + 1 + len(v) + sovObject(uint64(len(v)))
+			n += mapEntrySize + 2 + sovObject(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *GCPStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.ConnectionStatus) > 0 {
+		for _, e := range m.ConnectionStatus {
+			l = e.Size()
+			n += 1 + l + sovObject(uint64(l))
+		}
+	}
+	if m.CloudLinkState != 0 {
+		n += 1 + sovObject(uint64(m.CloudLinkState))
+	}
 	return n
 }
 
@@ -3361,6 +4271,16 @@ func (this *StatusObject_AzureStatus) String() string {
 	}, "")
 	return s
 }
+func (this *StatusObject_GcpStatus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&StatusObject_GcpStatus{`,
+		`GcpStatus:` + strings.Replace(fmt.Sprintf("%v", this.GcpStatus), "GCPStatusType", "GCPStatusType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AWSStatusType) String() string {
 	if this == nil {
 		return "nil"
@@ -3372,6 +4292,10 @@ func (this *AWSStatusType) String() string {
 	repeatedStringForConnectionStatus += "}"
 	s := strings.Join([]string{`&AWSStatusType{`,
 		`ConnectionStatus:` + repeatedStringForConnectionStatus + `,`,
+		`SuggestedAction:` + fmt.Sprintf("%v", this.SuggestedAction) + `,`,
+		`ErrorDescription:` + fmt.Sprintf("%v", this.ErrorDescription) + `,`,
+		`CloudLinkState:` + fmt.Sprintf("%v", this.CloudLinkState) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3406,7 +4330,6 @@ func (this *DirectConnectConnectionStatusType) String() string {
 		`OwnerAccount:` + fmt.Sprintf("%v", this.OwnerAccount) + `,`,
 		`VifStatus:` + strings.Replace(this.VifStatus.String(), "VirtualInterfaceStatusType", "VirtualInterfaceStatusType", 1) + `,`,
 		`GatewayStatus:` + strings.Replace(this.GatewayStatus.String(), "DirectConnectGatewayStatusType", "DirectConnectGatewayStatusType", 1) + `,`,
-		`Coordinates:` + strings.Replace(this.Coordinates.String(), "Coordinates", "Coordinates", 1) + `,`,
 		`AwsPath:` + fmt.Sprintf("%v", this.AwsPath) + `,`,
 		`}`,
 	}, "")
@@ -3464,12 +4387,12 @@ func (this *BGPPeerType) String() string {
 	}
 	s := strings.Join([]string{`&BGPPeerType{`,
 		`AddressFamily:` + fmt.Sprintf("%v", this.AddressFamily) + `,`,
-		`AmazonAddress:` + fmt.Sprintf("%v", this.AmazonAddress) + `,`,
 		`Asn:` + fmt.Sprintf("%v", this.Asn) + `,`,
 		`BgpPeerId:` + fmt.Sprintf("%v", this.BgpPeerId) + `,`,
 		`BgpPeerState:` + fmt.Sprintf("%v", this.BgpPeerState) + `,`,
 		`BgpStatus:` + fmt.Sprintf("%v", this.BgpStatus) + `,`,
 		`CustomerAddress:` + fmt.Sprintf("%v", this.CustomerAddress) + `,`,
+		`CloudProviderAddress:` + fmt.Sprintf("%v", this.CloudProviderAddress) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3490,22 +4413,71 @@ func (this *DirectConnectGatewayStatusType) String() string {
 	}, "")
 	return s
 }
-func (this *Coordinates) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Coordinates{`,
-		`Latitude:` + fmt.Sprintf("%v", this.Latitude) + `,`,
-		`Longitude:` + fmt.Sprintf("%v", this.Longitude) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *AzureStatusType) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AzureStatusType{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPCloudInterconnectAttachmentStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForBgpPeers := "[]*BGPPeerType{"
+	for _, f := range this.BgpPeers {
+		repeatedStringForBgpPeers += strings.Replace(f.String(), "BGPPeerType", "BGPPeerType", 1) + ","
+	}
+	repeatedStringForBgpPeers += "}"
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	s := strings.Join([]string{`&GCPCloudInterconnectAttachmentStatusType{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`AdminEnabled:` + fmt.Sprintf("%v", this.AdminEnabled) + `,`,
+		`OperationalStatus:` + fmt.Sprintf("%v", this.OperationalStatus) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Router:` + fmt.Sprintf("%v", this.Router) + `,`,
+		`Interconnect:` + fmt.Sprintf("%v", this.Interconnect) + `,`,
+		`Bandwidth:` + fmt.Sprintf("%v", this.Bandwidth) + `,`,
+		`Encryption:` + fmt.Sprintf("%v", this.Encryption) + `,`,
+		`Vlan:` + fmt.Sprintf("%v", this.Vlan) + `,`,
+		`Mtu:` + fmt.Sprintf("%v", this.Mtu) + `,`,
+		`StackType:` + fmt.Sprintf("%v", this.StackType) + `,`,
+		`CloudRouterIp:` + fmt.Sprintf("%v", this.CloudRouterIp) + `,`,
+		`CustomerRouterIp:` + fmt.Sprintf("%v", this.CustomerRouterIp) + `,`,
+		`AvailabilityDomain:` + fmt.Sprintf("%v", this.AvailabilityDomain) + `,`,
+		`PartnerMetadata:` + strings.Replace(fmt.Sprintf("%v", this.PartnerMetadata), "GCPPartnerMetadata", "GCPPartnerMetadata", 1) + `,`,
+		`PartnerAsn:` + fmt.Sprintf("%v", this.PartnerAsn) + `,`,
+		`AttachmentState:` + fmt.Sprintf("%v", this.AttachmentState) + `,`,
+		`DataplaneVersion:` + fmt.Sprintf("%v", this.DataplaneVersion) + `,`,
+		`BgpPeers:` + repeatedStringForBgpPeers + `,`,
+		`Labels:` + mapStringForLabels + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForConnectionStatus := "[]*GCPCloudInterconnectAttachmentStatusType{"
+	for _, f := range this.ConnectionStatus {
+		repeatedStringForConnectionStatus += strings.Replace(f.String(), "GCPCloudInterconnectAttachmentStatusType", "GCPCloudInterconnectAttachmentStatusType", 1) + ","
+	}
+	repeatedStringForConnectionStatus += "}"
+	s := strings.Join([]string{`&GCPStatusType{`,
+		`ConnectionStatus:` + repeatedStringForConnectionStatus + `,`,
+		`CloudLinkState:` + fmt.Sprintf("%v", this.CloudLinkState) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3971,6 +4943,41 @@ func (m *StatusObject) Unmarshal(dAtA []byte) error {
 			}
 			m.CloudLinkStatus = &StatusObject_AzureStatus{v}
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GcpStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPStatusType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudLinkStatus = &StatusObject_GcpStatus{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipObject(dAtA[iNdEx:])
@@ -4058,6 +5065,108 @@ func (m *AWSStatusType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuggestedAction", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SuggestedAction = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ErrorDescription", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ErrorDescription = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudLinkState", wireType)
+			}
+			m.CloudLinkState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CloudLinkState |= CloudLinkState(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
+			}
+			m.DeploymentStatus = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DeploymentStatus |= CloudLinkDeploymentStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipObject(dAtA[iNdEx:])
@@ -4666,42 +5775,6 @@ func (m *DirectConnectConnectionStatusType) Unmarshal(dAtA []byte) error {
 				m.GatewayStatus = &DirectConnectGatewayStatusType{}
 			}
 			if err := m.GatewayStatus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 16:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Coordinates", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowObject
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthObject
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthObject
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Coordinates == nil {
-				m.Coordinates = &Coordinates{}
-			}
-			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5612,38 +6685,6 @@ func (m *BGPPeerType) Unmarshal(dAtA []byte) error {
 			}
 			m.AddressFamily = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AmazonAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowObject
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthObject
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthObject
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AmazonAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Asn", wireType)
@@ -5790,6 +6831,38 @@ func (m *BGPPeerType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.CustomerAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudProviderAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CloudProviderAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6079,81 +7152,6 @@ func (m *DirectConnectGatewayStatusType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Coordinates) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowObject
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Coordinates: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Coordinates: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Latitude", wireType)
-			}
-			var v uint32
-			if (iNdEx + 4) > l {
-				return io.ErrUnexpectedEOF
-			}
-			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
-			iNdEx += 4
-			m.Latitude = float32(math.Float32frombits(v))
-		case 2:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Longitude", wireType)
-			}
-			var v uint32
-			if (iNdEx + 4) > l {
-				return io.ErrUnexpectedEOF
-			}
-			v = uint32(encoding_binary.LittleEndian.Uint32(dAtA[iNdEx:]))
-			iNdEx += 4
-			m.Longitude = float32(math.Float32frombits(v))
-		default:
-			iNdEx = preIndex
-			skippy, err := skipObject(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthObject
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthObject
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *AzureStatusType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -6183,6 +7181,842 @@ func (m *AzureStatusType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: AzureStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipObject(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthObject
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthObject
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPCloudInterconnectAttachmentStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowObject
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPCloudInterconnectAttachmentStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPCloudInterconnectAttachmentStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AdminEnabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AdminEnabled = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperationalStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OperationalStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Type = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Router", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Router = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Interconnect", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Interconnect = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Bandwidth", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Bandwidth = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Encryption", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Encryption = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Vlan", wireType)
+			}
+			m.Vlan = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Vlan |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mtu", wireType)
+			}
+			m.Mtu = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Mtu |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StackType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StackType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudRouterIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CloudRouterIp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerRouterIp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CustomerRouterIp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailabilityDomain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailabilityDomain = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PartnerMetadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PartnerMetadata == nil {
+				m.PartnerMetadata = &GCPPartnerMetadata{}
+			}
+			if err := m.PartnerMetadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PartnerAsn", wireType)
+			}
+			m.PartnerAsn = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PartnerAsn |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachmentState", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AttachmentState = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 18:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DataplaneVersion", wireType)
+			}
+			m.DataplaneVersion = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DataplaneVersion |= int32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BgpPeers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BgpPeers = append(m.BgpPeers, &BGPPeerType{})
+			if err := m.BgpPeers[len(m.BgpPeers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowObject
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowObject
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthObject
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthObject
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowObject
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthObject
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthObject
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipObject(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthObject
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipObject(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthObject
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthObject
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowObject
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthObject
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthObject
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ConnectionStatus = append(m.ConnectionStatus, &GCPCloudInterconnectAttachmentStatusType{})
+			if err := m.ConnectionStatus[len(m.ConnectionStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudLinkState", wireType)
+			}
+			m.CloudLinkState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowObject
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CloudLinkState |= CloudLinkState(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipObject(dAtA[iNdEx:])

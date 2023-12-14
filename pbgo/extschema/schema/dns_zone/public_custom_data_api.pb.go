@@ -20,6 +20,7 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
@@ -63,6 +64,9 @@ const (
 	// x-displayName: "Dns zone name"
 	// Identifies the dns zone name.
 	DNS_ZONE_NAME Label = 4
+	// x-displayName: "Client subnet"
+	// Identifies the client subnet.
+	CLIENT_SUBNET Label = 5
 )
 
 var Label_name = map[int32]string{
@@ -71,6 +75,7 @@ var Label_name = map[int32]string{
 	2: "QUERY_TYPE",
 	3: "RESPONSE_CODE",
 	4: "DNS_ZONE_NAME",
+	5: "CLIENT_SUBNET",
 }
 
 var Label_value = map[string]int32{
@@ -79,6 +84,7 @@ var Label_value = map[string]int32{
 	"QUERY_TYPE":    2,
 	"RESPONSE_CODE": 3,
 	"DNS_ZONE_NAME": 4,
+	"CLIENT_SUBNET": 5,
 }
 
 func (Label) EnumDescriptor() ([]byte, []int) {
@@ -837,6 +843,12 @@ type DnsZoneMetricsResponse struct {
 	// Actual step size used in the response.
 	// Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days
 	Step string `protobuf:"bytes,2,opt,name=step,proto3" json:"step,omitempty"`
+	// total hits
+	//
+	// x-displayName: "Total Hits"
+	// x-example: "100"
+	// total number of log messages that matched the query.
+	TotalHits uint64 `protobuf:"varint,3,opt,name=total_hits,json=totalHits,proto3" json:"total_hits,omitempty"`
 }
 
 func (m *DnsZoneMetricsResponse) Reset()      { *m = DnsZoneMetricsResponse{} }
@@ -885,6 +897,215 @@ func (m *DnsZoneMetricsResponse) GetStep() string {
 	return ""
 }
 
+func (m *DnsZoneMetricsResponse) GetTotalHits() uint64 {
+	if m != nil {
+		return m.TotalHits
+	}
+	return 0
+}
+
+// DnsZoneRequestLogRequest
+//
+// x-displayName: "Dns Zone Request Log Request"
+// Request to fetch request logs.
+type DnsZoneRequestLogRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// fetch request logs for a given namespace
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Label Filter
+	//
+	// x-displayName: "Filter"
+	// x-example: "{COUNTRY_CODE=\"CH\"}"
+	// filter is used to specify the list of matchers
+	// syntax for filter := {[<matcher>]}
+	// <matcher> := <label><operator>"<value>"
+	//   <label> := string
+	//     One or more labels defined in Label can be specified in the filter.
+	//   <value> := string
+	//   <operator> := ["="|"!="]
+	//     =  : equal to
+	//     != : not equal to
+	//
+	// Optional: If not specified, counter will be aggregated based on the group_by labels.
+	Filter string `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
+	// start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "2019-09-23T12:30:11.733Z"
+	// fetch request logs whose timestamp >= start_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// end time
+	//
+	// x-displayName: "End Time"
+	// x-example: "2019-09-24T12:30:11.733Z"
+	// fetch request logs whose timestamp <= end_time
+	// format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,4,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// sort order
+	//
+	// x-displayName: "Sort Order"
+	// specifies whether the response should be sorted in ascending or descending order based on timestamp in the log
+	// Optional: default is descending order
+	Sort schema.SortOrder `protobuf:"varint,5,opt,name=sort,proto3,enum=ves.io.schema.SortOrder" json:"sort,omitempty"`
+	// limit
+	//
+	// x-displayName: "Limit"
+	// x-example: "0"
+	// limits the number of logs returned in the response
+	// Optional: If not specified, first or last 500 log messages that matches the query (depending on the sort order) will be returned in the response.
+	//           The maximum value for limit is 500.
+	Limit uint32 `protobuf:"varint,6,opt,name=limit,proto3" json:"limit,omitempty"`
+}
+
+func (m *DnsZoneRequestLogRequest) Reset()      { *m = DnsZoneRequestLogRequest{} }
+func (*DnsZoneRequestLogRequest) ProtoMessage() {}
+func (*DnsZoneRequestLogRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7feea21366f27619, []int{2}
+}
+func (m *DnsZoneRequestLogRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsZoneRequestLogRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DnsZoneRequestLogRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DnsZoneRequestLogRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsZoneRequestLogRequest.Merge(m, src)
+}
+func (m *DnsZoneRequestLogRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsZoneRequestLogRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsZoneRequestLogRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsZoneRequestLogRequest proto.InternalMessageInfo
+
+func (m *DnsZoneRequestLogRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogRequest) GetFilter() string {
+	if m != nil {
+		return m.Filter
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogRequest) GetSort() schema.SortOrder {
+	if m != nil {
+		return m.Sort
+	}
+	return schema.DESCENDING
+}
+
+func (m *DnsZoneRequestLogRequest) GetLimit() uint32 {
+	if m != nil {
+		return m.Limit
+	}
+	return 0
+}
+
+// DnsZoneRequestLogResponse
+//
+// x-displayName: "Dns Zone Log Response"
+// Response message for RequestLogRequest
+type DnsZoneRequestLogResponse struct {
+	// logs
+	//
+	// x-displayName: "Logs"
+	// x-example: "value"
+	// list of log messages that matched the query. Not all log messages that matched the query are returned in the response.
+	Logs []*DnsZoneRequestLogsResponseData `protobuf:"bytes,1,rep,name=logs,proto3" json:"logs,omitempty"`
+	// total hits
+	//
+	// x-displayName: "Total Hits"
+	// x-example: "100"
+	// total number of log messages that matched the query.
+	TotalHits uint64 `protobuf:"varint,2,opt,name=total_hits,json=totalHits,proto3" json:"total_hits,omitempty"`
+}
+
+func (m *DnsZoneRequestLogResponse) Reset()      { *m = DnsZoneRequestLogResponse{} }
+func (*DnsZoneRequestLogResponse) ProtoMessage() {}
+func (*DnsZoneRequestLogResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7feea21366f27619, []int{3}
+}
+func (m *DnsZoneRequestLogResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsZoneRequestLogResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DnsZoneRequestLogResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DnsZoneRequestLogResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsZoneRequestLogResponse.Merge(m, src)
+}
+func (m *DnsZoneRequestLogResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsZoneRequestLogResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsZoneRequestLogResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsZoneRequestLogResponse proto.InternalMessageInfo
+
+func (m *DnsZoneRequestLogResponse) GetLogs() []*DnsZoneRequestLogsResponseData {
+	if m != nil {
+		return m.Logs
+	}
+	return nil
+}
+
+func (m *DnsZoneRequestLogResponse) GetTotalHits() uint64 {
+	if m != nil {
+		return m.TotalHits
+	}
+	return 0
+}
+
 // Metrics Data
 //
 // x-displayName: "Metrics Data"
@@ -906,7 +1127,7 @@ type MetricsData struct {
 func (m *MetricsData) Reset()      { *m = MetricsData{} }
 func (*MetricsData) ProtoMessage() {}
 func (*MetricsData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7feea21366f27619, []int{2}
+	return fileDescriptor_7feea21366f27619, []int{4}
 }
 func (m *MetricsData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -949,6 +1170,137 @@ func (m *MetricsData) GetValue() []*schema.MetricValue {
 	return nil
 }
 
+// Dns Zone Request Logs data item
+//
+// x-displayName: "Dns Zone Request log data item"
+// Dns Zone Request-Log item
+type DnsZoneRequestLogsResponseData struct {
+	// Timestamp
+	//
+	// x-displayName: "Timestamp of the request log"
+	// x-example: "2022-10-21T01:05:32.713Z"
+	// x-required
+	// Format: unix_timestamp|rfc 3339
+	Timestamp string `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	// Country code
+	//
+	// x-displayName: "Country code"
+	// x-example: "FRA"
+	// Country Code
+	CountryCode string `protobuf:"bytes,2,opt,name=country_code,json=countryCode,proto3" json:"country_code,omitempty"`
+	// Domain
+	//
+	// x-displayName: "Domain"
+	// x-example: "www.example.com"
+	// Domain
+	Domain string `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"`
+	// Query type
+	//
+	// x-displayName: "Query type"
+	// x-example: "AAAA"
+	// Query Type
+	QueryType string `protobuf:"bytes,4,opt,name=query_type,json=queryType,proto3" json:"query_type,omitempty"`
+	// Response code
+	//
+	// x-displayName: "Response code"
+	// x-example: "NOERROR"
+	// Response Code
+	ResponseCode string `protobuf:"bytes,5,opt,name=response_code,json=responseCode,proto3" json:"response_code,omitempty"`
+	// Client subnet
+	//
+	// x-displayName: "Client subnet"
+	// x-example: "1.2.3.4"
+	// Client Subnet
+	ClientSubnet string `protobuf:"bytes,6,opt,name=client_subnet,json=clientSubnet,proto3" json:"client_subnet,omitempty"`
+	// Dns zone name
+	//
+	// x-displayName: "Dns zone name"
+	// x-example: "abc.com"
+	// Identifies the dns zone name.
+	DnsZoneName string `protobuf:"bytes,7,opt,name=dns_zone_name,json=dnsZoneName,proto3" json:"dns_zone_name,omitempty"`
+}
+
+func (m *DnsZoneRequestLogsResponseData) Reset()      { *m = DnsZoneRequestLogsResponseData{} }
+func (*DnsZoneRequestLogsResponseData) ProtoMessage() {}
+func (*DnsZoneRequestLogsResponseData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_7feea21366f27619, []int{5}
+}
+func (m *DnsZoneRequestLogsResponseData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DnsZoneRequestLogsResponseData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DnsZoneRequestLogsResponseData.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DnsZoneRequestLogsResponseData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DnsZoneRequestLogsResponseData.Merge(m, src)
+}
+func (m *DnsZoneRequestLogsResponseData) XXX_Size() int {
+	return m.Size()
+}
+func (m *DnsZoneRequestLogsResponseData) XXX_DiscardUnknown() {
+	xxx_messageInfo_DnsZoneRequestLogsResponseData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DnsZoneRequestLogsResponseData proto.InternalMessageInfo
+
+func (m *DnsZoneRequestLogsResponseData) GetTimestamp() string {
+	if m != nil {
+		return m.Timestamp
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetCountryCode() string {
+	if m != nil {
+		return m.CountryCode
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetDomain() string {
+	if m != nil {
+		return m.Domain
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetQueryType() string {
+	if m != nil {
+		return m.QueryType
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetResponseCode() string {
+	if m != nil {
+		return m.ResponseCode
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetClientSubnet() string {
+	if m != nil {
+		return m.ClientSubnet
+	}
+	return ""
+}
+
+func (m *DnsZoneRequestLogsResponseData) GetDnsZoneName() string {
+	if m != nil {
+		return m.DnsZoneName
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.dns_zone.Label", Label_name, Label_value)
 	golang_proto.RegisterEnum("ves.io.schema.dns_zone.Label", Label_name, Label_value)
@@ -960,10 +1312,16 @@ func init() {
 	golang_proto.RegisterType((*DnsZoneMetricsRequest)(nil), "ves.io.schema.dns_zone.DnsZoneMetricsRequest")
 	proto.RegisterType((*DnsZoneMetricsResponse)(nil), "ves.io.schema.dns_zone.DnsZoneMetricsResponse")
 	golang_proto.RegisterType((*DnsZoneMetricsResponse)(nil), "ves.io.schema.dns_zone.DnsZoneMetricsResponse")
+	proto.RegisterType((*DnsZoneRequestLogRequest)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogRequest")
+	golang_proto.RegisterType((*DnsZoneRequestLogRequest)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogRequest")
+	proto.RegisterType((*DnsZoneRequestLogResponse)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogResponse")
+	golang_proto.RegisterType((*DnsZoneRequestLogResponse)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogResponse")
 	proto.RegisterType((*MetricsData)(nil), "ves.io.schema.dns_zone.MetricsData")
 	golang_proto.RegisterType((*MetricsData)(nil), "ves.io.schema.dns_zone.MetricsData")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.dns_zone.MetricsData.LabelsEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.dns_zone.MetricsData.LabelsEntry")
+	proto.RegisterType((*DnsZoneRequestLogsResponseData)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogsResponseData")
+	golang_proto.RegisterType((*DnsZoneRequestLogsResponseData)(nil), "ves.io.schema.dns_zone.DnsZoneRequestLogsResponseData")
 }
 
 func init() {
@@ -974,98 +1332,118 @@ func init() {
 }
 
 var fileDescriptor_7feea21366f27619 = []byte{
-	// 1456 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x56, 0xcb, 0x6f, 0x1b, 0xc7,
-	0x19, 0xe7, 0x2c, 0x1f, 0x22, 0xc7, 0x96, 0xf2, 0x65, 0x9b, 0xb8, 0x0c, 0x63, 0x6f, 0x55, 0xa5,
-	0x46, 0x15, 0x25, 0x24, 0x1d, 0xc9, 0x4e, 0x1c, 0xf7, 0xb9, 0xdc, 0x5d, 0x4a, 0x0b, 0x93, 0xbb,
-	0x9b, 0xd9, 0xa5, 0x40, 0xb9, 0x28, 0x88, 0x25, 0x39, 0xa2, 0x37, 0x26, 0xb9, 0xcc, 0xee, 0x52,
-	0xad, 0x5a, 0x14, 0x50, 0x8c, 0xa2, 0xb7, 0x02, 0x05, 0x7a, 0xe9, 0xb1, 0xc7, 0xfe, 0x09, 0x45,
-	0x7d, 0x11, 0xd0, 0x43, 0x73, 0x32, 0x8c, 0xf6, 0x12, 0x14, 0x3d, 0xd4, 0x54, 0x0f, 0xed, 0xcd,
-	0xf7, 0x3e, 0xf1, 0x0d, 0x29, 0xc5, 0x52, 0x63, 0x20, 0xa7, 0xfd, 0xcd, 0xfc, 0x1e, 0xdf, 0xf0,
-	0x9b, 0xe1, 0xee, 0xd0, 0xad, 0x03, 0x1e, 0x57, 0x82, 0xb0, 0x1a, 0xf7, 0xee, 0xf3, 0x91, 0x5f,
-	0xed, 0x8f, 0xe3, 0xce, 0x8f, 0xc2, 0x31, 0xaf, 0x4e, 0xa6, 0xdd, 0x61, 0xd0, 0xeb, 0xf4, 0xa6,
-	0x71, 0x12, 0x8e, 0x3a, 0x7d, 0x3f, 0xf1, 0x3b, 0xfe, 0x24, 0xa8, 0x4c, 0xa2, 0x30, 0x09, 0xe5,
-	0x2b, 0x73, 0x53, 0x65, 0x6e, 0xaa, 0x9c, 0x9a, 0x4a, 0xe5, 0x41, 0x90, 0xdc, 0x9f, 0x76, 0x2b,
-	0xbd, 0x70, 0x54, 0x1d, 0x84, 0x83, 0xb0, 0x2a, 0xe4, 0xdd, 0xe9, 0xbe, 0x18, 0x89, 0x81, 0x40,
-	0xf3, 0x98, 0xd2, 0xd5, 0x41, 0x18, 0x0e, 0x86, 0xbc, 0xea, 0x4f, 0x82, 0xaa, 0x3f, 0x1e, 0x87,
-	0x89, 0x9f, 0x04, 0xe1, 0x38, 0x5e, 0xb0, 0xaf, 0x9f, 0x5f, 0x59, 0x38, 0x79, 0x9e, 0x7c, 0xed,
-	0x3c, 0x99, 0x1c, 0x4e, 0xf8, 0x29, 0x75, 0xf5, 0x3c, 0x75, 0xe0, 0x0f, 0x83, 0xbe, 0x9f, 0xf0,
-	0x05, 0xbb, 0x76, 0x81, 0xe5, 0x31, 0x1f, 0x1f, 0x5c, 0x08, 0x5f, 0xbd, 0xa0, 0x09, 0xf8, 0x0f,
-	0x3a, 0xe7, 0x14, 0x6b, 0x8f, 0x25, 0xfa, 0xaa, 0x3e, 0x8e, 0xef, 0x85, 0x63, 0xde, 0xe4, 0x49,
-	0x14, 0xf4, 0x62, 0xc6, 0x3f, 0x9a, 0xf2, 0x38, 0x91, 0xaf, 0xd2, 0xc2, 0xd8, 0x1f, 0xf1, 0x78,
-	0xe2, 0xf7, 0x78, 0x91, 0xac, 0x92, 0xf5, 0x02, 0xfb, 0x6c, 0x42, 0xbe, 0x42, 0x73, 0xfb, 0xc1,
-	0x30, 0xe1, 0x51, 0x31, 0x2d, 0xa8, 0xc5, 0x48, 0xbe, 0x4d, 0xf3, 0x83, 0x28, 0x9c, 0x4e, 0x3a,
-	0xdd, 0xc3, 0x62, 0x66, 0x35, 0xbd, 0xbe, 0xb2, 0x79, 0xad, 0xf2, 0xf9, 0x3d, 0xae, 0x34, 0xfc,
-	0x2e, 0x1f, 0xb2, 0x25, 0x21, 0xaf, 0x1d, 0xca, 0x6f, 0x52, 0x1a, 0x27, 0x7e, 0x94, 0x74, 0x92,
-	0x60, 0xc4, 0x8b, 0x39, 0x4c, 0xad, 0xd1, 0xdf, 0xfd, 0xe3, 0x38, 0x9d, 0x8d, 0xd2, 0xbf, 0xca,
-	0x10, 0x56, 0x10, 0xac, 0x17, 0x8c, 0xb8, 0x7c, 0x9d, 0xe6, 0xf9, 0xb8, 0x3f, 0x17, 0x2e, 0xfd,
-	0x9f, 0x70, 0x89, 0x8f, 0xfb, 0x42, 0xf6, 0x36, 0xcd, 0xc4, 0x61, 0x94, 0x14, 0xf3, 0xab, 0x64,
-	0x7d, 0x65, 0xb3, 0x78, 0x61, 0x1d, 0x6e, 0x18, 0x25, 0x76, 0xd4, 0xe7, 0x11, 0x13, 0x2a, 0xf9,
-	0x3a, 0xcd, 0x0e, 0x83, 0x51, 0x90, 0x14, 0x0b, 0xab, 0x64, 0x7d, 0xb9, 0xf6, 0xd2, 0x9f, 0x1f,
-	0x11, 0xe9, 0x9d, 0x1b, 0x98, 0x9b, 0xd9, 0x90, 0x8a, 0x7d, 0x36, 0x67, 0x65, 0x85, 0x66, 0xe2,
-	0x84, 0x4f, 0x8a, 0xf4, 0x5c, 0xdd, 0x5f, 0x67, 0x08, 0x13, 0xf3, 0x6b, 0x1f, 0xd1, 0x2b, 0x17,
-	0xfb, 0x19, 0x4f, 0xc2, 0x71, 0xcc, 0xe5, 0xf7, 0x68, 0x06, 0x4f, 0x5f, 0x91, 0xac, 0xa6, 0xd7,
-	0x2f, 0x6d, 0xbe, 0xf1, 0xa2, 0xb6, 0x2c, 0x6c, 0xba, 0x9f, 0xf8, 0x4c, 0x18, 0xce, 0x4a, 0x4a,
-	0xe7, 0x4a, 0x3e, 0x93, 0x4e, 0x4b, 0xfe, 0x9e, 0xd0, 0x4b, 0xcf, 0xb9, 0xe4, 0x6d, 0x9a, 0x1b,
-	0x62, 0x6f, 0xe3, 0x45, 0xa9, 0xea, 0x17, 0x28, 0x35, 0xdf, 0x8d, 0xd8, 0x18, 0x27, 0xd1, 0x21,
-	0x5b, 0xd8, 0xe5, 0x1b, 0x34, 0x7b, 0xe0, 0x0f, 0xa7, 0xbc, 0x28, 0x89, 0x9c, 0xd2, 0x85, 0x9c,
-	0xb9, 0x7d, 0x17, 0x15, 0x6c, 0x2e, 0x2c, 0xbd, 0x4f, 0x2f, 0x3d, 0x17, 0x24, 0x03, 0x4d, 0x3f,
-	0xe0, 0x87, 0x8b, 0xd3, 0x83, 0x50, 0x7e, 0xe5, 0xb3, 0x48, 0x9c, 0x9b, 0x0f, 0xee, 0x48, 0xb7,
-	0xc9, 0xc6, 0xf7, 0x68, 0x56, 0x58, 0x65, 0xa0, 0x97, 0x35, 0xbb, 0x65, 0x79, 0x6c, 0xaf, 0xa3,
-	0xd9, 0xba, 0x01, 0x29, 0x99, 0xd2, 0x9c, 0x6e, 0x37, 0x55, 0xd3, 0x02, 0x22, 0xaf, 0x50, 0xfa,
-	0x41, 0xcb, 0x60, 0x7b, 0x1d, 0x6f, 0xcf, 0x31, 0x40, 0x92, 0x5f, 0xa6, 0xcb, 0xcc, 0x70, 0x1d,
-	0xdb, 0x72, 0x8d, 0xb9, 0x3c, 0x8d, 0x53, 0xba, 0xe5, 0x76, 0xee, 0xd9, 0x96, 0xd1, 0xb1, 0xd4,
-	0xa6, 0x01, 0x99, 0x8d, 0xbf, 0xe4, 0x68, 0xe1, 0x83, 0x29, 0x8f, 0x0e, 0xbd, 0xc3, 0x09, 0x97,
-	0xf3, 0x34, 0x63, 0x85, 0x63, 0x0e, 0x29, 0x39, 0x4b, 0x89, 0x0a, 0x44, 0xce, 0x51, 0xc9, 0x72,
-	0x41, 0xc2, 0x67, 0x53, 0x87, 0xb4, 0x78, 0xd6, 0x21, 0x23, 0x17, 0x68, 0x56, 0x13, 0x09, 0x59,
-	0x79, 0x89, 0xa6, 0x5d, 0x5b, 0x85, 0x9c, 0xe0, 0x6a, 0xb0, 0x24, 0x9e, 0xdb, 0x90, 0x17, 0x4f,
-	0x06, 0x05, 0x11, 0xda, 0x6a, 0x34, 0x80, 0xa2, 0xd4, 0xf1, 0x18, 0x5c, 0x46, 0xfb, 0x8e, 0x69,
-	0xd5, 0x6d, 0x58, 0x46, 0xd8, 0x14, 0x70, 0x45, 0x18, 0xda, 0xf0, 0x12, 0xca, 0xbc, 0xb6, 0x07,
-	0x80, 0x13, 0xcc, 0x81, 0x97, 0x51, 0xa3, 0xd6, 0x5d, 0xbd, 0x06, 0x32, 0x72, 0xed, 0xcd, 0x5b,
-	0xf0, 0x25, 0x4c, 0x35, 0x5d, 0xdd, 0x82, 0x57, 0x84, 0xca, 0x83, 0x57, 0xe5, 0x4b, 0x74, 0xc9,
-	0x72, 0x55, 0x07, 0x2b, 0x7c, 0x59, 0xac, 0xca, 0xdc, 0x86, 0x22, 0x82, 0xbb, 0xc6, 0x1e, 0xbc,
-	0x86, 0x32, 0xa7, 0x0d, 0x25, 0x34, 0x6e, 0x3b, 0xb6, 0x0b, 0xaf, 0x23, 0x52, 0x55, 0x55, 0x85,
-	0xab, 0x28, 0x6a, 0xd8, 0x1a, 0x5c, 0x43, 0x60, 0xb5, 0x3d, 0x50, 0x10, 0x18, 0xa6, 0x0e, 0x5f,
-	0xc1, 0x16, 0x5b, 0x66, 0x13, 0xd9, 0x55, 0x11, 0xca, 0x76, 0xe1, 0xab, 0xc2, 0xe9, 0x35, 0x55,
-	0x58, 0xc3, 0xa5, 0x59, 0x2a, 0x96, 0x7c, 0x03, 0x0b, 0xdc, 0x6d, 0xc3, 0xd7, 0x90, 0xd4, 0x0c,
-	0xe6, 0xc1, 0x75, 0x24, 0x75, 0xd1, 0xa5, 0xaf, 0xa3, 0xd5, 0x76, 0x3c, 0x78, 0x13, 0x81, 0xea,
-	0x34, 0x60, 0x03, 0xe5, 0xba, 0x0b, 0x6f, 0xa1, 0xc8, 0x75, 0x77, 0xea, 0x0e, 0xbc, 0x2d, 0x5f,
-	0xa6, 0x79, 0xd3, 0x71, 0x0d, 0x0d, 0x17, 0x5c, 0x46, 0x82, 0x31, 0xfc, 0x11, 0x15, 0xd1, 0x42,
-	0xd7, 0xd0, 0xa0, 0x2a, 0x76, 0xdc, 0x72, 0x51, 0x70, 0x43, 0xc4, 0xef, 0x68, 0xa6, 0x0e, 0xef,
-	0x88, 0x65, 0xb8, 0x86, 0xb6, 0x05, 0x9b, 0x78, 0x0e, 0x04, 0x74, 0x54, 0xa6, 0x36, 0x61, 0x0b,
-	0xbd, 0x5e, 0xc3, 0x55, 0xe1, 0x26, 0x7a, 0xdd, 0xa6, 0xd9, 0x34, 0x54, 0xb8, 0x85, 0xcb, 0xd8,
-	0x31, 0x1d, 0x78, 0x4f, 0x38, 0x45, 0xff, 0x6f, 0xa3, 0x92, 0x61, 0xf2, 0xfb, 0xa8, 0xf4, 0xd4,
-	0x86, 0x69, 0xdd, 0x85, 0x3b, 0xa8, 0xd4, 0x74, 0x17, 0xbe, 0x81, 0xfd, 0xd5, 0x16, 0xb5, 0xbf,
-	0x89, 0x55, 0x6c, 0xc7, 0xb0, 0x9c, 0x6d, 0x07, 0xc7, 0xdf, 0x12, 0x07, 0xc2, 0xdd, 0xb3, 0x34,
-	0xf8, 0x36, 0x9a, 0xf1, 0x84, 0x35, 0x75, 0xf8, 0x0e, 0x46, 0xba, 0xbb, 0x5a, 0x0d, 0xbe, 0x2b,
-	0xb6, 0xdc, 0xf3, 0x1c, 0x17, 0x54, 0xd1, 0x46, 0xa7, 0x0e, 0x3d, 0x9c, 0x6b, 0x89, 0xda, 0x7d,
-	0x9c, 0x6b, 0x99, 0x3a, 0x70, 0x04, 0xdb, 0xa6, 0x0e, 0xfb, 0x18, 0xd3, 0xb2, 0x5c, 0xc7, 0xd0,
-	0x60, 0x20, 0xb6, 0xc5, 0xd4, 0xe1, 0xbe, 0xd8, 0xa8, 0xad, 0x4d, 0x08, 0x04, 0x78, 0xf7, 0x26,
-	0x7c, 0x88, 0x6d, 0x6c, 0x38, 0xf0, 0x00, 0xb3, 0x8c, 0x96, 0x79, 0xf3, 0x36, 0x0c, 0x17, 0xf0,
-	0xdd, 0x9b, 0x30, 0x92, 0xf3, 0x34, 0xdd, 0x62, 0x26, 0x1c, 0x49, 0x88, 0x34, 0x55, 0x85, 0x8f,
-	0x05, 0x52, 0x77, 0x35, 0x78, 0x28, 0xc9, 0xcb, 0x34, 0xaf, 0x36, 0x3d, 0x66, 0x34, 0xd4, 0x3d,
-	0xf8, 0xa9, 0x24, 0x17, 0x68, 0xc6, 0x6c, 0xd7, 0x19, 0xfc, 0x93, 0x20, 0x54, 0x11, 0xfe, 0x8b,
-	0xc8, 0x94, 0x66, 0x9b, 0xaa, 0xd9, 0xa8, 0xc1, 0xbf, 0xcf, 0xb0, 0x0a, 0xff, 0x21, 0x22, 0xc6,
-	0xda, 0x83, 0xff, 0x22, 0x92, 0x3c, 0x15, 0x8e, 0x8e, 0x30, 0x21, 0xad, 0x37, 0x76, 0xe1, 0xe3,
-	0x23, 0xa9, 0x94, 0x39, 0x7e, 0x44, 0x52, 0x1b, 0x7d, 0x7a, 0xf9, 0xf4, 0x35, 0xa7, 0x85, 0x7d,
-	0x2e, 0xce, 0xa8, 0x6d, 0x30, 0x66, 0x33, 0x48, 0xe1, 0xa0, 0x6e, 0xb3, 0xa6, 0xc1, 0x18, 0x10,
-	0xdc, 0x7b, 0xd7, 0x60, 0xbb, 0x75, 0xd5, 0x6c, 0x80, 0x84, 0x23, 0xab, 0xbd, 0xf8, 0x6b, 0xa7,
-	0x51, 0xc8, 0x8c, 0x7a, 0xcb, 0x35, 0x74, 0xc8, 0xce, 0x23, 0x3c, 0xb5, 0xe5, 0xed, 0x40, 0x61,
-	0x5e, 0x65, 0xf3, 0xe7, 0x12, 0x5d, 0xd6, 0xc4, 0x67, 0x1c, 0xdf, 0x58, 0xaa, 0x63, 0xca, 0x8f,
-	0x09, 0x5d, 0x39, 0xff, 0xb6, 0x95, 0xcb, 0x2f, 0x7a, 0xd9, 0x7d, 0xee, 0x57, 0xae, 0x54, 0xf9,
-	0xa2, 0xf2, 0xf9, 0xaf, 0x5b, 0xfb, 0xfe, 0x27, 0xbf, 0x95, 0xc8, 0xec, 0x0f, 0xc5, 0xd2, 0x01,
-	0x8f, 0xcb, 0x41, 0x58, 0x0e, 0xc6, 0xfb, 0x91, 0x1f, 0x27, 0xd1, 0xb4, 0x97, 0x4c, 0x23, 0x5e,
-	0x8e, 0xb8, 0xdf, 0x7f, 0xf8, 0xa7, 0xbf, 0xfd, 0x52, 0xba, 0xb5, 0x76, 0x63, 0x71, 0xf3, 0xa8,
-	0x9e, 0x7d, 0x34, 0xe3, 0xea, 0x8f, 0xcf, 0xf0, 0x4f, 0xce, 0x2e, 0x28, 0x71, 0x75, 0x34, 0xaf,
-	0x71, 0x87, 0x6c, 0x94, 0xde, 0x3a, 0x7e, 0x44, 0xd2, 0x7f, 0x7c, 0x44, 0xae, 0xbd, 0x60, 0x55,
-	0x76, 0xf7, 0x43, 0xde, 0x4b, 0x1e, 0x3e, 0x2e, 0x4a, 0x45, 0x52, 0xfb, 0x19, 0x79, 0xf2, 0x54,
-	0x49, 0x7d, 0xfa, 0x54, 0x49, 0x3d, 0x7b, 0xaa, 0x90, 0xa3, 0x99, 0x42, 0x7e, 0x33, 0x53, 0xc8,
-	0x27, 0x33, 0x85, 0x3c, 0x99, 0x29, 0xe4, 0xaf, 0x33, 0x85, 0xfc, 0x7d, 0xa6, 0xa4, 0x9e, 0xcd,
-	0x14, 0xf2, 0x8b, 0x13, 0x25, 0x75, 0x7c, 0xa2, 0x90, 0x27, 0x27, 0x4a, 0xea, 0xd3, 0x13, 0x25,
-	0x75, 0xaf, 0x31, 0x08, 0x27, 0x0f, 0x06, 0x95, 0x83, 0x10, 0x3f, 0xda, 0x91, 0x5f, 0x99, 0xc6,
-	0x55, 0x01, 0xf6, 0xc3, 0x68, 0x54, 0x9e, 0x44, 0xe1, 0x41, 0xd0, 0xe7, 0x51, 0xf9, 0x94, 0xae,
-	0x4e, 0xba, 0x83, 0xb0, 0xca, 0x7f, 0x98, 0x2c, 0xee, 0x11, 0x17, 0xae, 0x58, 0xdd, 0x9c, 0xb8,
-	0x4b, 0x6c, 0xfd, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x12, 0x86, 0x52, 0xe1, 0x83, 0x09, 0x00, 0x00,
+	// 1764 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x57, 0xcf, 0x6f, 0x1b, 0xc7,
+	0x15, 0xe6, 0x2c, 0x49, 0x49, 0x1c, 0x49, 0xce, 0xcb, 0x36, 0x71, 0x69, 0xc5, 0x62, 0x15, 0xba,
+	0x46, 0x15, 0xc5, 0x24, 0x65, 0xc9, 0x72, 0x1c, 0xf5, 0xe7, 0x8a, 0x5c, 0x49, 0x5b, 0x93, 0xcb,
+	0xcd, 0xec, 0x52, 0x90, 0x7c, 0x21, 0x96, 0xe4, 0x88, 0xde, 0x98, 0xdc, 0x65, 0x76, 0x97, 0x6a,
+	0xd4, 0xa2, 0x80, 0x62, 0x14, 0x3e, 0x07, 0xe8, 0xa5, 0xbd, 0xf5, 0xd8, 0x3f, 0xa1, 0xa8, 0x2f,
+	0x06, 0x7a, 0x68, 0x4e, 0x81, 0xd1, 0x5e, 0x82, 0xa2, 0x87, 0x5a, 0x2e, 0x8a, 0xf6, 0xe6, 0x16,
+	0xbd, 0xf5, 0x27, 0xde, 0xec, 0x52, 0x11, 0xe5, 0xb8, 0x51, 0xd0, 0xd3, 0xbe, 0x79, 0xef, 0x7b,
+	0xdf, 0x9b, 0x79, 0xdf, 0xe3, 0x72, 0x96, 0xae, 0x1e, 0xf0, 0xa0, 0xe8, 0x78, 0xa5, 0xa0, 0x7d,
+	0x97, 0xf7, 0xed, 0x52, 0xc7, 0x0d, 0x9a, 0xdf, 0xf7, 0x5c, 0x5e, 0x1a, 0x0c, 0x5b, 0x3d, 0xa7,
+	0xdd, 0x6c, 0x0f, 0x83, 0xd0, 0xeb, 0x37, 0x3b, 0x76, 0x68, 0x37, 0xed, 0x81, 0x53, 0x1c, 0xf8,
+	0x5e, 0xe8, 0xc9, 0x17, 0xa3, 0xa4, 0x62, 0x94, 0x54, 0x1c, 0x25, 0xcd, 0x15, 0xba, 0x4e, 0x78,
+	0x77, 0xd8, 0x2a, 0xb6, 0xbd, 0x7e, 0xa9, 0xeb, 0x75, 0xbd, 0x92, 0x80, 0xb7, 0x86, 0xfb, 0x62,
+	0x25, 0x16, 0xc2, 0x8a, 0x68, 0xe6, 0x2e, 0x77, 0x3d, 0xaf, 0xdb, 0xe3, 0x25, 0x7b, 0xe0, 0x94,
+	0x6c, 0xd7, 0xf5, 0x42, 0x3b, 0x74, 0x3c, 0x37, 0x88, 0xa3, 0xf3, 0xe3, 0x3b, 0xeb, 0x79, 0xdd,
+	0x52, 0x78, 0x38, 0xe0, 0xa3, 0xf0, 0x6b, 0xe3, 0x61, 0x6f, 0x70, 0x3a, 0xf7, 0xd2, 0x78, 0xf0,
+	0x74, 0xde, 0xe5, 0xf1, 0xd0, 0x81, 0xdd, 0x73, 0x3a, 0x76, 0xc8, 0xe3, 0x68, 0xfe, 0x4c, 0x94,
+	0x07, 0xdc, 0x3d, 0x38, 0x43, 0xbe, 0x70, 0x06, 0xe3, 0xf0, 0xef, 0x35, 0xc7, 0x10, 0xf9, 0x8f,
+	0x25, 0xfa, 0x6a, 0xc5, 0x0d, 0xee, 0x78, 0x2e, 0xaf, 0xf1, 0xd0, 0x77, 0xda, 0x01, 0xe3, 0xef,
+	0x0d, 0x79, 0x10, 0xca, 0x97, 0x69, 0xc6, 0xb5, 0xfb, 0x3c, 0x18, 0xd8, 0x6d, 0x9e, 0x25, 0x0b,
+	0x64, 0x31, 0xc3, 0x3e, 0x75, 0xc8, 0x17, 0xe9, 0xc4, 0xbe, 0xd3, 0x0b, 0xb9, 0x9f, 0x4d, 0x8a,
+	0x50, 0xbc, 0x92, 0x6f, 0xd1, 0xa9, 0xae, 0xef, 0x0d, 0x07, 0xcd, 0xd6, 0x61, 0x36, 0xb5, 0x90,
+	0x5c, 0xbc, 0xb0, 0x32, 0x5f, 0xfc, 0x6c, 0x09, 0x8a, 0x55, 0xbb, 0xc5, 0x7b, 0x6c, 0x52, 0xc0,
+	0x37, 0x0e, 0xe5, 0x37, 0x28, 0x0d, 0x42, 0xdb, 0x0f, 0x9b, 0xa1, 0xd3, 0xe7, 0xd9, 0x09, 0x64,
+	0xdd, 0xa0, 0xbf, 0xfc, 0xcb, 0xa3, 0x64, 0xda, 0x4f, 0xfe, 0x24, 0x45, 0x58, 0x46, 0x44, 0x2d,
+	0xa7, 0xcf, 0xe5, 0xab, 0x74, 0x8a, 0xbb, 0x9d, 0x08, 0x38, 0xf9, 0x1c, 0x70, 0x92, 0xbb, 0x1d,
+	0x01, 0xbb, 0x46, 0x53, 0x81, 0xe7, 0x87, 0xd9, 0xa9, 0x05, 0xb2, 0x78, 0x61, 0x25, 0x7b, 0x66,
+	0x1f, 0xa6, 0xe7, 0x87, 0x75, 0xbf, 0xc3, 0x7d, 0x26, 0x50, 0xf2, 0x55, 0x9a, 0xee, 0x39, 0x7d,
+	0x27, 0xcc, 0x66, 0x16, 0xc8, 0xe2, 0xec, 0xc6, 0x4b, 0xbf, 0x7b, 0x48, 0xa4, 0xeb, 0xcb, 0xc8,
+	0x9b, 0x5a, 0x92, 0xb2, 0x1d, 0x16, 0x45, 0xe5, 0x1c, 0x4d, 0x05, 0x21, 0x1f, 0x64, 0xe9, 0x58,
+	0xdd, 0x9f, 0xa5, 0x08, 0x13, 0xfe, 0xfc, 0x87, 0x84, 0x5e, 0x3c, 0xdb, 0xd0, 0x60, 0xe0, 0xb9,
+	0x01, 0x97, 0xdf, 0xa2, 0x29, 0x9c, 0xce, 0x2c, 0x59, 0x48, 0x2e, 0x4e, 0xaf, 0x5c, 0x79, 0x51,
+	0x5f, 0xe2, 0xb4, 0x8a, 0x1d, 0xda, 0x4c, 0x24, 0x9c, 0xd4, 0x94, 0xc6, 0x6a, 0x3e, 0x93, 0xe2,
+	0x9a, 0xf2, 0x3c, 0xa5, 0xa1, 0x17, 0xda, 0xbd, 0xe6, 0x5d, 0x27, 0x0c, 0x84, 0x20, 0x29, 0x96,
+	0x11, 0x9e, 0x6d, 0x27, 0x0c, 0xf2, 0x7f, 0x23, 0x34, 0x1b, 0x6f, 0x29, 0x16, 0xb7, 0xea, 0x75,
+	0xbf, 0xa8, 0xcc, 0xd2, 0x98, 0xcc, 0xe3, 0x62, 0x25, 0xcf, 0x2b, 0x56, 0xea, 0xf3, 0xc5, 0x4a,
+	0x9f, 0x4b, 0xac, 0x85, 0x91, 0x58, 0x13, 0x42, 0xac, 0x88, 0x71, 0x29, 0x99, 0xfd, 0x7b, 0x32,
+	0xd6, 0x29, 0xff, 0x80, 0xd0, 0x4b, 0x9f, 0x71, 0xe8, 0x58, 0x8a, 0xef, 0xd2, 0x54, 0xcf, 0xeb,
+	0x06, 0xb1, 0x14, 0x37, 0x5f, 0x24, 0xc5, 0x73, 0x04, 0x27, 0x62, 0x46, 0xea, 0x20, 0xc7, 0x99,
+	0xee, 0x4b, 0x67, 0xbb, 0xff, 0x2b, 0x42, 0xa7, 0x4f, 0x49, 0x2a, 0x6f, 0xd1, 0x89, 0x1e, 0x4e,
+	0xfe, 0xa8, 0x78, 0xe9, 0x1c, 0x73, 0x10, 0xfd, 0x56, 0x02, 0xd5, 0x0d, 0xfd, 0x43, 0x16, 0xa7,
+	0xcb, 0xcb, 0x34, 0x7d, 0x60, 0xf7, 0x86, 0x3c, 0x2b, 0x09, 0x9e, 0xb9, 0x33, 0x3c, 0x51, 0xfa,
+	0x0e, 0x22, 0x58, 0x04, 0x9c, 0x7b, 0x9b, 0x4e, 0x9f, 0x22, 0x92, 0x81, 0x26, 0xef, 0xf1, 0xc3,
+	0x58, 0x74, 0x34, 0xe5, 0x57, 0x3e, 0xa5, 0x44, 0x5f, 0xb4, 0x58, 0x97, 0x6e, 0x91, 0xfc, 0x03,
+	0x89, 0xe6, 0xfe, 0x77, 0x37, 0x70, 0x92, 0x50, 0xe4, 0x20, 0xb4, 0xfb, 0x83, 0xd1, 0x24, 0x9d,
+	0x38, 0xe4, 0xd7, 0xe9, 0x4c, 0xdb, 0x1b, 0x62, 0xdd, 0x66, 0xdb, 0xeb, 0x8c, 0x2a, 0x4c, 0xc7,
+	0xbe, 0xb2, 0xd7, 0x11, 0xc3, 0xd6, 0xf1, 0xfa, 0xb6, 0xe3, 0x8e, 0xde, 0x29, 0xd1, 0x0a, 0x1b,
+	0xfc, 0xde, 0x90, 0xfb, 0x87, 0x4d, 0x7c, 0x39, 0x46, 0x33, 0xc4, 0x32, 0xc2, 0x63, 0x1d, 0x0e,
+	0xb8, 0x7c, 0x85, 0xce, 0xfa, 0xf1, 0x3e, 0x22, 0xea, 0xb4, 0x40, 0xcc, 0x8c, 0x9c, 0x82, 0xfb,
+	0x0a, 0x9d, 0x6d, 0xf7, 0x1c, 0xee, 0x86, 0xcd, 0x60, 0xd8, 0x72, 0x79, 0x34, 0x38, 0x19, 0x36,
+	0x13, 0x39, 0x4d, 0xe1, 0x93, 0xf3, 0x74, 0x76, 0xd4, 0xfd, 0x26, 0xfe, 0x06, 0xa2, 0x97, 0x0b,
+	0x9b, 0xee, 0x44, 0x07, 0xd7, 0xed, 0x3e, 0x5f, 0x72, 0x69, 0x5a, 0xf4, 0x50, 0x06, 0x3a, 0x53,
+	0xae, 0x37, 0x74, 0x8b, 0xed, 0x35, 0xcb, 0xf5, 0x8a, 0x0a, 0x09, 0x99, 0xd2, 0x89, 0x4a, 0xbd,
+	0xa6, 0x68, 0x3a, 0x10, 0xf9, 0x02, 0xa5, 0xef, 0x34, 0x54, 0xb6, 0xd7, 0xb4, 0xf6, 0x0c, 0x15,
+	0x24, 0xf9, 0x65, 0x3a, 0xcb, 0x54, 0xd3, 0xa8, 0xeb, 0xa6, 0x1a, 0xc1, 0x93, 0xe8, 0xaa, 0xe8,
+	0x66, 0xf3, 0x4e, 0x5d, 0x57, 0x9b, 0xba, 0x52, 0x53, 0x21, 0x85, 0xae, 0x72, 0x55, 0x53, 0x75,
+	0xab, 0x69, 0x36, 0x36, 0x74, 0xd5, 0x82, 0xf4, 0xd2, 0xef, 0x27, 0x68, 0xe6, 0x9d, 0x93, 0xb3,
+	0x4e, 0xd1, 0x94, 0xee, 0xb9, 0x1c, 0x12, 0x72, 0x9a, 0x12, 0x05, 0x88, 0x3c, 0x41, 0x25, 0xdd,
+	0x04, 0x09, 0x9f, 0xb5, 0x0a, 0x24, 0xc5, 0x73, 0x13, 0x52, 0x72, 0x86, 0xa6, 0xcb, 0x82, 0x34,
+	0x2d, 0x4f, 0xd2, 0xa4, 0x59, 0x57, 0x60, 0x42, 0xc4, 0x36, 0x60, 0x52, 0x3c, 0xb7, 0x60, 0x4a,
+	0x3c, 0x19, 0x64, 0x04, 0x69, 0xa3, 0x5a, 0x05, 0x8a, 0x50, 0xc3, 0x62, 0x30, 0x83, 0xe9, 0xdb,
+	0x9a, 0xbe, 0x59, 0x87, 0x59, 0x34, 0x6b, 0xc2, 0xbc, 0x20, 0x12, 0x76, 0xe1, 0x25, 0x84, 0x59,
+	0xbb, 0x16, 0x00, 0x3a, 0x98, 0x01, 0x2f, 0x23, 0x46, 0xd9, 0x34, 0x2b, 0x1b, 0x20, 0x63, 0x6c,
+	0x77, 0x65, 0x0d, 0xbe, 0x84, 0xac, 0x9a, 0x59, 0xd1, 0xe1, 0x15, 0x81, 0xb2, 0xe0, 0x55, 0x79,
+	0x9a, 0x4e, 0xea, 0xa6, 0x62, 0x60, 0x85, 0x2f, 0x8b, 0x5d, 0x69, 0x5b, 0x90, 0x45, 0xe3, 0xb6,
+	0xba, 0x07, 0x97, 0x10, 0x66, 0xec, 0xc2, 0x1c, 0x26, 0x6e, 0x19, 0x75, 0x13, 0x5e, 0x43, 0x4b,
+	0x51, 0x14, 0x05, 0x2e, 0x23, 0xa8, 0x5a, 0x2f, 0xc3, 0x3c, 0x1a, 0xfa, 0xae, 0x05, 0x39, 0x34,
+	0x54, 0xad, 0x02, 0x5f, 0xc1, 0xae, 0xeb, 0x5a, 0x0d, 0xa3, 0x0b, 0x82, 0x94, 0xed, 0xc0, 0xeb,
+	0x22, 0xd3, 0xaa, 0x29, 0x90, 0xc7, 0xad, 0xe9, 0x0a, 0x96, 0xbc, 0x82, 0x05, 0x6e, 0xef, 0xc2,
+	0x57, 0x31, 0x58, 0x56, 0x99, 0x05, 0x57, 0x31, 0x58, 0x11, 0x5d, 0xfa, 0x1a, 0xa6, 0xd6, 0x0d,
+	0x0b, 0xde, 0x40, 0x43, 0x31, 0xaa, 0xb0, 0x84, 0xf0, 0x8a, 0x09, 0x6f, 0x22, 0xc8, 0x34, 0xb7,
+	0x37, 0x0d, 0xb8, 0x26, 0xcf, 0xd0, 0x29, 0xcd, 0x30, 0xd5, 0x32, 0x6e, 0xb8, 0x80, 0x01, 0xc6,
+	0xf0, 0x10, 0x45, 0xd1, 0x42, 0x53, 0x2d, 0x43, 0x49, 0x0c, 0x81, 0x6e, 0x22, 0x60, 0x59, 0xd0,
+	0x6f, 0x97, 0xb5, 0x0a, 0x5c, 0x17, 0xdb, 0x30, 0xd5, 0xf2, 0x2a, 0xac, 0xe0, 0x68, 0x08, 0xd3,
+	0x50, 0x98, 0x52, 0x83, 0x55, 0xcc, 0xb5, 0xaa, 0xa6, 0x02, 0x37, 0x30, 0xd7, 0xac, 0x69, 0x35,
+	0x55, 0x81, 0x35, 0xdc, 0xc6, 0xb6, 0x66, 0xc0, 0x5b, 0x22, 0x53, 0xf4, 0xff, 0x16, 0x22, 0x19,
+	0x32, 0xbf, 0x8d, 0x48, 0x4b, 0xa9, 0x6a, 0xfa, 0x6d, 0x58, 0x47, 0x64, 0xb9, 0x62, 0xc2, 0xd7,
+	0xb1, 0xbf, 0xe5, 0xb8, 0xf6, 0x37, 0xb0, 0x4a, 0xdd, 0x50, 0x75, 0x63, 0xcb, 0xc0, 0xf5, 0x37,
+	0xc5, 0x40, 0x98, 0x7b, 0x7a, 0x19, 0xbe, 0x85, 0xc9, 0x38, 0x74, 0xb5, 0x0a, 0x7c, 0x1b, 0x29,
+	0xcd, 0x9d, 0xf2, 0x06, 0x7c, 0x47, 0x48, 0x6e, 0x59, 0x86, 0x09, 0x8a, 0x68, 0xa3, 0xb1, 0x09,
+	0x6d, 0xf4, 0x35, 0x44, 0xed, 0x0e, 0xfa, 0x1a, 0x5a, 0x05, 0x38, 0x1a, 0x5b, 0x5a, 0x05, 0xf6,
+	0x91, 0xa6, 0xa1, 0x9b, 0x86, 0x5a, 0x86, 0xae, 0x90, 0x45, 0xab, 0xc0, 0x5d, 0x21, 0xd4, 0xea,
+	0x0a, 0x38, 0xc2, 0xb8, 0x79, 0x03, 0xde, 0xc5, 0x36, 0x56, 0x0d, 0xb8, 0x87, 0x5c, 0x6a, 0x43,
+	0xbb, 0x71, 0x0b, 0x7a, 0xb1, 0x79, 0xf3, 0x06, 0xf4, 0xe5, 0x29, 0x9a, 0x6c, 0x30, 0x0d, 0x8e,
+	0x24, 0xb4, 0xca, 0x8a, 0x02, 0x1f, 0x08, 0x4b, 0xd9, 0x29, 0xc3, 0x7d, 0x49, 0x9e, 0xa5, 0x53,
+	0x4a, 0xcd, 0x62, 0x6a, 0x55, 0xd9, 0x83, 0x1f, 0x49, 0x72, 0x86, 0xa6, 0xb4, 0xdd, 0x4d, 0x06,
+	0xff, 0x20, 0x68, 0x2a, 0x68, 0xfe, 0x93, 0xc8, 0x94, 0xa6, 0x6b, 0x8a, 0x56, 0xdd, 0x80, 0x7f,
+	0x9d, 0xd8, 0x0a, 0xfc, 0x9b, 0x08, 0x1a, 0x7d, 0x0f, 0xfe, 0x83, 0x96, 0x64, 0x29, 0x70, 0x74,
+	0x84, 0x0c, 0xc9, 0x4a, 0x75, 0x07, 0x3e, 0x38, 0x92, 0xe6, 0x52, 0x8f, 0x1e, 0x92, 0xc4, 0x52,
+	0x87, 0xce, 0xb0, 0xd3, 0xef, 0x09, 0x9c, 0xd1, 0xba, 0xca, 0x58, 0x9d, 0x41, 0x02, 0x17, 0x9b,
+	0x75, 0x56, 0x53, 0x19, 0x03, 0x82, 0xda, 0x9b, 0x2a, 0xdb, 0xd9, 0x54, 0xb4, 0x2a, 0x48, 0xb8,
+	0xd2, 0x77, 0xe3, 0x5f, 0x7b, 0x12, 0x81, 0x4c, 0xdd, 0x6c, 0x98, 0x6a, 0x05, 0xd2, 0x11, 0x85,
+	0xa5, 0x34, 0xac, 0x6d, 0xc8, 0x44, 0x55, 0x56, 0x7e, 0x9a, 0xa2, 0xb3, 0x65, 0x71, 0x3f, 0xc5,
+	0x37, 0xa5, 0x62, 0x68, 0xf2, 0x9f, 0x08, 0xbd, 0x30, 0x7e, 0x4d, 0x90, 0x0b, 0x9f, 0xf3, 0x2f,
+	0x34, 0x7e, 0x3f, 0x9b, 0x2b, 0x9e, 0x17, 0x1e, 0x9d, 0x2e, 0x3f, 0xfc, 0xe8, 0x17, 0x12, 0x39,
+	0xfe, 0x75, 0x76, 0xe5, 0x80, 0x07, 0x05, 0xc7, 0x2b, 0x38, 0xee, 0xbe, 0x6f, 0x07, 0xa1, 0x3f,
+	0x6c, 0x87, 0x43, 0x9f, 0x17, 0x7c, 0x6e, 0x77, 0xae, 0x2d, 0xec, 0xaf, 0xbd, 0xdf, 0x2e, 0x74,
+	0xdc, 0xa0, 0xd0, 0xb2, 0x03, 0xa7, 0x5d, 0xe8, 0x7b, 0xae, 0x13, 0x7a, 0xfe, 0xfd, 0xdf, 0xfe,
+	0xf1, 0xc7, 0xd2, 0x5a, 0x7e, 0x39, 0xbe, 0x6a, 0x97, 0x4e, 0xee, 0x07, 0x41, 0xe9, 0x07, 0x27,
+	0xf6, 0x0f, 0x4f, 0x6e, 0xe4, 0x41, 0xa9, 0x1f, 0xd5, 0x5e, 0x27, 0x4b, 0xf2, 0x5f, 0x09, 0x95,
+	0x9f, 0xff, 0xe3, 0x90, 0x97, 0xcf, 0xfd, 0x97, 0x3b, 0x3a, 0xef, 0xf5, 0x2f, 0x90, 0x11, 0x1f,
+	0xf9, 0xe0, 0xff, 0x38, 0xee, 0x7a, 0x7e, 0xed, 0xdc, 0xc7, 0xf5, 0xa3, 0xd2, 0x4d, 0xbc, 0x0e,
+	0xac, 0x93, 0xa5, 0xb9, 0x37, 0x1f, 0x3d, 0x24, 0xc9, 0xdf, 0x3c, 0x24, 0xf3, 0x2f, 0xd8, 0x71,
+	0xbd, 0xf5, 0x2e, 0x6f, 0x87, 0xf7, 0x3f, 0xce, 0x4a, 0x59, 0xb2, 0xf1, 0x80, 0x3c, 0x7e, 0x92,
+	0x4b, 0x7c, 0xf2, 0x24, 0x97, 0x78, 0xf6, 0x24, 0x47, 0x8e, 0x8e, 0x73, 0xe4, 0xe7, 0xc7, 0x39,
+	0xf2, 0xd1, 0x71, 0x8e, 0x3c, 0x3e, 0xce, 0x91, 0x3f, 0x1c, 0xe7, 0xc8, 0x9f, 0x8f, 0x73, 0x89,
+	0x67, 0xc7, 0x39, 0xf2, 0xe1, 0xd3, 0x5c, 0xe2, 0xd1, 0xd3, 0x1c, 0x79, 0xfc, 0x34, 0x97, 0xf8,
+	0xe4, 0x69, 0x2e, 0x71, 0xa7, 0xda, 0xf5, 0x06, 0xf7, 0xba, 0xc5, 0x03, 0x0f, 0xef, 0x64, 0xbe,
+	0x5d, 0x1c, 0x06, 0x25, 0x61, 0xec, 0x7b, 0x7e, 0xbf, 0x30, 0xf0, 0xbd, 0x03, 0xa7, 0xc3, 0xfd,
+	0xc2, 0x28, 0x5c, 0x1a, 0xb4, 0xba, 0x5e, 0x89, 0xbf, 0x1f, 0xc6, 0x5f, 0x03, 0x67, 0xbe, 0xa3,
+	0x5a, 0x13, 0xe2, 0x8b, 0x60, 0xf5, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xbe, 0x46, 0x1d, 0x4d,
+	0x68, 0x0d, 0x00, 0x00,
 }
 
 func (x Label) String() string {
@@ -1169,6 +1547,80 @@ func (this *DnsZoneMetricsResponse) Equal(that interface{}) bool {
 	if this.Step != that1.Step {
 		return false
 	}
+	if this.TotalHits != that1.TotalHits {
+		return false
+	}
+	return true
+}
+func (this *DnsZoneRequestLogRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsZoneRequestLogRequest)
+	if !ok {
+		that2, ok := that.(DnsZoneRequestLogRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Filter != that1.Filter {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	if this.Sort != that1.Sort {
+		return false
+	}
+	if this.Limit != that1.Limit {
+		return false
+	}
+	return true
+}
+func (this *DnsZoneRequestLogResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsZoneRequestLogResponse)
+	if !ok {
+		that2, ok := that.(DnsZoneRequestLogResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Logs) != len(that1.Logs) {
+		return false
+	}
+	for i := range this.Logs {
+		if !this.Logs[i].Equal(that1.Logs[i]) {
+			return false
+		}
+	}
+	if this.TotalHits != that1.TotalHits {
+		return false
+	}
 	return true
 }
 func (this *MetricsData) Equal(that interface{}) bool {
@@ -1208,6 +1660,48 @@ func (this *MetricsData) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DnsZoneRequestLogsResponseData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DnsZoneRequestLogsResponseData)
+	if !ok {
+		that2, ok := that.(DnsZoneRequestLogsResponseData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Timestamp != that1.Timestamp {
+		return false
+	}
+	if this.CountryCode != that1.CountryCode {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	if this.QueryType != that1.QueryType {
+		return false
+	}
+	if this.ResponseCode != that1.ResponseCode {
+		return false
+	}
+	if this.ClientSubnet != that1.ClientSubnet {
+		return false
+	}
+	if this.DnsZoneName != that1.DnsZoneName {
+		return false
+	}
+	return true
+}
 func (this *DnsZoneMetricsRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1229,12 +1723,41 @@ func (this *DnsZoneMetricsResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&dns_zone.DnsZoneMetricsResponse{")
 	if this.Data != nil {
 		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
 	}
 	s = append(s, "Step: "+fmt.Sprintf("%#v", this.Step)+",\n")
+	s = append(s, "TotalHits: "+fmt.Sprintf("%#v", this.TotalHits)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DnsZoneRequestLogRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&dns_zone.DnsZoneRequestLogRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Filter: "+fmt.Sprintf("%#v", this.Filter)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "Sort: "+fmt.Sprintf("%#v", this.Sort)+",\n")
+	s = append(s, "Limit: "+fmt.Sprintf("%#v", this.Limit)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DnsZoneRequestLogResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.DnsZoneRequestLogResponse{")
+	if this.Logs != nil {
+		s = append(s, "Logs: "+fmt.Sprintf("%#v", this.Logs)+",\n")
+	}
+	s = append(s, "TotalHits: "+fmt.Sprintf("%#v", this.TotalHits)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1260,6 +1783,22 @@ func (this *MetricsData) GoString() string {
 	if this.Value != nil {
 		s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
 	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DnsZoneRequestLogsResponseData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&dns_zone.DnsZoneRequestLogsResponseData{")
+	s = append(s, "Timestamp: "+fmt.Sprintf("%#v", this.Timestamp)+",\n")
+	s = append(s, "CountryCode: "+fmt.Sprintf("%#v", this.CountryCode)+",\n")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	s = append(s, "QueryType: "+fmt.Sprintf("%#v", this.QueryType)+",\n")
+	s = append(s, "ResponseCode: "+fmt.Sprintf("%#v", this.ResponseCode)+",\n")
+	s = append(s, "ClientSubnet: "+fmt.Sprintf("%#v", this.ClientSubnet)+",\n")
+	s = append(s, "DnsZoneName: "+fmt.Sprintf("%#v", this.DnsZoneName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1289,6 +1828,11 @@ type CustomDataAPIClient interface {
 	// x-displayName: "Dns Zone Metrics"
 	// Request to get dns zone metrics data
 	DnsZoneMetrics(ctx context.Context, in *DnsZoneMetricsRequest, opts ...grpc.CallOption) (*DnsZoneMetricsResponse, error)
+	// DnsZoneRequestLogs
+	//
+	// x-displayName: "Get Dns Zone Request Logs"
+	// Retrieve Dns Zone Request Logs
+	DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRequestLogRequest, opts ...grpc.CallOption) (*DnsZoneRequestLogResponse, error)
 }
 
 type customDataAPIClient struct {
@@ -1308,6 +1852,15 @@ func (c *customDataAPIClient) DnsZoneMetrics(ctx context.Context, in *DnsZoneMet
 	return out, nil
 }
 
+func (c *customDataAPIClient) DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRequestLogRequest, opts ...grpc.CallOption) (*DnsZoneRequestLogResponse, error) {
+	out := new(DnsZoneRequestLogResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_zone.CustomDataAPI/DnsZoneRequestLogs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomDataAPIServer is the server API for CustomDataAPI service.
 type CustomDataAPIServer interface {
 	// Dns Zone Metrics
@@ -1315,6 +1868,11 @@ type CustomDataAPIServer interface {
 	// x-displayName: "Dns Zone Metrics"
 	// Request to get dns zone metrics data
 	DnsZoneMetrics(context.Context, *DnsZoneMetricsRequest) (*DnsZoneMetricsResponse, error)
+	// DnsZoneRequestLogs
+	//
+	// x-displayName: "Get Dns Zone Request Logs"
+	// Retrieve Dns Zone Request Logs
+	DnsZoneRequestLogs(context.Context, *DnsZoneRequestLogRequest) (*DnsZoneRequestLogResponse, error)
 }
 
 // UnimplementedCustomDataAPIServer can be embedded to have forward compatible implementations.
@@ -1323,6 +1881,9 @@ type UnimplementedCustomDataAPIServer struct {
 
 func (*UnimplementedCustomDataAPIServer) DnsZoneMetrics(ctx context.Context, req *DnsZoneMetricsRequest) (*DnsZoneMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DnsZoneMetrics not implemented")
+}
+func (*UnimplementedCustomDataAPIServer) DnsZoneRequestLogs(ctx context.Context, req *DnsZoneRequestLogRequest) (*DnsZoneRequestLogResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DnsZoneRequestLogs not implemented")
 }
 
 func RegisterCustomDataAPIServer(s *grpc.Server, srv CustomDataAPIServer) {
@@ -1347,6 +1908,24 @@ func _CustomDataAPI_DnsZoneMetrics_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomDataAPI_DnsZoneRequestLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DnsZoneRequestLogRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomDataAPIServer).DnsZoneRequestLogs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_zone.CustomDataAPI/DnsZoneRequestLogs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomDataAPIServer).DnsZoneRequestLogs(ctx, req.(*DnsZoneRequestLogRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomDataAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.dns_zone.CustomDataAPI",
 	HandlerType: (*CustomDataAPIServer)(nil),
@@ -1354,6 +1933,10 @@ var _CustomDataAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DnsZoneMetrics",
 			Handler:    _CustomDataAPI_DnsZoneMetrics_Handler,
+		},
+		{
+			MethodName: "DnsZoneRequestLogs",
+			Handler:    _CustomDataAPI_DnsZoneRequestLogs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1466,6 +2049,11 @@ func (m *DnsZoneMetricsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.TotalHits != 0 {
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.TotalHits))
+		i--
+		dAtA[i] = 0x18
+	}
 	if len(m.Step) > 0 {
 		i -= len(m.Step)
 		copy(dAtA[i:], m.Step)
@@ -1477,6 +2065,109 @@ func (m *DnsZoneMetricsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		for iNdEx := len(m.Data) - 1; iNdEx >= 0; iNdEx-- {
 			{
 				size, err := m.Data[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DnsZoneRequestLogRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsZoneRequestLogRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsZoneRequestLogRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Limit != 0 {
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.Limit))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.Sort != 0 {
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.Sort))
+		i--
+		dAtA[i] = 0x28
+	}
+	if len(m.EndTime) > 0 {
+		i -= len(m.EndTime)
+		copy(dAtA[i:], m.EndTime)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.EndTime)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.StartTime) > 0 {
+		i -= len(m.StartTime)
+		copy(dAtA[i:], m.StartTime)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.StartTime)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Filter) > 0 {
+		i -= len(m.Filter)
+		copy(dAtA[i:], m.Filter)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Filter)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DnsZoneRequestLogResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsZoneRequestLogResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsZoneRequestLogResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.TotalHits != 0 {
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(m.TotalHits))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Logs) > 0 {
+		for iNdEx := len(m.Logs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Logs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1542,6 +2233,78 @@ func (m *MetricsData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i--
 			dAtA[i] = 0xa
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DnsZoneRequestLogsResponseData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DnsZoneRequestLogsResponseData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DnsZoneRequestLogsResponseData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsZoneName) > 0 {
+		i -= len(m.DnsZoneName)
+		copy(dAtA[i:], m.DnsZoneName)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.DnsZoneName)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.ClientSubnet) > 0 {
+		i -= len(m.ClientSubnet)
+		copy(dAtA[i:], m.ClientSubnet)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.ClientSubnet)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.ResponseCode) > 0 {
+		i -= len(m.ResponseCode)
+		copy(dAtA[i:], m.ResponseCode)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.ResponseCode)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.QueryType) > 0 {
+		i -= len(m.QueryType)
+		copy(dAtA[i:], m.QueryType)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.QueryType)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Domain) > 0 {
+		i -= len(m.Domain)
+		copy(dAtA[i:], m.Domain)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Domain)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.CountryCode) > 0 {
+		i -= len(m.CountryCode)
+		copy(dAtA[i:], m.CountryCode)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.CountryCode)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Timestamp) > 0 {
+		i -= len(m.Timestamp)
+		copy(dAtA[i:], m.Timestamp)
+		i = encodeVarintPublicCustomDataApi(dAtA, i, uint64(len(m.Timestamp)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1615,6 +2378,58 @@ func (m *DnsZoneMetricsResponse) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPublicCustomDataApi(uint64(l))
 	}
+	if m.TotalHits != 0 {
+		n += 1 + sovPublicCustomDataApi(uint64(m.TotalHits))
+	}
+	return n
+}
+
+func (m *DnsZoneRequestLogRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.Filter)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	if m.Sort != 0 {
+		n += 1 + sovPublicCustomDataApi(uint64(m.Sort))
+	}
+	if m.Limit != 0 {
+		n += 1 + sovPublicCustomDataApi(uint64(m.Limit))
+	}
+	return n
+}
+
+func (m *DnsZoneRequestLogResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Logs) > 0 {
+		for _, e := range m.Logs {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomDataApi(uint64(l))
+		}
+	}
+	if m.TotalHits != 0 {
+		n += 1 + sovPublicCustomDataApi(uint64(m.TotalHits))
+	}
 	return n
 }
 
@@ -1637,6 +2452,43 @@ func (m *MetricsData) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovPublicCustomDataApi(uint64(l))
 		}
+	}
+	return n
+}
+
+func (m *DnsZoneRequestLogsResponseData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Timestamp)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.CountryCode)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.Domain)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.QueryType)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.ResponseCode)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.ClientSubnet)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
+	}
+	l = len(m.DnsZoneName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomDataApi(uint64(l))
 	}
 	return n
 }
@@ -1676,6 +2528,38 @@ func (this *DnsZoneMetricsResponse) String() string {
 	s := strings.Join([]string{`&DnsZoneMetricsResponse{`,
 		`Data:` + repeatedStringForData + `,`,
 		`Step:` + fmt.Sprintf("%v", this.Step) + `,`,
+		`TotalHits:` + fmt.Sprintf("%v", this.TotalHits) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DnsZoneRequestLogRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DnsZoneRequestLogRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Filter:` + fmt.Sprintf("%v", this.Filter) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`Sort:` + fmt.Sprintf("%v", this.Sort) + `,`,
+		`Limit:` + fmt.Sprintf("%v", this.Limit) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DnsZoneRequestLogResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForLogs := "[]*DnsZoneRequestLogsResponseData{"
+	for _, f := range this.Logs {
+		repeatedStringForLogs += strings.Replace(f.String(), "DnsZoneRequestLogsResponseData", "DnsZoneRequestLogsResponseData", 1) + ","
+	}
+	repeatedStringForLogs += "}"
+	s := strings.Join([]string{`&DnsZoneRequestLogResponse{`,
+		`Logs:` + repeatedStringForLogs + `,`,
+		`TotalHits:` + fmt.Sprintf("%v", this.TotalHits) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1702,6 +2586,22 @@ func (this *MetricsData) String() string {
 	s := strings.Join([]string{`&MetricsData{`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Value:` + repeatedStringForValue + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DnsZoneRequestLogsResponseData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DnsZoneRequestLogsResponseData{`,
+		`Timestamp:` + fmt.Sprintf("%v", this.Timestamp) + `,`,
+		`CountryCode:` + fmt.Sprintf("%v", this.CountryCode) + `,`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`QueryType:` + fmt.Sprintf("%v", this.QueryType) + `,`,
+		`ResponseCode:` + fmt.Sprintf("%v", this.ResponseCode) + `,`,
+		`ClientSubnet:` + fmt.Sprintf("%v", this.ClientSubnet) + `,`,
+		`DnsZoneName:` + fmt.Sprintf("%v", this.DnsZoneName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2129,6 +3029,350 @@ func (m *DnsZoneMetricsResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Step = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TotalHits", wireType)
+			}
+			m.TotalHits = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TotalHits |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DnsZoneRequestLogRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsZoneRequestLogRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsZoneRequestLogRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Filter", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Filter = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sort", wireType)
+			}
+			m.Sort = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Sort |= schema.SortOrder(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
+			}
+			m.Limit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Limit |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DnsZoneRequestLogResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsZoneRequestLogResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsZoneRequestLogResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Logs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Logs = append(m.Logs, &DnsZoneRequestLogsResponseData{})
+			if err := m.Logs[len(m.Logs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TotalHits", wireType)
+			}
+			m.TotalHits = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.TotalHits |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
@@ -2342,6 +3586,283 @@ func (m *MetricsData) Unmarshal(dAtA []byte) error {
 			if err := m.Value[len(m.Value)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomDataApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DnsZoneRequestLogsResponseData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomDataApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DnsZoneRequestLogsResponseData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DnsZoneRequestLogsResponseData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Timestamp", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Timestamp = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CountryCode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CountryCode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domain = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCode = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientSubnet", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ClientSubnet = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsZoneName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomDataApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomDataApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsZoneName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

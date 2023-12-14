@@ -6221,6 +6221,32 @@ func (v *ValidatePrivateConnectConfigType) Validate(ctx context.Context, pm inte
 
 	}
 
+	switch m.GetNetworkOptions().(type) {
+	case *PrivateConnectConfigType_Outside:
+		if fv, exists := v.FldValidators["network_options.outside"]; exists {
+			val := m.GetNetworkOptions().(*PrivateConnectConfigType_Outside).Outside
+			vOpts := append(opts,
+				db.WithValidateField("network_options"),
+				db.WithValidateField("outside"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PrivateConnectConfigType_Inside:
+		if fv, exists := v.FldValidators["network_options.inside"]; exists {
+			val := m.GetNetworkOptions().(*PrivateConnectConfigType_Inside).Inside
+			vOpts := append(opts,
+				db.WithValidateField("network_options"),
+				db.WithValidateField("inside"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 

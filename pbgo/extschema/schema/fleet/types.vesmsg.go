@@ -13517,6 +13517,15 @@ func (v *ValidateSriovInterface) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["number_of_vfio_vfs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("number_of_vfio_vfs"))
+		if err := fv(ctx, m.GetNumberOfVfioVfs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["number_of_vfs"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("number_of_vfs"))

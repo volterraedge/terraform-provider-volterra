@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.forward_proxy_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -3057,6 +3072,47 @@ var APISwaggerJSON string = `{
             "x-displayname": "Rule Action",
             "x-ves-proto-enum": "ves.io.schema.policy.RuleAction"
         },
+        "policySegmentPolicyType": {
+            "type": "object",
+            "description": "Configure source and destination segment for policy",
+            "title": "Segment Choice",
+            "x-displayname": "Configure Segments",
+            "x-ves-oneof-field-dst_segment_choice": "[\"dst_any\",\"dst_segments\",\"intra_segment\"]",
+            "x-ves-oneof-field-src_segment_choice": "[\"src_any\",\"src_segments\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.SegmentPolicyType",
+            "properties": {
+                "dst_any": {
+                    "description": "Exclusive with [dst_segments intra_segment]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "dst_segments": {
+                    "description": "Exclusive with [dst_any intra_segment]\n Traffic is matched against destination segment in selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                },
+                "intra_segment": {
+                    "description": "Exclusive with [dst_any dst_segments]\n Traffic is matched for source and destination on the same segment",
+                    "title": "Intra Segment Policy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Intra Segment"
+                },
+                "src_any": {
+                    "description": "Exclusive with [src_segments]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "src_segments": {
+                    "description": "Exclusive with [src_any]\n Source traffic is matched against selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                }
+            }
+        },
         "policyURLCategory": {
             "type": "string",
             "description": "The url categories to use when a policy based url category is configured.\n\n - UNCATEGORIZED: UNCATEGORIZED\n\nUncategorized\n - REAL_ESTATE: REAL_ESTATE\n\nReal Estate\n - COMPUTER_AND_INTERNET_SECURITY: COMPUTER_AND_INTERNET_SECURITY\n\nComputer and Internet Security\n - FINANCIAL_SERVICES: FINANCIAL_SERVICES\n\nFinancial Services\n - BUSINESS_AND_ECONOMY: BUSINESS_AND_ECONOMY\n\nBusiness and Economy\n - COMPUTER_AND_INTERNET_INFO: COMPUTER_AND_INTERNET_INFO\n\nComputer and Internet Info\n - AUCTIONS: AUCTIONS\n\nAuctions\n - SHOPPING: SHOPPING\n\nShopping\n - CULT_AND_OCCULT: CULT_AND_OCCULT\n\nCult and Occult\n - TRAVEL: TRAVEL\n\nTravel\n - ABUSED_DRUGS: ABUSED_DRUGS\n\nAbused Drugs\n - ADULT_AND_PORNOGRAPHY: ADULT_AND_PORNOGRAPHY\n\nAdult and Pornography\n - HOME_AND_GARDEN: HOME_AND_GARDEN\n\nHome and Garden\n - MILITARY: MILITARY\n\nMilitary\n - SOCIAL_NETWORKING: SOCIAL_NETWORKING\n\nSocial Networking\n - DEAD_SITES: DEAD_SITES\n\nDead Sites\n - INDIVIDUAL_STOCK_ADVICE_AND_TOOLS: INDIVIDUAL_STOCK_ADVICE_AND_TOOLS\n\nIndividual Stock Advice and Tools\n - TRAINING_AND_TOOLS: TRAINING_AND_TOOLS\n\nTraining and Tools\n - DATING: DATING\n\nDating\n - SEX_EDUCATION: SEX_EDUCATION\n\nSex Education\n - RELIGION: RELIGION\n\nReligion\n - ENTERTAINMENT_AND_ARTS: ENTERTAINMENT_AND_ARTS\n\nEntertainment and Arts\n - PERSONAL_SITES_AND_BLOGS: PERSONAL_SITES_AND_BLOGS\n\nPersonal sites and Blogs\n - LEGAL: LEGAL\n\nLegal\n - LOCAL_INFORMATION: LOCAL_INFORMATION\n\nLocal Information\n - STREAMING_MEDIA: STREAMING_MEDIA\n\nStreaming Media\n - JOB_SEARCH: JOB_SEARCH\n\nJob Search\n - GAMBLING: GAMBLING\n\nGambling\n - TRANSLATION: TRANSLATION\n\nTranslation\n - REFERENCE_AND_RESEARCH: REFERENCE_AND_RESEARCH\n\nReference and Research\n - SHAREWARE_AND_FREEWARE: SHAREWARE_AND_FREEWARE\n\nShareware and Freeware\n - PEER_TO_PEER: PEER_TO_PEER\n\nPeer to Peer\n - MARIJUANA: MARIJUANA\n\nMarijuana\n - HACKING: HACKING\n\nHacking\n - GAMES: GAMES\n\nGames\n - PHILOSOPHY_AND_POLITICAL_ADVOCACY: PHILOSOPHY_AND_POLITICAL_ADVOCACY\n\nPhilosophy and Political Advocacy\n - WEAPONS: WEAPONS\n\nWeapons\n - PAY_TO_SURF: PAY_TO_SURF\n\nPay to Surf\n - HUNTING_AND_FISHING: HUNTING_AND_FISHING\n\nHunting and Fishing\n - SOCIETY: SOCIETY\n\nSociety\n - EDUCATIONAL_INSTITUTIONS: EDUCATIONAL_INSTITUTIONS\n\nEducational Institutions\n - ONLINE_GREETING_CARDS: ONLINE_GREETING_CARDS\n\nOnline Greeting Cards\n - SPORTS: SPORTS\n\nSports\n - SWIMSUITS_AND_INTIMATE_APPAREL: SWIMSUITS_AND_INTIMATE_APPAREL\n\nSwimsuits and Intimate Apparel\n - QUESTIONABLE: QUESTIONABLE\n\nQuestionable\n - KIDS: KIDS\n\nKids\n - HATE_AND_RACISM: HATE_AND_RACISM\n\nHate and Racism\n - PERSONAL_STORAGE: PERSONAL_STORAGE\n\nPersonal Storage\n - VIOLENCE: VIOLENCE\n\nViolence\n - KEYLOGGERS_AND_MONITORING: KEYLOGGERS_AND_MONITORING\n\nKeyloggers and Monitoring\n - SEARCH_ENGINES: SEARCH_ENGINES\n\nSearch Engines\n - INTERNET_PORTALS: INTERNET_PORTALS\n\nInternet Portals\n - WEB_ADVERTISEMENTS: WEB_ADVERTISEMENTS\n\nWeb Advertisements\n - CHEATING: CHEATING\n\nCheating\n - GROSS: GROSS\n\nGross\n - WEB_BASED_EMAIL: WEB_BASED_EMAIL\n\nWeb-based Email\n - MALWARE_SITES: MALWARE_SITES\n\nMalware Sites\n - PHISHING_AND_OTHER_FRAUDS: PHISHING_AND_OTHER_FRAUDS\n\nPhishing and Other Frauds\n - PROXY_AVOIDANCE_AND_ANONYMIZERS: PROXY_AVOIDANCE_AND_ANONYMIZERS\n\nProxy Avoidance and Anonymizers\n - SPYWARE_AND_ADWARE: SPYWARE_AND_ADWARE\n\nSpyware and Adware\n - MUSIC: MUSIC\n\nMusic\n - GOVERNMENT: GOVERNMENT\n\nGovernment\n - NUDITY: NUDITY\n\nNudity\n - NEWS_AND_MEDIA: NEWS_AND_MEDIA\n\nNews and Media\n - ILLEGAL: ILLEGAL\n\nIllegal\n - CONTENT_DELIVERY_NETWORKS: CONTENT_DELIVERY_NETWORKS\n\nContent Delivery Networks\n - INTERNET_COMMUNICATIONS: INTERNET_COMMUNICATIONS\n\nInternet Communications\n - BOT_NETS: BOT_NETS\n\nBot Nets\n - ABORTION: ABORTION\n\nAbortion\n - HEALTH_AND_MEDICINE: HEALTH_AND_MEDICINE\n\nHealth and Medicine\n - CONFIRMED_SPAM_SOURCES: CONFIRMED_SPAM_SOURCES\n\nConfirmed SPAM Sources\n - SPAM_URLS: SPAM_URLS\n\nSPAM URLs\n - UNCONFIRMED_SPAM_SOURCES: UNCONFIRMED_SPAM_SOURCES\n\nUnconfirmed SPAM Sources\n - OPEN_HTTP_PROXIES: OPEN_HTTP_PROXIES\n\nOpen HTTP Proxies\n - DYNAMICALLY_GENERATED_CONTENT: DYNAMICALLY_GENERATED_CONTENT\n\nDynamically Generated Content\n - PARKED_DOMAINS: PARKED_DOMAINS\n\nParked Domains\n - ALCOHOL_AND_TOBACCO: ALCOHOL_AND_TOBACCO\n\nAlcohol and Tobacco\n - PRIVATE_IP_ADDRESSES: PRIVATE_IP_ADDRESSES\n\nPrivate IP Addresses\n - IMAGE_AND_VIDEO_SEARCH: IMAGE_AND_VIDEO_SEARCH\n\nImage and Video Search\n - FASHION_AND_BEAUTY: FASHION_AND_BEAUTY\n\nFashion and Beauty\n - RECREATION_AND_HOBBIES: RECREATION_AND_HOBBIES\n\nRecreation and Hobbies\n - MOTOR_VEHICLES: MOTOR_VEHICLES\n\nMotor Vehicles\n - WEB_HOSTING: WEB_HOSTING\n\nWeb Hosting",
@@ -4184,6 +4240,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "IPv4 Prefix List",
             "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
             "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "prefixes": {
                     "type": "array",
                     "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4198,6 +4270,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "viewsSegmentRefList": {
+            "type": "object",
+            "description": "List of references to Segments",
+            "title": "Segment List",
+            "x-displayname": "Segment List",
+            "x-ves-proto-message": "ves.io.schema.views.SegmentRefList",
+            "properties": {
+                "segments": {
+                    "type": "array",
+                    "description": " Select list of segments\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segments",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Segments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -4251,6 +4345,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allow_list deny_list]\n List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4303,6 +4402,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allow_list deny_list]\n List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4363,6 +4467,12 @@ var APISwaggerJSON string = `{
                     "title": "List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4415,6 +4525,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allow_list deny_list]\n List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         }

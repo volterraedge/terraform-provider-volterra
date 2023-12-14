@@ -37,6 +37,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.dns_zone.DnsZoneMetricsRequest"] = DnsZoneMetricsRequestValidator()
 	vr["ves.io.schema.dns_zone.DnsZoneMetricsResponse"] = DnsZoneMetricsResponseValidator()
+	vr["ves.io.schema.dns_zone.DnsZoneRequestLogRequest"] = DnsZoneRequestLogRequestValidator()
+	vr["ves.io.schema.dns_zone.DnsZoneRequestLogResponse"] = DnsZoneRequestLogResponseValidator()
+	vr["ves.io.schema.dns_zone.DnsZoneRequestLogsResponseData"] = DnsZoneRequestLogsResponseDataValidator()
 	vr["ves.io.schema.dns_zone.MetricsData"] = MetricsDataValidator()
 
 	vr["ves.io.schema.dns_zone.CloneReq"] = CloneReqValidator()

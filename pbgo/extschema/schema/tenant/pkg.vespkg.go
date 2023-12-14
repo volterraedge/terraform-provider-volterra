@@ -28,7 +28,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tenant.LoginEventsMap"] = LoginEventsMapValidator()
 	vr["ves.io.schema.tenant.LookupCnameRequest"] = LookupCnameRequestValidator()
 	vr["ves.io.schema.tenant.PasswordPolicyPublicAccess"] = PasswordPolicyPublicAccessValidator()
-	vr["ves.io.schema.tenant.SetBillingInfoRequest"] = SetBillingInfoRequestValidator()
 	vr["ves.io.schema.tenant.StatusResponse"] = StatusResponseValidator()
 	vr["ves.io.schema.tenant.SupportInfo"] = SupportInfoValidator()
 	vr["ves.io.schema.tenant.TenantSettingsResponse"] = TenantSettingsResponseValidator()
@@ -68,8 +67,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tenant.CustomAPI.SetBillingInfo"] = "ves.io.schema.tenant.SetBillingInfoRequest"
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tenant.CustomAPI.UpdateImage"] = "ves.io.schema.tenant.UpdateImageRequest"
 

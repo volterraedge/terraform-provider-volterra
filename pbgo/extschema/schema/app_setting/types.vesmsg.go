@@ -1567,6 +1567,14 @@ func (v *ValidateMaliciousUserDetectionSetting) BolaActivityChoiceValidationRule
 	return validatorFn, nil
 }
 
+func (v *ValidateMaliciousUserDetectionSetting) BotDefenseActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_activity_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateMaliciousUserDetectionSetting) CoolingOffPeriodSettingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1603,6 +1611,14 @@ func (v *ValidateMaliciousUserDetectionSetting) IpReputationChoiceValidationRule
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_reputation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateMaliciousUserDetectionSetting) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
 	}
 	return validatorFn, nil
 }
@@ -1668,6 +1684,42 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 			vOpts := append(opts,
 				db.WithValidateField("bola_activity_choice"),
 				db.WithValidateField("bola_detection_automatic"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_activity_choice"]; exists {
+		val := m.GetBotDefenseActivityChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_activity_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseActivityChoice().(type) {
+	case *MaliciousUserDetectionSetting_IncludeBotDefenseActivity:
+		if fv, exists := v.FldValidators["bot_defense_activity_choice.include_bot_defense_activity"]; exists {
+			val := m.GetBotDefenseActivityChoice().(*MaliciousUserDetectionSetting_IncludeBotDefenseActivity).IncludeBotDefenseActivity
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_activity_choice"),
+				db.WithValidateField("include_bot_defense_activity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_ExcludeBotDefenseActivity:
+		if fv, exists := v.FldValidators["bot_defense_activity_choice.exclude_bot_defense_activity"]; exists {
+			val := m.GetBotDefenseActivityChoice().(*MaliciousUserDetectionSetting_ExcludeBotDefenseActivity).ExcludeBotDefenseActivity
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_activity_choice"),
+				db.WithValidateField("exclude_bot_defense_activity"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1846,6 +1898,42 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *MaliciousUserDetectionSetting_IncludeRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.include_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*MaliciousUserDetectionSetting_IncludeRateLimit).IncludeRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("include_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaliciousUserDetectionSetting_ExcludeRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.exclude_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*MaliciousUserDetectionSetting_ExcludeRateLimit).ExcludeRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("exclude_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_activity_choice"]; exists {
 		val := m.GetWafActivityChoice()
 		vOpts := append(opts,
@@ -1908,6 +1996,17 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 	}
 	v.FldValidators["bola_activity_choice"] = vFn
 
+	vrhBotDefenseActivityChoice := v.BotDefenseActivityChoiceValidationRuleHandler
+	rulesBotDefenseActivityChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseActivityChoice(rulesBotDefenseActivityChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaliciousUserDetectionSetting.bot_defense_activity_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_activity_choice"] = vFn
+
 	vrhCoolingOffPeriodSetting := v.CoolingOffPeriodSettingValidationRuleHandler
 	rulesCoolingOffPeriodSetting := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1965,6 +2064,17 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 		panic(errMsg)
 	}
 	v.FldValidators["ip_reputation_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaliciousUserDetectionSetting.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
 
 	vrhWafActivityChoice := v.WafActivityChoiceValidationRuleHandler
 	rulesWafActivityChoice := map[string]string{

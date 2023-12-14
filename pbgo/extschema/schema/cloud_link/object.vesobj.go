@@ -1289,6 +1289,17 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
+	case *StatusObject_GcpStatus:
+		if fv, exists := v.FldValidators["cloud_link_status.gcp_status"]; exists {
+			val := e.GetCloudLinkStatus().(*StatusObject_GcpStatus).GcpStatus
+			vOpts := append(opts,
+				db.WithValidateField("cloud_link_status"),
+				db.WithValidateField("gcp_status"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1333,6 +1344,7 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["cloud_link_status.aws_status"] = AWSStatusTypeValidator().Validate
+	v.FldValidators["cloud_link_status.gcp_status"] = GCPStatusTypeValidator().Validate
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 

@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.service_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -3439,6 +3454,22 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3732,6 +3763,47 @@ var APISwaggerJSON string = `{
                 "ALLOW_OVERRIDES"
             ],
             "default": "FIRST_MATCH"
+        },
+        "policySegmentPolicyType": {
+            "type": "object",
+            "description": "Configure source and destination segment for policy",
+            "title": "Segment Choice",
+            "x-displayname": "Configure Segments",
+            "x-ves-oneof-field-dst_segment_choice": "[\"dst_any\",\"dst_segments\",\"intra_segment\"]",
+            "x-ves-oneof-field-src_segment_choice": "[\"src_any\",\"src_segments\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.SegmentPolicyType",
+            "properties": {
+                "dst_any": {
+                    "description": "Exclusive with [dst_segments intra_segment]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "dst_segments": {
+                    "description": "Exclusive with [dst_any intra_segment]\n Traffic is matched against destination segment in selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                },
+                "intra_segment": {
+                    "description": "Exclusive with [dst_any dst_segments]\n Traffic is matched for source and destination on the same segment",
+                    "title": "Intra Segment Policy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Intra Segment"
+                },
+                "src_any": {
+                    "description": "Exclusive with [src_segments]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "src_segments": {
+                    "description": "Exclusive with [src_any]\n Source traffic is matched against selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                }
+            }
         },
         "policyShapeBotBlockMitigationActionType": {
             "type": "object",
@@ -5473,6 +5545,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
                 },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
+                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -5538,6 +5615,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 },
                 "server_name": {
                     "type": "string",
@@ -5612,6 +5694,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
                 },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
+                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -5680,6 +5768,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 },
                 "server_name": {
                     "type": "string",
@@ -6892,6 +6985,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "IPv4 Prefix List",
             "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
             "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "prefixes": {
                     "type": "array",
                     "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -6906,6 +7015,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "viewsSegmentRefList": {
+            "type": "object",
+            "description": "List of references to Segments",
+            "title": "Segment List",
+            "x-displayname": "Segment List",
+            "x-ves-proto-message": "ves.io.schema.views.SegmentRefList",
+            "properties": {
+                "segments": {
+                    "type": "array",
+                    "description": " Select list of segments\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segments",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Segments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }

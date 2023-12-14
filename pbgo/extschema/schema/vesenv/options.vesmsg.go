@@ -1904,12 +1904,23 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-	case *ServiceSlugChoice_DataDelivery:
-		if fv, exists := v.FldValidators["choice.data_delivery"]; exists {
-			val := m.GetChoice().(*ServiceSlugChoice_DataDelivery).DataDelivery
+	case *ServiceSlugChoice_DataIntelligence:
+		if fv, exists := v.FldValidators["choice.data_intelligence"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_DataIntelligence).DataIntelligence
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
-				db.WithValidateField("data_delivery"),
+				db.WithValidateField("data_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Brmalerts:
+		if fv, exists := v.FldValidators["choice.brmalerts"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Brmalerts).Brmalerts
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("brmalerts"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

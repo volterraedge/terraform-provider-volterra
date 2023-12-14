@@ -20,7 +20,7 @@ import (
 	status "google.golang.org/grpc/status"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -40,58 +40,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// CloudLink Associated Sites Request
-//
-// x-displayName: "CloudLink Associated Sites Request"
-// Get list of sites using this CloudLink
-type AssociatedSitesRequest struct {
-	// Name
-	//
-	// x-displayName: "Name"
-	// x-example: "aws-cloud-link-east"
-	// Name of Cloud Link.
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-}
-
-func (m *AssociatedSitesRequest) Reset()      { *m = AssociatedSitesRequest{} }
-func (*AssociatedSitesRequest) ProtoMessage() {}
-func (*AssociatedSitesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc9d11a2d081fbcb, []int{0}
-}
-func (m *AssociatedSitesRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AssociatedSitesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AssociatedSitesRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AssociatedSitesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AssociatedSitesRequest.Merge(m, src)
-}
-func (m *AssociatedSitesRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *AssociatedSitesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AssociatedSitesRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AssociatedSitesRequest proto.InternalMessageInfo
-
-func (m *AssociatedSitesRequest) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
 // CloudLink Reapply Config Request
 //
 // x-displayName: "CloudLink Reapply Config Request"
@@ -108,7 +56,7 @@ type ReapplyConfigRequest struct {
 func (m *ReapplyConfigRequest) Reset()      { *m = ReapplyConfigRequest{} }
 func (*ReapplyConfigRequest) ProtoMessage() {}
 func (*ReapplyConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc9d11a2d081fbcb, []int{1}
+	return fileDescriptor_cc9d11a2d081fbcb, []int{0}
 }
 func (m *ReapplyConfigRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -144,57 +92,6 @@ func (m *ReapplyConfigRequest) GetName() string {
 	return ""
 }
 
-// CloudLink Associated Sites Response
-//
-// x-displayName: "CloudLink Associated Sites Response"
-// Get list of sites using this CloudLink
-type AssociatedSitesResponse struct {
-	// Sites
-	//
-	// x-displayName: "Sites"
-	// List of Associated Sites.
-	Sites []*views.ObjectRefType `protobuf:"bytes,1,rep,name=sites,proto3" json:"sites,omitempty"`
-}
-
-func (m *AssociatedSitesResponse) Reset()      { *m = AssociatedSitesResponse{} }
-func (*AssociatedSitesResponse) ProtoMessage() {}
-func (*AssociatedSitesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc9d11a2d081fbcb, []int{2}
-}
-func (m *AssociatedSitesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AssociatedSitesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AssociatedSitesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AssociatedSitesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AssociatedSitesResponse.Merge(m, src)
-}
-func (m *AssociatedSitesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AssociatedSitesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AssociatedSitesResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AssociatedSitesResponse proto.InternalMessageInfo
-
-func (m *AssociatedSitesResponse) GetSites() []*views.ObjectRefType {
-	if m != nil {
-		return m.Sites
-	}
-	return nil
-}
-
 // CloudLink Reapply Config Response
 //
 // x-displayName: "CloudLink Reapply Config Response"
@@ -205,7 +102,7 @@ type ReapplyConfigResponse struct {
 func (m *ReapplyConfigResponse) Reset()      { *m = ReapplyConfigResponse{} }
 func (*ReapplyConfigResponse) ProtoMessage() {}
 func (*ReapplyConfigResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cc9d11a2d081fbcb, []int{3}
+	return fileDescriptor_cc9d11a2d081fbcb, []int{1}
 }
 func (m *ReapplyConfigResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -235,12 +132,8 @@ func (m *ReapplyConfigResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_ReapplyConfigResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*AssociatedSitesRequest)(nil), "ves.io.schema.cloud_link.AssociatedSitesRequest")
-	golang_proto.RegisterType((*AssociatedSitesRequest)(nil), "ves.io.schema.cloud_link.AssociatedSitesRequest")
 	proto.RegisterType((*ReapplyConfigRequest)(nil), "ves.io.schema.cloud_link.ReapplyConfigRequest")
 	golang_proto.RegisterType((*ReapplyConfigRequest)(nil), "ves.io.schema.cloud_link.ReapplyConfigRequest")
-	proto.RegisterType((*AssociatedSitesResponse)(nil), "ves.io.schema.cloud_link.AssociatedSitesResponse")
-	golang_proto.RegisterType((*AssociatedSitesResponse)(nil), "ves.io.schema.cloud_link.AssociatedSitesResponse")
 	proto.RegisterType((*ReapplyConfigResponse)(nil), "ves.io.schema.cloud_link.ReapplyConfigResponse")
 	golang_proto.RegisterType((*ReapplyConfigResponse)(nil), "ves.io.schema.cloud_link.ReapplyConfigResponse")
 }
@@ -253,70 +146,39 @@ func init() {
 }
 
 var fileDescriptor_cc9d11a2d081fbcb = []byte{
-	// 591 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xbf, 0x4f, 0x14, 0x4f,
-	0x14, 0xbf, 0x01, 0xbe, 0x5f, 0xe3, 0x1a, 0xa2, 0xd9, 0xa8, 0x9c, 0x07, 0x19, 0xc8, 0x56, 0x84,
-	0xb8, 0x33, 0x88, 0x9d, 0xc6, 0x28, 0x60, 0x63, 0xa3, 0xe6, 0xb4, 0x32, 0x26, 0x97, 0xd9, 0xbd,
-	0x77, 0xcb, 0xc8, 0xee, 0xce, 0x38, 0x33, 0xbb, 0x78, 0x31, 0x24, 0x86, 0xca, 0xd2, 0xc4, 0x7f,
-	0xc2, 0xf8, 0x17, 0x98, 0xd0, 0xd0, 0x41, 0x65, 0x88, 0x16, 0xd2, 0x29, 0x7b, 0x16, 0x96, 0xd4,
-	0x56, 0xe6, 0x66, 0x0f, 0xe5, 0x0e, 0xce, 0x48, 0xf7, 0x66, 0x3f, 0xef, 0xf3, 0xde, 0xe7, 0xfd,
-	0x5a, 0x67, 0x3e, 0x07, 0x4d, 0xb8, 0xa0, 0x3a, 0x5c, 0x81, 0x84, 0xd1, 0x30, 0x16, 0x59, 0xb3,
-	0x11, 0xf3, 0x74, 0x95, 0xca, 0x2c, 0x88, 0x79, 0xd8, 0x08, 0x33, 0x6d, 0x44, 0xd2, 0x60, 0x92,
-	0x13, 0xa9, 0x84, 0x11, 0x6e, 0xb5, 0x64, 0x90, 0x92, 0x41, 0xfe, 0x30, 0x6a, 0x7e, 0xc4, 0xcd,
-	0x4a, 0x16, 0x90, 0x50, 0x24, 0x34, 0x12, 0x91, 0xa0, 0x96, 0x10, 0x64, 0x2d, 0xfb, 0xb2, 0x0f,
-	0x6b, 0x95, 0x81, 0x6a, 0x53, 0x91, 0x10, 0x51, 0x0c, 0x94, 0x49, 0x4e, 0x59, 0x9a, 0x0a, 0xc3,
-	0x0c, 0x17, 0xa9, 0xee, 0xa1, 0x93, 0xfd, 0xc2, 0x84, 0x3c, 0x0a, 0x5e, 0xe9, 0x07, 0x4d, 0x5b,
-	0xc2, 0x21, 0x34, 0xd5, 0x0f, 0xe5, 0x2c, 0xe6, 0x4d, 0x66, 0xa0, 0x87, 0x7a, 0x03, 0x28, 0x68,
-	0x48, 0xf3, 0x81, 0xe0, 0xd3, 0x03, 0x3e, 0x1c, 0xd6, 0xf4, 0xd1, 0x14, 0xde, 0x55, 0xe7, 0xf2,
-	0xa2, 0xd6, 0x22, 0xe4, 0xcc, 0x40, 0xf3, 0x11, 0x37, 0xa0, 0xeb, 0xf0, 0x3c, 0x03, 0x6d, 0x5c,
-	0xd7, 0x19, 0x4b, 0x59, 0x02, 0x55, 0x34, 0x83, 0x66, 0xcf, 0xd6, 0xad, 0xed, 0xcd, 0x39, 0x17,
-	0xeb, 0xc0, 0xa4, 0x8c, 0xdb, 0xcb, 0x22, 0x6d, 0xf1, 0xe8, 0x6f, 0xbe, 0x4f, 0x9d, 0x89, 0x63,
-	0x91, 0xb5, 0x14, 0xa9, 0x06, 0x77, 0xd1, 0xf9, 0x4f, 0x77, 0x3f, 0x54, 0xd1, 0xcc, 0xe8, 0xec,
-	0xb9, 0x05, 0x8f, 0xf4, 0x8f, 0xc1, 0xaa, 0x24, 0x0f, 0x82, 0x67, 0x10, 0x9a, 0x3a, 0xb4, 0x1e,
-	0xb7, 0x25, 0x2c, 0x9d, 0x79, 0xbf, 0x3e, 0xd6, 0xe5, 0xd4, 0x4b, 0xa6, 0x37, 0xe1, 0x5c, 0x1a,
-	0x50, 0x52, 0xc6, 0x5e, 0xf8, 0x39, 0xea, 0x8c, 0x2f, 0xdb, 0x39, 0xdf, 0x65, 0x86, 0x2d, 0x3e,
-	0xbc, 0xe7, 0x7e, 0x45, 0xce, 0xf9, 0x01, 0x25, 0xee, 0x3c, 0x19, 0x36, 0x79, 0x72, 0x72, 0x3b,
-	0x6a, 0xd7, 0x4e, 0xc1, 0x28, 0xa5, 0x78, 0xd1, 0xce, 0x87, 0x11, 0x54, 0x6c, 0x57, 0x6b, 0x39,
-	0x68, 0x9f, 0x0b, 0x9f, 0xa7, 0x2d, 0xc5, 0xb4, 0x51, 0x59, 0x68, 0x32, 0x05, 0xbe, 0x02, 0xd6,
-	0xdc, 0xf8, 0xfc, 0xfd, 0xed, 0xc8, 0x6d, 0xf7, 0x56, 0x6f, 0x43, 0x69, 0xb7, 0x73, 0x5a, 0xb2,
-	0x10, 0x34, 0xd5, 0x6d, 0x6d, 0x20, 0x39, 0xb2, 0xc5, 0x9a, 0xbe, 0xec, 0xc2, 0xeb, 0x94, 0xfd,
-	0xce, 0xd7, 0xb0, 0xcd, 0x70, 0xbf, 0x20, 0x67, 0xbc, 0xaf, 0x1b, 0x2e, 0x19, 0xae, 0xf6, 0xa4,
-	0x01, 0xd6, 0xe8, 0x3f, 0xfb, 0xf7, 0x6a, 0x83, 0x62, 0xbb, 0x3a, 0x79, 0x72, 0x5d, 0x6b, 0x8a,
-	0x1b, 0xb0, 0x85, 0xdd, 0xf1, 0x6e, 0x9e, 0xaa, 0x30, 0x55, 0xa6, 0x6a, 0x84, 0x36, 0xd7, 0x0d,
-	0x34, 0x57, 0xf3, 0xb7, 0x36, 0xd1, 0xe8, 0xa7, 0x4d, 0x34, 0x3d, 0x54, 0x5e, 0xb9, 0x26, 0x1b,
-	0x1f, 0xab, 0x23, 0x17, 0xd0, 0xd2, 0x6b, 0xb4, 0xbb, 0x8f, 0x2b, 0x7b, 0xfb, 0xb8, 0x72, 0xb0,
-	0x8f, 0xd1, 0xab, 0x02, 0xa3, 0x77, 0x05, 0x46, 0x3b, 0x05, 0x46, 0xbb, 0x05, 0x46, 0xdf, 0x0a,
-	0x8c, 0x7e, 0x14, 0xb8, 0x72, 0x50, 0x60, 0xf4, 0xa6, 0x83, 0x2b, 0x5b, 0x1d, 0x8c, 0x76, 0x3b,
-	0xb8, 0xb2, 0xd7, 0xc1, 0x95, 0x27, 0xf7, 0x23, 0x21, 0x57, 0x23, 0x92, 0x8b, 0xd8, 0x80, 0x52,
-	0x8c, 0x64, 0x9a, 0x5a, 0xa3, 0x25, 0x54, 0xe2, 0x4b, 0x25, 0x72, 0xde, 0x04, 0xe5, 0x1f, 0xc2,
-	0x54, 0x06, 0x91, 0xa0, 0xf0, 0xc2, 0xf4, 0x0e, 0xeb, 0xd8, 0x2f, 0x27, 0xf8, 0xdf, 0xde, 0xd7,
-	0xf5, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xc3, 0x8a, 0x36, 0xfa, 0x95, 0x04, 0x00, 0x00,
+	// 470 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x31, 0x8b, 0x13, 0x41,
+	0x14, 0xc7, 0x77, 0xa2, 0x08, 0x2e, 0x1c, 0x48, 0x38, 0x31, 0xc6, 0x63, 0x4e, 0xb6, 0x92, 0x83,
+	0x9d, 0x11, 0xed, 0xb4, 0x51, 0xcf, 0xc6, 0x46, 0x25, 0xa5, 0x85, 0x61, 0x76, 0xf3, 0xb2, 0x37,
+	0x66, 0x77, 0xde, 0x38, 0x33, 0xbb, 0x31, 0x88, 0x20, 0x57, 0x59, 0x2a, 0x7e, 0x09, 0xbf, 0xc3,
+	0x35, 0xd7, 0x69, 0x25, 0x41, 0x9b, 0x2b, 0xcd, 0xc6, 0xc2, 0xf2, 0x3e, 0x82, 0xdc, 0x6c, 0x0e,
+	0x93, 0xe8, 0x81, 0xdd, 0x1b, 0x7e, 0xff, 0xff, 0xbc, 0xff, 0xcc, 0x7b, 0xe1, 0xcd, 0x0a, 0x2c,
+	0x93, 0xc8, 0x6d, 0xba, 0x07, 0x85, 0xe0, 0x69, 0x8e, 0xe5, 0xa0, 0x9f, 0x4b, 0x35, 0xe2, 0xba,
+	0x4c, 0x72, 0x99, 0xf6, 0xd3, 0xd2, 0x3a, 0x2c, 0xfa, 0x42, 0x4b, 0xa6, 0x0d, 0x3a, 0x6c, 0x77,
+	0x1a, 0x07, 0x6b, 0x1c, 0xec, 0x8f, 0xa3, 0x1b, 0x67, 0xd2, 0xed, 0x95, 0x09, 0x4b, 0xb1, 0xe0,
+	0x19, 0x66, 0xc8, 0xbd, 0x21, 0x29, 0x87, 0xfe, 0xe4, 0x0f, 0xbe, 0x6a, 0x2e, 0xea, 0x6e, 0x65,
+	0x88, 0x59, 0x0e, 0x5c, 0x68, 0xc9, 0x85, 0x52, 0xe8, 0x84, 0x93, 0xa8, 0xec, 0x82, 0x5e, 0x5b,
+	0x0d, 0x86, 0x7a, 0x19, 0x5e, 0x5d, 0x85, 0x6e, 0xa2, 0xe1, 0x14, 0x6d, 0xad, 0xa2, 0x4a, 0xe4,
+	0x72, 0x20, 0x1c, 0x2c, 0x68, 0xb4, 0x46, 0xc1, 0x82, 0xaa, 0xd6, 0x2e, 0xdf, 0x5e, 0xd3, 0x48,
+	0x18, 0xdb, 0xe5, 0x16, 0xd1, 0x4e, 0xb8, 0xd9, 0x03, 0xa1, 0x75, 0x3e, 0xd9, 0x45, 0x35, 0x94,
+	0x59, 0x0f, 0x5e, 0x96, 0x60, 0x5d, 0xbb, 0x1d, 0x9e, 0x57, 0xa2, 0x80, 0x0e, 0xb9, 0x4e, 0x6e,
+	0x5c, 0xec, 0xf9, 0x3a, 0xba, 0x12, 0x5e, 0x5e, 0xd3, 0x5a, 0x8d, 0xca, 0xc2, 0xad, 0x0f, 0xad,
+	0x70, 0x63, 0xd7, 0xff, 0xed, 0x43, 0xe1, 0xc4, 0xfd, 0xa7, 0x8f, 0xda, 0x53, 0x12, 0x6e, 0xac,
+	0x68, 0xdb, 0x8c, 0x9d, 0xf5, 0xd7, 0xec, 0x5f, 0x01, 0xba, 0xfc, 0xbf, 0xf5, 0x4d, 0x88, 0xe8,
+	0x79, 0xfd, 0xb9, 0xb3, 0x59, 0x81, 0x8d, 0x25, 0xc6, 0x0a, 0xdc, 0x18, 0xcd, 0x28, 0x1e, 0x1b,
+	0xe9, 0x60, 0xff, 0xfb, 0xcf, 0x8f, 0xad, 0x7b, 0xd1, 0xdd, 0xc5, 0x16, 0xf0, 0x93, 0xb7, 0x58,
+	0x2d, 0x52, 0xb0, 0xdc, 0x4e, 0xac, 0x83, 0x62, 0x69, 0x53, 0x2c, 0x7f, 0x7d, 0x82, 0xdf, 0x70,
+	0xd3, 0xf4, 0xe8, 0xa7, 0xbe, 0xc9, 0x1d, 0xb2, 0xd3, 0x8d, 0x0f, 0x0f, 0xc8, 0xb9, 0x6f, 0x07,
+	0x64, 0xfb, 0xcc, 0x5c, 0x4f, 0x92, 0x17, 0x90, 0xba, 0xfd, 0xaf, 0x9d, 0xd6, 0x25, 0xf2, 0xe0,
+	0x1d, 0x99, 0xce, 0x68, 0x70, 0x34, 0xa3, 0xc1, 0xf1, 0x8c, 0x92, 0xb7, 0x35, 0x25, 0x9f, 0x6a,
+	0x4a, 0xbe, 0xd4, 0x94, 0x4c, 0x6b, 0x4a, 0x7e, 0xd4, 0x94, 0xfc, 0xaa, 0x69, 0x70, 0x5c, 0x53,
+	0xf2, 0x7e, 0x4e, 0x83, 0xc3, 0x39, 0x25, 0xd3, 0x39, 0x0d, 0x8e, 0xe6, 0x34, 0x78, 0xf6, 0x38,
+	0x43, 0x3d, 0xca, 0x58, 0x85, 0xb9, 0x03, 0x63, 0x04, 0x2b, 0x2d, 0xf7, 0xc5, 0x10, 0x4d, 0x11,
+	0x6b, 0x83, 0x95, 0x1c, 0x80, 0x89, 0x4f, 0x31, 0xd7, 0x49, 0x86, 0x1c, 0x5e, 0xb9, 0xc5, 0x8c,
+	0xff, 0xda, 0xfe, 0xe4, 0x82, 0x1f, 0xf5, 0xed, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xbe, 0x4a,
+	0x94, 0x5a, 0x20, 0x03, 0x00, 0x00,
 }
 
-func (this *AssociatedSitesRequest) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AssociatedSitesRequest)
-	if !ok {
-		that2, ok := that.(AssociatedSitesRequest)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	return true
-}
 func (this *ReapplyConfigRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -341,35 +203,6 @@ func (this *ReapplyConfigRequest) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *AssociatedSitesResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AssociatedSitesResponse)
-	if !ok {
-		that2, ok := that.(AssociatedSitesResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Sites) != len(that1.Sites) {
-		return false
-	}
-	for i := range this.Sites {
-		if !this.Sites[i].Equal(that1.Sites[i]) {
-			return false
-		}
-	}
-	return true
-}
 func (this *ReapplyConfigResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -391,16 +224,6 @@ func (this *ReapplyConfigResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *AssociatedSitesRequest) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&cloud_link.AssociatedSitesRequest{")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *ReapplyConfigRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -408,18 +231,6 @@ func (this *ReapplyConfigRequest) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&cloud_link.ReapplyConfigRequest{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AssociatedSitesResponse) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&cloud_link.AssociatedSitesResponse{")
-	if this.Sites != nil {
-		s = append(s, "Sites: "+fmt.Sprintf("%#v", this.Sites)+",\n")
-	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -453,11 +264,6 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type CustomDataAPIClient interface {
-	// CloudLink Associated Sites
-	//
-	// x-displayName: "CloudLink Associated Sites"
-	// Get list of sites using this CloudLink
-	AssociatedSites(ctx context.Context, in *AssociatedSitesRequest, opts ...grpc.CallOption) (*AssociatedSitesResponse, error)
 	// CloudLink Reapply Config
 	//
 	// x-displayName: "CloudLink "
@@ -473,15 +279,6 @@ func NewCustomDataAPIClient(cc *grpc.ClientConn) CustomDataAPIClient {
 	return &customDataAPIClient{cc}
 }
 
-func (c *customDataAPIClient) AssociatedSites(ctx context.Context, in *AssociatedSitesRequest, opts ...grpc.CallOption) (*AssociatedSitesResponse, error) {
-	out := new(AssociatedSitesResponse)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.cloud_link.CustomDataAPI/AssociatedSites", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *customDataAPIClient) ReapplyConfig(ctx context.Context, in *ReapplyConfigRequest, opts ...grpc.CallOption) (*ReapplyConfigResponse, error) {
 	out := new(ReapplyConfigResponse)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.cloud_link.CustomDataAPI/ReapplyConfig", in, out, opts...)
@@ -493,11 +290,6 @@ func (c *customDataAPIClient) ReapplyConfig(ctx context.Context, in *ReapplyConf
 
 // CustomDataAPIServer is the server API for CustomDataAPI service.
 type CustomDataAPIServer interface {
-	// CloudLink Associated Sites
-	//
-	// x-displayName: "CloudLink Associated Sites"
-	// Get list of sites using this CloudLink
-	AssociatedSites(context.Context, *AssociatedSitesRequest) (*AssociatedSitesResponse, error)
 	// CloudLink Reapply Config
 	//
 	// x-displayName: "CloudLink "
@@ -509,33 +301,12 @@ type CustomDataAPIServer interface {
 type UnimplementedCustomDataAPIServer struct {
 }
 
-func (*UnimplementedCustomDataAPIServer) AssociatedSites(ctx context.Context, req *AssociatedSitesRequest) (*AssociatedSitesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AssociatedSites not implemented")
-}
 func (*UnimplementedCustomDataAPIServer) ReapplyConfig(ctx context.Context, req *ReapplyConfigRequest) (*ReapplyConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReapplyConfig not implemented")
 }
 
 func RegisterCustomDataAPIServer(s *grpc.Server, srv CustomDataAPIServer) {
 	s.RegisterService(&_CustomDataAPI_serviceDesc, srv)
-}
-
-func _CustomDataAPI_AssociatedSites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AssociatedSitesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CustomDataAPIServer).AssociatedSites(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ves.io.schema.cloud_link.CustomDataAPI/AssociatedSites",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CustomDataAPIServer).AssociatedSites(ctx, req.(*AssociatedSitesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _CustomDataAPI_ReapplyConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -561,46 +332,12 @@ var _CustomDataAPI_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*CustomDataAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AssociatedSites",
-			Handler:    _CustomDataAPI_AssociatedSites_Handler,
-		},
-		{
 			MethodName: "ReapplyConfig",
 			Handler:    _CustomDataAPI_ReapplyConfig_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ves.io/schema/cloud_link/public_custom_api.proto",
-}
-
-func (m *AssociatedSitesRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AssociatedSitesRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AssociatedSitesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintPublicCustomApi(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
 }
 
 func (m *ReapplyConfigRequest) Marshal() (dAtA []byte, err error) {
@@ -629,43 +366,6 @@ func (m *ReapplyConfigRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintPublicCustomApi(dAtA, i, uint64(len(m.Name)))
 		i--
 		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AssociatedSitesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AssociatedSitesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AssociatedSitesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Sites) > 0 {
-		for iNdEx := len(m.Sites) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Sites[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintPublicCustomApi(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -704,19 +404,6 @@ func encodeVarintPublicCustomApi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *AssociatedSitesRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomApi(uint64(l))
-	}
-	return n
-}
-
 func (m *ReapplyConfigRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -726,21 +413,6 @@ func (m *ReapplyConfigRequest) Size() (n int) {
 	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovPublicCustomApi(uint64(l))
-	}
-	return n
-}
-
-func (m *AssociatedSitesResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Sites) > 0 {
-		for _, e := range m.Sites {
-			l = e.Size()
-			n += 1 + l + sovPublicCustomApi(uint64(l))
-		}
 	}
 	return n
 }
@@ -760,37 +432,12 @@ func sovPublicCustomApi(x uint64) (n int) {
 func sozPublicCustomApi(x uint64) (n int) {
 	return sovPublicCustomApi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *AssociatedSitesRequest) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AssociatedSitesRequest{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *ReapplyConfigRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReapplyConfigRequest{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AssociatedSitesResponse) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForSites := "[]*ObjectRefType{"
-	for _, f := range this.Sites {
-		repeatedStringForSites += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
-	}
-	repeatedStringForSites += "}"
-	s := strings.Join([]string{`&AssociatedSitesResponse{`,
-		`Sites:` + repeatedStringForSites + `,`,
 		`}`,
 	}, "")
 	return s
@@ -811,91 +458,6 @@ func valueToStringPublicCustomApi(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *AssociatedSitesRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomApi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AssociatedSitesRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AssociatedSitesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomApi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *ReapplyConfigRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -957,93 +519,6 @@ func (m *ReapplyConfigRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomApi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AssociatedSitesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomApi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AssociatedSitesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AssociatedSitesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sites", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomApi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sites = append(m.Sites, &views.ObjectRefType{})
-			if err := m.Sites[len(m.Sites)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

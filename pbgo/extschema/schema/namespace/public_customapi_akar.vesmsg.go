@@ -28,6 +28,306 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AllApplicationInventoryRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AllApplicationInventoryRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AllApplicationInventoryRequest) DeepCopy() *AllApplicationInventoryRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AllApplicationInventoryRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AllApplicationInventoryRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AllApplicationInventoryRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AllApplicationInventoryRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAllApplicationInventoryRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAllApplicationInventoryRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AllApplicationInventoryRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AllApplicationInventoryRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["http_load_balancer_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_load_balancer_filter"))
+		if err := fv(ctx, m.GetHttpLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tcp_load_balancer_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tcp_load_balancer_filter"))
+		if err := fv(ctx, m.GetTcpLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAllApplicationInventoryRequestValidator = func() *ValidateAllApplicationInventoryRequest {
+	v := &ValidateAllApplicationInventoryRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AllApplicationInventoryRequestValidator() db.Validator {
+	return DefaultAllApplicationInventoryRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AllApplicationInventoryWafFilterRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AllApplicationInventoryWafFilterRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AllApplicationInventoryWafFilterRequest) DeepCopy() *AllApplicationInventoryWafFilterRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AllApplicationInventoryWafFilterRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AllApplicationInventoryWafFilterRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AllApplicationInventoryWafFilterRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AllApplicationInventoryWafFilterRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAllApplicationInventoryWafFilterRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAllApplicationInventoryWafFilterRequest) WafFilterChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_filter_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAllApplicationInventoryWafFilterRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AllApplicationInventoryWafFilterRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AllApplicationInventoryWafFilterRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["waf_filter_choice"]; exists {
+		val := m.GetWafFilterChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_filter_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafFilterChoice().(type) {
+	case *AllApplicationInventoryWafFilterRequest_ExclusionSignatureId:
+		if fv, exists := v.FldValidators["waf_filter_choice.exclusion_signature_id"]; exists {
+			val := m.GetWafFilterChoice().(*AllApplicationInventoryWafFilterRequest_ExclusionSignatureId).ExclusionSignatureId
+			vOpts := append(opts,
+				db.WithValidateField("waf_filter_choice"),
+				db.WithValidateField("exclusion_signature_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AllApplicationInventoryWafFilterRequest_ExclusionViolationType:
+		if fv, exists := v.FldValidators["waf_filter_choice.exclusion_violation_type"]; exists {
+			val := m.GetWafFilterChoice().(*AllApplicationInventoryWafFilterRequest_ExclusionViolationType).ExclusionViolationType
+			vOpts := append(opts,
+				db.WithValidateField("waf_filter_choice"),
+				db.WithValidateField("exclusion_violation_type"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAllApplicationInventoryWafFilterRequestValidator = func() *ValidateAllApplicationInventoryWafFilterRequest {
+	v := &ValidateAllApplicationInventoryWafFilterRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWafFilterChoice := v.WafFilterChoiceValidationRuleHandler
+	rulesWafFilterChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafFilterChoice(rulesWafFilterChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AllApplicationInventoryWafFilterRequest.waf_filter_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_filter_choice"] = vFn
+
+	return v
+}()
+
+func AllApplicationInventoryWafFilterRequestValidator() db.Validator {
+	return DefaultAllApplicationInventoryWafFilterRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AllApplicationInventoryWafFilterResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AllApplicationInventoryWafFilterResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AllApplicationInventoryWafFilterResponse) DeepCopy() *AllApplicationInventoryWafFilterResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AllApplicationInventoryWafFilterResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AllApplicationInventoryWafFilterResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AllApplicationInventoryWafFilterResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AllApplicationInventoryWafFilterResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAllApplicationInventoryWafFilterResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAllApplicationInventoryWafFilterResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AllApplicationInventoryWafFilterResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AllApplicationInventoryWafFilterResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["http_loadbalancers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_loadbalancers"))
+		for idx, item := range m.GetHttpLoadbalancers() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAllApplicationInventoryWafFilterResponseValidator = func() *ValidateAllApplicationInventoryWafFilterResponse {
+	v := &ValidateAllApplicationInventoryWafFilterResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AllApplicationInventoryWafFilterResponseValidator() db.Validator {
+	return DefaultAllApplicationInventoryWafFilterResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApplicationInventoryRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1678,6 +1978,15 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["namespace_service_policy_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy_enabled"))
@@ -1744,6 +2053,93 @@ var DefaultHTTPLoadbalancerResultTypeValidator = func() *ValidateHTTPLoadbalance
 
 func HTTPLoadbalancerResultTypeValidator() db.Validator {
 	return DefaultHTTPLoadbalancerResultTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HTTPLoadbalancerWafFilterResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HTTPLoadbalancerWafFilterResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HTTPLoadbalancerWafFilterResultType) DeepCopy() *HTTPLoadbalancerWafFilterResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HTTPLoadbalancerWafFilterResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HTTPLoadbalancerWafFilterResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HTTPLoadbalancerWafFilterResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HTTPLoadbalancerWafFilterResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHTTPLoadbalancerWafFilterResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHTTPLoadbalancerWafFilterResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HTTPLoadbalancerWafFilterResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HTTPLoadbalancerWafFilterResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHTTPLoadbalancerWafFilterResultTypeValidator = func() *ValidateHTTPLoadbalancerWafFilterResultType {
+	v := &ValidateHTTPLoadbalancerWafFilterResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func HTTPLoadbalancerWafFilterResultTypeValidator() db.Validator {
+	return DefaultHTTPLoadbalancerWafFilterResultTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3372,6 +3768,15 @@ func (v *ValidateTCPLoadbalancerResultType) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
 			return err
 		}
 

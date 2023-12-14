@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2670,6 +2734,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -3287,6 +3355,47 @@ var APISwaggerJSON string = `{
             "default": "DENY",
             "x-displayname": "Rule Action",
             "x-ves-proto-enum": "ves.io.schema.policy.RuleAction"
+        },
+        "policySegmentPolicyType": {
+            "type": "object",
+            "description": "Configure source and destination segment for policy",
+            "title": "Segment Choice",
+            "x-displayname": "Configure Segments",
+            "x-ves-oneof-field-dst_segment_choice": "[\"dst_any\",\"dst_segments\",\"intra_segment\"]",
+            "x-ves-oneof-field-src_segment_choice": "[\"src_any\",\"src_segments\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.SegmentPolicyType",
+            "properties": {
+                "dst_any": {
+                    "description": "Exclusive with [dst_segments intra_segment]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "dst_segments": {
+                    "description": "Exclusive with [dst_any intra_segment]\n Traffic is matched against destination segment in selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                },
+                "intra_segment": {
+                    "description": "Exclusive with [dst_any dst_segments]\n Traffic is matched for source and destination on the same segment",
+                    "title": "Intra Segment Policy",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Intra Segment"
+                },
+                "src_any": {
+                    "description": "Exclusive with [src_segments]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "src_segments": {
+                    "description": "Exclusive with [src_any]\n Source traffic is matched against selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                }
+            }
         },
         "policyURLCategory": {
             "type": "string",
@@ -4131,6 +4240,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "IPv4 Prefix List",
             "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
             "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "prefixes": {
                     "type": "array",
                     "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4145,6 +4270,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "viewsSegmentRefList": {
+            "type": "object",
+            "description": "List of references to Segments",
+            "title": "Segment List",
+            "x-displayname": "Segment List",
+            "x-ves-proto-message": "ves.io.schema.views.SegmentRefList",
+            "properties": {
+                "segments": {
+                    "type": "array",
+                    "description": " Select list of segments\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segments",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Segments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -4206,6 +4353,12 @@ var APISwaggerJSON string = `{
                     "title": "List of custom rules",
                     "$ref": "#/definitions/forward_proxy_policyForwardProxyRuleListType",
                     "x-displayname": "Custom Rule List"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         }

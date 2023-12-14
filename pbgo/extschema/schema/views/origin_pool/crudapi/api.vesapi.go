@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1852,6 +1871,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2061,6 +2095,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2300,6 +2349,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2850,6 +2914,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -3443,28 +3511,131 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "origin_poolOriginServerSegmentIP": {
+            "type": "object",
+            "description": "Specify origin server with IP address in a Segment on given Site",
+            "title": "OriginServerSegmentIP",
+            "x-displayname": "IP address of Origin server in Segment on given Site",
+            "x-ves-displayorder": "1,4,5",
+            "x-ves-oneof-field-ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentIP",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP",
+                    "x-displayname": "IP",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IP6",
+                    "x-displayname": "IP6",
+                    "x-ves-example": "2001::10",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "segment": {
+                    "description": " Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site_locator": {
+                    "description": " Site or Cloud RE Region or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site Locator",
+                    "$ref": "#/definitions/viewsSiteRegionLocator",
+                    "x-displayname": "Site or Cloud Edge or Virtual Site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "origin_poolOriginServerSegmentName": {
+            "type": "object",
+            "description": "Specify origin server with DNS name in Segment on given Site",
+            "title": "OriginServerSegmentName",
+            "x-displayname": "DNS Name of Origin Server in Segment on given Sites",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentName",
+            "properties": {
+                "dns_name": {
+                    "type": "string",
+                    "description": " DNS Name\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "DNS name",
+                    "x-displayname": "DNS Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "refresh_interval": {
+                    "type": "integer",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "title": "refresh_interval",
+                    "format": "int64",
+                    "x-displayname": "DNS Refresh interval",
+                    "x-ves-example": "20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "604800"
+                    }
+                },
+                "segment": {
+                    "description": " Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site_locator": {
+                    "description": " Site or Cloud RE Region or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site Locator",
+                    "$ref": "#/definitions/viewsSiteRegionLocator",
+                    "x-displayname": "Site or Cloud RE Region or Virtual Site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "origin_poolOriginServerType": {
             "type": "object",
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"segment_ip\",\"segment_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService",
                     "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
                     "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService",
                     "x-displayname": "K8s Service Name of Origin Server on given Sites"
@@ -3477,37 +3648,49 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
                     "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName",
                     "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
-                    "title": "OriginServerPublicName",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
+                    "title": "OriginServerPublicIP",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP",
                     "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName",
                     "x-displayname": "Public DNS Name of Origin Server"
                 },
+                "segment_ip": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_name vn_private_ip vn_private_name]\n Specify origin server with IP address in a Segment on given Site",
+                    "title": "OriginServerSegmentIP",
+                    "$ref": "#/definitions/origin_poolOriginServerSegmentIP",
+                    "x-displayname": "IP address of Origin server in Segment on given Site"
+                },
+                "segment_name": {
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip vn_private_ip vn_private_name]\n Specify origin server with DNS name in Segment on given Site",
+                    "title": "OriginServerSegmentName",
+                    "$ref": "#/definitions/origin_poolOriginServerSegmentName",
+                    "x-displayname": "DNS Name of Origin Server in Segment on given Sites"
+                },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
                     "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
                     "x-displayname": "Name on Virtual Network"
@@ -3903,7 +4086,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHeaderTransformationType": {
             "type": "object",
-            "description": "Header Transformation options for HTTP request/response headers",
+            "description": "Header Transformation options for HTTP/1.1 request/response headers",
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
@@ -4530,6 +4713,34 @@ var APISwaggerJSON string = `{
                 },
                 "virtual_site": {
                     "description": "Exclusive with [site]\n Reference to virtual site object",
+                    "title": "Virtual Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site"
+                }
+            }
+        },
+        "viewsSiteRegionLocator": {
+            "type": "object",
+            "description": "This message defines reference to site or virtual site or a cloud-re-region object",
+            "title": "SiteRegionLocator",
+            "x-displayname": "Select Site or Virtual Site or Cloud Edge",
+            "x-ves-oneof-field-choice": "[\"cloud_re_region\",\"site\",\"virtual_site\"]",
+            "x-ves-proto-message": "ves.io.schema.views.SiteRegionLocator",
+            "properties": {
+                "cloud_re_region": {
+                    "description": "Exclusive with [site virtual_site]\n Reference to a Cloud Edge",
+                    "title": "Cloud Edge",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud Edge"
+                },
+                "site": {
+                    "description": "Exclusive with [cloud_re_region virtual_site]\n Reference to site object",
+                    "title": "site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site"
+                },
+                "virtual_site": {
+                    "description": "Exclusive with [cloud_re_region site]\n Reference to virtual site object",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Site"

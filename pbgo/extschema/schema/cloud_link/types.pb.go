@@ -12,6 +12,7 @@ import (
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
@@ -55,18 +56,32 @@ const (
 	// x-displayName: "Ready"
 	// CloudLink is ready for use
 	READY CloudLinkDeploymentStatus = 2
+	// Deleting
+	//
+	// x-displayName: "Deleting"
+	// CloudLink deleting in progress
+	DELETING CloudLinkDeploymentStatus = 3
+	// Customer Deployed
+	//
+	// x-displayName: "Customer Deployed"
+	// Customer deploys the CloudLink
+	CUSTOMER_DEPLOYED CloudLinkDeploymentStatus = 4
 )
 
 var CloudLinkDeploymentStatus_name = map[int32]string{
 	0: "IN_PROGRESS",
 	1: "ERROR",
 	2: "READY",
+	3: "DELETING",
+	4: "CUSTOMER_DEPLOYED",
 }
 
 var CloudLinkDeploymentStatus_value = map[string]int32{
-	"IN_PROGRESS": 0,
-	"ERROR":       1,
-	"READY":       2,
+	"IN_PROGRESS":       0,
+	"ERROR":             1,
+	"READY":             2,
+	"DELETING":          3,
+	"CUSTOMER_DEPLOYED": 4,
 }
 
 func (CloudLinkDeploymentStatus) EnumDescriptor() ([]byte, []int) {
@@ -160,34 +175,23 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to CloudProvider:
 	//	*GlobalSpecType_Aws
 	//	*GlobalSpecType_Azure
+	//	*GlobalSpecType_Gcp
 	CloudProvider isGlobalSpecType_CloudProvider `protobuf_oneof:"cloud_provider"`
 	// CloudLink Status
 	//
 	// x-displayName: "Status"
 	// Status of the CloudLink deployment
 	Status CloudLinkDeploymentStatus `protobuf:"varint,4,opt,name=status,proto3,enum=ves.io.schema.cloud_link.CloudLinkDeploymentStatus" json:"status,omitempty"`
-	// Suggested Action
-	//
-	// x-displayName: "Suggested Action"
-	// x-example: "value"
-	// Suggested action for customer on error
-	SuggestedAction string `protobuf:"bytes,5,opt,name=suggested_action,json=suggestedAction,proto3" json:"suggested_action,omitempty"`
-	// Error Description
-	//
-	// x-displayName: "Error Description"
-	// x-example: "value"
-	// Description of error on site
-	ErrorDescription string `protobuf:"bytes,6,opt,name=error_description,json=errorDescription,proto3" json:"error_description,omitempty"`
 	// Sites
 	//
 	// x-displayName: "Sites"
 	// This field indicates the number of Sites connected to this CloudLink object.
 	Sites int32 `protobuf:"varint,7,opt,name=sites,proto3" json:"sites,omitempty"`
-	// Connection to RE
+	// Private Connectivity via Regional Edge (RE)
 	//
-	// x-displayName: "Connection to RE"
+	// x-displayName: "Private Connectivity via Regional Edge (RE)"
 	// x-required
-	// Specifies CloudLink connection to RE
+	// Private Connectivity via Regional Edge (RE)
 	//
 	// Types that are valid to be assigned to EnableConnectionToReChoice:
 	//	*GlobalSpecType_Disabled
@@ -247,6 +251,9 @@ type GlobalSpecType_Aws struct {
 type GlobalSpecType_Azure struct {
 	Azure *AzureType `protobuf:"bytes,3,opt,name=azure,proto3,oneof" json:"azure,omitempty"`
 }
+type GlobalSpecType_Gcp struct {
+	Gcp *GCPType `protobuf:"bytes,12,opt,name=gcp,proto3,oneof" json:"gcp,omitempty"`
+}
 type GlobalSpecType_Disabled struct {
 	Disabled *schema.Empty `protobuf:"bytes,9,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
@@ -256,6 +263,7 @@ type GlobalSpecType_Enabled struct {
 
 func (*GlobalSpecType_Aws) isGlobalSpecType_CloudProvider()                   {}
 func (*GlobalSpecType_Azure) isGlobalSpecType_CloudProvider()                 {}
+func (*GlobalSpecType_Gcp) isGlobalSpecType_CloudProvider()                   {}
 func (*GlobalSpecType_Disabled) isGlobalSpecType_EnableConnectionToReChoice() {}
 func (*GlobalSpecType_Enabled) isGlobalSpecType_EnableConnectionToReChoice()  {}
 
@@ -286,25 +294,18 @@ func (m *GlobalSpecType) GetAzure() *AzureType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetGcp() *GCPType {
+	if x, ok := m.GetCloudProvider().(*GlobalSpecType_Gcp); ok {
+		return x.Gcp
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetStatus() CloudLinkDeploymentStatus {
 	if m != nil {
 		return m.Status
 	}
 	return IN_PROGRESS
-}
-
-func (m *GlobalSpecType) GetSuggestedAction() string {
-	if m != nil {
-		return m.SuggestedAction
-	}
-	return ""
-}
-
-func (m *GlobalSpecType) GetErrorDescription() string {
-	if m != nil {
-		return m.ErrorDescription
-	}
-	return ""
 }
 
 func (m *GlobalSpecType) GetSites() int32 {
@@ -340,6 +341,7 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_Aws)(nil),
 		(*GlobalSpecType_Azure)(nil),
+		(*GlobalSpecType_Gcp)(nil),
 		(*GlobalSpecType_Disabled)(nil),
 		(*GlobalSpecType_Enabled)(nil),
 	}
@@ -530,6 +532,97 @@ func (m *AzureType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AzureType proto.InternalMessageInfo
 
+// Google Cloud Platform (GCP) CloudLink Provider
+//
+// x-displayName: "Google Cloud Platform (GCP) CloudLink Provider"
+// CloudLink for GCP Cloud Provider
+type GCPType struct {
+	// Account Credential
+	//
+	// x-required
+	// x-displayName: "Account Credential"
+	// Reference to GCP cloud account credential object used to deploy CloudLink specific object
+	GcpCred *views.ObjectRefType `protobuf:"bytes,1,opt,name=gcp_cred,json=gcpCred,proto3" json:"gcp_cred,omitempty"`
+	// CloudLink
+	//
+	// x-displayName: "CloudLink"
+	// x-required
+	// Type of CloudLink which needs to be created
+	//
+	// Types that are valid to be assigned to CloudLinkType:
+	//	*GCPType_Byoc
+	CloudLinkType isGCPType_CloudLinkType `protobuf_oneof:"cloud_link_type"`
+}
+
+func (m *GCPType) Reset()      { *m = GCPType{} }
+func (*GCPType) ProtoMessage() {}
+func (*GCPType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_580b870794b9a906, []int{3}
+}
+func (m *GCPType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPType.Merge(m, src)
+}
+func (m *GCPType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPType proto.InternalMessageInfo
+
+type isGCPType_CloudLinkType interface {
+	isGCPType_CloudLinkType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GCPType_Byoc struct {
+	Byoc *GCPBYOCListType `protobuf:"bytes,3,opt,name=byoc,proto3,oneof" json:"byoc,omitempty"`
+}
+
+func (*GCPType_Byoc) isGCPType_CloudLinkType() {}
+
+func (m *GCPType) GetCloudLinkType() isGCPType_CloudLinkType {
+	if m != nil {
+		return m.CloudLinkType
+	}
+	return nil
+}
+
+func (m *GCPType) GetGcpCred() *views.ObjectRefType {
+	if m != nil {
+		return m.GcpCred
+	}
+	return nil
+}
+
+func (m *GCPType) GetByoc() *GCPBYOCListType {
+	if x, ok := m.GetCloudLinkType().(*GCPType_Byoc); ok {
+		return x.Byoc
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GCPType_Byoc)(nil),
+	}
+}
+
 // Bring You Own Connection List
 //
 // x-displayName: "Bring Your Own Connections"
@@ -546,7 +639,7 @@ type AWSBYOCListType struct {
 func (m *AWSBYOCListType) Reset()      { *m = AWSBYOCListType{} }
 func (*AWSBYOCListType) ProtoMessage() {}
 func (*AWSBYOCListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{3}
+	return fileDescriptor_580b870794b9a906, []int{4}
 }
 func (m *AWSBYOCListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -663,12 +756,24 @@ type AWSBYOCType struct {
 	// x-required
 	// Specify attributes for the connection including name and description.
 	Metadata *schema.MessageMetaType `protobuf:"bytes,15,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Region
+	//
+	// x-displayName: "Region"
+	// x-required
+	// x-example: "us-east-1"
+	// Region where the connection is setup
+	Region string `protobuf:"bytes,16,opt,name=region,proto3" json:"region,omitempty"`
+	// CloudLink Connection Coordinates
+	//
+	// x-displayName: "CloudLink Connection Coordinates"
+	// Coordinates of the CloudLink Connection based on connection's physical location
+	Coordinates *site.Coordinates `protobuf:"bytes,17,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 }
 
 func (m *AWSBYOCType) Reset()      { *m = AWSBYOCType{} }
 func (*AWSBYOCType) ProtoMessage() {}
 func (*AWSBYOCType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{4}
+	return fileDescriptor_580b870794b9a906, []int{5}
 }
 func (m *AWSBYOCType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -828,6 +933,20 @@ func (m *AWSBYOCType) GetMetadata() *schema.MessageMetaType {
 	return nil
 }
 
+func (m *AWSBYOCType) GetRegion() string {
+	if m != nil {
+		return m.Region
+	}
+	return ""
+}
+
+func (m *AWSBYOCType) GetCoordinates() *site.Coordinates {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*AWSBYOCType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -836,6 +955,267 @@ func (*AWSBYOCType) XXX_OneofWrappers() []interface{} {
 		(*AWSBYOCType_Ipv4)(nil),
 		(*AWSBYOCType_Ipv6)(nil),
 	}
+}
+
+// GCP Bring You Own Connection List
+//
+// x-displayName: "GCP Bring Your Own Connections"
+// List of GCP Bring You Own Connections
+type GCPBYOCListType struct {
+	// List of Bring You Own Connections
+	//
+	// x-displayName: "Bring Your Own Connections"
+	// x-required
+	// List of Bring You Own Connections. These GCP Cloud Interconnect connections are not managed by F5XC but will be used for connecting sites and REs.
+	Connections []*GCPBYOCType `protobuf:"bytes,1,rep,name=connections,proto3" json:"connections,omitempty"`
+}
+
+func (m *GCPBYOCListType) Reset()      { *m = GCPBYOCListType{} }
+func (*GCPBYOCListType) ProtoMessage() {}
+func (*GCPBYOCListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_580b870794b9a906, []int{6}
+}
+func (m *GCPBYOCListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPBYOCListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPBYOCListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPBYOCListType.Merge(m, src)
+}
+func (m *GCPBYOCListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPBYOCListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPBYOCListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPBYOCListType proto.InternalMessageInfo
+
+func (m *GCPBYOCListType) GetConnections() []*GCPBYOCType {
+	if m != nil {
+		return m.Connections
+	}
+	return nil
+}
+
+// Bring You Own Connection
+//
+// x-displayName: "Bring You Own Connection"
+// GCP Bring You Own Connection.
+type GCPBYOCType struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Specify attributes for the connection including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Region
+	//
+	// x-displayName: "Region"
+	// x-required
+	// GCP Region in which the GCP Cloud Interconnect attachment is configured
+	Region string `protobuf:"bytes,2,opt,name=region,proto3" json:"region,omitempty"`
+	// Project
+	//
+	// x-displayName: "Project"
+	// x-required
+	// GCP Project in which the GCP Interconnect Attachment is configured
+	//
+	// Types that are valid to be assigned to ProjectChoice:
+	//	*GCPBYOCType_SameAsCredential
+	//	*GCPBYOCType_Project
+	ProjectChoice isGCPBYOCType_ProjectChoice `protobuf_oneof:"project_choice"`
+	// Interconnect Attachment Name
+	//
+	// x-displayName: "Interconnect Attachment Name"
+	// x-required
+	// Name of already-existing GCP Cloud Interconnect Attachment
+	InterconnectAttachmentName string `protobuf:"bytes,6,opt,name=interconnect_attachment_name,json=interconnectAttachmentName,proto3" json:"interconnect_attachment_name,omitempty"`
+	// CloudLink Connection Coordinates
+	//
+	// x-displayName: "CloudLink Connection Coordinates"
+	// Coordinates of the CloudLink Connection based on connection's physical location
+	Coordinates *site.Coordinates `protobuf:"bytes,7,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
+}
+
+func (m *GCPBYOCType) Reset()      { *m = GCPBYOCType{} }
+func (*GCPBYOCType) ProtoMessage() {}
+func (*GCPBYOCType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_580b870794b9a906, []int{7}
+}
+func (m *GCPBYOCType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPBYOCType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPBYOCType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPBYOCType.Merge(m, src)
+}
+func (m *GCPBYOCType) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPBYOCType) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPBYOCType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPBYOCType proto.InternalMessageInfo
+
+type isGCPBYOCType_ProjectChoice interface {
+	isGCPBYOCType_ProjectChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GCPBYOCType_SameAsCredential struct {
+	SameAsCredential *schema.Empty `protobuf:"bytes,4,opt,name=same_as_credential,json=sameAsCredential,proto3,oneof" json:"same_as_credential,omitempty"`
+}
+type GCPBYOCType_Project struct {
+	Project string `protobuf:"bytes,5,opt,name=project,proto3,oneof" json:"project,omitempty"`
+}
+
+func (*GCPBYOCType_SameAsCredential) isGCPBYOCType_ProjectChoice() {}
+func (*GCPBYOCType_Project) isGCPBYOCType_ProjectChoice()          {}
+
+func (m *GCPBYOCType) GetProjectChoice() isGCPBYOCType_ProjectChoice {
+	if m != nil {
+		return m.ProjectChoice
+	}
+	return nil
+}
+
+func (m *GCPBYOCType) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *GCPBYOCType) GetRegion() string {
+	if m != nil {
+		return m.Region
+	}
+	return ""
+}
+
+func (m *GCPBYOCType) GetSameAsCredential() *schema.Empty {
+	if x, ok := m.GetProjectChoice().(*GCPBYOCType_SameAsCredential); ok {
+		return x.SameAsCredential
+	}
+	return nil
+}
+
+func (m *GCPBYOCType) GetProject() string {
+	if x, ok := m.GetProjectChoice().(*GCPBYOCType_Project); ok {
+		return x.Project
+	}
+	return ""
+}
+
+func (m *GCPBYOCType) GetInterconnectAttachmentName() string {
+	if m != nil {
+		return m.InterconnectAttachmentName
+	}
+	return ""
+}
+
+func (m *GCPBYOCType) GetCoordinates() *site.Coordinates {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GCPBYOCType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GCPBYOCType_SameAsCredential)(nil),
+		(*GCPBYOCType_Project)(nil),
+	}
+}
+
+// GCP Partner Metadata
+//
+// x-displayName: "GCP Partner Metadata"
+// Partner metadata for a GCP Cloud Interconnect attachment
+type GCPPartnerMetadata struct {
+	// Name
+	//
+	// x-displayName: "Name"
+	// Name of partner associated with a GCP Cloud Interconnect attachment
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Interconnect Name
+	//
+	// x-displayName: "Interconnect Name"
+	// Name of partner interconnect associated with a GCP Cloud Interconnect attachment
+	Interconnect string `protobuf:"bytes,2,opt,name=interconnect,proto3" json:"interconnect,omitempty"`
+	// Portal URL
+	//
+	// x-displayName: "Portal URL"
+	// URL to the partner portal for the interconnect associated with this GCP Cloud Interconnect attachment
+	PortalUrl string `protobuf:"bytes,3,opt,name=portal_url,json=portalUrl,proto3" json:"portal_url,omitempty"`
+}
+
+func (m *GCPPartnerMetadata) Reset()      { *m = GCPPartnerMetadata{} }
+func (*GCPPartnerMetadata) ProtoMessage() {}
+func (*GCPPartnerMetadata) Descriptor() ([]byte, []int) {
+	return fileDescriptor_580b870794b9a906, []int{8}
+}
+func (m *GCPPartnerMetadata) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GCPPartnerMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *GCPPartnerMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GCPPartnerMetadata.Merge(m, src)
+}
+func (m *GCPPartnerMetadata) XXX_Size() int {
+	return m.Size()
+}
+func (m *GCPPartnerMetadata) XXX_DiscardUnknown() {
+	xxx_messageInfo_GCPPartnerMetadata.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GCPPartnerMetadata proto.InternalMessageInfo
+
+func (m *GCPPartnerMetadata) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GCPPartnerMetadata) GetInterconnect() string {
+	if m != nil {
+		return m.Interconnect
+	}
+	return ""
+}
+
+func (m *GCPPartnerMetadata) GetPortalUrl() string {
+	if m != nil {
+		return m.PortalUrl
+	}
+	return ""
 }
 
 // IPv4 Peering
@@ -862,7 +1242,7 @@ type Ipv4Type struct {
 func (m *Ipv4Type) Reset()      { *m = Ipv4Type{} }
 func (*Ipv4Type) ProtoMessage() {}
 func (*Ipv4Type) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{5}
+	return fileDescriptor_580b870794b9a906, []int{9}
 }
 func (m *Ipv4Type) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -911,7 +1291,7 @@ type Ipv6Type struct {
 func (m *Ipv6Type) Reset()      { *m = Ipv6Type{} }
 func (*Ipv6Type) ProtoMessage() {}
 func (*Ipv6Type) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{6}
+	return fileDescriptor_580b870794b9a906, []int{10}
 }
 func (m *Ipv6Type) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -946,7 +1326,7 @@ type AWSF5XCManagedType struct {
 func (m *AWSF5XCManagedType) Reset()      { *m = AWSF5XCManagedType{} }
 func (*AWSF5XCManagedType) ProtoMessage() {}
 func (*AWSF5XCManagedType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{7}
+	return fileDescriptor_580b870794b9a906, []int{11}
 }
 func (m *AWSF5XCManagedType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -979,6 +1359,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to CloudProvider:
 	//	*CreateSpecType_Aws
 	//	*CreateSpecType_Azure
+	//	*CreateSpecType_Gcp
 	CloudProvider isCreateSpecType_CloudProvider `protobuf_oneof:"cloud_provider"`
 	// Types that are valid to be assigned to EnableConnectionToReChoice:
 	//	*CreateSpecType_Disabled
@@ -989,7 +1370,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{8}
+	return fileDescriptor_580b870794b9a906, []int{12}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1033,6 +1414,9 @@ type CreateSpecType_Aws struct {
 type CreateSpecType_Azure struct {
 	Azure *AzureType `protobuf:"bytes,3,opt,name=azure,proto3,oneof" json:"azure,omitempty"`
 }
+type CreateSpecType_Gcp struct {
+	Gcp *GCPType `protobuf:"bytes,12,opt,name=gcp,proto3,oneof" json:"gcp,omitempty"`
+}
 type CreateSpecType_Disabled struct {
 	Disabled *schema.Empty `protobuf:"bytes,9,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
@@ -1042,6 +1426,7 @@ type CreateSpecType_Enabled struct {
 
 func (*CreateSpecType_Aws) isCreateSpecType_CloudProvider()                   {}
 func (*CreateSpecType_Azure) isCreateSpecType_CloudProvider()                 {}
+func (*CreateSpecType_Gcp) isCreateSpecType_CloudProvider()                   {}
 func (*CreateSpecType_Disabled) isCreateSpecType_EnableConnectionToReChoice() {}
 func (*CreateSpecType_Enabled) isCreateSpecType_EnableConnectionToReChoice()  {}
 
@@ -1072,6 +1457,13 @@ func (m *CreateSpecType) GetAzure() *AzureType {
 	return nil
 }
 
+func (m *CreateSpecType) GetGcp() *GCPType {
+	if x, ok := m.GetCloudProvider().(*CreateSpecType_Gcp); ok {
+		return x.Gcp
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetEnableConnectionToReChoice().(*CreateSpecType_Disabled); ok {
 		return x.Disabled
@@ -1091,6 +1483,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_Aws)(nil),
 		(*CreateSpecType_Azure)(nil),
+		(*CreateSpecType_Gcp)(nil),
 		(*CreateSpecType_Disabled)(nil),
 		(*CreateSpecType_Enabled)(nil),
 	}
@@ -1104,6 +1497,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to CloudProvider:
 	//	*ReplaceSpecType_Aws
 	//	*ReplaceSpecType_Azure
+	//	*ReplaceSpecType_Gcp
 	CloudProvider isReplaceSpecType_CloudProvider `protobuf_oneof:"cloud_provider"`
 	// Types that are valid to be assigned to EnableConnectionToReChoice:
 	//	*ReplaceSpecType_Disabled
@@ -1114,7 +1508,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{9}
+	return fileDescriptor_580b870794b9a906, []int{13}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1158,6 +1552,9 @@ type ReplaceSpecType_Aws struct {
 type ReplaceSpecType_Azure struct {
 	Azure *AzureType `protobuf:"bytes,3,opt,name=azure,proto3,oneof" json:"azure,omitempty"`
 }
+type ReplaceSpecType_Gcp struct {
+	Gcp *GCPType `protobuf:"bytes,12,opt,name=gcp,proto3,oneof" json:"gcp,omitempty"`
+}
 type ReplaceSpecType_Disabled struct {
 	Disabled *schema.Empty `protobuf:"bytes,9,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
@@ -1167,6 +1564,7 @@ type ReplaceSpecType_Enabled struct {
 
 func (*ReplaceSpecType_Aws) isReplaceSpecType_CloudProvider()                   {}
 func (*ReplaceSpecType_Azure) isReplaceSpecType_CloudProvider()                 {}
+func (*ReplaceSpecType_Gcp) isReplaceSpecType_CloudProvider()                   {}
 func (*ReplaceSpecType_Disabled) isReplaceSpecType_EnableConnectionToReChoice() {}
 func (*ReplaceSpecType_Enabled) isReplaceSpecType_EnableConnectionToReChoice()  {}
 
@@ -1197,6 +1595,13 @@ func (m *ReplaceSpecType) GetAzure() *AzureType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetGcp() *GCPType {
+	if x, ok := m.GetCloudProvider().(*ReplaceSpecType_Gcp); ok {
+		return x.Gcp
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetDisabled() *schema.Empty {
 	if x, ok := m.GetEnableConnectionToReChoice().(*ReplaceSpecType_Disabled); ok {
 		return x.Disabled
@@ -1216,6 +1621,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_Aws)(nil),
 		(*ReplaceSpecType_Azure)(nil),
+		(*ReplaceSpecType_Gcp)(nil),
 		(*ReplaceSpecType_Disabled)(nil),
 		(*ReplaceSpecType_Enabled)(nil),
 	}
@@ -1229,11 +1635,10 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to CloudProvider:
 	//	*GetSpecType_Aws
 	//	*GetSpecType_Azure
-	CloudProvider    isGetSpecType_CloudProvider `protobuf_oneof:"cloud_provider"`
-	Status           CloudLinkDeploymentStatus   `protobuf:"varint,4,opt,name=status,proto3,enum=ves.io.schema.cloud_link.CloudLinkDeploymentStatus" json:"status,omitempty"`
-	SuggestedAction  string                      `protobuf:"bytes,5,opt,name=suggested_action,json=suggestedAction,proto3" json:"suggested_action,omitempty"`
-	ErrorDescription string                      `protobuf:"bytes,6,opt,name=error_description,json=errorDescription,proto3" json:"error_description,omitempty"`
-	Sites            int32                       `protobuf:"varint,7,opt,name=sites,proto3" json:"sites,omitempty"`
+	//	*GetSpecType_Gcp
+	CloudProvider isGetSpecType_CloudProvider `protobuf_oneof:"cloud_provider"`
+	Status        CloudLinkDeploymentStatus   `protobuf:"varint,4,opt,name=status,proto3,enum=ves.io.schema.cloud_link.CloudLinkDeploymentStatus" json:"status,omitempty"`
+	Sites         int32                       `protobuf:"varint,7,opt,name=sites,proto3" json:"sites,omitempty"`
 	// Types that are valid to be assigned to EnableConnectionToReChoice:
 	//	*GetSpecType_Disabled
 	//	*GetSpecType_Enabled
@@ -1244,7 +1649,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_580b870794b9a906, []int{10}
+	return fileDescriptor_580b870794b9a906, []int{14}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1288,6 +1693,9 @@ type GetSpecType_Aws struct {
 type GetSpecType_Azure struct {
 	Azure *AzureType `protobuf:"bytes,3,opt,name=azure,proto3,oneof" json:"azure,omitempty"`
 }
+type GetSpecType_Gcp struct {
+	Gcp *GCPType `protobuf:"bytes,12,opt,name=gcp,proto3,oneof" json:"gcp,omitempty"`
+}
 type GetSpecType_Disabled struct {
 	Disabled *schema.Empty `protobuf:"bytes,9,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
 }
@@ -1297,6 +1705,7 @@ type GetSpecType_Enabled struct {
 
 func (*GetSpecType_Aws) isGetSpecType_CloudProvider()                   {}
 func (*GetSpecType_Azure) isGetSpecType_CloudProvider()                 {}
+func (*GetSpecType_Gcp) isGetSpecType_CloudProvider()                   {}
 func (*GetSpecType_Disabled) isGetSpecType_EnableConnectionToReChoice() {}
 func (*GetSpecType_Enabled) isGetSpecType_EnableConnectionToReChoice()  {}
 
@@ -1327,25 +1736,18 @@ func (m *GetSpecType) GetAzure() *AzureType {
 	return nil
 }
 
+func (m *GetSpecType) GetGcp() *GCPType {
+	if x, ok := m.GetCloudProvider().(*GetSpecType_Gcp); ok {
+		return x.Gcp
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetStatus() CloudLinkDeploymentStatus {
 	if m != nil {
 		return m.Status
 	}
 	return IN_PROGRESS
-}
-
-func (m *GetSpecType) GetSuggestedAction() string {
-	if m != nil {
-		return m.SuggestedAction
-	}
-	return ""
-}
-
-func (m *GetSpecType) GetErrorDescription() string {
-	if m != nil {
-		return m.ErrorDescription
-	}
-	return ""
 }
 
 func (m *GetSpecType) GetSites() int32 {
@@ -1381,6 +1783,7 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_Aws)(nil),
 		(*GetSpecType_Azure)(nil),
+		(*GetSpecType_Gcp)(nil),
 		(*GetSpecType_Disabled)(nil),
 		(*GetSpecType_Enabled)(nil),
 	}
@@ -1399,12 +1802,20 @@ func init() {
 	golang_proto.RegisterType((*AWSType)(nil), "ves.io.schema.cloud_link.AWSType")
 	proto.RegisterType((*AzureType)(nil), "ves.io.schema.cloud_link.AzureType")
 	golang_proto.RegisterType((*AzureType)(nil), "ves.io.schema.cloud_link.AzureType")
+	proto.RegisterType((*GCPType)(nil), "ves.io.schema.cloud_link.GCPType")
+	golang_proto.RegisterType((*GCPType)(nil), "ves.io.schema.cloud_link.GCPType")
 	proto.RegisterType((*AWSBYOCListType)(nil), "ves.io.schema.cloud_link.AWSBYOCListType")
 	golang_proto.RegisterType((*AWSBYOCListType)(nil), "ves.io.schema.cloud_link.AWSBYOCListType")
 	proto.RegisterType((*AWSBYOCType)(nil), "ves.io.schema.cloud_link.AWSBYOCType")
 	golang_proto.RegisterType((*AWSBYOCType)(nil), "ves.io.schema.cloud_link.AWSBYOCType")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_link.AWSBYOCType.TagsEntry")
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_link.AWSBYOCType.TagsEntry")
+	proto.RegisterType((*GCPBYOCListType)(nil), "ves.io.schema.cloud_link.GCPBYOCListType")
+	golang_proto.RegisterType((*GCPBYOCListType)(nil), "ves.io.schema.cloud_link.GCPBYOCListType")
+	proto.RegisterType((*GCPBYOCType)(nil), "ves.io.schema.cloud_link.GCPBYOCType")
+	golang_proto.RegisterType((*GCPBYOCType)(nil), "ves.io.schema.cloud_link.GCPBYOCType")
+	proto.RegisterType((*GCPPartnerMetadata)(nil), "ves.io.schema.cloud_link.GCPPartnerMetadata")
+	golang_proto.RegisterType((*GCPPartnerMetadata)(nil), "ves.io.schema.cloud_link.GCPPartnerMetadata")
 	proto.RegisterType((*Ipv4Type)(nil), "ves.io.schema.cloud_link.Ipv4Type")
 	golang_proto.RegisterType((*Ipv4Type)(nil), "ves.io.schema.cloud_link.Ipv4Type")
 	proto.RegisterType((*Ipv6Type)(nil), "ves.io.schema.cloud_link.Ipv6Type")
@@ -1427,135 +1838,178 @@ func init() {
 }
 
 var fileDescriptor_580b870794b9a906 = []byte{
-	// 2047 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6c, 0x1b, 0xc7,
-	0xf5, 0xe6, 0xf0, 0xef, 0xf2, 0x51, 0x12, 0xa9, 0x09, 0x13, 0xd3, 0xfa, 0xe5, 0x47, 0xad, 0x19,
-	0xd9, 0xa0, 0x65, 0x89, 0xb2, 0x68, 0x89, 0x96, 0x74, 0x68, 0x4a, 0x8a, 0xaa, 0x2c, 0xc7, 0x96,
-	0x84, 0x95, 0xeb, 0xd4, 0x29, 0xdc, 0xc5, 0x70, 0x39, 0x5a, 0x6f, 0x4c, 0xee, 0xb2, 0xbb, 0x43,
-	0xca, 0x4c, 0x6b, 0x20, 0xc8, 0xb1, 0x28, 0x50, 0xa3, 0x68, 0xd1, 0xc2, 0xa7, 0x9e, 0x8a, 0xa2,
-	0x97, 0x9e, 0x6b, 0xfa, 0x20, 0x18, 0x28, 0x50, 0x04, 0x2d, 0xa0, 0xa3, 0xd1, 0x53, 0x4c, 0x5f,
-	0xd2, 0x9b, 0x8f, 0x41, 0x0e, 0x75, 0x31, 0xb3, 0x4b, 0x8a, 0xfa, 0xe7, 0xf8, 0x56, 0x1f, 0xac,
-	0xd3, 0xec, 0xce, 0xf7, 0x3d, 0xcd, 0x7c, 0xf3, 0xbd, 0x37, 0x6f, 0x09, 0x13, 0x2d, 0xea, 0xe4,
-	0x0c, 0x6b, 0xc6, 0xd1, 0xee, 0xd0, 0x3a, 0x99, 0xd1, 0x6a, 0x56, 0xb3, 0xaa, 0xd6, 0x0c, 0xf3,
-	0xee, 0x0c, 0x6b, 0x37, 0xa8, 0x93, 0x6b, 0xd8, 0x16, 0xb3, 0x70, 0xca, 0x45, 0xe5, 0x5c, 0x54,
-	0x6e, 0x1f, 0x35, 0x36, 0xad, 0x1b, 0xec, 0x4e, 0xb3, 0x92, 0xd3, 0xac, 0xfa, 0x8c, 0x6e, 0xe9,
-	0xd6, 0x8c, 0x20, 0x54, 0x9a, 0xdb, 0xe2, 0x49, 0x3c, 0x88, 0x91, 0x1b, 0x68, 0x6c, 0x5c, 0xb7,
-	0x2c, 0xbd, 0x46, 0xf7, 0x51, 0xcc, 0xa8, 0x53, 0x87, 0x91, 0x7a, 0xc3, 0x03, 0x9c, 0x3a, 0xb8,
-	0x1e, 0x93, 0x32, 0x6f, 0x62, 0xea, 0xc8, 0xc4, 0x8e, 0x65, 0xdf, 0x55, 0x1b, 0x56, 0xcd, 0xd0,
-	0xda, 0xaa, 0x43, 0xd9, 0xe0, 0x82, 0xc7, 0xfe, 0xef, 0x20, 0xda, 0x6a, 0x30, 0xc3, 0x32, 0x7b,
-	0x93, 0xa7, 0x0f, 0x4e, 0x0e, 0xf2, 0xde, 0x3f, 0x38, 0xd5, 0x22, 0x35, 0xa3, 0x4a, 0x18, 0xf5,
-	0x66, 0xe5, 0x43, 0xb3, 0x06, 0xdd, 0x51, 0x0f, 0x86, 0x9e, 0x38, 0x8a, 0x70, 0x66, 0x1c, 0x83,
-	0x51, 0x75, 0xf0, 0xbf, 0x8c, 0x1f, 0x87, 0x1a, 0x00, 0x64, 0xfe, 0x11, 0x82, 0x91, 0xd5, 0x9a,
-	0x55, 0x21, 0xb5, 0xad, 0x06, 0xd5, 0x6e, 0xb4, 0x1b, 0x14, 0xcf, 0x43, 0x80, 0xec, 0x38, 0x29,
-	0xbf, 0x8c, 0xb2, 0xb1, 0xfc, 0x99, 0xdc, 0x49, 0x07, 0x92, 0x2b, 0x7e, 0xbc, 0xc5, 0xf1, 0x57,
-	0x7c, 0x0a, 0xc7, 0xe3, 0x32, 0x84, 0xc8, 0x67, 0x4d, 0x9b, 0xa6, 0x02, 0x82, 0xf8, 0xc1, 0x2b,
-	0x88, 0x1c, 0xc6, 0xa9, 0xa5, 0xc8, 0xd3, 0xfb, 0xe8, 0xeb, 0x0e, 0x42, 0x57, 0x7c, 0x8a, 0x4b,
-	0xc6, 0x1f, 0x41, 0xd8, 0x61, 0x84, 0x35, 0x9d, 0x54, 0x50, 0x46, 0xd9, 0x91, 0xfc, 0xa5, 0x93,
-	0xc3, 0x2c, 0xf3, 0xe1, 0x35, 0xc3, 0xbc, 0x5b, 0xa6, 0x8d, 0x9a, 0xd5, 0xae, 0x53, 0x93, 0x6d,
-	0x09, 0xaa, 0xe2, 0x85, 0xc0, 0xe7, 0x21, 0xe1, 0x34, 0x75, 0x9d, 0x3a, 0x8c, 0x56, 0x55, 0xa2,
-	0x71, 0xf9, 0x52, 0x21, 0x19, 0x65, 0xa3, 0x4a, 0xbc, 0xff, 0xbe, 0x28, 0x5e, 0xe3, 0x0b, 0x30,
-	0x4a, 0x6d, 0xdb, 0xb2, 0xd5, 0x2a, 0x75, 0x34, 0xdb, 0x10, 0x52, 0xa7, 0xc2, 0x02, 0x9b, 0x10,
-	0x13, 0xe5, 0xfd, 0xf7, 0x78, 0x1c, 0x42, 0x5c, 0x69, 0x27, 0x15, 0x91, 0x51, 0x36, 0x54, 0x8a,
-	0x3e, 0xfa, 0xf7, 0x6e, 0x20, 0x38, 0xe6, 0x4f, 0x25, 0x15, 0xf7, 0x3d, 0xce, 0x83, 0x54, 0x35,
-	0x1c, 0x52, 0xa9, 0xd1, 0x6a, 0x2a, 0x2a, 0xe4, 0x48, 0x1e, 0xda, 0xc7, 0x4a, 0xbd, 0xc1, 0xda,
-	0x57, 0x90, 0xd2, 0xc7, 0xe1, 0x22, 0x44, 0xa8, 0xe9, 0x52, 0x40, 0x50, 0xce, 0x1e, 0xa2, 0x88,
-	0xc3, 0xdb, 0xdf, 0x75, 0xb1, 0xbc, 0x2e, 0xe4, 0x47, 0x4a, 0x8f, 0x87, 0x15, 0x48, 0xec, 0xeb,
-	0xa3, 0x72, 0x11, 0x68, 0x2a, 0x26, 0x64, 0xcc, 0xbe, 0x86, 0x8c, 0x5c, 0x3c, 0xaa, 0x8c, 0x68,
-	0x07, 0x9e, 0x97, 0x96, 0x9f, 0x74, 0xd0, 0x87, 0x30, 0x0a, 0x43, 0x02, 0x27, 0x6f, 0xb8, 0x0a,
-	0xa0, 0x59, 0x98, 0x84, 0xb3, 0x9b, 0xb6, 0xd1, 0x22, 0x8c, 0xca, 0xcb, 0x96, 0x69, 0x52, 0x8d,
-	0x19, 0x2d, 0x83, 0xb5, 0x65, 0x66, 0xc9, 0x0a, 0xd5, 0x0d, 0xcb, 0x24, 0x35, 0x79, 0xa5, 0xaa,
-	0x53, 0x8c, 0x16, 0x4a, 0x1f, 0x80, 0x1b, 0x56, 0x6d, 0xd8, 0x56, 0xcb, 0xa8, 0x52, 0x1b, 0x8f,
-	0xee, 0x76, 0x90, 0x7f, 0xaf, 0x83, 0x50, 0xb7, 0x83, 0x50, 0x9e, 0x7b, 0xa0, 0x54, 0x80, 0xb4,
-	0xbb, 0x11, 0x55, 0xf3, 0xe2, 0x59, 0xa6, 0xca, 0x2c, 0xd5, 0xa6, 0xaa, 0x76, 0xc7, 0x32, 0x34,
-	0x8a, 0x93, 0xbb, 0x1d, 0x14, 0xdd, 0xeb, 0x20, 0xa9, 0xdb, 0x41, 0xc1, 0xc5, 0xa9, 0xd9, 0x8b,
-	0x9c, 0x77, 0x35, 0x28, 0xa1, 0x84, 0xff, 0x6a, 0x50, 0x92, 0x12, 0xd1, 0xcc, 0x5f, 0x82, 0x10,
-	0xf1, 0x7c, 0x89, 0x29, 0x48, 0x64, 0xc7, 0x51, 0x35, 0x9b, 0x56, 0x53, 0x48, 0x28, 0x9a, 0x39,
-	0x56, 0xd1, 0x8d, 0xca, 0xa7, 0x54, 0x63, 0x0a, 0xdd, 0x16, 0x96, 0x3c, 0xf7, 0xe7, 0xfb, 0xa3,
-	0xee, 0x5a, 0x39, 0x91, 0x9a, 0xcc, 0x20, 0x35, 0xe7, 0xd1, 0x63, 0x34, 0x22, 0xa1, 0x2c, 0xba,
-	0x88, 0x96, 0xc2, 0x9a, 0x65, 0x6e, 0x1b, 0xba, 0x12, 0x21, 0x3b, 0xce, 0xb2, 0x4d, 0xab, 0xf8,
-	0x43, 0x08, 0x56, 0xda, 0x96, 0xe6, 0xd9, 0xfe, 0xfc, 0x2b, 0xf3, 0xa5, 0x74, 0x6b, 0x63, 0xf9,
-	0x9a, 0xe1, 0x30, 0x2f, 0x6f, 0x04, 0x11, 0x7f, 0x02, 0x43, 0xdb, 0xf3, 0xf7, 0x34, 0xb5, 0x4e,
-	0x4c, 0xa2, 0xd3, 0xaa, 0x30, 0x7e, 0x2c, 0x3f, 0xf5, 0xca, 0x40, 0x3f, 0x98, 0xff, 0xd1, 0xf2,
-	0x75, 0x17, 0x7f, 0x38, 0x91, 0x62, 0x3c, 0x98, 0x37, 0x87, 0x27, 0x21, 0x48, 0x9a, 0xcc, 0x12,
-	0x4e, 0x3e, 0xd9, 0x84, 0x02, 0x83, 0xaf, 0x01, 0x68, 0x4d, 0x87, 0x59, 0x75, 0x95, 0x38, 0xa6,
-	0xb0, 0xf6, 0x70, 0xe9, 0x02, 0xb7, 0xf6, 0xb9, 0xc9, 0x89, 0x52, 0xa6, 0x30, 0x37, 0x3f, 0x9b,
-	0x9f, 0x2e, 0xcc, 0xcf, 0x5f, 0x9a, 0x9b, 0x92, 0xe7, 0xf2, 0x17, 0xbd, 0xbf, 0xe9, 0xb9, 0xfc,
-	0xe2, 0xdc, 0x62, 0xe1, 0x72, 0x7e, 0x71, 0xee, 0x0a, 0x52, 0xa2, 0x6e, 0x80, 0xa2, 0x63, 0x2e,
-	0x15, 0x9e, 0x74, 0x50, 0x1e, 0x46, 0x20, 0xda, 0xf7, 0x17, 0x46, 0x79, 0x88, 0x03, 0x2c, 0xf7,
-	0x65, 0xe5, 0x2e, 0x8a, 0x03, 0x14, 0xb7, 0xd6, 0xfb, 0xb6, 0x9a, 0x2f, 0x65, 0x21, 0x3e, 0xe0,
-	0x61, 0x5e, 0xaa, 0xf0, 0xbb, 0xbb, 0x1d, 0x14, 0xd8, 0xeb, 0x20, 0x3f, 0xf7, 0xca, 0x25, 0xbe,
-	0xcd, 0x3f, 0x3c, 0x46, 0xa8, 0xb4, 0x00, 0x67, 0xaa, 0x86, 0x4d, 0x35, 0xd6, 0xf3, 0x8b, 0xaa,
-	0x13, 0x46, 0x77, 0x48, 0x9b, 0xaf, 0xbf, 0x67, 0x99, 0x77, 0x76, 0x3b, 0x28, 0xbc, 0xd7, 0x41,
-	0xa1, 0x6e, 0x07, 0x05, 0x0a, 0x53, 0x97, 0x3d, 0xc7, 0xf8, 0x13, 0x81, 0xab, 0x41, 0x29, 0x94,
-	0x08, 0x67, 0x62, 0x10, 0xed, 0xd7, 0xa3, 0xcc, 0xef, 0x10, 0xc4, 0x0f, 0x1d, 0x13, 0xbe, 0x0d,
-	0xb1, 0x7d, 0x3f, 0x3a, 0x29, 0x24, 0x07, 0x8e, 0xc9, 0xcd, 0xa3, 0xc7, 0x2c, 0x8e, 0x25, 0xc9,
-	0xe5, 0x0b, 0xfd, 0x1a, 0xf9, 0x13, 0xd0, 0x1b, 0x49, 0x48, 0x19, 0x8c, 0xb7, 0x74, 0xf6, 0x49,
-	0x07, 0x9d, 0x81, 0x71, 0x18, 0x2b, 0x8b, 0xbd, 0xf4, 0x72, 0xa9, 0x9f, 0x53, 0x96, 0xe9, 0x60,
-	0x34, 0x9b, 0xf9, 0x2d, 0x40, 0x6c, 0x20, 0x32, 0xb6, 0x60, 0x78, 0x20, 0x4b, 0x0c, 0xd7, 0xe1,
-	0xd1, 0xd2, 0xd5, 0x6f, 0x3a, 0xc8, 0xf7, 0xe8, 0x31, 0x1a, 0x92, 0x06, 0xbc, 0x2a, 0xca, 0x93,
-	0xed, 0x4f, 0x7d, 0x9f, 0x0f, 0xb2, 0xf6, 0xb9, 0xfc, 0xc4, 0x4f, 0xb2, 0xd5, 0x7b, 0x9a, 0x65,
-	0x4e, 0x9f, 0xcf, 0xfe, 0x98, 0x4c, 0x7f, 0x76, 0x71, 0x7a, 0xf1, 0xf6, 0xcf, 0x16, 0xee, 0xff,
-	0xbc, 0x3f, 0x9e, 0xbd, 0x7c, 0xff, 0xfc, 0x84, 0x32, 0xb4, 0xff, 0x0f, 0xd6, 0xaa, 0xf8, 0x2a,
-	0xbc, 0xeb, 0xb4, 0x1d, 0x46, 0xeb, 0xaa, 0x4e, 0x4d, 0x6a, 0x13, 0x5e, 0x52, 0x4d, 0x52, 0xef,
-	0x95, 0xfb, 0xe3, 0xad, 0xe5, 0x53, 0xde, 0x71, 0x49, 0xab, 0x3d, 0xce, 0x3a, 0xa9, 0x53, 0xbc,
-	0x04, 0xb8, 0xe9, 0x50, 0x5b, 0x25, 0x8e, 0x63, 0xe8, 0x66, 0x2f, 0x50, 0x50, 0xec, 0xc0, 0x15,
-	0xca, 0x0e, 0xa4, 0x3e, 0xf7, 0x5f, 0xf1, 0x29, 0x09, 0x8e, 0x2b, 0x7a, 0x30, 0xc1, 0xfd, 0x29,
-	0xbc, 0xd7, 0x32, 0x6c, 0xd6, 0x24, 0x35, 0xd5, 0x30, 0x19, 0xb5, 0xb7, 0x89, 0xe6, 0x5e, 0x79,
-	0xa2, 0xb2, 0x8f, 0xe4, 0x73, 0x27, 0x9f, 0xcc, 0x4d, 0x97, 0xb7, 0xd6, 0xa3, 0x89, 0x23, 0x8a,
-	0xfd, 0xab, 0x83, 0x22, 0x9b, 0xca, 0xda, 0xcd, 0xe2, 0x8d, 0x15, 0x25, 0xd9, 0x3a, 0x06, 0x82,
-	0x65, 0x08, 0xb6, 0x6a, 0xc4, 0xbd, 0x0e, 0x86, 0x4b, 0x43, 0x7c, 0x81, 0x91, 0xc9, 0x50, 0xea,
-	0x3f, 0xe3, 0x59, 0xa4, 0x88, 0x19, 0x9c, 0x85, 0x48, 0x45, 0x6f, 0x0c, 0xe4, 0x4d, 0x9c, 0x83,
-	0x60, 0x52, 0x4a, 0xbd, 0x7c, 0xf9, 0xf2, 0x65, 0x24, 0x8b, 0x94, 0x70, 0x45, 0x6f, 0x14, 0x1d,
-	0x13, 0x2f, 0x40, 0xd0, 0x68, 0xb4, 0xe6, 0xbc, 0x5b, 0x21, 0x73, 0xf2, 0x62, 0xd7, 0x1a, 0xad,
-	0x39, 0xaf, 0xbe, 0x0b, 0x06, 0x2e, 0x0a, 0x66, 0xc1, 0xbb, 0x1c, 0x5e, 0xcd, 0x2c, 0x1c, 0x2c,
-	0x0a, 0x6e, 0x88, 0x02, 0x2e, 0x82, 0x44, 0x9a, 0xec, 0x8e, 0x7a, 0x97, 0xb6, 0xc5, 0xbd, 0x10,
-	0xcb, 0x9f, 0x3e, 0x14, 0x66, 0x8b, 0x6a, 0x36, 0x65, 0xae, 0x30, 0x7c, 0x0b, 0x61, 0x3b, 0x28,
-	0x87, 0xb3, 0x9b, 0x4a, 0x84, 0xf3, 0x3e, 0xa2, 0x6d, 0xfc, 0x1b, 0x04, 0x41, 0x46, 0x74, 0x27,
-	0x35, 0x24, 0xf2, 0x60, 0xe6, 0xb5, 0xf2, 0x20, 0x77, 0x83, 0xe8, 0xce, 0x8a, 0xc9, 0xec, 0x76,
-	0x69, 0x43, 0x08, 0xf3, 0x10, 0x45, 0x32, 0xe2, 0x8c, 0x11, 0x7f, 0x8c, 0x3e, 0x44, 0xe1, 0x4c,
-	0xd0, 0xf6, 0x27, 0xc4, 0x53, 0xe8, 0x21, 0xf2, 0x27, 0xb2, 0x3d, 0xd8, 0xa4, 0x6b, 0x85, 0x1e,
-	0x6c, 0x52, 0xc0, 0xba, 0x5f, 0xfd, 0x2d, 0x10, 0xfe, 0xc5, 0x63, 0xe4, 0x97, 0x7c, 0x8a, 0x58,
-	0x0d, 0x9e, 0x82, 0xe8, 0xa7, 0xcd, 0x7a, 0xc5, 0x52, 0xeb, 0xac, 0x99, 0x1a, 0x96, 0x51, 0x56,
-	0x2a, 0xc5, 0x9f, 0xde, 0x47, 0xbb, 0x1d, 0x24, 0x14, 0xe0, 0x59, 0xa1, 0x48, 0x02, 0x71, 0x9d,
-	0x35, 0xf1, 0x02, 0xc4, 0xbd, 0x9b, 0x86, 0x5f, 0xd7, 0x7c, 0xb5, 0xa9, 0x91, 0xe3, 0x39, 0x23,
-	0x2e, 0x6e, 0xcb, 0x83, 0xe1, 0x25, 0x90, 0xea, 0x94, 0x91, 0x2a, 0x61, 0x24, 0x15, 0x17, 0x0a,
-	0xa6, 0x0f, 0x29, 0x70, 0x9d, 0x3a, 0x0e, 0xd1, 0xe9, 0x75, 0xca, 0x08, 0xdf, 0xba, 0xd2, 0xc7,
-	0x8f, 0x5d, 0x86, 0x68, 0x5f, 0x07, 0x9c, 0x80, 0x00, 0x3f, 0x05, 0x91, 0xb5, 0x0a, 0x1f, 0xe2,
-	0x24, 0x84, 0x5a, 0xa4, 0xd6, 0xa4, 0xa2, 0xf1, 0x8a, 0x2a, 0xee, 0xc3, 0x92, 0x7f, 0x01, 0x2d,
-	0xfd, 0x13, 0x3d, 0xe9, 0xa0, 0xdb, 0x30, 0x02, 0xd2, 0x75, 0x2f, 0x16, 0xf6, 0xcf, 0xce, 0xc3,
-	0xff, 0xc3, 0xa8, 0xe7, 0x68, 0xb9, 0xef, 0x57, 0x2c, 0xcd, 0x4e, 0xcd, 0x4f, 0x15, 0xa6, 0x66,
-	0xf3, 0x90, 0x84, 0xa1, 0x65, 0x51, 0x8d, 0xa9, 0x2d, 0x97, 0x56, 0x37, 0x71, 0xf0, 0xf2, 0xd4,
-	0xec, 0x2c, 0xbc, 0x07, 0xa3, 0x9b, 0x94, 0xda, 0xf2, 0xda, 0xa6, 0x5c, 0xac, 0x56, 0x6d, 0xea,
-	0x38, 0xd4, 0xc1, 0x68, 0xe1, 0xcb, 0x0e, 0xba, 0x03, 0xa7, 0x20, 0xc8, 0x53, 0x6c, 0x2c, 0x0e,
-	0xc3, 0xbd, 0x45, 0xe7, 0x78, 0x66, 0x82, 0x0c, 0xc3, 0xfb, 0xe5, 0x48, 0x5e, 0xab, 0x72, 0xc4,
-	0x81, 0xea, 0x03, 0x17, 0xe0, 0x4c, 0x6f, 0x2d, 0xd7, 0x2c, 0x8d, 0xd4, 0xe4, 0xa2, 0x4d, 0x89,
-	0xbc, 0xee, 0xb6, 0xce, 0x72, 0xf6, 0xe6, 0xb5, 0xe2, 0xfa, 0xf9, 0xb1, 0xb0, 0x9b, 0x47, 0x25,
-	0x19, 0x92, 0x36, 0x75, 0xac, 0xa6, 0xad, 0x51, 0x91, 0xf9, 0xbd, 0x5a, 0x2d, 0xf1, 0x1a, 0xff,
-	0x82, 0xb7, 0x02, 0xef, 0x43, 0xc4, 0x68, 0xb8, 0xc5, 0x7f, 0x74, 0xe0, 0xce, 0x47, 0x8b, 0xbc,
-	0xf0, 0xf7, 0xcb, 0x37, 0xbf, 0xf0, 0xff, 0x8a, 0x40, 0xea, 0xa5, 0x0a, 0x56, 0xe0, 0x1d, 0xdb,
-	0x6a, 0x32, 0x6a, 0xab, 0x0d, 0xca, 0xcb, 0x8b, 0xbb, 0x41, 0xaf, 0x34, 0x66, 0x44, 0x69, 0x74,
-	0x8b, 0xcb, 0x37, 0x08, 0x79, 0xa3, 0xdf, 0xfb, 0xc7, 0xbd, 0xd1, 0x03, 0xff, 0xb8, 0x32, 0xea,
-	0xd2, 0xb9, 0x42, 0x9e, 0x3a, 0xf8, 0x16, 0x9c, 0xe2, 0x5d, 0xc4, 0x71, 0x71, 0xfd, 0xaf, 0x1d,
-	0x37, 0x49, 0x76, 0x1c, 0xe5, 0x70, 0xe8, 0x0c, 0x88, 0xa5, 0x8b, 0x5c, 0xcd, 0x24, 0x01, 0x1f,
-	0xbd, 0xd6, 0x33, 0xbf, 0x0a, 0xc0, 0xc8, 0xb2, 0x4d, 0x09, 0xa3, 0x6f, 0x46, 0x77, 0xfe, 0xbf,
-	0xe9, 0x6b, 0x97, 0x46, 0xbf, 0xfc, 0xde, 0xa1, 0x8f, 0x94, 0xd2, 0xc4, 0x91, 0x8e, 0x12, 0x7f,
-	0xf1, 0x2d, 0x3a, 0xf4, 0xae, 0x54, 0xfe, 0xce, 0x96, 0x32, 0xf3, 0xc5, 0xb7, 0xe8, 0x3b, 0x30,
-	0x07, 0x1a, 0xcc, 0x07, 0x01, 0x88, 0x2b, 0xb4, 0x51, 0x23, 0xda, 0xdb, 0x23, 0x79, 0x43, 0x8e,
-	0xe4, 0x8f, 0x21, 0x88, 0xad, 0x52, 0xf6, 0xf6, 0xfb, 0xf5, 0xed, 0xf7, 0xeb, 0x31, 0xdf, 0xaf,
-	0x6f, 0x8e, 0x51, 0x27, 0x4b, 0x70, 0xfa, 0xc4, 0x33, 0xc7, 0x71, 0x88, 0xad, 0xad, 0xab, 0x9b,
-	0xca, 0xc6, 0xaa, 0xb2, 0xb2, 0xb5, 0x95, 0xf0, 0xe1, 0x28, 0x84, 0x56, 0x14, 0x65, 0x43, 0x49,
-	0x20, 0x3e, 0x54, 0x56, 0x8a, 0xe5, 0x5b, 0x09, 0xff, 0xe4, 0x45, 0x18, 0x39, 0xb8, 0x61, 0x1c,
-	0x06, 0xff, 0x0f, 0x37, 0x13, 0x3e, 0x2c, 0x41, 0xb0, 0xbc, 0xf1, 0xf1, 0x7a, 0x02, 0xe1, 0x21,
-	0x90, 0xca, 0x2b, 0xab, 0x4a, 0xb1, 0xbc, 0x52, 0x4e, 0xf8, 0x27, 0x0b, 0x90, 0x3c, 0xae, 0xf1,
-	0xc5, 0x31, 0xe8, 0xb5, 0xbd, 0x09, 0x1f, 0x1e, 0x85, 0xc8, 0x0d, 0xa5, 0xb8, 0xbe, 0xb5, 0x76,
-	0x23, 0x81, 0xc6, 0x82, 0xbc, 0x05, 0x2a, 0xfd, 0x12, 0xed, 0x3d, 0x4b, 0xfb, 0x9e, 0x3e, 0x4b,
-	0xfb, 0x5e, 0x3c, 0x4b, 0xa3, 0xcf, 0xbb, 0x69, 0xf4, 0xa7, 0x6e, 0x1a, 0xfd, 0xbd, 0x9b, 0x46,
-	0x7b, 0xdd, 0x34, 0x7a, 0xda, 0x4d, 0xa3, 0xaf, 0xba, 0x69, 0xf4, 0x75, 0x37, 0xed, 0x7b, 0xd1,
-	0x4d, 0xa3, 0x07, 0xcf, 0xd3, 0xbe, 0xdd, 0xe7, 0x69, 0xb4, 0xf7, 0x3c, 0xed, 0x7b, 0xfa, 0x3c,
-	0xed, 0xfb, 0x64, 0x5d, 0xb7, 0x1a, 0x77, 0xf5, 0x5c, 0xcb, 0xaa, 0x31, 0x6a, 0xdb, 0x24, 0xd7,
-	0x74, 0x66, 0xc4, 0x60, 0xdb, 0xb2, 0xeb, 0xd3, 0x3d, 0x91, 0xa7, 0x7b, 0xd3, 0x33, 0x8d, 0x8a,
-	0x6e, 0xcd, 0xd0, 0x7b, 0xcc, 0xfb, 0xa1, 0xea, 0xc8, 0x8f, 0x84, 0x95, 0xb0, 0xf8, 0xbd, 0xea,
-	0xd2, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0xec, 0x0a, 0x23, 0x23, 0x47, 0x14, 0x00, 0x00,
+	// 2721 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
+	0x15, 0xe6, 0x90, 0xcb, 0xbf, 0x47, 0x49, 0xa4, 0x26, 0x4a, 0xcc, 0xa8, 0x29, 0x4d, 0xb3, 0x8e,
+	0x4b, 0x2b, 0xa4, 0x64, 0xae, 0x7e, 0x2c, 0xa9, 0x40, 0x13, 0xfe, 0x28, 0xb2, 0x1c, 0x5b, 0x22,
+	0x46, 0x72, 0x52, 0xa7, 0x48, 0xd9, 0xd1, 0x72, 0x4c, 0x6f, 0x4c, 0xee, 0x6e, 0x77, 0x97, 0x52,
+	0x94, 0xd6, 0x40, 0x90, 0x53, 0xd1, 0x16, 0x45, 0x5a, 0x04, 0x68, 0x11, 0x14, 0x68, 0x2e, 0x05,
+	0x8a, 0xde, 0x7a, 0x2b, 0x42, 0x1f, 0x04, 0x03, 0x69, 0x8b, 0xf4, 0xa2, 0xa3, 0xd1, 0x53, 0x22,
+	0xf7, 0x90, 0xdc, 0x72, 0x0c, 0x72, 0xa8, 0x8b, 0x99, 0xdd, 0xe5, 0x9f, 0x25, 0xdb, 0x41, 0x51,
+	0xb4, 0x41, 0xa3, 0xd3, 0x7b, 0x3b, 0xdf, 0x7b, 0xf3, 0xe6, 0xcd, 0xfb, 0xe3, 0x08, 0x4e, 0xef,
+	0x30, 0x6b, 0x5a, 0xd5, 0x67, 0x2c, 0xe5, 0x3a, 0x6b, 0xd1, 0x19, 0xa5, 0xa9, 0xb7, 0xeb, 0xb5,
+	0xa6, 0xaa, 0xdd, 0x98, 0xb1, 0xf7, 0x0c, 0x66, 0x4d, 0x1b, 0xa6, 0x6e, 0xeb, 0x38, 0xe9, 0xa0,
+	0xa6, 0x1d, 0xd4, 0x74, 0x0f, 0x35, 0x99, 0x6f, 0xa8, 0xf6, 0xf5, 0xf6, 0xf6, 0xb4, 0xa2, 0xb7,
+	0x66, 0x1a, 0x7a, 0x43, 0x9f, 0x11, 0x02, 0xdb, 0xed, 0x6b, 0x82, 0x13, 0x8c, 0xa0, 0x1c, 0x45,
+	0x93, 0x27, 0x1b, 0xba, 0xde, 0x68, 0xb2, 0x1e, 0xca, 0x56, 0x5b, 0xcc, 0xb2, 0x69, 0xcb, 0x70,
+	0x01, 0x27, 0x06, 0xed, 0xd1, 0x98, 0xed, 0x2e, 0xe4, 0xee, 0x5b, 0xd8, 0xd5, 0xcd, 0x1b, 0x35,
+	0x43, 0x6f, 0xaa, 0xca, 0x5e, 0xcd, 0x62, 0x76, 0xbf, 0xc1, 0x93, 0x5f, 0x1b, 0x44, 0xeb, 0x86,
+	0xad, 0xea, 0x9a, 0xb7, 0x98, 0x1a, 0x5c, 0xb4, 0x54, 0x9b, 0x0d, 0x08, 0x3f, 0x39, 0xb8, 0xde,
+	0xbf, 0xf4, 0xd4, 0xe0, 0xd2, 0x0e, 0x6d, 0xaa, 0x75, 0x6a, 0x33, 0x77, 0x35, 0x3d, 0xb4, 0xaa,
+	0xb2, 0xdd, 0xda, 0xe0, 0xd6, 0xa7, 0xef, 0x47, 0x58, 0xc2, 0x80, 0x5a, 0xff, 0x2e, 0x27, 0x8f,
+	0x42, 0xf5, 0x01, 0x32, 0x07, 0x41, 0x18, 0x5b, 0x6d, 0xea, 0xdb, 0xb4, 0xb9, 0x69, 0x30, 0x65,
+	0x6b, 0xcf, 0x60, 0x78, 0x1e, 0x02, 0x74, 0xd7, 0x4a, 0xfa, 0xd3, 0x28, 0x1b, 0x93, 0x4f, 0x4d,
+	0x1f, 0x77, 0x61, 0xd3, 0xc5, 0x97, 0x36, 0x39, 0xfe, 0x82, 0x8f, 0x70, 0x3c, 0xae, 0x40, 0x90,
+	0xbe, 0xde, 0x36, 0x59, 0x32, 0x20, 0x04, 0xbf, 0xf1, 0x00, 0x41, 0x0e, 0xe3, 0xa2, 0xa5, 0xf0,
+	0x9d, 0x9b, 0xe8, 0xe3, 0x0e, 0x42, 0x17, 0x7c, 0xc4, 0x11, 0xe6, 0x9b, 0x37, 0x14, 0x23, 0x39,
+	0xf2, 0xb0, 0xcd, 0x57, 0xcb, 0x55, 0x6f, 0xf3, 0x86, 0x62, 0xe0, 0x17, 0x20, 0x64, 0xd9, 0xd4,
+	0x6e, 0x5b, 0x49, 0x29, 0x8d, 0xb2, 0x63, 0xf2, 0xec, 0xf1, 0x92, 0x65, 0x4e, 0x5e, 0x52, 0xb5,
+	0x1b, 0x15, 0x66, 0x34, 0xf5, 0xbd, 0x16, 0xd3, 0xec, 0x4d, 0x21, 0x4a, 0x5c, 0x15, 0xf8, 0x24,
+	0x04, 0xb9, 0x23, 0xad, 0x64, 0x38, 0x8d, 0xb2, 0xc1, 0x52, 0xf4, 0xbd, 0x4f, 0xf6, 0x03, 0xd2,
+	0xa4, 0x3f, 0x39, 0x41, 0x9c, 0xef, 0x58, 0x86, 0x48, 0x5d, 0xb5, 0xe8, 0x76, 0x93, 0xd5, 0x93,
+	0x51, 0x61, 0xe9, 0xc4, 0xd0, 0x7e, 0x2b, 0x2d, 0xc3, 0xde, 0xbb, 0x80, 0x48, 0x17, 0x87, 0x8b,
+	0x10, 0x66, 0x9a, 0x23, 0x02, 0x42, 0xe4, 0xe9, 0x21, 0x11, 0x71, 0x37, 0x3d, 0xeb, 0x8a, 0x95,
+	0x75, 0x71, 0x40, 0x44, 0x3c, 0x39, 0x4c, 0x20, 0xd1, 0x3b, 0x47, 0x8d, 0x1b, 0xcb, 0x92, 0x31,
+	0x71, 0xdc, 0xec, 0x23, 0x1c, 0x97, 0x1f, 0x92, 0x91, 0x31, 0x65, 0x80, 0x5f, 0xbe, 0x7a, 0xbb,
+	0x83, 0xae, 0xc0, 0x38, 0x8c, 0x08, 0x5c, 0x7a, 0x43, 0xc4, 0x18, 0x46, 0x05, 0x78, 0x0e, 0xbe,
+	0x55, 0x35, 0xd5, 0x1d, 0x6a, 0xb3, 0x74, 0x59, 0xd7, 0x34, 0xa6, 0xd8, 0xea, 0x8e, 0x6a, 0xef,
+	0xa5, 0x6d, 0x3d, 0xfd, 0xfc, 0x7c, 0xba, 0xa2, 0x5a, 0xb6, 0xa9, 0x6e, 0xb7, 0x6d, 0x56, 0x4f,
+	0x3b, 0x92, 0x4e, 0x10, 0xa5, 0xd7, 0x9d, 0x6c, 0xc2, 0x68, 0xb1, 0x74, 0x06, 0x9c, 0xcd, 0x6a,
+	0x86, 0xa9, 0xef, 0xa8, 0x75, 0x66, 0xe2, 0x89, 0xfd, 0x0e, 0xf2, 0x1f, 0x74, 0x10, 0x3a, 0xec,
+	0x20, 0x49, 0xce, 0x15, 0x64, 0x7e, 0xf7, 0xa5, 0x05, 0x48, 0x39, 0x27, 0xac, 0x29, 0xee, 0x46,
+	0xba, 0x56, 0xb3, 0xf5, 0x9a, 0xc9, 0x6a, 0xca, 0x75, 0x5d, 0x55, 0x98, 0x90, 0x8b, 0x1e, 0x74,
+	0x50, 0x84, 0xcb, 0x2d, 0xe5, 0x0a, 0xe7, 0xb8, 0xdc, 0x45, 0x29, 0x82, 0x12, 0xfe, 0x8b, 0x52,
+	0x24, 0x98, 0x08, 0x5d, 0x94, 0x22, 0xa1, 0x44, 0xf8, 0xa2, 0x14, 0x89, 0x24, 0xa2, 0x99, 0x3f,
+	0x49, 0x10, 0x76, 0x63, 0x13, 0x33, 0x88, 0xd0, 0x5d, 0xab, 0xa6, 0x98, 0xac, 0x9e, 0x44, 0xc2,
+	0xed, 0x99, 0x23, 0xdd, 0xbe, 0xb1, 0xfd, 0x2a, 0x53, 0x6c, 0xc2, 0xae, 0x89, 0xb0, 0x3c, 0xf3,
+	0x87, 0x9b, 0xe3, 0x8e, 0xe9, 0x5c, 0x90, 0x69, 0xb6, 0x4a, 0x9b, 0xd6, 0x7b, 0xb7, 0xd0, 0x58,
+	0x04, 0x65, 0xd1, 0x39, 0xb4, 0x1c, 0x52, 0x74, 0xed, 0x9a, 0xda, 0x20, 0x61, 0xba, 0x6b, 0x95,
+	0x4d, 0x56, 0xc7, 0xcf, 0x82, 0xb4, 0xbd, 0xa7, 0x2b, 0x6e, 0xe8, 0x9f, 0x7d, 0x60, 0xce, 0x94,
+	0xae, 0x6e, 0x94, 0x2f, 0xa9, 0x96, 0xed, 0x86, 0xaf, 0x10, 0xc4, 0x2f, 0xc3, 0xc8, 0xb5, 0xf9,
+	0xd7, 0x94, 0x5a, 0x8b, 0x6a, 0xb4, 0xc1, 0xea, 0x22, 0x8a, 0x63, 0x72, 0xee, 0x81, 0x8a, 0x9e,
+	0x9f, 0xff, 0x4e, 0xf9, 0xb2, 0x83, 0x1f, 0x4e, 0xa6, 0x18, 0x57, 0xe6, 0xae, 0xe1, 0x59, 0x90,
+	0x68, 0xdb, 0xd6, 0x93, 0xa1, 0xe3, 0x23, 0xb5, 0x27, 0x8b, 0x88, 0x00, 0xe3, 0x4b, 0x00, 0x4a,
+	0xdb, 0xb2, 0xf5, 0x56, 0x8d, 0x5a, 0x9a, 0x48, 0x84, 0xd1, 0xd2, 0x33, 0x3c, 0x11, 0xce, 0x4c,
+	0x9d, 0x2e, 0x65, 0x16, 0xe6, 0xe6, 0x0b, 0x72, 0x7e, 0x61, 0x7e, 0x7e, 0x76, 0x2e, 0x97, 0x9e,
+	0x93, 0xcf, 0xb9, 0x7f, 0xf9, 0x39, 0x79, 0x69, 0x6e, 0x69, 0xe1, 0xbc, 0xbc, 0x34, 0x77, 0x01,
+	0x91, 0xa8, 0xa3, 0xa0, 0x68, 0x69, 0xcb, 0x0b, 0xb7, 0x3b, 0x48, 0x86, 0x31, 0x88, 0x76, 0xa3,
+	0x11, 0x23, 0x19, 0xe2, 0x00, 0xe5, 0xae, 0x7f, 0x79, 0xcc, 0xc5, 0x01, 0x8a, 0x9b, 0xeb, 0xdd,
+	0x20, 0x9c, 0x2f, 0x65, 0x21, 0xde, 0x17, 0xf1, 0xbc, 0x6e, 0xe1, 0xc7, 0xf7, 0x3b, 0x28, 0x70,
+	0xd0, 0x41, 0xfe, 0xc3, 0x0e, 0x42, 0xb3, 0xdc, 0xe6, 0x77, 0x6f, 0x21, 0x54, 0x5a, 0x84, 0x53,
+	0x75, 0xd5, 0x64, 0x8a, 0xed, 0x05, 0x51, 0xad, 0x41, 0x6d, 0xb6, 0x4b, 0xf7, 0xb8, 0xfd, 0x5e,
+	0x1c, 0x3d, 0xb6, 0xdf, 0x41, 0xa1, 0x83, 0x0e, 0x0a, 0x1e, 0x76, 0x50, 0x60, 0x21, 0x77, 0xde,
+	0x0d, 0x23, 0x7f, 0x22, 0xe0, 0x84, 0x51, 0x26, 0x06, 0xd1, 0x6e, 0x71, 0xca, 0xfc, 0xd8, 0x0f,
+	0x61, 0xb7, 0xcc, 0xf0, 0x38, 0x6a, 0x28, 0xc6, 0x7f, 0x2c, 0x8e, 0x1a, 0x8a, 0xf1, 0xc5, 0xe2,
+	0x68, 0xb5, 0x5c, 0x3d, 0x2a, 0x8e, 0x96, 0x9f, 0xbe, 0xdd, 0x41, 0xa7, 0x1e, 0xea, 0xe8, 0x47,
+	0xf7, 0xab, 0xe3, 0x9d, 0xcc, 0xaf, 0x10, 0xc4, 0x87, 0x42, 0x17, 0xbf, 0x02, 0xb1, 0x5e, 0xbe,
+	0x5a, 0x49, 0x94, 0x0e, 0x1c, 0x51, 0xd4, 0xee, 0x0f, 0x7d, 0xe1, 0x98, 0x09, 0x1e, 0x49, 0xc1,
+	0x5f, 0x22, 0x7f, 0x02, 0x3c, 0x2a, 0x82, 0x48, 0xbf, 0x3e, 0xf7, 0x24, 0x27, 0x61, 0xb2, 0x22,
+	0xae, 0xd5, 0x2b, 0x42, 0xdd, 0x62, 0xa4, 0x6b, 0x16, 0x46, 0x85, 0xcc, 0x6f, 0x46, 0x21, 0xd6,
+	0xa7, 0x19, 0x5b, 0x30, 0xda, 0x57, 0x45, 0x54, 0xe7, 0xb6, 0xa2, 0xa5, 0xf5, 0xcf, 0x3a, 0xc8,
+	0xf7, 0xde, 0x2d, 0x94, 0x88, 0x70, 0xbf, 0x83, 0x30, 0x2b, 0x5f, 0xa7, 0x36, 0x15, 0xb5, 0xdd,
+	0xf4, 0x27, 0x9f, 0xe3, 0x44, 0xd6, 0x3c, 0x23, 0x9f, 0xfe, 0x5e, 0xb6, 0xfe, 0x9a, 0xa2, 0x6b,
+	0xf9, 0xb3, 0xd9, 0xef, 0xd2, 0xfc, 0xeb, 0xe7, 0xf2, 0x4b, 0xaf, 0xfc, 0x70, 0xf1, 0xe6, 0x8f,
+	0xba, 0x74, 0xe1, 0xfc, 0xcd, 0xb3, 0xa7, 0xc9, 0x48, 0x6f, 0x93, 0xb5, 0x3a, 0xbe, 0x08, 0x8f,
+	0x5b, 0x7b, 0x96, 0xcd, 0x5a, 0xb5, 0x06, 0xd3, 0x98, 0x49, 0x6d, 0x56, 0xaf, 0x69, 0xb4, 0xe5,
+	0xb5, 0xc2, 0xa3, 0x9b, 0x83, 0x8f, 0x3c, 0xe6, 0x08, 0xad, 0x7a, 0x32, 0xeb, 0xb4, 0xc5, 0xf0,
+	0x32, 0xe0, 0xb6, 0xc5, 0xcc, 0x1a, 0xb5, 0x2c, 0xb5, 0xa1, 0x79, 0x8a, 0x24, 0x71, 0x0a, 0xc7,
+	0x59, 0x66, 0x20, 0xf9, 0x86, 0xff, 0x82, 0x8f, 0x24, 0x38, 0xae, 0xe8, 0xc2, 0x84, 0xec, 0x0f,
+	0xe0, 0x89, 0x1d, 0xd5, 0xb4, 0xdb, 0xb4, 0x59, 0x53, 0x35, 0x9b, 0x99, 0xd7, 0xa8, 0xe2, 0x8c,
+	0x03, 0xc9, 0xa0, 0x68, 0x13, 0xd3, 0xc7, 0xdf, 0xce, 0x8b, 0x8e, 0xdc, 0x9a, 0x27, 0x26, 0xae,
+	0x29, 0xf6, 0xf7, 0x0e, 0x0a, 0x57, 0xc9, 0xda, 0x8b, 0xc5, 0xad, 0x15, 0x32, 0xb1, 0x73, 0x04,
+	0x04, 0xa7, 0x41, 0xda, 0x69, 0x52, 0x4d, 0x14, 0x97, 0xd1, 0xd2, 0x08, 0x37, 0x30, 0x3c, 0x15,
+	0x4c, 0xfe, 0xf3, 0x64, 0x16, 0x11, 0xb1, 0x82, 0xb3, 0x10, 0xde, 0x6e, 0x18, 0x7d, 0x65, 0x24,
+	0xce, 0x41, 0x30, 0x15, 0x49, 0xde, 0xbb, 0x77, 0xef, 0x5e, 0x38, 0x8b, 0x48, 0x68, 0xbb, 0x61,
+	0x14, 0x2d, 0x0d, 0x2f, 0x82, 0xa4, 0x1a, 0x3b, 0x73, 0x6e, 0x4b, 0xcd, 0x1c, 0x6f, 0xec, 0x9a,
+	0xb1, 0x33, 0xe7, 0x36, 0x47, 0x21, 0x81, 0x8b, 0x42, 0x72, 0xc1, 0xed, 0xac, 0x0f, 0x96, 0x5c,
+	0x18, 0x2c, 0x96, 0x8e, 0x8a, 0x05, 0x5c, 0x84, 0x08, 0x6d, 0xdb, 0xd7, 0x6b, 0x37, 0xd8, 0x9e,
+	0x68, 0xaa, 0x31, 0xf9, 0xc9, 0x21, 0x35, 0x9b, 0x4c, 0x31, 0x99, 0xed, 0x38, 0x86, 0x1f, 0x21,
+	0x64, 0x4a, 0xe9, 0x50, 0xb6, 0x4a, 0xc2, 0x5c, 0xee, 0x05, 0xb6, 0x87, 0xdf, 0x46, 0x20, 0xd9,
+	0xb4, 0x61, 0x25, 0x47, 0x44, 0x2e, 0xcc, 0x3c, 0x52, 0x2e, 0x4c, 0x6f, 0xd1, 0x86, 0xb5, 0xa2,
+	0xd9, 0xe6, 0x5e, 0x69, 0x43, 0x38, 0xe6, 0x1d, 0x14, 0xce, 0x88, 0x3b, 0x46, 0x9c, 0x8d, 0xbe,
+	0x83, 0x42, 0x19, 0xc9, 0xf4, 0x27, 0x04, 0x17, 0x7c, 0x07, 0xf9, 0x13, 0x59, 0x0f, 0x36, 0xe5,
+	0x84, 0x82, 0x07, 0x9b, 0x12, 0xb0, 0xc3, 0x0f, 0xdf, 0x0f, 0x84, 0x7e, 0x72, 0x0b, 0xf9, 0x23,
+	0x3e, 0x22, 0xac, 0xc1, 0x39, 0x88, 0xbe, 0xda, 0x6e, 0x6d, 0xeb, 0xb5, 0x96, 0xdd, 0x4e, 0x8e,
+	0xa6, 0x51, 0x36, 0x52, 0x8a, 0xdf, 0xb9, 0x89, 0xf6, 0x3b, 0x48, 0x78, 0x80, 0x67, 0x06, 0x89,
+	0x08, 0xc4, 0x65, 0xbb, 0x8d, 0x17, 0x21, 0xee, 0x76, 0x63, 0x3e, 0xeb, 0x70, 0x6b, 0x93, 0x63,
+	0x47, 0xcb, 0x8c, 0x39, 0xb8, 0x4d, 0x17, 0x86, 0x97, 0x21, 0xd2, 0x62, 0x36, 0xe5, 0x59, 0x95,
+	0x8c, 0x0b, 0x0f, 0xa6, 0x86, 0x3c, 0x70, 0x99, 0x59, 0x16, 0x6d, 0xb0, 0xcb, 0xcc, 0xa6, 0xfc,
+	0xe8, 0xa4, 0x8b, 0xc7, 0x7f, 0xf4, 0x43, 0xc8, 0x64, 0x0d, 0x55, 0xd7, 0x92, 0x09, 0x11, 0xea,
+	0xbf, 0xf6, 0x8b, 0x8c, 0xfd, 0x64, 0x3f, 0xf0, 0x73, 0xbf, 0xf9, 0x53, 0x3f, 0x19, 0xa3, 0x46,
+	0x5e, 0xd3, 0x4d, 0xfb, 0x3a, 0xa3, 0x96, 0x9d, 0x2f, 0x08, 0xde, 0xd2, 0xdb, 0x5d, 0x7e, 0x84,
+	0xb5, 0xf3, 0x0a, 0xd3, 0x6c, 0x93, 0x36, 0xf3, 0x05, 0x12, 0x65, 0xed, 0xfc, 0x2e, 0x13, 0x0b,
+	0x5d, 0x72, 0x96, 0x44, 0x2d, 0x9a, 0x77, 0xe1, 0xd1, 0xb6, 0x75, 0x1f, 0x29, 0x0b, 0x52, 0x60,
+	0x65, 0x32, 0xa2, 0xd0, 0x3e, 0x7d, 0x40, 0xaf, 0x39, 0xbb, 0x71, 0x3c, 0x35, 0x3c, 0x51, 0xf0,
+	0x8c, 0x70, 0x0d, 0xea, 0x19, 0x28, 0x0f, 0x19, 0x28, 0x13, 0x60, 0xed, 0x2e, 0x96, 0xd3, 0x02,
+	0xdb, 0x6f, 0x9f, 0x4c, 0xa0, 0xc5, 0x7a, 0xbb, 0x78, 0xa6, 0x0c, 0x1f, 0x75, 0x96, 0xb8, 0x8e,
+	0xc2, 0x17, 0x79, 0x01, 0xd6, 0xcd, 0xba, 0xaa, 0x51, 0x3e, 0xac, 0x8e, 0x0b, 0x97, 0x9f, 0x1c,
+	0x72, 0x39, 0xbf, 0xc4, 0xe9, 0x72, 0x0f, 0xd6, 0x0d, 0x7c, 0xd2, 0x2f, 0x3c, 0x79, 0x1e, 0xa2,
+	0xdd, 0x38, 0xc4, 0x09, 0x08, 0xf0, 0x2c, 0x10, 0x95, 0x93, 0x70, 0x12, 0x4f, 0x40, 0x70, 0x87,
+	0x36, 0xdb, 0x4c, 0xfc, 0x28, 0x88, 0x12, 0x87, 0x59, 0xf6, 0x2f, 0xa2, 0xe5, 0x03, 0x74, 0xbb,
+	0x83, 0xbe, 0x0f, 0x63, 0x10, 0xb9, 0xec, 0xdd, 0xa5, 0xbf, 0x30, 0x0f, 0x69, 0x18, 0x77, 0x2b,
+	0x4a, 0xba, 0x5b, 0x2f, 0x70, 0xac, 0xb0, 0x90, 0x2b, 0xe4, 0xe6, 0x73, 0x0b, 0xb9, 0x82, 0x0c,
+	0x13, 0x30, 0x52, 0x16, 0xf3, 0x01, 0x33, 0xd3, 0xa5, 0xd5, 0x2a, 0x96, 0xce, 0xe7, 0x0a, 0x05,
+	0x78, 0x02, 0xc6, 0xab, 0x8c, 0x99, 0xe9, 0xb5, 0x6a, 0xba, 0x58, 0xaf, 0x9b, 0xcc, 0xb2, 0x98,
+	0x85, 0xd1, 0xe2, 0x07, 0x1d, 0x74, 0x1d, 0x4e, 0x80, 0xc4, 0xab, 0xdc, 0x64, 0x1c, 0x46, 0xbd,
+	0xb8, 0x99, 0xe6, 0xc5, 0x11, 0xd2, 0x30, 0xda, 0xeb, 0x0a, 0xe9, 0xb5, 0x3a, 0x47, 0x0c, 0x34,
+	0x01, 0x78, 0x06, 0x4e, 0x79, 0xe6, 0x5c, 0xd2, 0x15, 0xda, 0x4c, 0x17, 0x4d, 0x46, 0xbd, 0x59,
+	0x35, 0x9d, 0x7d, 0xf1, 0x52, 0x71, 0xfd, 0xec, 0x64, 0xc8, 0x29, 0x65, 0xa5, 0x34, 0x4c, 0x98,
+	0xcc, 0xd2, 0xdb, 0xa6, 0xc2, 0x44, 0xf1, 0xf5, 0xa6, 0x87, 0x08, 0xef, 0x8e, 0x9f, 0xf2, 0x89,
+	0xf5, 0x29, 0x08, 0xab, 0x86, 0xd3, 0x36, 0xc7, 0xfb, 0x46, 0x53, 0xb4, 0xd4, 0x6b, 0x99, 0xee,
+	0x2c, 0xfa, 0x5b, 0x04, 0xf1, 0xa1, 0x5e, 0xfd, 0x85, 0x1b, 0xa7, 0x2b, 0xff, 0xa8, 0x8d, 0x33,
+	0x7f, 0xbb, 0x83, 0xce, 0xc2, 0x37, 0x21, 0xb3, 0x5a, 0xae, 0xba, 0xb3, 0xb9, 0xb8, 0x02, 0xe5,
+	0xe8, 0x06, 0xfa, 0x76, 0x14, 0x62, 0x7d, 0x3b, 0x0c, 0x64, 0x31, 0xfa, 0x82, 0x59, 0xfc, 0x0f,
+	0xa9, 0x9b, 0xc5, 0x22, 0x50, 0x4a, 0x7f, 0x93, 0xb8, 0x95, 0xef, 0x4b, 0xe6, 0x6d, 0x89, 0x00,
+	0xb5, 0x54, 0x27, 0xff, 0x0a, 0x7d, 0xb4, 0x4c, 0xe2, 0x82, 0xee, 0xa6, 0x4e, 0x61, 0xf8, 0xc3,
+	0x7d, 0x88, 0x59, 0xf7, 0x43, 0x37, 0x27, 0x0a, 0xc3, 0x1f, 0x64, 0x12, 0x67, 0x6d, 0x53, 0x37,
+	0x98, 0x97, 0xc2, 0x32, 0x19, 0x75, 0x3f, 0x08, 0x2d, 0xa2, 0x5c, 0x08, 0x96, 0xa7, 0xd8, 0x20,
+	0x27, 0x0f, 0x70, 0xb3, 0x03, 0xdc, 0xdc, 0x00, 0xb7, 0x30, 0xc0, 0x2d, 0x0e, 0x70, 0x4b, 0xdd,
+	0x0d, 0xc5, 0x0e, 0xe7, 0x06, 0x59, 0x99, 0x8c, 0xbb, 0xac, 0x30, 0xd9, 0x31, 0x22, 0xd2, 0xf2,
+	0xcc, 0x89, 0xb5, 0xba, 0x86, 0x0f, 0x30, 0x32, 0x39, 0x21, 0xcc, 0xa7, 0x2d, 0x66, 0xaa, 0xca,
+	0x80, 0xcf, 0x8e, 0x59, 0x90, 0x49, 0xac, 0x6d, 0xf5, 0x74, 0x45, 0xdc, 0x52, 0xd7, 0xa3, 0xe6,
+	0xba, 0xd4, 0xbc, 0x28, 0x39, 0xc2, 0x1e, 0x67, 0xd9, 0xb5, 0xca, 0xa5, 0xe4, 0x2e, 0x35, 0xdb,
+	0xa5, 0xe6, 0x08, 0x16, 0x78, 0x6f, 0x5b, 0x47, 0xf5, 0xe0, 0x37, 0x47, 0xcb, 0x04, 0x6d, 0x5b,
+	0xdc, 0x84, 0xc1, 0x5b, 0x3b, 0xea, 0xab, 0x4c, 0x62, 0xbd, 0xbb, 0x2c, 0xf4, 0x33, 0x72, 0xb7,
+	0xf0, 0x55, 0x00, 0x5b, 0x3c, 0x2f, 0xa9, 0xd5, 0x37, 0x57, 0xbb, 0x3f, 0x99, 0x8e, 0x9b, 0xb5,
+	0x12, 0x5c, 0xa2, 0x68, 0xf5, 0x8d, 0xc1, 0xd3, 0x10, 0x36, 0x4c, 0x9d, 0x8f, 0xeb, 0x62, 0x3a,
+	0x8a, 0x96, 0xb0, 0x37, 0x0b, 0xa6, 0x5c, 0x22, 0x21, 0x5d, 0xf0, 0x11, 0x0f, 0x84, 0xb7, 0xe0,
+	0x29, 0xb5, 0x2f, 0x8f, 0x6a, 0xd4, 0xb6, 0xa9, 0x72, 0xbd, 0xc5, 0x34, 0xdb, 0x19, 0xd1, 0x42,
+	0x83, 0x4a, 0x9e, 0xf5, 0x94, 0x20, 0x32, 0xd9, 0x2f, 0x57, 0xec, 0x8a, 0x89, 0x91, 0x6d, 0xa8,
+	0x88, 0x87, 0xff, 0x8d, 0x22, 0xbe, 0xfc, 0x2e, 0xaf, 0xc5, 0xe7, 0x60, 0xb4, 0xaf, 0x16, 0xa3,
+	0x02, 0x9c, 0x84, 0x27, 0x8e, 0xae, 0x04, 0x38, 0x28, 0xe7, 0x66, 0x73, 0x0b, 0x0f, 0xae, 0xad,
+	0x18, 0x42, 0x44, 0x78, 0x7d, 0x32, 0xe2, 0xe5, 0x36, 0x2c, 0xc1, 0x89, 0x81, 0x8a, 0xd2, 0x3b,
+	0xd2, 0x64, 0xea, 0xc1, 0x4e, 0x2a, 0x9d, 0x82, 0x31, 0xd7, 0x9f, 0x5e, 0x55, 0x8d, 0xef, 0x77,
+	0x90, 0x74, 0xd0, 0x41, 0x01, 0xfe, 0x9b, 0x6c, 0x2e, 0x37, 0x7f, 0x51, 0x8a, 0x04, 0x12, 0x52,
+	0xe6, 0x06, 0xe0, 0xd5, 0x72, 0xb5, 0x4a, 0x4d, 0x5b, 0x63, 0x66, 0xf7, 0x38, 0x18, 0x24, 0xe1,
+	0x6b, 0xa7, 0x35, 0x09, 0x1a, 0x67, 0x60, 0xa4, 0x7f, 0x4b, 0xb7, 0x45, 0x0d, 0x7c, 0xc3, 0x5f,
+	0x07, 0x30, 0x74, 0xd3, 0xa6, 0xcd, 0x5a, 0xdb, 0x6c, 0x8a, 0xa9, 0x3c, 0x4a, 0xa2, 0xce, 0x97,
+	0x2b, 0x66, 0x33, 0xf3, 0x3b, 0x04, 0x11, 0x6f, 0xa6, 0xc4, 0x17, 0xe0, 0x31, 0x53, 0x6f, 0xdb,
+	0xcc, 0xac, 0x19, 0x8c, 0xcf, 0xe1, 0x4e, 0x1b, 0x72, 0x7f, 0x47, 0x24, 0xbd, 0xa9, 0x24, 0x68,
+	0x06, 0x3e, 0x43, 0xc8, 0xa5, 0xde, 0xf2, 0x23, 0x32, 0xee, 0x08, 0xf1, 0xee, 0xe5, 0x76, 0x2e,
+	0xbc, 0x01, 0x27, 0xe8, 0xae, 0x55, 0x3b, 0x4a, 0x9b, 0xff, 0x21, 0xda, 0x26, 0xe8, 0xae, 0x45,
+	0x86, 0x15, 0x66, 0x40, 0x98, 0x29, 0x06, 0xd8, 0xcc, 0x04, 0xe0, 0xfb, 0xdf, 0x00, 0x32, 0x7f,
+	0x0e, 0xc0, 0x58, 0xd9, 0x64, 0xd4, 0x66, 0x5f, 0xea, 0xe7, 0xbc, 0xff, 0xce, 0x03, 0xdb, 0xf2,
+	0xf8, 0x07, 0xdf, 0x1e, 0x7a, 0x0c, 0x2d, 0x9d, 0xbe, 0xef, 0x11, 0x0b, 0xbf, 0xf9, 0x39, 0x1a,
+	0xfa, 0x56, 0xaa, 0x3c, 0xf4, 0x09, 0x2b, 0xf3, 0xe6, 0xe7, 0xe8, 0x21, 0x98, 0xee, 0x83, 0x16,
+	0x1f, 0x1c, 0xfe, 0x12, 0x80, 0x38, 0x61, 0x46, 0x93, 0x2a, 0x5f, 0xdd, 0xe4, 0x97, 0xfb, 0x26,
+	0x7f, 0x11, 0x84, 0xd8, 0x2a, 0xb3, 0xbf, 0x7a, 0x5e, 0xff, 0x7f, 0x7c, 0x5e, 0xff, 0x1f, 0x89,
+	0xc3, 0xa1, 0x27, 0xf2, 0xa9, 0x06, 0x3c, 0x79, 0xec, 0x3d, 0xe1, 0x38, 0xc4, 0xd6, 0xd6, 0x6b,
+	0x55, 0xb2, 0xb1, 0x4a, 0x56, 0x36, 0x37, 0x13, 0x3e, 0x1c, 0x85, 0xe0, 0x0a, 0x21, 0x1b, 0x24,
+	0x81, 0x38, 0x49, 0x56, 0x8a, 0x95, 0xab, 0x09, 0x3f, 0x1e, 0x81, 0x48, 0x65, 0xe5, 0xd2, 0xca,
+	0xd6, 0xda, 0xfa, 0x6a, 0x22, 0x80, 0x1f, 0x87, 0xf1, 0xf2, 0x95, 0xcd, 0xad, 0x8d, 0xcb, 0x2b,
+	0xa4, 0x56, 0x59, 0xa9, 0x5e, 0xda, 0xb8, 0xba, 0x52, 0x49, 0x48, 0x53, 0xe7, 0x60, 0x6c, 0xd0,
+	0x43, 0x38, 0x04, 0xfe, 0x2b, 0xd5, 0x84, 0x0f, 0x47, 0x40, 0xaa, 0x6c, 0xbc, 0xb4, 0x9e, 0x40,
+	0x8e, 0xa2, 0x55, 0x52, 0xac, 0xac, 0x54, 0x12, 0xfe, 0xa9, 0x05, 0x98, 0x38, 0xea, 0x2d, 0x0a,
+	0xc7, 0xc0, 0x7b, 0x89, 0x4a, 0xf8, 0xf0, 0x38, 0x84, 0xb7, 0x48, 0x71, 0x7d, 0x73, 0x6d, 0x2b,
+	0x81, 0x26, 0xa5, 0x7d, 0xfe, 0x9b, 0xec, 0x67, 0xe8, 0xe0, 0xa3, 0x94, 0xef, 0xce, 0x47, 0x29,
+	0xdf, 0xa7, 0x1f, 0xa5, 0xd0, 0x1b, 0x87, 0x29, 0xf4, 0xfb, 0xc3, 0x14, 0xfa, 0xeb, 0x61, 0x0a,
+	0x1d, 0x1c, 0xa6, 0xd0, 0x9d, 0xc3, 0x14, 0xfa, 0xf0, 0x30, 0x85, 0x3e, 0x3e, 0x4c, 0xf9, 0x3e,
+	0x3d, 0x4c, 0xa1, 0xb7, 0xee, 0xa6, 0x7c, 0xfb, 0x77, 0x53, 0xe8, 0xe0, 0x6e, 0xca, 0x77, 0xe7,
+	0x6e, 0xca, 0xf7, 0xf2, 0x7a, 0x43, 0x37, 0x6e, 0x34, 0xa6, 0x77, 0xf4, 0xa6, 0xcd, 0x4c, 0x93,
+	0x4e, 0xb7, 0xad, 0x19, 0x41, 0x5c, 0xd3, 0xcd, 0x56, 0xde, 0xbb, 0x95, 0xbc, 0xb7, 0x3c, 0x63,
+	0x6c, 0x37, 0xf4, 0x19, 0xf6, 0x9a, 0xed, 0xfd, 0xe3, 0x6f, 0xf8, 0x7f, 0x9e, 0xdb, 0x21, 0xf1,
+	0xef, 0xb5, 0xd9, 0x7f, 0x05, 0x00, 0x00, 0xff, 0xff, 0x7e, 0x7b, 0xc3, 0xe9, 0x16, 0x1d, 0x00,
+	0x00,
 }
 
 func (x CloudLinkDeploymentStatus) String() string {
@@ -1608,12 +2062,6 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Status != that1.Status {
-		return false
-	}
-	if this.SuggestedAction != that1.SuggestedAction {
-		return false
-	}
-	if this.ErrorDescription != that1.ErrorDescription {
 		return false
 	}
 	if this.Sites != that1.Sites {
@@ -1677,6 +2125,30 @@ func (this *GlobalSpecType_Azure) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Azure.Equal(that1.Azure) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_Gcp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Gcp)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Gcp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Gcp.Equal(that1.Gcp) {
 		return false
 	}
 	return true
@@ -1888,6 +2360,63 @@ func (this *AzureType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GCPType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPType)
+	if !ok {
+		that2, ok := that.(GCPType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.GcpCred.Equal(that1.GcpCred) {
+		return false
+	}
+	if that1.CloudLinkType == nil {
+		if this.CloudLinkType != nil {
+			return false
+		}
+	} else if this.CloudLinkType == nil {
+		return false
+	} else if !this.CloudLinkType.Equal(that1.CloudLinkType) {
+		return false
+	}
+	return true
+}
+func (this *GCPType_Byoc) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPType_Byoc)
+	if !ok {
+		that2, ok := that.(GCPType_Byoc)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Byoc.Equal(that1.Byoc) {
+		return false
+	}
+	return true
+}
 func (this *AWSBYOCListType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1986,6 +2515,12 @@ func (this *AWSBYOCType) Equal(that interface{}) bool {
 	if !this.Metadata.Equal(that1.Metadata) {
 		return false
 	}
+	if this.Region != that1.Region {
+		return false
+	}
+	if !this.Coordinates.Equal(that1.Coordinates) {
+		return false
+	}
 	return true
 }
 func (this *AWSBYOCType_SystemGeneratedName) Equal(that interface{}) bool {
@@ -2080,6 +2615,155 @@ func (this *AWSBYOCType_Ipv6) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Ipv6.Equal(that1.Ipv6) {
+		return false
+	}
+	return true
+}
+func (this *GCPBYOCListType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPBYOCListType)
+	if !ok {
+		that2, ok := that.(GCPBYOCListType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Connections) != len(that1.Connections) {
+		return false
+	}
+	for i := range this.Connections {
+		if !this.Connections[i].Equal(that1.Connections[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *GCPBYOCType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPBYOCType)
+	if !ok {
+		that2, ok := that.(GCPBYOCType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if this.Region != that1.Region {
+		return false
+	}
+	if that1.ProjectChoice == nil {
+		if this.ProjectChoice != nil {
+			return false
+		}
+	} else if this.ProjectChoice == nil {
+		return false
+	} else if !this.ProjectChoice.Equal(that1.ProjectChoice) {
+		return false
+	}
+	if this.InterconnectAttachmentName != that1.InterconnectAttachmentName {
+		return false
+	}
+	if !this.Coordinates.Equal(that1.Coordinates) {
+		return false
+	}
+	return true
+}
+func (this *GCPBYOCType_SameAsCredential) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPBYOCType_SameAsCredential)
+	if !ok {
+		that2, ok := that.(GCPBYOCType_SameAsCredential)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SameAsCredential.Equal(that1.SameAsCredential) {
+		return false
+	}
+	return true
+}
+func (this *GCPBYOCType_Project) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPBYOCType_Project)
+	if !ok {
+		that2, ok := that.(GCPBYOCType_Project)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Project != that1.Project {
+		return false
+	}
+	return true
+}
+func (this *GCPPartnerMetadata) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GCPPartnerMetadata)
+	if !ok {
+		that2, ok := that.(GCPPartnerMetadata)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.Interconnect != that1.Interconnect {
+		return false
+	}
+	if this.PortalUrl != that1.PortalUrl {
 		return false
 	}
 	return true
@@ -2240,6 +2924,30 @@ func (this *CreateSpecType_Azure) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_Gcp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_Gcp)
+	if !ok {
+		that2, ok := that.(CreateSpecType_Gcp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Gcp.Equal(that1.Gcp) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_Disabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2375,6 +3083,30 @@ func (this *ReplaceSpecType_Azure) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_Gcp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_Gcp)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_Gcp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Gcp.Equal(that1.Gcp) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType_Disabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2454,12 +3186,6 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.Status != that1.Status {
 		return false
 	}
-	if this.SuggestedAction != that1.SuggestedAction {
-		return false
-	}
-	if this.ErrorDescription != that1.ErrorDescription {
-		return false
-	}
 	if this.Sites != that1.Sites {
 		return false
 	}
@@ -2525,6 +3251,30 @@ func (this *GetSpecType_Azure) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_Gcp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Gcp)
+	if !ok {
+		that2, ok := that.(GetSpecType_Gcp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Gcp.Equal(that1.Gcp) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType_Disabled) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2577,14 +3327,12 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 12)
 	s = append(s, "&cloud_link.GlobalSpecType{")
 	if this.CloudProvider != nil {
 		s = append(s, "CloudProvider: "+fmt.Sprintf("%#v", this.CloudProvider)+",\n")
 	}
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
-	s = append(s, "SuggestedAction: "+fmt.Sprintf("%#v", this.SuggestedAction)+",\n")
-	s = append(s, "ErrorDescription: "+fmt.Sprintf("%#v", this.ErrorDescription)+",\n")
 	s = append(s, "Sites: "+fmt.Sprintf("%#v", this.Sites)+",\n")
 	if this.EnableConnectionToReChoice != nil {
 		s = append(s, "EnableConnectionToReChoice: "+fmt.Sprintf("%#v", this.EnableConnectionToReChoice)+",\n")
@@ -2607,6 +3355,14 @@ func (this *GlobalSpecType_Azure) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_link.GlobalSpecType_Azure{` +
 		`Azure:` + fmt.Sprintf("%#v", this.Azure) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_Gcp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.GlobalSpecType_Gcp{` +
+		`Gcp:` + fmt.Sprintf("%#v", this.Gcp) + `}`}, ", ")
 	return s
 }
 func (this *GlobalSpecType_Disabled) GoString() string {
@@ -2684,6 +3440,29 @@ func (this *AzureType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GCPType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_link.GCPType{")
+	if this.GcpCred != nil {
+		s = append(s, "GcpCred: "+fmt.Sprintf("%#v", this.GcpCred)+",\n")
+	}
+	if this.CloudLinkType != nil {
+		s = append(s, "CloudLinkType: "+fmt.Sprintf("%#v", this.CloudLinkType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GCPType_Byoc) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.GCPType_Byoc{` +
+		`Byoc:` + fmt.Sprintf("%#v", this.Byoc) + `}`}, ", ")
+	return s
+}
 func (this *AWSBYOCListType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2700,7 +3479,7 @@ func (this *AWSBYOCType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 17)
+	s := make([]string, 0, 19)
 	s = append(s, "&cloud_link.AWSBYOCType{")
 	s = append(s, "ConnectionId: "+fmt.Sprintf("%#v", this.ConnectionId)+",\n")
 	if this.ResourceNameChoice != nil {
@@ -2732,6 +3511,10 @@ func (this *AWSBYOCType) GoString() string {
 	s = append(s, "EnableSitelink: "+fmt.Sprintf("%#v", this.EnableSitelink)+",\n")
 	if this.Metadata != nil {
 		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	s = append(s, "Region: "+fmt.Sprintf("%#v", this.Region)+",\n")
+	if this.Coordinates != nil {
+		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -2768,6 +3551,66 @@ func (this *AWSBYOCType_Ipv6) GoString() string {
 		`Ipv6:` + fmt.Sprintf("%#v", this.Ipv6) + `}`}, ", ")
 	return s
 }
+func (this *GCPBYOCListType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_link.GCPBYOCListType{")
+	if this.Connections != nil {
+		s = append(s, "Connections: "+fmt.Sprintf("%#v", this.Connections)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GCPBYOCType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&cloud_link.GCPBYOCType{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	s = append(s, "Region: "+fmt.Sprintf("%#v", this.Region)+",\n")
+	if this.ProjectChoice != nil {
+		s = append(s, "ProjectChoice: "+fmt.Sprintf("%#v", this.ProjectChoice)+",\n")
+	}
+	s = append(s, "InterconnectAttachmentName: "+fmt.Sprintf("%#v", this.InterconnectAttachmentName)+",\n")
+	if this.Coordinates != nil {
+		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GCPBYOCType_SameAsCredential) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.GCPBYOCType_SameAsCredential{` +
+		`SameAsCredential:` + fmt.Sprintf("%#v", this.SameAsCredential) + `}`}, ", ")
+	return s
+}
+func (this *GCPBYOCType_Project) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.GCPBYOCType_Project{` +
+		`Project:` + fmt.Sprintf("%#v", this.Project) + `}`}, ", ")
+	return s
+}
+func (this *GCPPartnerMetadata) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_link.GCPPartnerMetadata{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "Interconnect: "+fmt.Sprintf("%#v", this.Interconnect)+",\n")
+	s = append(s, "PortalUrl: "+fmt.Sprintf("%#v", this.PortalUrl)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *Ipv4Type) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2801,7 +3644,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_link.CreateSpecType{")
 	if this.CloudProvider != nil {
 		s = append(s, "CloudProvider: "+fmt.Sprintf("%#v", this.CloudProvider)+",\n")
@@ -2828,6 +3671,14 @@ func (this *CreateSpecType_Azure) GoString() string {
 		`Azure:` + fmt.Sprintf("%#v", this.Azure) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_Gcp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.CreateSpecType_Gcp{` +
+		`Gcp:` + fmt.Sprintf("%#v", this.Gcp) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_Disabled) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2848,7 +3699,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&cloud_link.ReplaceSpecType{")
 	if this.CloudProvider != nil {
 		s = append(s, "CloudProvider: "+fmt.Sprintf("%#v", this.CloudProvider)+",\n")
@@ -2875,6 +3726,14 @@ func (this *ReplaceSpecType_Azure) GoString() string {
 		`Azure:` + fmt.Sprintf("%#v", this.Azure) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_Gcp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.ReplaceSpecType_Gcp{` +
+		`Gcp:` + fmt.Sprintf("%#v", this.Gcp) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_Disabled) GoString() string {
 	if this == nil {
 		return "nil"
@@ -2895,14 +3754,12 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 12)
 	s = append(s, "&cloud_link.GetSpecType{")
 	if this.CloudProvider != nil {
 		s = append(s, "CloudProvider: "+fmt.Sprintf("%#v", this.CloudProvider)+",\n")
 	}
 	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
-	s = append(s, "SuggestedAction: "+fmt.Sprintf("%#v", this.SuggestedAction)+",\n")
-	s = append(s, "ErrorDescription: "+fmt.Sprintf("%#v", this.ErrorDescription)+",\n")
 	s = append(s, "Sites: "+fmt.Sprintf("%#v", this.Sites)+",\n")
 	if this.EnableConnectionToReChoice != nil {
 		s = append(s, "EnableConnectionToReChoice: "+fmt.Sprintf("%#v", this.EnableConnectionToReChoice)+",\n")
@@ -2925,6 +3782,14 @@ func (this *GetSpecType_Azure) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_link.GetSpecType_Azure{` +
 		`Azure:` + fmt.Sprintf("%#v", this.Azure) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Gcp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_link.GetSpecType_Gcp{` +
+		`Gcp:` + fmt.Sprintf("%#v", this.Gcp) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_Disabled) GoString() string {
@@ -2971,6 +3836,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.CloudProvider != nil {
+		{
+			size := m.CloudProvider.Size()
+			i -= size
+			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.CloudLinkState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CloudLinkState))
 		i--
@@ -2990,33 +3864,10 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if len(m.ErrorDescription) > 0 {
-		i -= len(m.ErrorDescription)
-		copy(dAtA[i:], m.ErrorDescription)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ErrorDescription)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.SuggestedAction) > 0 {
-		i -= len(m.SuggestedAction)
-		copy(dAtA[i:], m.SuggestedAction)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SuggestedAction)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Status != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Status))
 		i--
 		dAtA[i] = 0x20
-	}
-	if m.CloudProvider != nil {
-		{
-			size := m.CloudProvider.Size()
-			i -= size
-			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -3102,6 +3953,27 @@ func (m *GlobalSpecType_Enabled) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		}
 		i--
 		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_Gcp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Gcp != nil {
+		{
+			size, err := m.Gcp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
 	}
 	return len(dAtA) - i, nil
 }
@@ -3256,6 +4128,71 @@ func (m *AzureType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GCPType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CloudLinkType != nil {
+		{
+			size := m.CloudLinkType.Size()
+			i -= size
+			if _, err := m.CloudLinkType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.GcpCred != nil {
+		{
+			size, err := m.GcpCred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GCPType_Byoc) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPType_Byoc) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Byoc != nil {
+		{
+			size, err := m.Byoc.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *AWSBYOCListType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3313,6 +4250,29 @@ func (m *AWSBYOCType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	if len(m.Region) > 0 {
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
 	if m.Metadata != nil {
 		{
 			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
@@ -3501,6 +4461,192 @@ func (m *AWSBYOCType_Ipv6) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GCPBYOCListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPBYOCListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPBYOCListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Connections) > 0 {
+		for iNdEx := len(m.Connections) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Connections[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GCPBYOCType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPBYOCType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPBYOCType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.InterconnectAttachmentName) > 0 {
+		i -= len(m.InterconnectAttachmentName)
+		copy(dAtA[i:], m.InterconnectAttachmentName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.InterconnectAttachmentName)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.ProjectChoice != nil {
+		{
+			size := m.ProjectChoice.Size()
+			i -= size
+			if _, err := m.ProjectChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.Region) > 0 {
+		i -= len(m.Region)
+		copy(dAtA[i:], m.Region)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Region)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GCPBYOCType_SameAsCredential) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPBYOCType_SameAsCredential) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SameAsCredential != nil {
+		{
+			size, err := m.SameAsCredential.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GCPBYOCType_Project) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPBYOCType_Project) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Project)
+	copy(dAtA[i:], m.Project)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Project)))
+	i--
+	dAtA[i] = 0x2a
+	return len(dAtA) - i, nil
+}
+func (m *GCPPartnerMetadata) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GCPPartnerMetadata) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GCPPartnerMetadata) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PortalUrl) > 0 {
+		i -= len(m.PortalUrl)
+		copy(dAtA[i:], m.PortalUrl)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PortalUrl)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Interconnect) > 0 {
+		i -= len(m.Interconnect)
+		copy(dAtA[i:], m.Interconnect)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Interconnect)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *Ipv4Type) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3604,20 +4750,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.EnableConnectionToReChoice != nil {
-		{
-			size := m.EnableConnectionToReChoice.Size()
-			i -= size
-			if _, err := m.EnableConnectionToReChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.CloudProvider != nil {
 		{
 			size := m.CloudProvider.Size()
 			i -= size
 			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnableConnectionToReChoice != nil {
+		{
+			size := m.EnableConnectionToReChoice.Size()
+			i -= size
+			if _, err := m.EnableConnectionToReChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3709,6 +4855,27 @@ func (m *CreateSpecType_Enabled) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_Gcp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Gcp != nil {
+		{
+			size, err := m.Gcp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3729,20 +4896,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.EnableConnectionToReChoice != nil {
-		{
-			size := m.EnableConnectionToReChoice.Size()
-			i -= size
-			if _, err := m.EnableConnectionToReChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
 	if m.CloudProvider != nil {
 		{
 			size := m.CloudProvider.Size()
 			i -= size
 			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.EnableConnectionToReChoice != nil {
+		{
+			size := m.EnableConnectionToReChoice.Size()
+			i -= size
+			if _, err := m.EnableConnectionToReChoice.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -3834,6 +5001,27 @@ func (m *ReplaceSpecType_Enabled) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_Gcp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Gcp != nil {
+		{
+			size, err := m.Gcp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3854,6 +5042,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.CloudProvider != nil {
+		{
+			size := m.CloudProvider.Size()
+			i -= size
+			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.CloudLinkState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CloudLinkState))
 		i--
@@ -3873,33 +5070,10 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x38
 	}
-	if len(m.ErrorDescription) > 0 {
-		i -= len(m.ErrorDescription)
-		copy(dAtA[i:], m.ErrorDescription)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ErrorDescription)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.SuggestedAction) > 0 {
-		i -= len(m.SuggestedAction)
-		copy(dAtA[i:], m.SuggestedAction)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.SuggestedAction)))
-		i--
-		dAtA[i] = 0x2a
-	}
 	if m.Status != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.Status))
 		i--
 		dAtA[i] = 0x20
-	}
-	if m.CloudProvider != nil {
-		{
-			size := m.CloudProvider.Size()
-			i -= size
-			if _, err := m.CloudProvider.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -3988,6 +5162,27 @@ func (m *GetSpecType_Enabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_Gcp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Gcp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Gcp != nil {
+		{
+			size, err := m.Gcp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -4010,14 +5205,6 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.Status != 0 {
 		n += 1 + sovTypes(uint64(m.Status))
-	}
-	l = len(m.SuggestedAction)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ErrorDescription)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
 	}
 	if m.Sites != 0 {
 		n += 1 + sovTypes(uint64(m.Sites))
@@ -4075,6 +5262,18 @@ func (m *GlobalSpecType_Enabled) Size() (n int) {
 	_ = l
 	if m.Enabled != nil {
 		l = m.Enabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Gcp != nil {
+		l = m.Gcp.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -4152,6 +5351,34 @@ func (m *AzureType) Size() (n int) {
 	return n
 }
 
+func (m *GCPType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.GcpCred != nil {
+		l = m.GcpCred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CloudLinkType != nil {
+		n += m.CloudLinkType.Size()
+	}
+	return n
+}
+
+func (m *GCPType_Byoc) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Byoc != nil {
+		l = m.Byoc.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *AWSBYOCListType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4214,6 +5441,14 @@ func (m *AWSBYOCType) Size() (n int) {
 		l = m.Metadata.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	l = len(m.Region)
+	if l > 0 {
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.Coordinates != nil {
+		l = m.Coordinates.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -4263,6 +5498,92 @@ func (m *AWSBYOCType_Ipv6) Size() (n int) {
 	}
 	return n
 }
+func (m *GCPBYOCListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Connections) > 0 {
+		for _, e := range m.Connections {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *GCPBYOCType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Region)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ProjectChoice != nil {
+		n += m.ProjectChoice.Size()
+	}
+	l = len(m.InterconnectAttachmentName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Coordinates != nil {
+		l = m.Coordinates.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *GCPBYOCType_SameAsCredential) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SameAsCredential != nil {
+		l = m.SameAsCredential.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GCPBYOCType_Project) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Project)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *GCPPartnerMetadata) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Interconnect)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.PortalUrl)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *Ipv4Type) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4361,6 +5682,18 @@ func (m *CreateSpecType_Enabled) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Gcp != nil {
+		l = m.Gcp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4424,6 +5757,18 @@ func (m *ReplaceSpecType_Enabled) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Gcp != nil {
+		l = m.Gcp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -4435,14 +5780,6 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.Status != 0 {
 		n += 1 + sovTypes(uint64(m.Status))
-	}
-	l = len(m.SuggestedAction)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.ErrorDescription)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
 	}
 	if m.Sites != 0 {
 		n += 1 + sovTypes(uint64(m.Sites))
@@ -4504,6 +5841,18 @@ func (m *GetSpecType_Enabled) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_Gcp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Gcp != nil {
+		l = m.Gcp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -4518,8 +5867,6 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`CloudProvider:` + fmt.Sprintf("%v", this.CloudProvider) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
-		`SuggestedAction:` + fmt.Sprintf("%v", this.SuggestedAction) + `,`,
-		`ErrorDescription:` + fmt.Sprintf("%v", this.ErrorDescription) + `,`,
 		`Sites:` + fmt.Sprintf("%v", this.Sites) + `,`,
 		`EnableConnectionToReChoice:` + fmt.Sprintf("%v", this.EnableConnectionToReChoice) + `,`,
 		`CloudLinkState:` + fmt.Sprintf("%v", this.CloudLinkState) + `,`,
@@ -4563,6 +5910,16 @@ func (this *GlobalSpecType_Enabled) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Enabled{`,
 		`Enabled:` + strings.Replace(fmt.Sprintf("%v", this.Enabled), "CloudLinkADNType", "views.CloudLinkADNType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_Gcp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Gcp{`,
+		`Gcp:` + strings.Replace(fmt.Sprintf("%v", this.Gcp), "GCPType", "GCPType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4628,6 +5985,27 @@ func (this *AzureType) String() string {
 	}, "")
 	return s
 }
+func (this *GCPType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPType{`,
+		`GcpCred:` + strings.Replace(fmt.Sprintf("%v", this.GcpCred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`CloudLinkType:` + fmt.Sprintf("%v", this.CloudLinkType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPType_Byoc) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPType_Byoc{`,
+		`Byoc:` + strings.Replace(fmt.Sprintf("%v", this.Byoc), "GCPBYOCListType", "GCPBYOCListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AWSBYOCListType) String() string {
 	if this == nil {
 		return "nil"
@@ -4669,6 +6047,8 @@ func (this *AWSBYOCType) String() string {
 		`JumboMtu:` + fmt.Sprintf("%v", this.JumboMtu) + `,`,
 		`EnableSitelink:` + fmt.Sprintf("%v", this.EnableSitelink) + `,`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`Region:` + fmt.Sprintf("%v", this.Region) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4709,6 +6089,67 @@ func (this *AWSBYOCType_Ipv6) String() string {
 	}
 	s := strings.Join([]string{`&AWSBYOCType_Ipv6{`,
 		`Ipv6:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6), "Ipv6Type", "Ipv6Type", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPBYOCListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForConnections := "[]*GCPBYOCType{"
+	for _, f := range this.Connections {
+		repeatedStringForConnections += strings.Replace(f.String(), "GCPBYOCType", "GCPBYOCType", 1) + ","
+	}
+	repeatedStringForConnections += "}"
+	s := strings.Join([]string{`&GCPBYOCListType{`,
+		`Connections:` + repeatedStringForConnections + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPBYOCType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPBYOCType{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`Region:` + fmt.Sprintf("%v", this.Region) + `,`,
+		`ProjectChoice:` + fmt.Sprintf("%v", this.ProjectChoice) + `,`,
+		`InterconnectAttachmentName:` + fmt.Sprintf("%v", this.InterconnectAttachmentName) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPBYOCType_SameAsCredential) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPBYOCType_SameAsCredential{`,
+		`SameAsCredential:` + strings.Replace(fmt.Sprintf("%v", this.SameAsCredential), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPBYOCType_Project) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPBYOCType_Project{`,
+		`Project:` + fmt.Sprintf("%v", this.Project) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GCPPartnerMetadata) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GCPPartnerMetadata{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Interconnect:` + fmt.Sprintf("%v", this.Interconnect) + `,`,
+		`PortalUrl:` + fmt.Sprintf("%v", this.PortalUrl) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4793,6 +6234,16 @@ func (this *CreateSpecType_Enabled) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_Gcp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_Gcp{`,
+		`Gcp:` + strings.Replace(fmt.Sprintf("%v", this.Gcp), "GCPType", "GCPType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4844,6 +6295,16 @@ func (this *ReplaceSpecType_Enabled) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_Gcp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_Gcp{`,
+		`Gcp:` + strings.Replace(fmt.Sprintf("%v", this.Gcp), "GCPType", "GCPType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -4851,8 +6312,6 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`CloudProvider:` + fmt.Sprintf("%v", this.CloudProvider) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
-		`SuggestedAction:` + fmt.Sprintf("%v", this.SuggestedAction) + `,`,
-		`ErrorDescription:` + fmt.Sprintf("%v", this.ErrorDescription) + `,`,
 		`Sites:` + fmt.Sprintf("%v", this.Sites) + `,`,
 		`EnableConnectionToReChoice:` + fmt.Sprintf("%v", this.EnableConnectionToReChoice) + `,`,
 		`CloudLinkState:` + fmt.Sprintf("%v", this.CloudLinkState) + `,`,
@@ -4896,6 +6355,16 @@ func (this *GetSpecType_Enabled) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_Enabled{`,
 		`Enabled:` + strings.Replace(fmt.Sprintf("%v", this.Enabled), "CloudLinkADNType", "views.CloudLinkADNType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Gcp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Gcp{`,
+		`Gcp:` + strings.Replace(fmt.Sprintf("%v", this.Gcp), "GCPType", "GCPType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5026,70 +6495,6 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SuggestedAction", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SuggestedAction = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ErrorDescription", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ErrorDescription = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sites", wireType)
@@ -5198,6 +6603,41 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gcp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudProvider = &GlobalSpecType_Gcp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -5465,6 +6905,130 @@ func (m *AzureType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: AzureType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GcpCred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.GcpCred == nil {
+				m.GcpCred = &views.ObjectRefType{}
+			}
+			if err := m.GcpCred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Byoc", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPBYOCListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudLinkType = &GCPType_Byoc{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6070,6 +7634,566 @@ func (m *AWSBYOCType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Region", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Region = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coordinates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Coordinates == nil {
+				m.Coordinates = &site.Coordinates{}
+			}
+			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPBYOCListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPBYOCListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPBYOCListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Connections", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Connections = append(m.Connections, &GCPBYOCType{})
+			if err := m.Connections[len(m.Connections)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPBYOCType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPBYOCType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPBYOCType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Region", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Region = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SameAsCredential", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProjectChoice = &GCPBYOCType_SameAsCredential{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Project", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProjectChoice = &GCPBYOCType_Project{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InterconnectAttachmentName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InterconnectAttachmentName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coordinates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Coordinates == nil {
+				m.Coordinates = &site.Coordinates{}
+			}
+			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GCPPartnerMetadata) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GCPPartnerMetadata: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GCPPartnerMetadata: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Interconnect", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Interconnect = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PortalUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PortalUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6486,6 +8610,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.EnableConnectionToReChoice = &CreateSpecType_Enabled{v}
 			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gcp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudProvider = &CreateSpecType_Gcp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6679,6 +8838,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.EnableConnectionToReChoice = &ReplaceSpecType_Enabled{v}
 			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gcp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudProvider = &ReplaceSpecType_Gcp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -6821,70 +9015,6 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SuggestedAction", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SuggestedAction = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ErrorDescription", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ErrorDescription = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sites", wireType)
@@ -6993,6 +9123,41 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Gcp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &GCPType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudProvider = &GetSpecType_Gcp{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

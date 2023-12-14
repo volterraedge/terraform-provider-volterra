@@ -3460,17 +3460,6 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *StringRules_StrictUriRef:
-		if fv, exists := v.FldValidators["well_known.strict_uri_ref"]; exists {
-			val := m.GetWellKnown().(*StringRules_StrictUriRef).StrictUriRef
-			vOpts := append(opts,
-				db.WithValidateField("well_known"),
-				db.WithValidateField("strict_uri_ref"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *StringRules_VesServiceNamespaceName:
 		if fv, exists := v.FldValidators["well_known.ves_service_namespace_name"]; exists {
 			val := m.GetWellKnown().(*StringRules_VesServiceNamespaceName).VesServiceNamespaceName
@@ -3620,6 +3609,50 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("well_known"),
 				db.WithValidateField("http_valid_methods"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_UrlOrUriRef:
+		if fv, exists := v.FldValidators["well_known.url_or_uri_ref"]; exists {
+			val := m.GetWellKnown().(*StringRules_UrlOrUriRef).UrlOrUriRef
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("url_or_uri_ref"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv4PrefixGloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ipv4_prefix_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv4PrefixGloballyRoutable).Ipv4PrefixGloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv4_prefix_globally_routable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_Ipv6PrefixGloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ipv6_prefix_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_Ipv6PrefixGloballyRoutable).Ipv6PrefixGloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ipv6_prefix_globally_routable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *StringRules_IpPrefixGloballyRoutable:
+		if fv, exists := v.FldValidators["well_known.ip_prefix_globally_routable"]; exists {
+			val := m.GetWellKnown().(*StringRules_IpPrefixGloballyRoutable).IpPrefixGloballyRoutable
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("ip_prefix_globally_routable"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -384,3 +384,366 @@ var DefaultListCloudNetworkTagValuesResponseValidator = func() *ValidateListClou
 func ListCloudNetworkTagValuesResponseValidator() db.Validator {
 	return DefaultListCloudNetworkTagValuesResponseValidator
 }
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListCloudSubnetTagKeysRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCloudSubnetTagKeysRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCloudSubnetTagKeysRequest) DeepCopy() *ListCloudSubnetTagKeysRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCloudSubnetTagKeysRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCloudSubnetTagKeysRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCloudSubnetTagKeysRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCloudSubnetTagKeysRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCloudSubnetTagKeysRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCloudSubnetTagKeysRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCloudSubnetTagKeysRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCloudSubnetTagKeysRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_type"))
+		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_key"))
+		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCloudSubnetTagKeysRequestValidator = func() *ValidateListCloudSubnetTagKeysRequest {
+	v := &ValidateListCloudSubnetTagKeysRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListCloudSubnetTagKeysRequestValidator() db.Validator {
+	return DefaultListCloudSubnetTagKeysRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListCloudSubnetTagKeysResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCloudSubnetTagKeysResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCloudSubnetTagKeysResponse) DeepCopy() *ListCloudSubnetTagKeysResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCloudSubnetTagKeysResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCloudSubnetTagKeysResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCloudSubnetTagKeysResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCloudSubnetTagKeysResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCloudSubnetTagKeysResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCloudSubnetTagKeysResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCloudSubnetTagKeysResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCloudSubnetTagKeysResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["keys"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("keys"))
+		for idx, item := range m.GetKeys() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCloudSubnetTagKeysResponseValidator = func() *ValidateListCloudSubnetTagKeysResponse {
+	v := &ValidateListCloudSubnetTagKeysResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListCloudSubnetTagKeysResponseValidator() db.Validator {
+	return DefaultListCloudSubnetTagKeysResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListCloudSubnetTagValuesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCloudSubnetTagValuesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCloudSubnetTagValuesRequest) DeepCopy() *ListCloudSubnetTagValuesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCloudSubnetTagValuesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCloudSubnetTagValuesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCloudSubnetTagValuesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCloudSubnetTagValuesRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCloudSubnetTagValuesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCloudSubnetTagValuesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCloudSubnetTagValuesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCloudSubnetTagValuesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_type"))
+		if err := fv(ctx, m.GetCloudType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_key"))
+		if err := fv(ctx, m.GetQueryKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_value"))
+		if err := fv(ctx, m.GetQueryValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCloudSubnetTagValuesRequestValidator = func() *ValidateListCloudSubnetTagValuesRequest {
+	v := &ValidateListCloudSubnetTagValuesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListCloudSubnetTagValuesRequestValidator() db.Validator {
+	return DefaultListCloudSubnetTagValuesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListCloudSubnetTagValuesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListCloudSubnetTagValuesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListCloudSubnetTagValuesResponse) DeepCopy() *ListCloudSubnetTagValuesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListCloudSubnetTagValuesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListCloudSubnetTagValuesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListCloudSubnetTagValuesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListCloudSubnetTagValuesResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListCloudSubnetTagValuesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListCloudSubnetTagValuesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListCloudSubnetTagValuesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListCloudSubnetTagValuesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("values"))
+		for idx, item := range m.GetValues() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListCloudSubnetTagValuesResponseValidator = func() *ValidateListCloudSubnetTagValuesResponse {
+	v := &ValidateListCloudSubnetTagValuesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListCloudSubnetTagValuesResponseValidator() db.Validator {
+	return DefaultListCloudSubnetTagValuesResponseValidator
+}

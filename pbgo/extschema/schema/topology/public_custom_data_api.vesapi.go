@@ -1837,7 +1837,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "schematopologyMetricType": {
             "type": "string",
-            "description": "List of metric types applicable for the nodes and edges in the topology graph.\nNot all metric types are applicable for all nodes or edges. For example, LATENCY metric\nis applicable only for the edges where both the vertices are sites and CPU_USAGE metric is\napplicable only for node of type instance. This list is a union of all metric types.\n\nTotal incoming traffic in bytes\nTotal outgoing traffic in bytes\nTotal incoming packets dropped\nTotal outgoing packets dropped\nReachability based on probes sent periodically\nAverage latency in seconds\nAverage CPU utilization in percentage\nAverage Memory utilization in percentage\nAverage Disk utilization in percentage",
+            "description": "List of metric types applicable for the nodes and edges in the topology graph.\nNot all metric types are applicable for all nodes or edges. For example, LATENCY metric\nis applicable only for the edges where both the vertices are sites and CPU_USAGE metric is\napplicable only for node of type instance. This list is a union of all metric types.\n\nTotal incoming traffic in bytes\nTotal outgoing traffic in bytes\nTotal incoming packets dropped\nTotal outgoing packets dropped\nReachability based on probes sent periodically\nAverage latency in seconds\nAverage CPU utilization in percentage\nAverage Memory utilization in percentage\nAverage Disk utilization in percentage\nConnection status of the tunnel",
             "title": "Metric Type",
             "enum": [
                 "METRIC_TYPE_IN_BYTES",
@@ -1848,7 +1848,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "METRIC_TYPE_LATENCY_SECONDS",
                 "METRIC_TYPE_CPU_USAGE_PERCENT",
                 "METRIC_TYPE_MEMORY_USAGE_PERCENT",
-                "METRIC_TYPE_DISK_USAGE_PERCENT"
+                "METRIC_TYPE_DISK_USAGE_PERCENT",
+                "METRIC_TYPE_DATA_PLANE_CONNECTION_STATUS"
             ],
             "default": "METRIC_TYPE_IN_BYTES",
             "x-displayname": "Metric Type",
@@ -2021,6 +2022,12 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Network"
+                },
+                "site_type": {
+                    "description": " Site type indicates whether the site is CUSTOMER_EDGE or REGIONAL_EDGE",
+                    "title": "Site type",
+                    "$ref": "#/definitions/schemasiteSiteType",
+                    "x-displayname": "Site Type"
                 },
                 "tgw": {
                     "type": "array",
@@ -2269,6 +2276,28 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
+        "topologyEdgeInfoSummary": {
+            "type": "object",
+            "description": "Summary information for an edge",
+            "title": "EdgeInfoSummary",
+            "x-displayname": "Edge Info Summary",
+            "x-ves-proto-message": "ves.io.schema.topology.EdgeInfoSummary",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "description": " Links count.",
+                    "title": "Count",
+                    "format": "int64",
+                    "x-displayname": "Count"
+                },
+                "status": {
+                    "description": " Edge status.",
+                    "title": "Status",
+                    "$ref": "#/definitions/topologyLinkStatus",
+                    "x-displayname": "Status"
+                }
+            }
+        },
         "topologyInstanceType": {
             "type": "object",
             "description": "A canonical form of the instance.",
@@ -2372,12 +2401,26 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "Link Info",
             "x-ves-proto-message": "ves.io.schema.topology.LinkInfo",
             "properties": {
+                "dst_id": {
+                    "type": "string",
+                    "description": " Endpoint identifier. dst_id is the destination endpoint for the link is between src_id and dst_id.\n\nExample: - \"master-0\"-",
+                    "title": "Destination ID",
+                    "x-displayname": "Destination ID",
+                    "x-ves-example": "master-0"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the link.\n Link name may or may not be present depending on the type of link.\n\nExample: - \"tunnel-1\"-",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "tunnel-1"
+                },
+                "src_id": {
+                    "type": "string",
+                    "description": " Endpoint identifier. src_id is the source endpoint for the link is between src_id and dst_id.\n\nExample: - \"master-0\"-",
+                    "title": "Source ID",
+                    "x-displayname": "Source ID",
+                    "x-ves-example": "master-0"
                 },
                 "status": {
                     "description": " Link status.",
@@ -2559,6 +2602,16 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "1570194000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "step": {
+                    "type": "string",
+                    "description": " step is the resolution width, which determines the number of the data points [x-axis (time)] to be returned in the response.\n The timestamps in the response will be t1=start_time, t2=t1+step, ... tn=tn-1+step, where tn \u003c= end_time.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\n Optional: If not specified, then step size is evaluated to \u003cend_time - start_time\u003e\n\nExample: - \"5m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_step: true\n",
+                    "title": "Step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "5m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_step": "true"
                     }
                 }
             }
@@ -3178,6 +3231,15 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "Site Mesh Group Summary",
             "x-ves-proto-message": "ves.io.schema.topology.SiteMeshGroupSummaryInfo",
             "properties": {
+                "edge_status_summary": {
+                    "type": "array",
+                    "description": " Summary of the edges status between the sites in the site mesh group.",
+                    "title": "Edge Summary",
+                    "items": {
+                        "$ref": "#/definitions/topologyEdgeInfoSummary"
+                    },
+                    "x-displayname": "Edge Summary"
+                },
                 "link_status_summary": {
                     "type": "array",
                     "description": " Summary of the link status between the sites in the site mesh group.",
@@ -3400,6 +3462,16 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schematopologyNode"
                     },
                     "x-displayname": "Nodes"
+                },
+                "step": {
+                    "type": "string",
+                    "description": " Actual step size used in the response. It could be higher than the requested step due to metric rollups and the query duration.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "30m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },

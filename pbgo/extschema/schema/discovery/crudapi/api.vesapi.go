@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2670,6 +2734,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -3706,23 +3774,41 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-oneof-field-ref_or_selector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
+            "x-ves-oneof-field-ref_or_selector": "[\"segment\",\"segment_site\",\"segment_vsite\",\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
+                "segment": {
+                    "description": "Exclusive with [segment_site segment_vsite site virtual_network virtual_site]\n Reference to Segment",
+                    "title": "segment",
+                    "$ref": "#/definitions/schemaSegementRefType",
+                    "x-displayname": "Segment"
+                },
+                "segment_site": {
+                    "description": "Exclusive with [segment segment_vsite site virtual_network virtual_site]\n Reference to Segment object",
+                    "title": "segment",
+                    "$ref": "#/definitions/schemaSiteSegmentRefType",
+                    "x-displayname": "Segment on a Site"
+                },
+                "segment_vsite": {
+                    "description": "Exclusive with [segment segment_site site virtual_network virtual_site]\n Reference to Segment in a virtual site",
+                    "title": "segment in virtual site",
+                    "$ref": "#/definitions/schemaVSiteSegmentRefType",
+                    "x-displayname": "Segment in a Virtual Site"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
+                    "description": "Exclusive with [segment segment_site segment_vsite virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
                     "$ref": "#/definitions/schemaSiteRefType",
                     "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
+                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
                     "$ref": "#/definitions/schemaNetworkRefType",
                     "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
+                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
                     "$ref": "#/definitions/schemaVSiteRefType",
                     "x-displayname": "Virtual Site"
@@ -3874,6 +3960,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSegementRefType": {
+            "type": "object",
+            "description": "This specifies a direct reference to a segment object",
+            "title": "SegementRefType",
+            "x-displayname": "Segment Reference",
+            "x-ves-proto-message": "ves.io.schema.SegementRefType",
+            "properties": {
+                "ref": {
+                    "type": "array",
+                    "description": " A segment reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "ref",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
         "schemaSiteRefType": {
             "type": "object",
             "description": "This specifies a direct reference to a site configuration object",
@@ -3909,6 +4019,45 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaSiteSegmentRefType": {
+            "type": "object",
+            "description": "Reference to a segment in a site",
+            "title": "SiteSegmentRefType",
+            "x-displayname": "Segment in Site",
+            "x-ves-proto-message": "ves.io.schema.SiteSegmentRefType",
+            "properties": {
+                "segment": {
+                    "type": "array",
+                    "description": " Segment in the site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "segment",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "site": {
+                    "type": "array",
+                    "description": " Reference to a site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -4200,6 +4349,45 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaVSiteSegmentRefType": {
+            "type": "object",
+            "description": "Reference to a segment in a virtual site",
+            "title": "VSiteSegmentRefType",
+            "x-displayname": "Segment in Virtual Site",
+            "x-ves-proto-message": "ves.io.schema.VSiteSegmentRefType",
+            "properties": {
+                "segment": {
+                    "type": "array",
+                    "description": " Segment in the virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "segment",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "vsite": {
+                    "type": "array",
+                    "description": " Reference to a virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "vsite",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Virtual Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

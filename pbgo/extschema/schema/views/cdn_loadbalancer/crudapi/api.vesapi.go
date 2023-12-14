@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2607,79 +2671,153 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNCacheRule": {
             "type": "object",
-            "description": "x-displayName: \"Cache Rule\"\nThis defines a CDN Cache Rule",
+            "description": "This defines a CDN Cache Rule",
             "title": "Cache Rule",
+            "x-displayname": "Cache Rule",
+            "x-ves-displayorder": "1,2,3",
+            "x-ves-oneof-field-cache_actions": "[\"cache_bypass\",\"eligible_for_cache\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNCacheRule",
             "properties": {
                 "cache_bypass": {
-                    "description": "x-displayName: \"Bypass Cache\"\nBypass Caching of content from the origin",
+                    "description": "Exclusive with [eligible_for_cache]\n Bypass Caching of content from the origin",
                     "title": "Bypass Cache",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Bypass Cache"
                 },
                 "eligible_for_cache": {
-                    "description": "x-displayName: \"Eligible For Cache\"\nEligible for caching the content",
+                    "description": "Exclusive with [cache_bypass]\n Eligible for caching the content",
                     "title": "Eligible For Cache",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheEligibleOptions"
+                    "$ref": "#/definitions/cdn_loadbalancerCacheEligibleOptions",
+                    "x-displayname": "Eligible For Cache"
                 },
                 "rule_expression_list": {
                     "type": "array",
-                    "description": "x-displayName: \"Expressions\"\nx-required\nExpressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs..",
+                    "description": " Expressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs..\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Expression List",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/cdn_loadbalancerCDNCacheRuleExpressionList"
+                    },
+                    "x-displayname": "Expressions",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "rule_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Rule Name\"\nx-required\nx-example: \"Rule-1\"\nName of the Cache Rule",
-                    "title": "Rule Name"
+                    "description": " Name of the Cache Rule\n\nExample: - \"Rule-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "Rule Name",
+                    "maxLength": 128,
+                    "x-displayname": "Rule Name",
+                    "x-ves-example": "Rule-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 }
             }
         },
         "cdn_loadbalancerCDNCacheRuleExpression": {
             "type": "object",
-            "description": "x-displayName: \"Cache Rule Expression\"\nSelect one of the field options",
+            "description": "Select one of the field options",
             "title": "CDNCacheRuleExpression",
+            "x-displayname": "Cache Rule Expression",
+            "x-ves-displayorder": "1,6,5,7",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNCacheRuleExpression",
             "properties": {
-                "headers": {
+                "cache_headers": {
                     "type": "array",
-                    "description": "x-displayName: \"Cache Headers\"\nConfigure cache rule headers to match the criteria",
+                    "description": " Configure cache rule headers to match the criteria\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Cache Headers",
+                    "maxItems": 8,
                     "items": {
-                        "$ref": "#/definitions/ioschemaHeaderMatcherType"
+                        "$ref": "#/definitions/cdn_loadbalancerCacheHeaderMatcherType"
+                    },
+                    "x-displayname": "Cache Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "cookie_matcher": {
+                    "type": "array",
+                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "cookie matchers",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerCacheCookieMatcherType"
+                    },
+                    "x-displayname": "Cookie Matchers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "path_match": {
-                    "description": "x-displayName: \"Path Match\"\nURI path of route",
+                    "description": " URI path of route",
                     "title": "path_match",
-                    "$ref": "#/definitions/ioschemaPathMatcherType"
+                    "$ref": "#/definitions/cdn_loadbalancerCDNPathMatcherType",
+                    "x-displayname": "Path Match"
                 },
-                "query_params": {
+                "query_parameters": {
                     "type": "array",
-                    "description": "x-displayName: \"Query Parameters\"\nList of (key, value) query parameters",
+                    "description": " List of (key, value) query parameters\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "query_params",
+                    "maxItems": 8,
                     "items": {
-                        "$ref": "#/definitions/ioschemaQueryParameterMatcherType"
+                        "$ref": "#/definitions/cdn_loadbalancerCacheQueryParameterMatcherType"
+                    },
+                    "x-displayname": "Query Parameters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "cdn_loadbalancerCDNCacheRuleExpressionList": {
             "type": "object",
-            "description": "x-displayName: \"Cache Rule Expression List\"\nCDN Cache Rule Expressions.",
+            "description": "CDN Cache Rule Expressions.",
             "title": "Cache Rule Expression List",
+            "x-displayname": "Cache Rule Expression List",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNCacheRuleExpressionList",
             "properties": {
                 "cache_rule_expression": {
                     "type": "array",
-                    "description": "x-displayName: \"Terms\"\nx-required\nThe Cache Rule Expression Terms that are ANDed",
+                    "description": " The Cache Rule Expression Terms that are ANDed\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Terms",
+                    "minItems": 1,
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/cdn_loadbalancerCDNCacheRuleExpression"
+                    },
+                    "x-displayname": "Terms",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "expression_name": {
                     "type": "string",
-                    "description": "x-displayName: \"Expression Name\"\nx-required\nx-example: \"Expression-1\"\nName of the Expressions items that are ANDed",
-                    "title": "Expression Name"
+                    "description": " Name of the Expressions items that are ANDed\n\nExample: - \"Expression-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "Expression Name",
+                    "maxLength": 128,
+                    "x-displayname": "Expression Name",
+                    "x-ves-example": "Expression-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 }
             }
         },
@@ -2828,7 +2966,8 @@ var APISwaggerJSON string = `{
                 "CDN_LB_STATUS_CREATED",
                 "CDN_LB_STATUS_DEPLOYING",
                 "CDN_LB_STATUS_DEPLOY_FAILED",
-                "CDN_LB_STATUS_DEPLOYED"
+                "CDN_LB_STATUS_DEPLOYED",
+                "CDN_LB_STATUS_FAILED"
             ],
             "default": "CDN_LB_STATUS_CREATED",
             "x-displayname": "CDN LoadBalancer Deployment status",
@@ -2891,6 +3030,22 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerCDNPathMatcherType": {
+            "type": "object",
+            "description": "Path match of the URI",
+            "title": "PathMatcherType",
+            "x-displayname": "Path to Match",
+            "x-ves-displayorder": "5",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNPathMatcherType",
+            "properties": {
+                "operator": {
+                    "description": " A specification of path match",
+                    "title": "cache_operator",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOperator",
+                    "x-displayname": "Path Match"
+                }
+            }
+        },
         "cdn_loadbalancerCDNSiteDeploymentStatus": {
             "type": "string",
             "title": "CDNSiteDeploymentStatus",
@@ -2927,108 +3082,259 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerCacheCookieMatcherType": {
+            "type": "object",
+            "description": "A cookie matcher specifies the name of a single cookie and the criteria to match it. The input has a list of values for each\ncookie in the request.\nA cookie matcher can check for one of the following:\n* Presence or absence of the cookie\n* At least one of the values for the cookie in the request satisfies the MatcherType item",
+            "title": "CacheCookieMatcherType",
+            "x-displayname": "Cookie Matcher",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheCookieMatcherType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " A case-sensitive cookie name.\n\nExample: - \"Session\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Cookie Name",
+                    "x-ves-example": "Session",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                },
+                "operator": {
+                    "description": " ",
+                    "title": "cache_operator",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOperator",
+                    "x-displayname": "Operator"
+                }
+            }
+        },
         "cdn_loadbalancerCacheEligibleOptions": {
             "type": "object",
-            "description": "x-displayName: \"Cache Action Options\"\nList of options for Cache Action",
+            "description": "List of options for Cache Action",
             "title": "Cache Action Options",
+            "x-displayname": "Cache Action Options",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-eligible_for_cache": "[\"scheme_proxy_host_request_uri\",\"scheme_proxy_host_uri\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheEligibleOptions",
             "properties": {
-                "hostname_uri": {
-                    "description": "x-displayName: \"Hostname + URI\"",
-                    "title": "Hostname + URI",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
-                },
-                "scheme_hostname_request_uri": {
-                    "description": "x-displayName: \"Scheme + Hostname + Request + URI\"",
+                "scheme_proxy_host_request_uri": {
+                    "description": "Exclusive with [scheme_proxy_host_uri]\n ",
                     "title": "Scheme + Proxy Host + Request URI",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps",
+                    "x-displayname": "Scheme + Proxy Host + Request URI"
                 },
-                "scheme_hostname_uri": {
-                    "description": "x-displayName: \"Scheme + Hostname + URI\"",
-                    "title": "Scheme + Hostname + URI",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                "scheme_proxy_host_uri": {
+                    "description": "Exclusive with [scheme_proxy_host_request_uri]\n ",
+                    "title": "Scheme + Proxy Host + URI",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps",
+                    "x-displayname": "Scheme + Proxy Host + URI"
+                }
+            }
+        },
+        "cdn_loadbalancerCacheHeaderMatcherType": {
+            "type": "object",
+            "description": "Header match is done using the name of the header and its value.\nThe value match is done using one of the following\n    regex match on value\n    exact match of value\n    presence of header\n\nHeader Match can also be inverse of above, which be used to check\n    missing header or\n    non-matching value",
+            "title": "CacheHeaderMatcherType",
+            "x-displayname": "Cache Header to Match",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheHeaderMatcherType",
+            "properties": {
+                "name": {
+                    "description": " Name of the header\n\nExample: - \"Content-Type\"-",
+                    "title": "Name",
+                    "$ref": "#/definitions/cdn_loadbalancerHeaderOptions",
+                    "x-displayname": "Name",
+                    "x-ves-example": "Content-Type"
                 },
-                "scheme_hostname_uri_query": {
-                    "description": "x-displayName: \"Scheme + Hostname + URI + Query\"",
-                    "title": "Scheme + Hostname + URI + Query",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLEnableProps"
+                "operator": {
+                    "description": " Available operators",
+                    "title": "cache_operator",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOperator",
+                    "x-displayname": "Operator"
+                }
+            }
+        },
+        "cdn_loadbalancerCacheOperator": {
+            "type": "object",
+            "title": "Cache Operator",
+            "x-displayname": "Operator",
+            "x-ves-oneof-field-cache_operator": "[\"Contains\",\"DoesNotContain\",\"DoesNotEndWith\",\"DoesNotEqual\",\"DoesNotStartWith\",\"Endswith\",\"Equals\",\"MatchRegex\",\"Startswith\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheOperator",
+            "properties": {
+                "Contains": {
+                    "type": "string",
+                    "description": "Exclusive with [DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must contain",
+                    "title": "Contains",
+                    "x-displayname": "Contains"
+                },
+                "DoesNotContain": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not contain",
+                    "title": "Does Not Contain",
+                    "x-displayname": "Does Not Contain"
+                },
+                "DoesNotEndWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not end with",
+                    "title": "Does Not End With",
+                    "x-displayname": "Does Not End With"
+                },
+                "DoesNotEqual": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotStartWith Endswith Equals MatchRegex Startswith]\n Field must not equal",
+                    "title": "Does Not Equal",
+                    "x-displayname": "Does Not Equal"
+                },
+                "DoesNotStartWith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual Endswith Equals MatchRegex Startswith]\n Field must not start with",
+                    "title": "Does Not Start With",
+                    "x-displayname": "Does Not Start With"
+                },
+                "Endswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Equals MatchRegex Startswith]\n Field must end with",
+                    "title": "Ends With",
+                    "x-displayname": "Ends With"
+                },
+                "Equals": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith MatchRegex Startswith]\n Field must exactly match",
+                    "title": "Equals",
+                    "x-displayname": "Equals"
+                },
+                "MatchRegex": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n Field matches regular expression",
+                    "title": "Matches Regex",
+                    "x-displayname": "Matches Regex"
+                },
+                "Startswith": {
+                    "type": "string",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals MatchRegex]\n Field must start with",
+                    "title": "Starts With",
+                    "x-displayname": "Starts With"
                 }
             }
         },
         "cdn_loadbalancerCacheOptions": {
             "type": "object",
-            "description": "x-displayName: \"Cache Options\"\nThis defines the options related to content caching",
+            "description": "This defines the options related to content caching",
             "title": "Cache options",
+            "x-displayname": "Cache Options",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheOptions",
             "properties": {
                 "cache_rules": {
                     "type": "array",
-                    "description": "x-displayName: \"Cache Rules\"\nx-required\nRules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.",
+                    "description": " Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of Cache rules(These rules are ORed)",
+                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/cdn_loadbalancerCDNCacheRule"
+                    },
+                    "x-displayname": "Cache Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "default_cache_action": {
-                    "description": "x-displayName: \"Default Cache Action\"\nx-required\nDefault value for Cache action.",
+                    "description": " Default value for Cache action.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Default Cache Action",
-                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction"
+                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction",
+                    "x-displayname": "Default Cache Action",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cdn_loadbalancerCacheQueryParameterMatcherType": {
+            "type": "object",
+            "description": "Query parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
+            "title": "CacheQueryParameterMatcherType",
+            "x-displayname": "Query Parameter to Match",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheQueryParameterMatcherType",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Query parameter key\n In the above example, assignee_username is the key\n\nExample: - \"assignee_username\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "key",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Key",
+                    "x-ves-example": "assignee_username",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "operator": {
+                    "description": " ",
+                    "title": "cache_operator",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOperator",
+                    "x-displayname": "Operator"
                 }
             }
         },
         "cdn_loadbalancerCacheTTLEnableProps": {
             "type": "object",
-            "description": "x-displayName: \"Cache TTL Enable Props\"\nCache TTL Enable Values",
+            "description": "Cache TTL Enable Values",
             "title": "Cache TTL Enable Props",
+            "x-displayname": "Cache TTL Enable Props",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheTTLEnableProps",
             "properties": {
                 "cache_override": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Cache Override\"\nHonour Cache Override",
+                    "description": " Honour Cache Override",
                     "title": "Cache Override",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Cache Override"
                 },
                 "cache_ttl": {
                     "type": "string",
-                    "description": "x-displayName: \"Cache TTL\"\nx-required\nx-example: \"5m, 60s, 120s, 3h, 1d, 15d\"\nCache TTL value is used to cache the resource/content for the specified amount of time\nFormat: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days",
-                    "title": "Cache TTL Key"
+                    "description": " Cache TTL value is used to cache the resource/content for the specified amount of time\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"5m, 60s, 120s, 3h, 1d, 15d\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "Cache TTL Key",
+                    "x-displayname": "Cache TTL",
+                    "x-ves-example": "5m, 60s, 120s, 3h, 1d, 15d",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 },
-                "set_cookie": {
+                "ignore_response_cookie": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Set-Cookie\"\nWhen enabled, the upstream cookie is sent to the client",
+                    "description": " By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present.",
                     "title": "Set Cookie",
-                    "format": "boolean"
+                    "format": "boolean",
+                    "x-displayname": "Ignore-Response-Cookie"
                 }
             }
         },
         "cdn_loadbalancerCacheTTLOptionsType": {
             "type": "object",
-            "description": "This defines the options related to content caching",
+            "description": "x-displayName: \"Cache Options\"\nThis defines the options related to content caching",
             "title": "Cache options",
-            "x-displayname": "Cache Options",
-            "x-ves-oneof-field-ttl_options": "[\"cache_disabled\",\"cache_ttl_default\",\"cache_ttl_override\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheTTLOptionsType",
             "properties": {
                 "cache_disabled": {
-                    "description": "Exclusive with [cache_ttl_default cache_ttl_override]\n Disable Caching of content from the origin",
+                    "description": "x-displayName: \"Disable Cache\"\nDisable Caching of content from the origin",
                     "title": "Disable Cache",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable Cache"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "cache_ttl_default": {
                     "type": "string",
-                    "description": "Exclusive with [cache_disabled cache_ttl_override]\n Cache TTL value to use when the origin does not provide one\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
-                    "title": "Default Cache TTL",
-                    "x-displayname": "Default Cache TTL",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.time_interval": "true"
-                    }
+                    "description": "x-displayName: \"Default Cache TTL\"\nCache TTL value to use when the origin does not provide one",
+                    "title": "Default Cache TTL"
                 },
                 "cache_ttl_override": {
                     "type": "string",
-                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Override the Cache TTL directive in the response from the origin\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
-                    "title": "Override Cache TTL",
-                    "x-displayname": "Override Cache TTL",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.time_interval": "true"
-                    }
+                    "description": "x-displayName: \"Override Cache TTL\"\nOverride the Cache TTL directive in the response from the origin",
+                    "title": "Override Cache TTL"
                 }
             }
         },
@@ -3040,6 +3346,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-tls_choice": "[\"no_tls\",\"use_tls\"]",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CdnOriginPoolType",
             "properties": {
+                "more_origin_options": {
+                    "title": "Advanced Configuration",
+                    "$ref": "#/definitions/cdn_loadbalancerOriginAdvancedConfiguration",
+                    "x-displayname": "Advanced Configuration"
+                },
                 "no_tls": {
                     "description": "Exclusive with [use_tls]\n Origin servers do not use TLS",
                     "title": "No TLS",
@@ -3096,13 +3407,35 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerDefaultCacheAction": {
             "type": "object",
-            "description": "x-displayName: \"Default Cache Action\"\nThis defines a Default Cache Action",
+            "description": "This defines a Default Cache Action",
             "title": "Default Cache Action",
+            "x-displayname": "Default Cache Action",
+            "x-ves-oneof-field-cache_actions": "[\"cache_disabled\",\"cache_ttl_default\",\"cache_ttl_override\"]",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.DefaultCacheAction",
             "properties": {
-                "eligible_for_cache": {
-                    "description": "x-displayName: \"Eligible For Cache\"\nEligible for caching the content",
-                    "title": "Eligible For Cache",
-                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheTTLProps"
+                "cache_disabled": {
+                    "description": "Exclusive with [cache_ttl_default cache_ttl_override]\n Disable Caching of content from the origin",
+                    "title": "Disable Cache",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Cache"
+                },
+                "cache_ttl_default": {
+                    "type": "string",
+                    "description": "Exclusive with [cache_disabled cache_ttl_override]\n Cache TTL value to use when the origin does not provide one\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "Default Cache TTL",
+                    "x-displayname": "Default Cache TTL",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
+                },
+                "cache_ttl_override": {
+                    "type": "string",
+                    "description": "Exclusive with [cache_disabled cache_ttl_default]\n Override the Cache TTL directive in the response from the origin\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "Override Cache TTL",
+                    "x-displayname": "Override Cache TTL",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },
@@ -3213,6 +3546,20 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerHeaderOptions": {
+            "type": "string",
+            "description": "\n - proxy_host: Proxy Host\n\nName of the proxied server\n - referer: Referer\n\nThis is the address of the previous web page from which a link to the currently requested page was followed\n - scheme: Scheme\n\nThe http scheme used: http or https\n - user_agent: User Agent\n\nThe user agent string of the user agent",
+            "title": "Header Options",
+            "enum": [
+                "proxy_host",
+                "referer",
+                "scheme",
+                "user_agent"
+            ],
+            "default": "proxy_host",
+            "x-displayname": "Header Options",
+            "x-ves-proto-enum": "ves.io.schema.views.cdn_loadbalancer.HeaderOptions"
+        },
         "cdn_loadbalancerIpFilteringOptions": {
             "type": "object",
             "description": "Options to filter based on IP prefix",
@@ -3277,6 +3624,30 @@ var APISwaggerJSON string = `{
                     "title": "origin_log_options",
                     "$ref": "#/definitions/cdn_loadbalancerLogHeaderOptions",
                     "x-displayname": "Origin Response Headers to Log"
+                }
+            }
+        },
+        "cdn_loadbalancerOriginAdvancedConfiguration": {
+            "type": "object",
+            "title": "Origin Byte Range Request Config",
+            "x-displayname": "Origin Byte Range Request Config",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.OriginAdvancedConfiguration",
+            "properties": {
+                "disable_byte_range_request": {
+                    "type": "boolean",
+                    "description": " Choice to enable/disable origin byte range requrests towards origin\n\nExample: - \"true/false\"-",
+                    "title": "Disable Origin Byte Range Requests",
+                    "format": "boolean",
+                    "x-displayname": "Disable Origin Byte Range Requests",
+                    "x-ves-example": "true/false"
+                },
+                "websocket_proxy": {
+                    "type": "boolean",
+                    "description": " Option to enable proxying of websocket connections to the origin server",
+                    "title": "Enable websocket proxy to the origin",
+                    "format": "boolean",
+                    "x-displayname": "Enable websocket proxy to the origin"
                 }
             }
         },
@@ -3458,6 +3829,10 @@ var APISwaggerJSON string = `{
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
                 },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
+                },
                 "uids": {
                     "type": "array",
                     "items": {
@@ -3585,40 +3960,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "ioschemaHeaderMatcherType": {
-            "type": "object",
-            "description": "x-displayName: \"Header to Match\"\nHeader match is done using the name of the header and its value.\nThe value match is done using one of the following\n    regex match on value\n    exact match of value\n    presence of header\n\nHeader Match can also be inverse of above, which be used to check\n    missing header or\n    non-matching value",
-            "title": "HeaderMatcherType",
-            "properties": {
-                "exact": {
-                    "type": "string",
-                    "description": "x-displayName: \"Exact\"\nx-example: \"application/json\"\nHeader value to match exactly",
-                    "title": "exact"
-                },
-                "invert_match": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"NOT of match\"\nInvert the result of the match to detect missing header or non-matching value",
-                    "title": "invert_match",
-                    "format": "boolean"
-                },
-                "name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-required\nx-example: \"Content-Type\"\nName of the header",
-                    "title": "name"
-                },
-                "presence": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Presence\"\nIf true, check for presence of header",
-                    "title": "presence",
-                    "format": "boolean"
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "x-displayName: \"Regex\"\nRegex match of the header value in re2 format",
-                    "title": "regex"
-                }
-            }
-        },
         "ioschemaObjectRefType": {
             "type": "object",
             "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
@@ -3660,50 +4001,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "ioschemaPathMatcherType": {
-            "type": "object",
-            "description": "x-displayName: \"Path to Match\"\nPath match of the URI can be either be, Prefix match or exact match or regular expression match",
-            "title": "PathMatcherType",
-            "properties": {
-                "path": {
-                    "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-example: \"/logout\"\nExact path value to match",
-                    "title": "path"
-                },
-                "prefix": {
-                    "type": "string",
-                    "description": "x-displayName: \"Prefix\"\nx-example: \"/register/\"\nPath prefix to match (e.g. the value / will match on all paths)",
-                    "title": "prefix"
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "x-displayName: \"Regex\"\nRegular expression of path match (e.g. the value .* will match on all paths)",
-                    "title": "regex"
-                }
-            }
-        },
-        "ioschemaQueryParameterMatcherType": {
-            "type": "object",
-            "description": "x-displayName: \"Query Parameter to Match\"\nQuery parameter match can be either regex match on value or exact match of value for given key\nAn example for HTTP request with query parameter https://gitlab.com/dashboard/issues?assignee_username=xxyyxx",
-            "title": "QueryParameterMatcherType",
-            "properties": {
-                "exact": {
-                    "type": "string",
-                    "description": "x-displayName: \"Exact\"\nExact match value for the query parameter key",
-                    "title": "exact"
-                },
-                "key": {
-                    "type": "string",
-                    "description": "x-displayName: \"Key\"\nx-required\nx-example: \"assignee_username\"\nQuery parameter key\nIn the above example, assignee_username is the key",
-                    "title": "key"
-                },
-                "regex": {
-                    "type": "string",
-                    "description": "x-displayName: \"Regex\"\nRegex match value for the query parameter key",
-                    "title": "regex"
                 }
             }
         },
@@ -4358,6 +4655,22 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5298,12 +5611,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Advanced Options",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.AdvancedOptionsType",
             "properties": {
-                "cache_ttl_options": {
+                "cache_options": {
                     "description": " Cache Options",
                     "title": "Cache Options",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLOptionsType",
-                    "x-displayname": "Cache Options",
-                    "x-ves-deprecated": "Replaced by new filed cache_options"
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOptions",
+                    "x-displayname": "Cache Options"
                 },
                 "header_options": {
                     "description": " Request/Response header related options",

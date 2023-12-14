@@ -189,6 +189,324 @@ func LastLoginUpdateResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ListByNotifPrefRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListByNotifPrefRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListByNotifPrefRequest) DeepCopy() *ListByNotifPrefRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListByNotifPrefRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListByNotifPrefRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListByNotifPrefRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListByNotifPrefRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListByNotifPrefRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListByNotifPrefRequest) PreferenceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for preference_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateListByNotifPrefRequest) PreferenceChoicePreferenceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Preference, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for preference")
+	}
+	return oValidatorFn_Preference, nil
+}
+
+func (v *ValidateListByNotifPrefRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListByNotifPrefRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListByNotifPrefRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["preference_choice"]; exists {
+		val := m.GetPreferenceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("preference_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPreferenceChoice().(type) {
+	case *ListByNotifPrefRequest_Preference:
+		if fv, exists := v.FldValidators["preference_choice.preference"]; exists {
+			val := m.GetPreferenceChoice().(*ListByNotifPrefRequest_Preference).Preference
+			vOpts := append(opts,
+				db.WithValidateField("preference_choice"),
+				db.WithValidateField("preference"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListByNotifPrefRequestValidator = func() *ValidateListByNotifPrefRequest {
+	v := &ValidateListByNotifPrefRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPreferenceChoice := v.PreferenceChoiceValidationRuleHandler
+	rulesPreferenceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPreferenceChoice(rulesPreferenceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListByNotifPrefRequest.preference_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["preference_choice"] = vFn
+
+	vrhPreferenceChoicePreference := v.PreferenceChoicePreferenceValidationRuleHandler
+	rulesPreferenceChoicePreference := map[string]string{
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFnMap["preference_choice.preference"], err = vrhPreferenceChoicePreference(rulesPreferenceChoicePreference)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ListByNotifPrefRequest.preference_choice_preference: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["preference_choice.preference"] = vFnMap["preference_choice.preference"]
+
+	return v
+}()
+
+func ListByNotifPrefRequestValidator() db.Validator {
+	return DefaultListByNotifPrefRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListByNotifPrefResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListByNotifPrefResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListByNotifPrefResponse) DeepCopy() *ListByNotifPrefResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListByNotifPrefResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListByNotifPrefResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListByNotifPrefResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListByNotifPrefResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListByNotifPrefResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListByNotifPrefResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListByNotifPrefResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListByNotifPrefResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListByNotifPrefResponseValidator = func() *ValidateListByNotifPrefResponse {
+	v := &ValidateListByNotifPrefResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListByNotifPrefResponseValidator() db.Validator {
+	return DefaultListByNotifPrefResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListByNotifPrefResponseItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListByNotifPrefResponseItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListByNotifPrefResponseItem) DeepCopy() *ListByNotifPrefResponseItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListByNotifPrefResponseItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListByNotifPrefResponseItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListByNotifPrefResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListByNotifPrefResponseItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListByNotifPrefResponseItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListByNotifPrefResponseItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListByNotifPrefResponseItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListByNotifPrefResponseItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("email"))
+		if err := fv(ctx, m.GetEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["first_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("first_name"))
+		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_name"))
+		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListByNotifPrefResponseItemValidator = func() *ValidateListByNotifPrefResponseItem {
+	v := &ValidateListByNotifPrefResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ListByNotifPrefResponseItemValidator() db.Validator {
+	return DefaultListByNotifPrefResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *PrivateCascadeDeleteRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

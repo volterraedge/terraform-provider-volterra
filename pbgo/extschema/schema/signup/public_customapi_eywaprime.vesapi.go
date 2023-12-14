@@ -919,7 +919,7 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
             "type": "object",
             "title": "Create V2 Request",
             "x-displayname": "Create V2 Request",
-            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_msp\",\"source_plan_transition\",\"source_public\"]",
+            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_msp\",\"source_plan_transition\"]",
             "x-ves-proto-message": "ves.io.schema.signup.CreateV2Request",
             "properties": {
                 "account_details": {
@@ -953,34 +953,28 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                     }
                 },
                 "source_internal_scaling": {
-                    "description": "Exclusive with [source_internal_sre source_msp source_plan_transition source_public]\n For internal use ONLY\n payload for the request made internally for scaling",
+                    "description": "Exclusive with [source_internal_sre source_msp source_plan_transition]\n For internal use ONLY\n payload for the request made internally for scaling",
                     "title": "Source Internal Scaling",
                     "$ref": "#/definitions/signupSourceInternalScaling",
                     "x-displayname": "Source Internal Scaling"
                 },
                 "source_internal_sre": {
-                    "description": "Exclusive with [source_internal_scaling source_msp source_plan_transition source_public]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
+                    "description": "Exclusive with [source_internal_scaling source_msp source_plan_transition]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
                     "title": "Source Internal SRE",
                     "$ref": "#/definitions/signupSourceInternalSre",
                     "x-displayname": "Source Internal SRE"
                 },
                 "source_msp": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_plan_transition source_public]\n payload for the creation request, for MSP tenant",
+                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_plan_transition]\n payload for the creation request, for MSP tenant",
                     "title": "Source MSP",
                     "$ref": "#/definitions/signupSourceMsp",
                     "x-displayname": "Source MSP"
                 },
                 "source_plan_transition": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_msp source_public]\n payload for the signup made out of a plan transition request.",
+                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_msp]\n payload for the signup made out of a plan transition request.",
                     "title": "Source Plan Transition",
                     "$ref": "#/definitions/signupSourcePlanTransition",
                     "x-displayname": "Source Plan Transition"
-                },
-                "source_public": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_msp source_plan_transition]\n payload for the public request, made either via the dashboard or the CMD line",
-                    "title": "Source Public",
-                    "$ref": "#/definitions/signupSourcePublic",
-                    "x-displayname": "Source Public"
                 },
                 "user_details": {
                     "description": " details of the user\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -1081,12 +1075,6 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
             "title": "Source Plan Transition",
             "x-displayname": "Source Plan Transition",
             "x-ves-proto-message": "ves.io.schema.signup.SourcePlanTransition"
-        },
-        "signupSourcePublic": {
-            "type": "object",
-            "title": "Source Public",
-            "x-displayname": "Source Public",
-            "x-ves-proto-message": "ves.io.schema.signup.SourcePublic"
         },
         "signupUserMeta": {
             "type": "object",

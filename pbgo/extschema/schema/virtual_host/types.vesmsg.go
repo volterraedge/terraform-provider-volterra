@@ -3505,8 +3505,76 @@ func (m *DNSProxyConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetProtocolInspectionDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIrulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIrulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetProtocolInspectionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetProtocolInspectionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *DNSProxyConfiguration) GetIrulesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetIrules()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("DNSProxyConfiguration.irules[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("irule.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "irule.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "irules",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetIrulesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DNSProxyConfiguration) GetIrulesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "irule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: irule")
+	}
+	for i, vref := range m.GetIrules() {
+		if vref == nil {
+			return nil, fmt.Errorf("DNSProxyConfiguration.irules[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "irule.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 func (m *DNSProxyConfiguration) GetProtocolInspectionDRefInfo() ([]db.DRefInfo, error) {
@@ -3579,6 +3647,54 @@ func (v *ValidateDNSProxyConfiguration) DdosProfileValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateDNSProxyConfiguration) IrulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for irules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for irules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated irules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items irules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDNSProxyConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DNSProxyConfiguration)
 	if !ok {
@@ -3606,6 +3722,14 @@ func (v *ValidateDNSProxyConfiguration) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("ddos_profile"))
 		if err := fv(ctx, m.GetDdosProfile(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["irules"]; exists {
+		vOpts := append(opts, db.WithValidateField("irules"))
+		if err := fv(ctx, m.GetIrules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3645,6 +3769,18 @@ var DefaultDNSProxyConfigurationValidator = func() *ValidateDNSProxyConfiguratio
 		panic(errMsg)
 	}
 	v.FldValidators["ddos_profile"] = vFn
+
+	vrhIrules := v.IrulesValidationRuleHandler
+	rulesIrules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhIrules(rulesIrules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSProxyConfiguration.irules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["irules"] = vFn
 
 	v.FldValidators["cache_profile"] = DNSCacheProfileValidator().Validate
 
@@ -8185,6 +8321,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetDdosAutoMitigationAction().(type) {
+	case *GlobalSpecType_Block:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.block"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GlobalSpecType_Block).Block
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DdosJsChallenge:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GlobalSpecType_DdosJsChallenge).DdosJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("ddos_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetDefaultLbChoice().(type) {
 	case *GlobalSpecType_NonDefaultLoadbalancer:
 		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
@@ -9062,6 +9224,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"] = JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
@@ -12209,7 +12373,6 @@ var DefaultShapeBotDefenseConfigTypeValidator = func() *ValidateShapeBotDefenseC
 	vrhApplicationId := v.ApplicationIdValidationRuleHandler
 	rulesApplicationId := map[string]string{
 		"ves.io.schema.rules.string.max_len": "32",
-		"ves.io.schema.rules.string.min_len": "32",
 	}
 	vFn, err = vrhApplicationId(rulesApplicationId)
 	if err != nil {
@@ -12294,14 +12457,20 @@ type ValidateSlowDDoSMitigation struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSlowDDoSMitigation) RequestTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSlowDDoSMitigation) RequestTimeoutChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for request_timeout_choice")
+	}
+	return validatorFn, nil
+}
 
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+func (v *ValidateSlowDDoSMitigation) RequestTimeoutChoiceRequestTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_RequestTimeout, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for request_timeout")
 	}
-
-	return validatorFn, nil
+	return oValidatorFn_RequestTimeout, nil
 }
 
 func (v *ValidateSlowDDoSMitigation) RequestHeadersTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -12337,11 +12506,38 @@ func (v *ValidateSlowDDoSMitigation) Validate(ctx context.Context, pm interface{
 
 	}
 
-	if fv, exists := v.FldValidators["request_timeout"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("request_timeout"))
-		if err := fv(ctx, m.GetRequestTimeout(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["request_timeout_choice"]; exists {
+		val := m.GetRequestTimeoutChoice()
+		vOpts := append(opts,
+			db.WithValidateField("request_timeout_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetRequestTimeoutChoice().(type) {
+	case *SlowDDoSMitigation_RequestTimeout:
+		if fv, exists := v.FldValidators["request_timeout_choice.request_timeout"]; exists {
+			val := m.GetRequestTimeoutChoice().(*SlowDDoSMitigation_RequestTimeout).RequestTimeout
+			vOpts := append(opts,
+				db.WithValidateField("request_timeout_choice"),
+				db.WithValidateField("request_timeout"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SlowDDoSMitigation_DisableRequestTimeout:
+		if fv, exists := v.FldValidators["request_timeout_choice.disable_request_timeout"]; exists {
+			val := m.GetRequestTimeoutChoice().(*SlowDDoSMitigation_DisableRequestTimeout).DisableRequestTimeout
+			vOpts := append(opts,
+				db.WithValidateField("request_timeout_choice"),
+				db.WithValidateField("disable_request_timeout"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -12361,17 +12557,29 @@ var DefaultSlowDDoSMitigationValidator = func() *ValidateSlowDDoSMitigation {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhRequestTimeout := v.RequestTimeoutValidationRuleHandler
-	rulesRequestTimeout := map[string]string{
+	vrhRequestTimeoutChoice := v.RequestTimeoutChoiceValidationRuleHandler
+	rulesRequestTimeoutChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRequestTimeoutChoice(rulesRequestTimeoutChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SlowDDoSMitigation.request_timeout_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_timeout_choice"] = vFn
+
+	vrhRequestTimeoutChoiceRequestTimeout := v.RequestTimeoutChoiceRequestTimeoutValidationRuleHandler
+	rulesRequestTimeoutChoiceRequestTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "2000",
 		"ves.io.schema.rules.uint32.lte": "300000",
 	}
-	vFn, err = vrhRequestTimeout(rulesRequestTimeout)
+	vFnMap["request_timeout_choice.request_timeout"], err = vrhRequestTimeoutChoiceRequestTimeout(rulesRequestTimeoutChoiceRequestTimeout)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SlowDDoSMitigation.request_timeout: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SlowDDoSMitigation.request_timeout_choice_request_timeout: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["request_timeout"] = vFn
+
+	v.FldValidators["request_timeout_choice.request_timeout"] = vFnMap["request_timeout_choice.request_timeout"]
 
 	vrhRequestHeadersTimeout := v.RequestHeadersTimeoutValidationRuleHandler
 	rulesRequestHeadersTimeout := map[string]string{

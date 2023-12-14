@@ -20,6 +20,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.user.LastLoginUpdateRequest"] = LastLoginUpdateRequestValidator()
 	vr["ves.io.schema.user.LastLoginUpdateResponse"] = LastLoginUpdateResponseValidator()
+	vr["ves.io.schema.user.ListByNotifPrefRequest"] = ListByNotifPrefRequestValidator()
+	vr["ves.io.schema.user.ListByNotifPrefResponse"] = ListByNotifPrefResponseValidator()
+	vr["ves.io.schema.user.ListByNotifPrefResponseItem"] = ListByNotifPrefResponseItemValidator()
 	vr["ves.io.schema.user.PrivateCascadeDeleteRequest"] = PrivateCascadeDeleteRequestValidator()
 
 	vr["ves.io.schema.user.AcceptTOSRequest"] = AcceptTOSRequestValidator()

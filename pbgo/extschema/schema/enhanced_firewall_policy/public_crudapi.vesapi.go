@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.enhanced_firewall_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2372,6 +2387,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Deny"
                 },
+                "destination_aws_subnet_ids": {
+                    "description": " Destination is any address in list of AWS Subnets",
+                    "title": "AWS Subnet Identifier",
+                    "$ref": "#/definitions/schemaAwsSubnetList",
+                    "x-displayname": "AWS Subnet Identifier"
+                },
                 "destination_aws_vpc_ids": {
                     "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_ip_prefix_set destination_label_selector destination_prefix_list inside_destinations outside_destinations]\n Destination is any address in list of AWS VPCs",
                     "title": "AWS VPC Identifier",
@@ -2449,6 +2470,12 @@ var APISwaggerJSON string = `{
                     "title": "Protocol and Port Ranges",
                     "$ref": "#/definitions/network_policyProtocolPortType",
                     "x-displayname": "Match Protocol and Port Ranges"
+                },
+                "source_aws_subnet_ids": {
+                    "description": " Source is any address in list of AWS Subnets",
+                    "title": "AWS Subnet Identifier",
+                    "$ref": "#/definitions/schemaAwsSubnetList",
+                    "x-displayname": "AWS Subnet Identifier"
                 },
                 "source_aws_vpc_ids": {
                     "description": "Exclusive with [all_sources inside_sources outside_sources source_ip_prefix_set source_label_selector source_prefix_list]\n Source is any address in list of AWS VPCs",
@@ -2986,6 +3013,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policySegmentPolicyType": {
+            "type": "object",
+            "description": "Configure source and destination segment for policy",
+            "title": "Segment Choice",
+            "x-displayname": "Configure Segments",
+            "x-ves-oneof-field-dst_segment_choice": "[\"dst_any\",\"dst_segments\",\"intra_segment\"]",
+            "x-ves-oneof-field-src_segment_choice": "[\"src_any\",\"src_segments\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.SegmentPolicyType",
+            "properties": {
+                "dst_any": {
+                    "description": "Exclusive with [dst_segments intra_segment]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "dst_segments": {
+                    "description": "Exclusive with [dst_any intra_segment]\n Traffic is matched against destination segment in selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                },
+                "intra_segment": {
+                    "description": "Exclusive with [dst_any dst_segments]\n Traffic is matched for source and destination on the same segment",
+                    "title": "Intra Segment Policy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Intra Segment"
+                },
+                "src_any": {
+                    "description": "Exclusive with [src_segments]\n Traffic is not matched against any segment",
+                    "title": "Any segment",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any"
+                },
+                "src_segments": {
+                    "description": "Exclusive with [src_any]\n Source traffic is matched against selected segments",
+                    "title": "List of segments",
+                    "$ref": "#/definitions/viewsSegmentRefList",
+                    "x-displayname": "Segments"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2998,6 +3066,35 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaAwsSubnetList": {
+            "type": "object",
+            "description": "List of Subnet Identifiers in AWS",
+            "title": "AWS Subnet List",
+            "x-displayname": "AWS Subnet List",
+            "x-ves-proto-message": "ves.io.schema.AwsSubnetList",
+            "properties": {
+                "subnet_id": {
+                    "type": "array",
+                    "description": " List of Subnet Identifiers in AWS\n\nExample: - \"[subnet-0dcfbdc8dada15441, subnet-049595621864596da]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 64\n  ves.io.schema.rules.repeated.items.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AWS Subnet List",
+                    "maxItems": 256,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "x-displayname": "AWS Subnet List",
+                    "x-ves-example": "[subnet-0dcfbdc8dada15441, subnet-049595621864596da]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "64",
+                        "ves.io.schema.rules.repeated.items.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -3996,6 +4093,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all]\n Custom Enhanced Firewall Policy Rule Selection",
                     "$ref": "#/definitions/enhanced_firewall_policyEnhancedFirewallPolicyRuleListType",
                     "x-displayname": "Custom Enhanced Firewall Policy Rule Selection"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4041,6 +4143,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all]\n Custom Enhanced Firewall Policy Rule Selection",
                     "$ref": "#/definitions/enhanced_firewall_policyEnhancedFirewallPolicyRuleListType",
                     "x-displayname": "Custom Enhanced Firewall Policy Rule Selection"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4093,6 +4200,12 @@ var APISwaggerJSON string = `{
                     "title": "Custom Enhanced Firewall Policy Rule Selection",
                     "$ref": "#/definitions/enhanced_firewall_policyEnhancedFirewallPolicyRuleListType",
                     "x-displayname": "Custom Enhanced Firewall Policy Rule Selection"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4138,6 +4251,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all]\n Custom Enhanced Firewall Policy Rule Selection",
                     "$ref": "#/definitions/enhanced_firewall_policyEnhancedFirewallPolicyRuleListType",
                     "x-displayname": "Custom Enhanced Firewall Policy Rule Selection"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 }
             }
         },
@@ -4194,6 +4312,22 @@ var APISwaggerJSON string = `{
             "x-displayname": "IPv4 Prefix List",
             "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
             "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "prefixes": {
                     "type": "array",
                     "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -4208,6 +4342,28 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "viewsSegmentRefList": {
+            "type": "object",
+            "description": "List of references to Segments",
+            "title": "Segment List",
+            "x-displayname": "Segment List",
+            "x-ves-proto-message": "ves.io.schema.views.SegmentRefList",
+            "properties": {
+                "segments": {
+                    "type": "array",
+                    "description": " Select list of segments\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segments",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Segments",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }

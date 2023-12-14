@@ -24,6 +24,148 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AwsSubnetList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AwsSubnetList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AwsSubnetList) DeepCopy() *AwsSubnetList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AwsSubnetList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AwsSubnetList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AwsSubnetList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AwsSubnetListValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAwsSubnetList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAwsSubnetList) SubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for subnet_id")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for subnet_id")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated subnet_id")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items subnet_id")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAwsSubnetList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AwsSubnetList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AwsSubnetList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["subnet_id"]; exists {
+		vOpts := append(opts, db.WithValidateField("subnet_id"))
+		if err := fv(ctx, m.GetSubnetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAwsSubnetListValidator = func() *ValidateAwsSubnetList {
+	v := &ValidateAwsSubnetList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSubnetId := v.SubnetIdValidationRuleHandler
+	rulesSubnetId := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
+		"ves.io.schema.rules.repeated.items.string.max_len": "64",
+		"ves.io.schema.rules.repeated.items.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique":               "true",
+	}
+	vFn, err = vrhSubnetId(rulesSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AwsSubnetList.subnet_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subnet_id"] = vFn
+
+	return v
+}()
+
+func AwsSubnetListValidator() db.Validator {
+	return DefaultAwsSubnetListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AwsVpcList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

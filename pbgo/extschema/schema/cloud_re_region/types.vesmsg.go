@@ -132,6 +132,15 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["inside_gre_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_gre_subnet"))
+		if err := fv(ctx, m.GetInsideGreSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["nodes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("nodes"))
@@ -194,6 +203,8 @@ var DefaultAWSTypeValidator = func() *ValidateAWSType {
 	v.FldValidators["tgws"] = TGWTypeValidator().Validate
 
 	v.FldValidators["nodes"] = NodeTypeValidator().Validate
+
+	v.FldValidators["inside_gre_subnet"] = ves_io_schema.IpSubnetTypeValidator().Validate
 
 	return v
 }()
@@ -598,6 +609,15 @@ func (v *ValidateTGWType) Validate(ctx context.Context, pm interface{}, opts ...
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("asn"))
+		if err := fv(ctx, m.GetAsn(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["name"]; exists {

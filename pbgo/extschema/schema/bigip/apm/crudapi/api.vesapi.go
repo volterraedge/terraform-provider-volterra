@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -3013,6 +3077,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -4452,14 +4520,15 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -4532,11 +4601,12 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -4614,6 +4684,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 }
             }

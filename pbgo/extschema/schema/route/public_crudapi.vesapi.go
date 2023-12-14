@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.route.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2266,6 +2281,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "ioschemaPathMatcherType": {
             "type": "object",
             "description": "Path match of the URI can be either be, Prefix match or exact match or regular expression match",
@@ -2677,7 +2736,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "deleted_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Deleted Referred Objects"
                 },
@@ -2686,7 +2745,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "disabled_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Disabled Referred Objects"
                 },
@@ -2707,7 +2766,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of objects that are referring to this object in their spec",
                     "title": "referring_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Referring Objects"
                 },
@@ -2990,7 +3049,7 @@ var APISwaggerJSON string = `{
                     "title": "cluster",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Mirror Destination Cluster",
                     "x-ves-required": "true",
@@ -3072,7 +3131,7 @@ var APISwaggerJSON string = `{
                     "title": "cluster",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Cluster",
                     "x-ves-required": "true",
@@ -3597,9 +3656,18 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "ver_status": {
+                    "type": "array",
+                    "description": " Ver status for this route. List of statuses, one for each route entry within this route",
+                    "title": "Ver status",
+                    "items": {
+                        "$ref": "#/definitions/routeVerStatusType"
+                    },
+                    "x-displayname": "Ver status"
                 }
             }
         },
@@ -3648,6 +3716,32 @@ var APISwaggerJSON string = `{
             "x-displayname": "Tag Attribute Name",
             "x-ves-proto-enum": "ves.io.schema.route.TagAttributeName"
         },
+        "routeVerStatusType": {
+            "type": "object",
+            "description": "Status information sent for each route entry within route",
+            "title": "VerStatusType",
+            "x-displayname": "VER Status Type",
+            "x-ves-proto-message": "ves.io.schema.route.VerStatusType",
+            "properties": {
+                "reason": {
+                    "type": "string",
+                    "description": " A human readable string explaining the reason for reaching this condition\n\nExample: - \"Insufficient memory in data plane\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "Insufficient memory in data plane"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Incomplete\\\",\\\"Installed\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Incomplete\\\",\\\"Installed\\\"]"
+                    }
+                }
+            }
+        },
         "routeWebsocketConfigType": {
             "type": "object",
             "description": "Configuration to allow Websocket\n\nRequest headers of such upgrade looks like below\n  'connection', 'Upgrade'\n  'upgrade', 'websocket'\n\nWith configuration to allow websocket upgrade, ADC will produce following response\n  'HTTP/1.1 101 Switching Protocols\n  'Upgrade': 'websocket'\n  'Connection': 'Upgrade'",
@@ -3676,7 +3770,7 @@ var APISwaggerJSON string = `{
                     "description": " References to an Application Firewall configuration object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1\n",
                     "title": "app_firewall",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Application Firewall",
                     "x-ves-required": "true",
@@ -4323,50 +4417,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4904,7 +4954,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -5088,8 +5138,8 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1025\n",
-                    "maxItems": 1025,
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 257\n",
+                    "maxItems": 257,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
@@ -5097,7 +5147,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1025"
+                        "ves.io.schema.rules.repeated.max_items": "257"
                     }
                 }
             }
@@ -5111,8 +5161,8 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1025\n",
-                    "maxItems": 1025,
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 257\n",
+                    "maxItems": 257,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
@@ -5120,7 +5170,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1025"
+                        "ves.io.schema.rules.repeated.max_items": "257"
                     }
                 }
             }
@@ -5134,9 +5184,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1025\n",
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 257\n",
                     "title": "routes",
-                    "maxItems": 1025,
+                    "maxItems": 257,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
@@ -5144,7 +5194,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1025"
+                        "ves.io.schema.rules.repeated.max_items": "257"
                     }
                 }
             }
@@ -5158,8 +5208,8 @@ var APISwaggerJSON string = `{
             "properties": {
                 "routes": {
                     "type": "array",
-                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1025\n",
-                    "maxItems": 1025,
+                    "description": " List of routes to match for incoming request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 257\n",
+                    "maxItems": 257,
                     "items": {
                         "$ref": "#/definitions/routeRouteType"
                     },
@@ -5167,7 +5217,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1025"
+                        "ves.io.schema.rules.repeated.max_items": "257"
                     }
                 }
             }

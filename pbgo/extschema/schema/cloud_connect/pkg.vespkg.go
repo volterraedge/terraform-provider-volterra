@@ -28,6 +28,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.cloud_connect.AWSAttachmentsListStatusType"] = AWSAttachmentsListStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSAttachmentsStatusType"] = AWSAttachmentsStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSREType"] = AWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableListType"] = AWSRouteTableListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableType"] = AWSRouteTableTypeValidator()
@@ -35,12 +37,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.AWSTGWSiteType"] = AWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentListType"] = AWSVPCAttachmentListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentType"] = AWSVPCAttachmentTypeValidator()
+	vr["ves.io.schema.cloud_connect.CloudConnectStatusType"] = CloudConnectStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudLinkListType"] = CloudLinkListTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateSpecType"] = CreateSpecTypeValidator()
-	vr["ves.io.schema.cloud_connect.EnableSegmentType"] = EnableSegmentTypeValidator()
 	vr["ves.io.schema.cloud_connect.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.GlobalSpecType"] = GlobalSpecTypeValidator()
-	vr["ves.io.schema.cloud_connect.IsolatedType"] = IsolatedTypeValidator()
+	vr["ves.io.schema.cloud_connect.PeerType"] = PeerTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSREType"] = ReplaceAWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
@@ -61,7 +63,7 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
-		"spec.aws_re.nodes.#",
+		"spec.aws_re.peers.#",
 		"spec.aws_re.tgw",
 	}
 

@@ -853,14 +853,15 @@ var CustomAPISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -933,11 +934,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -996,7 +998,8 @@ var CustomAPISwaggerJSON string = `{
                 "NO_CHANGES",
                 "HAS_CHANGES",
                 "DISCARDED",
-                "PLAN_INIT_ERRORED"
+                "PLAN_INIT_ERRORED",
+                "PLAN_QUEUED"
             ],
             "default": "PLANNING",
             "x-displayname": "Plan Stage State",

@@ -270,7 +270,7 @@ func (OperStatus) EnumDescriptor() ([]byte, []int) {
 // AddonServiceStatus
 //
 // x-displayName: "Addon Service Status"
-// displays current state and access of an addon servie for the user of tenant.
+// displays current state and access of an addon service for the user of tenant.
 type AddonServiceStatus struct {
 	// state
 	//

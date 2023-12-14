@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.dns_lb_pool.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2941,7 +2956,7 @@ var APISwaggerJSON string = `{
         },
         "dns_lb_poolLoadBalancingMode": {
             "type": "string",
-            "description": "\n - ROUND_ROBIN: Round-Robin\n\nRound Robin will ensure random equal distribution of requests among all pool members in a pool.\n - RATIO_MEMBER: Ratio-Member\n\nRatio-Member performs load balancing of requests across the pool members based on the ratio assigned to each pool member\n - STATIC_PERSIST: Static-Persist\n\nThe Static Persist load balancing method uses the persist mask, with the source IP address of the Local Domain Name Server (LDNS), in a deterministic algorithm to send requests to a specific pool member\n - PRIORITY: Priority\n\nThe Priority load balancing method returns all available endpoints in a pool with the highest priority. Pool Members have a priority value, starting from zero, where a lower value means a higher priority.",
+            "description": "\n - ROUND_ROBIN: Round-Robin\n\nRound Robin will ensure random equal distribution of requests among all pool members in a pool.\n - RATIO_MEMBER: Ratio-Member\n\nRatio-Member performs load balancing of requests across the pool members based on the ratio assigned to each pool member\n - STATIC_PERSIST: Static-Persist\n\nThe Static Persist load balancing method uses the persist mask, with the source IP address of the Local Domain Name Server (LDNS), in a deterministic algorithm to send requests to a specific pool member. If the DNS resolver passes ECS (EDNS-Client-Subnet) information, then a hash of it will be used, to send the client to the same pool member\n - PRIORITY: Priority\n\nThe Priority load balancing method returns all available endpoints in a pool with the highest priority. Pool Members have a priority value, starting from zero, where a lower value means a higher priority.",
             "title": "LoadBalancing Mode",
             "enum": [
                 "ROUND_ROBIN",

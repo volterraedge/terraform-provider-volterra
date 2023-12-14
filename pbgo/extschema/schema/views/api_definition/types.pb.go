@@ -10,7 +10,6 @@ import (
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
@@ -36,12 +35,13 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // x-displayName: "Specification"
 // x-required
 // Shape of api_definition in the storage backend.
+// Note: due to UI/UX requirements the API Definition object should have a default value,
+// i.e. it should support creating an empty object.
 type GlobalSpecType struct {
 	// swagger_specs
 	//
 	// x-displayName: "Swagger Specs"
 	// x-example: "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12"
-	// x-required
 	// Define your application API by single or multiple swagger files.
 	// 1. Upload your swagger files via Web App & API Protection-> Files-> Swagger Files.
 	// 2. Select from the list of uploaded files.
@@ -54,6 +54,27 @@ type GlobalSpecType struct {
 	// The default groups include "all paths" and custom tags based groups.
 	// The default group builders are created automatically and are read only.
 	DefaultApiGroupsBuilders []*ApiGroupBuilder `protobuf:"bytes,3,rep,name=default_api_groups_builders,json=defaultApiGroupsBuilders,proto3" json:"default_api_groups_builders,omitempty"`
+	// api_inventory_inclusion_list
+	//
+	// x-displayName: "API Inventory Inclusion List"
+	// List of API Endpoints included in the API Inventory.
+	// Typically, discovered API endpoints are added to the API Inventory using this list.
+	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	// api_inventory_exclusion_list
+	//
+	// x-displayName: "API Inventory Exclusion List"
+	// List of API Endpoints excluded from the API Inventory.
+	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	// non_api_endpoints
+	//
+	// x-displayName: "Non API Endpoints"
+	// List of Non-API Endpoints.
+	NonApiEndpoints []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	// api_inventory_openapi_spec
+	//
+	// x-displayName: "Non API Endpoints"
+	// A stored object link to internally generated OpenAPI specification file.
+	ApiInventoryOpenapiSpec []string `protobuf:"bytes,7,rep,name=api_inventory_openapi_spec,json=apiInventoryOpenapiSpec,proto3" json:"api_inventory_openapi_spec,omitempty"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -108,6 +129,34 @@ func (m *GlobalSpecType) GetDefaultApiGroupsBuilders() []*ApiGroupBuilder {
 	return nil
 }
 
+func (m *GlobalSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionList
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionList
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetNonApiEndpoints() []*ApiOperation {
+	if m != nil {
+		return m.NonApiEndpoints
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetApiInventoryOpenapiSpec() []string {
+	if m != nil {
+		return m.ApiInventoryOpenapiSpec
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetViewInternal() *views.ObjectRefType {
 	if m != nil {
 		return m.ViewInternal
@@ -128,7 +177,10 @@ func (m *GlobalSpecType) GetApiGroups() []*ApiGroupSummary {
 // x-required
 // Create API Definition.
 type CreateSpecType struct {
-	SwaggerSpecs []string `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	SwaggerSpecs              []string        `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -166,14 +218,39 @@ func (m *CreateSpecType) GetSwaggerSpecs() []string {
 	return nil
 }
 
+func (m *CreateSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionList
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionList
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetNonApiEndpoints() []*ApiOperation {
+	if m != nil {
+		return m.NonApiEndpoints
+	}
+	return nil
+}
+
 // GetSpecType
 //
 // x-displayName: "Get API Definition"
 // Get API Definition.
 type GetSpecType struct {
-	SwaggerSpecs             []string           `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
-	DefaultApiGroupsBuilders []*ApiGroupBuilder `protobuf:"bytes,3,rep,name=default_api_groups_builders,json=defaultApiGroupsBuilders,proto3" json:"default_api_groups_builders,omitempty"`
-	ApiGroups                []*ApiGroupSummary `protobuf:"bytes,1001,rep,name=api_groups,json=apiGroups,proto3" json:"api_groups,omitempty"`
+	SwaggerSpecs              []string           `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	DefaultApiGroupsBuilders  []*ApiGroupBuilder `protobuf:"bytes,3,rep,name=default_api_groups_builders,json=defaultApiGroupsBuilders,proto3" json:"default_api_groups_builders,omitempty"`
+	ApiInventoryInclusionList []*ApiOperation    `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*ApiOperation    `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*ApiOperation    `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	ApiInventoryOpenapiSpec   []string           `protobuf:"bytes,7,rep,name=api_inventory_openapi_spec,json=apiInventoryOpenapiSpec,proto3" json:"api_inventory_openapi_spec,omitempty"`
+	ApiGroups                 []*ApiGroupSummary `protobuf:"bytes,1001,rep,name=api_groups,json=apiGroups,proto3" json:"api_groups,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -218,6 +295,34 @@ func (m *GetSpecType) GetDefaultApiGroupsBuilders() []*ApiGroupBuilder {
 	return nil
 }
 
+func (m *GetSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionList
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionList
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetNonApiEndpoints() []*ApiOperation {
+	if m != nil {
+		return m.NonApiEndpoints
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetApiInventoryOpenapiSpec() []string {
+	if m != nil {
+		return m.ApiInventoryOpenapiSpec
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetApiGroups() []*ApiGroupSummary {
 	if m != nil {
 		return m.ApiGroups
@@ -231,7 +336,10 @@ func (m *GetSpecType) GetApiGroups() []*ApiGroupSummary {
 // x-required
 // Replace API Definition.
 type ReplaceSpecType struct {
-	SwaggerSpecs []string `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	SwaggerSpecs              []string        `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -265,6 +373,27 @@ var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 func (m *ReplaceSpecType) GetSwaggerSpecs() []string {
 	if m != nil {
 		return m.SwaggerSpecs
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionList
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionList
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetNonApiEndpoints() []*ApiOperation {
+	if m != nil {
+		return m.NonApiEndpoints
 	}
 	return nil
 }
@@ -524,72 +653,81 @@ func init() {
 }
 
 var fileDescriptor_d394c51e1f8ccc10 = []byte{
-	// 1029 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xb3, 0xf3, 0xc3, 0x1e, 0xe7, 0x17, 0xdb, 0x1c, 0xb6, 0x29, 0xda, 0x5a, 0x5b, 0x0e,
-	0x1b, 0x2a, 0xef, 0x06, 0x47, 0x08, 0x11, 0x24, 0xa0, 0xae, 0x4a, 0x5a, 0x41, 0xa8, 0xb4, 0x41,
-	0xa8, 0x22, 0x2a, 0xd6, 0xd8, 0x7e, 0xde, 0x2c, 0xec, 0x7a, 0x57, 0x3b, 0x63, 0xa7, 0x69, 0x88,
-	0x14, 0x71, 0xe2, 0x54, 0x95, 0x0a, 0x10, 0x7f, 0x02, 0xe2, 0xc2, 0xbd, 0xe9, 0x21, 0xea, 0x09,
-	0xe5, 0x80, 0x72, 0xcc, 0x91, 0x38, 0x97, 0xf4, 0x44, 0xaf, 0xdc, 0xd0, 0x8c, 0x77, 0x9d, 0xd8,
-	0x89, 0x02, 0x15, 0xed, 0xc9, 0x6f, 0xe7, 0x7d, 0xef, 0x7d, 0x6f, 0xbe, 0xf7, 0x66, 0xc6, 0xc4,
-	0x6c, 0x23, 0x33, 0xdd, 0xc0, 0x62, 0xb5, 0x55, 0xf4, 0xa9, 0xd5, 0x76, 0x71, 0x8d, 0x59, 0x34,
-	0x74, 0x2b, 0x75, 0x6c, 0xb8, 0x4d, 0x97, 0xbb, 0x41, 0xd3, 0xe2, 0xeb, 0x21, 0x32, 0x33, 0x8c,
-	0x02, 0x1e, 0x28, 0x7a, 0x17, 0x6f, 0x76, 0xf1, 0xa6, 0xc4, 0x9b, 0xfd, 0xf8, 0x99, 0xa2, 0xe3,
-	0xf2, 0xd5, 0x56, 0xd5, 0xac, 0x05, 0xbe, 0xe5, 0x04, 0x4e, 0x60, 0xc9, 0xd0, 0x6a, 0xab, 0x21,
-	0xbf, 0xe4, 0x87, 0xb4, 0xba, 0x29, 0x67, 0xae, 0xf6, 0x97, 0x20, 0x92, 0x39, 0x51, 0xd0, 0x0a,
-	0x2b, 0xe8, 0xa1, 0x8f, 0x4d, 0x7e, 0x92, 0x7f, 0xe6, 0x52, 0x3f, 0x38, 0x08, 0x05, 0x63, 0xe2,
-	0xbc, 0xd8, 0xef, 0x3c, 0x19, 0xf7, 0xfa, 0xc0, 0x3e, 0xa9, 0xe7, 0xd6, 0x29, 0xc7, 0xd8, 0xab,
-	0x0f, 0x78, 0x91, 0x61, 0xb3, 0x3d, 0x90, 0xbc, 0x70, 0x5a, 0xa9, 0x4a, 0x3f, 0xe2, 0xf2, 0x59,
-	0x5a, 0x9e, 0x28, 0x42, 0xff, 0x7b, 0x88, 0x4c, 0x2c, 0x7a, 0x41, 0x95, 0x7a, 0xcb, 0x21, 0xd6,
-	0x3e, 0x5b, 0x0f, 0x51, 0xf9, 0x31, 0x4d, 0xc6, 0xd9, 0x1a, 0x75, 0x1c, 0x8c, 0x2a, 0x2c, 0xc4,
-	0x1a, 0x53, 0xa1, 0x90, 0x31, 0x72, 0xe5, 0xbf, 0xe0, 0xf1, 0x13, 0xd0, 0xb3, 0xa0, 0x2b, 0x62,
-	0xd5, 0xec, 0x83, 0x18, 0x30, 0x07, 0x0b, 0x23, 0xb5, 0xa0, 0xd9, 0x70, 0x9d, 0xa7, 0x4f, 0x20,
-	0x47, 0x46, 0x63, 0xf7, 0xe3, 0x67, 0x3b, 0x99, 0x9f, 0xe1, 0x11, 0xfc, 0x00, 0xfa, 0xf7, 0x10,
-	0x3d, 0x00, 0x63, 0x6b, 0xa8, 0xf4, 0x1d, 0x08, 0x45, 0xad, 0xa0, 0xfa, 0x15, 0xd6, 0x78, 0x85,
-	0xf1, 0x20, 0x42, 0xab, 0x49, 0x7d, 0x64, 0x21, 0xad, 0x21, 0xb3, 0x8c, 0x15, 0x5a, 0xbc, 0x7f,
-	0xd7, 0x58, 0x29, 0xd2, 0xe2, 0xfd, 0xb9, 0xe2, 0xbb, 0x77, 0xdf, 0x5c, 0x89, 0x8d, 0xd9, 0x0f,
-	0x66, 0x2d, 0x89, 0xae, 0x57, 0xba, 0xb1, 0xcc, 0x8a, 0x59, 0xce, 0x8f, 0x31, 0xda, 0xdf, 0x7c,
-	0x3e, 0xbb, 0x22, 0xbe, 0xae, 0x1a, 0x45, 0xf9, 0xbb, 0x51, 0xda, 0x9c, 0xdd, 0x98, 0xdf, 0x7c,
-	0x43, 0x54, 0x37, 0xfc, 0x08, 0xd2, 0x53, 0x24, 0xb1, 0xb2, 0x90, 0x58, 0x2a, 0xd8, 0x63, 0x71,
-	0x7a, 0x21, 0x0d, 0x53, 0x36, 0xc8, 0xa5, 0x3a, 0x36, 0x68, 0xcb, 0xe3, 0x95, 0xde, 0x40, 0xb0,
-	0x4a, 0xb5, 0xe5, 0x7a, 0x75, 0x8c, 0x98, 0x9a, 0x29, 0x64, 0x8c, 0x7c, 0x69, 0xde, 0xfc, 0xf7,
-	0x69, 0x34, 0xaf, 0x85, 0xee, 0xa2, 0x88, 0x2e, 0x77, 0x63, 0xcb, 0xa3, 0xfb, 0x9b, 0x70, 0xb4,
-	0x0d, 0x60, 0xab, 0x31, 0x41, 0x02, 0x60, 0x31, 0x82, 0x29, 0x5f, 0x92, 0x71, 0xd9, 0x5e, 0xb7,
-	0xc9, 0x31, 0x6a, 0x52, 0x4f, 0x3d, 0x1a, 0x2d, 0x80, 0x91, 0x2f, 0xe9, 0x67, 0xf2, 0xdd, 0x96,
-	0xf2, 0xd8, 0xd8, 0x10, 0x0d, 0x2d, 0x4f, 0xff, 0xba, 0xd9, 0x1f, 0x2c, 0xb9, 0xc6, 0xc4, 0xd2,
-	0xad, 0x78, 0x45, 0xb9, 0x43, 0xc8, 0xf1, 0xa6, 0xd4, 0x67, 0xa3, 0x2f, 0xbe, 0x99, 0xe5, 0x96,
-	0xef, 0xd3, 0x68, 0xbd, 0x9c, 0xd9, 0xdf, 0x04, 0x3b, 0x47, 0x93, 0x1d, 0x2c, 0xa8, 0x4f, 0xb7,
-	0x61, 0x9a, 0x28, 0x64, 0x7c, 0xb9, 0x2b, 0x66, 0xa1, 0xab, 0x26, 0xbc, 0xa5, 0xdf, 0x24, 0x13,
-	0xd7, 0x23, 0xa4, 0x1c, 0x7b, 0xa3, 0x77, 0xe5, 0xcc, 0xc9, 0xeb, 0xef, 0xc3, 0xc2, 0x6b, 0xbb,
-	0xef, 0x0f, 0x8c, 0xac, 0xfe, 0x20, 0x4d, 0xf2, 0x8b, 0xc8, 0x5f, 0x28, 0x8f, 0x12, 0xbd, 0xaa,
-	0x7e, 0x9e, 0xd3, 0xc6, 0xe5, 0x97, 0x25, 0xf3, 0x49, 0x85, 0xcf, 0x10, 0xe4, 0x16, 0x99, 0xb4,
-	0x31, 0xf4, 0x68, 0xed, 0xff, 0x6b, 0xdb, 0x22, 0x63, 0xd7, 0x42, 0xf7, 0x76, 0x88, 0x11, 0x15,
-	0x85, 0x28, 0x1f, 0x92, 0x11, 0x1f, 0xf9, 0x6a, 0x50, 0x57, 0xa1, 0x00, 0xc6, 0x44, 0xe9, 0xe2,
-	0x40, 0xf5, 0x37, 0x39, 0x0f, 0x97, 0x24, 0xa0, 0x3c, 0x2e, 0xce, 0x52, 0xf6, 0x5b, 0x18, 0x9e,
-	0x02, 0x1d, 0x52, 0x76, 0x1c, 0xa7, 0x5c, 0x21, 0x43, 0x21, 0xe5, 0xab, 0x6a, 0xba, 0x00, 0x46,
-	0xae, 0x3c, 0x29, 0x40, 0x24, 0xca, 0x16, 0xc0, 0xd8, 0xca, 0x3e, 0xcc, 0x80, 0x2d, 0x9d, 0xfa,
-	0x1f, 0x19, 0x32, 0x39, 0xa0, 0xab, 0x72, 0x83, 0x64, 0x7d, 0xe4, 0xb4, 0x4e, 0x39, 0x95, 0xe4,
-	0xf9, 0x92, 0x36, 0x40, 0xbe, 0x84, 0x8c, 0x51, 0x07, 0x97, 0x90, 0x53, 0x39, 0xfa, 0xb9, 0xf8,
-	0x64, 0xa9, 0x60, 0xf7, 0x42, 0x95, 0xb7, 0x49, 0x5e, 0x50, 0x54, 0x1a, 0xae, 0xc7, 0x31, 0x8a,
-	0xcb, 0x98, 0x96, 0xe7, 0x3e, 0xca, 0xa8, 0x5b, 0xd9, 0xd8, 0xda, 0x01, 0xb0, 0x89, 0x00, 0x7e,
-	0x24, 0x71, 0xca, 0x75, 0x32, 0xe6, 0xd1, 0x2a, 0x7a, 0x49, 0x5c, 0x46, 0x56, 0x50, 0x18, 0xa8,
-	0xe0, 0x13, 0x01, 0x59, 0x46, 0x0f, 0x6b, 0x3c, 0x88, 0x44, 0x0d, 0x76, 0x5e, 0x46, 0xc5, 0x49,
-	0xd6, 0xc8, 0x05, 0xb7, 0x59, 0xf3, 0x5a, 0x75, 0x71, 0x89, 0x25, 0x9a, 0x32, 0x75, 0x48, 0x0e,
-	0xc2, 0xdc, 0x7f, 0x1c, 0x84, 0x5e, 0x33, 0xe2, 0xaa, 0xc5, 0x0d, 0x56, 0x3f, 0x71, 0x6f, 0x29,
-	0x09, 0x45, 0x0f, 0xc8, 0x04, 0x31, 0xde, 0x3b, 0x4d, 0x3c, 0xfc, 0x72, 0x89, 0x13, 0x8a, 0x63,
-	0xe2, 0x85, 0x91, 0xdd, 0x6d, 0x48, 0x4f, 0x81, 0xfe, 0x1b, 0x1c, 0x37, 0x34, 0x1e, 0x62, 0x45,
-	0x21, 0x43, 0xe2, 0xe2, 0x97, 0xcd, 0xcc, 0xd9, 0xd2, 0x56, 0x3e, 0x26, 0xd9, 0xf8, 0x95, 0x65,
-	0x6a, 0x5a, 0x56, 0x67, 0x0d, 0x54, 0x77, 0xea, 0x39, 0x36, 0xfb, 0x47, 0xd6, 0xee, 0x25, 0x58,
-	0x78, 0x6f, 0x77, 0x1b, 0xde, 0x21, 0xd3, 0x84, 0x48, 0xda, 0xc2, 0xa7, 0xd4, 0xc7, 0x99, 0x91,
-	0x2e, 0x29, 0xb9, 0x4c, 0xb2, 0x37, 0x12, 0xdc, 0x85, 0x63, 0x52, 0x65, 0xd4, 0xe5, 0xe8, 0x1b,
-	0x6c, 0xb6, 0xfc, 0x13, 0xec, 0x1d, 0x68, 0xa9, 0xfd, 0x03, 0x2d, 0xf5, 0xfc, 0x40, 0x83, 0xad,
-	0x8e, 0x06, 0xbf, 0x74, 0x34, 0xf8, 0xbd, 0xa3, 0xc1, 0x5e, 0x47, 0x83, 0xfd, 0x8e, 0x06, 0x7f,
-	0x76, 0x34, 0x38, 0xea, 0x68, 0xa9, 0xe7, 0x1d, 0x0d, 0x1e, 0x1e, 0x6a, 0xa9, 0x9d, 0x43, 0x0d,
-	0xf6, 0x0e, 0xb5, 0xd4, 0xfe, 0xa1, 0x96, 0xfa, 0xe2, 0x8e, 0x13, 0x84, 0x5f, 0x3b, 0x66, 0x3b,
-	0x10, 0x8d, 0x8f, 0xa8, 0xd9, 0x62, 0x96, 0x34, 0x1a, 0x41, 0xe4, 0x17, 0xc3, 0x28, 0x68, 0xbb,
-	0x75, 0x8c, 0x8a, 0x89, 0xdb, 0x0a, 0xab, 0x4e, 0x60, 0xe1, 0x3d, 0x1e, 0x3f, 0xd5, 0xe7, 0xfc,
-	0xfb, 0xa9, 0x8e, 0xc8, 0xb7, 0x7b, 0xfe, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x08, 0xfa, 0xa8,
-	0x46, 0x2a, 0x09, 0x00, 0x00,
+	// 1182 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4f, 0x6f, 0x1b, 0xc5,
+	0x1b, 0xf6, 0x1b, 0xc7, 0xff, 0xc6, 0x49, 0x93, 0x6e, 0x23, 0xfd, 0xb6, 0x69, 0xb5, 0xb5, 0xdc,
+	0xdf, 0x61, 0x43, 0xe5, 0xdd, 0xe2, 0x0a, 0x21, 0x52, 0x09, 0x5a, 0x57, 0xa1, 0x54, 0x34, 0x44,
+	0xda, 0x20, 0x54, 0x11, 0x8a, 0x35, 0xb6, 0xc7, 0xce, 0xd2, 0xf5, 0xce, 0x76, 0x67, 0xec, 0x24,
+	0x0d, 0x91, 0x22, 0x4e, 0x48, 0xfc, 0x2b, 0x11, 0x42, 0x7c, 0x00, 0x0e, 0x88, 0x0b, 0xf7, 0xa6,
+	0x87, 0xa8, 0x27, 0x94, 0x03, 0xca, 0x31, 0x47, 0xe2, 0x08, 0x29, 0xbd, 0xf5, 0x23, 0xa0, 0x19,
+	0xef, 0x3a, 0xb6, 0x13, 0x52, 0x0a, 0x89, 0xc4, 0xa1, 0x27, 0xcf, 0xce, 0x3c, 0xef, 0xfb, 0x3c,
+	0x33, 0xf3, 0xcc, 0xeb, 0x19, 0x64, 0x34, 0x09, 0x33, 0x6c, 0x6a, 0xb2, 0xf2, 0x3c, 0xa9, 0x63,
+	0xb3, 0x69, 0x93, 0x05, 0x66, 0x62, 0xcf, 0x2e, 0x56, 0x48, 0xd5, 0x76, 0x6d, 0x6e, 0x53, 0xd7,
+	0xe4, 0x4b, 0x1e, 0x61, 0x86, 0xe7, 0x53, 0x4e, 0x95, 0x6c, 0x1b, 0x6f, 0xb4, 0xf1, 0x86, 0xc4,
+	0x1b, 0xbd, 0xf8, 0xf1, 0x5c, 0xcd, 0xe6, 0xf3, 0x8d, 0x92, 0x51, 0xa6, 0x75, 0xb3, 0x46, 0x6b,
+	0xd4, 0x94, 0xa1, 0xa5, 0x46, 0x55, 0x7e, 0xc9, 0x0f, 0xd9, 0x6a, 0xa7, 0x1c, 0xbf, 0xd4, 0x2b,
+	0x41, 0x24, 0xab, 0xf9, 0xb4, 0xe1, 0x15, 0x89, 0x43, 0xea, 0xc4, 0xe5, 0xdd, 0xfc, 0xe3, 0xe7,
+	0x7a, 0xc1, 0xd4, 0x13, 0x8c, 0xe1, 0xe0, 0xd9, 0xde, 0xc1, 0xee, 0xb8, 0xf3, 0x7d, 0xf3, 0xc4,
+	0x8e, 0x5d, 0xc1, 0x9c, 0x04, 0xa3, 0x99, 0x83, 0xab, 0x50, 0xec, 0x4d, 0x7d, 0xe1, 0xb0, 0x75,
+	0xea, 0x22, 0xc8, 0xfe, 0x98, 0x44, 0xa7, 0x6e, 0x3a, 0xb4, 0x84, 0x9d, 0x59, 0x8f, 0x94, 0xdf,
+	0x5f, 0xf2, 0x88, 0xf2, 0xc5, 0x00, 0x1a, 0x66, 0x0b, 0xb8, 0x56, 0x23, 0x7e, 0x91, 0x79, 0xa4,
+	0xcc, 0x54, 0xc8, 0x44, 0xf5, 0x54, 0xe1, 0x0f, 0x78, 0xf4, 0x18, 0xb2, 0x49, 0xc8, 0x2a, 0xa2,
+	0xd7, 0xe8, 0x81, 0xe8, 0x70, 0x19, 0x26, 0xe3, 0x65, 0xea, 0x56, 0xed, 0xda, 0x93, 0xc7, 0x90,
+	0x42, 0x89, 0x60, 0xf8, 0xd1, 0xd3, 0x8d, 0xe8, 0x0f, 0xb0, 0x06, 0xdf, 0x41, 0xf6, 0x5b, 0xf0,
+	0xbf, 0x06, 0x7d, 0x75, 0x30, 0xff, 0x39, 0x88, 0xd5, 0x32, 0x69, 0xe9, 0x13, 0x52, 0xe6, 0x45,
+	0xc6, 0xa9, 0x4f, 0x4c, 0x17, 0xd7, 0x09, 0xf3, 0x70, 0x99, 0x30, 0x53, 0x9f, 0xc3, 0xb9, 0x07,
+	0x77, 0xf5, 0xb9, 0x1c, 0xce, 0x3d, 0xb8, 0x9c, 0x7b, 0xe3, 0xee, 0x2b, 0x73, 0x41, 0x63, 0xe2,
+	0xad, 0x09, 0x53, 0xa2, 0x2b, 0xc5, 0x76, 0x2c, 0x33, 0x03, 0x96, 0xa3, 0x63, 0xf4, 0xe6, 0xa7,
+	0x1f, 0x4c, 0xcc, 0x89, 0xaf, 0x4b, 0x7a, 0x4e, 0xfe, 0x2e, 0xe7, 0x57, 0x26, 0x96, 0xaf, 0xac,
+	0xfc, 0x5f, 0xa8, 0x8b, 0xad, 0xc1, 0xc0, 0x28, 0x0a, 0x5b, 0x2a, 0x58, 0x43, 0x41, 0x52, 0xb1,
+	0x20, 0x4c, 0x59, 0x46, 0xe7, 0x2a, 0xa4, 0x8a, 0x1b, 0x0e, 0x2f, 0x76, 0xb6, 0x98, 0x15, 0x4b,
+	0x0d, 0xdb, 0xa9, 0x10, 0x9f, 0xa9, 0xd1, 0x4c, 0x54, 0x4f, 0xe7, 0xaf, 0x18, 0xcf, 0xf7, 0x97,
+	0x71, 0xdd, 0xb3, 0x6f, 0x8a, 0xe8, 0x42, 0x3b, 0xb6, 0x90, 0xd8, 0x5e, 0x81, 0xbd, 0x75, 0x00,
+	0x4b, 0x0d, 0x08, 0x42, 0x00, 0x0b, 0x10, 0x4c, 0x59, 0x05, 0x74, 0x5e, 0x64, 0xb1, 0xdd, 0x26,
+	0x71, 0x39, 0xf5, 0x97, 0x8a, 0xb6, 0x5b, 0x76, 0x1a, 0xcc, 0xa6, 0x6e, 0xd1, 0xb1, 0x19, 0x57,
+	0x07, 0x25, 0xfd, 0xe5, 0xbf, 0x49, 0x3f, 0xe3, 0x11, 0x1f, 0x8b, 0x8f, 0xc2, 0xb0, 0x98, 0x6f,
+	0x72, 0x0d, 0x62, 0xa3, 0x7b, 0x09, 0x15, 0xac, 0xb3, 0xd8, 0xb3, 0x6f, 0x85, 0x1c, 0xb7, 0x42,
+	0x8a, 0xdb, 0x36, 0xe3, 0x87, 0x48, 0x20, 0x8b, 0x3d, 0x12, 0x62, 0x27, 0x20, 0x61, 0x6a, 0xb1,
+	0x5b, 0xc2, 0x3d, 0x74, 0xda, 0xa5, 0xae, 0x5c, 0x7e, 0xe2, 0x56, 0x3c, 0x6a, 0xbb, 0x9c, 0xa9,
+	0xf1, 0xe3, 0xa1, 0x1d, 0x71, 0xa9, 0x7b, 0xdd, 0xb3, 0xa7, 0xc2, 0xbc, 0xca, 0x35, 0x34, 0xde,
+	0x3b, 0x5d, 0xea, 0x11, 0x57, 0xf4, 0x08, 0x9f, 0xab, 0x09, 0x79, 0x12, 0xa2, 0xdb, 0x2b, 0x60,
+	0xfd, 0xaf, 0x5b, 0xf0, 0x4c, 0x1b, 0x24, 0x2c, 0xa3, 0x7c, 0x8c, 0x86, 0xe5, 0x49, 0xb4, 0x5d,
+	0x4e, 0x7c, 0x17, 0x3b, 0xea, 0x5e, 0x22, 0x03, 0x7a, 0x3a, 0x9f, 0x3d, 0x54, 0xeb, 0x8c, 0x74,
+	0xb2, 0x45, 0xaa, 0xe2, 0xec, 0x15, 0xc6, 0x7e, 0x5e, 0xe9, 0x0d, 0x96, 0x06, 0x19, 0x12, 0x5d,
+	0xb7, 0x82, 0x1e, 0xe5, 0x0e, 0x42, 0xfb, 0x4e, 0x54, 0x9f, 0x26, 0x5e, 0xdc, 0x81, 0xb3, 0x8d,
+	0x7a, 0x1d, 0xfb, 0x4b, 0xed, 0x79, 0xa4, 0x70, 0x68, 0xbb, 0x49, 0xf5, 0xc9, 0x3a, 0x8c, 0x21,
+	0x05, 0x0d, 0xcf, 0xb6, 0x4f, 0x40, 0xa6, 0x7d, 0x04, 0xe0, 0xd5, 0xec, 0x97, 0x51, 0x74, 0xea,
+	0x86, 0x4f, 0x30, 0x27, 0x9d, 0x32, 0x71, 0xf1, 0xd0, 0x2a, 0xd1, 0x77, 0x7a, 0xee, 0x9f, 0x8c,
+	0x7f, 0x8f, 0x32, 0xec, 0xfd, 0x93, 0xf1, 0xeb, 0x51, 0x06, 0xfd, 0xe8, 0x18, 0x0d, 0x7a, 0xc0,
+	0x91, 0x93, 0xa7, 0x37, 0xdf, 0xec, 0x2b, 0xd1, 0xd9, 0x6f, 0x62, 0x28, 0x7d, 0x93, 0xf0, 0x17,
+	0xdb, 0x0b, 0xff, 0xa4, 0x2a, 0xd9, 0x11, 0x05, 0xec, 0xe5, 0xfe, 0xff, 0xeb, 0xfd, 0x57, 0xae,
+	0x3e, 0xbf, 0x22, 0xfd, 0x75, 0x31, 0x9a, 0x3d, 0xae, 0x62, 0xd1, 0x5d, 0x27, 0x0e, 0x71, 0xe4,
+	0x57, 0x51, 0x34, 0x62, 0x11, 0xcf, 0xc1, 0xe5, 0x97, 0x15, 0xe2, 0xbf, 0x50, 0x21, 0x1a, 0x68,
+	0xa8, 0x3b, 0x46, 0xb9, 0x86, 0xe2, 0x75, 0xc2, 0xe7, 0x69, 0x45, 0x85, 0x0c, 0xe8, 0xa7, 0xf2,
+	0x67, 0xfb, 0x58, 0xdf, 0xe1, 0xdc, 0x9b, 0x96, 0x80, 0xe0, 0x1f, 0xf2, 0x33, 0x88, 0x8d, 0x42,
+	0x16, 0x22, 0x56, 0x10, 0xa7, 0x5c, 0x44, 0x83, 0x1e, 0xe6, 0xf3, 0xea, 0x40, 0x06, 0xf4, 0x54,
+	0x61, 0x44, 0x80, 0x90, 0x9f, 0xcc, 0x80, 0xbe, 0x9a, 0x7c, 0x18, 0x05, 0x4b, 0x0e, 0x66, 0x7f,
+	0x8b, 0xa2, 0x91, 0xbe, 0xea, 0xa0, 0x4c, 0xa1, 0x64, 0x9d, 0x70, 0x5c, 0xc1, 0x1c, 0x4b, 0xf2,
+	0x74, 0x5e, 0xeb, 0x23, 0x9f, 0x26, 0x8c, 0xe1, 0x1a, 0x99, 0x26, 0x1c, 0xcb, 0x7f, 0xc1, 0x54,
+	0x70, 0x33, 0x52, 0xc1, 0xea, 0x84, 0x2a, 0xaf, 0xa1, 0xb4, 0xa0, 0x28, 0x56, 0x6d, 0x87, 0x13,
+	0x3f, 0x90, 0x31, 0x26, 0xef, 0x6d, 0x7e, 0x54, 0x5d, 0x4d, 0x06, 0xad, 0x0d, 0x00, 0x0b, 0x09,
+	0xe0, 0xdb, 0x12, 0xa7, 0xdc, 0x40, 0x43, 0x0e, 0x2e, 0x11, 0x27, 0x8c, 0x8b, 0x4a, 0x05, 0x99,
+	0x3e, 0x05, 0xb7, 0x05, 0x64, 0x96, 0x38, 0xa4, 0xcc, 0xa9, 0x2f, 0x34, 0x58, 0x69, 0x19, 0x15,
+	0x24, 0x59, 0x40, 0x67, 0xa4, 0x2d, 0x2b, 0xe2, 0xea, 0x19, 0xae, 0x29, 0xfb, 0xc7, 0xb7, 0xaf,
+	0xb1, 0xce, 0xbd, 0xb3, 0xd2, 0x75, 0xef, 0x54, 0x42, 0x8a, 0x0e, 0x90, 0x09, 0x62, 0x69, 0xce,
+	0x3e, 0xe2, 0xd8, 0xf1, 0x12, 0x87, 0x14, 0xfb, 0xc4, 0x93, 0xf1, 0xcd, 0x75, 0x18, 0x18, 0x85,
+	0xec, 0x2f, 0xb0, 0xbf, 0xa1, 0x41, 0x25, 0x50, 0x14, 0x34, 0x28, 0xae, 0xeb, 0x72, 0x33, 0x53,
+	0x96, 0x6c, 0x2b, 0xef, 0xa2, 0x64, 0xf0, 0xee, 0x61, 0xea, 0x80, 0x54, 0x67, 0xf6, 0xa9, 0x3b,
+	0xf0, 0x40, 0x32, 0x7a, 0x2d, 0x6b, 0x75, 0x12, 0x4c, 0x5e, 0xdd, 0x5c, 0x87, 0xd7, 0xd1, 0x18,
+	0x42, 0x92, 0x36, 0xf3, 0x1e, 0xae, 0x93, 0xf1, 0x78, 0x9b, 0x14, 0x5d, 0x40, 0xc9, 0xa9, 0x10,
+	0x77, 0x66, 0x9f, 0x54, 0x49, 0xd8, 0x9c, 0xd4, 0x75, 0x36, 0x51, 0xf8, 0x1e, 0xb6, 0x76, 0xb4,
+	0xc8, 0xf6, 0x8e, 0x16, 0x79, 0xb6, 0xa3, 0xc1, 0x6a, 0x4b, 0x83, 0x9f, 0x5a, 0x1a, 0xfc, 0xda,
+	0xd2, 0x60, 0xab, 0xa5, 0xc1, 0x76, 0x4b, 0x83, 0xdf, 0x5b, 0x1a, 0xec, 0xb5, 0xb4, 0xc8, 0xb3,
+	0x96, 0x06, 0x0f, 0x77, 0xb5, 0xc8, 0xc6, 0xae, 0x06, 0x5b, 0xbb, 0x5a, 0x64, 0x7b, 0x57, 0x8b,
+	0x7c, 0x78, 0xa7, 0x46, 0xbd, 0x7b, 0x35, 0xa3, 0x49, 0xc5, 0xc6, 0xfb, 0xd8, 0x68, 0x30, 0x53,
+	0x36, 0xaa, 0xd4, 0xaf, 0xe7, 0x3c, 0x9f, 0x36, 0xed, 0x0a, 0xf1, 0x73, 0xe1, 0xb0, 0xe9, 0x95,
+	0x6a, 0xd4, 0x24, 0x8b, 0x3c, 0x78, 0x60, 0x1d, 0xf1, 0x1e, 0x2d, 0xc5, 0xe5, 0x8b, 0xeb, 0xca,
+	0x9f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x45, 0x53, 0x50, 0x96, 0xbc, 0x0e, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -624,6 +762,38 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.DefaultApiGroupsBuilders {
 		if !this.DefaultApiGroupsBuilders[i].Equal(that1.DefaultApiGroupsBuilders[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryInclusionList) != len(that1.ApiInventoryInclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionList {
+		if !this.ApiInventoryInclusionList[i].Equal(that1.ApiInventoryInclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionList) != len(that1.ApiInventoryExclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionList {
+		if !this.ApiInventoryExclusionList[i].Equal(that1.ApiInventoryExclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpoints) != len(that1.NonApiEndpoints) {
+		return false
+	}
+	for i := range this.NonApiEndpoints {
+		if !this.NonApiEndpoints[i].Equal(that1.NonApiEndpoints[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryOpenapiSpec) != len(that1.ApiInventoryOpenapiSpec) {
+		return false
+	}
+	for i := range this.ApiInventoryOpenapiSpec {
+		if this.ApiInventoryOpenapiSpec[i] != that1.ApiInventoryOpenapiSpec[i] {
 			return false
 		}
 	}
@@ -667,6 +837,30 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.ApiInventoryInclusionList) != len(that1.ApiInventoryInclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionList {
+		if !this.ApiInventoryInclusionList[i].Equal(that1.ApiInventoryInclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionList) != len(that1.ApiInventoryExclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionList {
+		if !this.ApiInventoryExclusionList[i].Equal(that1.ApiInventoryExclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpoints) != len(that1.NonApiEndpoints) {
+		return false
+	}
+	for i := range this.NonApiEndpoints {
+		if !this.NonApiEndpoints[i].Equal(that1.NonApiEndpoints[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -704,6 +898,38 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.ApiInventoryInclusionList) != len(that1.ApiInventoryInclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionList {
+		if !this.ApiInventoryInclusionList[i].Equal(that1.ApiInventoryInclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionList) != len(that1.ApiInventoryExclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionList {
+		if !this.ApiInventoryExclusionList[i].Equal(that1.ApiInventoryExclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpoints) != len(that1.NonApiEndpoints) {
+		return false
+	}
+	for i := range this.NonApiEndpoints {
+		if !this.NonApiEndpoints[i].Equal(that1.NonApiEndpoints[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryOpenapiSpec) != len(that1.ApiInventoryOpenapiSpec) {
+		return false
+	}
+	for i := range this.ApiInventoryOpenapiSpec {
+		if this.ApiInventoryOpenapiSpec[i] != that1.ApiInventoryOpenapiSpec[i] {
+			return false
+		}
+	}
 	if len(this.ApiGroups) != len(that1.ApiGroups) {
 		return false
 	}
@@ -738,6 +964,30 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.SwaggerSpecs {
 		if this.SwaggerSpecs[i] != that1.SwaggerSpecs[i] {
+			return false
+		}
+	}
+	if len(this.ApiInventoryInclusionList) != len(that1.ApiInventoryInclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionList {
+		if !this.ApiInventoryInclusionList[i].Equal(that1.ApiInventoryInclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionList) != len(that1.ApiInventoryExclusionList) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionList {
+		if !this.ApiInventoryExclusionList[i].Equal(that1.ApiInventoryExclusionList[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpoints) != len(that1.NonApiEndpoints) {
+		return false
+	}
+	for i := range this.NonApiEndpoints {
+		if !this.NonApiEndpoints[i].Equal(that1.NonApiEndpoints[i]) {
 			return false
 		}
 	}
@@ -852,12 +1102,22 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 12)
 	s = append(s, "&api_definition.GlobalSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.DefaultApiGroupsBuilders != nil {
 		s = append(s, "DefaultApiGroupsBuilders: "+fmt.Sprintf("%#v", this.DefaultApiGroupsBuilders)+",\n")
 	}
+	if this.ApiInventoryInclusionList != nil {
+		s = append(s, "ApiInventoryInclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionList)+",\n")
+	}
+	if this.ApiInventoryExclusionList != nil {
+		s = append(s, "ApiInventoryExclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionList)+",\n")
+	}
+	if this.NonApiEndpoints != nil {
+		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
+	}
+	s = append(s, "ApiInventoryOpenapiSpec: "+fmt.Sprintf("%#v", this.ApiInventoryOpenapiSpec)+",\n")
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
 	}
@@ -871,9 +1131,18 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 8)
 	s = append(s, "&api_definition.CreateSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
+	if this.ApiInventoryInclusionList != nil {
+		s = append(s, "ApiInventoryInclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionList)+",\n")
+	}
+	if this.ApiInventoryExclusionList != nil {
+		s = append(s, "ApiInventoryExclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionList)+",\n")
+	}
+	if this.NonApiEndpoints != nil {
+		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -881,12 +1150,22 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 11)
 	s = append(s, "&api_definition.GetSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.DefaultApiGroupsBuilders != nil {
 		s = append(s, "DefaultApiGroupsBuilders: "+fmt.Sprintf("%#v", this.DefaultApiGroupsBuilders)+",\n")
 	}
+	if this.ApiInventoryInclusionList != nil {
+		s = append(s, "ApiInventoryInclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionList)+",\n")
+	}
+	if this.ApiInventoryExclusionList != nil {
+		s = append(s, "ApiInventoryExclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionList)+",\n")
+	}
+	if this.NonApiEndpoints != nil {
+		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
+	}
+	s = append(s, "ApiInventoryOpenapiSpec: "+fmt.Sprintf("%#v", this.ApiInventoryOpenapiSpec)+",\n")
 	if this.ApiGroups != nil {
 		s = append(s, "ApiGroups: "+fmt.Sprintf("%#v", this.ApiGroups)+",\n")
 	}
@@ -897,9 +1176,18 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 8)
 	s = append(s, "&api_definition.ReplaceSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
+	if this.ApiInventoryInclusionList != nil {
+		s = append(s, "ApiInventoryInclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionList)+",\n")
+	}
+	if this.ApiInventoryExclusionList != nil {
+		s = append(s, "ApiInventoryExclusionList: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionList)+",\n")
+	}
+	if this.NonApiEndpoints != nil {
+		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1007,6 +1295,57 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if len(m.ApiInventoryOpenapiSpec) > 0 {
+		for iNdEx := len(m.ApiInventoryOpenapiSpec) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ApiInventoryOpenapiSpec[iNdEx])
+			copy(dAtA[i:], m.ApiInventoryOpenapiSpec[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiInventoryOpenapiSpec[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.DefaultApiGroupsBuilders) > 0 {
 		for iNdEx := len(m.DefaultApiGroupsBuilders) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1053,6 +1392,48 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.NonApiEndpoints) > 0 {
+		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.SwaggerSpecs) > 0 {
 		for iNdEx := len(m.SwaggerSpecs) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.SwaggerSpecs[iNdEx])
@@ -1101,6 +1482,57 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xca
 		}
 	}
+	if len(m.ApiInventoryOpenapiSpec) > 0 {
+		for iNdEx := len(m.ApiInventoryOpenapiSpec) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ApiInventoryOpenapiSpec[iNdEx])
+			copy(dAtA[i:], m.ApiInventoryOpenapiSpec[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiInventoryOpenapiSpec[iNdEx])))
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.DefaultApiGroupsBuilders) > 0 {
 		for iNdEx := len(m.DefaultApiGroupsBuilders) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1147,6 +1579,48 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.NonApiEndpoints) > 0 {
+		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	if len(m.SwaggerSpecs) > 0 {
 		for iNdEx := len(m.SwaggerSpecs) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.SwaggerSpecs[iNdEx])
@@ -1349,6 +1823,30 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for _, e := range m.ApiInventoryInclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for _, e := range m.ApiInventoryExclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for _, e := range m.NonApiEndpoints {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryOpenapiSpec) > 0 {
+		for _, s := range m.ApiInventoryOpenapiSpec {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -1374,6 +1872,24 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for _, e := range m.ApiInventoryInclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for _, e := range m.ApiInventoryExclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for _, e := range m.NonApiEndpoints {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1395,6 +1911,30 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for _, e := range m.ApiInventoryInclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for _, e := range m.ApiInventoryExclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for _, e := range m.NonApiEndpoints {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryOpenapiSpec) > 0 {
+		for _, s := range m.ApiInventoryOpenapiSpec {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	if len(m.ApiGroups) > 0 {
 		for _, e := range m.ApiGroups {
 			l = e.Size()
@@ -1413,6 +1953,24 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if len(m.SwaggerSpecs) > 0 {
 		for _, s := range m.SwaggerSpecs {
 			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryInclusionList) > 0 {
+		for _, e := range m.ApiInventoryInclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionList) > 0 {
+		for _, e := range m.ApiInventoryExclusionList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpoints) > 0 {
+		for _, e := range m.NonApiEndpoints {
+			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
@@ -1502,6 +2060,21 @@ func (this *GlobalSpecType) String() string {
 		repeatedStringForDefaultApiGroupsBuilders += strings.Replace(f.String(), "ApiGroupBuilder", "ApiGroupBuilder", 1) + ","
 	}
 	repeatedStringForDefaultApiGroupsBuilders += "}"
+	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionList {
+		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionList += "}"
+	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionList {
+		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionList += "}"
+	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpoints {
+		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpoints += "}"
 	repeatedStringForApiGroups := "[]*ApiGroupSummary{"
 	for _, f := range this.ApiGroups {
 		repeatedStringForApiGroups += strings.Replace(f.String(), "ApiGroupSummary", "ApiGroupSummary", 1) + ","
@@ -1510,6 +2083,10 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`SwaggerSpecs:` + fmt.Sprintf("%v", this.SwaggerSpecs) + `,`,
 		`DefaultApiGroupsBuilders:` + repeatedStringForDefaultApiGroupsBuilders + `,`,
+		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
+		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
+		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
+		`ApiInventoryOpenapiSpec:` + fmt.Sprintf("%v", this.ApiInventoryOpenapiSpec) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`ApiGroups:` + repeatedStringForApiGroups + `,`,
 		`}`,
@@ -1520,8 +2097,26 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionList {
+		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionList += "}"
+	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionList {
+		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionList += "}"
+	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpoints {
+		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpoints += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`SwaggerSpecs:` + fmt.Sprintf("%v", this.SwaggerSpecs) + `,`,
+		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
+		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
+		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1535,6 +2130,21 @@ func (this *GetSpecType) String() string {
 		repeatedStringForDefaultApiGroupsBuilders += strings.Replace(f.String(), "ApiGroupBuilder", "ApiGroupBuilder", 1) + ","
 	}
 	repeatedStringForDefaultApiGroupsBuilders += "}"
+	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionList {
+		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionList += "}"
+	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionList {
+		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionList += "}"
+	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpoints {
+		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpoints += "}"
 	repeatedStringForApiGroups := "[]*ApiGroupSummary{"
 	for _, f := range this.ApiGroups {
 		repeatedStringForApiGroups += strings.Replace(f.String(), "ApiGroupSummary", "ApiGroupSummary", 1) + ","
@@ -1543,6 +2153,10 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`SwaggerSpecs:` + fmt.Sprintf("%v", this.SwaggerSpecs) + `,`,
 		`DefaultApiGroupsBuilders:` + repeatedStringForDefaultApiGroupsBuilders + `,`,
+		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
+		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
+		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
+		`ApiInventoryOpenapiSpec:` + fmt.Sprintf("%v", this.ApiInventoryOpenapiSpec) + `,`,
 		`ApiGroups:` + repeatedStringForApiGroups + `,`,
 		`}`,
 	}, "")
@@ -1552,8 +2166,26 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionList {
+		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionList += "}"
+	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionList {
+		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionList += "}"
+	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpoints {
+		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpoints += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`SwaggerSpecs:` + fmt.Sprintf("%v", this.SwaggerSpecs) + `,`,
+		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
+		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
+		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1712,6 +2344,140 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryOpenapiSpec", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryOpenapiSpec = append(m.ApiInventoryOpenapiSpec, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ViewInternal", wireType)
@@ -1867,6 +2633,108 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.SwaggerSpecs = append(m.SwaggerSpecs, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1986,6 +2854,140 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryOpenapiSpec", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryOpenapiSpec = append(m.ApiInventoryOpenapiSpec, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroups", wireType)
@@ -2104,6 +3106,108 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.SwaggerSpecs = append(m.SwaggerSpecs, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

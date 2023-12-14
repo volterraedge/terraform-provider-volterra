@@ -3009,6 +3009,14 @@ func (v *ValidateGlobalSpecType) PodSecurityPolicyChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) FinalClusterRoleBindingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -3488,6 +3496,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
+		val := m.GetVk8SNamespaceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vk8s_namespace_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVk8SNamespaceAccessChoice().(type) {
+	case *GlobalSpecType_Vk8SNamespaceAccessDeny:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_deny"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*GlobalSpecType_Vk8SNamespaceAccessDeny).Vk8SNamespaceAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Vk8SNamespaceAccessPermit:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_permit"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*GlobalSpecType_Vk8SNamespaceAccessPermit).Vk8SNamespaceAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_permit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -3590,6 +3634,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
+
+	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
+	rulesVk8SNamespaceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVk8SNamespaceAccessChoice(rulesVk8SNamespaceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.vk8s_namespace_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace_access_choice"] = vFn
 
 	vrhFinalClusterRoleBindings := v.FinalClusterRoleBindingsValidationRuleHandler
 	rulesFinalClusterRoleBindings := map[string]string{

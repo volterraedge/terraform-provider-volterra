@@ -376,7 +376,7 @@ func (m *WebhookConfig) GetHttpConfig() *HTTPConfig {
 type HTTPConfig struct {
 	// HTTP Authentication header
 	//
-	// x-displayName: "Authentication"
+	// x-displayName: "Client Authentication"
 	// x-required
 	// HTTP Authentication header controls how to authenticate to the HTTP endpoint
 	//
@@ -400,7 +400,7 @@ type HTTPConfig struct {
 	FollowRedirects bool `protobuf:"varint,5,opt,name=follow_redirects,json=followRedirects,proto3" json:"follow_redirects,omitempty"`
 	// Enable TLS
 	//
-	// x-displayName: "TLS"
+	// x-displayName: "Server TLS"
 	// x-required
 	//
 	// Types that are valid to be assigned to TlsChoice:

@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.azure_vnet_site.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -5949,6 +5964,14 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Inside VIP CNAME\"\nx-example: \"test.56670-387196482.useast2.ves.io\"\nCNAME value for the inside VIP,\nThese are usually public cloud generated CNAME",
                     "title": "Inside VIP CNAME"
                 },
+                "inside_vip_v6": {
+                    "type": "array",
+                    "description": "x-displayName: \"Inside IPv6 VIP(s)\"\nx-example: \"2001::1\"\nOptional list of Inside IPv6 VIPs for an AZ",
+                    "title": "Inside IPv6 VIP(s)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "outside_vip": {
                     "type": "array",
                     "description": "x-displayName: \"Outside VIP(s)\"\nx-example: \"192.168.0.156\"\nx-required\nList of Outside VIPs for an AZ",
@@ -5961,6 +5984,14 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Outside VIP CNAME\"\nx-example: \"test.56670-387196482.useast2.ves.io\"\nCNAME value for the outside VIP\nThese are usually public cloud generated CNAME",
                     "title": "Outside VIP CNAME"
+                },
+                "outside_vip_v6": {
+                    "type": "array",
+                    "description": "x-displayName: \"Outside IPv6 VIP(s)\"\nx-example: \"2001::1\"\nOptional list of Outside IPv6 VIPs for an AZ",
+                    "title": "Outside IPv6 VIP(s)",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -5985,14 +6016,15 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -6089,11 +6121,12 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -6122,7 +6155,8 @@ var APISwaggerJSON string = `{
                 "NO_CHANGES",
                 "HAS_CHANGES",
                 "DISCARDED",
-                "PLAN_INIT_ERRORED"
+                "PLAN_INIT_ERRORED",
+                "PLAN_QUEUED"
             ],
             "default": "PLANNING",
             "x-displayname": "Plan Stage State",
@@ -6604,10 +6638,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "CloudLink ADN Network Name",
+                    "description": " Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Private ADN Network",
                     "maxLength": 64,
-                    "x-displayname": "CloudLink ADN Network Name",
+                    "x-displayname": "Private ADN Network",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -6636,6 +6670,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 }
             }

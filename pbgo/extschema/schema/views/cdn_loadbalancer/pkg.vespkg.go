@@ -71,9 +71,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNHTTPSAutoCertsType"] = CDNHTTPSAutoCertsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNHTTPSCustomCertsType"] = CDNHTTPSCustomCertsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNOriginServerType"] = CDNOriginServerTypeValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.CDNPathMatcherType"] = CDNPathMatcherTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNTLSConfig"] = CDNTLSConfigValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.CacheCookieMatcherType"] = CacheCookieMatcherTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheEligibleOptions"] = CacheEligibleOptionsValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.CacheHeaderMatcherType"] = CacheHeaderMatcherTypeValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.CacheOperator"] = CacheOperatorValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheOptions"] = CacheOptionsValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.CacheQueryParameterMatcherType"] = CacheQueryParameterMatcherTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheTTLEnableProps"] = CacheTTLEnablePropsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CacheTTLOptionsType"] = CacheTTLOptionsTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CdnOriginPoolType"] = CdnOriginPoolTypeValidator()
@@ -92,6 +97,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponseValue"] = LilacCDNMetricsResponseValueValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LogHeaderOptions"] = LogHeaderOptionsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LoggingOptionsType"] = LoggingOptionsTypeValidator()
+	vr["ves.io.schema.views.cdn_loadbalancer.OriginAdvancedConfiguration"] = OriginAdvancedConfigurationValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ProxyTypeHttpsAutoCerts"] = ProxyTypeHttpsAutoCertsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType"] = SecurityOptionsTypeValidator()
@@ -113,10 +119,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.more_option.cache_ttl_options",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []string{
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.more_option.cache_ttl_options",
 	}
 
@@ -125,7 +141,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
-		"spec.more_option.cache_options",
+		"spec.more_option.cache_ttl_options",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.vault_secret_info",
@@ -142,8 +158,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.security_options.auth_options.jwt.secret_key.secret_encoding_type",
 		"spec.more_option.security_options.auth_options.jwt.secret_key.vault_secret_info",
 		"spec.more_option.security_options.auth_options.jwt.secret_key.wingman_secret_info",
-		"spec.more_option.security_options.ip_filtering.allow_list.ipv6_prefixes.#",
-		"spec.more_option.security_options.ip_filtering.block_list.ipv6_prefixes.#",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.vault_secret_info",
@@ -153,18 +167,48 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = "ves.io.schema.views.cdn_loadbalancer.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Get"] = []string{
+		"create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"create_form.spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"create_form.spec.more_option.cache_ttl_options",
 		"object",
+		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"replace_form.spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"replace_form.spec.more_option.cache_ttl_options",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.more_option.cache_ttl_options",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.List"] = []string{
+		"items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"items.#.get_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"items.#.get_spec.more_option.cache_ttl_options",
+		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"items.#.object.spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"items.#.object.spec.gc_spec.more_option.cache_ttl_options",
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.API.Replace"] = []string{
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
+		"spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.more_option.cache_ttl_options",
 	}
 
@@ -173,7 +217,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
-		"spec.more_option.cache_options",
+		"spec.more_option.cache_ttl_options",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.header_options.request_headers_to_add.#.secret_value.vault_secret_info",
@@ -190,8 +234,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option.security_options.auth_options.jwt.secret_key.secret_encoding_type",
 		"spec.more_option.security_options.auth_options.jwt.secret_key.vault_secret_info",
 		"spec.more_option.security_options.auth_options.jwt.secret_key.wingman_secret_info",
-		"spec.more_option.security_options.ip_filtering.allow_list.ipv6_prefixes.#",
-		"spec.more_option.security_options.ip_filtering.block_list.ipv6_prefixes.#",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.origin_pool.use_tls.use_mtls.tls_certificates.#.private_key.vault_secret_info",

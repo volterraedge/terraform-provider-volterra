@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.aws_tgw_site.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2273,31 +2288,136 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
+                },
+                "vpc_name": {
+                    "type": "string",
+                    "description": " VPC Name where the volterra site exists",
+                    "title": "VPC Name",
+                    "x-displayname": "VPC Name"
+                }
+            }
+        },
+        "aws_tgw_siteAWSTGWResourceShareType": {
+            "type": "object",
+            "description": "AWS Resource Share Status Type",
+            "title": "AWS Resource Share Status Type",
+            "x-displayname": "AWS Resource Share Status",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWResourceShareType",
+            "properties": {
+                "allow_external_principles": {
+                    "type": "boolean",
+                    "description": " Manage Sharing Outside AWS Organization",
+                    "title": "Allow External Principles",
+                    "format": "boolean",
+                    "x-displayname": "Allow External Principles"
+                },
+                "creation_time": {
+                    "type": "string",
+                    "description": " Resource Share Creation Time",
+                    "title": "Resource Share Creation Time",
+                    "format": "date-time",
+                    "x-displayname": "Resource Share Creation Time"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "feature_set": {
+                    "type": "string",
+                    "description": " x-displayName \"Feature Set\"\n Indicates what features are available for this Resource Share",
+                    "title": "Resource Share Feature Set"
+                },
+                "invitation_status": {
+                    "type": "string",
+                    "description": " Resource Share Invitation State",
+                    "title": "Resource Share Invitation State",
+                    "x-displayname": "Resource Share Invitation State"
+                },
+                "last_updated_time": {
+                    "type": "string",
+                    "description": " Resource Share Last Update Time",
+                    "title": "Resource Share Last Update Time",
+                    "format": "date-time",
+                    "x-displayname": "Resource Share Last Update Time"
+                },
+                "owner_account_id": {
+                    "type": "string",
+                    "description": " Resource Share Owner Account ID",
+                    "title": "Resource Share Owner Account ID",
+                    "x-displayname": "Resource Share Owner Account ID"
+                },
+                "receiver_account_id": {
+                    "type": "string",
+                    "description": " Resource Share Acceptor Account ID",
+                    "title": "Resource Share Acceptor Account ID",
+                    "x-displayname": "Resource Share Acceptor Account ID"
+                },
+                "receiver_arn": {
+                    "type": "string",
+                    "description": " Resource Share Receiver ARN",
+                    "title": "Resource Share Receiver ARN",
+                    "x-displayname": "Resource Share Receiver ARN"
+                },
+                "receiver_aws_account": {
+                    "type": "string",
+                    "description": " Resource Share Receiver Account",
+                    "title": "Resource Share Receiver Account",
+                    "x-displayname": "Resource Share Receiver Account"
+                },
+                "resource_share_arn": {
+                    "type": "string",
+                    "description": " Resource Share ARN",
+                    "title": "Resource Share ARN",
+                    "x-displayname": "Resource Share ARN"
+                },
+                "resource_share_invitation_arn": {
+                    "type": "string",
+                    "description": " Resource Share Invititation ARN",
+                    "title": "Resource Share Invititation ARN",
+                    "x-displayname": "Resource Share Invititation ARN"
+                },
+                "resource_share_name": {
+                    "type": "string",
+                    "description": " Resource Share Name",
+                    "title": "Resource Share Name",
+                    "x-displayname": "Resource Share Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Resource Share State",
+                    "title": "Resource Share State",
+                    "x-displayname": "Resource Share State"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Resource Share Tags",
+                    "title": "Resource Share Tags",
+                    "x-displayname": "Resource Share Tags"
                 }
             }
         },
         "aws_tgw_siteAWSTGWSpokeAttachmentListType": {
             "type": "object",
-            "description": "List of AWSTGWSpokeAttachmentType",
             "title": "List of AWSTGWSpokeAttachmentType",
             "x-displayname": "AWSTGWSpokeAttachmentListType",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentListType",
             "properties": {
                 "attachments": {
                     "type": "array",
-                    "description": " List of VPC attachments to transit gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "vpc_list",
-                    "minItems": 1,
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 0\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Attachments",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentType"
                     },
-                    "x-displayname": "VPC List",
+                    "x-displayname": "Attachments",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "0",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -2309,42 +2429,99 @@ var APISwaggerJSON string = `{
             "title": "AWS TGW Spoke Type",
             "x-displayname": "AWS TGW Spoke VPC Type",
             "x-ves-oneof-field-credential_choice": "[\"cred\",\"use_site_credential\"]",
-            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentType",
             "properties": {
                 "cred": {
-                    "description": "Exclusive with [use_site_credential]\n Other Cloud Credentials",
+                    "description": "Exclusive with [use_site_credential]\n Attach VPCs using a cloud credential not associated with this site",
                     "title": "Other Cloud Credentials",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Other Cloud Credentials"
+                    "x-displayname": "Other Cloud Credential"
                 },
-                "enable_segment": {
-                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
+                "segment": {
+                    "description": " Choose a network segment. All attached VPCs will be placed in this network segment",
                     "title": "Segment",
-                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
-                },
-                "isolated_segment": {
-                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
-                    "title": "Isolated Network",
-                    "$ref": "#/definitions/cloud_connectIsolatedType",
-                    "x-displayname": "Isolated segment"
                 },
                 "spokes": {
                     "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs",
+                    "x-displayname": "Attach VPCs",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "use_site_credential": {
-                    "description": "Exclusive with [cred]\n Attach VPC from same credential as site",
+                    "description": "Exclusive with [cred]\n Attach VPCs using this site’s cloud credential",
                     "title": "Site Cloud Credentials",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Site Cloud Credentials"
+                    "x-displayname": "Site Cloud Credential"
+                }
+            }
+        },
+        "aws_tgw_siteAWSTGWStatusType": {
+            "type": "object",
+            "description": "AWS Transit Gateway Status Type",
+            "title": "AWS Transit Gateway Status Type",
+            "x-displayname": "AWS TGW Status",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWStatusType",
+            "properties": {
+                "status_msg": {
+                    "type": "string",
+                    "description": " x-displayName \"TGW Deployment Status\"\n TGW Deployment Status",
+                    "title": "TGW Deployment Status"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " TGW Tags",
+                    "title": "TGW Tags",
+                    "x-displayname": "TGW Tags"
+                },
+                "tgw_amazon_asn": {
+                    "type": "string",
+                    "description": " AWS Side ASN of TGW",
+                    "title": "AWS Side ASN of TGW",
+                    "format": "int64",
+                    "x-displayname": "AWS Side ASN of TGW"
+                },
+                "tgw_arn": {
+                    "type": "string",
+                    "description": " TGW ARN",
+                    "title": "TGW ARN",
+                    "x-displayname": "TGW ARN"
+                },
+                "tgw_creation_time": {
+                    "type": "string",
+                    "description": " TGW Creation Time",
+                    "title": "TGW creation time",
+                    "format": "date-time",
+                    "x-displayname": "TGW Creation Time"
+                },
+                "tgw_id": {
+                    "type": "string",
+                    "description": " TGW ID",
+                    "title": "TGW ID",
+                    "x-displayname": "TGW ID"
+                },
+                "tgw_owner_account": {
+                    "type": "string",
+                    "description": " TGW Owner Account",
+                    "title": "TGW Owner",
+                    "x-displayname": "TGW Owner Account"
+                },
+                "tgw_region": {
+                    "type": "string",
+                    "description": " TGW Region",
+                    "title": "TGW Region",
+                    "x-displayname": "TGW Region"
+                },
+                "tgw_state": {
+                    "type": "string",
+                    "description": " TGW State",
+                    "title": "TGW State",
+                    "x-displayname": "TGW State"
                 }
             }
         },
@@ -2929,7 +3106,7 @@ var APISwaggerJSON string = `{
             "title": "AWS Service VPC and TGW",
             "x-displayname": "AWS Service VPC and TGW",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
@@ -2944,14 +3121,13 @@ var APISwaggerJSON string = `{
                 },
                 "aws_region": {
                     "type": "string",
-                    "description": " AWS Region of your services vpc, where F5XC site will be deployed.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]\n",
+                    "description": " AWS Region of your services vpc, where F5XC site will be deployed.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS Region",
                     "x-displayname": "AWS Region",
                     "x-ves-example": "us-east-1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "az_nodes": {
@@ -2974,12 +3150,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSecurityGroupType",
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
-                "disable_internet_vip": {
-                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
-                    "title": "Disable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
-                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Node disk size for all node in the F5XC site. Unit is GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
@@ -2990,12 +3160,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "64000"
                     }
-                },
-                "enable_internet_vip": {
-                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
-                    "title": "Enable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "existing_tgw": {
                     "description": "Exclusive with [new_tgw]\n Information about existing TGW",
@@ -3139,6 +3303,27 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "resource_share_status": {
+                    "type": "array",
+                    "description": " AWS TGW Resource Share",
+                    "title": "AWS TGW Resource Share",
+                    "items": {
+                        "$ref": "#/definitions/aws_tgw_siteAWSTGWResourceShareType"
+                    },
+                    "x-displayname": "AWS TGW Resource Share"
+                },
+                "tgw": {
+                    "description": " AWS Transit Gateway Status Type",
+                    "title": "AWS Transit Gateway Status Type",
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWStatusType",
+                    "x-displayname": "AWS TGW Status"
+                },
+                "vpc_attachments": {
+                    "description": " Cloud Connect to AWS Sites",
+                    "title": "Cloud Connect Attached to AWS TGW Site",
+                    "$ref": "#/definitions/cloud_connectAWSAttachmentsListStatusType",
+                    "x-displayname": "Cloud Connect to AWS TGW Site"
                 }
             }
         },
@@ -3200,7 +3385,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Spoke VPCs to be attached to the AWS TGW Site",
             "title": "Spoke VPCs",
-            "x-displayname": "Spoke VPCs",
+            "x-displayname": "Spoke VPCs (Legacy Mode)",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VPCAttachmentListType",
             "properties": {
                 "vpc_list": {
@@ -3227,9 +3412,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "labels": {
                     "type": "object",
-                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key, label defined in shared namespace and unknown key.\n\nExample: - \"value\"-",
-                    "title": "Labels For VPC ID",
-                    "x-displayname": "Labels For VPC ID",
+                    "description": " Add labels for the VPC attachment. These labels can then be used in policies such as enhanced firewall.\n\nExample: - \"value\"-",
+                    "title": "Labels",
+                    "x-displayname": "Labels",
                     "x-ves-example": "value"
                 },
                 "vpc_id": {
@@ -3279,6 +3464,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
@@ -3306,6 +3492,18 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
+                },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
+                    "title": "Disable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
+                    "title": "Enable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\n List of global network connections",
@@ -3363,6 +3561,85 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSAttachmentsListStatusType": {
+            "type": "object",
+            "description": "AWS VPC Attachment List Status Type",
+            "title": "AWS VPC Attachment List Status Type",
+            "x-displayname": "AWS VPC Attachment List Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsListStatusType",
+            "properties": {
+                "attachment_status": {
+                    "type": "array",
+                    "description": " AWS Attachment Status Type",
+                    "title": "AWS VPC Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
+                    },
+                    "x-displayname": "AWS VPC Attachment Status Type"
+                }
+            }
+        },
+        "cloud_connectAWSAttachmentsStatusType": {
+            "type": "object",
+            "description": "AWS Attachment Status Type",
+            "title": "AWS VPC Attachment Status Type",
+            "x-displayname": "AWS Attachment Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsStatusType",
+            "properties": {
+                "creation_time": {
+                    "type": "string",
+                    "description": " Attachment Creation Time",
+                    "title": "Attachment Creation Time",
+                    "format": "date-time",
+                    "x-displayname": "Attachment Creation Time"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " Attachment State",
+                    "title": "Attachment State",
+                    "x-displayname": "Attachment State"
+                },
+                "subnets": {
+                    "type": "array",
+                    "description": " Subnets to Route Traffic",
+                    "title": "Subnets",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Subnets"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "tgw_attachment_id": {
+                    "type": "string",
+                    "description": " TGW Attachment ID",
+                    "title": "TGW Attachment ID",
+                    "x-displayname": "TGW Attachment ID"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID"
+                },
+                "vpc_owner_id": {
+                    "type": "string",
+                    "description": " VPC Owner Account",
+                    "title": "VPC Owner Account",
+                    "x-displayname": "VPC Owner Account"
+                }
+            }
+        },
         "cloud_connectAWSRouteTableListType": {
             "type": "object",
             "description": "AWS Route Table List",
@@ -3372,7 +3649,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_tables": {
                     "type": "array",
-                    "description": " Route Tables \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Route Tables\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of route tables",
                     "minItems": 1,
                     "maxItems": 200,
@@ -3462,14 +3739,13 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSVPCAttachmentListType": {
             "type": "object",
-            "description": "Spoke VPCs to be attached to the AWS TGW Site",
-            "title": "Spoke VPCs",
-            "x-displayname": "Spoke VPCs",
+            "title": "VPC Attachments",
+            "x-displayname": "VPC Attachments",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentListType",
             "properties": {
                 "vpc_list": {
                     "type": "array",
-                    "description": " List of VPC attachments to transit gateway\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "vpc_list",
                     "maxItems": 128,
                     "items": {
@@ -3484,10 +3760,9 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSVPCAttachmentType": {
             "type": "object",
-            "description": "VPC attachments to transit gateway",
             "title": "AWS VPC attachment",
-            "x-displayname": "VPC",
-            "x-ves-oneof-field-routing_choice": "[\"manual_routing\",\"routing_ids\"]",
+            "x-displayname": "VPC Attachment",
+            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"default_route\",\"manual_routing\"]",
             "x-ves-oneof-field-subnet_choice": "[\"all_subnets\",\"subnet_ids\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
             "properties": {
@@ -3496,6 +3771,18 @@ var APISwaggerJSON string = `{
                     "title": "All subnets",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "All subnets"
+                },
+                "custom_routing": {
+                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
+                    "title": "Advertise Custom CIDRs",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Advertise Custom CIDRs"
+                },
+                "default_route": {
+                    "description": "Exclusive with [custom_routing manual_routing]\n default route towards the CE will be add to the route table",
+                    "title": "Override Default Route",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Override Default Route"
                 },
                 "labels": {
                     "type": "object",
@@ -3508,16 +3795,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "manual_routing": {
-                    "description": "Exclusive with [routing_ids]\n Manual routing",
+                    "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Manual routing"
-                },
-                "routing_ids": {
-                    "description": "Exclusive with [manual_routing]\n Routing tables automatically managed",
-                    "title": "Routing tables",
-                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Routing tables"
+                    "x-displayname": "Manual"
                 },
                 "subnet_ids": {
                     "description": "Exclusive with [all_subnets]\n Specific subnets are routed to transit gateway.",
@@ -3527,7 +3808,7 @@ var APISwaggerJSON string = `{
                 },
                 "vpc_id": {
                     "type": "string",
-                    "description": " Information about existing VPC\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "description": " Enter the VPC ID of the VPC to be attached\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "VPC ID",
                     "maxLength": 64,
                     "x-displayname": "VPC ID",
@@ -3540,28 +3821,6 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
-        },
-        "cloud_connectEnableSegmentType": {
-            "type": "object",
-            "description": "Enable Segment Type",
-            "title": "Enable Segment Type",
-            "x-displayname": "Enable Segment Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.EnableSegmentType",
-            "properties": {
-                "segment": {
-                    "description": " Segment connected to",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
-                }
-            }
-        },
-        "cloud_connectIsolatedType": {
-            "type": "object",
-            "description": "Network is isolated by default",
-            "title": "Isolated Type",
-            "x-displayname": "Isolated",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.IsolatedType"
         },
         "fleetBlockedServices": {
             "type": "object",
@@ -5274,6 +5533,22 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "inside_vip_v6": {
+                    "type": "array",
+                    "description": " Optional list of Inside IPv6 VIPs for an AZ\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Inside IPv6 VIP(s)",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Inside IPv6 VIP(s)",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "outside_vip": {
                     "type": "array",
                     "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -5304,6 +5579,22 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "outside_vip_v6": {
+                    "type": "array",
+                    "description": " Optional list of Outside IPv6 VIPs for an AZ\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Outside IPv6 VIP(s)",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Outside IPv6 VIP(s)",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -5328,14 +5619,15 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -5432,11 +5724,12 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -5465,7 +5758,8 @@ var APISwaggerJSON string = `{
                 "NO_CHANGES",
                 "HAS_CHANGES",
                 "DISCARDED",
-                "PLAN_INIT_ERRORED"
+                "PLAN_INIT_ERRORED",
+                "PLAN_QUEUED"
             ],
             "default": "PLANNING",
             "x-displayname": "Plan Stage State",
@@ -5780,10 +6074,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "CloudLink ADN Network Name",
+                    "description": " Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Private ADN Network",
                     "maxLength": 64,
-                    "x-displayname": "CloudLink ADN Network Name",
+                    "x-displayname": "Private ADN Network",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -5812,6 +6106,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 }
             }
@@ -6187,13 +6491,33 @@ var APISwaggerJSON string = `{
         },
         "viewsPrivateConnectConfigType": {
             "type": "object",
-            "description": "x-displayName: \"Private Connect Configuration\"\nPrivate Connect Configuration",
+            "description": "Private Connect Configuration",
             "title": "PrivateConnectConfigType",
+            "x-displayname": "Private Connect Configuration",
+            "x-ves-oneof-field-network_options": "[\"inside\",\"outside\"]",
+            "x-ves-proto-message": "ves.io.schema.views.PrivateConnectConfigType",
             "properties": {
                 "cloud_link": {
-                    "description": "x-displayName: \"Associate Cloud Link\"\nx-required\nReference to Cloud Link",
+                    "description": " Reference to Cloud Link\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Associate Cloud Link",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Associate Cloud Link",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "inside": {
+                    "description": "Exclusive with [outside]\n CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inside Network"
+                },
+                "outside": {
+                    "description": "Exclusive with [inside]\n CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site",
+                    "title": "Outside Network",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outside Network"
                 }
             }
         },
@@ -6355,9 +6679,9 @@ var APISwaggerJSON string = `{
             "title": "CreateSpecType",
             "x-displayname": "Create AWS TGW site",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-vpc_attach": "[\"disable_vpc_attachment\",\"spoke_attachments\",\"vpc_attachments\"]",
+            "x-ves-oneof-field-vpc_attach": "[\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.CreateSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6390,19 +6714,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect Connection to Site is disabled",
+                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Direct Connect"
+                    "x-displayname": "Disable Private Connectivity"
                 },
                 "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect Connection to Site is enabled",
+                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect Connection to Site is enabled(Legacy)",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Direct Connect"
-                },
-                "disable_vpc_attachment": {
-                    "description": "Exclusive with [spoke_attachments vpc_attachments]\n Disable VPC attachment to AWS TGW Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VPC Attachments"
+                    "x-displayname": "Enable Private Connectivity via Direct Connect (Legacy))"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -6430,8 +6749,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
                 },
+                "private_connectivity": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site via CloudLink",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable Private Connectivity via CloudLink"
+                },
                 "spoke_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment vpc_attachments]\n VPC Attachments to AWS TGW site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [vpc_attachments]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
                     "x-displayname": "Enable VPC Attachments",
                     "x-ves-required": "true",
@@ -6467,9 +6791,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site",
+                    "description": "Exclusive with [spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "[Legacy] Spoke VPCs"
                 }
             }
         },
@@ -6479,9 +6803,9 @@ var APISwaggerJSON string = `{
             "title": "GetSpecType",
             "x-displayname": "Get AWS TGW site",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-vpc_attach": "[\"disable_vpc_attachment\",\"spoke_attachments\",\"vpc_attachments\"]",
+            "x-ves-oneof-field-vpc_attach": "[\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GetSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6514,24 +6838,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect Connection to Site is disabled",
+                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Direct Connect"
+                    "x-displayname": "Disable Private Connectivity"
                 },
                 "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect Connection to Site is enabled",
+                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect Connection to Site is enabled(Legacy)",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Direct Connect"
+                    "x-displayname": "Enable Private Connectivity via Direct Connect (Legacy))"
                 },
                 "direct_connect_info": {
                     "description": " Direct Connect information obtained after creating the site and TGW",
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
-                },
-                "disable_vpc_attachment": {
-                    "description": "Exclusive with [spoke_attachments vpc_attachments]\n Disable VPC attachment to AWS TGW Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VPC Attachments"
                 },
                 "error_description": {
                     "type": "string",
@@ -6559,6 +6878,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
                 },
+                "private_connectivity": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site via CloudLink",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable Private Connectivity via CloudLink"
+                },
                 "site_state": {
                     "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
                     "title": "site_state",
@@ -6566,7 +6890,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site State"
                 },
                 "spoke_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment vpc_attachments]\n VPC Attachments to AWS TGW site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [vpc_attachments]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
                     "x-displayname": "Enable VPC Attachments",
                     "x-ves-required": "true",
@@ -6619,9 +6943,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site",
+                    "description": "Exclusive with [spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "[Legacy] Spoke VPCs"
                 }
             }
         },
@@ -6631,9 +6955,9 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-vpc_attach": "[\"disable_vpc_attachment\",\"spoke_attachments\",\"vpc_attachments\"]",
+            "x-ves-oneof-field-vpc_attach": "[\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6671,16 +6995,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect Connection to Site is disabled",
-                    "title": "Disable Direct Connect",
+                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
+                    "title": "Disable Private Connectivity",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Direct Connect"
+                    "x-displayname": "Disable Private Connectivity"
                 },
                 "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect Connection to Site is enabled",
-                    "title": "Enable Direct Connect",
+                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect Connection to Site is enabled(Legacy)",
+                    "title": "Enable Private Connectivity via Direct Connect (Legacy))",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Direct Connect"
+                    "x-displayname": "Enable Private Connectivity via Direct Connect (Legacy))"
                 },
                 "direct_connect_info": {
                     "description": " Direct Connect information obtained after creating the site and TGW",
@@ -6688,16 +7012,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsDirectConnectInfo",
                     "x-displayname": "Direct Connect Information"
                 },
-                "disable_vpc_attachment": {
-                    "description": "Exclusive with [spoke_attachments vpc_attachments]\n Disable VPC attachment to AWS TGW Site",
-                    "title": "Disable VPC Attachment",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VPC Attachments"
-                },
                 "error_description": {
                     "type": "string",
                     "description": " Description of error on site\n\nExample: - \"value\"-",
-                    "title": "error_description \n \nx-displayName: \"Error Description\"\nx-example: \"value\"\nDescription of error on site",
+                    "title": "error_description",
                     "x-displayname": "Error Description",
                     "x-ves-example": "value"
                 },
@@ -6731,6 +7049,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
                 },
+                "private_connectivity": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site via CloudLink",
+                    "title": "Enable Private Connectivity via CloudLink",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable Private Connectivity via CloudLink"
+                },
                 "site_state": {
                     "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
                     "title": "site_state",
@@ -6738,7 +7062,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site State"
                 },
                 "spoke_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment vpc_attachments]\n VPC Attachments to AWS TGW site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [vpc_attachments]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Enable VPC Attachments",
                     "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
                     "x-displayname": "Enable VPC Attachments",
@@ -6804,10 +7128,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site",
+                    "description": "Exclusive with [spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "[Legacy] Spoke VPCs"
                 }
             }
         },
@@ -6817,9 +7141,9 @@ var APISwaggerJSON string = `{
             "title": "ReplaceSpecType",
             "x-displayname": "Replace AWS TGW site",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-vpc_attach": "[\"disable_vpc_attachment\",\"spoke_attachments\",\"vpc_attachments\"]",
+            "x-ves-oneof-field-vpc_attach": "[\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ReplaceSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6852,19 +7176,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect Connection to Site is disabled",
+                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Direct Connect"
+                    "x-displayname": "Disable Private Connectivity"
                 },
                 "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect Connection to Site is enabled",
+                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect Connection to Site is enabled(Legacy)",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Direct Connect"
-                },
-                "disable_vpc_attachment": {
-                    "description": "Exclusive with [spoke_attachments vpc_attachments]\n Disable VPC attachment to AWS TGW Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VPC Attachments"
+                    "x-displayname": "Enable Private Connectivity via Direct Connect (Legacy))"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -6886,8 +7205,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
                 },
+                "private_connectivity": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site via CloudLink",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable Private Connectivity via CloudLink"
+                },
                 "spoke_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment vpc_attachments]\n VPC Attachments to AWS TGW site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [vpc_attachments]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
                     "x-displayname": "Enable VPC Attachments",
                     "x-ves-required": "true",
@@ -6906,9 +7230,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": "Exclusive with [disable_vpc_attachment spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site",
+                    "description": "Exclusive with [spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "[Legacy] Spoke VPCs"
                 }
             }
         }

@@ -52,6 +52,24 @@ func (c *PrivateCustomAPIGrpcClient) doRPCListCloudNetworkTagValues(ctx context.
 	return rsp, err
 }
 
+func (c *PrivateCustomAPIGrpcClient) doRPCListCloudSubnetTagKeys(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListCloudSubnetTagKeysRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.ListCloudSubnetTagKeysRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListCloudSubnetTagKeys(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *PrivateCustomAPIGrpcClient) doRPCListCloudSubnetTagValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListCloudSubnetTagValuesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.ListCloudSubnetTagValuesRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListCloudSubnetTagValues(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *PrivateCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -85,6 +103,10 @@ func NewPrivateCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["ListCloudNetworkTagKeys"] = ccl.doRPCListCloudNetworkTagKeys
 
 	rpcFns["ListCloudNetworkTagValues"] = ccl.doRPCListCloudNetworkTagValues
+
+	rpcFns["ListCloudSubnetTagKeys"] = ccl.doRPCListCloudSubnetTagKeys
+
+	rpcFns["ListCloudSubnetTagValues"] = ccl.doRPCListCloudSubnetTagValues
 
 	ccl.rpcFns = rpcFns
 
@@ -270,6 +292,177 @@ func (c *PrivateCustomAPIRestClient) doRPCListCloudNetworkTagValues(ctx context.
 	return pbRsp, nil
 }
 
+func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagKeys(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListCloudSubnetTagKeysRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.ListCloudSubnetTagKeysRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("cloud_type", fmt.Sprintf("%v", req.CloudType))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query_key", fmt.Sprintf("%v", req.QueryKey))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListCloudSubnetTagKeysResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudSubnetTagKeysResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *PrivateCustomAPIRestClient) doRPCListCloudSubnetTagValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListCloudSubnetTagValuesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.ListCloudSubnetTagValuesRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("cloud_type", fmt.Sprintf("%v", req.CloudType))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query_key", fmt.Sprintf("%v", req.QueryKey))
+		q.Add("query_value", fmt.Sprintf("%v", req.QueryValue))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListCloudSubnetTagValuesResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.ListCloudSubnetTagValuesResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *PrivateCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -298,6 +491,10 @@ func NewPrivateCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns["ListCloudNetworkTagValues"] = ccl.doRPCListCloudNetworkTagValues
 
+	rpcFns["ListCloudSubnetTagKeys"] = ccl.doRPCListCloudSubnetTagKeys
+
+	rpcFns["ListCloudSubnetTagValues"] = ccl.doRPCListCloudSubnetTagValues
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -317,6 +514,14 @@ func (c *privateCustomAPIInprocClient) ListCloudNetworkTagKeys(ctx context.Conte
 func (c *privateCustomAPIInprocClient) ListCloudNetworkTagValues(ctx context.Context, in *ListCloudNetworkTagValuesRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagValuesResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagValues", nil)
 	return c.PrivateCustomAPIServer.ListCloudNetworkTagValues(ctx, in)
+}
+func (c *privateCustomAPIInprocClient) ListCloudSubnetTagKeys(ctx context.Context, in *ListCloudSubnetTagKeysRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagKeysResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys", nil)
+	return c.PrivateCustomAPIServer.ListCloudSubnetTagKeys(ctx, in)
+}
+func (c *privateCustomAPIInprocClient) ListCloudSubnetTagValues(ctx context.Context, in *ListCloudSubnetTagValuesRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagValuesResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues", nil)
+	return c.PrivateCustomAPIServer.ListCloudSubnetTagValues(ctx, in)
 }
 
 func NewPrivateCustomAPIInprocClient(svc svcfw.Service) PrivateCustomAPIClient {
@@ -400,6 +605,72 @@ func (s *privateCustomAPISrv) ListCloudNetworkTagValues(ctx context.Context, in 
 	}
 
 	rsp, err = cah.ListCloudNetworkTagValues(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *privateCustomAPISrv) ListCloudSubnetTagKeys(ctx context.Context, in *ListCloudSubnetTagKeysRequest) (*ListCloudSubnetTagKeysResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.topology.PrivateCustomAPI")
+	cah, ok := ah.(PrivateCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PrivateCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListCloudSubnetTagKeysResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListCloudSubnetTagKeys(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *privateCustomAPISrv) ListCloudSubnetTagValues(ctx context.Context, in *ListCloudSubnetTagValuesRequest) (*ListCloudSubnetTagValuesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.topology.PrivateCustomAPI")
+	cah, ok := ah.(PrivateCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *PrivateCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListCloudSubnetTagValuesResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListCloudSubnetTagValues(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -653,6 +924,232 @@ var PrivateCustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         },
+        "/private/custom/namespaces/{namespace}/subnet_tag_keys": {
+            "get": {
+                "summary": "List Cloud Subnet Tag Keys",
+                "description": "ListCloudSubnetTagKeys retrieves cloud provider Keys of Subnet tags.\nThe tag keys are retrieved based on the key substring",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyListCloudSubnetTagKeysResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "cloud_type",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "PROVIDER_TYPE_UNSPECIFIED",
+                            "PROVIDER_TYPE_AWS",
+                            "PROVIDER_TYPE_GCP",
+                            "PROVIDER_TYPE_AZURE",
+                            "PROVIDER_TYPE_VOLTERRA"
+                        ],
+                        "default": "PROVIDER_TYPE_UNSPECIFIED",
+                        "x-displayname": "Volterra"
+                    },
+                    {
+                        "name": "query_key",
+                        "description": "Query Key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Key"
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/private/custom/namespaces/{namespace}/subnet_tag_values": {
+            "get": {
+                "summary": "List Cloud Subnet Tag Values",
+                "description": "ListCloudSubnetTagValues retrieves cloud provider Values of Subnet tags.\nThe tag values are retrieved based on the key",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyListCloudSubnetTagValuesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "cloud_type",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "PROVIDER_TYPE_UNSPECIFIED",
+                            "PROVIDER_TYPE_AWS",
+                            "PROVIDER_TYPE_GCP",
+                            "PROVIDER_TYPE_AZURE",
+                            "PROVIDER_TYPE_VOLTERRA"
+                        ],
+                        "default": "PROVIDER_TYPE_UNSPECIFIED",
+                        "x-displayname": "Volterra"
+                    },
+                    {
+                        "name": "query_key",
+                        "description": "Query Key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Key"
+                    },
+                    {
+                        "name": "query_value",
+                        "description": "Query Value",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Value"
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/network_tag_keys": {
             "get": {
                 "summary": "List Cloud Network Tag Keys",
@@ -876,6 +1373,232 @@ var PrivateCustomAPISwaggerJSON string = `{
             "x-displayname": "Private Custom API",
             "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/subnet_tag_keys": {
+            "get": {
+                "summary": "List Cloud Subnet Tag Keys",
+                "description": "ListCloudSubnetTagKeys retrieves cloud provider Keys of Subnet tags.\nThe tag keys are retrieved based on the key substring",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyListCloudSubnetTagKeysResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "cloud_type",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "PROVIDER_TYPE_UNSPECIFIED",
+                            "PROVIDER_TYPE_AWS",
+                            "PROVIDER_TYPE_GCP",
+                            "PROVIDER_TYPE_AZURE",
+                            "PROVIDER_TYPE_VOLTERRA"
+                        ],
+                        "default": "PROVIDER_TYPE_UNSPECIFIED",
+                        "x-displayname": "Volterra"
+                    },
+                    {
+                        "name": "query_key",
+                        "description": "Query Key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Key"
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/subnet_tag_values": {
+            "get": {
+                "summary": "List Cloud Subnet Tag Values",
+                "description": "ListCloudSubnetTagValues retrieves cloud provider Values of Subnet tags.\nThe tag values are retrieved based on the key",
+                "operationId": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyListCloudSubnetTagValuesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nValue of namespace is always \"system\"",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "cloud_type",
+                        "description": "Cloud type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "PROVIDER_TYPE_UNSPECIFIED",
+                            "PROVIDER_TYPE_AWS",
+                            "PROVIDER_TYPE_GCP",
+                            "PROVIDER_TYPE_AZURE",
+                            "PROVIDER_TYPE_VOLTERRA"
+                        ],
+                        "default": "PROVIDER_TYPE_UNSPECIFIED",
+                        "x-displayname": "Volterra"
+                    },
+                    {
+                        "name": "query_key",
+                        "description": "Query Key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Key"
+                    },
+                    {
+                        "name": "query_value",
+                        "description": "Query Value",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Query Value"
+                    }
+                ],
+                "tags": [
+                    "PrivateCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"
+            },
+            "x-displayname": "Private Custom API",
+            "x-ves-proto-service": "ves.io.schema.topology.PrivateCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {
@@ -903,6 +1626,42 @@ var PrivateCustomAPISwaggerJSON string = `{
             "title": "List Cloud Network Tag Values Response",
             "x-displayname": "List Cloud Network Tag Values Response",
             "x-ves-proto-message": "ves.io.schema.topology.ListCloudNetworkTagValuesResponse",
+            "properties": {
+                "values": {
+                    "type": "array",
+                    "description": " List of Values.",
+                    "title": "List Of Values",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Values"
+                }
+            }
+        },
+        "topologyListCloudSubnetTagKeysResponse": {
+            "type": "object",
+            "description": "Listing of cloud subnet tag keys response",
+            "title": "List Cloud Subnet Tag Keys Response",
+            "x-displayname": "List Cloud Subnet Tag Keys Response",
+            "x-ves-proto-message": "ves.io.schema.topology.ListCloudSubnetTagKeysResponse",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "description": " List of Keys.",
+                    "title": "List Of Keys",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Keys"
+                }
+            }
+        },
+        "topologyListCloudSubnetTagValuesResponse": {
+            "type": "object",
+            "description": "Listing of cloud subnet tag values response",
+            "title": "List Cloud Subnet Tag Values Response",
+            "x-displayname": "List Cloud Subnet Tag Values Response",
+            "x-ves-proto-message": "ves.io.schema.topology.ListCloudSubnetTagValuesResponse",
             "properties": {
                 "values": {
                     "type": "array",

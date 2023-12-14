@@ -34,15 +34,6 @@ type CustomDataAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomDataAPIGrpcClient) doRPCAssociatedSites(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &AssociatedSitesRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.cloud_link.AssociatedSitesRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.AssociatedSites(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomDataAPIGrpcClient) doRPCReapplyConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReapplyConfigRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -82,8 +73,6 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomDataAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["AssociatedSites"] = ccl.doRPCAssociatedSites
-
 	rpcFns["ReapplyConfig"] = ccl.doRPCReapplyConfig
 
 	ccl.rpcFns = rpcFns
@@ -97,89 +86,6 @@ type CustomDataAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
-}
-
-func (c *CustomDataAPIRestClient) doRPCAssociatedSites(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &AssociatedSitesRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.cloud_link.AssociatedSitesRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("name", fmt.Sprintf("%v", req.Name))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &AssociatedSitesResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_link.AssociatedSitesResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
 }
 
 func (c *CustomDataAPIRestClient) doRPCReapplyConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -289,8 +195,6 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["AssociatedSites"] = ccl.doRPCAssociatedSites
-
 	rpcFns["ReapplyConfig"] = ccl.doRPCReapplyConfig
 
 	ccl.rpcFns = rpcFns
@@ -305,10 +209,6 @@ type customDataAPIInprocClient struct {
 	CustomDataAPIServer
 }
 
-func (c *customDataAPIInprocClient) AssociatedSites(ctx context.Context, in *AssociatedSitesRequest, opts ...grpc.CallOption) (*AssociatedSitesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.CustomDataAPI.AssociatedSites", nil)
-	return c.CustomDataAPIServer.AssociatedSites(ctx, in)
-}
 func (c *customDataAPIInprocClient) ReapplyConfig(ctx context.Context, in *ReapplyConfigRequest, opts ...grpc.CallOption) (*ReapplyConfigResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.CustomDataAPI.ReapplyConfig", nil)
 	return c.CustomDataAPIServer.ReapplyConfig(ctx, in)
@@ -335,55 +235,6 @@ type customDataAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customDataAPISrv) AssociatedSites(ctx context.Context, in *AssociatedSitesRequest) (*AssociatedSitesResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.cloud_link.CustomDataAPI")
-	cah, ok := ah.(CustomDataAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
-	}
-
-	var (
-		rsp *AssociatedSitesResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.cloud_link.AssociatedSitesRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomDataAPI.AssociatedSites' operation on 'cloud_link'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.cloud_link.CustomDataAPI.AssociatedSites"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.AssociatedSites(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_link.AssociatedSitesResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customDataAPISrv) ReapplyConfig(ctx context.Context, in *ReapplyConfigRequest) (*ReapplyConfigResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.cloud_link.CustomDataAPI")
 	cah, ok := ah.(CustomDataAPIServer)
@@ -457,90 +308,6 @@ var CustomDataAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/system/cloud_links/{name}/associated_sites": {
-            "get": {
-                "summary": "CloudLink Associated Sites",
-                "description": "Get list of sites using this CloudLink",
-                "operationId": "ves.io.schema.cloud_link.CustomDataAPI.AssociatedSites",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/cloud_linkAssociatedSitesResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "name",
-                        "description": "Name\n\nx-example: \"aws-cloud-link-east\"\nName of Cloud Link.",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Name"
-                    }
-                ],
-                "tags": [
-                    "CustomDataAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-customdataapi-associatedsites"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.cloud_link.CustomDataAPI.AssociatedSites"
-            },
-            "x-displayname": "CloudLink Custom Data API",
-            "x-ves-proto-service": "ves.io.schema.cloud_link.CustomDataAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
         "/public/namespaces/system/cloud_links/{name}/reapply_config": {
             "post": {
                 "summary": "CloudLink ",
@@ -635,24 +402,6 @@ var CustomDataAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "cloud_linkAssociatedSitesResponse": {
-            "type": "object",
-            "description": "Get list of sites using this CloudLink",
-            "title": "CloudLink Associated Sites Response",
-            "x-displayname": "CloudLink Associated Sites Response",
-            "x-ves-proto-message": "ves.io.schema.cloud_link.AssociatedSitesResponse",
-            "properties": {
-                "sites": {
-                    "type": "array",
-                    "description": " List of Associated Sites.",
-                    "title": "Sites",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Sites"
-                }
-            }
-        },
         "cloud_linkReapplyConfigRequest": {
             "type": "object",
             "description": "Reapply CloudLink Config",
@@ -675,52 +424,6 @@ var CustomDataAPISwaggerJSON string = `{
             "title": "CloudLink Reapply Config Response",
             "x-displayname": "CloudLink Reapply Config Response",
             "x-ves-proto-message": "ves.io.schema.cloud_link.ReapplyConfigResponse"
-        },
-        "schemaviewsObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "128",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "namespace",
-                    "maxLength": 64,
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "tenant",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
-                }
-            }
         }
     },
     "x-displayname": "CloudLink",

@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.secret_policy_rule.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2195,6 +2210,50 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "policyMatcherType": {
             "type": "object",
             "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
@@ -2724,50 +2783,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -3106,7 +3121,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3465,7 +3480,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "deleted_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Deleted Referred Objects"
                 },
@@ -3474,7 +3489,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "disabled_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Disabled Referred Objects"
                 },
@@ -3495,7 +3510,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of objects that are referring to this object in their spec",
                     "title": "referring_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Referring Objects"
                 },
@@ -3765,7 +3780,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 }

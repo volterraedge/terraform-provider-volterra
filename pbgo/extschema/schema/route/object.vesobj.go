@@ -1299,6 +1299,18 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["ver_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ver_status"))
+		for idx, item := range e.GetVerStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1307,6 +1319,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	v.FldValidators["ver_status"] = VerStatusTypeValidator().Validate
 
 	return v
 }()

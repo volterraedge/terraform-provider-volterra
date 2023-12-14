@@ -355,6 +355,15 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["schema_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("schema_status"))
+		if err := fv(ctx, m.GetSchemaStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sec_events_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sec_events_count"))

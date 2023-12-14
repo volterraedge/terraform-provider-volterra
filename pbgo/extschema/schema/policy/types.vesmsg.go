@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -24,6 +25,635 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ActiveEnhancedFirewallPoliciesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) DeepCopy() *ActiveEnhancedFirewallPoliciesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActiveEnhancedFirewallPoliciesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActiveEnhancedFirewallPoliciesTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetEnhancedFirewallPoliciesDRefInfo()
+
+}
+
+func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetEnhancedFirewallPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveEnhancedFirewallPoliciesType.enhanced_firewall_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("enhanced_firewall_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "enhanced_firewall_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "enhanced_firewall_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetEnhancedFirewallPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ActiveEnhancedFirewallPoliciesType) GetEnhancedFirewallPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "enhanced_firewall_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: enhanced_firewall_policy")
+	}
+	for i, vref := range m.GetEnhancedFirewallPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveEnhancedFirewallPoliciesType.enhanced_firewall_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "enhanced_firewall_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateActiveEnhancedFirewallPoliciesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActiveEnhancedFirewallPoliciesType) EnhancedFirewallPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for enhanced_firewall_policies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for enhanced_firewall_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated enhanced_firewall_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items enhanced_firewall_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActiveEnhancedFirewallPoliciesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActiveEnhancedFirewallPoliciesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActiveEnhancedFirewallPoliciesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enhanced_firewall_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("enhanced_firewall_policies"))
+		if err := fv(ctx, m.GetEnhancedFirewallPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActiveEnhancedFirewallPoliciesTypeValidator = func() *ValidateActiveEnhancedFirewallPoliciesType {
+	v := &ValidateActiveEnhancedFirewallPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhEnhancedFirewallPolicies := v.EnhancedFirewallPoliciesValidationRuleHandler
+	rulesEnhancedFirewallPolicies := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhEnhancedFirewallPolicies(rulesEnhancedFirewallPolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveEnhancedFirewallPoliciesType.enhanced_firewall_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enhanced_firewall_policies"] = vFn
+
+	return v
+}()
+
+func ActiveEnhancedFirewallPoliciesTypeValidator() db.Validator {
+	return DefaultActiveEnhancedFirewallPoliciesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ActiveForwardProxyPoliciesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActiveForwardProxyPoliciesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActiveForwardProxyPoliciesType) DeepCopy() *ActiveForwardProxyPoliciesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActiveForwardProxyPoliciesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActiveForwardProxyPoliciesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActiveForwardProxyPoliciesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActiveForwardProxyPoliciesTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ActiveForwardProxyPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetForwardProxyPoliciesDRefInfo()
+
+}
+
+func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetForwardProxyPolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveForwardProxyPoliciesType.forward_proxy_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("forward_proxy_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "forward_proxy_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetForwardProxyPoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ActiveForwardProxyPoliciesType) GetForwardProxyPoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "forward_proxy_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: forward_proxy_policy")
+	}
+	for i, vref := range m.GetForwardProxyPolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveForwardProxyPoliciesType.forward_proxy_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "forward_proxy_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateActiveForwardProxyPoliciesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActiveForwardProxyPoliciesType) ForwardProxyPoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for forward_proxy_policies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for forward_proxy_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated forward_proxy_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items forward_proxy_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActiveForwardProxyPoliciesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActiveForwardProxyPoliciesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActiveForwardProxyPoliciesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("forward_proxy_policies"))
+		if err := fv(ctx, m.GetForwardProxyPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActiveForwardProxyPoliciesTypeValidator = func() *ValidateActiveForwardProxyPoliciesType {
+	v := &ValidateActiveForwardProxyPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhForwardProxyPolicies := v.ForwardProxyPoliciesValidationRuleHandler
+	rulesForwardProxyPolicies := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "128",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhForwardProxyPolicies(rulesForwardProxyPolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveForwardProxyPoliciesType.forward_proxy_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_policies"] = vFn
+
+	return v
+}()
+
+func ActiveForwardProxyPoliciesTypeValidator() db.Validator {
+	return DefaultActiveForwardProxyPoliciesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ActiveServicePoliciesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ActiveServicePoliciesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ActiveServicePoliciesType) DeepCopy() *ActiveServicePoliciesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ActiveServicePoliciesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ActiveServicePoliciesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ActiveServicePoliciesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ActiveServicePoliciesTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ActiveServicePoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetServicePoliciesDRefInfo()
+
+}
+
+func (m *ActiveServicePoliciesType) GetServicePoliciesDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetServicePolicies()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "service_policies",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetServicePoliciesDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ActiveServicePoliciesType) GetServicePoliciesDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for i, vref := range m.GetServicePolicies() {
+		if vref == nil {
+			return nil, fmt.Errorf("ActiveServicePoliciesType.service_policies[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "service_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateActiveServicePoliciesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateActiveServicePoliciesType) ServicePoliciesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for service_policies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for service_policies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated service_policies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items service_policies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateActiveServicePoliciesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ActiveServicePoliciesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ActiveServicePoliciesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["service_policies"]; exists {
+		vOpts := append(opts, db.WithValidateField("service_policies"))
+		if err := fv(ctx, m.GetServicePolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultActiveServicePoliciesTypeValidator = func() *ValidateActiveServicePoliciesType {
+	v := &ValidateActiveServicePoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServicePolicies := v.ServicePoliciesValidationRuleHandler
+	rulesServicePolicies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhServicePolicies(rulesServicePolicies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ActiveServicePoliciesType.service_policies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policies"] = vFn
+
+	return v
+}()
+
+func ActiveServicePoliciesTypeValidator() db.Validator {
+	return DefaultActiveServicePoliciesTypeValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -8755,6 +9385,512 @@ func RoleMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SecurityPoliciesType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SecurityPoliciesType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SecurityPoliciesType) DeepCopy() *SecurityPoliciesType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SecurityPoliciesType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SecurityPoliciesType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SecurityPoliciesType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SecurityPoliciesTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SecurityPoliciesType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFirewallPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFirewallPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetForwardProxyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetForwardProxyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityPoliciesType) GetFirewallPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetFirewallPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetFirewallPolicyChoice().(type) {
+	case *SecurityPoliciesType_NoFirewallPolicy:
+
+		return nil, nil
+
+	case *SecurityPoliciesType_ActiveEnhancedFirewallPolicies:
+		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_enhanced_firewall_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityPoliciesType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetForwardProxyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityPoliciesType_NoForwardProxy:
+
+		return nil, nil
+
+	case *SecurityPoliciesType_ActiveForwardProxyPolicies:
+		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_forward_proxy_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	case *SecurityPoliciesType_ActiveServicePolicies:
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateSecurityPoliciesType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSecurityPoliciesType) FirewallPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for firewall_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSecurityPoliciesType) ForwardProxyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for forward_proxy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSecurityPoliciesType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SecurityPoliciesType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SecurityPoliciesType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["firewall_policy_choice"]; exists {
+		val := m.GetFirewallPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("firewall_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetFirewallPolicyChoice().(type) {
+	case *SecurityPoliciesType_NoFirewallPolicy:
+		if fv, exists := v.FldValidators["firewall_policy_choice.no_firewall_policy"]; exists {
+			val := m.GetFirewallPolicyChoice().(*SecurityPoliciesType_NoFirewallPolicy).NoFirewallPolicy
+			vOpts := append(opts,
+				db.WithValidateField("firewall_policy_choice"),
+				db.WithValidateField("no_firewall_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityPoliciesType_ActiveEnhancedFirewallPolicies:
+		if fv, exists := v.FldValidators["firewall_policy_choice.active_enhanced_firewall_policies"]; exists {
+			val := m.GetFirewallPolicyChoice().(*SecurityPoliciesType_ActiveEnhancedFirewallPolicies).ActiveEnhancedFirewallPolicies
+			vOpts := append(opts,
+				db.WithValidateField("firewall_policy_choice"),
+				db.WithValidateField("active_enhanced_firewall_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["forward_proxy_choice"]; exists {
+		val := m.GetForwardProxyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("forward_proxy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetForwardProxyChoice().(type) {
+	case *SecurityPoliciesType_NoForwardProxy:
+		if fv, exists := v.FldValidators["forward_proxy_choice.no_forward_proxy"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityPoliciesType_NoForwardProxy).NoForwardProxy
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("no_forward_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityPoliciesType_ActiveForwardProxyPolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityPoliciesType_ActiveForwardProxyPolicies).ActiveForwardProxyPolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_forward_proxy_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SecurityPoliciesType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["forward_proxy_choice.active_service_policies"]; exists {
+			val := m.GetForwardProxyChoice().(*SecurityPoliciesType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("forward_proxy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSecurityPoliciesTypeValidator = func() *ValidateSecurityPoliciesType {
+	v := &ValidateSecurityPoliciesType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFirewallPolicyChoice := v.FirewallPolicyChoiceValidationRuleHandler
+	rulesFirewallPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhFirewallPolicyChoice(rulesFirewallPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityPoliciesType.firewall_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["firewall_policy_choice"] = vFn
+
+	vrhForwardProxyChoice := v.ForwardProxyChoiceValidationRuleHandler
+	rulesForwardProxyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhForwardProxyChoice(rulesForwardProxyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SecurityPoliciesType.forward_proxy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["forward_proxy_choice"] = vFn
+
+	v.FldValidators["firewall_policy_choice.active_enhanced_firewall_policies"] = ActiveEnhancedFirewallPoliciesTypeValidator().Validate
+
+	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ActiveForwardProxyPoliciesTypeValidator().Validate
+	v.FldValidators["forward_proxy_choice.active_service_policies"] = ActiveServicePoliciesTypeValidator().Validate
+
+	return v
+}()
+
+func SecurityPoliciesTypeValidator() db.Validator {
+	return DefaultSecurityPoliciesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SegmentPolicyType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentPolicyType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentPolicyType) DeepCopy() *SegmentPolicyType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentPolicyType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentPolicyType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentPolicyType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentPolicyTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegmentPolicyType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetDstSegmentChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDstSegmentChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSrcSegmentChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSrcSegmentChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SegmentPolicyType) GetDstSegmentChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDstSegmentChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetDstSegmentChoice().(type) {
+	case *SegmentPolicyType_DstAny:
+
+		return nil, nil
+
+	case *SegmentPolicyType_IntraSegment:
+
+		return nil, nil
+
+	case *SegmentPolicyType_DstSegments:
+		drInfos, err := m.GetDstSegments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetDstSegments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "dst_segments." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SegmentPolicyType) GetSrcSegmentChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSrcSegmentChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSrcSegmentChoice().(type) {
+	case *SegmentPolicyType_SrcAny:
+
+		return nil, nil
+
+	case *SegmentPolicyType_SrcSegments:
+		drInfos, err := m.GetSrcSegments().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSrcSegments().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "src_segments." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateSegmentPolicyType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentPolicyType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentPolicyType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentPolicyType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDstSegmentChoice().(type) {
+	case *SegmentPolicyType_DstAny:
+		if fv, exists := v.FldValidators["dst_segment_choice.dst_any"]; exists {
+			val := m.GetDstSegmentChoice().(*SegmentPolicyType_DstAny).DstAny
+			vOpts := append(opts,
+				db.WithValidateField("dst_segment_choice"),
+				db.WithValidateField("dst_any"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentPolicyType_IntraSegment:
+		if fv, exists := v.FldValidators["dst_segment_choice.intra_segment"]; exists {
+			val := m.GetDstSegmentChoice().(*SegmentPolicyType_IntraSegment).IntraSegment
+			vOpts := append(opts,
+				db.WithValidateField("dst_segment_choice"),
+				db.WithValidateField("intra_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentPolicyType_DstSegments:
+		if fv, exists := v.FldValidators["dst_segment_choice.dst_segments"]; exists {
+			val := m.GetDstSegmentChoice().(*SegmentPolicyType_DstSegments).DstSegments
+			vOpts := append(opts,
+				db.WithValidateField("dst_segment_choice"),
+				db.WithValidateField("dst_segments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetSrcSegmentChoice().(type) {
+	case *SegmentPolicyType_SrcAny:
+		if fv, exists := v.FldValidators["src_segment_choice.src_any"]; exists {
+			val := m.GetSrcSegmentChoice().(*SegmentPolicyType_SrcAny).SrcAny
+			vOpts := append(opts,
+				db.WithValidateField("src_segment_choice"),
+				db.WithValidateField("src_any"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentPolicyType_SrcSegments:
+		if fv, exists := v.FldValidators["src_segment_choice.src_segments"]; exists {
+			val := m.GetSrcSegmentChoice().(*SegmentPolicyType_SrcSegments).SrcSegments
+			vOpts := append(opts,
+				db.WithValidateField("src_segment_choice"),
+				db.WithValidateField("src_segments"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentPolicyTypeValidator = func() *ValidateSegmentPolicyType {
+	v := &ValidateSegmentPolicyType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["dst_segment_choice.dst_segments"] = ves_io_schema_views.SegmentRefListValidator().Validate
+
+	v.FldValidators["src_segment_choice.src_segments"] = ves_io_schema_views.SegmentRefListValidator().Validate
+
+	return v
+}()
+
+func SegmentPolicyTypeValidator() db.Validator {
+	return DefaultSegmentPolicyTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ShapeBotBlockMitigationActionType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -9379,8 +10515,8 @@ var DefaultShapeBotRedirectMitigationActionTypeValidator = func() *ValidateShape
 
 	vrhUri := v.UriValidationRuleHandler
 	rulesUri := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.uri_ref":   "true",
+		"ves.io.schema.rules.message.required":      "true",
+		"ves.io.schema.rules.string.url_or_uri_ref": "true",
 	}
 	vFn, err = vrhUri(rulesUri)
 	if err != nil {

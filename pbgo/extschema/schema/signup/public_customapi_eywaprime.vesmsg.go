@@ -221,17 +221,6 @@ func (v *ValidateCreateV2Request) Validate(ctx context.Context, pm interface{}, 
 	}
 
 	switch m.GetSourceChoice().(type) {
-	case *CreateV2Request_SourcePublic:
-		if fv, exists := v.FldValidators["source_choice.source_public"]; exists {
-			val := m.GetSourceChoice().(*CreateV2Request_SourcePublic).SourcePublic
-			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_public"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *CreateV2Request_SourceInternalSre:
 		if fv, exists := v.FldValidators["source_choice.source_internal_sre"]; exists {
 			val := m.GetSourceChoice().(*CreateV2Request_SourceInternalSre).SourceInternalSre

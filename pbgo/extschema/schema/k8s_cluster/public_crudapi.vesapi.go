@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.k8s_cluster.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2774,6 +2789,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
+            "x-ves-oneof-field-vk8s_namespace_access_choice": "[\"vk8s_namespace_access_deny\",\"vk8s_namespace_access_permit\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
@@ -2913,6 +2929,18 @@ var APISwaggerJSON string = `{
                     "title": "Default Pod Security Policies",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Pod Security Policies"
+                },
+                "vk8s_namespace_access_deny": {
+                    "description": "Exclusive with [vk8s_namespace_access_permit]\n Access to create, modify and delete resources in VK8s namespaces will be prevented for service accounts and Managed K8s clients. Resources in VK8s namespaces can be managed only through VK8s API or UI.",
+                    "title": "Deny VK8s namespace access",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny VK8s namespace access"
+                },
+                "vk8s_namespace_access_permit": {
+                    "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
+                    "title": "Allow VK8s namespace access",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow K8s API Access"
                 }
             }
         },

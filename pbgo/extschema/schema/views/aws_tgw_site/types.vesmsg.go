@@ -278,6 +278,15 @@ func (v *ValidateAWSTGWInfoConfigType) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["vpc_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_name"))
+		if err := fv(ctx, m.GetVpcName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -362,6 +371,213 @@ var DefaultAWSTGWInfoConfigTypeValidator = func() *ValidateAWSTGWInfoConfigType 
 
 func AWSTGWInfoConfigTypeValidator() db.Validator {
 	return DefaultAWSTGWInfoConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWResourceShareType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWResourceShareType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWResourceShareType) DeepCopy() *AWSTGWResourceShareType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWResourceShareType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWResourceShareType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWResourceShareType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWResourceShareTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWResourceShareType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWResourceShareType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWResourceShareType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWResourceShareType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["allow_external_principles"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("allow_external_principles"))
+		if err := fv(ctx, m.GetAllowExternalPrinciples(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["creation_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("creation_time"))
+		if err := fv(ctx, m.GetCreationTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["deployment_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment_status"))
+		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["feature_set"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("feature_set"))
+		if err := fv(ctx, m.GetFeatureSet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["invitation_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invitation_status"))
+		if err := fv(ctx, m.GetInvitationStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_updated_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_updated_time"))
+		if err := fv(ctx, m.GetLastUpdatedTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["owner_account_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("owner_account_id"))
+		if err := fv(ctx, m.GetOwnerAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["receiver_account_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("receiver_account_id"))
+		if err := fv(ctx, m.GetReceiverAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["receiver_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("receiver_arn"))
+		if err := fv(ctx, m.GetReceiverArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["receiver_aws_account"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("receiver_aws_account"))
+		if err := fv(ctx, m.GetReceiverAwsAccount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_share_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_share_arn"))
+		if err := fv(ctx, m.GetResourceShareArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_share_invitation_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_share_invitation_arn"))
+		if err := fv(ctx, m.GetResourceShareInvitationArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_share_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_share_name"))
+		if err := fv(ctx, m.GetResourceShareName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWResourceShareTypeValidator = func() *ValidateAWSTGWResourceShareType {
+	v := &ValidateAWSTGWResourceShareType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSTGWResourceShareTypeValidator() db.Validator {
+	return DefaultAWSTGWResourceShareTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -525,7 +741,7 @@ var DefaultAWSTGWSpokeAttachmentListTypeValidator = func() *ValidateAWSTGWSpokeA
 	rulesAttachments := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
-		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "0",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhAttachments(rulesAttachments)
@@ -591,8 +807,8 @@ func (m *AWSTGWSpokeAttachmentType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSegmentOptionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentOptionDRefInfo() FAILED")
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -666,31 +882,53 @@ func (m *AWSTGWSpokeAttachmentType) GetCredentialChoiceDBEntries(ctx context.Con
 	return entries, nil
 }
 
-// GetDRefInfo for the field's type
-func (m *AWSTGWSpokeAttachmentType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSegmentOption() == nil {
+func (m *AWSTGWSpokeAttachmentType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
 		return nil, nil
 	}
-	switch m.GetSegmentOption().(type) {
-	case *AWSTGWSpokeAttachmentType_IsolatedSegment:
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
 
-		return nil, nil
+}
 
-	case *AWSTGWSpokeAttachmentType_EnableSegment:
-		drInfos, err := m.GetEnableSegment().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "enable_segment." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *AWSTGWSpokeAttachmentType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
 
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 type ValidateAWSTGWSpokeAttachmentType struct {
@@ -701,14 +939,6 @@ func (v *ValidateAWSTGWSpokeAttachmentType) CredentialChoiceValidationRuleHandle
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for credential_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
 	}
 	return validatorFn, nil
 }
@@ -784,38 +1014,11 @@ func (v *ValidateAWSTGWSpokeAttachmentType) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["segment_option"]; exists {
-		val := m.GetSegmentOption()
-		vOpts := append(opts,
-			db.WithValidateField("segment_option"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["segment"]; exists {
 
-	switch m.GetSegmentOption().(type) {
-	case *AWSTGWSpokeAttachmentType_IsolatedSegment:
-		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
-			val := m.GetSegmentOption().(*AWSTGWSpokeAttachmentType_IsolatedSegment).IsolatedSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("isolated_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSTGWSpokeAttachmentType_EnableSegment:
-		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
-			val := m.GetSegmentOption().(*AWSTGWSpokeAttachmentType_EnableSegment).EnableSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("enable_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -855,17 +1058,6 @@ var DefaultAWSTGWSpokeAttachmentTypeValidator = func() *ValidateAWSTGWSpokeAttac
 	}
 	v.FldValidators["credential_choice"] = vFn
 
-	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
-	rulesSegmentOption := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSegmentOption(rulesSegmentOption)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.segment_option: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["segment_option"] = vFn
-
 	vrhSpokes := v.SpokesValidationRuleHandler
 	rulesSpokes := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -879,13 +1071,166 @@ var DefaultAWSTGWSpokeAttachmentTypeValidator = func() *ValidateAWSTGWSpokeAttac
 
 	v.FldValidators["credential_choice.cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["segment_option.enable_segment"] = ves_io_schema_cloud_connect.EnableSegmentTypeValidator().Validate
+	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
 
 func AWSTGWSpokeAttachmentTypeValidator() db.Validator {
 	return DefaultAWSTGWSpokeAttachmentTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSTGWStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSTGWStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSTGWStatusType) DeepCopy() *AWSTGWStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSTGWStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSTGWStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSTGWStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSTGWStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSTGWStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSTGWStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSTGWStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSTGWStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["status_msg"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status_msg"))
+		if err := fv(ctx, m.GetStatusMsg(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_amazon_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_amazon_asn"))
+		if err := fv(ctx, m.GetTgwAmazonAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_arn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_arn"))
+		if err := fv(ctx, m.GetTgwArn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_creation_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_creation_time"))
+		if err := fv(ctx, m.GetTgwCreationTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_id"))
+		if err := fv(ctx, m.GetTgwId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_owner_account"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_owner_account"))
+		if err := fv(ctx, m.GetTgwOwnerAccount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_region"))
+		if err := fv(ctx, m.GetTgwRegion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_state"))
+		if err := fv(ctx, m.GetTgwState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSTGWStatusTypeValidator = func() *ValidateAWSTGWStatusType {
+	v := &ValidateAWSTGWStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSTGWStatusTypeValidator() db.Validator {
+	return DefaultAWSTGWStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1607,10 +1952,6 @@ func (m *CreateSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
-	case *CreateSpecType_DisableVpcAttachment:
-
-		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -1957,17 +2298,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("vpc_attach"),
 				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_DisableVpcAttachment:
-		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
-			val := m.GetVpcAttach().(*CreateSpecType_DisableVpcAttachment).DisableVpcAttachment
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("disable_vpc_attachment"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2528,10 +2858,6 @@ func (m *GetSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
-	case *GetSpecType_DisableVpcAttachment:
-
-		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -3069,17 +3395,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
-	case *GetSpecType_DisableVpcAttachment:
-		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
-			val := m.GetVpcAttach().(*GetSpecType_DisableVpcAttachment).DisableVpcAttachment
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("disable_vpc_attachment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 
@@ -3563,10 +3878,6 @@ func (m *GlobalSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "spoke_attachments." + dri.DRField
 		}
 		return drInfos, err
-
-	case *GlobalSpecType_DisableVpcAttachment:
-
-		return nil, nil
 
 	default:
 		return nil, nil
@@ -4169,17 +4480,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
-	case *GlobalSpecType_DisableVpcAttachment:
-		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
-			val := m.GetVpcAttach().(*GlobalSpecType_DisableVpcAttachment).DisableVpcAttachment
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("disable_vpc_attachment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 
 	}
 
@@ -4644,10 +4944,6 @@ func (m *ReplaceSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
-	case *ReplaceSpecType_DisableVpcAttachment:
-
-		return nil, nil
-
 	default:
 		return nil, nil
 	}
@@ -4923,17 +5219,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("vpc_attach"),
 				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_DisableVpcAttachment:
-		if fv, exists := v.FldValidators["vpc_attach.disable_vpc_attachment"]; exists {
-			val := m.GetVpcAttach().(*ReplaceSpecType_DisableVpcAttachment).DisableVpcAttachment
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("disable_vpc_attachment"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6506,7 +6791,6 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -7558,6 +7842,14 @@ func (v *ValidateVnConfiguration) InsideStaticRouteChoiceValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateVnConfiguration) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateVnConfiguration) OutsideStaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -7725,6 +8017,42 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
+		val := m.GetInternetVipChoice()
+		vOpts := append(opts,
+			db.WithValidateField("internet_vip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetInternetVipChoice().(type) {
+	case *VnConfiguration_DisableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*VnConfiguration_DisableInternetVip).DisableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("disable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *VnConfiguration_EnableInternetVip:
+		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
+			val := m.GetInternetVipChoice().(*VnConfiguration_EnableInternetVip).EnableInternetVip
+			vOpts := append(opts,
+				db.WithValidateField("internet_vip_choice"),
+				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
 		val := m.GetOutsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -7844,6 +8172,17 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["inside_static_route_choice"] = vFn
+
+	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
+	rulesInternetVipChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.internet_vip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
@@ -8010,9 +8349,6 @@ func (r *CreateSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.VpcAttach = nil
 
-	case *CreateSpecType_DisableVpcAttachment:
-		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
-
 	case *CreateSpecType_SpokeAttachments:
 		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
 
@@ -8029,9 +8365,6 @@ func (r *CreateSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error
 	switch of := o.VpcAttach.(type) {
 	case nil:
 		r.VpcAttach = nil
-
-	case *GlobalSpecType_DisableVpcAttachment:
-		r.VpcAttach = &CreateSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
 
 	case *GlobalSpecType_SpokeAttachments:
 		r.VpcAttach = &CreateSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
@@ -8225,9 +8558,6 @@ func (r *GetSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.VpcAttach = nil
 
-	case *GetSpecType_DisableVpcAttachment:
-		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
-
 	case *GetSpecType_SpokeAttachments:
 		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
 
@@ -8244,9 +8574,6 @@ func (r *GetSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
 	switch of := o.VpcAttach.(type) {
 	case nil:
 		r.VpcAttach = nil
-
-	case *GlobalSpecType_DisableVpcAttachment:
-		r.VpcAttach = &GetSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
 
 	case *GlobalSpecType_SpokeAttachments:
 		r.VpcAttach = &GetSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
@@ -8458,9 +8785,6 @@ func (r *ReplaceSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error 
 	case nil:
 		o.VpcAttach = nil
 
-	case *ReplaceSpecType_DisableVpcAttachment:
-		o.VpcAttach = &GlobalSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
-
 	case *ReplaceSpecType_SpokeAttachments:
 		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
 
@@ -8477,9 +8801,6 @@ func (r *ReplaceSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) erro
 	switch of := o.VpcAttach.(type) {
 	case nil:
 		r.VpcAttach = nil
-
-	case *GlobalSpecType_DisableVpcAttachment:
-		r.VpcAttach = &ReplaceSpecType_DisableVpcAttachment{DisableVpcAttachment: of.DisableVpcAttachment}
 
 	case *GlobalSpecType_SpokeAttachments:
 		r.VpcAttach = &ReplaceSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}

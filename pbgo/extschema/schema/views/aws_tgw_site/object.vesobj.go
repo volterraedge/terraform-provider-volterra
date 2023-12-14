@@ -1318,6 +1318,36 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["resource_share_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_share_status"))
+		for idx, item := range e.GetResourceShareStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw"))
+		if err := fv(ctx, e.GetTgw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, e.GetVpcAttachments(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

@@ -40,6 +40,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.origin_pool.OriginServerPrivateName"] = OriginServerPrivateNameValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerPublicIP"] = OriginServerPublicIPValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerPublicName"] = OriginServerPublicNameValidator()
+	vr["ves.io.schema.views.origin_pool.OriginServerSegmentIP"] = OriginServerSegmentIPValidator()
+	vr["ves.io.schema.views.origin_pool.OriginServerSegmentName"] = OriginServerSegmentNameValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerType"] = OriginServerTypeValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP"] = OriginServerVirtualNetworkIPValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkName"] = OriginServerVirtualNetworkNameValidator()

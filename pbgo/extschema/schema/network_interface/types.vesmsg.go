@@ -3024,6 +3024,24 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 
 		return nil, nil
 
+	case *EthernetInterfaceType_SegmentNetwork:
+
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		dri := db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segment_network",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
 	default:
 		return nil, nil
 	}
@@ -3089,6 +3107,30 @@ func (m *EthernetInterfaceType) GetNetworkChoiceDBEntries(ctx context.Context, d
 		}
 
 	case *EthernetInterfaceType_IpFabricNetwork:
+
+	case *EthernetInterfaceType_SegmentNetwork:
+		refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+		}
+
+		vref := m.GetSegmentNetwork()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "segment.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
 
 	}
 
@@ -3404,6 +3446,17 @@ func (v *ValidateEthernetInterfaceType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
+	case *EthernetInterfaceType_SegmentNetwork:
+		if fv, exists := v.FldValidators["network_choice.segment_network"]; exists {
+			val := m.GetNetworkChoice().(*EthernetInterfaceType_SegmentNetwork).SegmentNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("segment_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3664,6 +3717,7 @@ var DefaultEthernetInterfaceTypeValidator = func() *ValidateEthernetInterfaceTyp
 
 	v.FldValidators["network_choice.inside_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["network_choice.srv6_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["network_choice.segment_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -5788,6 +5842,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("priority"))
 		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetSegmentMultiplexing().(type) {
+	case *GlobalSpecType_SegmentationDisabled:
+		if fv, exists := v.FldValidators["segment_multiplexing.segmentation_disabled"]; exists {
+			val := m.GetSegmentMultiplexing().(*GlobalSpecType_SegmentationDisabled).SegmentationDisabled
+			vOpts := append(opts,
+				db.WithValidateField("segment_multiplexing"),
+				db.WithValidateField("segmentation_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SegmentationEnabled:
+		if fv, exists := v.FldValidators["segment_multiplexing.segmentation_enabled"]; exists {
+			val := m.GetSegmentMultiplexing().(*GlobalSpecType_SegmentationEnabled).SegmentationEnabled
+			vOpts := append(opts,
+				db.WithValidateField("segment_multiplexing"),
+				db.WithValidateField("segmentation_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}

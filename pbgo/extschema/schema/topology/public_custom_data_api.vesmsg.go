@@ -368,6 +368,93 @@ func EdgeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *EdgeInfoSummary) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EdgeInfoSummary) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EdgeInfoSummary) DeepCopy() *EdgeInfoSummary {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EdgeInfoSummary{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EdgeInfoSummary) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EdgeInfoSummary) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EdgeInfoSummaryValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateEdgeInfoSummary struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEdgeInfoSummary) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EdgeInfoSummary)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EdgeInfoSummary got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEdgeInfoSummaryValidator = func() *ValidateEdgeInfoSummary {
+	v := &ValidateEdgeInfoSummary{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func EdgeInfoSummaryValidator() db.Validator {
+	return DefaultEdgeInfoSummaryValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LinkInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -421,10 +508,28 @@ func (v *ValidateLinkInfo) Validate(ctx context.Context, pm interface{}, opts ..
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["dst_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dst_id"))
+		if err := fv(ctx, m.GetDstId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["src_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("src_id"))
+		if err := fv(ctx, m.GetSrcId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -904,6 +1009,16 @@ func (v *ValidateMetricSelector) EdgeValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateMetricSelector) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateMetricSelector) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*MetricSelector)
 	if !ok {
@@ -947,6 +1062,15 @@ func (v *ValidateMetricSelector) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("start_time"))
 		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1010,6 +1134,17 @@ var DefaultMetricSelectorValidator = func() *ValidateMetricSelector {
 		panic(errMsg)
 	}
 	v.FldValidators["edge"] = vFn
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.query_step": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MetricSelector.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()
@@ -2873,6 +3008,18 @@ func (v *ValidateSiteMeshGroupSummaryInfo) Validate(ctx context.Context, pm inte
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["edge_status_summary"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("edge_status_summary"))
+		for idx, item := range m.GetEdgeStatusSummary() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["link_status_summary"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("link_status_summary"))
@@ -3476,6 +3623,16 @@ type ValidateTopologyResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateTopologyResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTopologyResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TopologyResponse)
 	if !ok {
@@ -3514,12 +3671,40 @@ func (v *ValidateTopologyResponse) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTopologyResponseValidator = func() *ValidateTopologyResponse {
 	v := &ValidateTopologyResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopologyResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	v.FldValidators["nodes"] = NodeValidator().Validate
 

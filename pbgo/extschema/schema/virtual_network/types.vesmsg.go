@@ -1218,6 +1218,10 @@ func (m *GetSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *GetSpecType_SegmentNetwork:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -1475,6 +1479,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			vOpts := append(opts,
 				db.WithValidateField("network_choice"),
 				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SegmentNetwork:
+		if fv, exists := v.FldValidators["network_choice.segment_network"]; exists {
+			val := m.GetNetworkChoice().(*GetSpecType_SegmentNetwork).SegmentNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("segment_network"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1761,6 +1776,10 @@ func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "srv6_network." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GlobalSpecType_SegmentNetwork:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -2330,6 +2349,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("network_choice"),
 				db.WithValidateField("srv6_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SegmentNetwork:
+		if fv, exists := v.FldValidators["network_choice.segment_network"]; exists {
+			val := m.GetNetworkChoice().(*GlobalSpecType_SegmentNetwork).SegmentNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("segment_network"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -6570,6 +6600,9 @@ func (r *GetSpecType) SetNetworkChoiceToGlobalSpecType(o *GlobalSpecType) error 
 	case *GetSpecType_PrivateNetwork:
 		o.NetworkChoice = &GlobalSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
 
+	case *GetSpecType_SegmentNetwork:
+		o.NetworkChoice = &GlobalSpecType_SegmentNetwork{SegmentNetwork: of.SegmentNetwork}
+
 	case *GetSpecType_SiteLocalInsideNetwork:
 		o.NetworkChoice = &GlobalSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}
 
@@ -6598,6 +6631,9 @@ func (r *GetSpecType) GetNetworkChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_PrivateNetwork:
 		r.NetworkChoice = &GetSpecType_PrivateNetwork{PrivateNetwork: of.PrivateNetwork}
+
+	case *GlobalSpecType_SegmentNetwork:
+		r.NetworkChoice = &GetSpecType_SegmentNetwork{SegmentNetwork: of.SegmentNetwork}
 
 	case *GlobalSpecType_SiteLocalInsideNetwork:
 		r.NetworkChoice = &GetSpecType_SiteLocalInsideNetwork{SiteLocalInsideNetwork: of.SiteLocalInsideNetwork}

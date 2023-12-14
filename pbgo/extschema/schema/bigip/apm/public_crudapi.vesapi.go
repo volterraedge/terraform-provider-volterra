@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.bigip.apm.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -4730,14 +4745,15 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -4810,11 +4826,12 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -4892,6 +4909,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 }
             }

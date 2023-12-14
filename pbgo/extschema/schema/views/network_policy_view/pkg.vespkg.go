@@ -59,13 +59,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Create"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
-		"spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.egress_rules.#.rule_description",
 		"spec.egress_rules.#.rule_name",
-		"spec.endpoint.prefix_list.ipv6_prefixes.#",
 		"spec.ingress_rules.#.keys.#",
 		"spec.ingress_rules.#.metadata.disable",
-		"spec.ingress_rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.ingress_rules.#.rule_description",
 		"spec.ingress_rules.#.rule_name",
 	}
@@ -77,13 +74,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.network_policy_view.API.Replace"] = []string{
 		"spec.egress_rules.#.keys.#",
 		"spec.egress_rules.#.metadata.disable",
-		"spec.egress_rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.egress_rules.#.rule_description",
 		"spec.egress_rules.#.rule_name",
-		"spec.endpoint.prefix_list.ipv6_prefixes.#",
 		"spec.ingress_rules.#.keys.#",
 		"spec.ingress_rules.#.metadata.disable",
-		"spec.ingress_rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.ingress_rules.#.rule_description",
 		"spec.ingress_rules.#.rule_name",
 	}

@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.api_definition.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2268,18 +2283,38 @@ var APISwaggerJSON string = `{
         },
         "api_definitionApiOperation": {
             "type": "object",
-            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
+            "description": "API operation according to OpenAPI specification.",
             "title": "ApiOperation",
+            "x-displayname": "API Operation",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.ApiOperation",
             "properties": {
                 "method": {
-                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
+                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
                     "title": "method",
-                    "$ref": "#/definitions/schemaHttpMethod"
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "path": {
                     "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
-                    "title": "path"
+                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "path",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/users/{userid}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
                 }
             }
         },
@@ -3639,10 +3674,48 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create API Definition",
             "x-ves-proto-message": "ves.io.schema.views.api_definition.CreateSpecType",
             "properties": {
+                "api_inventory_exclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "non_api_endpoints": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "Non API Endpoints",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "minItems": 1,
+                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 10,
                     "items": {
                         "type": "string",
@@ -3650,13 +3723,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Swagger Specs",
                     "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
                         "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
                         "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3677,10 +3747,56 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Api Groups"
                 },
+                "api_inventory_exclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_openapi_spec": {
+                    "type": "array",
+                    "description": " A stored object link to internally generated OpenAPI specification file.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Non API Endpoints"
+                },
+                "non_api_endpoints": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "Non API Endpoints",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "minItems": 1,
+                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 10,
                     "items": {
                         "type": "string",
@@ -3688,13 +3804,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Swagger Specs",
                     "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
                         "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
                         "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3702,7 +3815,7 @@ var APISwaggerJSON string = `{
         },
         "viewsapi_definitionGlobalSpecType": {
             "type": "object",
-            "description": "x-required\nShape of api_definition in the storage backend.",
+            "description": "x-required\nShape of api_definition in the storage backend.\nNote: due to UI/UX requirements the API Definition object should have a default value,\ni.e. it should support creating an empty object.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
             "x-ves-proto-message": "ves.io.schema.views.api_definition.GlobalSpecType",
@@ -3716,11 +3829,61 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Api Groups"
                 },
+                "api_inventory_exclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_exclusion_list",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_inclusion_list",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_openapi_spec": {
+                    "type": "array",
+                    "description": " A stored object link to internally generated OpenAPI specification file.",
+                    "title": "api_inventory_openapi_spec",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Non API Endpoints"
+                },
+                "non_api_endpoints": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "non_api_endpoints",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "Non API Endpoints",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "swagger_specs",
-                    "minItems": 1,
                     "maxItems": 10,
                     "items": {
                         "type": "string",
@@ -3728,13 +3891,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Swagger Specs",
                     "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
                         "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
                         "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3747,10 +3907,48 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace API Definition",
             "x-ves-proto-message": "ves.io.schema.views.api_definition.ReplaceSpecType",
             "properties": {
+                "api_inventory_exclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "non_api_endpoints": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "Non API Endpoints",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "swagger_specs": {
                     "type": "array",
-                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "minItems": 1,
+                    "description": " Define your application API by single or multiple swagger files.\n 1. Upload your swagger files via Web App \u0026 API Protection-\u003e Files-\u003e Swagger Files.\n 2. Select from the list of uploaded files.\n Notice file versions. If swagger file is updated, need to select a new version here to redefine the API.\n\nExample: - \"https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 10,
                     "items": {
                         "type": "string",
@@ -3758,13 +3956,10 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Swagger Specs",
                     "x-ves-example": "https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
                         "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
                         "ves.io.schema.rules.repeated.max_items": "10",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

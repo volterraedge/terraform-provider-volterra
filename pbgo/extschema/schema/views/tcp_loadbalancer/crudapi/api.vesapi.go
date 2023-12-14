@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2670,6 +2734,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -4238,6 +4306,98 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsWhereCloudEdgeSegment": {
+            "type": "object",
+            "description": "This defines a reference to a Segment on a Cloud Edge and an optional ip address where a load balancer could be advertised",
+            "title": "WhereCloudEdgeSegment",
+            "x-displayname": "Segment on a Cloud Edge",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.views.WhereCloudEdgeSegment",
+            "properties": {
+                "cloud_edge": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud Edge",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "ip": {
+                    "type": "string",
+                    "description": " Use given IP address as VIP on the Cloud Edge\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP address on the Cloud Edge",
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the Cloud Edge\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the Cloud Edge",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "viewsWhereSegment": {
+            "type": "object",
+            "description": "Parameters to advertise on a given virtual network",
+            "title": "WhereVirtualNetwork",
+            "x-displayname": "Virtual Network",
+            "x-ves-displayorder": "1,2,10",
+            "x-ves-proto-message": "ves.io.schema.views.WhereSegment",
+            "properties": {
+                "ipv4_vip": {
+                    "type": "string",
+                    "description": " Configure IPV4 VIP address\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IPv4 VIP",
+                    "x-displayname": "IPV4 VIP",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6_vip": {
+                    "type": "string",
+                    "description": " Configure IPV6 VIP address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 VIP",
+                    "x-displayname": "IPV6 VIP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "viewsWhereSite": {
             "type": "object",
             "description": "This defines a reference to a CE site along with network type and an optional ip address where a load balancer could be advertised",
@@ -4288,16 +4448,74 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsWhereSiteSegment": {
+            "type": "object",
+            "description": "This defines a reference to a Segment on a Site and an optional ip address where a load balancer could be advertised",
+            "title": "WhereSiteSegment",
+            "x-displayname": "Segment on Site",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.views.WhereSiteSegment",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP address on the site",
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the site",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Site",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "viewsWhereType": {
             "type": "object",
             "description": "This defines various options where a Loadbalancer could be advertised",
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
             "x-ves-displayorder": "4,5",
-            "x-ves-oneof-field-choice": "[\"site\",\"virtual_network\",\"virtual_site\",\"vk8s_service\"]",
+            "x-ves-oneof-field-choice": "[\"cloud_edge_segment\",\"segment\",\"site\",\"site_segment\",\"virtual_network\",\"virtual_site\",\"virtual_site_segment\",\"vk8s_service\"]",
             "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
+                "cloud_edge_segment": {
+                    "description": "Exclusive with [segment site site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment on a Cloud Edge",
+                    "title": "Segment on Cloud Edge",
+                    "$ref": "#/definitions/viewsWhereCloudEdgeSegment",
+                    "x-displayname": "Segment on Cloud Edge"
+                },
                 "port": {
                     "type": "integer",
                     "description": "Exclusive with [use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
@@ -4309,11 +4527,23 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "segment": {
+                    "description": "Exclusive with [cloud_edge_segment site site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment",
+                    "title": "Segment",
+                    "$ref": "#/definitions/viewsWhereSegment",
+                    "x-displayname": "Segment"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site vk8s_service]\n Advertise on a customer site and a given network.",
+                    "description": "Exclusive with [cloud_edge_segment segment site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite",
                     "x-displayname": "Site"
+                },
+                "site_segment": {
+                    "description": "Exclusive with [cloud_edge_segment segment site virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment on a site",
+                    "title": "Segment on Site",
+                    "$ref": "#/definitions/viewsWhereSiteSegment",
+                    "x-displayname": "Segment on Site"
                 },
                 "use_default_port": {
                     "description": "Exclusive with [port]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
@@ -4322,19 +4552,25 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Use Default TCP Listen Port"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site vk8s_service]\n Advertise on a virtual network",
+                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_site virtual_site_segment vk8s_service]\n Advertise on a virtual network",
                     "title": "Virtual Network",
                     "$ref": "#/definitions/viewsWhereVirtualNetwork",
                     "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network vk8s_service]\n Advertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site_segment vk8s_service]\n Advertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite",
                     "x-displayname": "Virtual Site"
                 },
+                "virtual_site_segment": {
+                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site vk8s_service]\n Advertise on a segment on a virtual site",
+                    "title": "Segment on Virtual Site",
+                    "$ref": "#/definitions/viewsWhereVirtualSiteSegment",
+                    "x-displayname": "Segment on Virtual Site"
+                },
                 "vk8s_service": {
-                    "description": "Exclusive with [site virtual_network virtual_site]\n Advertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment]\n Advertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService",
                     "x-displayname": "vK8s Service Network on RE"
@@ -4429,6 +4665,58 @@ var APISwaggerJSON string = `{
                     "title": "SiteNetwork",
                     "$ref": "#/definitions/viewsSiteNetwork",
                     "x-displayname": "Site Network",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "virtual_site": {
+                    "description": " Reference to virtual site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Virtual Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "viewsWhereVirtualSiteSegment": {
+            "type": "object",
+            "description": "This defines a reference to a customer site virtual site along with network type where a load balancer could be advertised",
+            "title": "WhereVirtualSiteSegment",
+            "x-displayname": "Virtual Site",
+            "x-ves-displayorder": "1,2,3,4",
+            "x-ves-proto-message": "ves.io.schema.views.WhereVirtualSiteSegment",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP address on the site",
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the site",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

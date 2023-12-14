@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.malicious_user_mitigation.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -1667,7 +1682,7 @@ var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "malicious user mitigation object",
-        "description": "A malicious_user_mitigation object consists of settings that sepcify the actions to be taken when malicious users are determined to be at different threat levels.\nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\nThe settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
+        "description": "A malicious_user_mitigation object consists of settings that specify the actions to be taken when\nmalicious users are determined to be at different threat levels. User's activity is monitored and\ncontinuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\nThe settings defined in malicious user mitigation specify what mitigation actions to take for users\ndetermined to be at different threat levels.",
         "version": "version not set"
     },
     "schemes": [

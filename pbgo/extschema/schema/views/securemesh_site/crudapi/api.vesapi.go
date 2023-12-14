@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2670,6 +2734,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -3567,7 +3635,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -3677,14 +3745,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "255"
                     }
                 },
+                "segment_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network storage_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_network storage_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
+                    "description": "Exclusive with [segment_network site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Site Local Network (Outside)"
@@ -3702,7 +3776,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Storage Network"
@@ -3741,7 +3815,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information \n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
                     "title": "Prefix Info",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "2001::0/64",
@@ -5287,12 +5361,22 @@ var APISwaggerJSON string = `{
                 },
                 "nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Optional DNS V4 server IP to be used for name resolution\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "nameserver",
-                    "x-displayname": "DNS Server",
+                    "x-displayname": "DNS V4 Server",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS V6 server IP to be used for name resolution\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "nameserver_v6",
+                    "x-displayname": "DNS V6 Server",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "no_dc_cluster_group": {

@@ -9,6 +9,7 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+
 	vr["ves.io.schema.vesenv.AddonServiceChoice"] = AddonServiceChoiceValidator()
 
 	vr["ves.io.schema.vesenv.APIGroupChoice"] = APIGroupChoiceValidator()

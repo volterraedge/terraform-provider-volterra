@@ -8773,7 +8773,6 @@ var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
 	vrhFingerprint := v.FingerprintValidationRuleHandler
 	rulesFingerprint := map[string]string{
 		"ves.io.schema.rules.string.max_len": "4096",
-		"ves.io.schema.rules.string.pattern": "^[A-Fa-f0-9]+$",
 	}
 	vFn, err = vrhFingerprint(rulesFingerprint)
 	if err != nil {
@@ -8784,7 +8783,6 @@ var DefaultSSHFPRecordValueValidator = func() *ValidateSSHFPRecordValue {
 
 	vrhFingerprinttype := v.FingerprinttypeValidationRuleHandler
 	rulesFingerprinttype := map[string]string{
-		"ves.io.schema.rules.enum.not_in":      "0",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhFingerprinttype(rulesFingerprinttype)

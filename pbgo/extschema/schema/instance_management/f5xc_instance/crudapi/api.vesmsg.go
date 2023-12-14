@@ -809,6 +809,24 @@ func (v *ValidateObjectListReq) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["page_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("page_limit"))
+		if err := fv(ctx, m.GetPageLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["page_start"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("page_start"))
+		if err := fv(ctx, m.GetPageStart(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["report_fields"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("report_fields"))
@@ -967,6 +985,15 @@ func (v *ValidateObjectListRsp) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["next_page"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("next_page"))
+		if err := fv(ctx, m.GetNextPage(), vOpts...); err != nil {
 			return err
 		}
 

@@ -298,7 +298,7 @@ var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "app setting object",
-        "description": "App setting object\napp setting object refers to an app type",
+        "description": "App setting object refers to an app type",
         "version": "version not set"
     },
     "schemes": [

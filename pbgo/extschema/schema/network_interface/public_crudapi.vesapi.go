@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.network_interface.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2864,7 +2879,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -2974,14 +2989,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "255"
                     }
                 },
+                "segment_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network storage_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_network storage_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
+                    "description": "Exclusive with [segment_network site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Site Local Network (Outside)"
@@ -2999,7 +3020,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Storage Network"
@@ -3327,6 +3348,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-interface_choice": "[]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
+            "x-ves-oneof-field-segment_multiplexing": "[]",
             "x-ves-proto-message": "ves.io.schema.network_interface.GlobalSpecType",
             "properties": {
                 "DHCP_server": {
@@ -3536,7 +3558,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information \n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
                     "title": "Prefix Info",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "2001::0/64",
@@ -3789,7 +3811,7 @@ var APISwaggerJSON string = `{
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": " VLAN Id \n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
+                    "description": " VLAN Id\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
                     "title": "VLAN Id",
                     "format": "int64",
                     "x-displayname": "VLAN Id",

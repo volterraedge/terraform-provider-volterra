@@ -18,12 +18,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.waf_signatures_changelog.Object"] = ObjectValidator()
 	vr["ves.io.schema.waf_signatures_changelog.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesReq"] = ReleasedSignaturesReqValidator()
-	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp"] = ReleasedSignaturesRspValidator()
-
 	vr["ves.io.schema.waf_signatures_changelog.StagedSignature"] = StagedSignatureValidator()
 	vr["ves.io.schema.waf_signatures_changelog.StagedSignaturesReq"] = StagedSignaturesReqValidator()
 	vr["ves.io.schema.waf_signatures_changelog.StagedSignaturesRsp"] = StagedSignaturesRspValidator()
+
+	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesReq"] = ReleasedSignaturesReqValidator()
+	vr["ves.io.schema.waf_signatures_changelog.ReleasedSignaturesRsp"] = ReleasedSignaturesRspValidator()
 
 	vr["ves.io.schema.waf_signatures_changelog.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.waf_signatures_changelog.GetSpecType"] = GetSpecTypeValidator()
@@ -55,8 +55,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = "config"
 	sm["ves.io.schema.waf_signatures_changelog.SignatureCustomApi"] = "ml/data"
+	sm["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = "config"
 
 }
 
@@ -81,26 +81,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	func() {
 		// set swagger jsons for our and external schemas
 
-		customCSR.SwaggerRegistry["ves.io.schema.waf_signatures_changelog.Object"] = WafSignatureChangelogCustomApiSwaggerJSON
-
-		customCSR.GrpcClientRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = NewWafSignatureChangelogCustomApiGrpcClient
-		customCSR.RestClientRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = NewWafSignatureChangelogCustomApiRestClient
-		if isExternal {
-			return
-		}
-		mdr.SvcRegisterHandlers["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = RegisterWafSignatureChangelogCustomApiServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = RegisterGwWafSignatureChangelogCustomApiHandler
-		customCSR.ServerRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = func(svc svcfw.Service) server.APIHandler {
-			return NewWafSignatureChangelogCustomApiServer(svc)
-		}
-
-	}()
-
-	customCSR = mdr.PubCustomServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-
 		customCSR.SwaggerRegistry["ves.io.schema.waf_signatures_changelog.Object"] = SignatureCustomApiSwaggerJSON
 
 		customCSR.GrpcClientRegistry["ves.io.schema.waf_signatures_changelog.SignatureCustomApi"] = NewSignatureCustomApiGrpcClient
@@ -112,6 +92,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.waf_signatures_changelog.SignatureCustomApi"] = RegisterGwSignatureCustomApiHandler
 		customCSR.ServerRegistry["ves.io.schema.waf_signatures_changelog.SignatureCustomApi"] = func(svc svcfw.Service) server.APIHandler {
 			return NewSignatureCustomApiServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.waf_signatures_changelog.Object"] = WafSignatureChangelogCustomApiSwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = NewWafSignatureChangelogCustomApiGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = NewWafSignatureChangelogCustomApiRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = RegisterWafSignatureChangelogCustomApiServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = RegisterGwWafSignatureChangelogCustomApiHandler
+		customCSR.ServerRegistry["ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi"] = func(svc svcfw.Service) server.APIHandler {
+			return NewWafSignatureChangelogCustomApiServer(svc)
 		}
 
 	}()

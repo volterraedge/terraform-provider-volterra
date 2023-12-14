@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.virtual_network.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -3551,6 +3566,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "static_v6_routes": {
+                    "type": "array",
+                    "description": "List of static IPv6 routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_v6_routes",
+                    "maxItems": 165,
+                    "items": {
+                        "$ref": "#/definitions/virtual_networkStaticV6RouteViewType"
+                    },
+                    "x-displayname": "Static IPv6 Routes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "165",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -4175,6 +4204,20 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/virtual_networkStaticRouteViewType"
                     },
                     "x-displayname": "Static Routes",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "165",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "static_v6_routes": {
+                    "type": "array",
+                    "description": "List of static IPv6 routes on the virtual network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 165\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_v6_routes",
+                    "maxItems": 165,
+                    "items": {
+                        "$ref": "#/definitions/virtual_networkStaticV6RouteViewType"
+                    },
+                    "x-displayname": "Static IPv6 Routes",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "165",
                         "ves.io.schema.rules.repeated.unique": "true"

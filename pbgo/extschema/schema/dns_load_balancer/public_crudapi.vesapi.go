@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.dns_load_balancer.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2247,6 +2262,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create DNS Load Balancer",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.CreateSpecType",
             "properties": {
+                "fallback_pool": {
+                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fallback Pool"
+                },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/dns_load_balancerResourceRecordType",
@@ -2413,6 +2433,11 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "DNS Zones"
                 },
+                "fallback_pool": {
+                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fallback Pool"
+                },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/dns_load_balancerResourceRecordType",
@@ -2443,7 +2468,7 @@ var APISwaggerJSON string = `{
             "description": "Desired state of DNS Load Balancer Record",
             "title": "DNS Load Balancer Record",
             "x-displayname": "DNS Load Balancer Record",
-            "x-ves-displayorder": "2,3,4",
+            "x-ves-displayorder": "2,3,4,6",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.GlobalSpecType",
             "properties": {
                 "dns_zones": {
@@ -2454,6 +2479,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "DNS Zones"
+                },
+                "fallback_pool": {
+                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
+                    "title": "fallback pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fallback Pool"
                 },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2737,6 +2768,11 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace DNS Load Balancer",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.ReplaceSpecType",
             "properties": {
+                "fallback_pool": {
+                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fallback Pool"
+                },
                 "record_type": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/dns_load_balancerResourceRecordType",

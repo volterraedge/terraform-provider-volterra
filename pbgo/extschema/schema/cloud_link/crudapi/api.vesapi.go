@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1580,7 +1599,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Get"
             },
             "delete": {
@@ -1656,7 +1674,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Delete"
             },
             "put": {
@@ -1740,7 +1757,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1864,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -1873,7 +1904,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.List"
             },
             "post": {
@@ -1951,7 +1981,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2075,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2084,7 +2128,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2192,7 +2235,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2316,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2325,7 +2382,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2408,7 +2464,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Delete"
             },
             "put": {
@@ -2492,7 +2547,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2577,7 +2631,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_link-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_link.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2681,6 +2734,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "region": {
+                    "type": "string",
+                    "description": " Region where the connection is setup\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\",\\\"ap-southeast-3\\\"]\n",
+                    "title": "Region",
+                    "x-displayname": "Region",
+                    "x-ves-example": "us-east-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"ap-northeast-1\\\",\\\"ap-southeast-1\\\",\\\"eu-central-1\\\",\\\"eu-west-1\\\",\\\"eu-west-3\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-2\\\",\\\"ca-central-1\\\",\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-south-1\\\",\\\"ap-northeast-2\\\",\\\"ap-southeast-2\\\",\\\"eu-south-1\\\",\\\"eu-north-1\\\",\\\"eu-west-2\\\",\\\"me-south-1\\\",\\\"us-west-1\\\",\\\"ap-southeast-3\\\"]"
+                    }
+                },
                 "system_generated_name": {
                     "description": "Exclusive with [user_assigned_name]\n F5XC will automatically assign a AWS resource name",
                     "title": "System Generated",
@@ -2745,6 +2810,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Amazon Web Services (AWS) Cloud Link Status",
             "x-ves-proto-message": "ves.io.schema.cloud_link.AWSStatusType",
             "properties": {
+                "cloud_link_state": {
+                    "description": " State of the connections with the CloudLink deployment",
+                    "title": "CloudLink State",
+                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "x-displayname": "CloudLink State"
+                },
                 "connection_status": {
                     "type": "array",
                     "description": " Status reported by Amazon Web Services (AWS) CloudLink Connection",
@@ -2753,6 +2824,26 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_linkDirectConnectConnectionStatusType"
                     },
                     "x-displayname": "CloudLink Direct Connect Connection Status"
+                },
+                "deployment_status": {
+                    "description": " Status of the CloudLink deployment",
+                    "title": "CloudLink Deployment Status",
+                    "$ref": "#/definitions/cloud_linkCloudLinkDeploymentStatus",
+                    "x-displayname": "Status"
+                },
+                "error_description": {
+                    "type": "string",
+                    "description": " Description of error on site\n\nExample: - \"value\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "value"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -2762,15 +2853,9 @@ var APISwaggerJSON string = `{
             "title": "Amazon Web Services(AWS) CloudLink Provider",
             "x-displayname": "Amazon Web Services(AWS) CloudLink Provider",
             "x-ves-oneof-field-cloud_link_type": "[\"byoc\"]",
-            "x-ves-oneof-field-direct_connect_gateway_asn_choice": "[\"auto\",\"custom_asn\"]",
+            "x-ves-oneof-field-direct_connect_gateway_asn_choice": "[\"custom_asn\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.AWSType",
             "properties": {
-                "auto": {
-                    "description": "Exclusive with [custom_asn]\n F5XC will automatically generate an ASN to create a Direct Connect Gateway",
-                    "title": "Auto Generated ASN",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Automatic"
-                },
                 "aws_cred": {
                     "description": " Reference to AWS cloud account credential object used to deploy CloudLink specific object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Account Credential",
@@ -2789,7 +2874,7 @@ var APISwaggerJSON string = `{
                 },
                 "custom_asn": {
                     "type": "integer",
-                    "description": "Exclusive with [auto]\n F5XC will use custom ASN to create a Direct Connect Gateway\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 64512-65534, 4200000000-4294967294\n",
+                    "description": "Exclusive with []\n F5XC will use custom ASN to create a Direct Connect Gateway\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 64512-65534, 4200000000-4294967294\n",
                     "title": "Custom ASN",
                     "format": "int64",
                     "x-displayname": "Custom ASN",
@@ -2828,18 +2913,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"ipv4\\\",\\\"ipv6\\\"]"
                     }
                 },
-                "amazon_address": {
-                    "type": "string",
-                    "description": " The BGP peer IP configured on the AWS endpoint",
-                    "title": "AWS Router Peer IP",
-                    "x-displayname": "AWS Router Peer IP"
-                },
                 "asn": {
                     "type": "integer",
-                    "description": " The autonomous system number (ASN) for the Amazon side of the connection",
-                    "title": "Amazon Web Services (AWS) ASN",
+                    "description": " The autonomous system number (ASN) for the cloud provider side of the connection",
+                    "title": "Cloud Provider ASN",
                     "format": "int64",
-                    "x-displayname": "Amazon Web Services (AWS) ASN"
+                    "x-displayname": "Cloud Provider ASN"
                 },
                 "bgp_peer_id": {
                     "type": "string",
@@ -2865,6 +2944,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"up\\\",\\\"down\\\",\\\"unknown\\\"]"
                     }
                 },
+                "cloud_provider_address": {
+                    "type": "string",
+                    "description": " The BGP peer IP configured on the cloud provider endpoint",
+                    "title": "Cloud Provider Router Peer IP",
+                    "x-displayname": "Cloud Provider Router Peer IP"
+                },
                 "customer_address": {
                     "type": "string",
                     "description": " The BGP peer IP configured on the Customer endpoint",
@@ -2875,12 +2960,14 @@ var APISwaggerJSON string = `{
         },
         "cloud_linkCloudLinkDeploymentStatus": {
             "type": "string",
-            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use",
+            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use\n - DELETING: Deleting\n\nCloudLink deleting in progress\n - CUSTOMER_DEPLOYED: Customer Deployed\n\nCustomer deploys the CloudLink",
             "title": "CloudLink Status",
             "enum": [
                 "IN_PROGRESS",
                 "ERROR",
-                "READY"
+                "READY",
+                "DELETING",
+                "CUSTOMER_DEPLOYED"
             ],
             "default": "IN_PROGRESS",
             "x-displayname": "Status",
@@ -2898,39 +2985,6 @@ var APISwaggerJSON string = `{
             "default": "UP",
             "x-displayname": "CloudLink State",
             "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkState"
-        },
-        "cloud_linkCoordinates": {
-            "type": "object",
-            "description": "Coordinates of the Direct Connect Connection location",
-            "title": "Connection Coordinates",
-            "x-displayname": "Connection Coordinates",
-            "x-ves-proto-message": "ves.io.schema.cloud_link.Coordinates",
-            "properties": {
-                "latitude": {
-                    "type": "number",
-                    "description": " Latitude of the Direct Connect Connection location\n\nExample: - \"10.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -90.0\n  ves.io.schema.rules.float.lte: 90.0\n",
-                    "title": "latitude",
-                    "format": "float",
-                    "x-displayname": "Latitude",
-                    "x-ves-example": "10.0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.float.gte": "-90.0",
-                        "ves.io.schema.rules.float.lte": "90.0"
-                    }
-                },
-                "longitude": {
-                    "type": "number",
-                    "description": " longitude of Direct Connect Connection location\n\nExample: - \"20.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.float.gte: -180.0\n  ves.io.schema.rules.float.lte: 180.0\n",
-                    "title": "longitude",
-                    "format": "float",
-                    "x-displayname": "Longitude",
-                    "x-ves-example": "20.0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.float.gte": "-180.0",
-                        "ves.io.schema.rules.float.lte": "180.0"
-                    }
-                }
-            }
         },
         "cloud_linkDirectConnectConnectionStatusType": {
             "type": "object",
@@ -2971,12 +3025,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.in": "[\\\"ordering\\\",\\\"requested\\\",\\\"pending\\\",\\\"available\\\",\\\"down\\\",\\\"deleting\\\",\\\"deleted\\\",\\\"rejected\\\",\\\"unknown\\\"]"
                     }
-                },
-                "coordinates": {
-                    "description": " Coordinates of the CloudLink Connection based on connection's physical location",
-                    "title": "CloudLink Connection Coordinates",
-                    "$ref": "#/definitions/cloud_linkCoordinates",
-                    "x-displayname": "CloudLink Connection Coordinates"
                 },
                 "gateway_status": {
                     "description": " Status reported by Amazon Web Services (AWS) Direct Connect Gateway Status and associations related to this Cloud Link",
@@ -3108,6 +3156,328 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_linkGCPBYOCListType": {
+            "type": "object",
+            "description": "List of GCP Bring You Own Connections",
+            "title": "GCP Bring You Own Connection List",
+            "x-displayname": "GCP Bring Your Own Connections",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPBYOCListType",
+            "properties": {
+                "connections": {
+                    "type": "array",
+                    "description": " List of Bring You Own Connections. These GCP Cloud Interconnect connections are not managed by F5XC but will be used for connecting sites and REs.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "List of Bring You Own Connections",
+                    "minItems": 1,
+                    "maxItems": 10,
+                    "items": {
+                        "$ref": "#/definitions/cloud_linkGCPBYOCType"
+                    },
+                    "x-displayname": "Bring Your Own Connections",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "cloud_linkGCPBYOCType": {
+            "type": "object",
+            "description": "GCP Bring You Own Connection.",
+            "title": "Bring You Own Connection",
+            "x-displayname": "Bring You Own Connection",
+            "x-ves-oneof-field-project_choice": "[\"project\",\"same_as_credential\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPBYOCType",
+            "properties": {
+                "interconnect_attachment_name": {
+                    "type": "string",
+                    "description": " Name of already-existing GCP Cloud Interconnect Attachment\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 63\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Interconnect Attachment Name",
+                    "minLength": 1,
+                    "maxLength": 63,
+                    "x-displayname": "Interconnect Attachment Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "63",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "metadata": {
+                    "description": " Specify attributes for the connection including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "project": {
+                    "type": "string",
+                    "description": "Exclusive with [same_as_credential]\n Specify a GCP Project for the interconnect attachment\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 30\n  ves.io.schema.rules.string.min_len: 4\n",
+                    "title": "Project ID",
+                    "minLength": 4,
+                    "maxLength": 30,
+                    "x-displayname": "Specified Project",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "30",
+                        "ves.io.schema.rules.string.min_len": "4"
+                    }
+                },
+                "region": {
+                    "type": "string",
+                    "description": " GCP Region in which the GCP Cloud Interconnect attachment is configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"asia-east1\\\",\\\"asia-east2\\\",\\\"asia-northeast1\\\",\\\"asia-northeast2\\\",\\\"asia-northeast3\\\",\\\"asia-southeast1\\\",\\\"asia-southeast2\\\",\\\"europe-central2\\\",\\\"europe-north1\\\",\\\"europe-west1\\\",\\\"europe-west2\\\",\\\"europe-west3\\\",\\\"europe-west4\\\",\\\"europe-west6\\\",\\\"europe-west8\\\",\\\"europe-west9\\\",\\\"europe-west10\\\",\\\"europe-west12\\\",\\\"europe-southwest1\\\",\\\"me-west1\\\",\\\"me-central1\\\",\\\"me-central2\\\",\\\"northamerica-northeast1\\\",\\\"northamerica-northeast2\\\",\\\"us-central1\\\",\\\"us-east1\\\",\\\"us-east4\\\",\\\"us-east5\\\",\\\"us-south1\\\",\\\"us-west1\\\",\\\"us-west2\\\",\\\"us-west3\\\",\\\"us-west4\\\",\\\"southamerica-east1\\\",\\\"southamerica-west1\\\",\\\"australia-southeast1\\\",\\\"australia-southeast2\\\",\\\"asia-south1\\\",\\\"asia-south2\\\"]\n",
+                    "title": "Region",
+                    "x-displayname": "Region",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"asia-east1\\\",\\\"asia-east2\\\",\\\"asia-northeast1\\\",\\\"asia-northeast2\\\",\\\"asia-northeast3\\\",\\\"asia-southeast1\\\",\\\"asia-southeast2\\\",\\\"europe-central2\\\",\\\"europe-north1\\\",\\\"europe-west1\\\",\\\"europe-west2\\\",\\\"europe-west3\\\",\\\"europe-west4\\\",\\\"europe-west6\\\",\\\"europe-west8\\\",\\\"europe-west9\\\",\\\"europe-west10\\\",\\\"europe-west12\\\",\\\"europe-southwest1\\\",\\\"me-west1\\\",\\\"me-central1\\\",\\\"me-central2\\\",\\\"northamerica-northeast1\\\",\\\"northamerica-northeast2\\\",\\\"us-central1\\\",\\\"us-east1\\\",\\\"us-east4\\\",\\\"us-east5\\\",\\\"us-south1\\\",\\\"us-west1\\\",\\\"us-west2\\\",\\\"us-west3\\\",\\\"us-west4\\\",\\\"southamerica-east1\\\",\\\"southamerica-west1\\\",\\\"australia-southeast1\\\",\\\"australia-southeast2\\\",\\\"asia-south1\\\",\\\"asia-south2\\\"]"
+                    }
+                },
+                "same_as_credential": {
+                    "description": "Exclusive with [project]\n GCP Project for the interconnect is the same as the project specified in the credential",
+                    "title": "Same As Credential",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Same As Credential"
+                }
+            }
+        },
+        "cloud_linkGCPCloudInterconnectAttachmentStatusType": {
+            "type": "object",
+            "description": "Status reported by Google Cloud Platform (GCP) Cloud Interconnect attachment related to this Cloud Link",
+            "title": "CloudLink GCP Cloud Interconnect Connection Status",
+            "x-displayname": "CloudLink GCP Cloud Interconnect Connection Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType",
+            "properties": {
+                "admin_enabled": {
+                    "type": "boolean",
+                    "description": " Whether the GCP Cloud Interconnect attachment is administratively enabled",
+                    "title": "Admin Enabled",
+                    "format": "boolean",
+                    "x-displayname": "Admin Enabled"
+                },
+                "attachment_state": {
+                    "type": "string",
+                    "description": " The state of the GCP Cloud Interconnect Attachment.\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"ACTIVE\\\",\\\"UNPROVISIONED\\\",\\\"PENDING_PARTNER\\\",\\\"PARTNER_REQUEST_RECEIVED\\\",\\\"PENDING_CUSTOMER\\\",\\\"DEFUNCT\\\"]\n",
+                    "title": "GCP Cloud Interconnect Attachment State",
+                    "x-displayname": "GCP Cloud Interconnect Attachment State",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"ACTIVE\\\",\\\"UNPROVISIONED\\\",\\\"PENDING_PARTNER\\\",\\\"PARTNER_REQUEST_RECEIVED\\\",\\\"PENDING_CUSTOMER\\\",\\\"DEFUNCT\\\"]"
+                    }
+                },
+                "availability_domain": {
+                    "type": "string",
+                    "description": " Desired availability domain this attachment. Defaults to AVAILABILITY_DOMAIN_ANY.",
+                    "title": "Availability Domain",
+                    "x-displayname": "Availability Domain"
+                },
+                "bandwidth": {
+                    "type": "string",
+                    "description": " Provisioned bandwidth capacity for this GCP Cloud Interconnect attachment",
+                    "title": "Bandwidth",
+                    "x-displayname": "Bandwidth"
+                },
+                "bgp_peers": {
+                    "type": "array",
+                    "description": " BGP peer status for this GCP Cloud Interconnect.",
+                    "title": "BGP Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_linkBGPPeerType"
+                    },
+                    "x-displayname": "BGP Peers"
+                },
+                "cloud_router_ip": {
+                    "type": "string",
+                    "description": " IP address of this interconnect attachment on the GCP Cloud Router",
+                    "title": "Cloud Router IP Address",
+                    "x-displayname": "Cloud Router IP Address"
+                },
+                "customer_router_ip": {
+                    "type": "string",
+                    "description": " IP address of this interconnect attachment on the customer side",
+                    "title": "Customer Router IP Address",
+                    "x-displayname": "Customer Router IP Address"
+                },
+                "dataplane_version": {
+                    "type": "integer",
+                    "description": " The dataplane version of the GCP Cloud Interconnect Attachment.",
+                    "title": "Dataplane Version",
+                    "format": "int32",
+                    "x-displayname": "GCP Cloud Interconnect Dataplane Version"
+                },
+                "encryption": {
+                    "type": "string",
+                    "description": " Encryption type for this GCP Cloud Interconnect attachment\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"NONE\\\",\\\"IPSEC\\\"]\n",
+                    "title": "Encryption",
+                    "x-displayname": "Encryption",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"NONE\\\",\\\"IPSEC\\\"]"
+                    }
+                },
+                "interconnect": {
+                    "type": "string",
+                    "description": " Name of the underlying GCP Cloud Interconnect that this attachment is attached to",
+                    "title": "GCP Cloud Interconnect",
+                    "x-displayname": "GCP Cloud Interconnect"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Labels are user-defined keys and values associated with this GCP Cloud Interconnect attachment\n\nExample: - \"devstaging\"-",
+                    "title": "Labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "dev: staging"
+                },
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum Transmission Unit (MTU) for the GCP Cloud Interconnect attachment.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 1440,1500\n",
+                    "title": "Maximum Transmission Unit (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Transmission Unit (MTU)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "1440,1500"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the GCP Cloud Interconnect Attachment",
+                    "title": "GCP Cloud Interconnect Attachment Name",
+                    "x-displayname": "GCP Cloud Interconnect Attachment Name"
+                },
+                "operational_status": {
+                    "type": "string",
+                    "description": " Provisioning status of this GCP Cloud Interconnect attachment",
+                    "title": "Operational Status",
+                    "x-displayname": "Operational Status"
+                },
+                "partner_asn": {
+                    "type": "integer",
+                    "description": " Partner Autonomous System Number (ASN) for this GCP Cloud Interconnect attachment",
+                    "title": "Partner ASN",
+                    "format": "int64",
+                    "x-displayname": "Partner ASN"
+                },
+                "partner_metadata": {
+                    "description": " Partner information for this GCP Cloud Interconnect attachment",
+                    "title": "Partner Metadata",
+                    "$ref": "#/definitions/cloud_linkGCPPartnerMetadata",
+                    "x-displayname": "Partner Metadata"
+                },
+                "router": {
+                    "type": "string",
+                    "description": " Name of the GCP Cloud Router to which this GCP Cloud Interconnect is connected",
+                    "title": "Router",
+                    "x-displayname": "Project"
+                },
+                "stack_type": {
+                    "type": "string",
+                    "description": " TCP/IP Stack Type of the GCP Cloud Interconnect attachment.  Defaults to IPV4_ONLY.",
+                    "title": "Stack Type",
+                    "x-displayname": "Stack Type"
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of GCP Cloud Interconnect attachment\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"DEDICATED\\\",\\\"PARTNER\\\",\\\"PARTNER_PROVIDER\\\"]\n",
+                    "title": "Type",
+                    "x-displayname": "Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"DEDICATED\\\",\\\"PARTNER\\\",\\\"PARTNER_PROVIDER\\\"]"
+                    }
+                },
+                "vlan": {
+                    "type": "integer",
+                    "description": " Virtual Local Area Network number for the GCP Cloud Interconnect attachment.\n This tag is required for any traffic traversing the GCP Cloud Router via this connection.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4094\n",
+                    "title": "Virtual Local Area Network (VLAN)",
+                    "format": "int64",
+                    "x-displayname": "Virtual Local Area Network (VLAN)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "4094"
+                    }
+                }
+            }
+        },
+        "cloud_linkGCPPartnerMetadata": {
+            "type": "object",
+            "description": "Partner metadata for a GCP Cloud Interconnect attachment",
+            "title": "GCP Partner Metadata",
+            "x-displayname": "GCP Partner Metadata",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPPartnerMetadata",
+            "properties": {
+                "interconnect": {
+                    "type": "string",
+                    "description": " Name of partner interconnect associated with a GCP Cloud Interconnect attachment",
+                    "title": "Interconnect Name",
+                    "x-displayname": "Interconnect Name"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of partner associated with a GCP Cloud Interconnect attachment",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "portal_url": {
+                    "type": "string",
+                    "description": " URL to the partner portal for the interconnect associated with this GCP Cloud Interconnect attachment",
+                    "title": "Portal URL",
+                    "x-displayname": "Portal URL"
+                }
+            }
+        },
+        "cloud_linkGCPStatusType": {
+            "type": "object",
+            "description": "Status reported by associated GCP cloud components",
+            "title": "GCP Cloud Link Status",
+            "x-displayname": "GCP Cloud Link Status",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPStatusType",
+            "properties": {
+                "cloud_link_state": {
+                    "description": " State of the connections with the CloudLink deployment",
+                    "title": "CloudLink State",
+                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "x-displayname": "CloudLink State"
+                },
+                "connection_status": {
+                    "type": "array",
+                    "description": " Status reported by Google Cloud Platform (GCP) CloudLink Connection",
+                    "title": "CloudLink GCP Cloud Interconnect Status",
+                    "items": {
+                        "$ref": "#/definitions/cloud_linkGCPCloudInterconnectAttachmentStatusType"
+                    },
+                    "x-displayname": "CloudLink GCP Cloud Interconnect Connection Status"
+                }
+            }
+        },
+        "cloud_linkGCPType": {
+            "type": "object",
+            "description": "CloudLink for GCP Cloud Provider",
+            "title": "Google Cloud Platform (GCP) CloudLink Provider",
+            "x-displayname": "Google Cloud Platform (GCP) CloudLink Provider",
+            "x-ves-oneof-field-cloud_link_type": "[\"byoc\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_link.GCPType",
+            "properties": {
+                "byoc": {
+                    "description": "Exclusive with []\n F5 XC will take care of using the GCP Cloud Interconnect and making it ready to be consumed by the site.\n Assumption is that this given GCP account already has Cloud Interconnect provisioned.",
+                    "title": "Multiple Bring You Own Connections (BYOC)",
+                    "$ref": "#/definitions/cloud_linkGCPBYOCListType",
+                    "x-displayname": "Bring Your Own Connections"
+                },
+                "gcp_cred": {
+                    "description": " Reference to GCP cloud account credential object used to deploy CloudLink specific object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Account Credential",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Account Credential",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_linkIpv4Type": {
             "type": "object",
             "description": "Configure BGP IPv4 peering for endpoints",
@@ -3117,7 +3487,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_router_peer_address": {
                     "type": "string",
-                    "description": " The BGP peer IP configured on the AWS endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 31\n  ves.io.schema.rules.string.min_ip_prefix_length: 31\n",
+                    "description": " The BGP peer IP configured on the AWS endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
                     "title": "AWS Router Peer IP/Prefix",
                     "x-displayname": "AWS Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
@@ -3125,13 +3495,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.string.max_ip_prefix_length": "31",
-                        "ves.io.schema.rules.string.min_ip_prefix_length": "31"
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "1"
                     }
                 },
                 "router_peer_address": {
                     "type": "string",
-                    "description": " The BGP peer IP configured on your (customer) endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 31\n  ves.io.schema.rules.string.min_ip_prefix_length: 31\n",
+                    "description": " The BGP peer IP configured on your (customer) endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
                     "title": "Customer Peer IP/Prefix",
                     "x-displayname": "Customer Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
@@ -3139,8 +3508,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.string.max_ip_prefix_length": "31",
-                        "ves.io.schema.rules.string.min_ip_prefix_length": "31"
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "1"
                     }
                 }
             }
@@ -3169,18 +3537,18 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of object",
             "title": "Status for Cloud Link",
             "x-displayname": "Status",
-            "x-ves-displayorder": "1,4",
-            "x-ves-oneof-field-cloud_link_status": "[\"aws_status\",\"azure_status\"]",
+            "x-ves-displayorder": "1,3,4",
+            "x-ves-oneof-field-cloud_link_status": "[\"aws_status\",\"azure_status\",\"gcp_status\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.StatusObject",
             "properties": {
                 "aws_status": {
-                    "description": "Exclusive with [azure_status]\n Status reported by this Cloud Link and associated Amazon Web Services (AWS) cloud components",
+                    "description": "Exclusive with [azure_status gcp_status]\n Status reported by this Cloud Link and associated Amazon Web Services (AWS) cloud components",
                     "title": "Amazon Web Services (AWS) Cloud Link Status",
                     "$ref": "#/definitions/cloud_linkAWSStatusType",
                     "x-displayname": "Amazon Web Services (AWS) Cloud Link Status"
                 },
                 "azure_status": {
-                    "description": "Exclusive with [aws_status]\n Status reported to this Cloud Link and associated Azure cloud components",
+                    "description": "Exclusive with [aws_status gcp_status]\n Status reported to this Cloud Link and associated Azure cloud components",
                     "title": "Azure Cloud Link Status",
                     "$ref": "#/definitions/cloud_linkAzureStatusType",
                     "x-displayname": "Azure Cloud Link Status"
@@ -3193,6 +3561,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaConditionType"
                     },
                     "x-displayname": "Conditions"
+                },
+                "gcp_status": {
+                    "description": "Exclusive with [aws_status azure_status]\n Status reported to this Cloud Link and associated GCP cloud components",
+                    "title": "GCP Cloud Link Status",
+                    "$ref": "#/definitions/cloud_linkGCPStatusType",
+                    "x-displayname": "GCP Cloud Link Status"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -3490,6 +3864,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -4301,12 +4679,12 @@ var APISwaggerJSON string = `{
             "description": "Desired specification of CloudLink",
             "title": "CloudLink Specification",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-cloud_provider": "[\"aws\"]",
+            "x-ves-oneof-field-cloud_provider": "[\"aws\",\"gcp\"]",
             "x-ves-oneof-field-enable_connection_to_re_choice": "[\"disabled\",\"enabled\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_link.GlobalSpecType",
             "properties": {
                 "aws": {
-                    "description": "Exclusive with []\n CloudLink for AWS Cloud",
+                    "description": "Exclusive with [gcp]\n CloudLink for AWS Cloud",
                     "title": "Amazon Web Services(AWS)",
                     "$ref": "#/definitions/cloud_linkAWSType",
                     "x-displayname": "Amazon Web Services(AWS)"
@@ -4329,12 +4707,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsCloudLinkADNType",
                     "x-displayname": "Enable"
                 },
-                "error_description": {
-                    "type": "string",
-                    "description": " Description of error on site\n\nExample: - \"value\"-",
-                    "title": "Error Description",
-                    "x-displayname": "Error Description",
-                    "x-ves-example": "value"
+                "gcp": {
+                    "description": "Exclusive with [aws]\n CloudLink for Google Cloud Platform",
+                    "title": "Google Cloud Platform",
+                    "$ref": "#/definitions/cloud_linkGCPType",
+                    "x-displayname": "Google Cloud Platform"
                 },
                 "sites": {
                     "type": "integer",
@@ -4351,13 +4728,6 @@ var APISwaggerJSON string = `{
                     "title": "CloudLink Status",
                     "$ref": "#/definitions/cloud_linkCloudLinkDeploymentStatus",
                     "x-displayname": "Status"
-                },
-                "suggested_action": {
-                    "type": "string",
-                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
-                    "title": "Suggested Action",
-                    "x-displayname": "Suggested Action",
-                    "x-ves-example": "value"
                 }
             }
         },
@@ -4407,6 +4777,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteCoordinates": {
+            "type": "object",
+            "description": "x-displayName: \"Site Coordinates\"\nCoordinates of the site which provides the site physical location",
+            "title": "Site Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "x-displayName: \"Latitude\"\nx-example: \"10.0\"\nLatitude of the site location",
+                    "title": "latitude",
+                    "format": "float"
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "x-displayName: \"Longitude\"\nx-example: \"20.0\"\nlongitude of site location",
+                    "title": "longitude",
+                    "format": "float"
+                }
+            }
+        },
         "viewsCloudLinkADNType": {
             "type": "object",
             "title": "CloudLink ADN Network Config",
@@ -4415,10 +4804,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "CloudLink ADN Network Name",
+                    "description": " Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Private ADN Network",
                     "maxLength": 64,
-                    "x-displayname": "CloudLink ADN Network Name",
+                    "x-displayname": "Private ADN Network",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {

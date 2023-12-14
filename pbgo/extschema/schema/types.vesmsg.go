@@ -2872,6 +2872,246 @@ func BufferConfigTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CRMInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CRMInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CRMInfo) DeepCopy() *CRMInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CRMInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CRMInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CRMInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CRMInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCRMInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCRMInfo) AccountIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for account_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCRMInfo) EntitlementIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for entitlement_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCRMInfo) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCRMInfo) OrderTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for order_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCRMInfo) CustomerIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_identifier")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCRMInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CRMInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CRMInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["account_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("account_id"))
+		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_identifier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_identifier"))
+		if err := fv(ctx, m.GetCustomerIdentifier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["entitled_skus"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("entitled_skus"))
+		for idx, item := range m.GetEntitledSkus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["entitlement_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("entitlement_id"))
+		if err := fv(ctx, m.GetEntitlementId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["order_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("order_type"))
+		if err := fv(ctx, m.GetOrderType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subscription_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subscription_id"))
+		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCRMInfoValidator = func() *ValidateCRMInfo {
+	v := &ValidateCRMInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAccountId := v.AccountIdValidationRuleHandler
+	rulesAccountId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhAccountId(rulesAccountId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CRMInfo.account_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["account_id"] = vFn
+
+	vrhEntitlementId := v.EntitlementIdValidationRuleHandler
+	rulesEntitlementId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhEntitlementId(rulesEntitlementId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CRMInfo.entitlement_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["entitlement_id"] = vFn
+
+	vrhSubscriptionId := v.SubscriptionIdValidationRuleHandler
+	rulesSubscriptionId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhSubscriptionId(rulesSubscriptionId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CRMInfo.subscription_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["subscription_id"] = vFn
+
+	vrhOrderType := v.OrderTypeValidationRuleHandler
+	rulesOrderType := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhOrderType(rulesOrderType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CRMInfo.order_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["order_type"] = vFn
+
+	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
+	rulesCustomerIdentifier := map[string]string{
+		"ves.io.schema.rules.string.max_len": "255",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CRMInfo.customer_identifier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["customer_identifier"] = vFn
+
+	return v
+}()
+
+func CRMInfoValidator() db.Validator {
+	return DefaultCRMInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ClearSecretInfoType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4471,35 +4711,6 @@ func (m *File) ToJSON() (string, error) {
 
 func (m *File) ToYAML() (string, error) {
 	return codec.ToYAML(m)
-}
-
-func (m *File) String() string {
-	if m == nil {
-		return ""
-	}
-	copy := m.DeepCopy()
-	copy.Content = []byte{}
-
-	return copy.string()
-}
-
-func (m *File) GoString() string {
-	copy := m.DeepCopy()
-	copy.Content = []byte{}
-
-	return copy.goString()
-}
-
-// Redact squashes sensitive info in m (in-place)
-func (m *File) Redact(ctx context.Context) error {
-	// clear fields with confidential option set (at message or field level)
-	if m == nil {
-		return nil
-	}
-
-	m.Content = []byte{}
-
-	return nil
 }
 
 func (m *File) DeepCopy() *File {
@@ -8109,6 +8320,39 @@ func (m *NetworkSiteRefSelector) GetRefOrSelectorDRefInfo() ([]db.DRefInfo, erro
 		}
 		return drInfos, err
 
+	case *NetworkSiteRefSelector_SegmentSite:
+		drInfos, err := m.GetSegmentSite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentSite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment_site." + dri.DRField
+		}
+		return drInfos, err
+
+	case *NetworkSiteRefSelector_SegmentVsite:
+		drInfos, err := m.GetSegmentVsite().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentVsite().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment_vsite." + dri.DRField
+		}
+		return drInfos, err
+
+	case *NetworkSiteRefSelector_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -8185,6 +8429,39 @@ func (v *ValidateNetworkSiteRefSelector) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *NetworkSiteRefSelector_SegmentSite:
+		if fv, exists := v.FldValidators["ref_or_selector.segment_site"]; exists {
+			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_SegmentSite).SegmentSite
+			vOpts := append(opts,
+				db.WithValidateField("ref_or_selector"),
+				db.WithValidateField("segment_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkSiteRefSelector_SegmentVsite:
+		if fv, exists := v.FldValidators["ref_or_selector.segment_vsite"]; exists {
+			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_SegmentVsite).SegmentVsite
+			vOpts := append(opts,
+				db.WithValidateField("ref_or_selector"),
+				db.WithValidateField("segment_vsite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *NetworkSiteRefSelector_Segment:
+		if fv, exists := v.FldValidators["ref_or_selector.segment"]; exists {
+			val := m.GetRefOrSelector().(*NetworkSiteRefSelector_Segment).Segment
+			vOpts := append(opts,
+				db.WithValidateField("ref_or_selector"),
+				db.WithValidateField("segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -8217,6 +8494,9 @@ var DefaultNetworkSiteRefSelectorValidator = func() *ValidateNetworkSiteRefSelec
 	v.FldValidators["ref_or_selector.virtual_network"] = NetworkRefTypeValidator().Validate
 	v.FldValidators["ref_or_selector.site"] = SiteRefTypeValidator().Validate
 	v.FldValidators["ref_or_selector.virtual_site"] = VSiteRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.segment_site"] = SiteSegmentRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.segment_vsite"] = VSiteSegmentRefTypeValidator().Validate
+	v.FldValidators["ref_or_selector.segment"] = SegementRefTypeValidator().Validate
 
 	return v
 }()
@@ -12524,6 +12804,205 @@ func SecretTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SegementRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegementRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegementRefType) DeepCopy() *SegementRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegementRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegementRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegementRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegementRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegementRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRefDRefInfo()
+
+}
+
+func (m *SegementRefType) GetRefDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetRef()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SegementRefType.ref[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ref",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SegementRefType) GetRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+	for _, ref := range m.GetRef() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSegementRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegementRefType) RefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ref")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ref")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ref")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSegementRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegementRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegementRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("ref"))
+		if err := fv(ctx, m.GetRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegementRefTypeValidator = func() *ValidateSegementRefType {
+	v := &ValidateSegementRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRef := v.RefValidationRuleHandler
+	rulesRef := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhRef(rulesRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegementRefType.ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ref"] = vFn
+
+	return v
+}()
+
+func SegementRefTypeValidator() db.Validator {
+	return DefaultSegementRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -13241,6 +13720,331 @@ var DefaultSiteReferenceListTypeValidator = func() *ValidateSiteReferenceListTyp
 
 func SiteReferenceListTypeValidator() db.Validator {
 	return DefaultSiteReferenceListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteSegmentRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteSegmentRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteSegmentRefType) DeepCopy() *SiteSegmentRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteSegmentRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteSegmentRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteSegmentRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteSegmentRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SiteSegmentRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *SiteSegmentRefType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSegment()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteSegmentRefType.segment[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "segment",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteSegmentRefType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+	for _, ref := range m.GetSegment() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *SiteSegmentRefType) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteSegmentRefType.site[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteSegmentRefType) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+	for _, ref := range m.GetSite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSiteSegmentRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteSegmentRefType) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteSegmentRefType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteSegmentRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteSegmentRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteSegmentRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteSegmentRefTypeValidator = func() *ValidateSiteSegmentRefType {
+	v := &ValidateSiteSegmentRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteSegmentRefType.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteSegmentRefType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	return v
+}()
+
+func SiteSegmentRefTypeValidator() db.Validator {
+	return DefaultSiteSegmentRefTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -16131,6 +16935,331 @@ var DefaultVSiteRefTypeValidator = func() *ValidateVSiteRefType {
 
 func VSiteRefTypeValidator() db.Validator {
 	return DefaultVSiteRefTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VSiteSegmentRefType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VSiteSegmentRefType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VSiteSegmentRefType) DeepCopy() *VSiteSegmentRefType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VSiteSegmentRefType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VSiteSegmentRefType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VSiteSegmentRefType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VSiteSegmentRefTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *VSiteSegmentRefType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVsiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVsiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *VSiteSegmentRefType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetSegment()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VSiteSegmentRefType.segment[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "segment",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *VSiteSegmentRefType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+	for _, ref := range m.GetSegment() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *VSiteSegmentRefType) GetVsiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVsite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VSiteSegmentRefType.vsite[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "vsite",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVsiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *VSiteSegmentRefType) GetVsiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+	}
+	for _, ref := range m.GetVsite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateVSiteSegmentRefType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVSiteSegmentRefType) VsiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vsite")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vsite")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vsite")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vsite")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVSiteSegmentRefType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVSiteSegmentRefType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VSiteSegmentRefType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VSiteSegmentRefType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vsite"]; exists {
+		vOpts := append(opts, db.WithValidateField("vsite"))
+		if err := fv(ctx, m.GetVsite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVSiteSegmentRefTypeValidator = func() *ValidateVSiteSegmentRefType {
+	v := &ValidateVSiteSegmentRefType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVsite := v.VsiteValidationRuleHandler
+	rulesVsite := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhVsite(rulesVsite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VSiteSegmentRefType.vsite: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vsite"] = vFn
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VSiteSegmentRefType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	return v
+}()
+
+func VSiteSegmentRefTypeValidator() db.Validator {
+	return DefaultVSiteSegmentRefTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

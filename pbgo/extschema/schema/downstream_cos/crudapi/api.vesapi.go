@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2671,6 +2735,10 @@ var APISwaggerJSON string = `{
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
                 },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
+                },
                 "uids": {
                     "type": "array",
                     "items": {
@@ -2754,19 +2822,19 @@ var APISwaggerJSON string = `{
         },
         "downstream_cosGlobalSpecType": {
             "type": "object",
-            "description": "Downstream Class of Service configures limits on downstream traffic for a give tenant and/or all tenants associated\nwith the given class of service.",
+            "description": "Downstream Class of Service configures limits on downstream traffic for a given tenant and/or all tenants associated\nwith the given class of service.",
             "title": "GlobalSpecType",
             "x-displayname": "Downstream Class of Service Specification",
             "x-ves-proto-message": "ves.io.schema.downstream_cos.GlobalSpecType",
             "properties": {
                 "cos_limit": {
-                    "description": " Limit tenant per cpu utilization of a given envoy worker by all tenants in this class of service",
+                    "description": " Limit imposed on sum traffic of all tenants associated with this class of service.",
                     "title": "Class of Service Limit",
                     "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
                     "x-displayname": "CoS Limit"
                 },
                 "tenant_limit": {
-                    "description": " Limit tenant per cpu utilization of a given envoy worker by tenant associated with this class of service",
+                    "description": " Limit imposed on traffic of each individual tenant associated with this class of service.",
                     "title": "Tenant Limit",
                     "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
                     "x-displayname": "Tenant Limit"
@@ -2775,19 +2843,25 @@ var APISwaggerJSON string = `{
         },
         "downstream_cosPerCpuUtilizationLimit": {
             "type": "object",
-            "description": "Defines soft and hard utilization limits for downstream traffic.\nLimit is specified in terms of: rate of downstream socket-level events associated with given tenant (or cos)\nvs total rate of downstream socket-level events handled in all tenants.\nThis limit is enforced on per-cpu (per envoy worker) basis.\nAt least one of 'soft_limit' or 'hard_limit' must be specified.",
+            "description": "Defines utilization limits for downstream traffic.\nLimit is specified in terms of: L=Tr/Cr, where:\nTr = Tenant (or CoS) event rate\nCr = envoy worker estimated event rate capacity.\nEvent rate is the number of downstream socket-level connect and read events per second, handled by Envoy.\nLimit utilization is calculated and enforced on per-cpu (per envoy worker) basis.\nWhen traffic volume crosses the limit threshold, enforcement action associated with the limit type may be\napplied to existing and new connections in order to bring the traffic volume under the threshold value.\nsoft_limit and hard_limit enforcement may be activated/deactivated multiple times during the lifetime\nof a connection.\nEnforcement decision and duration are derived from limit values, tenant/cos downstream traffic volume,\nconnection establishment rate, and envoy worker capacity.\n\nWhile it is allowed to set none, any or all of available limit types, it is recommended to use the following\ncombinations:\n1) no limits - monitor a group of tenants associated with a class of service, in order to determine limit\nthreshold values.\n2) soft_limit - traffic prioritization, with minimal negative impact in case of misconfiguration.\n3) soft_limit and hard_limit - full enforcement, large-scale DDoS mitigation.\n4) soft_limit, hard_limit, close_limit - full enforcement, large-scale DDoS mitigation, including attacks with very\nlarge number of network connections.",
             "title": "Per Cpu Utilization Limit",
             "x-displayname": "PerCpuUtilizationLimit Specification",
             "x-ves-proto-message": "ves.io.schema.downstream_cos.PerCpuUtilizationLimit",
             "properties": {
+                "close_limit": {
+                    "description": " Downstream connections may be closed, when this limited threshold is exceeded.\n Connection close is done in two steps: first stop socket reads for a duration, and then close connection.\n This is a DDoS protection measure.",
+                    "title": "Close Limit",
+                    "$ref": "#/definitions/schemaFractionalPercent",
+                    "x-displayname": "Close Limit"
+                },
                 "hard_limit": {
-                    "description": " When downstream traffic passes hard_limit, downstream handling will be briefly paused (100ms-1s).\n Pauses are inserted probabilistically, with probability and duration proportional to over limit.",
+                    "description": " Define Hard utilization limit.\n Downstream connection reads may be paused (for 50ms-5s), when this limit threshold is exceeded.",
                     "title": "Hard Limit",
                     "$ref": "#/definitions/schemaFractionalPercent",
                     "x-displayname": "Hard Limit"
                 },
                 "soft_limit": {
-                    "description": " Define Soft utilization limit.\n When downstream traffic passes this limit, associated (tenant or cos)\n connections will be placed in low priority mode.\n De-prioritization is done probabilistically, with probability and duration proportional to over limit.",
+                    "description": " Define Soft utilization limit.\n Connections may be be placed in low read priority mode, when this limit threshold is exceeded.",
                     "title": "Soft Limit",
                     "$ref": "#/definitions/schemaFractionalPercent",
                     "x-displayname": "Soft Limit"

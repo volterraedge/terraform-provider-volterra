@@ -4847,6 +4847,16 @@ func (v *ValidateVnConfiguration) VipV6ValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateVnConfiguration) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VnConfiguration)
 	if !ok {
@@ -4917,6 +4927,15 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("nameserver"))
 		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
+		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5119,6 +5138,17 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["vip_v6"] = vFn
+
+	vrhNameserverV6 := v.NameserverV6ValidationRuleHandler
+	rulesNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhNameserverV6(rulesNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nameserver_v6"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

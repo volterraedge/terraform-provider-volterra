@@ -50,7 +50,7 @@ const (
 	// Static-Persist
 	//
 	// x-displayName: "Static-Persist"
-	// The Static Persist load balancing method uses the persist mask, with the source IP address of the Local Domain Name Server (LDNS), in a deterministic algorithm to send requests to a specific pool member
+	// The Static Persist load balancing method uses the persist mask, with the source IP address of the Local Domain Name Server (LDNS), in a deterministic algorithm to send requests to a specific pool member. If the DNS resolver passes ECS (EDNS-Client-Subnet) information, then a hash of it will be used, to send the client to the same pool member
 	STATIC_PERSIST LoadBalancingMode = 2
 	// Priority
 	//
