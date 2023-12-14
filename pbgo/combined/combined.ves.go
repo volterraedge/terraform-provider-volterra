@@ -61,6 +61,8 @@ import (
 	ves_io_schema_cloud_re_region_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region/crudapi"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_cluster_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi"
+	ves_io_schema_cminstance "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cminstance"
+	ves_io_schema_cminstance_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cminstance/crudapi"
 	ves_io_schema_contact "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact"
 	ves_io_schema_contact_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact/crudapi"
 	ves_io_schema_container_registry "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
@@ -103,6 +105,12 @@ import (
 	ves_io_schema_global_log_receiver_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver/crudapi"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
 	ves_io_schema_healthcheck_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck/crudapi"
+	ves_io_schema_infraprotect_deny_list_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_deny_list_rule"
+	ves_io_schema_infraprotect_deny_list_rule_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_deny_list_rule/crudapi"
+	ves_io_schema_infraprotect_firewall_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule"
+	ves_io_schema_infraprotect_firewall_rule_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule/crudapi"
+	ves_io_schema_infraprotect_firewall_ruleset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_ruleset"
+	ves_io_schema_infraprotect_firewall_ruleset_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_ruleset/crudapi"
 	ves_io_schema_infraprotect_information "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information"
 	ves_io_schema_infraprotect_information_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information/crudapi"
 	ves_io_schema_instance_management_auth "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/auth"
@@ -220,6 +228,8 @@ import (
 	ves_io_schema_trusted_ca_list_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list/crudapi"
 	ves_io_schema_tunnel "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel"
 	ves_io_schema_tunnel_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel/crudapi"
+	ves_io_schema_ui_static_component "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ui/static_component"
+	ves_io_schema_ui_static_component_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ui/static_component/crudapi"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_usb_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy/crudapi"
 	ves_io_schema_user "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user"
@@ -357,6 +367,8 @@ func init() {
 	ves_io_schema_cloud_re_region_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster.InitializeMDRegistry(MDR, true)
 	ves_io_schema_cluster_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cminstance.InitializeMDRegistry(MDR, true)
+	ves_io_schema_cminstance_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_contact.InitializeMDRegistry(MDR, true)
 	ves_io_schema_contact_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_container_registry.InitializeMDRegistry(MDR, true)
@@ -399,6 +411,12 @@ func init() {
 	ves_io_schema_global_log_receiver_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_healthcheck.InitializeMDRegistry(MDR, true)
 	ves_io_schema_healthcheck_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_deny_list_rule.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_deny_list_rule_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_firewall_rule.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_firewall_rule_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_firewall_ruleset.InitializeMDRegistry(MDR, true)
+	ves_io_schema_infraprotect_firewall_ruleset_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_infraprotect_information.InitializeMDRegistry(MDR, true)
 	ves_io_schema_infraprotect_information_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_instance_management_auth.InitializeMDRegistry(MDR, true)
@@ -516,6 +534,8 @@ func init() {
 	ves_io_schema_trusted_ca_list_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_tunnel.InitializeMDRegistry(MDR, true)
 	ves_io_schema_tunnel_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ui_static_component.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ui_static_component_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_usb_policy.InitializeMDRegistry(MDR, true)
 	ves_io_schema_usb_policy_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_user.InitializeMDRegistry(MDR, true)

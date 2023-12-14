@@ -680,13 +680,15 @@ var ApiepLBCustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPCategory": {
             "type": "string",
-            "description": "The category of an API endpoint.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.",
+            "description": "The category of an API endpoint.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.\nDeprecated API Endpoint.\nNon-API Endpoint.",
             "title": "APIEP Category",
             "enum": [
                 "APIEP_CATEGORY_DISCOVERED",
                 "APIEP_CATEGORY_SWAGGER",
                 "APIEP_CATEGORY_INVENTORY",
-                "APIEP_CATEGORY_SHADOW"
+                "APIEP_CATEGORY_SHADOW",
+                "APIEP_CATEGORY_DEPRECATED",
+                "APIEP_CATEGORY_NON_API"
             ],
             "default": "APIEP_CATEGORY_DISCOVERED",
             "x-displayname": "Category of the API Endpoint",

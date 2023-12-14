@@ -798,6 +798,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["crm_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_info"))
+		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["default_disable_public_ap"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("default_disable_public_ap"))
@@ -1072,6 +1081,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["proxy_root_cas"] = CAValidator().Validate
 
 	v.FldValidators["shape_shared_instance_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
+
+	v.FldValidators["crm_info"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
 }()

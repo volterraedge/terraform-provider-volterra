@@ -4357,6 +4357,654 @@ func OriginServerPublicNameValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *OriginServerSegmentIP) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginServerSegmentIP) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginServerSegmentIP) DeepCopy() *OriginServerSegmentIP {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginServerSegmentIP{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginServerSegmentIP) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginServerSegmentIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerSegmentIPValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OriginServerSegmentIP) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteLocatorDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *OriginServerSegmentIP) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *OriginServerSegmentIP) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *OriginServerSegmentIP) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteLocator() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "site_locator." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateOriginServerSegmentIP struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginServerSegmentIP) IpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentIP) IpChoiceIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+	return oValidatorFn_Ip, nil
+}
+func (v *ValidateOriginServerSegmentIP) IpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
+}
+
+func (v *ValidateOriginServerSegmentIP) SiteLocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site_locator")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.SiteRegionLocatorValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentIP) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerSegmentIP)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginServerSegmentIP got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip_choice"]; exists {
+		val := m.GetIpChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetIpChoice().(type) {
+	case *OriginServerSegmentIP_Ip:
+		if fv, exists := v.FldValidators["ip_choice.ip"]; exists {
+			val := m.GetIpChoice().(*OriginServerSegmentIP_Ip).Ip
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerSegmentIP_Ipv6:
+		if fv, exists := v.FldValidators["ip_choice.ipv6"]; exists {
+			val := m.GetIpChoice().(*OriginServerSegmentIP_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("ip_choice"),
+				db.WithValidateField("ipv6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_locator"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_locator"))
+		if err := fv(ctx, m.GetSiteLocator(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginServerSegmentIPValidator = func() *ValidateOriginServerSegmentIP {
+	v := &ValidateOriginServerSegmentIP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpChoice := v.IpChoiceValidationRuleHandler
+	rulesIpChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhIpChoice(rulesIpChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentIP.ip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_choice"] = vFn
+
+	vrhIpChoiceIp := v.IpChoiceIpValidationRuleHandler
+	rulesIpChoiceIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["ip_choice.ip"], err = vrhIpChoiceIp(rulesIpChoiceIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerSegmentIP.ip_choice_ip: %s", err)
+		panic(errMsg)
+	}
+	vrhIpChoiceIpv6 := v.IpChoiceIpv6ValidationRuleHandler
+	rulesIpChoiceIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["ip_choice.ipv6"], err = vrhIpChoiceIpv6(rulesIpChoiceIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginServerSegmentIP.ip_choice_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["ip_choice.ip"] = vFnMap["ip_choice.ip"]
+	v.FldValidators["ip_choice.ipv6"] = vFnMap["ip_choice.ipv6"]
+
+	vrhSiteLocator := v.SiteLocatorValidationRuleHandler
+	rulesSiteLocator := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteLocator(rulesSiteLocator)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentIP.site_locator: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_locator"] = vFn
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentIP.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	return v
+}()
+
+func OriginServerSegmentIPValidator() db.Validator {
+	return DefaultOriginServerSegmentIPValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginServerSegmentName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginServerSegmentName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginServerSegmentName) DeepCopy() *OriginServerSegmentName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginServerSegmentName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginServerSegmentName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginServerSegmentName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginServerSegmentNameValidator().Validate(ctx, m, opts...)
+}
+
+func (m *OriginServerSegmentName) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSiteLocatorDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteLocatorDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *OriginServerSegmentName) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *OriginServerSegmentName) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *OriginServerSegmentName) GetSiteLocatorDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteLocator() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSiteLocator().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSiteLocator().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "site_locator." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateOriginServerSegmentName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginServerSegmentName) DnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentName) RefreshIntervalValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for refresh_interval")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentName) SiteLocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site_locator")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.SiteRegionLocatorValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentName) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateOriginServerSegmentName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginServerSegmentName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginServerSegmentName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_name"))
+		if err := fv(ctx, m.GetDnsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["refresh_interval"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("refresh_interval"))
+		if err := fv(ctx, m.GetRefreshInterval(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_locator"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_locator"))
+		if err := fv(ctx, m.GetSiteLocator(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginServerSegmentNameValidator = func() *ValidateOriginServerSegmentName {
+	v := &ValidateOriginServerSegmentName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsName := v.DnsNameValidationRuleHandler
+	rulesDnsName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDnsName(rulesDnsName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentName.dns_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_name"] = vFn
+
+	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
+	rulesRefreshInterval := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "604800",
+	}
+	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentName.refresh_interval: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["refresh_interval"] = vFn
+
+	vrhSiteLocator := v.SiteLocatorValidationRuleHandler
+	rulesSiteLocator := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteLocator(rulesSiteLocator)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentName.site_locator: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_locator"] = vFn
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OriginServerSegmentName.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	return v
+}()
+
+func OriginServerSegmentNameValidator() db.Validator {
+	return DefaultOriginServerSegmentNameValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OriginServerType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4489,6 +5137,28 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "vn_private_name." + dri.DRField
+		}
+		return drInfos, err
+
+	case *OriginServerType_SegmentIp:
+		drInfos, err := m.GetSegmentIp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentIp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment_ip." + dri.DRField
+		}
+		return drInfos, err
+
+	case *OriginServerType_SegmentName:
+		drInfos, err := m.GetSegmentName().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentName().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment_name." + dri.DRField
 		}
 		return drInfos, err
 
@@ -4634,6 +5304,28 @@ func (v *ValidateOriginServerType) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *OriginServerType_SegmentIp:
+		if fv, exists := v.FldValidators["choice.segment_ip"]; exists {
+			val := m.GetChoice().(*OriginServerType_SegmentIp).SegmentIp
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("segment_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OriginServerType_SegmentName:
+		if fv, exists := v.FldValidators["choice.segment_name"]; exists {
+			val := m.GetChoice().(*OriginServerType_SegmentName).SegmentName
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("segment_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4684,6 +5376,8 @@ var DefaultOriginServerTypeValidator = func() *ValidateOriginServerType {
 	v.FldValidators["choice.custom_endpoint_object"] = OriginServerCustomEndpointValidator().Validate
 	v.FldValidators["choice.vn_private_ip"] = OriginServerVirtualNetworkIPValidator().Validate
 	v.FldValidators["choice.vn_private_name"] = OriginServerVirtualNetworkNameValidator().Validate
+	v.FldValidators["choice.segment_ip"] = OriginServerSegmentIPValidator().Validate
+	v.FldValidators["choice.segment_name"] = OriginServerSegmentNameValidator().Validate
 
 	return v
 }()

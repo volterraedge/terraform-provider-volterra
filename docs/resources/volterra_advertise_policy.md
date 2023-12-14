@@ -46,7 +46,7 @@ Argument Reference
 
 `port` - (Optional) Port to advertise. (`Int`).
 
-`port_ranges` - (Optinal) Each port range consists of a single port or two ports separated by "-". (`String`).
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `protocol` - (Optional) Protocol to advertise. (`String`).
 
@@ -146,6 +146,28 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Segment
+
+Reference to Segment.
+
+`ref` - (Required) A segment reference. See [ref](#ref) below for details.
+
+### Segment Site
+
+Reference to Segment object.
+
+`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
+
+`site` - (Required) Reference to a site. See [ref](#ref) below for details.
+
+### Segment Vsite
+
+Reference to Segment in a virtual site.
+
+`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
+
+`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
+
 ### Site
 
 Direct reference to site object.
@@ -156,7 +178,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Tls Certificates
 
@@ -184,6 +206,14 @@ Optional. TLS parameters to use. If not specified, will take from Virtual Host c
 
 `require_client_certificate` - (Optional) certificate. (`Bool`).
 
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+
+### Trusted Ca
+
+Trusted CA List.
+
+`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
+
 ### Use System Defaults
 
 F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
@@ -194,7 +224,9 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca_url` - (Optional) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
 
@@ -218,7 +250,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Direct reference to virtual network object.
 
-`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -230,11 +262,17 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 
 -	site Advertised on site local network in case of customer sites and Public network in case of regional sites.
+
+`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
+
+`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
+
+`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
 
 `site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
 

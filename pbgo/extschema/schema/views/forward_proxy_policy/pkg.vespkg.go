@@ -64,12 +64,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.forward_proxy_policy.API.Create"] = []string{
-		"spec.rule_list.rules.#.dst_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.inside_sources",
 		"spec.rule_list.rules.#.interface",
 		"spec.rule_list.rules.#.metadata.disable",
 		"spec.rule_list.rules.#.namespace",
-		"spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.rule_description",
 		"spec.rule_list.rules.#.rule_name",
 	}
@@ -79,12 +77,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.forward_proxy_policy.API.Replace"] = []string{
-		"spec.rule_list.rules.#.dst_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.inside_sources",
 		"spec.rule_list.rules.#.interface",
 		"spec.rule_list.rules.#.metadata.disable",
 		"spec.rule_list.rules.#.namespace",
-		"spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.rule_description",
 		"spec.rule_list.rules.#.rule_name",
 	}

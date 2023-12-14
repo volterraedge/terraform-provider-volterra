@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cloud_connect "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
@@ -653,6 +654,18 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"inside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"outside": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -1756,6 +1769,18 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_internet_vip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_internet_vip": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"no_outside_static_routes": {
 
 							Type:     schema.TypeBool,
@@ -1961,10 +1986,208 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
-			"disable_vpc_attachment": {
+			"spoke_attachments": {
 
-				Type:     schema.TypeBool,
+				Type:     schema.TypeSet,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"attachments": {
+
+							Type:     schema.TypeList,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"cred": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"use_site_credential": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"spokes": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"vpc_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
+															},
+
+															"custom_routing": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"route_tables": {
+
+																			Type:     schema.TypeList,
+																			Required: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"route_table_id": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"static_routes": {
+
+																						Type: schema.TypeList,
+
+																						Required: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"default_route": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"route_tables": {
+
+																			Type:     schema.TypeList,
+																			Required: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"route_table_id": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"static_routes": {
+
+																						Type: schema.TypeList,
+
+																						Required: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"manual_routing": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"all_subnets": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"subnet_ids": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"subnet_ids": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"vpc_id": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"vpc_attachments": {
@@ -2942,6 +3165,32 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 						cloudLink.Tenant = w.(string)
 					}
 
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 				}
 
 			}
@@ -4556,6 +4805,32 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			internetVipChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DisableInternetVip{}
+					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+					vnConfig.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_EnableInternetVip{}
+					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+					vnConfig.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
 			outsideStaticRouteChoiceTypeFound := false
 
 			if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
@@ -4854,14 +5129,269 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	vpcAttachTypeFound := false
 
-	if v, ok := d.GetOk("disable_vpc_attachment"); ok && !vpcAttachTypeFound {
+	if v, ok := d.GetOk("spoke_attachments"); ok && !vpcAttachTypeFound {
 
 		vpcAttachTypeFound = true
+		vpcAttachInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_SpokeAttachments{}
+		vpcAttachInt.SpokeAttachments = &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentListType{}
+		createSpec.VpcAttach = vpcAttachInt
 
-		if v.(bool) {
-			vpcAttachInt := &ves_io_schema_views_aws_tgw_site.CreateSpecType_DisableVpcAttachment{}
-			vpcAttachInt.DisableVpcAttachment = &ves_io_schema.Empty{}
-			createSpec.VpcAttach = vpcAttachInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["attachments"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				attachments := make([]*ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType, len(sl))
+				vpcAttachInt.SpokeAttachments.Attachments = attachments
+				for i, set := range sl {
+					attachments[i] = &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType{}
+					attachmentsMapStrToI := set.(map[string]interface{})
+
+					credentialChoiceTypeFound := false
+
+					if v, ok := attachmentsMapStrToI["cred"]; ok && !isIntfNil(v) && !credentialChoiceTypeFound {
+
+						credentialChoiceTypeFound = true
+						credentialChoiceInt := &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType_Cred{}
+						credentialChoiceInt.Cred = &ves_io_schema_views.ObjectRefType{}
+						attachments[i].CredentialChoice = credentialChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["use_site_credential"]; ok && !isIntfNil(v) && !credentialChoiceTypeFound {
+
+						credentialChoiceTypeFound = true
+
+						if v.(bool) {
+							credentialChoiceInt := &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType_UseSiteCredential{}
+							credentialChoiceInt.UseSiteCredential = &ves_io_schema.Empty{}
+							attachments[i].CredentialChoice = credentialChoiceInt
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						segmentInt := &ves_io_schema_views.ObjectRefType{}
+						attachments[i].Segment = segmentInt
+
+						for _, set := range sl {
+							sMapToStrVal := set.(map[string]interface{})
+							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt.Name = val.(string)
+							}
+							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt.Namespace = val.(string)
+							}
+
+							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["spokes"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						spokes := &ves_io_schema_cloud_connect.AWSVPCAttachmentListType{}
+						attachments[i].Spokes = spokes
+						for _, set := range sl {
+							spokesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := spokesMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								vpcList := make([]*ves_io_schema_cloud_connect.AWSVPCAttachmentType, len(sl))
+								spokes.VpcList = vpcList
+								for i, set := range sl {
+									vpcList[i] = &ves_io_schema_cloud_connect.AWSVPCAttachmentType{}
+									vpcListMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
+										ms := map[string]string{}
+										for k, v := range w.(map[string]interface{}) {
+											ms[k] = v.(string)
+										}
+										vpcList[i].Labels = ms
+									}
+
+									routingChoiceTypeFound := false
+
+									if v, ok := vpcListMapStrToI["custom_routing"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+										routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_CustomRouting{}
+										routingChoiceInt.CustomRouting = &ves_io_schema_cloud_connect.AWSRouteTableListType{}
+										vpcList[i].RoutingChoice = routingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["route_tables"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												routeTables := make([]*ves_io_schema_cloud_connect.AWSRouteTableType, len(sl))
+												routingChoiceInt.CustomRouting.RouteTables = routeTables
+												for i, set := range sl {
+													routeTables[i] = &ves_io_schema_cloud_connect.AWSRouteTableType{}
+													routeTablesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := routeTablesMapStrToI["route_table_id"]; ok && !isIntfNil(w) {
+														routeTables[i].RouteTableId = w.(string)
+													}
+
+													if w, ok := routeTablesMapStrToI["static_routes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														routeTables[i].StaticRoutes = ls
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["default_route"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+										routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_DefaultRoute{}
+										routingChoiceInt.DefaultRoute = &ves_io_schema_cloud_connect.AWSRouteTableListType{}
+										vpcList[i].RoutingChoice = routingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["route_tables"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												routeTables := make([]*ves_io_schema_cloud_connect.AWSRouteTableType, len(sl))
+												routingChoiceInt.DefaultRoute.RouteTables = routeTables
+												for i, set := range sl {
+													routeTables[i] = &ves_io_schema_cloud_connect.AWSRouteTableType{}
+													routeTablesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := routeTablesMapStrToI["route_table_id"]; ok && !isIntfNil(w) {
+														routeTables[i].RouteTableId = w.(string)
+													}
+
+													if w, ok := routeTablesMapStrToI["static_routes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														routeTables[i].StaticRoutes = ls
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["manual_routing"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+
+										if v.(bool) {
+											routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}
+											routingChoiceInt.ManualRouting = &ves_io_schema.Empty{}
+											vpcList[i].RoutingChoice = routingChoiceInt
+										}
+
+									}
+
+									subnetChoiceTypeFound := false
+
+									if v, ok := vpcListMapStrToI["all_subnets"]; ok && !isIntfNil(v) && !subnetChoiceTypeFound {
+
+										subnetChoiceTypeFound = true
+
+										if v.(bool) {
+											subnetChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_AllSubnets{}
+											subnetChoiceInt.AllSubnets = &ves_io_schema.Empty{}
+											vpcList[i].SubnetChoice = subnetChoiceInt
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["subnet_ids"]; ok && !isIntfNil(v) && !subnetChoiceTypeFound {
+
+										subnetChoiceTypeFound = true
+										subnetChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_SubnetIds{}
+										subnetChoiceInt.SubnetIds = &ves_io_schema_cloud_connect.AWSSubnetIDListType{}
+										vpcList[i].SubnetChoice = subnetChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["subnet_ids"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												subnetChoiceInt.SubnetIds.SubnetIds = ls
+
+											}
+
+										}
+
+									}
+
+									if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
+										vpcList[i].VpcId = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -5476,6 +6006,32 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 						cloudLink.Tenant = w.(string)
 					}
 
+				}
+
+			}
+
+			networkOptionsTypeFound := false
+
+			if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
+					networkOptionsInt.Inside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+			if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
+
+				networkOptionsTypeFound = true
+
+				if v.(bool) {
+					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
+					networkOptionsInt.Outside = &ves_io_schema.Empty{}
+					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
 				}
 
 			}
@@ -6998,6 +7554,32 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			internetVipChoiceTypeFound := false
+
+			if v, ok := vnConfigMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DisableInternetVip{}
+					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
+					vnConfig.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			if v, ok := vnConfigMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
+
+				internetVipChoiceTypeFound = true
+
+				if v.(bool) {
+					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_EnableInternetVip{}
+					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
+					vnConfig.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
 			outsideStaticRouteChoiceTypeFound := false
 
 			if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
@@ -7294,14 +7876,269 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	vpcAttachTypeFound := false
 
-	if v, ok := d.GetOk("disable_vpc_attachment"); ok && !vpcAttachTypeFound {
+	if v, ok := d.GetOk("spoke_attachments"); ok && !vpcAttachTypeFound {
 
 		vpcAttachTypeFound = true
+		vpcAttachInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_SpokeAttachments{}
+		vpcAttachInt.SpokeAttachments = &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentListType{}
+		updateSpec.VpcAttach = vpcAttachInt
 
-		if v.(bool) {
-			vpcAttachInt := &ves_io_schema_views_aws_tgw_site.ReplaceSpecType_DisableVpcAttachment{}
-			vpcAttachInt.DisableVpcAttachment = &ves_io_schema.Empty{}
-			updateSpec.VpcAttach = vpcAttachInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["attachments"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				attachments := make([]*ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType, len(sl))
+				vpcAttachInt.SpokeAttachments.Attachments = attachments
+				for i, set := range sl {
+					attachments[i] = &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType{}
+					attachmentsMapStrToI := set.(map[string]interface{})
+
+					credentialChoiceTypeFound := false
+
+					if v, ok := attachmentsMapStrToI["cred"]; ok && !isIntfNil(v) && !credentialChoiceTypeFound {
+
+						credentialChoiceTypeFound = true
+						credentialChoiceInt := &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType_Cred{}
+						credentialChoiceInt.Cred = &ves_io_schema_views.ObjectRefType{}
+						attachments[i].CredentialChoice = credentialChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								credentialChoiceInt.Cred.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["use_site_credential"]; ok && !isIntfNil(v) && !credentialChoiceTypeFound {
+
+						credentialChoiceTypeFound = true
+
+						if v.(bool) {
+							credentialChoiceInt := &ves_io_schema_views_aws_tgw_site.AWSTGWSpokeAttachmentType_UseSiteCredential{}
+							credentialChoiceInt.UseSiteCredential = &ves_io_schema.Empty{}
+							attachments[i].CredentialChoice = credentialChoiceInt
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["segment"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						segmentInt := &ves_io_schema_views.ObjectRefType{}
+						attachments[i].Segment = segmentInt
+
+						for _, set := range sl {
+							sMapToStrVal := set.(map[string]interface{})
+							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentInt.Name = val.(string)
+							}
+							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentInt.Namespace = val.(string)
+							}
+
+							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentInt.Tenant = val.(string)
+							}
+						}
+
+					}
+
+					if v, ok := attachmentsMapStrToI["spokes"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						spokes := &ves_io_schema_cloud_connect.AWSVPCAttachmentListType{}
+						attachments[i].Spokes = spokes
+						for _, set := range sl {
+							spokesMapStrToI := set.(map[string]interface{})
+
+							if v, ok := spokesMapStrToI["vpc_list"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								vpcList := make([]*ves_io_schema_cloud_connect.AWSVPCAttachmentType, len(sl))
+								spokes.VpcList = vpcList
+								for i, set := range sl {
+									vpcList[i] = &ves_io_schema_cloud_connect.AWSVPCAttachmentType{}
+									vpcListMapStrToI := set.(map[string]interface{})
+
+									if w, ok := vpcListMapStrToI["labels"]; ok && !isIntfNil(w) {
+										ms := map[string]string{}
+										for k, v := range w.(map[string]interface{}) {
+											ms[k] = v.(string)
+										}
+										vpcList[i].Labels = ms
+									}
+
+									routingChoiceTypeFound := false
+
+									if v, ok := vpcListMapStrToI["custom_routing"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+										routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_CustomRouting{}
+										routingChoiceInt.CustomRouting = &ves_io_schema_cloud_connect.AWSRouteTableListType{}
+										vpcList[i].RoutingChoice = routingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["route_tables"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												routeTables := make([]*ves_io_schema_cloud_connect.AWSRouteTableType, len(sl))
+												routingChoiceInt.CustomRouting.RouteTables = routeTables
+												for i, set := range sl {
+													routeTables[i] = &ves_io_schema_cloud_connect.AWSRouteTableType{}
+													routeTablesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := routeTablesMapStrToI["route_table_id"]; ok && !isIntfNil(w) {
+														routeTables[i].RouteTableId = w.(string)
+													}
+
+													if w, ok := routeTablesMapStrToI["static_routes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														routeTables[i].StaticRoutes = ls
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["default_route"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+										routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_DefaultRoute{}
+										routingChoiceInt.DefaultRoute = &ves_io_schema_cloud_connect.AWSRouteTableListType{}
+										vpcList[i].RoutingChoice = routingChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["route_tables"]; ok && !isIntfNil(v) {
+
+												sl := v.([]interface{})
+												routeTables := make([]*ves_io_schema_cloud_connect.AWSRouteTableType, len(sl))
+												routingChoiceInt.DefaultRoute.RouteTables = routeTables
+												for i, set := range sl {
+													routeTables[i] = &ves_io_schema_cloud_connect.AWSRouteTableType{}
+													routeTablesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := routeTablesMapStrToI["route_table_id"]; ok && !isIntfNil(w) {
+														routeTables[i].RouteTableId = w.(string)
+													}
+
+													if w, ok := routeTablesMapStrToI["static_routes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														routeTables[i].StaticRoutes = ls
+													}
+
+												}
+
+											}
+
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["manual_routing"]; ok && !isIntfNil(v) && !routingChoiceTypeFound {
+
+										routingChoiceTypeFound = true
+
+										if v.(bool) {
+											routingChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_ManualRouting{}
+											routingChoiceInt.ManualRouting = &ves_io_schema.Empty{}
+											vpcList[i].RoutingChoice = routingChoiceInt
+										}
+
+									}
+
+									subnetChoiceTypeFound := false
+
+									if v, ok := vpcListMapStrToI["all_subnets"]; ok && !isIntfNil(v) && !subnetChoiceTypeFound {
+
+										subnetChoiceTypeFound = true
+
+										if v.(bool) {
+											subnetChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_AllSubnets{}
+											subnetChoiceInt.AllSubnets = &ves_io_schema.Empty{}
+											vpcList[i].SubnetChoice = subnetChoiceInt
+										}
+
+									}
+
+									if v, ok := vpcListMapStrToI["subnet_ids"]; ok && !isIntfNil(v) && !subnetChoiceTypeFound {
+
+										subnetChoiceTypeFound = true
+										subnetChoiceInt := &ves_io_schema_cloud_connect.AWSVPCAttachmentType_SubnetIds{}
+										subnetChoiceInt.SubnetIds = &ves_io_schema_cloud_connect.AWSSubnetIDListType{}
+										vpcList[i].SubnetChoice = subnetChoiceInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["subnet_ids"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												subnetChoiceInt.SubnetIds.SubnetIds = ls
+
+											}
+
+										}
+
+									}
+
+									if w, ok := vpcListMapStrToI["vpc_id"]; ok && !isIntfNil(w) {
+										vpcList[i].VpcId = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}

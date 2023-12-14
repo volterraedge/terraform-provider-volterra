@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.views.securemesh_site.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -3017,7 +3032,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
             "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
-            "x-ves-oneof-field-network_choice": "[\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
             "x-ves-oneof-field-primary_choice": "[\"is_primary\",\"not_primary\"]",
             "x-ves-oneof-field-vlan_choice": "[\"untagged\",\"vlan_id\"]",
@@ -3127,14 +3142,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "255"
                     }
                 },
+                "segment_network": {
+                    "description": "Exclusive with [site_local_inside_network site_local_network storage_network]\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment"
+                },
                 "site_local_inside_network": {
-                    "description": "Exclusive with [site_local_network storage_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_network storage_network]\n Interface belongs to site local network inside",
                     "title": "Site Local Network Inside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Site Local Network Inside"
                 },
                 "site_local_network": {
-                    "description": "Exclusive with [site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
+                    "description": "Exclusive with [segment_network site_local_inside_network storage_network]\n Interface belongs to site local network (outside)",
                     "title": "Site Local Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Site Local Network (Outside)"
@@ -3152,7 +3173,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "storage_network": {
-                    "description": "Exclusive with [site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
+                    "description": "Exclusive with [segment_network site_local_inside_network site_local_network]\n Interface belongs to site local network inside",
                     "title": "Storage Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Storage Network"
@@ -3191,7 +3212,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information \n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
                     "title": "Prefix Info",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "2001::0/64",
@@ -5372,12 +5393,22 @@ var APISwaggerJSON string = `{
                 },
                 "nameserver": {
                     "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": " Optional DNS V4 server IP to be used for name resolution\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "nameserver",
-                    "x-displayname": "DNS Server",
+                    "x-displayname": "DNS V4 Server",
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS V6 server IP to be used for name resolution\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "nameserver_v6",
+                    "x-displayname": "DNS V6 Server",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "no_dc_cluster_group": {

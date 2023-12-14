@@ -53,7 +53,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []string{
 		"spec.rules.#.metadata.disable",
-		"spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Get"] = []string{
@@ -62,7 +61,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []string{
 		"spec.rules.#.metadata.disable",
-		"spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 	}
 
 }

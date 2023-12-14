@@ -20,9 +20,9 @@ provider "volterra" {
 
 ## Argument Reference
 
-* `api_p12_file` - API credential p12 file path. Either api p12 file or (`api_cert` and `api_key`) must be given. This can also be sourced from `VOLT_API_P12_FILE` env variable. When using api_p12_file, password for the p12 file must be passed as the environment variable `VES_P12_PASSWORD` (`String`).
+* `api_p12_file` - API credential p12 file path (`String`). See [ref](#api-credential-options) below for details.
 
-* `api_cert` - API certificate file path. `api_cert`, `api_key` and `api_ca_cert` trio must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
+* `api_cert` - API certificate file path. `api_cert`, `api_key` must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
 
 * `api_key` - API certificate private key file path. This can also be sourced from `VOLT_API_KEY` env variable (`String`).
 
@@ -31,3 +31,22 @@ provider "volterra" {
 * `url` - (Required) Tenant API url file path. This can also be sourced from `VOLT_API_URL` env variable (`String`).
 
 * `timeout` - Volterra api call timeout, by default its 20 seconds. This can also be sourced from `VOLT_API_TIMEOUT` env variable (`String`).
+
+### API Credential Options
+- Provide the path to the API P12 file using the `api_p12_file` variable.
+  - **Password:** Set the P12 file password via the `VES_P12_PASSWORD` environment variable.
+
+**OR**
+
+- Use `api_cert`, `api_key` variables for authentication.
+
+**OR**
+
+- If sourcing from environment variables:
+  - `api_p12_file`: Use `VOLT_API_P12_FILE`.
+  - **Password:** Set the P12 file password.
+
+  **OR**
+
+  - `VES_P12_CONTENT`: Base64-encoded P12 bundle content.
+  - **Password:** Set the P12 file password via the `VES_P12_PASSWORD` environment variable.

@@ -428,6 +428,16 @@ func (n *namespaceCustomAPIServer) ApplicationInventory(context.Context,
 	return &ves_io_schema_ns.ApplicationInventoryResponse{}, nil
 }
 
+func (n *namespaceCustomAPIServer) AllApplicationInventory(context.Context,
+	*ves_io_schema_ns.AllApplicationInventoryRequest) (*ves_io_schema_ns.ApplicationInventoryResponse, error) {
+	return &ves_io_schema_ns.ApplicationInventoryResponse{}, nil
+}
+
+func (n *namespaceCustomAPIServer) AllApplicationInventoryWaf(context.Context,
+	*ves_io_schema_ns.AllApplicationInventoryWafFilterRequest) (*ves_io_schema_ns.AllApplicationInventoryWafFilterResponse, error) {
+	return &ves_io_schema_ns.AllApplicationInventoryWafFilterResponse{}, nil
+}
+
 var _ ves_io_schema_ns.NamespaceCustomAPIServer = &namespaceCustomAPIServer{}
 
 // ves.io.schema.views.gcp_vpc_site.CustomAPI handling - start

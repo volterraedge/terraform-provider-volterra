@@ -81,6 +81,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -194,6 +200,24 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -347,6 +371,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -390,6 +423,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["rule_choice.allow_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = ForwardProxyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -1870,6 +1905,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1983,6 +2024,24 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2136,6 +2195,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2179,6 +2247,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["rule_choice.allow_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = ForwardProxyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -2238,6 +2308,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2361,6 +2437,24 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2563,6 +2657,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -2615,6 +2718,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["rule_choice.allow_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = ForwardProxyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2676,6 +2781,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2793,6 +2904,24 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2946,6 +3075,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2989,6 +3127,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["rule_choice.allow_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.deny_list"] = ForwardProxySimpleRuleTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = ForwardProxyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -3728,6 +3868,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	}
 	m.GetProxyChoiceFromGlobalSpecType(f)
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3747,6 +3888,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 
 	m1.SetProxyChoiceToGlobalSpecType(f)
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3857,6 +3999,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.GetProxyChoiceFromGlobalSpecType(f)
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3876,6 +4019,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetProxyChoiceToGlobalSpecType(f)
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3986,6 +4130,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	}
 	m.GetProxyChoiceFromGlobalSpecType(f)
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4005,6 +4150,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 
 	m1.SetProxyChoiceToGlobalSpecType(f)
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

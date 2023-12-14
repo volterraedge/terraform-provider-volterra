@@ -49,16 +49,8 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
-		"spec.ipv6_prefix.#",
-	}
-
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []string{
 		"object",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
-		"spec.ipv6_prefix.#",
 	}
 
 }

@@ -43,6 +43,15 @@ func (c *CustomDataAPIGrpcClient) doRPCDnsZoneMetrics(ctx context.Context, yamlR
 	return rsp, err
 }
 
+func (c *CustomDataAPIGrpcClient) doRPCDnsZoneRequestLogs(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &DnsZoneRequestLogRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.DnsZoneRequestLogRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.DnsZoneRequestLogs(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -74,6 +83,8 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["DnsZoneMetrics"] = ccl.doRPCDnsZoneMetrics
+
+	rpcFns["DnsZoneRequestLogs"] = ccl.doRPCDnsZoneRequestLogs
 
 	ccl.rpcFns = rpcFns
 
@@ -180,6 +191,94 @@ func (c *CustomDataAPIRestClient) doRPCDnsZoneMetrics(ctx context.Context, callO
 	return pbRsp, nil
 }
 
+func (c *CustomDataAPIRestClient) doRPCDnsZoneRequestLogs(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &DnsZoneRequestLogRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.DnsZoneRequestLogRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filter", fmt.Sprintf("%v", req.Filter))
+		q.Add("limit", fmt.Sprintf("%v", req.Limit))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("sort", fmt.Sprintf("%v", req.Sort))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &DnsZoneRequestLogResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.DnsZoneRequestLogResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -206,6 +305,8 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["DnsZoneMetrics"] = ccl.doRPCDnsZoneMetrics
 
+	rpcFns["DnsZoneRequestLogs"] = ccl.doRPCDnsZoneRequestLogs
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -221,6 +322,10 @@ type customDataAPIInprocClient struct {
 func (c *customDataAPIInprocClient) DnsZoneMetrics(ctx context.Context, in *DnsZoneMetricsRequest, opts ...grpc.CallOption) (*DnsZoneMetricsResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneMetrics", nil)
 	return c.CustomDataAPIServer.DnsZoneMetrics(ctx, in)
+}
+func (c *customDataAPIInprocClient) DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRequestLogRequest, opts ...grpc.CallOption) (*DnsZoneRequestLogResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs", nil)
+	return c.CustomDataAPIServer.DnsZoneRequestLogs(ctx, in)
 }
 
 func NewCustomDataAPIInprocClient(svc svcfw.Service) CustomDataAPIClient {
@@ -290,6 +395,55 @@ func (s *customDataAPISrv) DnsZoneMetrics(ctx context.Context, in *DnsZoneMetric
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.DnsZoneMetricsResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customDataAPISrv) DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRequestLogRequest) (*DnsZoneRequestLogResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomDataAPI")
+	cah, ok := ah.(CustomDataAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
+	}
+
+	var (
+		rsp *DnsZoneRequestLogResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.DnsZoneRequestLogRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataAPI.DnsZoneRequestLogs' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.DnsZoneRequestLogs(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.DnsZoneRequestLogResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -408,6 +562,98 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "DNS Zone Metrics Custom Data API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.CustomDataAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/dns_zones/request_logs": {
+            "post": {
+                "summary": "Get Dns Zone Request Logs",
+                "description": "Retrieve Dns Zone Request Logs",
+                "operationId": "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneDnsZoneRequestLogResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"value\"\nfetch request logs for a given namespace",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneDnsZoneRequestLogRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomDataAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customdataapi-dnszonerequestlogs"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs"
+            },
+            "x-displayname": "DNS Zone Metrics Custom Data API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomDataAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -513,6 +759,164 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "30m",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.time_interval": "true"
+                    }
+                },
+                "total_hits": {
+                    "type": "string",
+                    "description": " total number of log messages that matched the query.\n\nExample: - \"100\"-",
+                    "title": "total hits",
+                    "format": "uint64",
+                    "x-displayname": "Total Hits",
+                    "x-ves-example": "100"
+                }
+            }
+        },
+        "dns_zoneDnsZoneRequestLogRequest": {
+            "type": "object",
+            "description": "Request to fetch request logs.",
+            "title": "DnsZoneRequestLogRequest",
+            "x-displayname": "Dns Zone Request Log Request",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DnsZoneRequestLogRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " fetch request logs whose timestamp \u003c= end_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "end time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "2019-09-24T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "filter": {
+                    "type": "string",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{COUNTRY_CODE=\\\"CH\\\"}\"-",
+                    "title": "Label Filter",
+                    "x-displayname": "Filter",
+                    "x-ves-example": "{COUNTRY_CODE=\\\"CH\\\"}"
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": " limits the number of logs returned in the response\n Optional: If not specified, first or last 500 log messages that matches the query (depending on the sort order) will be returned in the response.\n           The maximum value for limit is 500.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 500\n",
+                    "title": "limit",
+                    "format": "int64",
+                    "x-displayname": "Limit",
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "500"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " fetch request logs for a given namespace\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                },
+                "sort": {
+                    "description": " specifies whether the response should be sorted in ascending or descending order based on timestamp in the log\n Optional: default is descending order",
+                    "title": "sort order",
+                    "$ref": "#/definitions/schemaSortOrder",
+                    "x-displayname": "Sort Order"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " fetch request logs whose timestamp \u003e= start_time\n format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "dns_zoneDnsZoneRequestLogResponse": {
+            "type": "object",
+            "description": "Response message for RequestLogRequest",
+            "title": "DnsZoneRequestLogResponse",
+            "x-displayname": "Dns Zone Log Response",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DnsZoneRequestLogResponse",
+            "properties": {
+                "logs": {
+                    "type": "array",
+                    "description": " list of log messages that matched the query. Not all log messages that matched the query are returned in the response.\n\nExample: - \"value\"-",
+                    "title": "logs",
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneDnsZoneRequestLogsResponseData"
+                    },
+                    "x-displayname": "Logs",
+                    "x-ves-example": "value"
+                },
+                "total_hits": {
+                    "type": "string",
+                    "description": " total number of log messages that matched the query.\n\nExample: - \"100\"-",
+                    "title": "total hits",
+                    "format": "uint64",
+                    "x-displayname": "Total Hits",
+                    "x-ves-example": "100"
+                }
+            }
+        },
+        "dns_zoneDnsZoneRequestLogsResponseData": {
+            "type": "object",
+            "description": "Dns Zone Request-Log item",
+            "title": "Dns Zone Request Logs data item",
+            "x-displayname": "Dns Zone Request log data item",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.DnsZoneRequestLogsResponseData",
+            "properties": {
+                "client_subnet": {
+                    "type": "string",
+                    "description": " Client Subnet\n\nExample: - \"1.2.3.4\"-",
+                    "title": "Client subnet",
+                    "x-displayname": "Client subnet",
+                    "x-ves-example": "1.2.3.4"
+                },
+                "country_code": {
+                    "type": "string",
+                    "description": " Country Code\n\nExample: - \"FRA\"-",
+                    "title": "Country code",
+                    "x-displayname": "Country code",
+                    "x-ves-example": "FRA"
+                },
+                "dns_zone_name": {
+                    "type": "string",
+                    "description": " Identifies the dns zone name.\n\nExample: - \"abc.com\"-",
+                    "title": "Dns zone name",
+                    "x-displayname": "Dns zone name",
+                    "x-ves-example": "abc.com"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " Domain\n\nExample: - \"www.example.com\"-",
+                    "title": "Domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "www.example.com"
+                },
+                "query_type": {
+                    "type": "string",
+                    "description": " Query Type\n\nExample: - \"AAAA\"-",
+                    "title": "Query type",
+                    "x-displayname": "Query type",
+                    "x-ves-example": "AAAA"
+                },
+                "response_code": {
+                    "type": "string",
+                    "description": " Response Code\n\nExample: - \"NOERROR\"-",
+                    "title": "Response code",
+                    "x-displayname": "Response code",
+                    "x-ves-example": "NOERROR"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "description": " Format: unix_timestamp|rfc 3339\n\nExample: - \"2022-10-21T01:05:32.713Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Timestamp",
+                    "x-displayname": "Timestamp of the request log",
+                    "x-ves-example": "2022-10-21T01:05:32.713Z",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -636,14 +1040,15 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "schemadns_zoneLabel": {
             "type": "string",
-            "description": "Labels is used to select one or more fields for the data\n\nIdentifies the country code .\nIdentifies the domain.\nIdentifies the query type.\nIdentifies the response code.\nIdentifies the dns zone name.",
+            "description": "Labels is used to select one or more fields for the data\n\nIdentifies the country code .\nIdentifies the domain.\nIdentifies the query type.\nIdentifies the response code.\nIdentifies the dns zone name.\nIdentifies the client subnet.",
             "title": "Labels",
             "enum": [
                 "COUNTRY_CODE",
                 "DOMAIN",
                 "QUERY_TYPE",
                 "RESPONSE_CODE",
-                "DNS_ZONE_NAME"
+                "DNS_ZONE_NAME",
+                "CLIENT_SUBNET"
             ],
             "default": "COUNTRY_CODE",
             "x-displayname": "Labels",

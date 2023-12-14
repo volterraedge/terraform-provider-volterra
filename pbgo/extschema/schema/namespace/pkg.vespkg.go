@@ -35,6 +35,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.LookupUserRolesReq"] = LookupUserRolesReqValidator()
 	vr["ves.io.schema.namespace.LookupUserRolesResp"] = LookupUserRolesRespValidator()
 
+	vr["ves.io.schema.namespace.AllApplicationInventoryRequest"] = AllApplicationInventoryRequestValidator()
+	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest"] = AllApplicationInventoryWafFilterRequestValidator()
+	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse"] = AllApplicationInventoryWafFilterResponseValidator()
 	vr["ves.io.schema.namespace.ApplicationInventoryRequest"] = ApplicationInventoryRequestValidator()
 	vr["ves.io.schema.namespace.ApplicationInventoryResponse"] = ApplicationInventoryResponseValidator()
 	vr["ves.io.schema.namespace.GetActiveAlertPoliciesRequest"] = GetActiveAlertPoliciesRequestValidator()
@@ -48,6 +51,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.HTTPLoadbalancerInventoryFilterType"] = HTTPLoadbalancerInventoryFilterTypeValidator()
 	vr["ves.io.schema.namespace.HTTPLoadbalancerInventoryType"] = HTTPLoadbalancerInventoryTypeValidator()
 	vr["ves.io.schema.namespace.HTTPLoadbalancerResultType"] = HTTPLoadbalancerResultTypeValidator()
+	vr["ves.io.schema.namespace.HTTPLoadbalancerWafFilterResultType"] = HTTPLoadbalancerWafFilterResultTypeValidator()
 	vr["ves.io.schema.namespace.NetworkingInventoryRequest"] = NetworkingInventoryRequestValidator()
 	vr["ves.io.schema.namespace.NetworkingInventoryResponse"] = NetworkingInventoryResponseValidator()
 	vr["ves.io.schema.namespace.SetActiveAlertPoliciesRequest"] = SetActiveAlertPoliciesRequestValidator()

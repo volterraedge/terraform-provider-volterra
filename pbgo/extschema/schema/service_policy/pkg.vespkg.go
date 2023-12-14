@@ -63,8 +63,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy.API.Create"] = []string{
 		"spec.algo",
-		"spec.allow_list.prefix_list.ipv6_prefixes.#",
-		"spec.deny_list.prefix_list.ipv6_prefixes.#",
 		"spec.internally_generated",
 		"spec.legacy_rule_list",
 		"spec.port_matcher",
@@ -82,7 +80,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.forwarding_class.#",
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
-		"spec.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
 		"spec.rule_list.rules.#.spec.l4_dest_matcher",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
@@ -104,8 +101,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy.API.Replace"] = []string{
 		"spec.algo",
-		"spec.allow_list.prefix_list.ipv6_prefixes.#",
-		"spec.deny_list.prefix_list.ipv6_prefixes.#",
 		"spec.internally_generated",
 		"spec.port_matcher",
 		"spec.rule_list.rules.#.metadata.disable",
@@ -122,7 +117,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.forwarding_class.#",
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
-		"spec.rule_list.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
 		"spec.rule_list.rules.#.spec.l4_dest_matcher",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",

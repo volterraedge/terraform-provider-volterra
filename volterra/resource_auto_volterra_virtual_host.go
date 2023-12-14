@@ -951,6 +951,29 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							},
 						},
 
+						"irules": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"protocol_inspection": {
 
 							Type:     schema.TypeSet,
@@ -1709,7 +1732,14 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Optional: true,
 						},
 
+						"disable_request_timeout": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"request_timeout": {
+
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
@@ -3654,6 +3684,32 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := dnsProxyConfigurationMapStrToI["irules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				irulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				dnsProxyConfiguration.Irules = irulesInt
+				for i, ps := range sl {
+
+					iMapToStrVal := ps.(map[string]interface{})
+					irulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+						irulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						irulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						irulesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 			if v, ok := dnsProxyConfigurationMapStrToI["protocol_inspection"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -4535,8 +4591,29 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
 			}
 
-			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
-				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			requestTimeoutChoiceTypeFound := false
+
+			if v, ok := slowDdosMitigationMapStrToI["disable_request_timeout"]; ok && !isIntfNil(v) && !requestTimeoutChoiceTypeFound {
+
+				requestTimeoutChoiceTypeFound = true
+
+				if v.(bool) {
+					requestTimeoutChoiceInt := &ves_io_schema_virtual_host.SlowDDoSMitigation_DisableRequestTimeout{}
+					requestTimeoutChoiceInt.DisableRequestTimeout = &ves_io_schema.Empty{}
+					slowDdosMitigation.RequestTimeoutChoice = requestTimeoutChoiceInt
+				}
+
+			}
+
+			if v, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(v) && !requestTimeoutChoiceTypeFound {
+
+				requestTimeoutChoiceTypeFound = true
+				requestTimeoutChoiceInt := &ves_io_schema_virtual_host.SlowDDoSMitigation_RequestTimeout{}
+
+				slowDdosMitigation.RequestTimeoutChoice = requestTimeoutChoiceInt
+
+				requestTimeoutChoiceInt.RequestTimeout = uint32(v.(int))
+
 			}
 
 		}
@@ -6646,6 +6723,32 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := dnsProxyConfigurationMapStrToI["irules"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				irulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+				dnsProxyConfiguration.Irules = irulesInt
+				for i, ps := range sl {
+
+					iMapToStrVal := ps.(map[string]interface{})
+					irulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+					if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+						irulesInt[i].Name = v.(string)
+					}
+
+					if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						irulesInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						irulesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
 			if v, ok := dnsProxyConfigurationMapStrToI["protocol_inspection"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -7507,8 +7610,29 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				slowDdosMitigation.RequestHeadersTimeout = uint32(w.(int))
 			}
 
-			if w, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(w) {
-				slowDdosMitigation.RequestTimeout = uint32(w.(int))
+			requestTimeoutChoiceTypeFound := false
+
+			if v, ok := slowDdosMitigationMapStrToI["disable_request_timeout"]; ok && !isIntfNil(v) && !requestTimeoutChoiceTypeFound {
+
+				requestTimeoutChoiceTypeFound = true
+
+				if v.(bool) {
+					requestTimeoutChoiceInt := &ves_io_schema_virtual_host.SlowDDoSMitigation_DisableRequestTimeout{}
+					requestTimeoutChoiceInt.DisableRequestTimeout = &ves_io_schema.Empty{}
+					slowDdosMitigation.RequestTimeoutChoice = requestTimeoutChoiceInt
+				}
+
+			}
+
+			if v, ok := slowDdosMitigationMapStrToI["request_timeout"]; ok && !isIntfNil(v) && !requestTimeoutChoiceTypeFound {
+
+				requestTimeoutChoiceTypeFound = true
+				requestTimeoutChoiceInt := &ves_io_schema_virtual_host.SlowDDoSMitigation_RequestTimeout{}
+
+				slowDdosMitigation.RequestTimeoutChoice = requestTimeoutChoiceInt
+
+				requestTimeoutChoiceInt.RequestTimeout = uint32(v.(int))
+
 			}
 
 		}

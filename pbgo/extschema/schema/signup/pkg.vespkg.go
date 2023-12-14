@@ -18,12 +18,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.signup.Object"] = ObjectValidator()
 	vr["ves.io.schema.signup.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.signup.SignupFreemiumSSOTenantRequest"] = SignupFreemiumSSOTenantRequestValidator()
-	vr["ves.io.schema.signup.SignupFreemiumSSOTenantResponse"] = SignupFreemiumSSOTenantResponseValidator()
-
 	vr["ves.io.schema.signup.CityItem"] = CityItemValidator()
 	vr["ves.io.schema.signup.CountryItem"] = CountryItemValidator()
-	vr["ves.io.schema.signup.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.signup.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.signup.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.signup.ListCitiesRequest"] = ListCitiesRequestValidator()
@@ -79,21 +75,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.signup.CustomAPI.Create"] = []string{
-		"spec.crm_info.account_id",
-		"spec.crm_info.entitled_skus.#",
-		"spec.crm_info.entitlement_id",
-		"spec.crm_info.order_type",
-		"spec.crm_info.subscription_id",
-		"spec.infraprotect_info.default_tunnel_bgp_secret.blindfold_secret_info_internal",
-		"spec.infraprotect_info.default_tunnel_bgp_secret.secret_encoding_type",
-		"spec.infraprotect_info.default_tunnel_bgp_secret.vault_secret_info",
-		"spec.infraprotect_info.default_tunnel_bgp_secret.wingman_secret_info",
-		"spec.sfdc_subscription_id",
-	}
-
-	mdr.RPCConfidentialRequestRegistry["ves.io.schema.signup.CustomAPI.Create"] = "ves.io.schema.signup.CreateRequest"
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.signup.CustomAPIEywaprime.CreateV2"] = []string{
 		".source_internal_sre.crm_info.account_id",
 		".source_internal_sre.crm_info.entitled_skus.#",
@@ -131,25 +112,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
-
-	customCSR = mdr.PvtCustomServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		customCSR.SwaggerRegistry["ves.io.schema.signup.CustomPrivateAPI"] = CustomPrivateAPISwaggerJSON
-
-		customCSR.GrpcClientRegistry["ves.io.schema.signup.CustomPrivateAPI"] = NewCustomPrivateAPIGrpcClient
-		customCSR.RestClientRegistry["ves.io.schema.signup.CustomPrivateAPI"] = NewCustomPrivateAPIRestClient
-		if isExternal {
-			return
-		}
-		mdr.SvcRegisterHandlers["ves.io.schema.signup.CustomPrivateAPI"] = RegisterCustomPrivateAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.signup.CustomPrivateAPI"] = RegisterGwCustomPrivateAPIHandler
-		customCSR.ServerRegistry["ves.io.schema.signup.CustomPrivateAPI"] = func(svc svcfw.Service) server.APIHandler {
-			return NewCustomPrivateAPIServer(svc)
-		}
-
-	}()
 
 	customCSR = mdr.PubCustomServiceRegistry
 

@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2796,6 +2860,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -3635,7 +3703,7 @@ var APISwaggerJSON string = `{
         },
         "schemaHeaderTransformationType": {
             "type": "object",
-            "description": "x-displayName: \"Header Transformation\"\nHeader Transformation options for HTTP request/response headers",
+            "description": "x-displayName: \"Header Transformation\"\nHeader Transformation options for HTTP/1.1 request/response headers",
             "title": "HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
@@ -4636,6 +4704,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
+            "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
@@ -4703,6 +4772,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Auto Cert State"
                 },
+                "block": {
+                    "description": "Exclusive with [ddos_js_challenge]\n",
+                    "title": "Block",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Block"
+                },
                 "buffer_policy": {
                     "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
                     "title": "Buffer configuration for requests",
@@ -4763,6 +4838,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.values.string.max_len": "65536",
                         "ves.io.schema.rules.map.values.string.uri_ref": "true"
                     }
+                },
+                "ddos_js_challenge": {
+                    "description": "Exclusive with [block]\n",
+                    "title": "JavaScript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "JavaScript Challenge"
                 },
                 "default_header": {
                     "description": "Exclusive with [append_server_name pass_through server_name]\n Specifies that the default value of \"volt-adc\" should be used for Server Header",
@@ -5533,6 +5614,14 @@ var APISwaggerJSON string = `{
                     "title": "DDoS mitigation",
                     "$ref": "#/definitions/virtual_hostDNSDDoSProfile"
                 },
+                "irules": {
+                    "type": "array",
+                    "description": "x-displayName: \"iRules Ref\"\nOptions for attaching iRules to dns proxy",
+                    "title": "iRules",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    }
+                },
                 "protocol_inspection": {
                     "description": "x-displayName: \"Protocol Inspection\"\nOptions for enabling and configuring protocol inspection configuration",
                     "title": "Protcol Inspection",
@@ -5892,8 +5981,15 @@ var APISwaggerJSON string = `{
             "description": "\"Slow and low\" attacks tie up server resources, leaving none available for servicing\nrequests from actual users.",
             "title": "Slow DDoS Mitigation",
             "x-displayname": "Slow DDoS Mitigation",
+            "x-ves-oneof-field-request_timeout_choice": "[\"disable_request_timeout\",\"request_timeout\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.SlowDDoSMitigation",
             "properties": {
+                "disable_request_timeout": {
+                    "description": "Exclusive with [request_timeout]\n",
+                    "title": "No Timeout",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Timeout"
+                },
                 "request_headers_timeout": {
                     "type": "integer",
                     "description": " The amount of time the client has to send only the headers on the request stream before\n the stream is cancelled. The default value is 10000 milliseconds. This setting\n provides protection against Slowloris attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 30000\n",
@@ -5908,10 +6004,10 @@ var APISwaggerJSON string = `{
                 },
                 "request_timeout": {
                     "type": "integer",
-                    "description": " The amount of time allowed for the entire request stream to be received from the client,\n in milliseconds. The stream is terminated with a HTTP 408 (Request Timeout) error code\n if request has not been completed. The default value is 60000 milliseconds. This setting\n provides protection against Slow POST attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 300000\n",
-                    "title": "Request Timeout",
+                    "description": "Exclusive with [disable_request_timeout]\n\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 300000\n",
+                    "title": "Custom Timeout",
                     "format": "int64",
-                    "x-displayname": "Request Timeout",
+                    "x-displayname": "Custom Timeout",
                     "x-ves-example": "60000",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "2000",

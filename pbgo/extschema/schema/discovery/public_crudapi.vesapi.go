@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.discovery.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -3635,23 +3650,41 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-oneof-field-ref_or_selector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
+            "x-ves-oneof-field-ref_or_selector": "[\"segment\",\"segment_site\",\"segment_vsite\",\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
+                "segment": {
+                    "description": "Exclusive with [segment_site segment_vsite site virtual_network virtual_site]\n Reference to Segment",
+                    "title": "segment",
+                    "$ref": "#/definitions/schemaSegementRefType",
+                    "x-displayname": "Segment"
+                },
+                "segment_site": {
+                    "description": "Exclusive with [segment segment_vsite site virtual_network virtual_site]\n Reference to Segment object",
+                    "title": "segment",
+                    "$ref": "#/definitions/schemaSiteSegmentRefType",
+                    "x-displayname": "Segment on a Site"
+                },
+                "segment_vsite": {
+                    "description": "Exclusive with [segment segment_site site virtual_network virtual_site]\n Reference to Segment in a virtual site",
+                    "title": "segment in virtual site",
+                    "$ref": "#/definitions/schemaVSiteSegmentRefType",
+                    "x-displayname": "Segment in a Virtual Site"
+                },
                 "site": {
-                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
+                    "description": "Exclusive with [segment segment_site segment_vsite virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
                     "$ref": "#/definitions/schemaSiteRefType",
                     "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
+                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
                     "$ref": "#/definitions/schemaNetworkRefType",
                     "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
+                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
                     "$ref": "#/definitions/schemaVSiteRefType",
                     "x-displayname": "Virtual Site"
@@ -3984,6 +4017,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSegementRefType": {
+            "type": "object",
+            "description": "This specifies a direct reference to a segment object",
+            "title": "SegementRefType",
+            "x-displayname": "Segment Reference",
+            "x-ves-proto-message": "ves.io.schema.SegementRefType",
+            "properties": {
+                "ref": {
+                    "type": "array",
+                    "description": " A segment reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "ref",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
         "schemaSiteRefType": {
             "type": "object",
             "description": "This specifies a direct reference to a site configuration object",
@@ -4019,6 +4076,45 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaSiteSegmentRefType": {
+            "type": "object",
+            "description": "Reference to a segment in a site",
+            "title": "SiteSegmentRefType",
+            "x-displayname": "Segment in Site",
+            "x-ves-proto-message": "ves.io.schema.SiteSegmentRefType",
+            "properties": {
+                "segment": {
+                    "type": "array",
+                    "description": " Segment in the site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "segment",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "site": {
+                    "type": "array",
+                    "description": " Reference to a site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -4405,6 +4501,45 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaObjectRefType"
                     },
                     "x-displayname": "Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "schemaVSiteSegmentRefType": {
+            "type": "object",
+            "description": "Reference to a segment in a virtual site",
+            "title": "VSiteSegmentRefType",
+            "x-displayname": "Segment in Virtual Site",
+            "x-ves-proto-message": "ves.io.schema.VSiteSegmentRefType",
+            "properties": {
+                "segment": {
+                    "type": "array",
+                    "description": " Segment in the virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "segment",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "vsite": {
+                    "type": "array",
+                    "description": " Reference to a virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "vsite",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Virtual Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

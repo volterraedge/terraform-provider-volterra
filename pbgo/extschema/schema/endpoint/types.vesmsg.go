@@ -1603,6 +1603,42 @@ func (v *ValidateHealthCheckInfoType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["health_status_update_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_status_update_time"))
+		if err := fv(ctx, m.GetHealthStatusUpdateTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_health_status_failure_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_health_status_failure_details"))
+		if err := fv(ctx, m.GetLastHealthStatusFailureDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_health_status_failure_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_health_status_failure_reason"))
+		if err := fv(ctx, m.GetLastHealthStatusFailureReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_health_status_update_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_health_status_update_time"))
+		if err := fv(ctx, m.GetLastHealthStatusUpdateTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

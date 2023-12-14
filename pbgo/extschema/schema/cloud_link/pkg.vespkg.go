@@ -16,9 +16,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_link.AWSStatusType"] = AWSStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.AzureStatusType"] = AzureStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.BGPPeerType"] = BGPPeerTypeValidator()
-	vr["ves.io.schema.cloud_link.Coordinates"] = CoordinatesValidator()
 	vr["ves.io.schema.cloud_link.DirectConnectConnectionStatusType"] = DirectConnectConnectionStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.DirectConnectGatewayStatusType"] = DirectConnectGatewayStatusTypeValidator()
+	vr["ves.io.schema.cloud_link.GCPCloudInterconnectAttachmentStatusType"] = GCPCloudInterconnectAttachmentStatusTypeValidator()
+	vr["ves.io.schema.cloud_link.GCPStatusType"] = GCPStatusTypeValidator()
 	vr["ves.io.schema.cloud_link.SpecType"] = SpecTypeValidator()
 	vr["ves.io.schema.cloud_link.VirtualInterfaceStatusType"] = VirtualInterfaceStatusTypeValidator()
 
@@ -36,8 +37,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_link.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_link.ReplaceResponse"] = ReplaceResponseValidator()
 
-	vr["ves.io.schema.cloud_link.AssociatedSitesRequest"] = AssociatedSitesRequestValidator()
-	vr["ves.io.schema.cloud_link.AssociatedSitesResponse"] = AssociatedSitesResponseValidator()
 	vr["ves.io.schema.cloud_link.ReapplyConfigRequest"] = ReapplyConfigRequestValidator()
 	vr["ves.io.schema.cloud_link.ReapplyConfigResponse"] = ReapplyConfigResponseValidator()
 
@@ -47,6 +46,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_link.AWSType"] = AWSTypeValidator()
 	vr["ves.io.schema.cloud_link.AzureType"] = AzureTypeValidator()
 	vr["ves.io.schema.cloud_link.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.cloud_link.GCPBYOCListType"] = GCPBYOCListTypeValidator()
+	vr["ves.io.schema.cloud_link.GCPBYOCType"] = GCPBYOCTypeValidator()
+	vr["ves.io.schema.cloud_link.GCPPartnerMetadata"] = GCPPartnerMetadataValidator()
+	vr["ves.io.schema.cloud_link.GCPType"] = GCPTypeValidator()
 	vr["ves.io.schema.cloud_link.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cloud_link.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.cloud_link.Ipv4Type"] = Ipv4TypeValidator()
@@ -70,16 +73,20 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_link.API.Create"] = []string{
+		"spec.aws.auto",
 		"spec.aws.byoc.connections.#.auth_key.blindfold_secret_info_internal",
 		"spec.aws.byoc.connections.#.auth_key.secret_encoding_type",
 		"spec.aws.byoc.connections.#.auth_key.vault_secret_info",
 		"spec.aws.byoc.connections.#.auth_key.wingman_secret_info",
+		"spec.aws.byoc.connections.#.coordinates",
 		"spec.aws.byoc.connections.#.enable_sitelink",
 		"spec.aws.byoc.connections.#.ipv6",
 		"spec.aws.byoc.connections.#.jumbo_mtu",
 		"spec.aws.byoc.connections.#.metadata.disable",
 		"spec.aws.f5xc_managed",
 		"spec.azure",
+		"spec.gcp.byoc.connections.#.coordinates",
+		"spec.gcp.byoc.connections.#.metadata.disable",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cloud_link.API.Create"] = "ves.io.schema.cloud_link.CreateRequest"
@@ -89,16 +96,20 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_link.API.Replace"] = []string{
+		"spec.aws.auto",
 		"spec.aws.byoc.connections.#.auth_key.blindfold_secret_info_internal",
 		"spec.aws.byoc.connections.#.auth_key.secret_encoding_type",
 		"spec.aws.byoc.connections.#.auth_key.vault_secret_info",
 		"spec.aws.byoc.connections.#.auth_key.wingman_secret_info",
+		"spec.aws.byoc.connections.#.coordinates",
 		"spec.aws.byoc.connections.#.enable_sitelink",
 		"spec.aws.byoc.connections.#.ipv6",
 		"spec.aws.byoc.connections.#.jumbo_mtu",
 		"spec.aws.byoc.connections.#.metadata.disable",
 		"spec.aws.f5xc_managed",
 		"spec.azure",
+		"spec.gcp.byoc.connections.#.coordinates",
+		"spec.gcp.byoc.connections.#.metadata.disable",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cloud_link.API.Replace"] = "ves.io.schema.cloud_link.ReplaceRequest"

@@ -111,6 +111,17 @@ func (v *ValidateAggregationRequest) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AggregationRequest_MultiFieldAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.multi_field_aggregation"]; exists {
+			val := m.GetAggregationType().(*AggregationRequest_MultiFieldAggregation).MultiFieldAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("multi_field_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -124,6 +135,7 @@ var DefaultAggregationRequestValidator = func() *ValidateAggregationRequest {
 	v.FldValidators["aggregation_type.date_aggregation"] = DateAggregationValidator().Validate
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
 	v.FldValidators["aggregation_type.cardinality_aggregation"] = CardinalityAggregationValidator().Validate
+	v.FldValidators["aggregation_type.multi_field_aggregation"] = MultiFieldAggregationValidator().Validate
 
 	return v
 }()
@@ -434,6 +446,17 @@ func (v *ValidateDateSubAggregation) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *DateSubAggregation_MultiFieldAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.multi_field_aggregation"]; exists {
+			val := m.GetAggregationType().(*DateSubAggregation_MultiFieldAggregation).MultiFieldAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("multi_field_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -445,6 +468,7 @@ var DefaultDateSubAggregationValidator = func() *ValidateDateSubAggregation {
 	v := &ValidateDateSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
+	v.FldValidators["aggregation_type.multi_field_aggregation"] = MultiFieldAggregationValidator().Validate
 
 	return v
 }()
@@ -595,4 +619,148 @@ var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
 
 func FieldAggregationValidator() db.Validator {
 	return DefaultFieldAggregationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultiFieldAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultiFieldAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultiFieldAggregation) DeepCopy() *MultiFieldAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultiFieldAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultiFieldAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultiFieldAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultiFieldAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMultiFieldAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultiFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(MultiKeyField)
+		return int32(i)
+	}
+	// MultiKeyField_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, MultiKeyField_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMultiFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMultiFieldAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultiFieldAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultiFieldAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field"))
+		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["topk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("topk"))
+		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultiFieldAggregationValidator = func() *ValidateMultiFieldAggregation {
+	v := &ValidateMultiFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhField := v.FieldValidationRuleHandler
+	rulesField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhField(rulesField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MultiFieldAggregation.field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field"] = vFn
+
+	vrhTopk := v.TopkValidationRuleHandler
+	rulesTopk := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhTopk(rulesTopk)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MultiFieldAggregation.topk: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["topk"] = vFn
+
+	return v
+}()
+
+func MultiFieldAggregationValidator() db.Validator {
+	return DefaultMultiFieldAggregationValidator
 }

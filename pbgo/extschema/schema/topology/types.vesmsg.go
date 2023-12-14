@@ -2646,6 +2646,15 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["site_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_type"))
+		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tgw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tgw"))

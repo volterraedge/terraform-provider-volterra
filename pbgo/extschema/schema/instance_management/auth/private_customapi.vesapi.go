@@ -1337,7 +1337,7 @@ var CustomPrivateAPISwaggerJSON string = `{
         },
         "tenantOperAction": {
             "type": "string",
-            "description": "OperAction defines the recommended operational action for the tenant\n\n - OperActionNone: OperActionNone\n\nNo actions are required\n - OperActionFreemiumSsoSignup: OperActionFreemiumSsoSignup\n\nThe tenant and user are not found in local, but the user is found in IDM.\nThis implies that we need to initiate an freemium SSO signup.\n - OperActionSyncUser: OperActionSyncUser\n\nThe tenant is found but the user is found only in IDM.\nIn such cases we need to sync IDM user to local.\n - OperActionRetry: OperActionRetry\n\nOperActionRetry indicates that something is pending, so we need to\nretry the operation",
+            "description": "OperAction defines the recommended operational action for the tenant\n\n - OperActionNone: OperActionNone\n\nNo actions are required\n - OperActionFreemiumSsoSignup: OperActionFreemiumSsoSignup\n\nThe tenant and user are not found in local, but the user is found in IDM.\nThis implies that we need to initiate an freemium SSO signup.\nTODO: remove this when KC issue is resolved. Ref: https://gitlab.com/f5/volterra/ves.io/schema/-/merge_requests/5628#note_1619369851\n - OperActionSyncUser: OperActionSyncUser\n\nThe tenant is found but the user is found only in IDM.\nIn such cases we need to sync IDM user to local.\n - OperActionRetry: OperActionRetry\n\nOperActionRetry indicates that something is pending, so we need to\nretry the operation",
             "title": "OperAction",
             "enum": [
                 "OperActionNone",

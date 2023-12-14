@@ -876,7 +876,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1025",
+		"ves.io.schema.rules.repeated.max_items": "257",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -1068,7 +1068,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1025",
+		"ves.io.schema.rules.repeated.max_items": "257",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -1260,7 +1260,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1025",
+		"ves.io.schema.rules.repeated.max_items": "257",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -2014,7 +2014,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhRoutes := v.RoutesValidationRuleHandler
 	rulesRoutes := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1025",
+		"ves.io.schema.rules.repeated.max_items": "257",
 	}
 	vFn, err = vrhRoutes(rulesRoutes)
 	if err != nil {
@@ -4406,6 +4406,122 @@ var DefaultTagAttributeValidator = func() *ValidateTagAttribute {
 
 func TagAttributeValidator() db.Validator {
 	return DefaultTagAttributeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *VerStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VerStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VerStatusType) DeepCopy() *VerStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VerStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VerStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VerStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VerStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateVerStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVerStatusType) StatusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for status")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VerStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VerStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("reason"))
+		if err := fv(ctx, m.GetReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
+	v := &ValidateVerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStatus := v.StatusValidationRuleHandler
+	rulesStatus := map[string]string{
+		"ves.io.schema.rules.string.in": "[\"Incomplete\",\"Installed\"]",
+	}
+	vFn, err = vrhStatus(rulesStatus)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VerStatusType.status: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["status"] = vFn
+
+	return v
+}()
+
+func VerStatusTypeValidator() db.Validator {
+	return DefaultVerStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

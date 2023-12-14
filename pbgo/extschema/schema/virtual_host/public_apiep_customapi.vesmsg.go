@@ -762,6 +762,18 @@ func (v *ValidateAPIEndpointLearntSchemaRsp) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_specs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_specs"))
+		for key, value := range m.GetApiSpecs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["authentication"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("authentication"))

@@ -1167,6 +1167,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["access_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("access_type"))
+		if err := fv(ctx, m.GetAccessType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["active_plan_transition_uid"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("active_plan_transition_uid"))

@@ -34,6 +34,24 @@ type NamespaceCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *NamespaceCustomAPIGrpcClient) doRPCAllApplicationInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AllApplicationInventoryRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.AllApplicationInventoryRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.AllApplicationInventory(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *NamespaceCustomAPIGrpcClient) doRPCAllApplicationInventoryWaf(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AllApplicationInventoryWafFilterRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.AllApplicationInventoryWaf(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceCustomAPIGrpcClient) doRPCApplicationInventory(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ApplicationInventoryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -190,6 +208,10 @@ func NewNamespaceCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewNamespaceCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["AllApplicationInventory"] = ccl.doRPCAllApplicationInventory
+
+	rpcFns["AllApplicationInventoryWaf"] = ccl.doRPCAllApplicationInventoryWaf
+
 	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
 
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
@@ -229,6 +251,173 @@ type NamespaceCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AllApplicationInventoryRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.AllApplicationInventoryRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
+		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ApplicationInventoryResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ApplicationInventoryResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventoryWaf(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AllApplicationInventoryWafFilterRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("waf_filter_choice", fmt.Sprintf("%v", req.WafFilterChoice))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &AllApplicationInventoryWafFilterResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -1436,6 +1625,10 @@ func NewNamespaceCustomAPIRestClient(baseURL string, hc http.Client) server.Cust
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["AllApplicationInventory"] = ccl.doRPCAllApplicationInventory
+
+	rpcFns["AllApplicationInventoryWaf"] = ccl.doRPCAllApplicationInventoryWaf
+
 	rpcFns["ApplicationInventory"] = ccl.doRPCApplicationInventory
 
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
@@ -1476,6 +1669,14 @@ type namespaceCustomAPIInprocClient struct {
 	NamespaceCustomAPIServer
 }
 
+func (c *namespaceCustomAPIInprocClient) AllApplicationInventory(ctx context.Context, in *AllApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory", nil)
+	return c.NamespaceCustomAPIServer.AllApplicationInventory(ctx, in)
+}
+func (c *namespaceCustomAPIInprocClient) AllApplicationInventoryWaf(ctx context.Context, in *AllApplicationInventoryWafFilterRequest, opts ...grpc.CallOption) (*AllApplicationInventoryWafFilterResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf", nil)
+	return c.NamespaceCustomAPIServer.AllApplicationInventoryWaf(ctx, in)
+}
 func (c *namespaceCustomAPIInprocClient) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory", nil)
 	return c.NamespaceCustomAPIServer.ApplicationInventory(ctx, in)
@@ -1554,6 +1755,104 @@ type namespaceCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *namespaceCustomAPISrv) AllApplicationInventory(ctx context.Context, in *AllApplicationInventoryRequest) (*ApplicationInventoryResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ApplicationInventoryResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.AllApplicationInventoryRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.AllApplicationInventory' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AllApplicationInventory(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApplicationInventoryResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *namespaceCustomAPISrv) AllApplicationInventoryWaf(ctx context.Context, in *AllApplicationInventoryWafFilterRequest) (*AllApplicationInventoryWafFilterResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
+	cah, ok := ah.(NamespaceCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *AllApplicationInventoryWafFilterResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceCustomAPI.AllApplicationInventoryWaf' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AllApplicationInventoryWaf(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *namespaceCustomAPISrv) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest) (*ApplicationInventoryResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceCustomAPI")
 	cah, ok := ah.(NamespaceCustomAPIServer)
@@ -2276,6 +2575,174 @@ var NamespaceCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/all_application_inventory": {
+            "post": {
+                "summary": "All Application Objects Inventory",
+                "description": "AllApplicationInventory returns inventory of configured application related objects for all namespaces.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceApplicationInventoryResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceAllApplicationInventoryRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventory"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/all_application_inventory_waf_filters": {
+            "post": {
+                "summary": "All Application Objects Inventory with WAF Filters",
+                "description": "AllApplicationInventoryWaf returns inventory of configured application related objects for all namespaces with WAF Filters.",
+                "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceAllApplicationInventoryWafFilterResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceAllApplicationInventoryWafFilterRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventorywaf"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf"
+            },
+            "x-displayname": "NamespaceCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/networking_inventory": {
             "post": {
                 "summary": "Networking Objects Inventory",
@@ -2530,8 +2997,8 @@ var NamespaceCustomAPISwaggerJSON string = `{
         },
         "/public/namespaces/{namespace}/active_alert_policies": {
             "get": {
-                "summary": "Get Active Aelrt Policies",
-                "description": "GetActiveAlertPolicies resturn the list of active alert policies for the namespace",
+                "summary": "Get Active Alert Policies",
+                "description": "GetActiveAlertPolicies returns the list of active alert policies for the namespace",
                 "operationId": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies",
                 "responses": {
                     "200": {
@@ -3524,6 +3991,56 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "app_firewallAppFirewallViolationType": {
+            "type": "string",
+            "description": "List of all supported Violation Types\n\nVIOL_NONE\nVIOL_FILETYPE\nVIOL_METHOD\nVIOL_MANDATORY_HEADER\nVIOL_HTTP_RESPONSE_STATUS\nVIOL_REQUEST_MAX_LENGTH\nVIOL_FILE_UPLOAD\nVIOL_FILE_UPLOAD_IN_BODY\nVIOL_XML_MALFORMED\nVIOL_JSON_MALFORMED\nVIOL_ASM_COOKIE_MODIFIED\nVIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS\nVIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE\nVIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT\nVIOL_HTTP_PROTOCOL_NULL_IN_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION\nVIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START\nVIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING\nVIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS\nVIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER\nVIOL_EVASION_DIRECTORY_TRAVERSALS\nVIOL_MALFORMED_REQUEST\nVIOL_EVASION_MULTIPLE_DECODING\nVIOL_DATA_GUARD\nVIOL_EVASION_APACHE_WHITESPACE\nVIOL_COOKIE_MODIFIED\nVIOL_EVASION_IIS_UNICODE_CODEPOINTS\nVIOL_EVASION_IIS_BACKSLASHES\nVIOL_EVASION_PERCENT_U_DECODING\nVIOL_EVASION_BARE_BYTE_DECODING\nVIOL_EVASION_BAD_UNESCAPE\nVIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING\nVIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST\nVIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS\nVIOL_ENCODING\nVIOL_COOKIE_MALFORMED\nVIOL_GRAPHQL_FORMAT\nVIOL_GRAPHQL_MALFORMED\nVIOL_GRAPHQL_INTROSPECTION_QUERY",
+            "title": "App Firewall Violation Type",
+            "enum": [
+                "VIOL_NONE",
+                "VIOL_FILETYPE",
+                "VIOL_METHOD",
+                "VIOL_MANDATORY_HEADER",
+                "VIOL_HTTP_RESPONSE_STATUS",
+                "VIOL_REQUEST_MAX_LENGTH",
+                "VIOL_FILE_UPLOAD",
+                "VIOL_FILE_UPLOAD_IN_BODY",
+                "VIOL_XML_MALFORMED",
+                "VIOL_JSON_MALFORMED",
+                "VIOL_ASM_COOKIE_MODIFIED",
+                "VIOL_HTTP_PROTOCOL_MULTIPLE_HOST_HEADERS",
+                "VIOL_HTTP_PROTOCOL_BAD_HOST_HEADER_VALUE",
+                "VIOL_HTTP_PROTOCOL_UNPARSABLE_REQUEST_CONTENT",
+                "VIOL_HTTP_PROTOCOL_NULL_IN_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_HTTP_VERSION",
+                "VIOL_HTTP_PROTOCOL_CRLF_CHARACTERS_BEFORE_REQUEST_START",
+                "VIOL_HTTP_PROTOCOL_NO_HOST_HEADER_IN_HTTP_1_1_REQUEST",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_PARAMETERS_PARSING",
+                "VIOL_HTTP_PROTOCOL_SEVERAL_CONTENT_LENGTH_HEADERS",
+                "VIOL_HTTP_PROTOCOL_CONTENT_LENGTH_SHOULD_BE_A_POSITIVE_NUMBER",
+                "VIOL_EVASION_DIRECTORY_TRAVERSALS",
+                "VIOL_MALFORMED_REQUEST",
+                "VIOL_EVASION_MULTIPLE_DECODING",
+                "VIOL_DATA_GUARD",
+                "VIOL_EVASION_APACHE_WHITESPACE",
+                "VIOL_COOKIE_MODIFIED",
+                "VIOL_EVASION_IIS_UNICODE_CODEPOINTS",
+                "VIOL_EVASION_IIS_BACKSLASHES",
+                "VIOL_EVASION_PERCENT_U_DECODING",
+                "VIOL_EVASION_BARE_BYTE_DECODING",
+                "VIOL_EVASION_BAD_UNESCAPE",
+                "VIOL_HTTP_PROTOCOL_BAD_MULTIPART_FORMDATA_REQUEST_PARSING",
+                "VIOL_HTTP_PROTOCOL_BODY_IN_GET_OR_HEAD_REQUEST",
+                "VIOL_HTTP_PROTOCOL_HIGH_ASCII_CHARACTERS_IN_HEADERS",
+                "VIOL_ENCODING",
+                "VIOL_COOKIE_MALFORMED",
+                "VIOL_GRAPHQL_FORMAT",
+                "VIOL_GRAPHQL_MALFORMED",
+                "VIOL_GRAPHQL_INTROSPECTION_QUERY"
+            ],
+            "default": "VIOL_NONE",
+            "x-displayname": "App Firewall Violation Type",
+            "x-ves-proto-enum": "ves.io.schema.app_firewall.AppFirewallViolationType"
+        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -3531,9 +4048,71 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
         },
-        "namespaceApplicationInventoryRequest": {
+        "namespaceAllApplicationInventoryRequest": {
             "type": "object",
             "description": "Request for inventory of application related objects",
+            "title": "AllApplicationInventoryRequest",
+            "x-displayname": "All Application related objects inventory request",
+            "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryRequest",
+            "properties": {
+                "http_load_balancer_filter": {
+                    "description": " Filters for HTTP LoadBalancer",
+                    "title": "HTTPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryFilterType",
+                    "x-displayname": "HTTP LoadBalancer Inventory Filter Type"
+                },
+                "tcp_load_balancer_filter": {
+                    "description": " Filters for TCP LoadBalancer",
+                    "title": "TCPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
+                    "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                }
+            }
+        },
+        "namespaceAllApplicationInventoryWafFilterRequest": {
+            "type": "object",
+            "description": "Request for inventory of application related objects with WAF Filter",
+            "title": "AllApplicationInventoryWafFilterRequest",
+            "x-displayname": "All Application related objects inventory request with WAF Filter",
+            "x-ves-oneof-field-waf_filter_choice": "[\"exclusion_signature_id\",\"exclusion_violation_type\"]",
+            "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest",
+            "properties": {
+                "exclusion_signature_id": {
+                    "type": "integer",
+                    "description": "Exclusive with [exclusion_violation_type]\n",
+                    "title": "WAF Exclusion Rule Signature Id",
+                    "format": "int64",
+                    "x-displayname": "WAF Exclusion Rule Signature Id"
+                },
+                "exclusion_violation_type": {
+                    "description": "Exclusive with [exclusion_signature_id]\n",
+                    "title": "WAF Exclusion Rule Violation Name",
+                    "$ref": "#/definitions/app_firewallAppFirewallViolationType",
+                    "x-displayname": "WAF Exclusion Rule Violation Name"
+                }
+            }
+        },
+        "namespaceAllApplicationInventoryWafFilterResponse": {
+            "type": "object",
+            "description": "Response for inventory of application related objects",
+            "title": "AllApplicationInventoryWafFilterResponse",
+            "x-displayname": "Application related objects inventory response",
+            "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryWafFilterResponse",
+            "properties": {
+                "http_loadbalancers": {
+                    "type": "array",
+                    "description": " Application Inventory of configured HTTP Loadbalancers with WAF Filters",
+                    "title": "HTTP Loadbalancer Inventory with WAF Filters",
+                    "items": {
+                        "$ref": "#/definitions/namespaceHTTPLoadbalancerWafFilterResultType"
+                    },
+                    "x-displayname": "HTTP Loadbalancers with WAF Filters"
+                }
+            }
+        },
+        "namespaceApplicationInventoryRequest": {
+            "type": "object",
+            "description": "Request for inventory of application related objects from all namespaces",
             "title": "ApplicationInventoryRequest",
             "x-displayname": "Application related objects inventory request",
             "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryRequest",
@@ -4004,6 +4583,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "HTTP LB Name",
                     "x-displayname": "HTTP LB Name"
                 },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of HTTP LB",
+                    "title": "HTTP LB Namespace",
+                    "x-displayname": "HTTP LB Namespace"
+                },
                 "namespace_service_policy_enabled": {
                     "description": " Namespace Service Policy configured",
                     "title": "Namespace Service Policy Status",
@@ -4039,6 +4624,27 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "WAF Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "WAF Enabled or Disabled"
+                }
+            }
+        },
+        "namespaceHTTPLoadbalancerWafFilterResultType": {
+            "type": "object",
+            "description": "HTTP Loadbalancer Waf Filter Inventory Results",
+            "title": "HTTPLoadbalancerWafFilterResultType",
+            "x-displayname": "HTTP Loadbalancer Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerWafFilterResultType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of HTTP LB",
+                    "title": "HTTP LB Name",
+                    "x-displayname": "HTTP LB Name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of HTTP LB",
+                    "title": "HTTP LB Namespace",
+                    "x-displayname": "HTTP LB Namespace"
                 }
             }
         },
@@ -4404,6 +5010,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "description": " Name of TCP LB",
                     "title": "TCP LB Name",
                     "x-displayname": "TCP LB Name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of TCP LB",
+                    "title": "TCP LB Namespace",
+                    "x-displayname": "TCP LB Namespace"
                 },
                 "namespace_service_policy": {
                     "description": " Namespace Service Policy configured",

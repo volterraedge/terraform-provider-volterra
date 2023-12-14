@@ -352,6 +352,15 @@ func (v *ValidatePerCpuUtilizationLimit) Validate(ctx context.Context, pm interf
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["close_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("close_limit"))
+		if err := fv(ctx, m.GetCloseLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["hard_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("hard_limit"))
@@ -380,6 +389,8 @@ var DefaultPerCpuUtilizationLimitValidator = func() *ValidatePerCpuUtilizationLi
 	v.FldValidators["soft_limit"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	v.FldValidators["hard_limit"] = ves_io_schema.FractionalPercentValidator().Validate
+
+	v.FldValidators["close_limit"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	return v
 }()

@@ -67,8 +67,70 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleListDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *CreateSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "dns_lb_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -144,6 +206,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["fallback_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fallback_pool"))
+		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -210,6 +281,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
 
+	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -262,6 +335,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -326,6 +405,55 @@ func (m *GetSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interface) 
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+	}
+
+	return entries, nil
+}
+
+func (m *GetSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "dns_lb_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -416,6 +544,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["fallback_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fallback_pool"))
+		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -484,6 +621,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	return v
 }()
 
@@ -536,6 +675,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -600,6 +745,55 @@ func (m *GlobalSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interfac
 		if refdEnt != nil {
 			entries = append(entries, refdEnt)
 		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "dns_lb_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
 	}
 
 	return entries, nil
@@ -690,6 +884,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["fallback_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fallback_pool"))
+		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -757,6 +960,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
 
 	v.FldValidators["dns_zones"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1360,8 +1565,70 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleListDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetFallbackPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFallbackPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
 
+	if fdrInfos, err := m.GetRuleListDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleListDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *ReplaceSpecType) GetFallbackPoolDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("dns_lb_pool.Object")
+	dri := db.DRefInfo{
+		RefdType:   "dns_lb_pool.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "fallback_pool",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetFallbackPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetFallbackPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "dns_lb_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: dns_lb_pool")
+	}
+
+	vref := m.GetFallbackPool()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "dns_lb_pool.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -1437,6 +1704,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["fallback_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fallback_pool"))
+		if err := fv(ctx, m.GetFallbackPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["record_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("record_type"))
@@ -1502,6 +1778,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["rule_list"] = vFn
 
 	v.FldValidators["response_cache"] = ResponseCacheValidator().Validate
+
+	v.FldValidators["fallback_pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -1828,6 +2106,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.FallbackPool = f.GetFallbackPool()
 	m.RecordType = f.GetRecordType()
 	m.ResponseCache = f.GetResponseCache()
 	m.RuleList = f.GetRuleList()
@@ -1848,6 +2127,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.FallbackPool = m1.FallbackPool
 	f.RecordType = m1.RecordType
 	f.ResponseCache = m1.ResponseCache
 	f.RuleList = m1.RuleList
@@ -1866,6 +2146,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.DnsZones = f.GetDnsZones()
+	m.FallbackPool = f.GetFallbackPool()
 	m.RecordType = f.GetRecordType()
 	m.ResponseCache = f.GetResponseCache()
 	m.RuleList = f.GetRuleList()
@@ -1887,6 +2168,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.DnsZones = m1.DnsZones
+	f.FallbackPool = m1.FallbackPool
 	f.RecordType = m1.RecordType
 	f.ResponseCache = m1.ResponseCache
 	f.RuleList = m1.RuleList
@@ -1904,6 +2186,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	if f == nil {
 		return
 	}
+	m.FallbackPool = f.GetFallbackPool()
 	m.RecordType = f.GetRecordType()
 	m.ResponseCache = f.GetResponseCache()
 	m.RuleList = f.GetRuleList()
@@ -1924,6 +2207,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	}
 	_ = m1
 
+	f.FallbackPool = m1.FallbackPool
 	f.RecordType = m1.RecordType
 	f.ResponseCache = m1.ResponseCache
 	f.RuleList = m1.RuleList

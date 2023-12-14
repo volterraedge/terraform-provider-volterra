@@ -2366,6 +2366,15 @@ func (v *ValidateAWSVPCSiteInfoType) Validate(ctx context.Context, pm interface{
 
 	}
 
+	if fv, exists := v.FldValidators["vpc_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_name"))
+		if err := fv(ctx, m.GetVpcName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -5211,7 +5220,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -6572,7 +6580,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {
@@ -8091,7 +8098,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"af-south-1\",\"ap-east-1\",\"ap-northeast-1\",\"ap-northeast-2\",\"ap-south-1\",\"ap-southeast-1\",\"ap-southeast-2\",\"ap-southeast-3\",\"ca-central-1\",\"eu-central-1\",\"eu-north-1\",\"eu-south-1\",\"eu-west-1\",\"eu-west-2\",\"eu-west-3\",\"me-south-1\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-1\",\"us-west-2\"]",
 	}
 	vFn, err = vrhAwsRegion(rulesAwsRegion)
 	if err != nil {

@@ -39,8 +39,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.aws_tgw_site.SetVPNTunnelsResponse"] = SetVPNTunnelsResponseValidator()
 
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType"] = AWSTGWInfoConfigTypeValidator()
+	vr["ves.io.schema.views.aws_tgw_site.AWSTGWResourceShareType"] = AWSTGWResourceShareTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentListType"] = AWSTGWSpokeAttachmentListTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentType"] = AWSTGWSpokeAttachmentTypeValidator()
+	vr["ves.io.schema.views.aws_tgw_site.AWSTGWStatusType"] = AWSTGWStatusTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType"] = AWSVPNTunnelConfigTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType"] = ActiveServicePoliciesTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.CreateSpecType"] = CreateSpecTypeValidator()
@@ -77,7 +79,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []string{
 		"spec.aws_parameters.assisted",
 		"spec.aws_parameters.az_nodes.#.disk_size",
-		"spec.private_connectivity",
+		"spec.aws_parameters.disable_internet_vip",
+		"spec.aws_parameters.enable_internet_vip",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
@@ -92,7 +95,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = []string{
 		"spec.aws_parameters.assisted",
-		"spec.private_connectivity",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",

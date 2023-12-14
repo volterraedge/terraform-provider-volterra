@@ -1359,6 +1359,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["origin_span"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_span"))
+		if err := fv(ctx, e.GetOriginSpan(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ver_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ver_status"))

@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.cloud_connect.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2200,36 +2215,113 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "cloud_connectAWSAttachmentsListStatusType": {
+            "type": "object",
+            "description": "AWS VPC Attachment List Status Type",
+            "title": "AWS VPC Attachment List Status Type",
+            "x-displayname": "AWS VPC Attachment List Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsListStatusType",
+            "properties": {
+                "attachment_status": {
+                    "type": "array",
+                    "description": " AWS Attachment Status Type",
+                    "title": "AWS VPC Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
+                    },
+                    "x-displayname": "AWS VPC Attachment Status Type"
+                }
+            }
+        },
+        "cloud_connectAWSAttachmentsStatusType": {
+            "type": "object",
+            "description": "AWS Attachment Status Type",
+            "title": "AWS VPC Attachment Status Type",
+            "x-displayname": "AWS Attachment Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSAttachmentsStatusType",
+            "properties": {
+                "creation_time": {
+                    "type": "string",
+                    "description": " Attachment Creation Time",
+                    "title": "Attachment Creation Time",
+                    "format": "date-time",
+                    "x-displayname": "Attachment Creation Time"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " Attachment State",
+                    "title": "Attachment State",
+                    "x-displayname": "Attachment State"
+                },
+                "subnets": {
+                    "type": "array",
+                    "description": " Subnets to Route Traffic",
+                    "title": "Subnets",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Subnets"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
+                "tgw_attachment_id": {
+                    "type": "string",
+                    "description": " TGW Attachment ID",
+                    "title": "TGW Attachment ID",
+                    "x-displayname": "TGW Attachment ID"
+                },
+                "vpc_id": {
+                    "type": "string",
+                    "description": " VPC ID",
+                    "title": "VPC ID",
+                    "x-displayname": "VPC ID"
+                },
+                "vpc_owner_id": {
+                    "type": "string",
+                    "description": " VPC Owner Account",
+                    "title": "VPC Owner Account",
+                    "x-displayname": "VPC Owner Account"
+                }
+            }
+        },
         "cloud_connectAWSREType": {
             "type": "object",
-            "description": "Cloud Connect AWS Type",
-            "title": "Cloud Connect AWS RE Type",
-            "x-displayname": "AWS Type",
+            "title": "Cloud Connect AWS Type",
+            "x-displayname": "AWS",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSREType",
             "properties": {
                 "cloud_links": {
-                    "description": " Reference to cloud links",
+                    "description": " Reference to cloud link",
                     "title": "Cloud Links",
                     "$ref": "#/definitions/cloud_connectCloudLinkListType",
-                    "x-displayname": "Cloud Links"
+                    "x-displayname": "CloudLink"
                 },
                 "cred": {
-                    "description": " Reference to cloud credential to deploy resources",
+                    "description": " Select a cloud credential to begin onboarding VPCs",
                     "title": "Cloud Credential",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential Reference"
+                    "x-displayname": "Credential"
                 },
                 "region": {
-                    "description": " Regions we support cloud_connects",
                     "title": "Region",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Region"
+                    "x-displayname": "Cloud Edge"
                 },
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the AWS TGW Site",
-                    "title": "Spoke VPCs",
+                    "title": "VPC Attachement List",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "VPC Attachement List"
                 }
             }
         },
@@ -2242,7 +2334,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_tables": {
                     "type": "array",
-                    "description": " Route Tables \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Route Tables\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "List of route tables",
                     "minItems": 1,
                     "maxItems": 200,
@@ -2336,7 +2428,7 @@ var APISwaggerJSON string = `{
             "title": "Cloud Connect AWS TGW Site Type",
             "properties": {
                 "cloud_links": {
-                    "description": "x-displayName: \"Cloud Links\"\nReference to cloud links",
+                    "description": "x-displayName: \"CloudLink\"\nReference to cloud link",
                     "title": "Cloud Links",
                     "$ref": "#/definitions/cloud_connectCloudLinkListType"
                 },
@@ -2359,14 +2451,13 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSVPCAttachmentListType": {
             "type": "object",
-            "description": "Spoke VPCs to be attached to the AWS TGW Site",
-            "title": "Spoke VPCs",
-            "x-displayname": "Spoke VPCs",
+            "title": "VPC Attachments",
+            "x-displayname": "VPC Attachments",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentListType",
             "properties": {
                 "vpc_list": {
                     "type": "array",
-                    "description": " List of VPC attachments to transit gateway\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "vpc_list",
                     "maxItems": 128,
                     "items": {
@@ -2381,10 +2472,9 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSVPCAttachmentType": {
             "type": "object",
-            "description": "VPC attachments to transit gateway",
             "title": "AWS VPC attachment",
-            "x-displayname": "VPC",
-            "x-ves-oneof-field-routing_choice": "[\"manual_routing\",\"routing_ids\"]",
+            "x-displayname": "VPC Attachment",
+            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"default_route\",\"manual_routing\"]",
             "x-ves-oneof-field-subnet_choice": "[\"all_subnets\",\"subnet_ids\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
             "properties": {
@@ -2393,6 +2483,18 @@ var APISwaggerJSON string = `{
                     "title": "All subnets",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "All subnets"
+                },
+                "custom_routing": {
+                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
+                    "title": "Advertise Custom CIDRs",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Advertise Custom CIDRs"
+                },
+                "default_route": {
+                    "description": "Exclusive with [custom_routing manual_routing]\n default route towards the CE will be add to the route table",
+                    "title": "Override Default Route",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Override Default Route"
                 },
                 "labels": {
                     "type": "object",
@@ -2405,16 +2507,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "manual_routing": {
-                    "description": "Exclusive with [routing_ids]\n Manual routing",
+                    "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Manual routing"
-                },
-                "routing_ids": {
-                    "description": "Exclusive with [manual_routing]\n Routing tables automatically managed",
-                    "title": "Routing tables",
-                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Routing tables"
+                    "x-displayname": "Manual"
                 },
                 "subnet_ids": {
                     "description": "Exclusive with [all_subnets]\n Specific subnets are routed to transit gateway.",
@@ -2424,7 +2520,7 @@ var APISwaggerJSON string = `{
                 },
                 "vpc_id": {
                     "type": "string",
-                    "description": " Information about existing VPC\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "description": " Enter the VPC ID of the VPC to be attached\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
                     "title": "VPC ID",
                     "maxLength": 64,
                     "x-displayname": "VPC ID",
@@ -2438,22 +2534,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectCloudConnectStatusType": {
+            "type": "object",
+            "description": "Cloud Connect Status",
+            "title": "Cloud Connect Status",
+            "x-displayname": "Cloud Connect Status",
+            "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectStatusType",
+            "properties": {
+                "cloud_connect_aws_site": {
+                    "description": "Exclusive with []\n Cloud Connect to AWS Sites",
+                    "title": "Cloud Connect Attached to AWS TGW Site",
+                    "$ref": "#/definitions/cloud_connectAWSAttachmentsListStatusType",
+                    "x-displayname": "Cloud Connect to AWS TGW Site"
+                }
+            }
+        },
         "cloud_connectCloudLinkListType": {
             "type": "object",
-            "description": "List of Cloud Link references to be attached",
-            "title": "Cloud Links",
-            "x-displayname": "Cloud Links",
+            "description": "List of CloudLink references to be attached",
+            "title": "CloudLinks",
+            "x-displayname": "CloudLink",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudLinkListType",
             "properties": {
                 "cloud_link": {
                     "type": "array",
-                    "description": " Reference to cloud link\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Cloud Link",
+                    "description": " Attach a CloudLink to this Cloud Connect\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "CloudLink",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
-                    "x-displayname": "Cloud Link Reference",
+                    "x-displayname": "CloudLink",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
@@ -2511,23 +2623,16 @@ var APISwaggerJSON string = `{
             "title": "Create Cloud Connect",
             "x-displayname": "Create Cloud Connect",
             "x-ves-oneof-field-cloud": "[\"aws_re\"]",
-            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n AWS RE Specific choice.",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/cloud_connectAWSREType",
-                    "x-displayname": "AWS RE"
+                    "x-displayname": "AWS"
                 },
-                "enable_segment": {
-                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
-                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                "segment": {
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
-                },
-                "isolated_segment": {
-                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
-                    "$ref": "#/definitions/cloud_connectIsolatedType",
-                    "x-displayname": "Isolated segment"
                 }
             }
         },
@@ -2558,21 +2663,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
-                }
-            }
-        },
-        "cloud_connectEnableSegmentType": {
-            "type": "object",
-            "description": "Enable Segment Type",
-            "title": "Enable Segment Type",
-            "x-displayname": "Enable Segment Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.EnableSegmentType",
-            "properties": {
-                "segment": {
-                    "description": " Segment connected to",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
                 }
             }
         },
@@ -2678,32 +2768,18 @@ var APISwaggerJSON string = `{
             "title": "Get Cloud Connect",
             "x-displayname": "Get Cloud Connect",
             "x-ves-oneof-field-cloud": "[\"aws_re\"]",
-            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n AWS RE Specific choice.",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/cloud_connectAWSREType",
-                    "x-displayname": "AWS RE"
+                    "x-displayname": "AWS"
                 },
-                "enable_segment": {
-                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
-                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                "segment": {
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
-                },
-                "isolated_segment": {
-                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
-                    "$ref": "#/definitions/cloud_connectIsolatedType",
-                    "x-displayname": "Isolated segment"
                 }
             }
-        },
-        "cloud_connectIsolatedType": {
-            "type": "object",
-            "description": "Network is isolated by default",
-            "title": "Isolated Type",
-            "x-displayname": "Isolated",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.IsolatedType"
         },
         "cloud_connectListResponse": {
             "type": "object",
@@ -2860,6 +2936,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectPeerType": {
+            "type": "object",
+            "description": "x-displayName: \"Cloud Links\"\nList of Cloud Link references to be attached",
+            "title": "Cloud Links",
+            "properties": {
+                "inside_gre_subnet": {
+                    "type": "string",
+                    "description": "x-displayName: \"Inside GRE Subnet\"",
+                    "title": "Inside GRE Subnet"
+                },
+                "node": {
+                    "description": "x-displayName: \"Node\"",
+                    "title": "Node",
+                    "$ref": "#/definitions/cloud_re_regionNodeType"
+                },
+                "peer_asn": {
+                    "type": "string",
+                    "description": "x-displayName: \"Peer ASN\"",
+                    "title": "Peer ASN",
+                    "format": "int64"
+                },
+                "tgw_address": {
+                    "type": "string",
+                    "description": "x-displayName: \"TGW Address\"",
+                    "title": "TGW Address"
+                }
+            }
+        },
         "cloud_connectReplaceAWSREType": {
             "type": "object",
             "description": "Cloud Connect AWS RE Type",
@@ -2868,10 +2972,9 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSREType",
             "properties": {
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the AWS TGW Site",
-                    "title": "Spoke VPCs",
+                    "title": "VPC Attachments",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
+                    "x-displayname": "VPC Attachments"
                 }
             }
         },
@@ -2906,23 +3009,16 @@ var APISwaggerJSON string = `{
             "title": "Replace Cloud Connect",
             "x-displayname": "Replace Cloud Connect",
             "x-ves-oneof-field-cloud": "[\"aws_re\"]",
-            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n AWS RE Specific choice.",
+                    "description": "Exclusive with []\n",
                     "$ref": "#/definitions/cloud_connectReplaceAWSREType",
-                    "x-displayname": "AWS RE"
+                    "x-displayname": "AWS"
                 },
-                "enable_segment": {
-                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
-                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                "segment": {
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
-                },
-                "isolated_segment": {
-                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
-                    "$ref": "#/definitions/cloud_connectIsolatedType",
-                    "x-displayname": "Isolated segment"
                 }
             }
         },
@@ -2947,6 +3043,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Status",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.StatusObject",
             "properties": {
+                "cloud_connect_status": {
+                    "description": " Cloud Connect Status",
+                    "title": "Cloud Connect Status",
+                    "$ref": "#/definitions/cloud_connectCloudConnectStatusType",
+                    "x-displayname": "Cloud Connect Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions reported by various component of the system",
@@ -3880,32 +3982,24 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-oneof-field-bandwidth_option": "[\"bandwidth_500mbs\"]",
             "x-ves-oneof-field-cloud": "[\"aws_re\"]",
-            "x-ves-oneof-field-segment_option": "[\"enable_segment\",\"isolated_segment\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GlobalSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n AWS RE Specific choice.",
-                    "title": "AWS RE",
+                    "description": "Exclusive with []\n",
+                    "title": "AWS",
                     "$ref": "#/definitions/cloud_connectAWSREType",
-                    "x-displayname": "AWS RE"
+                    "x-displayname": "AWS"
                 },
                 "bandwidth_500mbs": {
-                    "description": "Exclusive with []\n  500Mbps ",
+                    "description": "Exclusive with []\n  500Mbps",
                     "title": "500Mbps",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "500Mbps"
                 },
-                "enable_segment": {
-                    "description": "Exclusive with [isolated_segment]\n Segment connected to",
+                "segment": {
                     "title": "Segment",
-                    "$ref": "#/definitions/cloud_connectEnableSegmentType",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
-                },
-                "isolated_segment": {
-                    "description": "Exclusive with [enable_segment]\n Network is isolated.",
-                    "title": "Isolated Network",
-                    "$ref": "#/definitions/cloud_connectIsolatedType",
-                    "x-displayname": "Isolated segment"
                 }
             }
         },

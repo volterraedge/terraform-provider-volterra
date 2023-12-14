@@ -101,6 +101,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
@@ -236,6 +242,33 @@ func (m *CreateSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 }
 
 // GetDRefInfo for the field's type
+func (m *CreateSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPrivateConnectivityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *CreateSpecType_PrivateConnectDisabled:
+
+		return nil, nil
+
+	case *CreateSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
 func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteType() == nil {
 		return nil, nil
@@ -297,6 +330,14 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) PrivateConnectivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_connectivity_choice")
 	}
 	return validatorFn, nil
 }
@@ -616,6 +657,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["private_connectivity_choice"]; exists {
+		val := m.GetPrivateConnectivityChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_connectivity_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *CreateSpecType_PrivateConnectDisabled:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connect_disabled"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*CreateSpecType_PrivateConnectDisabled).PrivateConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connectivity"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*CreateSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -729,6 +806,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhPrivateConnectivityChoice := v.PrivateConnectivityChoiceValidationRuleHandler
+	rulesPrivateConnectivityChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPrivateConnectivityChoice(rulesPrivateConnectivityChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.private_connectivity_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_connectivity_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -828,6 +916,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["private_connectivity_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwTypeValidator().Validate
@@ -5905,6 +5995,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
@@ -6055,6 +6151,33 @@ func (m *GlobalSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d d
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPrivateConnectivityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *GlobalSpecType_PrivateConnectDisabled:
+
+		return nil, nil
+
+	case *GlobalSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 // GetDRefInfo for the field's type
@@ -6217,6 +6340,14 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) PrivateConnectivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_connectivity_choice")
 	}
 	return validatorFn, nil
 }
@@ -6594,6 +6725,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["private_connectivity_choice"]; exists {
+		val := m.GetPrivateConnectivityChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_connectivity_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *GlobalSpecType_PrivateConnectDisabled:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connect_disabled"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*GlobalSpecType_PrivateConnectDisabled).PrivateConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connectivity"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*GlobalSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
@@ -6761,6 +6928,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhPrivateConnectivityChoice := v.PrivateConnectivityChoiceValidationRuleHandler
+	rulesPrivateConnectivityChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPrivateConnectivityChoice(rulesPrivateConnectivityChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.private_connectivity_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_connectivity_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6883,6 +7061,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["private_connectivity_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
+
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = GCPVPCVoltstackClusterTypeValidator().Validate
@@ -6977,6 +7157,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetLogsReceiverChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetLogsReceiverChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7116,6 +7302,33 @@ func (m *ReplaceSpecType) GetLogsReceiverChoiceDBEntries(ctx context.Context, d 
 }
 
 // GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPrivateConnectivityChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *ReplaceSpecType_PrivateConnectDisabled:
+
+		return nil, nil
+
+	case *ReplaceSpecType_PrivateConnectivity:
+		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "private_connectivity." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSiteType() == nil {
 		return nil, nil
@@ -7177,6 +7390,14 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) PrivateConnectivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for private_connectivity_choice")
 	}
 	return validatorFn, nil
 }
@@ -7348,6 +7569,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["private_connectivity_choice"]; exists {
+		val := m.GetPrivateConnectivityChoice()
+		vOpts := append(opts,
+			db.WithValidateField("private_connectivity_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPrivateConnectivityChoice().(type) {
+	case *ReplaceSpecType_PrivateConnectDisabled:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connect_disabled"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*ReplaceSpecType_PrivateConnectDisabled).PrivateConnectDisabled
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connect_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_PrivateConnectivity:
+		if fv, exists := v.FldValidators["private_connectivity_choice.private_connectivity"]; exists {
+			val := m.GetPrivateConnectivityChoice().(*ReplaceSpecType_PrivateConnectivity).PrivateConnectivity
+			vOpts := append(opts,
+				db.WithValidateField("private_connectivity_choice"),
+				db.WithValidateField("private_connectivity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -7443,6 +7700,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhPrivateConnectivityChoice := v.PrivateConnectivityChoiceValidationRuleHandler
+	rulesPrivateConnectivityChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPrivateConnectivityChoice(rulesPrivateConnectivityChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.private_connectivity_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["private_connectivity_choice"] = vFn
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7470,6 +7738,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["deployment.cloud_credentials"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["private_connectivity_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = GCPVPCIngressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = GCPVPCIngressEgressGwReplaceTypeValidator().Validate
@@ -7592,6 +7862,41 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPrivateConnectivityChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PrivateConnectivityChoice.(type) {
+	case nil:
+		o.PrivateConnectivityChoice = nil
+
+	case *CreateSpecType_PrivateConnectDisabled:
+		o.PrivateConnectivityChoice = &GlobalSpecType_PrivateConnectDisabled{PrivateConnectDisabled: of.PrivateConnectDisabled}
+
+	case *CreateSpecType_PrivateConnectivity:
+		o.PrivateConnectivityChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPrivateConnectivityChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PrivateConnectivityChoice.(type) {
+	case nil:
+		r.PrivateConnectivityChoice = nil
+
+	case *GlobalSpecType_PrivateConnectDisabled:
+		r.PrivateConnectivityChoice = &CreateSpecType_PrivateConnectDisabled{PrivateConnectDisabled: of.PrivateConnectDisabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.PrivateConnectivityChoice = &CreateSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -7648,6 +7953,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.NodesPerAz = f.GetNodesPerAz()
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
+	m.GetPrivateConnectivityChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.Sw = f.GetSw()
@@ -7680,6 +7986,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.NodesPerAz = m1.NodesPerAz
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
+	m1.SetPrivateConnectivityChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.Sw = m1.Sw
@@ -8630,6 +8937,41 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPrivateConnectivityChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PrivateConnectivityChoice.(type) {
+	case nil:
+		o.PrivateConnectivityChoice = nil
+
+	case *ReplaceSpecType_PrivateConnectDisabled:
+		o.PrivateConnectivityChoice = &GlobalSpecType_PrivateConnectDisabled{PrivateConnectDisabled: of.PrivateConnectDisabled}
+
+	case *ReplaceSpecType_PrivateConnectivity:
+		o.PrivateConnectivityChoice = &GlobalSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPrivateConnectivityChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PrivateConnectivityChoice.(type) {
+	case nil:
+		r.PrivateConnectivityChoice = nil
+
+	case *GlobalSpecType_PrivateConnectDisabled:
+		r.PrivateConnectivityChoice = &ReplaceSpecType_PrivateConnectDisabled{PrivateConnectDisabled: of.PrivateConnectDisabled}
+
+	case *GlobalSpecType_PrivateConnectivity:
+		r.PrivateConnectivityChoice = &ReplaceSpecType_PrivateConnectivity{PrivateConnectivity: of.PrivateConnectivity}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetSiteTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.SiteType.(type) {
 	case nil:
@@ -8707,6 +9049,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.GetPrivateConnectivityChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
 }
 
@@ -8731,6 +9074,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	m1.SetPrivateConnectivityChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
 }
 

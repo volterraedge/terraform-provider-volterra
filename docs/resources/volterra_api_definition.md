@@ -19,8 +19,6 @@ Example Usage
 resource "volterra_api_definition" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-
-  swagger_specs = ["https://my.tenant.domain/api/object_store/namespaces/my-ns/stored_objects/swagger/file-name/v1-22-01-12"]
 }
 
 ```
@@ -44,7 +42,37 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`swagger_specs` - (Required) Notice file versions. If swagger file is updated, need to select a new version here to redefine the API. (`List of String`).
+`api_inventory_exclusion_list` - (Optional) List of API Endpoints excluded from the API Inventory.. See [Api Inventory Exclusion List ](#api-inventory-exclusion-list) below for details.
+
+`api_inventory_inclusion_list` - (Optional) Typically, discovered API endpoints are added to the API Inventory using this list.. See [Api Inventory Inclusion List ](#api-inventory-inclusion-list) below for details.
+
+`non_api_endpoints` - (Optional) List of Non-API Endpoints.. See [Non Api Endpoints ](#non-api-endpoints) below for details.
+
+`swagger_specs` - (Optional) Notice file versions. If swagger file is updated, need to select a new version here to redefine the API. (`List of String`).
+
+### Api Inventory Exclusion List
+
+List of API Endpoints excluded from the API Inventory..
+
+`method` - (Required) Method to match the input request API method against. (`String`).
+
+`path` - (Required) The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
+
+### Api Inventory Inclusion List
+
+Typically, discovered API endpoints are added to the API Inventory using this list..
+
+`method` - (Required) Method to match the input request API method against. (`String`).
+
+`path` - (Required) The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
+
+### Non Api Endpoints
+
+List of Non-API Endpoints..
+
+`method` - (Required) Method to match the input request API method against. (`String`).
+
+`path` - (Required) The path should comply with RFC 3986 and may have parameters according to OpenAPI specification (`String`).
 
 Attribute Reference
 -------------------

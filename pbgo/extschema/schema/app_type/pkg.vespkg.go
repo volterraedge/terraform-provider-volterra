@@ -13,6 +13,22 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.app_type.SpecType"] = SpecTypeValidator()
+
+	vr["ves.io.schema.app_type.Object"] = ObjectValidator()
+	vr["ves.io.schema.app_type.StatusObject"] = StatusObjectValidator()
+
+	vr["ves.io.schema.app_type.CreateRequest"] = CreateRequestValidator()
+	vr["ves.io.schema.app_type.CreateResponse"] = CreateResponseValidator()
+	vr["ves.io.schema.app_type.DeleteRequest"] = DeleteRequestValidator()
+	vr["ves.io.schema.app_type.GetRequest"] = GetRequestValidator()
+	vr["ves.io.schema.app_type.GetResponse"] = GetResponseValidator()
+	vr["ves.io.schema.app_type.ListRequest"] = ListRequestValidator()
+	vr["ves.io.schema.app_type.ListResponse"] = ListResponseValidator()
+	vr["ves.io.schema.app_type.ListResponseItem"] = ListResponseItemValidator()
+	vr["ves.io.schema.app_type.ReplaceRequest"] = ReplaceRequestValidator()
+	vr["ves.io.schema.app_type.ReplaceResponse"] = ReplaceResponseValidator()
+
 	vr["ves.io.schema.app_type.APIEndpointLearntSchemaReq"] = APIEndpointLearntSchemaReqValidator()
 	vr["ves.io.schema.app_type.APIEndpointLearntSchemaRsp"] = APIEndpointLearntSchemaRspValidator()
 	vr["ves.io.schema.app_type.APIEndpointPDFReq"] = APIEndpointPDFReqValidator()
@@ -29,22 +45,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.app_type.ServiceAPIEndpointsReq"] = ServiceAPIEndpointsReqValidator()
 	vr["ves.io.schema.app_type.SwaggerSpecReq"] = SwaggerSpecReqValidator()
 	vr["ves.io.schema.app_type.SwaggerSpecRsp"] = SwaggerSpecRspValidator()
-
-	vr["ves.io.schema.app_type.SpecType"] = SpecTypeValidator()
-
-	vr["ves.io.schema.app_type.Object"] = ObjectValidator()
-	vr["ves.io.schema.app_type.StatusObject"] = StatusObjectValidator()
-
-	vr["ves.io.schema.app_type.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.app_type.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.app_type.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.app_type.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.app_type.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.app_type.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.app_type.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.app_type.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.app_type.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.app_type.ReplaceResponse"] = ReplaceResponseValidator()
 
 	vr["ves.io.schema.app_type.APIEPDynExample"] = APIEPDynExampleValidator()
 	vr["ves.io.schema.app_type.APIEPInfo"] = APIEPInfoValidator()
@@ -82,7 +82,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
-
 	mdr.EntryFactory["ves.io.schema.app_type.Object"] = NewEntryObject
 	mdr.EntryStoreMap["ves.io.schema.app_type.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.app_type.Object"] = reflect.TypeOf(&DBObject{})
@@ -108,11 +107,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.business_logic_markup_setting.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.#.metadata.disable",
 	}
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema"] = []string{
+		"discovered_openapi_spec",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.app_type.CustomAPI"] = "ml/data"
 	sm["ves.io.schema.app_type.API"] = "config"
+	sm["ves.io.schema.app_type.CustomAPI"] = "ml/data"
 
 }
 
@@ -132,6 +135,24 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
+	csr = mdr.PubCRUDServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+		csr.CRUDSwaggerRegistry["ves.io.schema.app_type.Object"] = APISwaggerJSON
+		csr.CRUDGrpcClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIGrpcClient
+		csr.CRUDRestClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIRestClient
+		csr.CRUDInprocClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIInprocClient
+		if isExternal {
+			return
+		}
+		// registration of api handlers if our own schema
+		mdr.SvcRegisterHandlers["ves.io.schema.app_type.API"] = RegisterAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.app_type.API"] = RegisterGwAPIHandler
+		csr.CRUDServerRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIServer
+
+	}()
+
 	customCSR = mdr.PubCustomServiceRegistry
 
 	func() {
@@ -149,24 +170,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR.ServerRegistry["ves.io.schema.app_type.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
 		}
-
-	}()
-
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.app_type.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.app_type.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.app_type.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.app_type.Object"] = NewCRUDAPIServer
 
 	}()
 

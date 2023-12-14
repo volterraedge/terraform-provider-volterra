@@ -1456,6 +1456,12 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 		rsp.Spec = &GetSpecType{}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
+				return
+			}
+		}
 		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
 
 	}
@@ -1588,6 +1594,15 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 
 			continue
 		}
+		if redactor, ok := e.(db.Redactor); ok {
+			if err := redactor.Redact(ctx); err != nil {
+				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+					Code:    ves_io_schema.EINTERNAL,
+					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
+				})
+				continue
+			}
+		}
 		item := &ListResponseItem{
 			Tenant:    o.GetSystemMetadata().GetTenant(),
 			Namespace: o.GetMetadata().GetNamespace(),
@@ -1612,7 +1627,7 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
 			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
 
-			if o.Object != nil && o.Object.GetSpec().GetGcSpec() != nil {
+			if o.Object.GetSpec().GetGcSpec() != nil {
 				msgFQN := "ves.io.schema.alert_policy.GetResponse"
 				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
 					getSpec := &GetSpecType{}
@@ -2604,7 +2619,7 @@ var APISwaggerJSON string = `{
         },
         "alert_policyGroup": {
             "type": "string",
-            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN\nAlerts related to Synthetic Monitors\nAlerts related to TLS Certificates\nAlerts related to Bot Defense",
+            "description": "List of Groups\n\nInfrastructure alerts\nAlerts related to Infrastructure as a Service/Communication as a Service\nAlerts related to Virtual Host\nAlerts related to the VoltShare feature\nAlerts related to User Access Management\nAlerts related to Application Security\nAlerts related to Timeseries Anomaly\nAlerts related to Shape Security\nAlerts related to CSD Security\nAlerts related to CDN\nAlerts related to Synthetic Monitors\nAlerts related to TLS Certificates\nAlerts related to Bot Defense\nAlerts related Cloud Link",
             "title": "Group",
             "enum": [
                 "INFRASTRUCTURE",
@@ -2619,7 +2634,8 @@ var APISwaggerJSON string = `{
                 "CDN",
                 "SYNTHETIC_MONITORS",
                 "TLS",
-                "SECURITY_BOT_DEFENSE"
+                "SECURITY_BOT_DEFENSE",
+                "CLOUD_LINK"
             ],
             "default": "INFRASTRUCTURE",
             "x-displayname": "Group",

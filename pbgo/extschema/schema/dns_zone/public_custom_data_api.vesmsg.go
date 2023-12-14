@@ -345,6 +345,15 @@ func (v *ValidateDnsZoneMetricsResponse) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["total_hits"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_hits"))
+		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -376,6 +385,454 @@ var DefaultDnsZoneMetricsResponseValidator = func() *ValidateDnsZoneMetricsRespo
 
 func DnsZoneMetricsResponseValidator() db.Validator {
 	return DefaultDnsZoneMetricsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DnsZoneRequestLogRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DnsZoneRequestLogRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DnsZoneRequestLogRequest) DeepCopy() *DnsZoneRequestLogRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DnsZoneRequestLogRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DnsZoneRequestLogRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DnsZoneRequestLogRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DnsZoneRequestLogRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDnsZoneRequestLogRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDnsZoneRequestLogRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDnsZoneRequestLogRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDnsZoneRequestLogRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDnsZoneRequestLogRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DnsZoneRequestLogRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DnsZoneRequestLogRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filter"))
+		if err := fv(ctx, m.GetFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sort"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sort"))
+		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDnsZoneRequestLogRequestValidator = func() *ValidateDnsZoneRequestLogRequest {
+	v := &ValidateDnsZoneRequestLogRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsZoneRequestLogRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsZoneRequestLogRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhLimit := v.LimitValidationRuleHandler
+	rulesLimit := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "500",
+	}
+	vFn, err = vrhLimit(rulesLimit)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsZoneRequestLogRequest.limit: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["limit"] = vFn
+
+	return v
+}()
+
+func DnsZoneRequestLogRequestValidator() db.Validator {
+	return DefaultDnsZoneRequestLogRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DnsZoneRequestLogResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DnsZoneRequestLogResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DnsZoneRequestLogResponse) DeepCopy() *DnsZoneRequestLogResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DnsZoneRequestLogResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DnsZoneRequestLogResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DnsZoneRequestLogResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DnsZoneRequestLogResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDnsZoneRequestLogResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDnsZoneRequestLogResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DnsZoneRequestLogResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DnsZoneRequestLogResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["logs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("logs"))
+		for idx, item := range m.GetLogs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_hits"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_hits"))
+		if err := fv(ctx, m.GetTotalHits(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDnsZoneRequestLogResponseValidator = func() *ValidateDnsZoneRequestLogResponse {
+	v := &ValidateDnsZoneRequestLogResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["logs"] = DnsZoneRequestLogsResponseDataValidator().Validate
+
+	return v
+}()
+
+func DnsZoneRequestLogResponseValidator() db.Validator {
+	return DefaultDnsZoneRequestLogResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DnsZoneRequestLogsResponseData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DnsZoneRequestLogsResponseData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DnsZoneRequestLogsResponseData) DeepCopy() *DnsZoneRequestLogsResponseData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DnsZoneRequestLogsResponseData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DnsZoneRequestLogsResponseData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DnsZoneRequestLogsResponseData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DnsZoneRequestLogsResponseDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDnsZoneRequestLogsResponseData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDnsZoneRequestLogsResponseData) TimestampValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for timestamp")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDnsZoneRequestLogsResponseData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DnsZoneRequestLogsResponseData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DnsZoneRequestLogsResponseData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_subnet"))
+		if err := fv(ctx, m.GetClientSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["country_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("country_code"))
+		if err := fv(ctx, m.GetCountryCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_zone_name"))
+		if err := fv(ctx, m.GetDnsZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query_type"))
+		if err := fv(ctx, m.GetQueryType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_code"))
+		if err := fv(ctx, m.GetResponseCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("timestamp"))
+		if err := fv(ctx, m.GetTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDnsZoneRequestLogsResponseDataValidator = func() *ValidateDnsZoneRequestLogsResponseData {
+	v := &ValidateDnsZoneRequestLogsResponseData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTimestamp := v.TimestampValidationRuleHandler
+	rulesTimestamp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTimestamp(rulesTimestamp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DnsZoneRequestLogsResponseData.timestamp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["timestamp"] = vFn
+
+	return v
+}()
+
+func DnsZoneRequestLogsResponseDataValidator() db.Validator {
+	return DefaultDnsZoneRequestLogsResponseDataValidator
 }
 
 // augmented methods on protoc/std generated struct

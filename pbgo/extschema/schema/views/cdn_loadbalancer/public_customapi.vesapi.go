@@ -2760,41 +2760,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Hard Purge"
                 },
-                "name": {
-                    "type": "string",
-                    "description": " Format: string\n\nExample: - \"cdn-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "CDN Distribution Name",
-                    "x-displayname": "Name of the CDN distrubition",
-                    "x-ves-example": "cdn-1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace scope of the metric request\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "default",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "pattern": {
                     "type": "string",
                     "description": " Format: string\n Purge only the objects whos name matches the pattern\n\nExample: - \"*.ts\"-",
                     "title": "Regex Pattern to match",
                     "x-displayname": "Pattern (RegEx)",
                     "x-ves-example": "*.ts"
-                },
-                "purge_epoch_timestamp": {
-                    "type": "string",
-                    "description": " Format: unix_timestamp|rfc 3339\n Purge objects that were created on or before this timestamp\n\nExample: - \"1659758607\"-",
-                    "title": "Purge Timestamp",
-                    "x-displayname": "Purge Time",
-                    "x-ves-example": "1659758607"
                 },
                 "soft_purge": {
                     "description": "Exclusive with [hard_purge]\n Invalidate the Cache entries",

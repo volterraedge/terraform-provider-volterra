@@ -108,6 +108,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"] = []string{
+		"discovered_openapi_spec",
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
 		"spec.api_spec",
 		"spec.authentication.cookie_params.auth_hmac.prim_key.blindfold_secret_info_internal",

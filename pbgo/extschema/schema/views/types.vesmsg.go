@@ -3898,6 +3898,214 @@ func PrefixStringListTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SegmentRefList) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentRefList) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentRefList) DeepCopy() *SegmentRefList {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentRefList{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentRefList) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentRefList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentRefListValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegmentRefList) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentsDRefInfo()
+
+}
+
+func (m *SegmentRefList) GetSegmentsDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetSegments()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("SegmentRefList.segments[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("segment.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "segment.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "segments",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetSegmentsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SegmentRefList) GetSegmentsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+	for i, vref := range m.GetSegments() {
+		if vref == nil {
+			return nil, fmt.Errorf("SegmentRefList.segments[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "segment.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateSegmentRefList struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentRefList) SegmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segments")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segments")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segments")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segments")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentRefList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentRefList)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentRefList got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["segments"]; exists {
+		vOpts := append(opts, db.WithValidateField("segments"))
+		if err := fv(ctx, m.GetSegments(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentRefListValidator = func() *ValidateSegmentRefList {
+	v := &ValidateSegmentRefList{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSegments := v.SegmentsValidationRuleHandler
+	rulesSegments := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegments(rulesSegments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentRefList.segments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segments"] = vFn
+
+	return v
+}()
+
+func SegmentRefListValidator() db.Validator {
+	return DefaultSegmentRefListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteLocator) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4351,6 +4559,305 @@ func SiteReferenceListTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SiteRegionLocator) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteRegionLocator) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteRegionLocator) DeepCopy() *SiteRegionLocator {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteRegionLocator{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteRegionLocator) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteRegionLocator) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteRegionLocatorValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SiteRegionLocator) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetChoiceDRefInfo()
+
+}
+
+func (m *SiteRegionLocator) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetChoice().(type) {
+	case *SiteRegionLocator_Site:
+
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *SiteRegionLocator_CloudReRegion:
+
+		vref := m.GetCloudReRegion()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cloud_region.Object")
+		dri := db.DRefInfo{
+			RefdType:   "cloud_region.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cloud_re_region",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *SiteRegionLocator_VirtualSite:
+
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("virtual_site.Object")
+		dri := db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "virtual_site",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteRegionLocator) GetChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetChoice().(type) {
+	case *SiteRegionLocator_Site:
+		refdType, err := d.TypeForEntryKind("", "", "site.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: site")
+		}
+
+		vref := m.GetSite()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "site.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *SiteRegionLocator_CloudReRegion:
+		refdType, err := d.TypeForEntryKind("", "", "cloud_region.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
+		}
+
+		vref := m.GetCloudReRegion()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cloud_region.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *SiteRegionLocator_VirtualSite:
+		refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+		}
+
+		vref := m.GetVirtualSite()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "virtual_site.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateSiteRegionLocator struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteRegionLocator) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteRegionLocator) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteRegionLocator)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteRegionLocator got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *SiteRegionLocator_Site:
+		if fv, exists := v.FldValidators["choice.site"]; exists {
+			val := m.GetChoice().(*SiteRegionLocator_Site).Site
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SiteRegionLocator_CloudReRegion:
+		if fv, exists := v.FldValidators["choice.cloud_re_region"]; exists {
+			val := m.GetChoice().(*SiteRegionLocator_CloudReRegion).CloudReRegion
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cloud_re_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SiteRegionLocator_VirtualSite:
+		if fv, exists := v.FldValidators["choice.virtual_site"]; exists {
+			val := m.GetChoice().(*SiteRegionLocator_VirtualSite).VirtualSite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("virtual_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteRegionLocatorValidator = func() *ValidateSiteRegionLocator {
+	v := &ValidateSiteRegionLocator{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteRegionLocator.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	v.FldValidators["choice.site"] = ObjectRefTypeValidator().Validate
+	v.FldValidators["choice.cloud_re_region"] = ObjectRefTypeValidator().Validate
+	v.FldValidators["choice.virtual_site"] = ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func SiteRegionLocatorValidator() db.Validator {
+	return DefaultSiteRegionLocatorValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *TlsConfig) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4659,6 +5166,583 @@ func VolterraSoftwareTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *WhereCloudEdgeSegment) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereCloudEdgeSegment) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereCloudEdgeSegment) DeepCopy() *WhereCloudEdgeSegment {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereCloudEdgeSegment{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereCloudEdgeSegment) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereCloudEdgeSegment) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereCloudEdgeSegmentValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereCloudEdgeSegment) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCloudEdgeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCloudEdgeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *WhereCloudEdgeSegment) GetCloudEdgeDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetCloudEdge()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_region.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_region.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cloud_edge",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetCloudEdgeDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereCloudEdgeSegment) GetCloudEdgeDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_region.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
+	}
+
+	vref := m.GetCloudEdge()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_region.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *WhereCloudEdgeSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereCloudEdgeSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereCloudEdgeSegment struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereCloudEdgeSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereCloudEdgeSegment) CloudEdgeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cloud_edge")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereCloudEdgeSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereCloudEdgeSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereCloudEdgeSegment) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereCloudEdgeSegment)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereCloudEdgeSegment got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_edge"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_edge"))
+		if err := fv(ctx, m.GetCloudEdge(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip"))
+		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereCloudEdgeSegmentValidator = func() *ValidateWhereCloudEdgeSegment {
+	v := &ValidateWhereCloudEdgeSegment{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereCloudEdgeSegment.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	vrhCloudEdge := v.CloudEdgeValidationRuleHandler
+	rulesCloudEdge := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCloudEdge(rulesCloudEdge)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereCloudEdgeSegment.cloud_edge: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_edge"] = vFn
+
+	vrhIp := v.IpValidationRuleHandler
+	rulesIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhIp(rulesIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereCloudEdgeSegment.ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip"] = vFn
+
+	vrhIpv6 := v.Ipv6ValidationRuleHandler
+	rulesIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIpv6(rulesIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereCloudEdgeSegment.ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6"] = vFn
+
+	return v
+}()
+
+func WhereCloudEdgeSegmentValidator() db.Validator {
+	return DefaultWhereCloudEdgeSegmentValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WhereSegment) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereSegment) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereSegment) DeepCopy() *WhereSegment {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereSegment{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereSegment) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereSegment) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereSegmentValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereSegment) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentDRefInfo()
+
+}
+
+func (m *WhereSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereSegment struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSegment) Ipv4VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSegment) Ipv6VipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6_vip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSegment) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereSegment)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereSegment got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv4_vip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv4_vip"))
+		if err := fv(ctx, m.GetIpv4Vip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_vip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_vip"))
+		if err := fv(ctx, m.GetIpv6Vip(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereSegmentValidator = func() *ValidateWhereSegment {
+	v := &ValidateWhereSegment{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSegment.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	vrhIpv4Vip := v.Ipv4VipValidationRuleHandler
+	rulesIpv4Vip := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhIpv4Vip(rulesIpv4Vip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSegment.ipv4_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_vip"] = vFn
+
+	vrhIpv6Vip := v.Ipv6VipValidationRuleHandler
+	rulesIpv6Vip := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIpv6Vip(rulesIpv6Vip)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSegment.ipv6_vip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_vip"] = vFn
+
+	return v
+}()
+
+func WhereSegmentValidator() db.Validator {
+	return DefaultWhereSegmentValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *WhereSite) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4931,6 +6015,346 @@ func WhereSiteValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *WhereSiteSegment) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereSiteSegment) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereSiteSegment) DeepCopy() *WhereSiteSegment {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereSiteSegment{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereSiteSegment) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereSiteSegment) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereSiteSegmentValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *WhereSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *WhereSiteSegment) GetSiteDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereSiteSegment) GetSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
+	}
+
+	vref := m.GetSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "site.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereSiteSegment struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereSiteSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSiteSegment) SiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSiteSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSiteSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereSiteSegment) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereSiteSegment)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereSiteSegment got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip"))
+		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereSiteSegmentValidator = func() *ValidateWhereSiteSegment {
+	v := &ValidateWhereSiteSegment{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSiteSegment.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	vrhSite := v.SiteValidationRuleHandler
+	rulesSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSite(rulesSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSiteSegment.site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site"] = vFn
+
+	vrhIp := v.IpValidationRuleHandler
+	rulesIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhIp(rulesIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSiteSegment.ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip"] = vFn
+
+	vrhIpv6 := v.Ipv6ValidationRuleHandler
+	rulesIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIpv6(rulesIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereSiteSegment.ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6"] = vFn
+
+	return v
+}()
+
+func WhereSiteSegmentValidator() db.Validator {
+	return DefaultWhereSiteSegmentValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *WhereType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5022,6 +6446,50 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "virtual_network." + dri.DRField
+		}
+		return drInfos, err
+
+	case *WhereType_SiteSegment:
+		drInfos, err := m.GetSiteSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "site_segment." + dri.DRField
+		}
+		return drInfos, err
+
+	case *WhereType_VirtualSiteSegment:
+		drInfos, err := m.GetVirtualSiteSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSiteSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site_segment." + dri.DRField
+		}
+		return drInfos, err
+
+	case *WhereType_Segment:
+		drInfos, err := m.GetSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "segment." + dri.DRField
+		}
+		return drInfos, err
+
+	case *WhereType_CloudEdgeSegment:
+		drInfos, err := m.GetCloudEdgeSegment().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCloudEdgeSegment().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cloud_edge_segment." + dri.DRField
 		}
 		return drInfos, err
 
@@ -5128,6 +6596,50 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *WhereType_SiteSegment:
+		if fv, exists := v.FldValidators["choice.site_segment"]; exists {
+			val := m.GetChoice().(*WhereType_SiteSegment).SiteSegment
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("site_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereType_VirtualSiteSegment:
+		if fv, exists := v.FldValidators["choice.virtual_site_segment"]; exists {
+			val := m.GetChoice().(*WhereType_VirtualSiteSegment).VirtualSiteSegment
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("virtual_site_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereType_Segment:
+		if fv, exists := v.FldValidators["choice.segment"]; exists {
+			val := m.GetChoice().(*WhereType_Segment).Segment
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereType_CloudEdgeSegment:
+		if fv, exists := v.FldValidators["choice.cloud_edge_segment"]; exists {
+			val := m.GetChoice().(*WhereType_CloudEdgeSegment).CloudEdgeSegment
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cloud_edge_segment"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5221,6 +6733,10 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 	v.FldValidators["choice.virtual_site"] = WhereVirtualSiteValidator().Validate
 	v.FldValidators["choice.vk8s_service"] = WhereVK8SServiceValidator().Validate
 	v.FldValidators["choice.virtual_network"] = WhereVirtualNetworkValidator().Validate
+	v.FldValidators["choice.site_segment"] = WhereSiteSegmentValidator().Validate
+	v.FldValidators["choice.virtual_site_segment"] = WhereVirtualSiteSegmentValidator().Validate
+	v.FldValidators["choice.segment"] = WhereSegmentValidator().Validate
+	v.FldValidators["choice.cloud_edge_segment"] = WhereCloudEdgeSegmentValidator().Validate
 
 	return v
 }()
@@ -6177,6 +7693,346 @@ var DefaultWhereVirtualSiteValidator = func() *ValidateWhereVirtualSite {
 
 func WhereVirtualSiteValidator() db.Validator {
 	return DefaultWhereVirtualSiteValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WhereVirtualSiteSegment) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereVirtualSiteSegment) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereVirtualSiteSegment) DeepCopy() *WhereVirtualSiteSegment {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereVirtualSiteSegment{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereVirtualSiteSegment) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereVirtualSiteSegment) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereVirtualSiteSegmentValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereVirtualSiteSegment) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *WhereVirtualSiteSegment) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereVirtualSiteSegment) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *WhereVirtualSiteSegment) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereVirtualSiteSegment) GetVirtualSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+	}
+
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_site.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereVirtualSiteSegment struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereVirtualSiteSegment) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSegment) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSegment) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSegment) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSegment) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereVirtualSiteSegment)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereVirtualSiteSegment got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip"))
+		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_site"))
+		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereVirtualSiteSegmentValidator = func() *ValidateWhereVirtualSiteSegment {
+	v := &ValidateWhereVirtualSiteSegment{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSegment.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
+	vrhVirtualSite := v.VirtualSiteValidationRuleHandler
+	rulesVirtualSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualSite(rulesVirtualSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSegment.virtual_site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_site"] = vFn
+
+	vrhIp := v.IpValidationRuleHandler
+	rulesIp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhIp(rulesIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSegment.ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip"] = vFn
+
+	vrhIpv6 := v.Ipv6ValidationRuleHandler
+	rulesIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIpv6(rulesIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSegment.ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6"] = vFn
+
+	return v
+}()
+
+func WhereVirtualSiteSegmentValidator() db.Validator {
+	return DefaultWhereVirtualSiteSegmentValidator
 }
 
 // augmented methods on protoc/std generated struct

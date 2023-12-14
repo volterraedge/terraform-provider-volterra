@@ -299,6 +299,270 @@ func (m *ListCloudNetworkTagValuesResponse) GetValues() []string {
 	return nil
 }
 
+// List Cloud Subnet Tag Keys Request
+//
+// x-displayName: "List Cloud Subnet Tag Keys Request"
+// Listing of cloud subnet tag Keys request
+type ListCloudSubnetTagKeysRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// Value of namespace is always "system"
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// cloud_type
+	//
+	// x-displayName: "Cloud Type"
+	// Cloud type
+	CloudType ProviderType `protobuf:"varint,2,opt,name=cloud_type,json=cloudType,proto3,enum=ves.io.schema.topology.ProviderType" json:"cloud_type,omitempty"`
+	// query_key
+	//
+	// x-displayName: "Query Key"
+	// Query Key
+	QueryKey string `protobuf:"bytes,3,opt,name=query_key,json=queryKey,proto3" json:"query_key,omitempty"`
+}
+
+func (m *ListCloudSubnetTagKeysRequest) Reset()      { *m = ListCloudSubnetTagKeysRequest{} }
+func (*ListCloudSubnetTagKeysRequest) ProtoMessage() {}
+func (*ListCloudSubnetTagKeysRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2a4c893e836a3c1, []int{4}
+}
+func (m *ListCloudSubnetTagKeysRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListCloudSubnetTagKeysRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListCloudSubnetTagKeysRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListCloudSubnetTagKeysRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCloudSubnetTagKeysRequest.Merge(m, src)
+}
+func (m *ListCloudSubnetTagKeysRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListCloudSubnetTagKeysRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListCloudSubnetTagKeysRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListCloudSubnetTagKeysRequest proto.InternalMessageInfo
+
+func (m *ListCloudSubnetTagKeysRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ListCloudSubnetTagKeysRequest) GetCloudType() ProviderType {
+	if m != nil {
+		return m.CloudType
+	}
+	return PROVIDER_TYPE_UNSPECIFIED
+}
+
+func (m *ListCloudSubnetTagKeysRequest) GetQueryKey() string {
+	if m != nil {
+		return m.QueryKey
+	}
+	return ""
+}
+
+// List Cloud Subnet Tag Values Request
+//
+// x-displayName: "List Cloud Subnet Tag Values Request"
+// Listing of cloud subnet tag values request
+type ListCloudSubnetTagValuesRequest struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// Value of namespace is always "system"
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// cloud_type
+	//
+	// x-displayName: "Cloud Type"
+	// Cloud type
+	CloudType ProviderType `protobuf:"varint,2,opt,name=cloud_type,json=cloudType,proto3,enum=ves.io.schema.topology.ProviderType" json:"cloud_type,omitempty"`
+	// query_key
+	//
+	// x-displayName: "Query Key"
+	// Query Key
+	QueryKey string `protobuf:"bytes,3,opt,name=query_key,json=queryKey,proto3" json:"query_key,omitempty"`
+	// query_value
+	//
+	// x-displayName: "Query Value"
+	// Query Value
+	QueryValue string `protobuf:"bytes,4,opt,name=query_value,json=queryValue,proto3" json:"query_value,omitempty"`
+}
+
+func (m *ListCloudSubnetTagValuesRequest) Reset()      { *m = ListCloudSubnetTagValuesRequest{} }
+func (*ListCloudSubnetTagValuesRequest) ProtoMessage() {}
+func (*ListCloudSubnetTagValuesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2a4c893e836a3c1, []int{5}
+}
+func (m *ListCloudSubnetTagValuesRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListCloudSubnetTagValuesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListCloudSubnetTagValuesRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListCloudSubnetTagValuesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCloudSubnetTagValuesRequest.Merge(m, src)
+}
+func (m *ListCloudSubnetTagValuesRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListCloudSubnetTagValuesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListCloudSubnetTagValuesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListCloudSubnetTagValuesRequest proto.InternalMessageInfo
+
+func (m *ListCloudSubnetTagValuesRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ListCloudSubnetTagValuesRequest) GetCloudType() ProviderType {
+	if m != nil {
+		return m.CloudType
+	}
+	return PROVIDER_TYPE_UNSPECIFIED
+}
+
+func (m *ListCloudSubnetTagValuesRequest) GetQueryKey() string {
+	if m != nil {
+		return m.QueryKey
+	}
+	return ""
+}
+
+func (m *ListCloudSubnetTagValuesRequest) GetQueryValue() string {
+	if m != nil {
+		return m.QueryValue
+	}
+	return ""
+}
+
+// List Cloud Subnet Tag Keys Response
+//
+// x-displayName: "List Cloud Subnet Tag Keys Response"
+// Listing of cloud subnet tag keys response
+type ListCloudSubnetTagKeysResponse struct {
+	// List Of Keys
+	//
+	// x-displayName: "Keys"
+	// List of Keys.
+	Keys []string `protobuf:"bytes,1,rep,name=keys,proto3" json:"keys,omitempty"`
+}
+
+func (m *ListCloudSubnetTagKeysResponse) Reset()      { *m = ListCloudSubnetTagKeysResponse{} }
+func (*ListCloudSubnetTagKeysResponse) ProtoMessage() {}
+func (*ListCloudSubnetTagKeysResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2a4c893e836a3c1, []int{6}
+}
+func (m *ListCloudSubnetTagKeysResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListCloudSubnetTagKeysResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListCloudSubnetTagKeysResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListCloudSubnetTagKeysResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCloudSubnetTagKeysResponse.Merge(m, src)
+}
+func (m *ListCloudSubnetTagKeysResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListCloudSubnetTagKeysResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListCloudSubnetTagKeysResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListCloudSubnetTagKeysResponse proto.InternalMessageInfo
+
+func (m *ListCloudSubnetTagKeysResponse) GetKeys() []string {
+	if m != nil {
+		return m.Keys
+	}
+	return nil
+}
+
+// List Cloud Subnet Tag Values Response
+//
+// x-displayName: "List Cloud Subnet Tag Values Response"
+// Listing of cloud subnet tag values response
+type ListCloudSubnetTagValuesResponse struct {
+	// List Of Values
+	//
+	// x-displayName: "Values"
+	// List of Values.
+	Values []string `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *ListCloudSubnetTagValuesResponse) Reset()      { *m = ListCloudSubnetTagValuesResponse{} }
+func (*ListCloudSubnetTagValuesResponse) ProtoMessage() {}
+func (*ListCloudSubnetTagValuesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d2a4c893e836a3c1, []int{7}
+}
+func (m *ListCloudSubnetTagValuesResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListCloudSubnetTagValuesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListCloudSubnetTagValuesResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListCloudSubnetTagValuesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCloudSubnetTagValuesResponse.Merge(m, src)
+}
+func (m *ListCloudSubnetTagValuesResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListCloudSubnetTagValuesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListCloudSubnetTagValuesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListCloudSubnetTagValuesResponse proto.InternalMessageInfo
+
+func (m *ListCloudSubnetTagValuesResponse) GetValues() []string {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*ListCloudNetworkTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysRequest")
 	golang_proto.RegisterType((*ListCloudNetworkTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysRequest")
@@ -308,6 +572,14 @@ func init() {
 	golang_proto.RegisterType((*ListCloudNetworkTagKeysResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagKeysResponse")
 	proto.RegisterType((*ListCloudNetworkTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesResponse")
 	golang_proto.RegisterType((*ListCloudNetworkTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudNetworkTagValuesResponse")
+	proto.RegisterType((*ListCloudSubnetTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudSubnetTagKeysRequest")
+	golang_proto.RegisterType((*ListCloudSubnetTagKeysRequest)(nil), "ves.io.schema.topology.ListCloudSubnetTagKeysRequest")
+	proto.RegisterType((*ListCloudSubnetTagValuesRequest)(nil), "ves.io.schema.topology.ListCloudSubnetTagValuesRequest")
+	golang_proto.RegisterType((*ListCloudSubnetTagValuesRequest)(nil), "ves.io.schema.topology.ListCloudSubnetTagValuesRequest")
+	proto.RegisterType((*ListCloudSubnetTagKeysResponse)(nil), "ves.io.schema.topology.ListCloudSubnetTagKeysResponse")
+	golang_proto.RegisterType((*ListCloudSubnetTagKeysResponse)(nil), "ves.io.schema.topology.ListCloudSubnetTagKeysResponse")
+	proto.RegisterType((*ListCloudSubnetTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudSubnetTagValuesResponse")
+	golang_proto.RegisterType((*ListCloudSubnetTagValuesResponse)(nil), "ves.io.schema.topology.ListCloudSubnetTagValuesResponse")
 }
 
 func init() {
@@ -318,48 +590,57 @@ func init() {
 }
 
 var fileDescriptor_d2a4c893e836a3c1 = []byte{
-	// 649 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x54, 0xbf, 0x6b, 0x14, 0x4d,
-	0x18, 0xbe, 0xb9, 0xe4, 0x0b, 0xdf, 0xcd, 0x07, 0x1f, 0x32, 0x45, 0xbc, 0x5c, 0xe2, 0xe4, 0x3c,
-	0x0c, 0xa4, 0xc9, 0x0e, 0x44, 0x34, 0x06, 0x2b, 0x4d, 0x25, 0x09, 0x1a, 0x8e, 0x68, 0x30, 0xcd,
-	0x31, 0xb7, 0xf7, 0x66, 0xb3, 0xde, 0xde, 0xce, 0x64, 0x67, 0xf6, 0x74, 0x11, 0x41, 0x2c, 0xac,
-	0x45, 0x51, 0xb0, 0x10, 0xac, 0xc4, 0xd2, 0x3e, 0x4d, 0xc0, 0xc6, 0x32, 0x68, 0x93, 0xd2, 0xec,
-	0x59, 0x58, 0xe6, 0x4f, 0x90, 0x9b, 0xd9, 0x8b, 0xb9, 0x90, 0x0b, 0x24, 0x58, 0xd8, 0xbd, 0x33,
-	0xcf, 0xfb, 0xe3, 0x79, 0x9f, 0x99, 0xf7, 0xc5, 0x4e, 0x1b, 0x94, 0xe3, 0x0b, 0xa6, 0xdc, 0x0d,
-	0x68, 0x71, 0xa6, 0x85, 0x14, 0x81, 0xf0, 0x12, 0x26, 0x23, 0xbf, 0xcd, 0x35, 0xd4, 0xdc, 0x58,
-	0x69, 0xd1, 0xe2, 0xd2, 0x77, 0x64, 0x24, 0xb4, 0x20, 0xa3, 0xd6, 0xdf, 0xb1, 0xfe, 0x4e, 0xcf,
-	0xbf, 0x34, 0xe3, 0xf9, 0x7a, 0x23, 0xae, 0x3b, 0xae, 0x68, 0x31, 0x4f, 0x78, 0x82, 0x19, 0xf7,
-	0x7a, 0xbc, 0x6e, 0x4e, 0xe6, 0x60, 0x2c, 0x9b, 0xa6, 0x34, 0xe1, 0x09, 0xe1, 0x05, 0xc0, 0xb8,
-	0xf4, 0x19, 0x0f, 0x43, 0xa1, 0xb9, 0xf6, 0x45, 0xa8, 0x32, 0x74, 0x3c, 0x43, 0x0f, 0x72, 0x40,
-	0x4b, 0xea, 0x24, 0x03, 0xa7, 0xfa, 0x19, 0xbb, 0x81, 0x88, 0x1b, 0xb5, 0xc0, 0x0f, 0x9b, 0x4c,
-	0xd4, 0x1f, 0x80, 0xab, 0x7b, 0x39, 0xfa, 0xdd, 0x84, 0x3c, 0x5c, 0xa0, 0x32, 0xa0, 0x6b, 0x9d,
-	0x48, 0xe8, 0xf9, 0x8c, 0x1d, 0xf1, 0x39, 0x04, 0x4d, 0xf4, 0x43, 0x6d, 0x1e, 0xf8, 0x0d, 0xae,
-	0xc1, 0xa2, 0x95, 0xf7, 0x08, 0xd3, 0x25, 0x5f, 0xe9, 0x85, 0x2e, 0xb3, 0xdb, 0xa0, 0x1f, 0x8a,
-	0xa8, 0xb9, 0xc2, 0xbd, 0x45, 0x48, 0x54, 0x15, 0x36, 0x63, 0x50, 0x9a, 0x4c, 0xe0, 0x42, 0xc8,
-	0x5b, 0xa0, 0x24, 0x77, 0xa1, 0x88, 0xca, 0x68, 0xba, 0x50, 0xfd, 0x7d, 0x41, 0x16, 0x30, 0xb6,
-	0x5d, 0x75, 0x6b, 0x16, 0xf3, 0x65, 0x34, 0xfd, 0xff, 0xec, 0x25, 0xe7, 0x78, 0xe1, 0x9d, 0xe5,
-	0x48, 0xb4, 0xfd, 0x06, 0x44, 0x2b, 0x89, 0x84, 0x6a, 0xc1, 0xc4, 0x75, 0x4d, 0x32, 0x8e, 0x0b,
-	0x9b, 0x31, 0x44, 0x49, 0xad, 0x09, 0x49, 0x71, 0xc8, 0x94, 0xf8, 0xd7, 0x5c, 0x2c, 0x42, 0x52,
-	0xf9, 0x8c, 0x70, 0xf9, 0x18, 0x8a, 0xf7, 0x78, 0x10, 0xc3, 0xdf, 0x42, 0x92, 0x4c, 0xe2, 0xff,
-	0x2c, 0xd8, 0xee, 0xd2, 0x2a, 0x0e, 0x1b, 0x18, 0x9b, 0x2b, 0x43, 0xb4, 0x72, 0x05, 0x4f, 0x0e,
-	0xd4, 0x59, 0x49, 0x11, 0x2a, 0x20, 0x04, 0x0f, 0x37, 0x21, 0x51, 0x45, 0x54, 0x1e, 0x9a, 0x2e,
-	0x54, 0x8d, 0x5d, 0xb9, 0x8e, 0x2f, 0x9e, 0xd0, 0x7b, 0x16, 0x38, 0x8a, 0x47, 0x4c, 0xd9, 0x5e,
-	0x68, 0x76, 0x9a, 0x7d, 0xfd, 0x0f, 0x3e, 0xb7, 0x6c, 0x67, 0x63, 0xc1, 0x8c, 0xc6, 0x8d, 0xe5,
-	0x5b, 0xe4, 0x43, 0x1e, 0x9f, 0x1f, 0xc0, 0x84, 0x5c, 0x1d, 0xa4, 0xc9, 0xc9, 0x5f, 0xa4, 0x34,
-	0x77, 0xea, 0x38, 0xcb, 0xbc, 0xf2, 0x16, 0x3d, 0xfb, 0xf6, 0xe3, 0x55, 0xfe, 0x25, 0x22, 0x73,
-	0xbd, 0x29, 0x66, 0x76, 0x8a, 0xd9, 0xc1, 0xeb, 0x29, 0xf6, 0xf8, 0xc0, 0x7e, 0xc2, 0x42, 0x9b,
-	0xa8, 0xa6, 0xb9, 0xd7, 0x7d, 0x08, 0xb5, 0xb6, 0x4a, 0xee, 0xb2, 0xbe, 0xea, 0xcc, 0x0f, 0x75,
-	0x24, 0x94, 0x04, 0x57, 0xb3, 0x08, 0x78, 0xe3, 0x8c, 0x89, 0xc9, 0xa7, 0x3c, 0x1e, 0x1b, 0xa8,
-	0x3d, 0xb9, 0x76, 0x8a, 0x96, 0xfb, 0xbe, 0x6a, 0x69, 0xfe, 0x0c, 0x91, 0x99, 0x5c, 0xef, 0xac,
-	0x5c, 0x6f, 0x10, 0x99, 0x3f, 0x43, 0x57, 0xf6, 0x57, 0xac, 0xdd, 0x27, 0xab, 0x7f, 0x5c, 0x30,
-	0x9b, 0xba, 0x34, 0xb5, 0xbd, 0x85, 0x86, 0xbf, 0x6e, 0xa1, 0x0b, 0x03, 0x3a, 0xbc, 0x63, 0x96,
-	0xde, 0xcd, 0xe7, 0x68, 0x67, 0x8f, 0xe6, 0x76, 0xf7, 0x68, 0x6e, 0x7f, 0x8f, 0xa2, 0xa7, 0x29,
-	0x45, 0x1f, 0x53, 0x8a, 0xbe, 0xa4, 0x14, 0xed, 0xa4, 0x14, 0x7d, 0x4f, 0x29, 0xfa, 0x99, 0xd2,
-	0xdc, 0x7e, 0x4a, 0xd1, 0x8b, 0x0e, 0xcd, 0x6d, 0x77, 0x28, 0xda, 0xe9, 0xd0, 0xdc, 0x6e, 0x87,
-	0xe6, 0xd6, 0x96, 0x3c, 0x21, 0x9b, 0x9e, 0xd3, 0x16, 0x81, 0x86, 0x28, 0xe2, 0x4e, 0xac, 0x98,
-	0x31, 0xd6, 0x45, 0xd4, 0x9a, 0x91, 0xd9, 0xe4, 0xce, 0xf4, 0x60, 0x26, 0xeb, 0x9e, 0x60, 0xf0,
-	0x48, 0x67, 0x8d, 0x1e, 0x59, 0xa1, 0xf5, 0x11, 0xb3, 0x04, 0x2f, 0xff, 0x0a, 0x00, 0x00, 0xff,
-	0xff, 0x03, 0x60, 0xed, 0x42, 0x59, 0x06, 0x00, 0x00,
+	// 786 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x56, 0x4d, 0x4c, 0x13, 0x4f,
+	0x14, 0xef, 0x14, 0xfe, 0xe4, 0xdf, 0x31, 0x31, 0x66, 0x0e, 0x58, 0x0a, 0x2c, 0xb5, 0x91, 0x84,
+	0x0b, 0x3b, 0x11, 0xe5, 0x4b, 0x4f, 0xca, 0xc9, 0x40, 0x94, 0x54, 0x04, 0xe5, 0xd2, 0x4c, 0xdb,
+	0x61, 0x59, 0xdb, 0xee, 0x0c, 0x3b, 0xb3, 0xd5, 0x8d, 0x31, 0x31, 0x1e, 0x3c, 0x13, 0x35, 0x26,
+	0x1e, 0x8c, 0x1c, 0x8c, 0x31, 0x9e, 0x3c, 0x78, 0x30, 0xe1, 0x42, 0xf4, 0xe2, 0x91, 0xe8, 0x85,
+	0xa3, 0x6c, 0x3d, 0x78, 0xe4, 0xea, 0xcd, 0x74, 0x76, 0x5b, 0xda, 0xda, 0x56, 0x4a, 0x38, 0xe0,
+	0xed, 0xed, 0xbc, 0xcf, 0xdf, 0xef, 0xbd, 0x79, 0x3b, 0x50, 0x2f, 0x52, 0xa1, 0x9b, 0x0c, 0x8b,
+	0xcc, 0x2a, 0x2d, 0x10, 0x2c, 0x19, 0x67, 0x79, 0x66, 0xb8, 0x98, 0xdb, 0x66, 0x91, 0x48, 0x9a,
+	0xca, 0x38, 0x42, 0xb2, 0x02, 0xe1, 0xa6, 0xce, 0x6d, 0x26, 0x19, 0xea, 0xf5, 0xed, 0x75, 0xdf,
+	0x5e, 0xaf, 0xd8, 0xc7, 0x46, 0x0d, 0x53, 0xae, 0x3a, 0x69, 0x3d, 0xc3, 0x0a, 0xd8, 0x60, 0x06,
+	0xc3, 0xca, 0x3c, 0xed, 0xac, 0xa8, 0x2f, 0xf5, 0xa1, 0x24, 0x3f, 0x4c, 0x6c, 0xc0, 0x60, 0xcc,
+	0xc8, 0x53, 0x4c, 0xb8, 0x89, 0x89, 0x65, 0x31, 0x49, 0xa4, 0xc9, 0x2c, 0x11, 0x68, 0xfb, 0x03,
+	0x6d, 0x35, 0x06, 0x2d, 0x70, 0xe9, 0x06, 0xca, 0xe1, 0xfa, 0x8a, 0x33, 0x79, 0xe6, 0x64, 0x53,
+	0x79, 0xd3, 0xca, 0x61, 0x96, 0xbe, 0x43, 0x33, 0xb2, 0x12, 0xa3, 0xde, 0x8c, 0xf1, 0xda, 0x04,
+	0x89, 0x16, 0xa8, 0xa5, 0xcb, 0x69, 0xc5, 0xa6, 0xaf, 0xc1, 0xa6, 0x46, 0x35, 0x50, 0xaf, 0x2a,
+	0x92, 0xbc, 0x99, 0x25, 0x92, 0xfa, 0xda, 0xc4, 0x06, 0x80, 0xda, 0x9c, 0x29, 0xe4, 0x4c, 0xb9,
+	0xb2, 0x6b, 0x54, 0xde, 0x65, 0x76, 0x6e, 0x81, 0x18, 0xb3, 0xd4, 0x15, 0x49, 0xba, 0xe6, 0x50,
+	0x21, 0xd1, 0x00, 0x8c, 0x58, 0xa4, 0x40, 0x05, 0x27, 0x19, 0x1a, 0x05, 0x71, 0x30, 0x12, 0x49,
+	0xee, 0x1f, 0xa0, 0x19, 0x08, 0x7d, 0x54, 0xe5, 0x9c, 0xd1, 0x70, 0x1c, 0x8c, 0x9c, 0x1c, 0x3b,
+	0xab, 0x37, 0x27, 0x5e, 0x9f, 0xb7, 0x59, 0xd1, 0xcc, 0x52, 0x7b, 0xc1, 0xe5, 0x34, 0x19, 0x51,
+	0x7e, 0x65, 0x11, 0xf5, 0xc3, 0xc8, 0x9a, 0x43, 0x6d, 0x37, 0x95, 0xa3, 0x6e, 0xb4, 0x4b, 0xa5,
+	0xf8, 0x5f, 0x1d, 0xcc, 0x52, 0x37, 0xf1, 0x19, 0xc0, 0x78, 0x93, 0x12, 0x17, 0x49, 0xde, 0xa1,
+	0xc7, 0xa5, 0x48, 0x34, 0x04, 0x4f, 0xf8, 0xca, 0x62, 0xb9, 0xac, 0x68, 0xb7, 0x52, 0x43, 0x75,
+	0xa4, 0x0a, 0x4d, 0x8c, 0xc3, 0xa1, 0x96, 0x3c, 0x0b, 0xce, 0x2c, 0x41, 0x11, 0x82, 0xdd, 0x39,
+	0xea, 0x8a, 0x28, 0x88, 0x77, 0x8d, 0x44, 0x92, 0x4a, 0x4e, 0x5c, 0x82, 0x67, 0xda, 0x60, 0x0f,
+	0x1c, 0x7b, 0x61, 0x8f, 0x4a, 0x5b, 0x71, 0x0d, 0xbe, 0x12, 0xaf, 0x00, 0x1c, 0xac, 0x7a, 0xdf,
+	0x70, 0xd2, 0x16, 0x95, 0xc7, 0xac, 0xb7, 0x9f, 0x40, 0x0d, 0x2d, 0xd5, 0x0a, 0xff, 0xb1, 0xd6,
+	0x5e, 0xa8, 0xb9, 0x42, 0x0d, 0x2c, 0xb7, 0xe9, 0xec, 0xc5, 0x9a, 0xa9, 0xfe, 0x03, 0x79, 0xfb,
+	0xc6, 0x8e, 0xfd, 0x8a, 0xc0, 0x53, 0xf3, 0xfe, 0xd2, 0x9b, 0x51, 0x3b, 0xef, 0xf2, 0xfc, 0x55,
+	0xf4, 0x26, 0x0c, 0x4f, 0xb7, 0x18, 0x31, 0x34, 0xd1, 0x8a, 0x91, 0xf6, 0x77, 0x3f, 0x36, 0xd9,
+	0xb1, 0x9f, 0x5f, 0x79, 0xe2, 0x05, 0x78, 0xf4, 0xed, 0xc7, 0xd3, 0xf0, 0x13, 0x80, 0x26, 0x2b,
+	0xeb, 0x19, 0xfb, 0xeb, 0x19, 0x57, 0x7b, 0x27, 0xf0, 0xfd, 0xaa, 0xfc, 0x00, 0x5b, 0x7e, 0xa0,
+	0x94, 0x24, 0x46, 0xb9, 0x0d, 0x62, 0x79, 0x09, 0xdd, 0xc4, 0x75, 0xd9, 0xb1, 0x69, 0x49, 0x9b,
+	0x09, 0x4e, 0x33, 0x12, 0xdb, 0x94, 0x64, 0x0f, 0x19, 0x18, 0xbd, 0x0f, 0xc3, 0xbe, 0x96, 0x97,
+	0x0a, 0x4d, 0x75, 0x00, 0xb9, 0x6e, 0x50, 0x63, 0xd3, 0x87, 0xf0, 0x0c, 0xe8, 0x7a, 0xe9, 0xd3,
+	0xf5, 0x1c, 0xa0, 0xe9, 0x43, 0xa0, 0xf2, 0xa7, 0x62, 0xf9, 0x36, 0x5a, 0x3a, 0x72, 0xc2, 0xfc,
+	0xd0, 0xe8, 0x5d, 0x18, 0xf6, 0x36, 0x9f, 0x71, 0x34, 0xfe, 0x57, 0xd4, 0xcd, 0x36, 0x4f, 0x6c,
+	0xa2, 0x53, 0xb7, 0x80, 0xa9, 0x0d, 0xe0, 0x7d, 0x0c, 0xff, 0x97, 0xa5, 0x05, 0x76, 0x4e, 0x51,
+	0xb6, 0x0e, 0xd0, 0xc4, 0x01, 0x71, 0x09, 0x15, 0x70, 0x7f, 0xc0, 0x16, 0xd1, 0xc2, 0x91, 0xf0,
+	0xd5, 0x10, 0x17, 0x7d, 0x08, 0xc3, 0x68, 0xab, 0xab, 0x8d, 0x26, 0x0f, 0x8e, 0xbb, 0x7e, 0xba,
+	0xa6, 0x3a, 0x77, 0x0c, 0x28, 0x7b, 0xdd, 0x40, 0xd9, 0x33, 0x80, 0xa6, 0x3a, 0x87, 0x16, 0x0c,
+	0xd9, 0x2d, 0xb4, 0x78, 0xd4, 0xa4, 0xf9, 0x91, 0x63, 0xc3, 0x5b, 0x9b, 0xa0, 0xfb, 0xeb, 0x26,
+	0x18, 0x6c, 0x81, 0xf3, 0xba, 0x7a, 0x31, 0x5d, 0x79, 0x0c, 0xb6, 0x77, 0xb5, 0xd0, 0xce, 0xae,
+	0x16, 0xda, 0xdb, 0xd5, 0xc0, 0x43, 0x4f, 0x03, 0x6f, 0x3d, 0x0d, 0x7c, 0xf1, 0x34, 0xb0, 0xed,
+	0x69, 0xe0, 0xbb, 0xa7, 0x81, 0x9f, 0x9e, 0x16, 0xda, 0xf3, 0x34, 0xb0, 0x5e, 0xd2, 0x42, 0x5b,
+	0x25, 0x0d, 0x6c, 0x97, 0xb4, 0xd0, 0x4e, 0x49, 0x0b, 0x2d, 0xcf, 0x19, 0x8c, 0xe7, 0x0c, 0xbd,
+	0xc8, 0xf2, 0x92, 0xda, 0x36, 0xd1, 0x1d, 0x81, 0x95, 0xb0, 0xc2, 0xec, 0xc2, 0x28, 0x0f, 0xfe,
+	0x0d, 0xa3, 0x15, 0x35, 0xe6, 0x69, 0x83, 0x61, 0x7a, 0x4f, 0x06, 0x38, 0x1b, 0xde, 0x5f, 0xe9,
+	0x1e, 0xf5, 0x82, 0x3a, 0xff, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x77, 0x77, 0x3a, 0xda, 0x96, 0x0a,
+	0x00, 0x00,
 }
 
 func (this *ListCloudNetworkTagKeysRequest) Equal(that interface{}) bool {
@@ -483,6 +764,127 @@ func (this *ListCloudNetworkTagValuesResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ListCloudSubnetTagKeysRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListCloudSubnetTagKeysRequest)
+	if !ok {
+		that2, ok := that.(ListCloudSubnetTagKeysRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.CloudType != that1.CloudType {
+		return false
+	}
+	if this.QueryKey != that1.QueryKey {
+		return false
+	}
+	return true
+}
+func (this *ListCloudSubnetTagValuesRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListCloudSubnetTagValuesRequest)
+	if !ok {
+		that2, ok := that.(ListCloudSubnetTagValuesRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.CloudType != that1.CloudType {
+		return false
+	}
+	if this.QueryKey != that1.QueryKey {
+		return false
+	}
+	if this.QueryValue != that1.QueryValue {
+		return false
+	}
+	return true
+}
+func (this *ListCloudSubnetTagKeysResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListCloudSubnetTagKeysResponse)
+	if !ok {
+		that2, ok := that.(ListCloudSubnetTagKeysResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Keys) != len(that1.Keys) {
+		return false
+	}
+	for i := range this.Keys {
+		if this.Keys[i] != that1.Keys[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *ListCloudSubnetTagValuesResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListCloudSubnetTagValuesResponse)
+	if !ok {
+		that2, ok := that.(ListCloudSubnetTagValuesResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if this.Values[i] != that1.Values[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *ListCloudNetworkTagKeysRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -528,6 +930,51 @@ func (this *ListCloudNetworkTagValuesResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ListCloudSubnetTagKeysRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&topology.ListCloudSubnetTagKeysRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "CloudType: "+fmt.Sprintf("%#v", this.CloudType)+",\n")
+	s = append(s, "QueryKey: "+fmt.Sprintf("%#v", this.QueryKey)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListCloudSubnetTagValuesRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&topology.ListCloudSubnetTagValuesRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "CloudType: "+fmt.Sprintf("%#v", this.CloudType)+",\n")
+	s = append(s, "QueryKey: "+fmt.Sprintf("%#v", this.QueryKey)+",\n")
+	s = append(s, "QueryValue: "+fmt.Sprintf("%#v", this.QueryValue)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListCloudSubnetTagKeysResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&topology.ListCloudSubnetTagKeysResponse{")
+	s = append(s, "Keys: "+fmt.Sprintf("%#v", this.Keys)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListCloudSubnetTagValuesResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&topology.ListCloudSubnetTagValuesResponse{")
+	s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPrivateCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -561,6 +1008,18 @@ type PrivateCustomAPIClient interface {
 	// ListCloudNetworkTagValues retrieves cloud provider Values of tags.
 	// The tag values are retrieved based on the key
 	ListCloudNetworkTagValues(ctx context.Context, in *ListCloudNetworkTagValuesRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagValuesResponse, error)
+	// ListCloudSubnetTagKeys
+	//
+	// x-displayName: "List Cloud Subnet Tag Keys"
+	// ListCloudSubnetTagKeys retrieves cloud provider Keys of Subnet tags.
+	// The tag keys are retrieved based on the key substring
+	ListCloudSubnetTagKeys(ctx context.Context, in *ListCloudSubnetTagKeysRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagKeysResponse, error)
+	// ListCloudSubnetTagValues
+	//
+	// x-displayName: "List Cloud Subnet Tag Values"
+	// ListCloudSubnetTagValues retrieves cloud provider Values of Subnet tags.
+	// The tag values are retrieved based on the key
+	ListCloudSubnetTagValues(ctx context.Context, in *ListCloudSubnetTagValuesRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagValuesResponse, error)
 }
 
 type privateCustomAPIClient struct {
@@ -589,6 +1048,24 @@ func (c *privateCustomAPIClient) ListCloudNetworkTagValues(ctx context.Context, 
 	return out, nil
 }
 
+func (c *privateCustomAPIClient) ListCloudSubnetTagKeys(ctx context.Context, in *ListCloudSubnetTagKeysRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagKeysResponse, error) {
+	out := new(ListCloudSubnetTagKeysResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.topology.PrivateCustomAPI/ListCloudSubnetTagKeys", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *privateCustomAPIClient) ListCloudSubnetTagValues(ctx context.Context, in *ListCloudSubnetTagValuesRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagValuesResponse, error) {
+	out := new(ListCloudSubnetTagValuesResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.topology.PrivateCustomAPI/ListCloudSubnetTagValues", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PrivateCustomAPIServer is the server API for PrivateCustomAPI service.
 type PrivateCustomAPIServer interface {
 	// ListCloudNetworkTagKeys
@@ -603,6 +1080,18 @@ type PrivateCustomAPIServer interface {
 	// ListCloudNetworkTagValues retrieves cloud provider Values of tags.
 	// The tag values are retrieved based on the key
 	ListCloudNetworkTagValues(context.Context, *ListCloudNetworkTagValuesRequest) (*ListCloudNetworkTagValuesResponse, error)
+	// ListCloudSubnetTagKeys
+	//
+	// x-displayName: "List Cloud Subnet Tag Keys"
+	// ListCloudSubnetTagKeys retrieves cloud provider Keys of Subnet tags.
+	// The tag keys are retrieved based on the key substring
+	ListCloudSubnetTagKeys(context.Context, *ListCloudSubnetTagKeysRequest) (*ListCloudSubnetTagKeysResponse, error)
+	// ListCloudSubnetTagValues
+	//
+	// x-displayName: "List Cloud Subnet Tag Values"
+	// ListCloudSubnetTagValues retrieves cloud provider Values of Subnet tags.
+	// The tag values are retrieved based on the key
+	ListCloudSubnetTagValues(context.Context, *ListCloudSubnetTagValuesRequest) (*ListCloudSubnetTagValuesResponse, error)
 }
 
 // UnimplementedPrivateCustomAPIServer can be embedded to have forward compatible implementations.
@@ -614,6 +1103,12 @@ func (*UnimplementedPrivateCustomAPIServer) ListCloudNetworkTagKeys(ctx context.
 }
 func (*UnimplementedPrivateCustomAPIServer) ListCloudNetworkTagValues(ctx context.Context, req *ListCloudNetworkTagValuesRequest) (*ListCloudNetworkTagValuesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListCloudNetworkTagValues not implemented")
+}
+func (*UnimplementedPrivateCustomAPIServer) ListCloudSubnetTagKeys(ctx context.Context, req *ListCloudSubnetTagKeysRequest) (*ListCloudSubnetTagKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCloudSubnetTagKeys not implemented")
+}
+func (*UnimplementedPrivateCustomAPIServer) ListCloudSubnetTagValues(ctx context.Context, req *ListCloudSubnetTagValuesRequest) (*ListCloudSubnetTagValuesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCloudSubnetTagValues not implemented")
 }
 
 func RegisterPrivateCustomAPIServer(s *grpc.Server, srv PrivateCustomAPIServer) {
@@ -656,6 +1151,42 @@ func _PrivateCustomAPI_ListCloudNetworkTagValues_Handler(srv interface{}, ctx co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PrivateCustomAPI_ListCloudSubnetTagKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCloudSubnetTagKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PrivateCustomAPIServer).ListCloudSubnetTagKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.topology.PrivateCustomAPI/ListCloudSubnetTagKeys",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PrivateCustomAPIServer).ListCloudSubnetTagKeys(ctx, req.(*ListCloudSubnetTagKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PrivateCustomAPI_ListCloudSubnetTagValues_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCloudSubnetTagValuesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PrivateCustomAPIServer).ListCloudSubnetTagValues(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.topology.PrivateCustomAPI/ListCloudSubnetTagValues",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PrivateCustomAPIServer).ListCloudSubnetTagValues(ctx, req.(*ListCloudSubnetTagValuesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _PrivateCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.topology.PrivateCustomAPI",
 	HandlerType: (*PrivateCustomAPIServer)(nil),
@@ -667,6 +1198,14 @@ var _PrivateCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListCloudNetworkTagValues",
 			Handler:    _PrivateCustomAPI_ListCloudNetworkTagValues_Handler,
+		},
+		{
+			MethodName: "ListCloudSubnetTagKeys",
+			Handler:    _PrivateCustomAPI_ListCloudSubnetTagKeys_Handler,
+		},
+		{
+			MethodName: "ListCloudSubnetTagValues",
+			Handler:    _PrivateCustomAPI_ListCloudSubnetTagValues_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -828,6 +1367,161 @@ func (m *ListCloudNetworkTagValuesResponse) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 
+func (m *ListCloudSubnetTagKeysRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListCloudSubnetTagKeysRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListCloudSubnetTagKeysRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.QueryKey) > 0 {
+		i -= len(m.QueryKey)
+		copy(dAtA[i:], m.QueryKey)
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.QueryKey)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.CloudType != 0 {
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(m.CloudType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListCloudSubnetTagValuesRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListCloudSubnetTagValuesRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListCloudSubnetTagValuesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.QueryValue) > 0 {
+		i -= len(m.QueryValue)
+		copy(dAtA[i:], m.QueryValue)
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.QueryValue)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.QueryKey) > 0 {
+		i -= len(m.QueryKey)
+		copy(dAtA[i:], m.QueryKey)
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.QueryKey)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.CloudType != 0 {
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(m.CloudType))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListCloudSubnetTagKeysResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListCloudSubnetTagKeysResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListCloudSubnetTagKeysResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Keys) > 0 {
+		for iNdEx := len(m.Keys) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Keys[iNdEx])
+			copy(dAtA[i:], m.Keys[iNdEx])
+			i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Keys[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListCloudSubnetTagValuesResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListCloudSubnetTagValuesResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListCloudSubnetTagValuesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Values[iNdEx])
+			copy(dAtA[i:], m.Values[iNdEx])
+			i = encodeVarintPrivateCustomapi(dAtA, i, uint64(len(m.Values[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPrivateCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPrivateCustomapi(v)
 	base := offset
@@ -913,6 +1607,80 @@ func (m *ListCloudNetworkTagValuesResponse) Size() (n int) {
 	return n
 }
 
+func (m *ListCloudSubnetTagKeysRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPrivateCustomapi(uint64(l))
+	}
+	if m.CloudType != 0 {
+		n += 1 + sovPrivateCustomapi(uint64(m.CloudType))
+	}
+	l = len(m.QueryKey)
+	if l > 0 {
+		n += 1 + l + sovPrivateCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListCloudSubnetTagValuesRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPrivateCustomapi(uint64(l))
+	}
+	if m.CloudType != 0 {
+		n += 1 + sovPrivateCustomapi(uint64(m.CloudType))
+	}
+	l = len(m.QueryKey)
+	if l > 0 {
+		n += 1 + l + sovPrivateCustomapi(uint64(l))
+	}
+	l = len(m.QueryValue)
+	if l > 0 {
+		n += 1 + l + sovPrivateCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListCloudSubnetTagKeysResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Keys) > 0 {
+		for _, s := range m.Keys {
+			l = len(s)
+			n += 1 + l + sovPrivateCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ListCloudSubnetTagValuesResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for _, s := range m.Values {
+			l = len(s)
+			n += 1 + l + sovPrivateCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPrivateCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -959,6 +1727,51 @@ func (this *ListCloudNetworkTagValuesResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListCloudNetworkTagValuesResponse{`,
+		`Values:` + fmt.Sprintf("%v", this.Values) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListCloudSubnetTagKeysRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListCloudSubnetTagKeysRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`CloudType:` + fmt.Sprintf("%v", this.CloudType) + `,`,
+		`QueryKey:` + fmt.Sprintf("%v", this.QueryKey) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListCloudSubnetTagValuesRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListCloudSubnetTagValuesRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`CloudType:` + fmt.Sprintf("%v", this.CloudType) + `,`,
+		`QueryKey:` + fmt.Sprintf("%v", this.QueryKey) + `,`,
+		`QueryValue:` + fmt.Sprintf("%v", this.QueryValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListCloudSubnetTagKeysResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListCloudSubnetTagKeysResponse{`,
+		`Keys:` + fmt.Sprintf("%v", this.Keys) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListCloudSubnetTagValuesResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListCloudSubnetTagValuesResponse{`,
 		`Values:` + fmt.Sprintf("%v", this.Values) + `,`,
 		`}`,
 	}, "")
@@ -1388,6 +2201,480 @@ func (m *ListCloudNetworkTagValuesResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: ListCloudNetworkTagValuesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListCloudSubnetTagKeysRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPrivateCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCloudSubnetTagKeysRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCloudSubnetTagKeysRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudType", wireType)
+			}
+			m.CloudType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CloudType |= ProviderType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListCloudSubnetTagValuesRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPrivateCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCloudSubnetTagValuesRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCloudSubnetTagValuesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudType", wireType)
+			}
+			m.CloudType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CloudType |= ProviderType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryValue", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryValue = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListCloudSubnetTagKeysResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPrivateCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCloudSubnetTagKeysResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCloudSubnetTagKeysResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Keys", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPrivateCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Keys = append(m.Keys, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPrivateCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPrivateCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListCloudSubnetTagValuesResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPrivateCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListCloudSubnetTagValuesResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListCloudSubnetTagValuesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

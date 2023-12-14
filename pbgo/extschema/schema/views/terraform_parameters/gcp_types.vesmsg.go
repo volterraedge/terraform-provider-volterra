@@ -192,6 +192,93 @@ func GCPInstanceTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GCPInterconnectType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPInterconnectType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPInterconnectType) DeepCopy() *GCPInterconnectType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPInterconnectType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPInterconnectType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPInterconnectType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPInterconnectTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPInterconnectType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPInterconnectType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPInterconnectType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPInterconnectType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["adn_dns_ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("adn_dns_ip"))
+		if err := fv(ctx, m.GetAdnDnsIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network_name"))
+		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPInterconnectTypeValidator = func() *ValidateGCPInterconnectType {
+	v := &ValidateGCPInterconnectType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GCPInterconnectTypeValidator() db.Validator {
+	return DefaultGCPInterconnectTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GCPSubnetChoice) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -592,6 +679,15 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("gcp_vpc_network_outside"))
 		if err := fv(ctx, m.GetGcpVpcNetworkOutside(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["interconnect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("interconnect"))
+		if err := fv(ctx, m.GetInterconnect(), vOpts...); err != nil {
 			return err
 		}
 

@@ -62,6 +62,8 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`fallback_pool` - (Optional) Fallback Pool to be used for load balancing if none of the Load Balancing rules match. See [ref](#ref) below for details.
+
 `record_type` - (Required) x-required (`String`).
 
 `response_cache` - (Optional) Response Cache Parameters. See [Response Cache ](#response-cache) below for details.

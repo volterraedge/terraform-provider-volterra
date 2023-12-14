@@ -43,6 +43,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.terraform_parameters.BigIPDeviceType"] = BigIPDeviceTypeValidator()
 
 	vr["ves.io.schema.views.terraform_parameters.GCPInstanceType"] = GCPInstanceTypeValidator()
+	vr["ves.io.schema.views.terraform_parameters.GCPInterconnectType"] = GCPInterconnectTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPSubnetChoice"] = GCPSubnetChoiceValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPSubnetParamType"] = GCPSubnetParamTypeValidator()
 	vr["ves.io.schema.views.terraform_parameters.GCPVPCNetworkChoice"] = GCPVPCNetworkChoiceValidator()

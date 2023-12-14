@@ -70,7 +70,20 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -139,6 +152,24 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -309,6 +340,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_choice"]; exists {
 		val := m.GetServerChoice()
 		vOpts := append(opts,
@@ -437,6 +477,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
 
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
+
 	return v
 }()
 
@@ -495,6 +537,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -620,6 +668,24 @@ func (m *GetSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) ([]
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -915,6 +981,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_choice"]; exists {
 		val := m.GetServerChoice()
 		vOpts := append(opts,
@@ -1073,6 +1148,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
 
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
+
 	return v
 }()
 
@@ -1137,6 +1214,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRulesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1313,6 +1396,24 @@ func (m *GlobalSpecType) GetRulesDBEntries(ctx context.Context, d db.Interface) 
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 // GetDRefInfo for the field's type
@@ -1731,6 +1832,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_choice"]; exists {
 		val := m.GetServerChoice()
 		vOpts := append(opts,
@@ -1912,6 +2022,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["role"] = ves_io_schema_policy.RoleMatcherTypeValidator().Validate
 
 	v.FldValidators["deny_info"] = ves_io_schema_policy.DenyInformationValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2162,7 +2274,20 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -2231,6 +2356,24 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2401,6 +2544,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_choice"]; exists {
 		val := m.GetServerChoice()
 		vOpts := append(opts,
@@ -2528,6 +2680,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["server_choice.server_name_matcher"] = ves_io_schema_policy.MatcherTypeBasicValidator().Validate
 
 	v.FldValidators["port_matcher"] = ves_io_schema_policy.PortMatcherTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -4911,6 +5065,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Algo = f.GetAlgo()
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
 
@@ -4932,6 +5087,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 	m1.SetServerChoiceToGlobalSpecType(f)
 }
 
@@ -5063,6 +5219,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
 	m.Rules = f.GetRules()
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.GetServerChoiceFromGlobalSpecType(f)
 	m.SimpleRules = f.GetSimpleRules()
 }
@@ -5086,6 +5243,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
 	f.Rules = m1.Rules
+	f.SegmentPolicy = m1.SegmentPolicy
 	m1.SetServerChoiceToGlobalSpecType(f)
 	f.SimpleRules = m1.SimpleRules
 }
@@ -5217,6 +5375,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Algo = f.GetAlgo()
 	m.PortMatcher = f.GetPortMatcher()
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.GetServerChoiceFromGlobalSpecType(f)
 }
 
@@ -5238,6 +5397,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Algo = m1.Algo
 	f.PortMatcher = m1.PortMatcher
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 	m1.SetServerChoiceToGlobalSpecType(f)
 }
 

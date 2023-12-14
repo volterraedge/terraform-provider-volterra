@@ -2177,7 +2177,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "apiep_category",
-                        "description": "x-example: \"DISCOVERED\"\nCategory of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.\nOptional filter by api_category. If absent, endpoints of all categories are considered.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.",
+                        "description": "x-example: \"DISCOVERED\"\nCategory of api endpoints. Can be DISCOVERED, INVENTORY or SHADOW API.\nOptional filter by api_category. If absent, endpoints of all categories are considered.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.\nDeprecated API Endpoint.\nNon-API Endpoint.",
                         "in": "query",
                         "required": false,
                         "type": "array",
@@ -2187,11 +2187,13 @@ var ApiepCustomAPISwaggerJSON string = `{
                                 "APIEP_CATEGORY_DISCOVERED",
                                 "APIEP_CATEGORY_SWAGGER",
                                 "APIEP_CATEGORY_INVENTORY",
-                                "APIEP_CATEGORY_SHADOW"
+                                "APIEP_CATEGORY_SHADOW",
+                                "APIEP_CATEGORY_DEPRECATED",
+                                "APIEP_CATEGORY_NON_API"
                             ]
                         },
                         "collectionFormat": "multi",
-                        "x-displayname": "API Endpoint Origin Discovered"
+                        "x-displayname": "Non-API Endpoint"
                     }
                 ],
                 "tags": [
@@ -2825,13 +2827,15 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPCategory": {
             "type": "string",
-            "description": "The category of an API endpoint.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.",
+            "description": "The category of an API endpoint.\n\nDiscovered API Endpoint.\nThe API Endpoint is imported from user swagger.\nThe API Endpoint is present at the API Inventory.\nThe API Endpoint is considered as part of Shadow API.\nDeprecated API Endpoint.\nNon-API Endpoint.",
             "title": "APIEP Category",
             "enum": [
                 "APIEP_CATEGORY_DISCOVERED",
                 "APIEP_CATEGORY_SWAGGER",
                 "APIEP_CATEGORY_INVENTORY",
-                "APIEP_CATEGORY_SHADOW"
+                "APIEP_CATEGORY_SHADOW",
+                "APIEP_CATEGORY_DEPRECATED",
+                "APIEP_CATEGORY_NON_API"
             ],
             "default": "APIEP_CATEGORY_DISCOVERED",
             "x-displayname": "Category of the API Endpoint",
@@ -3006,6 +3010,13 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "risk_score",
                     "$ref": "#/definitions/app_typeRiskScore",
                     "x-displayname": "Risk score"
+                },
+                "schema_status": {
+                    "type": "string",
+                    "description": " Schema status indicates the API Endpoint's schema origin and if it's outdated.\n\nExample: - \"Discovered Not-Updated\"-",
+                    "title": "schema_status",
+                    "x-displayname": "Schema Status",
+                    "x-ves-example": "Discovered Not-Updated"
                 },
                 "sec_events_count": {
                     "type": "integer",
@@ -3761,7 +3772,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 },
                 "start_time": {
                     "type": "string",
-                    "description": " format: unix_timestamp|rfc 3339\n Filters the APIEPs with access time \u003e= start_time. \n Optional: If not specified, then the start_time will be evaluated to end_time-2h\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
+                    "description": " format: unix_timestamp|rfc 3339\n Filters the APIEPs with access time \u003e= start_time.\n Optional: If not specified, then the start_time will be evaluated to end_time-2h\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-",
                     "title": "start time",
                     "x-displayname": "Start Time",
                     "x-ves-example": "2019-09-23T12:30:11.733Z"
@@ -3775,18 +3786,17 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "Req Body Schema Response",
             "x-ves-proto-message": "ves.io.schema.virtual_host.APIEndpointLearntSchemaRsp",
             "properties": {
+                "api_specs": {
+                    "type": "object",
+                    "description": " Discovered API Specifications based on API type for eg, OpenAPI or GraphQL schema for API endpoint.",
+                    "title": "API Specifications",
+                    "x-displayname": "API Specifications"
+                },
                 "authentication": {
                     "description": " Authentication data for request API endpoint.",
                     "title": "Authentication",
                     "$ref": "#/definitions/app_typeAuthentication",
                     "x-displayname": "Authentication"
-                },
-                "discovered_openapi_spec": {
-                    "type": "string",
-                    "description": " Discovered OpenAPI spec for request API endpoint.\n\nExample: - \"{\\\"info\\\":{\\\"description\\\":\\\"\\\",\\\"title\\\":\\\"\\\",\\\"version\\\":\\\"\\\"},\\\"paths\\\":{\\\"\\/api\\/Addresss\\\":{\\\"get\\\":{\\\"consumes\\\":[\\\"application\\/json\\\"],\\\"description\\\":\\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\":[{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test\\\",\\\"type\\\":\\\"string\\\"},{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test1\\\",\\\"type\\\":\\\"string\\\"}],\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"\\\"}}}}},\\\"schemes\\\":[\\\"https\\\",\\\"http\\\"],\\\"swagger\\\":\\\"2.0\\\"}\"-",
-                    "title": "Discovered OpenAPI Spec",
-                    "x-displayname": "Discovered OpenAPI Spec",
-                    "x-ves-example": "{\\\"info\\\":{\\\"description\\\":\\\"\\\",\\\"title\\\":\\\"\\\",\\\"version\\\":\\\"\\\"},\\\"paths\\\":{\\\"\\/api\\/Addresss\\\":{\\\"get\\\":{\\\"consumes\\\":[\\\"application\\/json\\\"],\\\"description\\\":\\\"Swagger auto-generated from learnt schema\\\",\\\"parameters\\\":[{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test\\\",\\\"type\\\":\\\"string\\\"},{\\\"description\\\":\\\"\\\",\\\"in\\\":\\\"query\\\",\\\"name\\\":\\\"test1\\\",\\\"type\\\":\\\"string\\\"}],\\\"responses\\\":{\\\"200\\\":{\\\"description\\\":\\\"\\\"}}}}},\\\"schemes\\\":[\\\"https\\\",\\\"http\\\"],\\\"swagger\\\":\\\"2.0\\\"}"
                 },
                 "discovered_schema": {
                     "description": " Discovered Schema for request API endpoint.",

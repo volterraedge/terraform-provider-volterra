@@ -43,7 +43,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "VIP"
 	// x-example: "10.1.2.3/2001::1"
-	// Optional. VIP to advertise.
+	// Optional. VIP to advertise. This VIP can be either V4/V6 address
 	// You can not specify this if where contains a site or virtual site of type REGIONAL_EDGE or public network
 	// If not specified and "where" is specified with site or virtual site option,
 	// inside_vip or outside_vip specified in the site object will be used based on the network type.

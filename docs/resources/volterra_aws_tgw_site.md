@@ -28,16 +28,9 @@ resource "volterra_aws_tgw_site" "example" {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      reserved_inside_subnet = true
+      disk_size              = "80"
 
-      inside_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-        subnet_param {
-          ipv4 = "10.1.2.0/24"
-          ipv6 = "1234:568:abcd:9100::/64"
-        }
-      }
-      disk_size = "80"
       outside_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -46,6 +39,7 @@ resource "volterra_aws_tgw_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+
       workload_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
@@ -69,17 +63,8 @@ resource "volterra_aws_tgw_site" "example" {
     disable_internet_vip = true
     // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
     f5xc_security_group = true
-
     // One of the arguments from this list "new_vpc vpc_id" must be set
-
-    new_vpc {
-      allocate_ipv6 = true
-
-      // One of the arguments from this list "name_tag autogenerate" must be set
-      name_tag = "name_tag"
-
-      primary_ipv4 = "10.1.0.0/16"
-    }
+    vpc_id = "vpc-12345678901234567"
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -92,19 +77,19 @@ resource "volterra_aws_tgw_site" "example" {
     nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
+  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" must be set
-      ssh          = true
-      network_type = "network_type"
-    }
-  }
-  // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
   direct_connect_disabled = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -138,11 +123,11 @@ Argument Reference
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
-`direct_connect_disabled` - (Optional) Direct Connect Connection to Site is disabled (bool).
+`direct_connect_disabled` - (Optional) Disable Private Connectivity to Site (bool).
 
-`direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
+`direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled(Legacy). See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
-`private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity ](#private-connectivity) below for details.
+`private_connectivity` - (Optional) Enable Private Connectivity to Site via CloudLink. See [Private Connectivity ](#private-connectivity) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -162,9 +147,9 @@ Argument Reference
 
 `vn_config` - (Optional) Site Network related details will be configured. See [Vn Config ](#vn-config) below for details.
 
-`disable_vpc_attachment` - (Optional) Disable VPC attachment to AWS TGW Site (bool).
+`spoke_attachments` - (Optional) x-required. See [Spoke Attachments ](#spoke-attachments) below for details.
 
-`vpc_attachments` - (Optional) Spoke VPCs to be attached to the AWS TGW Site. See [Vpc Attachments ](#vpc-attachments) below for details.
+`vpc_attachments` - (Optional) Note that this choice would be deprecated in the near release.. See [Vpc Attachments ](#vpc-attachments) below for details.
 
 ### Active East West Service Policies
 
@@ -225,6 +210,18 @@ Allowed VIP Port Configuration for Inside Network.
 ### Assisted
 
 In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
+
+### Attachments
+
+x-required.
+
+`cred` - (Optional) Attach VPCs using a cloud credential not associated with this site. See [ref](#ref) below for details.
+
+`use_site_credential` - (Optional) Attach VPCs using this site’s cloud credential (bool).
+
+`segment` - (Optional) Choose a network segment. All attached VPCs will be placed in this network segment. See [ref](#ref) below for details.
+
+`spokes` - (Required) Spoke VPCs to be attached to the AWS TGW Site. See [Spokes ](#spokes) below for details.
 
 ### Auto Asn
 
@@ -374,6 +371,12 @@ Custom list of ports to be allowed.
 
 `port_ranges` - (Required) Port Ranges (`String`).
 
+### Custom Routing
+
+Routes for user specified CIDRs towards the CE will be installed for this subnet.
+
+`route_tables` - (Required) Route Tables. See [Route Tables ](#route-tables) below for details.
+
 ### Custom Security Group
 
 With this option, ingress and egress traffic will be controlled via security group ids..
@@ -398,13 +401,19 @@ Use Custom static route to configure all advanced options.
 
 Will assign latest available OS version.
 
+### Default Route
+
+default route towards the CE will be add to the route table.
+
+`route_tables` - (Required) Route Tables. See [Route Tables ](#route-tables) below for details.
+
 ### Default Sw Version
 
 Will assign latest available SW version.
 
 ### Direct Connect Enabled
 
-Direct Connect Connection to Site is enabled.
+Direct Connect Connection to Site is enabled(Legacy).
 
 `auto_asn` - (Optional) Automatically set ASN (bool).
 
@@ -538,6 +547,10 @@ and automatically associate provided hosted VIF and also setup BGP Peering..
 
 `vifs` - (Optional) VIFs (`String`).
 
+### Inside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+
 ### Inside Static Routes
 
 Manage static routes for inside network..
@@ -584,7 +597,7 @@ and a user associate AWS DirectConnect Gateway with it..
 
 ### Manual Routing
 
-Manual routing.
+No route tables will be programmed by F5. User will manage routing.
 
 ### New Tgw
 
@@ -684,6 +697,10 @@ Operating System Details.
 
 `operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
+### Outside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -726,9 +743,13 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 ### Private Connectivity
 
-Enable Private Connectivity to Site.
+Enable Private Connectivity to Site via CloudLink.
 
 `cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
+
+`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (bool).
+
+`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (bool).
 
 ### Private Key
 
@@ -762,17 +783,11 @@ Autogenerate and reserve a subnet from the Primary CIDR.
 
 ### Route Tables
 
-Route Tables .
+Route Tables.
 
 `route_table_id` - (Optional) Route table ID (`String`).
 
 `static_routes` - (Required) List of Static Routes (`String`).
-
-### Routing Ids
-
-Routing tables automatically managed.
-
-`route_tables` - (Required) Route Tables . See [Route Tables ](#route-tables) below for details.
 
 ### Same As Site Region
 
@@ -782,7 +797,7 @@ Use same region as that of the Site.
 
 Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
 
-`cloudlink_network_name` - (Required) CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up. (`String`).
+`cloudlink_network_name` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
 
 ### Site Registration Over Internet
 
@@ -807,6 +822,18 @@ creating ipsec between two sites which are part of the site mesh group.
 ### Sm Connection Pvt Ip
 
 creating ipsec between two sites which are part of the site mesh group.
+
+### Spoke Attachments
+
+x-required.
+
+`attachments` - (Required) x-required. See [Attachments ](#attachments) below for details.
+
+### Spokes
+
+Spoke VPCs to be attached to the AWS TGW Site.
+
+`vpc_list` - (Optional) x-displayName: "VPC List". See [Vpc List ](#vpc-list) below for details.
 
 ### Ssh
 
@@ -910,7 +937,7 @@ Only HTTPS Port (443) will be allowed..
 
 ### Use Site Credential
 
-Attach VPC from same credential as site.
+Attach VPCs using this site’s cloud credential.
 
 ### Use System Defaults
 
@@ -970,6 +997,10 @@ Site Network related details will be configured.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
+`disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (bool).
+
+`enable_internet_vip` - (Optional) VIPs can be advertised to the internet directly on this Site (bool).
+
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
@@ -988,25 +1019,27 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 ### Vpc Attachments
 
-Spoke VPCs to be attached to the AWS TGW Site.
+Note that this choice would be deprecated in the near release..
 
 `vpc_list` - (Optional) List of VPC attachments to transit gateway. See [Vpc List ](#vpc-list) below for details.
 
 ### Vpc List
 
-List of VPC attachments to transit gateway.
+x-displayName: "VPC List".
 
 `labels` - (Optional) These labels used must be from known key, label defined in shared namespace and unknown key. (`String`).
 
-`manual_routing` - (Optional) Manual routing (bool).
+`custom_routing` - (Optional) Routes for user specified CIDRs towards the CE will be installed for this subnet. See [Custom Routing ](#custom-routing) below for details.
 
-`routing_ids` - (Optional) Routing tables automatically managed. See [Routing Ids ](#routing-ids) below for details.
+`default_route` - (Optional) default route towards the CE will be add to the route table. See [Default Route ](#default-route) below for details.
+
+`manual_routing` - (Optional) No route tables will be programmed by F5. User will manage routing (bool).
 
 `all_subnets` - (Optional) All subnets are routed to transit gateway. (bool).
 
 `subnet_ids` - (Optional) Specific subnets are routed to transit gateway.. See [Subnet Ids ](#subnet-ids) below for details.
 
-`vpc_id` - (Required) Information about existing VPC (`String`).
+`vpc_id` - (Required) Enter the VPC ID of the VPC to be attached (`String`).
 
 ### Web User Interface
 

@@ -1379,6 +1379,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
+		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["express_route"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("express_route"))

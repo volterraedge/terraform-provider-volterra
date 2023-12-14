@@ -407,6 +407,10 @@ This is the default behavior if no choice is selected..
 
 No OpenApi Validation configuration for this VH.
 
+### Disable Request Timeout
+
+x-displayName: "No Timeout".
+
 ### Disable Tampering Protection
 
 x-displayName: "Disable".
@@ -422,6 +426,8 @@ Advanced DNS Proxy Configurations like DDoS, Cache are mapped to DNSProxyConfigu
 `cache_profile` - (Optional) which caches DNS replies from the origin DNS servers.. See [Cache Profile ](#cache-profile) below for details.
 
 `ddos_profile` - (Required) to protect the origin DNS servers from external DDoS attacks.. See [Ddos Profile ](#ddos-profile) below for details.
+
+`irules` - (Optional) Options for attaching iRules to dns proxy. See [ref](#ref) below for details.
 
 `protocol_inspection` - (Optional) Options for enabling and configuring protocol inspection configuration. See [ref](#ref) below for details.
 
@@ -675,7 +681,9 @@ This configuration helps to mitigate such type of attacks..
 
 `request_headers_timeout` - (Optional) provides protection against Slowloris attacks. (`Int`).
 
-`request_timeout` - (Optional) provides protection against Slow POST attacks. (`Int`).
+`disable_request_timeout` - (Optional) x-displayName: "No Timeout" (bool).
+
+`request_timeout` - (Optional) x-example: "60000" (`Int`).
 
 ### Temporary User Blocking
 

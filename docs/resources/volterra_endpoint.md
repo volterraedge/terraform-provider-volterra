@@ -46,7 +46,7 @@ Argument Reference
 
 `dns_name_advanced` - (Optional) Specifies name and TTL used for DNS resolution.. See [Dns Name Advanced ](#dns-name-advanced) below for details.
 
-`ip` - (Optional) Endpoint is reachable at the given ip address (`String`).
+`ip` - (Optional) Endpoint is reachable at the given ipv4/ipv6 address (`String`).
 
 `service_info` - (Optional) In case of Consul, tags on the service is matched against service_selector. See [Service Info ](#service-info) below for details.
 
@@ -86,6 +86,28 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Segment
+
+Reference to Segment.
+
+`ref` - (Required) A segment reference. See [ref](#ref) below for details.
+
+### Segment Site
+
+Reference to Segment object.
+
+`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
+
+`site` - (Required) Reference to a site. See [ref](#ref) below for details.
+
+### Segment Vsite
+
+Reference to Segment in a virtual site.
+
+`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
+
+`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
+
 ### Service Info
 
 ```
@@ -114,7 +136,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Strict Ttl
 
@@ -124,7 +146,7 @@ Use TTL value returned by DNS Server during DNS resolution as DNS refresh interv
 
 Direct reference to virtual network object.
 
-`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -136,11 +158,17 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 
 This endpoint is present in site, virtual_site or virtual_network selected by following field..
+
+`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
+
+`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
+
+`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
 
 `site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
 

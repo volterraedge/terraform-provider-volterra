@@ -8846,6 +8846,90 @@ func (v *ValidatePublishVIPParamsPerAz) AzNameValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidatePublishVIPParamsPerAz) InsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for inside_vip_v6")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for inside_vip_v6")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated inside_vip_v6")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items inside_vip_v6")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePublishVIPParamsPerAz) OutsideVipV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for outside_vip_v6")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for outside_vip_v6")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated outside_vip_v6")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items outside_vip_v6")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidatePublishVIPParamsPerAz) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*PublishVIPParamsPerAz)
 	if !ok {
@@ -8886,6 +8970,14 @@ func (v *ValidatePublishVIPParamsPerAz) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["inside_vip_v6"]; exists {
+		vOpts := append(opts, db.WithValidateField("inside_vip_v6"))
+		if err := fv(ctx, m.GetInsideVipV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_vip"]; exists {
 		vOpts := append(opts, db.WithValidateField("outside_vip"))
 		if err := fv(ctx, m.GetOutsideVip(), vOpts...); err != nil {
@@ -8898,6 +8990,14 @@ func (v *ValidatePublishVIPParamsPerAz) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("outside_vip_cname"))
 		if err := fv(ctx, m.GetOutsideVipCname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_vip_v6"]; exists {
+		vOpts := append(opts, db.WithValidateField("outside_vip_v6"))
+		if err := fv(ctx, m.GetOutsideVipV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8978,6 +9078,32 @@ var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerA
 		panic(errMsg)
 	}
 	v.FldValidators["az_name"] = vFn
+
+	vrhInsideVipV6 := v.InsideVipV6ValidationRuleHandler
+	rulesInsideVipV6 := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6": "true",
+		"ves.io.schema.rules.repeated.max_items":         "3",
+		"ves.io.schema.rules.repeated.unique":            "true",
+	}
+	vFn, err = vrhInsideVipV6(rulesInsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.inside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_vip_v6"] = vFn
+
+	vrhOutsideVipV6 := v.OutsideVipV6ValidationRuleHandler
+	rulesOutsideVipV6 := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.ipv6": "true",
+		"ves.io.schema.rules.repeated.max_items":         "3",
+		"ves.io.schema.rules.repeated.unique":            "true",
+	}
+	vFn, err = vrhOutsideVipV6(rulesOutsideVipV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PublishVIPParamsPerAz.outside_vip_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_vip_v6"] = vFn
 
 	return v
 }()

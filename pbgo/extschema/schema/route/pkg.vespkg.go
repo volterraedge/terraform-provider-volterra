@@ -48,6 +48,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.route.ServicePolicyInfo"] = ServicePolicyInfoValidator()
 	vr["ves.io.schema.route.SpdyConfigType"] = SpdyConfigTypeValidator()
 	vr["ves.io.schema.route.TagAttribute"] = TagAttributeValidator()
+	vr["ves.io.schema.route.VerStatusType"] = VerStatusTypeValidator()
 	vr["ves.io.schema.route.WebsocketConfigType"] = WebsocketConfigTypeValidator()
 
 }

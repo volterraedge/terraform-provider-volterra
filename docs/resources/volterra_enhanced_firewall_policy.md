@@ -21,7 +21,12 @@ resource "volterra_enhanced_firewall_policy" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "allowed_destinations deny_all denied_sources denied_destinations rule_list allow_all allowed_sources" must be set
-  allow_all = true
+
+  denied_sources {
+    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
+  }
 }
 
 ```
@@ -58,6 +63,8 @@ Argument Reference
 `deny_all` - (Optional) Deny all connections from any source to any destination (bool).
 
 `rule_list` - (Optional) Custom Enhanced Firewall Policy Rule Selection. See [Rule List ](#rule-list) below for details.
+
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
 
 ### Advanced Action
 
@@ -101,11 +108,15 @@ Allow any connection matching the rule.
 
 Allow all connections to list of destinations from any source.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Allowed Sources
 
 Allow all connections from list of sources to any destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
@@ -119,17 +130,27 @@ Select Application traffic to match.
 
 Deny all connections to list of destinations from any source.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Denied Sources
 
 Deny all connections from list of sources to any destination.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Deny
 
 Deny any connection matching the rule.
+
+### Destination Aws Subnet Ids
+
+Destination is any address in list of AWS Subnets.
+
+`subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
 ### Destination Aws Vpc Ids
 
@@ -153,7 +174,19 @@ These labels can be cloud tags defined on the vpc resource, labels on the global
 
 Addresses that match one of the prefix in the list.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Dst Any
+
+Traffic is not matched against any segment.
+
+### Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Insert Service
 
@@ -168,6 +201,10 @@ All addresses reachable in site-local inside interfaces.
 ### Inside Sources
 
 All addresses reachable in site-local inside interfaces.
+
+### Intra Segment
+
+Traffic is matched for source and destination on the same segment.
 
 ### Label Matcher
 
@@ -235,6 +272,8 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `all_slo_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-outside network (bool).
 
+`destination_aws_subnet_ids` - (Optional) Destination is any address in list of AWS Subnets. See [Destination Aws Subnet Ids ](#destination-aws-subnet-ids) below for details.
+
 `destination_aws_vpc_ids` - (Optional) Destination is any address in list of AWS VPCs. See [Destination Aws Vpc Ids ](#destination-aws-vpc-ids) below for details.
 
 `destination_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Destination Ip Prefix Set ](#destination-ip-prefix-set) below for details.
@@ -259,6 +298,8 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `outside_sources` - (Optional) All addresses reachable in site-local outside interfaces (bool).
 
+`source_aws_subnet_ids` - (Optional) Source is any address in list of AWS Subnets. See [Source Aws Subnet Ids ](#source-aws-subnet-ids) below for details.
+
 `source_aws_vpc_ids` - (Optional) Source is any address in list of AWS VPCs. See [Source Aws Vpc Ids ](#source-aws-vpc-ids) below for details.
 
 `source_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Source Ip Prefix Set ](#source-ip-prefix-set) below for details.
@@ -278,6 +319,26 @@ Ordered List of Enhanced Firewall Policy Rules.
 `applications` - (Optional) Select Application traffic to match. See [Applications ](#applications) below for details.
 
 `protocol_port_range` - (Optional) Select specific protocol and port ranges traffic to match. See [Protocol Port Range ](#protocol-port-range) below for details.
+
+### Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+`dst_any` - (Optional) Traffic is not matched against any segment (bool).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segments ](#dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (bool).
+
+`src_any` - (Optional) Traffic is not matched against any segment (bool).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segments ](#src-segments) below for details.
+
+### Source Aws Subnet Ids
+
+Source is any address in list of AWS Subnets.
+
+`subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
 ### Source Aws Vpc Ids
 
@@ -301,7 +362,19 @@ These labels can be cloud tags defined on the vpc resource, labels on the global
 
 Addresses that match one of the prefix in the list.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 Attribute Reference
 -------------------

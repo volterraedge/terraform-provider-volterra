@@ -986,6 +986,22 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
+                "inside_vip_v6": {
+                    "type": "array",
+                    "description": " Optional list of Inside IPv6 VIPs for an AZ\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Inside IPv6 VIP(s)",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Inside IPv6 VIP(s)",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "outside_vip": {
                     "type": "array",
                     "description": " List of Outside VIPs for an AZ\n\nExample: - \"192.168.0.156\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -1015,6 +1031,22 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "test.56670-387196482.useast2.ves.io",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "outside_vip_v6": {
+                    "type": "array",
+                    "description": " Optional list of Outside IPv6 VIPs for an AZ\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Outside IPv6 VIP(s)",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Outside IPv6 VIP(s)",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }

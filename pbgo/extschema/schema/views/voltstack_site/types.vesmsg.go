@@ -7926,6 +7926,16 @@ func (v *ValidateVssNetworkConfiguration) OutsideVipV6ValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateVssNetworkConfiguration) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VssNetworkConfiguration)
 	if !ok {
@@ -8128,6 +8138,15 @@ func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
 		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8384,7 +8403,7 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 
 	vrhOutsideNameserver := v.OutsideNameserverValidationRuleHandler
 	rulesOutsideNameserver := map[string]string{
-		"ves.io.schema.rules.string.ip": "true",
+		"ves.io.schema.rules.string.ipv4": "true",
 	}
 	vFn, err = vrhOutsideNameserver(rulesOutsideNameserver)
 	if err != nil {
@@ -8437,6 +8456,17 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 		panic(errMsg)
 	}
 	v.FldValidators["outside_vip_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VssNetworkConfiguration.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
 
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 

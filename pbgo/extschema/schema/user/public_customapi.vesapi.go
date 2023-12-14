@@ -3633,7 +3633,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaAddonServiceState": {
             "type": "string",
-            "description": "x-displayName: \"Addon Service State\"\nState of a service\n\n - AS_NONE: x-displayName: \"None\"\ndefault state\n - AS_PENDING: x-displayName: \"Pending Subscription\"\ninitiated subscription request and is pending to activate.\n - AS_SUBSCRIBED: x-displayName: \"Subscribed\"\nsuccessfully subscribed\n - AS_ERROR: x-displayName: \"Error\"\nservice subscription request ended up in error state.",
+            "description": "x-displayName: \"Addon Service State\"\nState of a service\n\n - AS_NONE: x-displayName: \"None\"\ndefault state\n - AS_PENDING: x-displayName: \"Pending Subscription\"\ninitiated subscription request and is pending to activate (requested).\n - AS_SUBSCRIBED: x-displayName: \"Subscribed\"\nsuccessfully subscribed\n - AS_ERROR: x-displayName: \"Error\"\nservice subscription request ended up in error state.",
             "title": "AddonServiceState",
             "enum": [
                 "AS_NONE",
@@ -4229,9 +4229,24 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Accept TOS Response",
             "x-ves-proto-message": "ves.io.schema.user.AcceptTOSResponse"
         },
+        "userAccessType": {
+            "type": "string",
+            "description": "Used to identify the tenant access\n\n - UNKNOWN_ACCESS: UNKNOWN_ACCESS\n\nWhen unable to determine the tenant access\n - DIRECT_ACCESS: DIRECT_ACCESS\n\nAccessing tenant through direct login\n - MSP_ACCESS: MSP_ACCESS\n\nAccessing tenant from MSP tenant\n - DELEGATED_ACCESS: DELEGATED_ACCESS\n\nAccessing tenant from operating tenant through delegated access\n - SUPPORT_ACCESS: SUPPORT_ACCESS\n\nAccessing tenant from support tenant",
+            "title": "AccessType",
+            "enum": [
+                "UNKNOWN_ACCESS",
+                "DIRECT_ACCESS",
+                "MSP_ACCESS",
+                "DELEGATED_ACCESS",
+                "SUPPORT_ACCESS"
+            ],
+            "default": "UNKNOWN_ACCESS",
+            "x-displayname": "Identify the tenant access",
+            "x-ves-proto-enum": "ves.io.schema.user.AccessType"
+        },
         "userAddonServiceStatus": {
             "type": "object",
-            "description": "x-displayName: \"Addon Service Status\"\ndisplays current state and access of an addon servie for the user of tenant.",
+            "description": "x-displayName: \"Addon Service Status\"\ndisplays current state and access of an addon service for the user of tenant.",
             "title": "AddonServiceStatus",
             "properties": {
                 "access": {
@@ -4514,6 +4529,9 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-oneof-field-managed_access_info": "[\"msp_managed\",\"self_managed\"]",
             "x-ves-proto-message": "ves.io.schema.user.GetUserRoleResponse",
             "properties": {
+                "access_type": {
+                    "$ref": "#/definitions/userAccessType"
+                },
                 "active_plan_transition_uid": {
                     "type": "string",
                     "description": " UUID of the plan transition request which is currently in progress. This field is empty\n if there is no such request.",

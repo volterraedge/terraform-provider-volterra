@@ -62,22 +62,105 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []string{
 		"spec.rule_list.rules.#.destination_namespace",
-		"spec.rule_list.rules.#.destination_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.metadata.disable",
 		"spec.rule_list.rules.#.source_namespace",
-		"spec.rule_list.rules.#.source_prefix_list.ipv6_prefixes.#",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.enhanced_firewall_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Get"] = []string{
 		"object",
 	}
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.enhanced_firewall_policy.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.enhanced_firewall_policy.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.enhanced_firewall_policy.API.Replace"] = []string{
 		"spec.rule_list.rules.#.destination_namespace",
-		"spec.rule_list.rules.#.destination_prefix_list.ipv6_prefixes.#",
 		"spec.rule_list.rules.#.metadata.disable",
 		"spec.rule_list.rules.#.source_namespace",
-		"spec.rule_list.rules.#.source_prefix_list.ipv6_prefixes.#",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.enhanced_firewall_policy.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rule_list.rules.#.destination_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.source_aws_subnet_ids",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 }

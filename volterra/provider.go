@@ -3,6 +3,7 @@ package volterra
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"os"
@@ -17,6 +18,8 @@ var (
 	AllResources = map[string]*schema.Resource{}
 	// EnvVarP12Password is the name of environment variable that holds password for P12 bundle file
 	EnvVarP12Password = "VES_P12_PASSWORD"
+	// EnvVarP12Content is the name of environment variable that holds content of P12 bundle file
+	EnvVarP12Content = "VES_P12_CONTENT"
 )
 
 const (
@@ -152,7 +155,25 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 		}
 		config.apiKey = fmt.Sprintf("file:///%s", v.(string))
 	} else {
-		return nil, diag.FromErr(fmt.Errorf("neither api_p12 bundle or api_cert/api_key is provided as provider config"))
+		apiP12Content := os.Getenv(EnvVarP12Content)
+		apiP12Contents, err := base64.StdEncoding.DecodeString(apiP12Content)
+		if err != nil {
+			return nil, diag.FromErr(fmt.Errorf("error decoding base64 content: %s", err))
+		}
+		if len(apiP12Content) == 0 {
+			return nil, diag.FromErr(fmt.Errorf("neither VES_P12_CONTENT, api_p12 bundle or api_cert/api_key is provided as provider config"))
+		} else {
+			tmp, err := os.CreateTemp(".", "volterra-cert")
+			if err != nil {
+				return nil, diag.FromErr(fmt.Errorf("error in creating temporary file : %s", err))
+			}
+			err = os.WriteFile(tmp.Name(), []byte(apiP12Contents), 0600)
+			if err != nil {
+				return nil, diag.FromErr(fmt.Errorf("error in writing credential on temp file : %s", err))
+			}
+			config.apiP12File = fmt.Sprintf("file:///%s", tmp.Name())
+			config.apiP12Password = os.Getenv(EnvVarP12Password)
+		}
 	}
 
 	if v, ok := d.GetOk("api_ca_cert"); ok {

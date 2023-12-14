@@ -669,6 +669,15 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
+		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dx_connect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dx_connect"))
@@ -1106,6 +1115,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("deployment"))
 		if err := fv(ctx, m.GetDeployment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["disable_internet_connectivity_via_igw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_internet_connectivity_via_igw"))
+		if err := fv(ctx, m.GetDisableInternetConnectivityViaIgw(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1766,6 +1784,15 @@ func (v *ValidateDirectConnectType) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("dx_gw_asn"))
 		if err := fv(ctx, m.GetDxGwAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dx_gw_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dx_gw_id"))
+		if err := fv(ctx, m.GetDxGwId(), vOpts...); err != nil {
 			return err
 		}
 

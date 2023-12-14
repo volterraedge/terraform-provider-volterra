@@ -14,6 +14,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.access_log.DateAggregation"] = DateAggregationValidator()
 	vr["ves.io.schema.log.access_log.DateSubAggregation"] = DateSubAggregationValidator()
 	vr["ves.io.schema.log.access_log.FieldAggregation"] = FieldAggregationValidator()
+	vr["ves.io.schema.log.access_log.MultiFieldAggregation"] = MultiFieldAggregationValidator()
 
 }
 

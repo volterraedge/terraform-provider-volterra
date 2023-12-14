@@ -9,6 +9,9 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.policy.ActiveEnhancedFirewallPoliciesType"] = ActiveEnhancedFirewallPoliciesTypeValidator()
+	vr["ves.io.schema.policy.ActiveForwardProxyPoliciesType"] = ActiveForwardProxyPoliciesTypeValidator()
+	vr["ves.io.schema.policy.ActiveServicePoliciesType"] = ActiveServicePoliciesTypeValidator()
 	vr["ves.io.schema.policy.AppFirewallAttackTypeContext"] = AppFirewallAttackTypeContextValidator()
 	vr["ves.io.schema.policy.AppFirewallDetectionControl"] = AppFirewallDetectionControlValidator()
 	vr["ves.io.schema.policy.AppFirewallSignatureContext"] = AppFirewallSignatureContextValidator()
@@ -48,6 +51,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.policy.RequestConstraintType"] = RequestConstraintTypeValidator()
 	vr["ves.io.schema.policy.RequestMatcher"] = RequestMatcherValidator()
 	vr["ves.io.schema.policy.RoleMatcherType"] = RoleMatcherTypeValidator()
+	vr["ves.io.schema.policy.SecurityPoliciesType"] = SecurityPoliciesTypeValidator()
+	vr["ves.io.schema.policy.SegmentPolicyType"] = SegmentPolicyTypeValidator()
 	vr["ves.io.schema.policy.ShapeBotBlockMitigationActionType"] = ShapeBotBlockMitigationActionTypeValidator()
 	vr["ves.io.schema.policy.ShapeBotFlagMitigationActionChoiceType"] = ShapeBotFlagMitigationActionChoiceTypeValidator()
 	vr["ves.io.schema.policy.ShapeBotFlagMitigationActionType"] = ShapeBotFlagMitigationActionTypeValidator()

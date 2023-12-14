@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -375,6 +376,16 @@ func (v *ValidateAWSBYOCType) MetadataValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSBYOCType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSBYOCType)
 	if !ok {
@@ -411,6 +422,15 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("connection_id"))
 		if err := fv(ctx, m.GetConnectionId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
 		}
 
@@ -474,6 +494,15 @@ func (v *ValidateAWSBYOCType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -647,7 +676,21 @@ var DefaultAWSBYOCTypeValidator = func() *ValidateAWSBYOCType {
 	}
 	v.FldValidators["metadata"] = vFn
 
+	vrhRegion := v.RegionValidationRuleHandler
+	rulesRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"ap-northeast-1\",\"ap-southeast-1\",\"eu-central-1\",\"eu-west-1\",\"eu-west-3\",\"sa-east-1\",\"us-east-1\",\"us-east-2\",\"us-west-2\",\"ca-central-1\",\"af-south-1\",\"ap-east-1\",\"ap-south-1\",\"ap-northeast-2\",\"ap-southeast-2\",\"eu-south-1\",\"eu-north-1\",\"eu-west-2\",\"me-south-1\",\"us-west-1\",\"ap-southeast-3\"]",
+	}
+	vFn, err = vrhRegion(rulesRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSBYOCType.region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region"] = vFn
+
 	v.FldValidators["ip_type.ipv4"] = Ipv4TypeValidator().Validate
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	return v
 }()
@@ -1197,6 +1240,17 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *CreateSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1265,6 +1319,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("cloud_provider"),
 				db.WithValidateField("azure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Gcp:
+		if fv, exists := v.FldValidators["cloud_provider.gcp"]; exists {
+			val := m.GetCloudProvider().(*CreateSpecType_Gcp).Gcp
+			vOpts := append(opts,
+				db.WithValidateField("cloud_provider"),
+				db.WithValidateField("gcp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1347,6 +1412,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["enable_connection_to_re_choice"] = vFn
 
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
+	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
 
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
@@ -1355,6 +1421,738 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPBYOCListType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPBYOCListType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPBYOCListType) DeepCopy() *GCPBYOCListType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPBYOCListType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPBYOCListType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPBYOCListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPBYOCListTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPBYOCListType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPBYOCListType) ConnectionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for connections")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*GCPBYOCType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := GCPBYOCTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for connections")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*GCPBYOCType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*GCPBYOCType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated connections")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items connections")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBYOCListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPBYOCListType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPBYOCListType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["connections"]; exists {
+		vOpts := append(opts, db.WithValidateField("connections"))
+		if err := fv(ctx, m.GetConnections(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPBYOCListTypeValidator = func() *ValidateGCPBYOCListType {
+	v := &ValidateGCPBYOCListType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhConnections := v.ConnectionsValidationRuleHandler
+	rulesConnections := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "10",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhConnections(rulesConnections)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBYOCListType.connections: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["connections"] = vFn
+
+	return v
+}()
+
+func GCPBYOCListTypeValidator() db.Validator {
+	return DefaultGCPBYOCListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPBYOCType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPBYOCType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPBYOCType) DeepCopy() *GCPBYOCType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPBYOCType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPBYOCType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPBYOCType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPBYOCTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPBYOCType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPBYOCType) ProjectChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for project_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBYOCType) ProjectChoiceProjectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Project, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for project")
+	}
+	return oValidatorFn_Project, nil
+}
+
+func (v *ValidateGCPBYOCType) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for metadata")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.MessageMetaTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBYOCType) RegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBYOCType) InterconnectAttachmentNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for interconnect_attachment_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPBYOCType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPBYOCType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPBYOCType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["coordinates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("coordinates"))
+		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["interconnect_attachment_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("interconnect_attachment_name"))
+		if err := fv(ctx, m.GetInterconnectAttachmentName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["project_choice"]; exists {
+		val := m.GetProjectChoice()
+		vOpts := append(opts,
+			db.WithValidateField("project_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetProjectChoice().(type) {
+	case *GCPBYOCType_SameAsCredential:
+		if fv, exists := v.FldValidators["project_choice.same_as_credential"]; exists {
+			val := m.GetProjectChoice().(*GCPBYOCType_SameAsCredential).SameAsCredential
+			vOpts := append(opts,
+				db.WithValidateField("project_choice"),
+				db.WithValidateField("same_as_credential"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPBYOCType_Project:
+		if fv, exists := v.FldValidators["project_choice.project"]; exists {
+			val := m.GetProjectChoice().(*GCPBYOCType_Project).Project
+			vOpts := append(opts,
+				db.WithValidateField("project_choice"),
+				db.WithValidateField("project"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPBYOCTypeValidator = func() *ValidateGCPBYOCType {
+	v := &ValidateGCPBYOCType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProjectChoice := v.ProjectChoiceValidationRuleHandler
+	rulesProjectChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhProjectChoice(rulesProjectChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBYOCType.project_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["project_choice"] = vFn
+
+	vrhProjectChoiceProject := v.ProjectChoiceProjectValidationRuleHandler
+	rulesProjectChoiceProject := map[string]string{
+		"ves.io.schema.rules.string.max_len": "30",
+		"ves.io.schema.rules.string.min_len": "4",
+	}
+	vFnMap["project_choice.project"], err = vrhProjectChoiceProject(rulesProjectChoiceProject)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GCPBYOCType.project_choice_project: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["project_choice.project"] = vFnMap["project_choice.project"]
+
+	vrhMetadata := v.MetadataValidationRuleHandler
+	rulesMetadata := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhMetadata(rulesMetadata)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBYOCType.metadata: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metadata"] = vFn
+
+	vrhRegion := v.RegionValidationRuleHandler
+	rulesRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"asia-east1\",\"asia-east2\",\"asia-northeast1\",\"asia-northeast2\",\"asia-northeast3\",\"asia-southeast1\",\"asia-southeast2\",\"europe-central2\",\"europe-north1\",\"europe-west1\",\"europe-west2\",\"europe-west3\",\"europe-west4\",\"europe-west6\",\"europe-west8\",\"europe-west9\",\"europe-west10\",\"europe-west12\",\"europe-southwest1\",\"me-west1\",\"me-central1\",\"me-central2\",\"northamerica-northeast1\",\"northamerica-northeast2\",\"us-central1\",\"us-east1\",\"us-east4\",\"us-east5\",\"us-south1\",\"us-west1\",\"us-west2\",\"us-west3\",\"us-west4\",\"southamerica-east1\",\"southamerica-west1\",\"australia-southeast1\",\"australia-southeast2\",\"asia-south1\",\"asia-south2\"]",
+	}
+	vFn, err = vrhRegion(rulesRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBYOCType.region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region"] = vFn
+
+	vrhInterconnectAttachmentName := v.InterconnectAttachmentNameValidationRuleHandler
+	rulesInterconnectAttachmentName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "63",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhInterconnectAttachmentName(rulesInterconnectAttachmentName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPBYOCType.interconnect_attachment_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interconnect_attachment_name"] = vFn
+
+	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
+
+	return v
+}()
+
+func GCPBYOCTypeValidator() db.Validator {
+	return DefaultGCPBYOCTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPPartnerMetadata) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPPartnerMetadata) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPPartnerMetadata) DeepCopy() *GCPPartnerMetadata {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPPartnerMetadata{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPPartnerMetadata) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPPartnerMetadata) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPPartnerMetadataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPPartnerMetadata struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPPartnerMetadata) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPPartnerMetadata)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPPartnerMetadata got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interconnect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("interconnect"))
+		if err := fv(ctx, m.GetInterconnect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["portal_url"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("portal_url"))
+		if err := fv(ctx, m.GetPortalUrl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPPartnerMetadataValidator = func() *ValidateGCPPartnerMetadata {
+	v := &ValidateGCPPartnerMetadata{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GCPPartnerMetadataValidator() db.Validator {
+	return DefaultGCPPartnerMetadataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GCPType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPType) DeepCopy() *GCPType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *GCPType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetGcpCredDRefInfo()
+
+}
+
+func (m *GCPType) GetGcpCredDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cloud_credentials.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cloud_credentials.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "gcp_cred",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetGcpCredDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GCPType) GetGcpCredDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
+	}
+
+	vref := m.GetGcpCred()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cloud_credentials.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateGCPType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPType) CloudLinkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud_link_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPType) GcpCredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for gcp_cred")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_link_type"]; exists {
+		val := m.GetCloudLinkType()
+		vOpts := append(opts,
+			db.WithValidateField("cloud_link_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCloudLinkType().(type) {
+	case *GCPType_Byoc:
+		if fv, exists := v.FldValidators["cloud_link_type.byoc"]; exists {
+			val := m.GetCloudLinkType().(*GCPType_Byoc).Byoc
+			vOpts := append(opts,
+				db.WithValidateField("cloud_link_type"),
+				db.WithValidateField("byoc"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_cred"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_cred"))
+		if err := fv(ctx, m.GetGcpCred(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPTypeValidator = func() *ValidateGCPType {
+	v := &ValidateGCPType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCloudLinkType := v.CloudLinkTypeValidationRuleHandler
+	rulesCloudLinkType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCloudLinkType(rulesCloudLinkType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPType.cloud_link_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_link_type"] = vFn
+
+	vrhGcpCred := v.GcpCredValidationRuleHandler
+	rulesGcpCred := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhGcpCred(rulesGcpCred)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPType.gcp_cred: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["gcp_cred"] = vFn
+
+	v.FldValidators["cloud_link_type.byoc"] = GCPBYOCListTypeValidator().Validate
+
+	return v
+}()
+
+func GCPTypeValidator() db.Validator {
+	return DefaultGCPTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1437,6 +2235,17 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	case *GetSpecType_Azure:
 
 		return nil, nil
+
+	case *GetSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -1530,6 +2339,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_Gcp:
+		if fv, exists := v.FldValidators["cloud_provider.gcp"]; exists {
+			val := m.GetCloudProvider().(*GetSpecType_Gcp).Gcp
+			vOpts := append(opts,
+				db.WithValidateField("cloud_provider"),
+				db.WithValidateField("gcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1569,15 +2389,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["error_description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("error_description"))
-		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sites"))
@@ -1591,15 +2402,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("suggested_action"))
-		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1654,6 +2456,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["sites"] = vFn
 
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
+	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
 
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
@@ -1744,6 +2547,17 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	case *GlobalSpecType_Azure:
 
 		return nil, nil
+
+	case *GlobalSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
 
 	default:
 		return nil, nil
@@ -1837,6 +2651,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_Gcp:
+		if fv, exists := v.FldValidators["cloud_provider.gcp"]; exists {
+			val := m.GetCloudProvider().(*GlobalSpecType_Gcp).Gcp
+			vOpts := append(opts,
+				db.WithValidateField("cloud_provider"),
+				db.WithValidateField("gcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1876,15 +2701,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["error_description"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("error_description"))
-		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["sites"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sites"))
@@ -1898,15 +2714,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["suggested_action"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("suggested_action"))
-		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1961,6 +2768,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["sites"] = vFn
 
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
+	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
 
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
@@ -2083,8 +2891,7 @@ var DefaultIpv4TypeValidator = func() *ValidateIpv4Type {
 	rulesRouterPeerAddress := map[string]string{
 		"ves.io.schema.rules.message.required":            "true",
 		"ves.io.schema.rules.string.ipv4_prefix":          "true",
-		"ves.io.schema.rules.string.max_ip_prefix_length": "31",
-		"ves.io.schema.rules.string.min_ip_prefix_length": "31",
+		"ves.io.schema.rules.string.min_ip_prefix_length": "1",
 	}
 	vFn, err = vrhRouterPeerAddress(rulesRouterPeerAddress)
 	if err != nil {
@@ -2097,8 +2904,7 @@ var DefaultIpv4TypeValidator = func() *ValidateIpv4Type {
 	rulesAwsRouterPeerAddress := map[string]string{
 		"ves.io.schema.rules.message.required":            "true",
 		"ves.io.schema.rules.string.ipv4_prefix":          "true",
-		"ves.io.schema.rules.string.max_ip_prefix_length": "31",
-		"ves.io.schema.rules.string.min_ip_prefix_length": "31",
+		"ves.io.schema.rules.string.min_ip_prefix_length": "1",
 	}
 	vFn, err = vrhAwsRouterPeerAddress(rulesAwsRouterPeerAddress)
 	if err != nil {
@@ -2264,6 +3070,17 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *ReplaceSpecType_Gcp:
+		drInfos, err := m.GetGcp().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "gcp." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2332,6 +3149,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("cloud_provider"),
 				db.WithValidateField("azure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Gcp:
+		if fv, exists := v.FldValidators["cloud_provider.gcp"]; exists {
+			val := m.GetCloudProvider().(*ReplaceSpecType_Gcp).Gcp
+			vOpts := append(opts,
+				db.WithValidateField("cloud_provider"),
+				db.WithValidateField("gcp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2414,6 +3242,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["enable_connection_to_re_choice"] = vFn
 
 	v.FldValidators["cloud_provider.aws"] = AWSTypeValidator().Validate
+	v.FldValidators["cloud_provider.gcp"] = GCPTypeValidator().Validate
 
 	v.FldValidators["enable_connection_to_re_choice.enabled"] = ves_io_schema_views.CloudLinkADNTypeValidator().Validate
 
@@ -2436,6 +3265,9 @@ func (r *CreateSpecType) SetCloudProviderToGlobalSpecType(o *GlobalSpecType) err
 	case *CreateSpecType_Azure:
 		o.CloudProvider = &GlobalSpecType_Azure{Azure: of.Azure}
 
+	case *CreateSpecType_Gcp:
+		o.CloudProvider = &GlobalSpecType_Gcp{Gcp: of.Gcp}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2452,6 +3284,9 @@ func (r *CreateSpecType) GetCloudProviderFromGlobalSpecType(o *GlobalSpecType) e
 
 	case *GlobalSpecType_Azure:
 		r.CloudProvider = &CreateSpecType_Azure{Azure: of.Azure}
+
+	case *GlobalSpecType_Gcp:
+		r.CloudProvider = &CreateSpecType_Gcp{Gcp: of.Gcp}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2541,6 +3376,9 @@ func (r *GetSpecType) SetCloudProviderToGlobalSpecType(o *GlobalSpecType) error 
 	case *GetSpecType_Azure:
 		o.CloudProvider = &GlobalSpecType_Azure{Azure: of.Azure}
 
+	case *GetSpecType_Gcp:
+		o.CloudProvider = &GlobalSpecType_Gcp{Gcp: of.Gcp}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2557,6 +3395,9 @@ func (r *GetSpecType) GetCloudProviderFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_Azure:
 		r.CloudProvider = &GetSpecType_Azure{Azure: of.Azure}
+
+	case *GlobalSpecType_Gcp:
+		r.CloudProvider = &GetSpecType_Gcp{Gcp: of.Gcp}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2606,10 +3447,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.CloudLinkState = f.GetCloudLinkState()
 	m.GetCloudProviderFromGlobalSpecType(f)
 	m.GetEnableConnectionToReChoiceFromGlobalSpecType(f)
-	m.ErrorDescription = f.GetErrorDescription()
 	m.Sites = f.GetSites()
 	m.Status = f.GetStatus()
-	m.SuggestedAction = f.GetSuggestedAction()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2630,10 +3469,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.CloudLinkState = m1.CloudLinkState
 	m1.SetCloudProviderToGlobalSpecType(f)
 	m1.SetEnableConnectionToReChoiceToGlobalSpecType(f)
-	f.ErrorDescription = m1.ErrorDescription
 	f.Sites = m1.Sites
 	f.Status = m1.Status
-	f.SuggestedAction = m1.SuggestedAction
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2656,6 +3493,9 @@ func (r *ReplaceSpecType) SetCloudProviderToGlobalSpecType(o *GlobalSpecType) er
 	case *ReplaceSpecType_Azure:
 		o.CloudProvider = &GlobalSpecType_Azure{Azure: of.Azure}
 
+	case *ReplaceSpecType_Gcp:
+		o.CloudProvider = &GlobalSpecType_Gcp{Gcp: of.Gcp}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2672,6 +3512,9 @@ func (r *ReplaceSpecType) GetCloudProviderFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_Azure:
 		r.CloudProvider = &ReplaceSpecType_Azure{Azure: of.Azure}
+
+	case *GlobalSpecType_Gcp:
+		r.CloudProvider = &ReplaceSpecType_Gcp{Gcp: of.Gcp}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

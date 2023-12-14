@@ -138,7 +138,12 @@ func newObjectListReqFrom(cco *server.CrudCallOpts) (*ObjectListReq, error) {
 	if cco.OutResourceVersion != nil {
 		r.ResourceVersion = true
 	}
-
+	if cco.PageStart != "" {
+		r.PageStart = cco.PageStart
+	}
+	if cco.PageLimit != 0 {
+		r.PageLimit = cco.PageLimit
+	}
 	return r, nil
 }
 
@@ -300,7 +305,9 @@ func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -685,6 +692,12 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		q.Add("resource_version", "true")
 	}
+	if cco.PageStart != "" {
+		q.Add("page_start", cco.PageStart)
+	}
+	if cco.PageLimit != 0 {
+		q.Add("page_limit", fmt.Sprintf("%d", cco.PageLimit))
+	}
 
 	hReq.URL.RawQuery += q.Encode()
 	rsp, err := c.client.Do(hReq)
@@ -712,7 +725,9 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rspo.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rspo.GetNextPage()
+	}
 	return rspo, nil
 }
 
@@ -994,7 +1009,9 @@ func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallO
 	if cco.OutResourceVersion != nil {
 		*cco.OutResourceVersion = rsp.GetMetadata().GetResourceVersion()
 	}
-
+	if cco.OutNextPage != nil {
+		*cco.OutNextPage = rsp.GetNextPage()
+	}
 	return rsp, err
 }
 
@@ -1156,6 +1173,8 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		RspStreamed:        false,
 		GetResourceVersion: req.ResourceVersion,
 		OmitReferredID:     !req.IncludeReferredId,
+		PageStart:          req.PageStart,
+		PageLimit:          req.PageLimit,
 	}
 	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
 	if err != nil {
@@ -1166,7 +1185,7 @@ func (s *APISrv) List(ctx context.Context, req *ObjectListReq) (*ObjectListRsp, 
 		merr = multierror.Append(merr, err)
 	}
 	rsp.Metadata.ResourceVersion = rsrcRsp.ResourceVersion
-
+	rsp.NextPage = rsrcRsp.NextPage
 	return rsp, merr
 }
 
@@ -1861,6 +1880,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2070,6 +2104,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2309,6 +2358,21 @@ var APISwaggerJSON string = `{
                         "required": false,
                         "type": "boolean",
                         "format": "boolean"
+                    },
+                    {
+                        "name": "page_start",
+                        "description": "The value for PageStart indicating from very first entry. This will be ignored unless page_limit\nis also defined.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "page_limit",
+                        "description": "The maximum number of items to return in a single page. If this is greater than 0, and page_start is unset,\nthe first page will be returned.",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
                     }
                 ],
                 "tags": [
@@ -2854,6 +2918,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$|^$"
                     }
+                },
+                "vpc_name": {
+                    "type": "string",
+                    "description": " VPC Name where the volterra site exists",
+                    "title": "VPC Name",
+                    "x-displayname": "VPC Name"
                 }
             }
         },
@@ -3172,6 +3242,10 @@ var APISwaggerJSON string = `{
                 },
                 "metadata": {
                     "$ref": "#/definitions/schemaListMetaType"
+                },
+                "next_page": {
+                    "type": "string",
+                    "title": "Will only be set if request included a page_limit and there are more pages beyond the current page"
                 },
                 "uids": {
                     "type": "array",
@@ -4653,6 +4727,14 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Inside VIP CNAME\"\nx-example: \"test.56670-387196482.useast2.ves.io\"\nCNAME value for the inside VIP,\nThese are usually public cloud generated CNAME",
                     "title": "Inside VIP CNAME"
                 },
+                "inside_vip_v6": {
+                    "type": "array",
+                    "description": "x-displayName: \"Inside IPv6 VIP(s)\"\nx-example: \"2001::1\"\nOptional list of Inside IPv6 VIPs for an AZ",
+                    "title": "Inside IPv6 VIP(s)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "outside_vip": {
                     "type": "array",
                     "description": "x-displayName: \"Outside VIP(s)\"\nx-example: \"192.168.0.156\"\nx-required\nList of Outside VIPs for an AZ",
@@ -4665,19 +4747,28 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Outside VIP CNAME\"\nx-example: \"test.56670-387196482.useast2.ves.io\"\nCNAME value for the outside VIP\nThese are usually public cloud generated CNAME",
                     "title": "Outside VIP CNAME"
+                },
+                "outside_vip_v6": {
+                    "type": "array",
+                    "description": "x-displayName: \"Outside IPv6 VIP(s)\"\nx-example: \"2001::1\"\nOptional list of Outside IPv6 VIPs for an AZ",
+                    "title": "Outside IPv6 VIP(s)",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
         "terraform_parametersApplyStageState": {
             "type": "string",
-            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"",
+            "title": "- APPLIED: x-displayName: \"Applied\"\n - APPLY_ERRORED: x-displayName: \"Apply errored\"\n - APPLY_INIT_ERRORED: x-displayName: \"Apply init errored\"\n - APPLYING: x-displayName: \"Applying\"\n - APPLY_PLANNING: x-displayName: \"Apply planning\"\n - APPLY_PLAN_ERRORED: x-displayName: \"Apply plan errored\"\n - APPLY_QUEUED: x-displayName: \"Apply queued\"",
             "enum": [
                 "APPLIED",
                 "APPLY_ERRORED",
                 "APPLY_INIT_ERRORED",
                 "APPLYING",
                 "APPLY_PLANNING",
-                "APPLY_PLAN_ERRORED"
+                "APPLY_PLAN_ERRORED",
+                "APPLY_QUEUED"
             ],
             "default": "APPLIED",
             "x-displayname": "",
@@ -4774,11 +4865,12 @@ var APISwaggerJSON string = `{
         },
         "terraform_parametersDestroyStageState": {
             "type": "string",
-            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"",
+            "title": "- DESTROYED: x-displayName: \"Destroyed\"\n - DESTROY_ERRORED: x-displayName: \"Destroy errored\"\n - DESTROYING: x-displayName: \"Destroying\"\n - DESTROY_QUEUED: x-displayName: \"Destroy Queued\"",
             "enum": [
                 "DESTROYED",
                 "DESTROY_ERRORED",
-                "DESTROYING"
+                "DESTROYING",
+                "DESTROY_QUEUED"
             ],
             "default": "DESTROYED",
             "x-displayname": "",
@@ -4807,7 +4899,8 @@ var APISwaggerJSON string = `{
                 "NO_CHANGES",
                 "HAS_CHANGES",
                 "DISCARDED",
-                "PLAN_INIT_ERRORED"
+                "PLAN_INIT_ERRORED",
+                "PLAN_QUEUED"
             ],
             "default": "PLANNING",
             "x-displayname": "Plan Stage State",
@@ -5219,10 +5312,10 @@ var APISwaggerJSON string = `{
             "properties": {
                 "cloudlink_network_name": {
                     "type": "string",
-                    "description": " CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "CloudLink ADN Network Name",
+                    "description": " Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support.\n\nExample: - \"private-cloud-ntw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "Private ADN Network",
                     "maxLength": 64,
-                    "x-displayname": "CloudLink ADN Network Name",
+                    "x-displayname": "Private ADN Network",
                     "x-ves-example": "private-cloud-ntw",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -5251,6 +5344,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
                     }
                 }
             }
@@ -5626,13 +5729,33 @@ var APISwaggerJSON string = `{
         },
         "viewsPrivateConnectConfigType": {
             "type": "object",
-            "description": "x-displayName: \"Private Connect Configuration\"\nPrivate Connect Configuration",
+            "description": "Private Connect Configuration",
             "title": "PrivateConnectConfigType",
+            "x-displayname": "Private Connect Configuration",
+            "x-ves-oneof-field-network_options": "[\"inside\",\"outside\"]",
+            "x-ves-proto-message": "ves.io.schema.views.PrivateConnectConfigType",
             "properties": {
                 "cloud_link": {
-                    "description": "x-displayName: \"Associate Cloud Link\"\nx-required\nReference to Cloud Link",
+                    "description": " Reference to Cloud Link\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Associate Cloud Link",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Associate Cloud Link",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "inside": {
+                    "description": "Exclusive with [outside]\n CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site",
+                    "title": "Inside Network",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inside Network"
+                },
+                "outside": {
+                    "description": "Exclusive with [inside]\n CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site",
+                    "title": "Outside Network",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Outside Network"
                 }
             }
         },
@@ -5846,7 +5969,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\"]",
+            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
@@ -5874,14 +5997,13 @@ var APISwaggerJSON string = `{
                 },
                 "aws_region": {
                     "type": "string",
-                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]\n",
+                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS Region",
                     "x-displayname": "AWS Region",
                     "x-ves-example": "us-east-1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.in": "[\\\"af-south-1\\\",\\\"ap-east-1\\\",\\\"ap-northeast-1\\\",\\\"ap-northeast-2\\\",\\\"ap-south-1\\\",\\\"ap-southeast-1\\\",\\\"ap-southeast-2\\\",\\\"ap-southeast-3\\\",\\\"ca-central-1\\\",\\\"eu-central-1\\\",\\\"eu-north-1\\\",\\\"eu-south-1\\\",\\\"eu-west-1\\\",\\\"eu-west-2\\\",\\\"eu-west-3\\\",\\\"me-south-1\\\",\\\"sa-east-1\\\",\\\"us-east-1\\\",\\\"us-east-2\\\",\\\"us-west-1\\\",\\\"us-west-2\\\"]"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "block_all_services": {
@@ -5921,16 +6043,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled]\n Direct Connect feature is disabled",
-                    "title": "Disable Direct Connect",
+                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\nDisable Private Connectivity to Site",
+                    "title": "Disable Private Connectivity",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable Direct Connect"
+                    "x-displayname": "Disable Private Connectivity"
                 },
                 "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled]\n Direct Connect feature is enabled",
+                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect feature is enabled(Legacy)",
                     "title": "Enable Direct Connect",
                     "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Direct Connect"
+                    "x-displayname": "Enable Direct Connect(Legacy)"
                 },
                 "direct_connect_info": {
                     "description": " Direct Connect information obtained after creating the site and TGW",
@@ -6058,6 +6180,12 @@ var APISwaggerJSON string = `{
                     "title": "Operating System",
                     "$ref": "#/definitions/viewsOperatingSystemType",
                     "x-displayname": "Operating System"
+                },
+                "private_connectivity": {
+                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site",
+                    "title": "Enable Private Connectivity",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable Private Connectivity"
                 },
                 "ssh_key": {
                     "type": "string",

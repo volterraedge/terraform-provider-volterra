@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -68,7 +69,20 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -116,6 +130,24 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -236,6 +268,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -267,6 +308,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -597,6 +640,10 @@ func (m *EnhancedFirewallPolicyRuleType) GetDestinationChoiceDRefInfo() ([]db.DR
 
 		return nil, nil
 
+	case *EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -641,6 +688,10 @@ func (m *EnhancedFirewallPolicyRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *EnhancedFirewallPolicyRuleType_SourceAwsVpcIds:
+
+		return nil, nil
+
+	case *EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds:
 
 		return nil, nil
 
@@ -898,6 +949,17 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 				return err
 			}
 		}
+	case *EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds:
+		if fv, exists := v.FldValidators["destination_choice.destination_aws_subnet_ids"]; exists {
+			val := m.GetDestinationChoice().(*EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds).DestinationAwsSubnetIds
+			vOpts := append(opts,
+				db.WithValidateField("destination_choice"),
+				db.WithValidateField("destination_aws_subnet_ids"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1013,6 +1075,17 @@ func (v *ValidateEnhancedFirewallPolicyRuleType) Validate(ctx context.Context, p
 			vOpts := append(opts,
 				db.WithValidateField("source_choice"),
 				db.WithValidateField("source_aws_vpc_ids"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds:
+		if fv, exists := v.FldValidators["source_choice.source_aws_subnet_ids"]; exists {
+			val := m.GetSourceChoice().(*EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds).SourceAwsSubnetIds
+			vOpts := append(opts,
+				db.WithValidateField("source_choice"),
+				db.WithValidateField("source_aws_subnet_ids"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1166,11 +1239,13 @@ var DefaultEnhancedFirewallPolicyRuleTypeValidator = func() *ValidateEnhancedFir
 	v.FldValidators["destination_choice.destination_ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 	v.FldValidators["destination_choice.destination_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["destination_choice.destination_aws_vpc_ids"] = ves_io_schema.AwsVpcListValidator().Validate
+	v.FldValidators["destination_choice.destination_aws_subnet_ids"] = ves_io_schema.AwsSubnetListValidator().Validate
 
 	v.FldValidators["source_choice.source_prefix_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["source_choice.source_ip_prefix_set"] = ves_io_schema.IpPrefixSetRefTypeValidator().Validate
 	v.FldValidators["source_choice.source_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
 	v.FldValidators["source_choice.source_aws_vpc_ids"] = ves_io_schema.AwsVpcListValidator().Validate
+	v.FldValidators["source_choice.source_aws_subnet_ids"] = ves_io_schema.AwsSubnetListValidator().Validate
 
 	v.FldValidators["traffic_choice.protocol_port_range"] = ves_io_schema_network_policy.ProtocolPortTypeValidator().Validate
 
@@ -1225,7 +1300,20 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -1273,6 +1361,24 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -1393,6 +1499,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1424,6 +1539,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -1483,6 +1600,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1553,6 +1676,24 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -1682,6 +1823,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1713,6 +1863,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -1968,7 +2120,20 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRuleChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRuleChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRuleChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -2016,6 +2181,24 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -2136,6 +2319,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2167,6 +2359,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["rule_choice.denied_sources"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.denied_destinations"] = ves_io_schema.PrefixListTypeValidator().Validate
 	v.FldValidators["rule_choice.rule_list"] = EnhancedFirewallPolicyRuleListTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -2421,6 +2615,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2439,6 +2634,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2519,6 +2715,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2537,6 +2734,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -2617,6 +2815,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.GetRuleChoiceFromGlobalSpecType(f)
+	m.SegmentPolicy = f.GetSegmentPolicy()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -2635,6 +2834,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	m1.SetRuleChoiceToGlobalSpecType(f)
+	f.SegmentPolicy = m1.SegmentPolicy
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

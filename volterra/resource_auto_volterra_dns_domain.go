@@ -61,6 +61,11 @@ func resourceVolterraDnsDomain() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"txt_record": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+
 			"dnssec_mode": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -269,6 +274,9 @@ func resourceVolterraDnsDomainRead(d *schema.ResourceData, meta interface{}) err
 
 func setDnsDomainFields(client *APIClient, d *schema.ResourceData, resp vesapi.GetObjectResponse) error {
 	metadata := resp.GetObjMetadata()
+
+	spec := resp.GetObjSpec().(*ves_io_schema_dns_domain.SpecType)
+	d.Set("txt_record", spec.GcSpec.GetTxtRecord())
 
 	d.Set("annotations", metadata.GetAnnotations())
 

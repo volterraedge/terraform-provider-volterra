@@ -34,15 +34,6 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &CreateRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.signup.CreateRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.Create(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -136,8 +127,6 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Get"] = ccl.doRPCGet
 
 	rpcFns["ListCities"] = ccl.doRPCListCities
@@ -163,89 +152,6 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
-}
-
-func (c *CustomAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &CreateRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.signup.CreateRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("spec", fmt.Sprintf("%v", req.Spec))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &Object{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.signup.Object", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -861,8 +767,6 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["Create"] = ccl.doRPCCreate
-
 	rpcFns["Get"] = ccl.doRPCGet
 
 	rpcFns["ListCities"] = ccl.doRPCListCities
@@ -889,10 +793,6 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
-func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*Object, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.Create", nil)
-	return c.CustomAPIServer.Create(ctx, in)
-}
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPI.Get", nil)
 	return c.CustomAPIServer.Get(ctx, in)
@@ -943,58 +843,6 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPISrv) Create(ctx context.Context, in *CreateRequest) (*Object, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.signup.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *Object
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.signup.CreateRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.Create' operation on 'signup'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
-		return nil, err
-	}
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.signup.CustomAPI.Create"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.Create(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.signup.Object", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.signup.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -1801,90 +1649,6 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-sendpasswordemail"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.SendPasswordEmail"
-            },
-            "x-displayname": "Signup",
-            "x-ves-proto-service": "ves.io.schema.signup.CustomAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/no_auth/signup": {
-            "post": {
-                "summary": "Create signup",
-                "description": "Create stores a signup object, this will trigger the signup flow and eventually result in a new customer tenant.\nUse the -Get- method to request for the signup status to see if all went well.",
-                "operationId": "ves.io.schema.signup.CustomAPI.Create",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/signupObject"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/signupCreateRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-create"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.Create"
             },
             "x-displayname": "Signup",
             "x-ves-proto-service": "ves.io.schema.signup.CustomAPI",
@@ -3223,167 +2987,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "schemasignupCreateSpecType": {
-            "type": "object",
-            "description": "Holds all the fields required to receive signup from the client.",
-            "title": "Create spec of the signup object",
-            "x-displayname": "Create Signup",
-            "x-ves-proto-message": "ves.io.schema.signup.CreateSpecType",
-            "properties": {
-                "billing_address": {
-                    "description": " address associated with the credit card details provided using the payment_provider_token\n if no billing address is provided then any address tokenized with payment_provider_token will be used - including an empty address.",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Billing Address"
-                },
-                "company": {
-                    "description": " company details (enterprise only), name, email",
-                    "$ref": "#/definitions/schemauserGlobalSpecType",
-                    "x-displayname": "Company"
-                },
-                "company_contact": {
-                    "description": " contact details of the enterprise customer",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Company Contact"
-                },
-                "company_name": {
-                    "type": "string",
-                    "description": " company name (enterprise only)\n\nExample: - \"ACME Ltd.\"-",
-                    "x-displayname": "Company Name",
-                    "x-ves-example": "ACME Ltd."
-                },
-                "contact_number": {
-                    "type": "string",
-                    "description": " phone contact number\n obsolete\n\nExample: - \"+11234567890\"-",
-                    "x-displayname": "Contact Number",
-                    "x-ves-example": "+11234567890"
-                },
-                "crm_info": {
-                    "description": " message to include crm info in TEEM pipeline.",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfo",
-                    "x-displayname": "CrmInfo"
-                },
-                "currency": {
-                    "type": "string",
-                    "description": " preferred currency on the tenant level - individual billing accounts may\n override this.\n\nExample: - \"USD\"-",
-                    "x-displayname": "Currency",
-                    "x-ves-example": "USD"
-                },
-                "customer": {
-                    "description": " customer details (personal/enterprise)",
-                    "$ref": "#/definitions/schemauserGlobalSpecType",
-                    "x-displayname": "Customer"
-                },
-                "customer_contact": {
-                    "description": " contact details of the customer",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Customer Contact"
-                },
-                "domain": {
-                    "type": "string",
-                    "description": " domain the customer chose to use - enterprise customers only.\n\nExample: - \"value\"-",
-                    "x-displayname": "Domain",
-                    "x-ves-example": "value"
-                },
-                "email": {
-                    "type": "string",
-                    "description": " email of the customer (ideally someone who's responsible for the company\n account)\n obsolete\n\nExample: - \"customer@email.com\"-",
-                    "x-displayname": "Email",
-                    "x-ves-example": "customer@email.com"
-                },
-                "first_name": {
-                    "type": "string",
-                    "description": " first name of the customer\n obsolete\n\nExample: - \"John\"-",
-                    "x-displayname": "First Name",
-                    "x-ves-example": "John"
-                },
-                "infraprotect_info": {
-                    "description": " Optional information that allows link any existing Infraprotect customer to Voltconsole",
-                    "$ref": "#/definitions/schemainfraprotect_informationGlobalSpecType",
-                    "x-displayname": "Infraprotect information"
-                },
-                "last_name": {
-                    "type": "string",
-                    "description": " last name of the customer (the superuser)\n obsolete\n\nExample: - \"Doe\"-",
-                    "x-displayname": "Last Name",
-                    "x-ves-example": "Doe"
-                },
-                "locale": {
-                    "type": "string",
-                    "description": " locale of this sign up\n\nExample: - \"en-us\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "x-displayname": "Locale",
-                    "x-ves-example": "en-us",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "payment_provider_token": {
-                    "type": "string",
-                    "description": " payment provider token (for credit card details)\n\nExample: - \"tok_1234567890\"-",
-                    "x-displayname": "Payment Provider Token",
-                    "x-ves-example": "tok_1234567890"
-                },
-                "support_plan_name": {
-                    "type": "string",
-                    "description": " what sort of support plan the customer will be on.\n\nExample: - \"xxxx-yyyy-zzzz-1111\"-",
-                    "x-displayname": "Support Plan Name",
-                    "x-ves-example": "xxxx-yyyy-zzzz-1111"
-                },
-                "tax_exempt": {
-                    "description": " indicates the customer is tax exempt. once confirmed with the finance team the customer will not be charged taxes.\n\nExample: - \"TAX_EXEMPT\"-",
-                    "$ref": "#/definitions/schemaTaxExemptionType",
-                    "x-displayname": "Tax exemption",
-                    "x-ves-example": "TAX_EXEMPT"
-                },
-                "token": {
-                    "type": "string",
-                    "description": " token of the user requesting for.\n Valid tokens are internally generated in the system and shared with respective customers.\n Onboarding of new customers will proceed only when a valid token along with the email is provided during the signup process.\n\nExample: - \"tok_1234567890\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "x-displayname": "Token",
-                    "x-ves-example": "tok_1234567890",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "tos_accepted": {
-                    "type": "string",
-                    "description": " t\u0026c accepted date as millis from 01/01/1970 UTC\n\nExample: - \"1569926163000\"-",
-                    "format": "int64",
-                    "x-displayname": "TOS Accepted",
-                    "x-ves-example": "1569926163000"
-                },
-                "tos_accepted_at": {
-                    "type": "string",
-                    "description": " tos accepted timestamp.\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
-                    "title": "tos_accepted_at",
-                    "format": "date-time",
-                    "x-displayname": "TosAcceptedAt",
-                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
-                },
-                "tos_version": {
-                    "type": "string",
-                    "description": " indicates the version of ToS customer approved during signup. Any new version will require the customer to re-approve during login.\n\nExample: - \"v1.2\"-",
-                    "x-displayname": "TOS version",
-                    "x-ves-example": "v1.2"
-                },
-                "type": {
-                    "description": " what tenant type we're processing (FREEMIUM, ENTERPRISE ...)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaTenantType",
-                    "x-displayname": "Tenant Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "usage_plan_name": {
-                    "type": "string",
-                    "description": " what sort of usage plan the customer will be on.\n\nExample: - \"xxxx-yyyy-zzzz-1111\"-",
-                    "x-displayname": "Usage Plan Name",
-                    "x-ves-example": "xxxx-yyyy-zzzz-1111"
-                }
-            }
-        },
         "schemasignupErrorCode": {
             "type": "string",
             "description": "ErrorCode is used to know the specific reason for signup registration failures\n\n - ETOKEN_OK: token related codes go here\n - EUSER_OK: user related codes go here\n - ECONTACT_VALIDATE_OK: contact validation codes go here\nValidation is ok\n - ECONTACT_EMPTY_COUNTRY: Empty country during validation of a contact\n - ECONTACT_EMPTY_ZIP_CODE: Empty zip code during validation of a contact\n - ECONTACT_UNKNOWN_COUNTRY: A given country is not present in the configured list of country-zipCodeRegexp\n - ECONTACT_INVALID_ZIP: A given zip doesn't match a configured regexp for a given country\n - EOK: EOK indicates no error\n - ENO_STATES: ENO_STATES indicates no states in a country\n - ENO_CITIES: ENO_CITIES indicates no cities in country/state",
@@ -3765,21 +3368,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "country name",
                     "x-displayname": "Country name",
                     "x-ves-example": "USA"
-                }
-            }
-        },
-        "signupCreateRequest": {
-            "type": "object",
-            "description": "signup create request",
-            "title": "Signup create",
-            "x-displayname": "Signup Create",
-            "x-ves-proto-message": "ves.io.schema.signup.CreateRequest",
-            "properties": {
-                "spec": {
-                    "description": " Specification of Object",
-                    "title": "Create specification",
-                    "$ref": "#/definitions/schemasignupCreateSpecType",
-                    "x-displayname": "Create Specification"
                 }
             }
         },

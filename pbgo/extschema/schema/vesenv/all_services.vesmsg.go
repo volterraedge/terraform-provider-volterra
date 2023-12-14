@@ -397,6 +397,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Lucario:
+		if fv, exists := v.FldValidators["choice.lucario"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Lucario).Lucario
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("lucario"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *ServiceChoice_Hellas:
 		if fv, exists := v.FldValidators["choice.hellas"]; exists {
 			val := m.GetChoice().(*ServiceChoice_Hellas).Hellas

@@ -28,6 +28,234 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSAttachmentsListStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSAttachmentsListStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSAttachmentsListStatusType) DeepCopy() *AWSAttachmentsListStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSAttachmentsListStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSAttachmentsListStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSAttachmentsListStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSAttachmentsListStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSAttachmentsListStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSAttachmentsListStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSAttachmentsListStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSAttachmentsListStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attachment_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attachment_status"))
+		for idx, item := range m.GetAttachmentStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSAttachmentsListStatusTypeValidator = func() *ValidateAWSAttachmentsListStatusType {
+	v := &ValidateAWSAttachmentsListStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSAttachmentsListStatusTypeValidator() db.Validator {
+	return DefaultAWSAttachmentsListStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSAttachmentsStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSAttachmentsStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSAttachmentsStatusType) DeepCopy() *AWSAttachmentsStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSAttachmentsStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSAttachmentsStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSAttachmentsStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSAttachmentsStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSAttachmentsStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSAttachmentsStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSAttachmentsStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSAttachmentsStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["creation_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("creation_time"))
+		if err := fv(ctx, m.GetCreationTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["deployment_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("deployment_status"))
+		if err := fv(ctx, m.GetDeploymentStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnets"))
+		for idx, item := range m.GetSubnets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tags"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tags"))
+		for key, value := range m.GetTags() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_attachment_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_attachment_id"))
+		if err := fv(ctx, m.GetTgwAttachmentId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_id"))
+		if err := fv(ctx, m.GetVpcId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_owner_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_owner_id"))
+		if err := fv(ctx, m.GetVpcOwnerId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSAttachmentsStatusTypeValidator = func() *ValidateAWSAttachmentsStatusType {
+	v := &ValidateAWSAttachmentsStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSAttachmentsStatusTypeValidator() db.Validator {
+	return DefaultAWSAttachmentsStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AWSREType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -81,8 +309,8 @@ func (m *AWSREType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetNodesDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetNodesDRefInfo() FAILED")
+	if fdrInfos, err := m.GetPeersDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPeersDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -165,20 +393,20 @@ func (m *AWSREType) GetCredDBEntries(ctx context.Context, d db.Interface) ([]db.
 }
 
 // GetDRefInfo for the field's type
-func (m *AWSREType) GetNodesDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetNodes() == nil {
+func (m *AWSREType) GetPeersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetPeers() == nil {
 		return nil, nil
 	}
 
 	var drInfos []db.DRefInfo
-	for idx, e := range m.GetNodes() {
+	for idx, e := range m.GetPeers() {
 		driSet, err := e.GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "GetNodes() GetDRefInfo() FAILED")
+			return nil, errors.Wrap(err, "GetPeers() GetDRefInfo() FAILED")
 		}
 		for i := range driSet {
 			dri := &driSet[i]
-			dri.DRField = fmt.Sprintf("nodes[%v].%s", idx, dri.DRField)
+			dri.DRField = fmt.Sprintf("peers[%v].%s", idx, dri.DRField)
 		}
 		drInfos = append(drInfos, driSet...)
 	}
@@ -193,9 +421,9 @@ func (m *AWSREType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("cloud_re_region.Object")
+	vdRef.SetKind("cloud_region.Object")
 	dri := db.DRefInfo{
-		RefdType:   "cloud_re_region.Object",
+		RefdType:   "cloud_region.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -209,9 +437,9 @@ func (m *AWSREType) GetRegionDRefInfo() ([]db.DRefInfo, error) {
 // GetRegionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *AWSREType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "cloud_re_region.Object")
+	refdType, err := d.TypeForEntryKind("", "", "cloud_region.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_re_region")
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_region")
 	}
 
 	vref := m.GetRegion()
@@ -219,7 +447,7 @@ func (m *AWSREType) GetRegionDBEntries(ctx context.Context, d db.Interface) ([]d
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "cloud_re_region.Object",
+		Kind:      "cloud_region.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -271,10 +499,10 @@ func (v *ValidateAWSREType) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
-	if fv, exists := v.FldValidators["nodes"]; exists {
+	if fv, exists := v.FldValidators["peers"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("nodes"))
-		for idx, item := range m.GetNodes() {
+		vOpts := append(opts, db.WithValidateField("peers"))
+		for idx, item := range m.GetPeers() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -325,7 +553,7 @@ var DefaultAWSRETypeValidator = func() *ValidateAWSREType {
 
 	v.FldValidators["cloud_links"] = CloudLinkListTypeValidator().Validate
 
-	v.FldValidators["nodes"] = ves_io_schema_cloud_re_region.NodeTypeValidator().Validate
+	v.FldValidators["peers"] = PeerTypeValidator().Validate
 
 	return v
 }()
@@ -1353,12 +1581,23 @@ func (v *ValidateAWSVPCAttachmentType) Validate(ctx context.Context, pm interfac
 				return err
 			}
 		}
-	case *AWSVPCAttachmentType_RoutingIds:
-		if fv, exists := v.FldValidators["routing_choice.routing_ids"]; exists {
-			val := m.GetRoutingChoice().(*AWSVPCAttachmentType_RoutingIds).RoutingIds
+	case *AWSVPCAttachmentType_DefaultRoute:
+		if fv, exists := v.FldValidators["routing_choice.default_route"]; exists {
+			val := m.GetRoutingChoice().(*AWSVPCAttachmentType_DefaultRoute).DefaultRoute
 			vOpts := append(opts,
 				db.WithValidateField("routing_choice"),
-				db.WithValidateField("routing_ids"),
+				db.WithValidateField("default_route"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSVPCAttachmentType_CustomRouting:
+		if fv, exists := v.FldValidators["routing_choice.custom_routing"]; exists {
+			val := m.GetRoutingChoice().(*AWSVPCAttachmentType_CustomRouting).CustomRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_choice"),
+				db.WithValidateField("custom_routing"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1473,7 +1712,8 @@ var DefaultAWSVPCAttachmentTypeValidator = func() *ValidateAWSVPCAttachmentType 
 	}
 	v.FldValidators["labels"] = vFn
 
-	v.FldValidators["routing_choice.routing_ids"] = AWSRouteTableListTypeValidator().Validate
+	v.FldValidators["routing_choice.default_route"] = AWSRouteTableListTypeValidator().Validate
+	v.FldValidators["routing_choice.custom_routing"] = AWSRouteTableListTypeValidator().Validate
 
 	v.FldValidators["subnet_choice.subnet_ids"] = AWSSubnetIDListTypeValidator().Validate
 
@@ -1482,6 +1722,90 @@ var DefaultAWSVPCAttachmentTypeValidator = func() *ValidateAWSVPCAttachmentType 
 
 func AWSVPCAttachmentTypeValidator() db.Validator {
 	return DefaultAWSVPCAttachmentTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CloudConnectStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloudConnectStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloudConnectStatusType) DeepCopy() *CloudConnectStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloudConnectStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloudConnectStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloudConnectStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloudConnectStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCloudConnectStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloudConnectStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloudConnectStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloudConnectStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetCloudConnectDeployment().(type) {
+	case *CloudConnectStatusType_CloudConnectAwsSite:
+		if fv, exists := v.FldValidators["cloud_connect_deployment.cloud_connect_aws_site"]; exists {
+			val := m.GetCloudConnectDeployment().(*CloudConnectStatusType_CloudConnectAwsSite).CloudConnectAwsSite
+			vOpts := append(opts,
+				db.WithValidateField("cloud_connect_deployment"),
+				db.WithValidateField("cloud_connect_aws_site"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloudConnectStatusTypeValidator = func() *ValidateCloudConnectStatusType {
+	v := &ValidateCloudConnectStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CloudConnectStatusTypeValidator() db.Validator {
+	return DefaultCloudConnectStatusTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1741,8 +2065,8 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSegmentOptionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentOptionDRefInfo() FAILED")
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1774,31 +2098,53 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSegmentOption() == nil {
+func (m *CreateSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
 		return nil, nil
 	}
-	switch m.GetSegmentOption().(type) {
-	case *CreateSpecType_IsolatedSegment:
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
 
-		return nil, nil
+}
 
-	case *CreateSpecType_EnableSegment:
-		drInfos, err := m.GetEnableSegment().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "enable_segment." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
 
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 type ValidateCreateSpecType struct {
@@ -1809,14 +2155,6 @@ func (v *ValidateCreateSpecType) CloudValidationRuleHandler(rules map[string]str
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
 	}
 	return validatorFn, nil
 }
@@ -1860,38 +2198,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["segment_option"]; exists {
-		val := m.GetSegmentOption()
-		vOpts := append(opts,
-			db.WithValidateField("segment_option"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["segment"]; exists {
 
-	switch m.GetSegmentOption().(type) {
-	case *CreateSpecType_IsolatedSegment:
-		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
-			val := m.GetSegmentOption().(*CreateSpecType_IsolatedSegment).IsolatedSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("isolated_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_EnableSegment:
-		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
-			val := m.GetSegmentOption().(*CreateSpecType_EnableSegment).EnableSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("enable_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1922,164 +2233,15 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
-	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
-	rulesSegmentOption := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSegmentOption(rulesSegmentOption)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.segment_option: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["segment_option"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
-
-	v.FldValidators["segment_option.enable_segment"] = EnableSegmentTypeValidator().Validate
-
-	return v
-}()
-
-func CreateSpecTypeValidator() db.Validator {
-	return DefaultCreateSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *EnableSegmentType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *EnableSegmentType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *EnableSegmentType) DeepCopy() *EnableSegmentType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &EnableSegmentType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *EnableSegmentType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *EnableSegmentType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return EnableSegmentTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *EnableSegmentType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetSegmentDRefInfo()
-
-}
-
-func (m *EnableSegmentType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
-	vref := m.GetSegment()
-	if vref == nil {
-		return nil, nil
-	}
-	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("segment.Object")
-	dri := db.DRefInfo{
-		RefdType:   "segment.Object",
-		RefdTenant: vref.Tenant,
-		RefdNS:     vref.Namespace,
-		RefdName:   vref.Name,
-		DRField:    "segment",
-		Ref:        vdRef,
-	}
-	return []db.DRefInfo{dri}, nil
-
-}
-
-// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *EnableSegmentType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
-	}
-
-	vref := m.GetSegment()
-	if vref == nil {
-		return nil, nil
-	}
-	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "segment.Object",
-		Tenant:    vref.Tenant,
-		Namespace: vref.Namespace,
-		Name:      vref.Name,
-	}
-	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting referred entry")
-	}
-	if refdEnt != nil {
-		entries = append(entries, refdEnt)
-	}
-
-	return entries, nil
-}
-
-type ValidateEnableSegmentType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateEnableSegmentType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*EnableSegmentType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *EnableSegmentType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["segment"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("segment"))
-		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultEnableSegmentTypeValidator = func() *ValidateEnableSegmentType {
-	v := &ValidateEnableSegmentType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
 
-func EnableSegmentTypeValidator() db.Validator {
-	return DefaultEnableSegmentTypeValidator
+func CreateSpecTypeValidator() db.Validator {
+	return DefaultCreateSpecTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2131,8 +2293,8 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSegmentOptionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentOptionDRefInfo() FAILED")
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2164,31 +2326,53 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *GetSpecType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSegmentOption() == nil {
+func (m *GetSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
 		return nil, nil
 	}
-	switch m.GetSegmentOption().(type) {
-	case *GetSpecType_IsolatedSegment:
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
 
-		return nil, nil
+}
 
-	case *GetSpecType_EnableSegment:
-		drInfos, err := m.GetEnableSegment().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "enable_segment." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
 
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 type ValidateGetSpecType struct {
@@ -2199,14 +2383,6 @@ func (v *ValidateGetSpecType) CloudValidationRuleHandler(rules map[string]string
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
 	}
 	return validatorFn, nil
 }
@@ -2250,38 +2426,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["segment_option"]; exists {
-		val := m.GetSegmentOption()
-		vOpts := append(opts,
-			db.WithValidateField("segment_option"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["segment"]; exists {
 
-	switch m.GetSegmentOption().(type) {
-	case *GetSpecType_IsolatedSegment:
-		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
-			val := m.GetSegmentOption().(*GetSpecType_IsolatedSegment).IsolatedSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("isolated_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_EnableSegment:
-		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
-			val := m.GetSegmentOption().(*GetSpecType_EnableSegment).EnableSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("enable_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2312,20 +2461,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
-	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
-	rulesSegmentOption := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSegmentOption(rulesSegmentOption)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.segment_option: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["segment_option"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 
-	v.FldValidators["segment_option.enable_segment"] = EnableSegmentTypeValidator().Validate
+	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2383,14 +2521,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetSegmentOptionDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentOptionDRefInfo() FAILED")
+	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
 	if fdrInfos, err := m.GetSitesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSitesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetVirtualNetworkDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualNetworkDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2433,31 +2577,53 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSegmentOption() == nil {
+func (m *GlobalSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
 		return nil, nil
 	}
-	switch m.GetSegmentOption().(type) {
-	case *GlobalSpecType_IsolatedSegment:
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
 
-		return nil, nil
+}
 
-	case *GlobalSpecType_EnableSegment:
-		drInfos, err := m.GetEnableSegment().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "enable_segment." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
 
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetSitesDRefInfo() ([]db.DRefInfo, error) {
@@ -2505,6 +2671,51 @@ func (m *GlobalSpecType) GetSitesDBEntries(ctx context.Context, d db.Interface) 
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.virtual_network[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+	for _, ref := range m.GetVirtualNetwork() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2521,14 +2732,6 @@ func (v *ValidateGlobalSpecType) CloudValidationRuleHandler(rules map[string]str
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
 	}
 	return validatorFn, nil
 }
@@ -2608,38 +2811,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["segment_option"]; exists {
-		val := m.GetSegmentOption()
-		vOpts := append(opts,
-			db.WithValidateField("segment_option"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["segment"]; exists {
 
-	switch m.GetSegmentOption().(type) {
-	case *GlobalSpecType_IsolatedSegment:
-		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
-			val := m.GetSegmentOption().(*GlobalSpecType_IsolatedSegment).IsolatedSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("isolated_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_EnableSegment:
-		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
-			val := m.GetSegmentOption().(*GlobalSpecType_EnableSegment).EnableSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("enable_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2648,6 +2824,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("sites"))
 		for idx, item := range m.GetSites() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_network"))
+		for idx, item := range m.GetVirtualNetwork() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -2693,21 +2881,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
-	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
-	rulesSegmentOption := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSegmentOption(rulesSegmentOption)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.segment_option: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["segment_option"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
 
-	v.FldValidators["segment_option.enable_segment"] = EnableSegmentTypeValidator().Validate
+	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2718,15 +2895,15 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *IsolatedType) ToJSON() (string, error) {
+func (m *PeerType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *IsolatedType) ToYAML() (string, error) {
+func (m *PeerType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *IsolatedType) DeepCopy() *IsolatedType {
+func (m *PeerType) DeepCopy() *PeerType {
 	if m == nil {
 		return nil
 	}
@@ -2734,7 +2911,7 @@ func (m *IsolatedType) DeepCopy() *IsolatedType {
 	if err != nil {
 		return nil
 	}
-	c := &IsolatedType{}
+	c := &PeerType{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -2742,47 +2919,112 @@ func (m *IsolatedType) DeepCopy() *IsolatedType {
 	return c
 }
 
-func (m *IsolatedType) DeepCopyProto() proto.Message {
+func (m *PeerType) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *IsolatedType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return IsolatedTypeValidator().Validate(ctx, m, opts...)
+func (m *PeerType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PeerTypeValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateIsolatedType struct {
+func (m *PeerType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *PeerType) GetNodeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNode() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetNode().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNode().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidatePeerType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateIsolatedType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*IsolatedType)
+func (v *ValidatePeerType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PeerType)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *IsolatedType got type %s", t)
+			return fmt.Errorf("Expected type *PeerType got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["inside_gre_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_gre_subnet"))
+		if err := fv(ctx, m.GetInsideGreSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["peer_asn"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("peer_asn"))
+		if err := fv(ctx, m.GetPeerAsn(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_address"))
+		if err := fv(ctx, m.GetTgwAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultIsolatedTypeValidator = func() *ValidateIsolatedType {
-	v := &ValidateIsolatedType{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultPeerTypeValidator = func() *ValidatePeerType {
+	v := &ValidatePeerType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["node"] = ves_io_schema_cloud_re_region.NodeTypeValidator().Validate
 
 	return v
 }()
 
-func IsolatedTypeValidator() db.Validator {
-	return DefaultIsolatedTypeValidator
+func PeerTypeValidator() db.Validator {
+	return DefaultPeerTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2907,35 +3149,57 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetSegmentOptionDRefInfo()
+	return m.GetSegmentDRefInfo()
 
 }
 
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetSegmentOptionDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetSegmentOption() == nil {
+func (m *ReplaceSpecType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegment()
+	if vref == nil {
 		return nil, nil
 	}
-	switch m.GetSegmentOption().(type) {
-	case *ReplaceSpecType_IsolatedSegment:
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
 
-		return nil, nil
+}
 
-	case *ReplaceSpecType_EnableSegment:
-		drInfos, err := m.GetEnableSegment().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetEnableSegment().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "enable_segment." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
+// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
 	}
 
+	vref := m.GetSegment()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
 }
 
 type ValidateReplaceSpecType struct {
@@ -2946,14 +3210,6 @@ func (v *ValidateReplaceSpecType) CloudValidationRuleHandler(rules map[string]st
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) SegmentOptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for segment_option")
 	}
 	return validatorFn, nil
 }
@@ -2997,38 +3253,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["segment_option"]; exists {
-		val := m.GetSegmentOption()
-		vOpts := append(opts,
-			db.WithValidateField("segment_option"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
+	if fv, exists := v.FldValidators["segment"]; exists {
 
-	switch m.GetSegmentOption().(type) {
-	case *ReplaceSpecType_IsolatedSegment:
-		if fv, exists := v.FldValidators["segment_option.isolated_segment"]; exists {
-			val := m.GetSegmentOption().(*ReplaceSpecType_IsolatedSegment).IsolatedSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("isolated_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_EnableSegment:
-		if fv, exists := v.FldValidators["segment_option.enable_segment"]; exists {
-			val := m.GetSegmentOption().(*ReplaceSpecType_EnableSegment).EnableSegment
-			vOpts := append(opts,
-				db.WithValidateField("segment_option"),
-				db.WithValidateField("enable_segment"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+		vOpts := append(opts, db.WithValidateField("segment"))
+		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3059,20 +3288,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
-	vrhSegmentOption := v.SegmentOptionValidationRuleHandler
-	rulesSegmentOption := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhSegmentOption(rulesSegmentOption)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.segment_option: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["segment_option"] = vFn
-
 	v.FldValidators["cloud.aws_re"] = ReplaceAWSRETypeValidator().Validate
 
-	v.FldValidators["segment_option.enable_segment"] = EnableSegmentTypeValidator().Validate
+	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -3110,47 +3328,12 @@ func (r *CreateSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetSegmentOptionToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.SegmentOption.(type) {
-	case nil:
-		o.SegmentOption = nil
-
-	case *CreateSpecType_EnableSegment:
-		o.SegmentOption = &GlobalSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *CreateSpecType_IsolatedSegment:
-		o.SegmentOption = &GlobalSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetSegmentOptionFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.SegmentOption.(type) {
-	case nil:
-		r.SegmentOption = nil
-
-	case *GlobalSpecType_EnableSegment:
-		r.SegmentOption = &CreateSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *GlobalSpecType_IsolatedSegment:
-		r.SegmentOption = &CreateSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetCloudFromGlobalSpecType(f)
-	m.GetSegmentOptionFromGlobalSpecType(f)
+	m.Segment = f.GetSegment()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3169,7 +3352,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	m1.SetCloudToGlobalSpecType(f)
-	m1.SetSegmentOptionToGlobalSpecType(f)
+	f.Segment = m1.Segment
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3209,47 +3392,12 @@ func (r *GetSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetSegmentOptionToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.SegmentOption.(type) {
-	case nil:
-		o.SegmentOption = nil
-
-	case *GetSpecType_EnableSegment:
-		o.SegmentOption = &GlobalSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *GetSpecType_IsolatedSegment:
-		o.SegmentOption = &GlobalSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetSegmentOptionFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.SegmentOption.(type) {
-	case nil:
-		r.SegmentOption = nil
-
-	case *GlobalSpecType_EnableSegment:
-		r.SegmentOption = &GetSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *GlobalSpecType_IsolatedSegment:
-		r.SegmentOption = &GetSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetCloudFromGlobalSpecType(f)
-	m.GetSegmentOptionFromGlobalSpecType(f)
+	m.Segment = f.GetSegment()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3268,7 +3416,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	m1.SetCloudToGlobalSpecType(f)
-	m1.SetSegmentOptionToGlobalSpecType(f)
+	f.Segment = m1.Segment
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -3350,47 +3498,12 @@ func (r *ReplaceSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetSegmentOptionToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.SegmentOption.(type) {
-	case nil:
-		o.SegmentOption = nil
-
-	case *ReplaceSpecType_EnableSegment:
-		o.SegmentOption = &GlobalSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *ReplaceSpecType_IsolatedSegment:
-		o.SegmentOption = &GlobalSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetSegmentOptionFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.SegmentOption.(type) {
-	case nil:
-		r.SegmentOption = nil
-
-	case *GlobalSpecType_EnableSegment:
-		r.SegmentOption = &ReplaceSpecType_EnableSegment{EnableSegment: of.EnableSegment}
-
-	case *GlobalSpecType_IsolatedSegment:
-		r.SegmentOption = &ReplaceSpecType_IsolatedSegment{IsolatedSegment: of.IsolatedSegment}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.GetCloudFromGlobalSpecType(f)
-	m.GetSegmentOptionFromGlobalSpecType(f)
+	m.Segment = f.GetSegment()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3409,7 +3522,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	m1.SetCloudToGlobalSpecType(f)
-	m1.SetSegmentOptionToGlobalSpecType(f)
+	f.Segment = m1.Segment
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

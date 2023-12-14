@@ -226,15 +226,6 @@ func (c *CustomAPIGrpcClient) doRPCLookupCname(ctx context.Context, yamlReq stri
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCSetBillingInfo(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &SetBillingInfoRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.SetBillingInfoRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.SetBillingInfo(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCUnassignDomainOwner(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UnassignDomainOwnerRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -342,8 +333,6 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["ListInactiveUsers"] = ccl.doRPCListInactiveUsers
 
 	rpcFns["LookupCname"] = ccl.doRPCLookupCname
-
-	rpcFns["SetBillingInfo"] = ccl.doRPCSetBillingInfo
 
 	rpcFns["UnassignDomainOwner"] = ccl.doRPCUnassignDomainOwner
 
@@ -2113,101 +2102,6 @@ func (c *CustomAPIRestClient) doRPCLookupCname(ctx context.Context, callOpts *se
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCSetBillingInfo(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &SetBillingInfoRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.SetBillingInfoRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("company_contact", fmt.Sprintf("%v", req.CompanyContact))
-		q.Add("company_name", fmt.Sprintf("%v", req.CompanyName))
-		q.Add("contact_number", fmt.Sprintf("%v", req.ContactNumber))
-		q.Add("customer_contact", fmt.Sprintf("%v", req.CustomerContact))
-		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
-		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
-		q.Add("locale", fmt.Sprintf("%v", req.Locale))
-		q.Add("payment_address", fmt.Sprintf("%v", req.PaymentAddress))
-		q.Add("payment_provider_token", fmt.Sprintf("%v", req.PaymentProviderToken))
-		q.Add("tos_accepted", fmt.Sprintf("%v", req.TosAccepted))
-		q.Add("tos_accepted_at", fmt.Sprintf("%v", req.TosAcceptedAt))
-		q.Add("tos_version", fmt.Sprintf("%v", req.TosVersion))
-		q.Add("usage_plan", fmt.Sprintf("%v", req.UsagePlan))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &StatusResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.StatusResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
 func (c *CustomAPIRestClient) doRPCUnassignDomainOwner(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2610,8 +2504,6 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["LookupCname"] = ccl.doRPCLookupCname
 
-	rpcFns["SetBillingInfo"] = ccl.doRPCSetBillingInfo
-
 	rpcFns["UnassignDomainOwner"] = ccl.doRPCUnassignDomainOwner
 
 	rpcFns["UpdateIDMSettings"] = ccl.doRPCUpdateIDMSettings
@@ -2715,10 +2607,6 @@ func (c *customAPIInprocClient) ListInactiveUsers(ctx context.Context, in *Empty
 func (c *customAPIInprocClient) LookupCname(ctx context.Context, in *LookupCnameRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.LookupCname", nil)
 	return c.CustomAPIServer.LookupCname(ctx, in)
-}
-func (c *customAPIInprocClient) SetBillingInfo(ctx context.Context, in *SetBillingInfoRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.SetBillingInfo", nil)
-	return c.CustomAPIServer.SetBillingInfo(ctx, in)
 }
 func (c *customAPIInprocClient) UnassignDomainOwner(ctx context.Context, in *UnassignDomainOwnerRequest, opts ...grpc.CallOption) (*Empty, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.UnassignDomainOwner", nil)
@@ -3787,55 +3675,6 @@ func (s *customAPISrv) LookupCname(ctx context.Context, in *LookupCnameRequest) 
 
 	return rsp, nil
 }
-func (s *customAPISrv) SetBillingInfo(ctx context.Context, in *SetBillingInfoRequest) (*StatusResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *StatusResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.SetBillingInfoRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.SetBillingInfo' operation on 'tenant'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.SetBillingInfo"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.SetBillingInfo(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.StatusResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) UnassignDomainOwner(ctx context.Context, in *UnassignDomainOwnerRequest) (*Empty, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -4227,90 +4066,6 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getpasswordpolicy"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetPasswordPolicy"
-            },
-            "x-displayname": "Tenant Custom API",
-            "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/namespaces/system/tenant/billing-info": {
-            "put": {
-                "summary": "Update billing plan for the tenant",
-                "description": "Updates billing plan for the specific tenant.",
-                "operationId": "ves.io.schema.tenant.CustomAPI.SetBillingInfo",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/tenantStatusResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/tenantSetBillingInfoRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-setbillinginfo"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.SetBillingInfo"
             },
             "x-displayname": "Tenant Custom API",
             "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
@@ -6224,19 +5979,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "contactContactType": {
-            "type": "string",
-            "description": "Determines the contact type\n\nIndicates snail mail address (used for correspondence)\nIndicates billing address (this address will appear on invoices)\nIndicates contact used for a payment method (this address is used when charging a payment method)",
-            "title": "Contact Type",
-            "enum": [
-                "MAILING",
-                "BILLING",
-                "PAYMENT"
-            ],
-            "default": "MAILING",
-            "x-displayname": "Contact Type",
-            "x-ves-proto-enum": "ves.io.schema.contact.ContactType"
-        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -6285,84 +6027,6 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.ves_object_name": "true"
                     }
-                }
-            }
-        },
-        "schemacontactGlobalSpecType": {
-            "type": "object",
-            "description": "Instance of one single contact that can be used to communicate with customers.\nDepending on contact type we use these details to send general communication (regular, physical mail) or invoices.",
-            "title": "Contact",
-            "x-displayname": "Contact",
-            "x-ves-proto-message": "ves.io.schema.contact.GlobalSpecType",
-            "properties": {
-                "address1": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"1234 Main road\"-",
-                    "title": "address1",
-                    "x-displayname": "Address Line 1",
-                    "x-ves-example": "1234 Main road"
-                },
-                "address2": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"P.O BOX 56\"-",
-                    "title": "address2",
-                    "x-displayname": "Address Line 2",
-                    "x-ves-example": "P.O BOX 56"
-                },
-                "city": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"Sunnyvale\"-",
-                    "title": "city",
-                    "x-displayname": "City",
-                    "x-ves-example": "Sunnyvale"
-                },
-                "contact_type": {
-                    "description": " type of the contact (snail mail, billing)",
-                    "title": "contact_type",
-                    "$ref": "#/definitions/contactContactType",
-                    "x-displayname": "Contact Type"
-                },
-                "country": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"US\"-",
-                    "title": "country",
-                    "x-displayname": "Country",
-                    "x-ves-example": "US"
-                },
-                "county": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"Santa Clara\"-",
-                    "title": "county",
-                    "x-displayname": "County",
-                    "x-ves-example": "Santa Clara"
-                },
-                "phone_number": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"+11234567890\"-",
-                    "title": "phone_number",
-                    "x-displayname": "Phone Number",
-                    "x-ves-example": "+11234567890"
-                },
-                "state": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"California\"-",
-                    "title": "state",
-                    "x-displayname": "State",
-                    "x-ves-example": "California"
-                },
-                "state_code": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"CA\"-",
-                    "title": "state code",
-                    "x-displayname": "State Code",
-                    "x-ves-example": "CA"
-                },
-                "zip_code": {
-                    "type": "string",
-                    "description": "\n\nExample: - \"95054\"-",
-                    "title": "zip_code",
-                    "x-displayname": "ZIP code",
-                    "x-ves-example": "95054"
                 }
             }
         },
@@ -6743,109 +6407,6 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "uppercase_characters",
                     "x-ves-example": "1"
-                }
-            }
-        },
-        "tenantSetBillingInfoRequest": {
-            "type": "object",
-            "description": "Request to update tenant billing pan",
-            "title": "UpdateBillingPlanRequest",
-            "x-displayname": "UpdateBillingPlanRequest",
-            "x-ves-proto-message": "ves.io.schema.tenant.SetBillingInfoRequest",
-            "properties": {
-                "company_contact": {
-                    "description": " contact details of the enterprise customer",
-                    "title": "company contact",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Company Contact"
-                },
-                "company_name": {
-                    "type": "string",
-                    "description": " company name (enterprise only)\n\nExample: - \"ACME Ltd.\"-",
-                    "title": "company name",
-                    "x-displayname": "Company Name",
-                    "x-ves-example": "ACME Ltd."
-                },
-                "contact_number": {
-                    "type": "string",
-                    "description": " phone contact number\n obsolete\n\nExample: - \"+11234567890\"-",
-                    "title": "contact_number",
-                    "x-displayname": "Contact Number",
-                    "x-ves-example": "+11234567890"
-                },
-                "customer_contact": {
-                    "description": " contact details of the customer",
-                    "title": "customer contact",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Customer Contact"
-                },
-                "first_name": {
-                    "type": "string",
-                    "description": " first name of the customer\n obsolete\n\nExample: - \"John\"-",
-                    "title": "first_name",
-                    "x-displayname": "First Name",
-                    "x-ves-example": "John"
-                },
-                "last_name": {
-                    "type": "string",
-                    "description": " last name of the customer (the superuser)\n obsolete\n\nExample: - \"Doe\"-",
-                    "title": "last_name",
-                    "x-displayname": "Last Name",
-                    "x-ves-example": "Doe"
-                },
-                "locale": {
-                    "type": "string",
-                    "description": " locale of this sign up\n\nExample: - \"en-us\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "locale",
-                    "x-displayname": "Locale",
-                    "x-ves-example": "en-us",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "payment_address": {
-                    "description": " address associated with the credit card details provided using the payment_provider_token\n if no billing address is provided then any address tokenized with payment_provider_token will be used - including an empty address.",
-                    "title": "billing_address",
-                    "$ref": "#/definitions/schemacontactGlobalSpecType",
-                    "x-displayname": "Payment Address"
-                },
-                "payment_provider_token": {
-                    "type": "string",
-                    "description": " payment provider token (for credit card details)\n\nExample: - \"tok_1234567890\"-",
-                    "title": "payment_provider_token",
-                    "x-displayname": "Payment Provider Token",
-                    "x-ves-example": "tok_1234567890"
-                },
-                "tos_accepted": {
-                    "type": "string",
-                    "description": " t\u0026c accepted date as millis from 01/01/1970 UTC\n\nExample: - \"1569926163000\"-",
-                    "title": "tos_accepted",
-                    "format": "int64",
-                    "x-displayname": "TOS Accepted",
-                    "x-ves-example": "1569926163000"
-                },
-                "tos_accepted_at": {
-                    "type": "string",
-                    "description": " tos accepted timestamp.\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
-                    "title": "tos_accepted_at",
-                    "format": "date-time",
-                    "x-displayname": "TOSAcceptedAt",
-                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
-                },
-                "tos_version": {
-                    "type": "string",
-                    "description": " indicates the version of ToS customer approved during signup. Any new version will require the customer to re-approve during login.\n\nExample: - \"v1.2\"-",
-                    "title": "version of terms of services the customer accepted",
-                    "x-displayname": "TOS version",
-                    "x-ves-example": "v1.2"
-                },
-                "usage_plan": {
-                    "type": "string",
-                    "description": " Updates usage plan for specific tenant to complete configuration part.\n\nExample: - \"plan-1\"-",
-                    "title": "UsagePlan",
-                    "x-displayname": "UsagePlan",
-                    "x-ves-example": "plan-1"
                 }
             }
         },

@@ -1252,6 +1252,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cloud_connect_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_connect_status"))
+		if err := fv(ctx, e.GetCloudConnectStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["conditions"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("conditions"))
