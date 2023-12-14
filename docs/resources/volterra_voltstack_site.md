@@ -21,34 +21,32 @@ resource "volterra_voltstack_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "blocked_services default_blocked_services" must be set
-  default_blocked_services = true
 
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" must be set
+      web_user_interface = true
+      network_type       = "network_type"
+    }
+  }
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
-
-  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
   disable_gpu = true
-
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
   no_k8s_cluster = true
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-
   master_node_configuration {
     name      = "master-0"
     public_ip = "192.168.0.156"
   }
-
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
-
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
   default_sriov_interface = true
-
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
-
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
@@ -321,7 +319,9 @@ Use custom networking configuration.
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
 
-`outside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in local network (`String`).
+`outside_nameserver` - (Optional) Optional DNS server V4 IP to be used for name resolution in local network (`String`).
+
+`outside_nameserver_v6` - (Optional) Optional DNS server V6 IP to be used for name resolution in local network (`String`).
 
 `outside_vip` - (Optional) Optional common virtual V4 IP across all nodes to be used as automatic VIP for site local network. (`String`).
 
@@ -582,6 +582,8 @@ Ethernet interface configuration..
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.
 
 `ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (bool).
+
+`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 
@@ -1043,9 +1045,11 @@ creating ipsec between two sites which are part of the site mesh group.
 
 Use custom SR-IOV interfaces Configuration.
 
-`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
+`interface_name` - (Required) Name of SR-IOV physical interface (`String`).
 
-`number_of_vfs` - (Required) Number of virtual functions (`Int`).
+`number_of_vfio_vfs` - (Optional) Number of virtual functions reserved for VNFs and DPDK-based CNFs (`Int`).
+
+`number_of_vfs` - (Required) Total number of virtual functions (`Int`).
 
 ### Sriov Interfaces
 
@@ -1184,6 +1188,8 @@ Configure storage interface for this App Stack site.
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.
 
 `ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (bool).
+
+`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (bool).
 

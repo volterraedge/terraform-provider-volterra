@@ -41,7 +41,7 @@ resource "volterra_app_setting" "example" {
 
     user_behavior_analysis_setting {
       // One of the arguments from this list "enable_learning disable_learning" must be set
-      disable_learning = true
+      enable_learning = true
 
       // One of the arguments from this list "enable_detection disable_detection" must be set
 
@@ -49,10 +49,13 @@ resource "volterra_app_setting" "example" {
         // One of the arguments from this list "exclude_bola_detection bola_detection_manual bola_detection_automatic" must be set
         exclude_bola_detection = true
 
+        // One of the arguments from this list "include_bot_defense_activity exclude_bot_defense_activity" must be set
+        exclude_bot_defense_activity = true
+
         // One of the arguments from this list "cooling_off_period" must be set
         cooling_off_period = "cooling_off_period"
 
-        // One of the arguments from this list "exclude_failed_login_activity include_failed_login_activity" must be set
+        // One of the arguments from this list "include_failed_login_activity exclude_failed_login_activity" must be set
 
         include_failed_login_activity {
           login_failures_threshold = "10"
@@ -67,8 +70,10 @@ resource "volterra_app_setting" "example" {
         include_ip_reputation = true
         // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
         exclude_non_existent_url_activity = true
-        // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
-        include_waf_activity = true
+        // One of the arguments from this list "exclude_rate_limit include_rate_limit" must be set
+        include_rate_limit = true
+        // One of the arguments from this list "exclude_waf_activity include_waf_activity" must be set
+        exclude_waf_activity = true
       }
     }
   }
@@ -167,6 +172,10 @@ Enable AI based malicious user detection.
 
 `exclude_bola_detection` - (Optional) Disable Enumeration attack detection (bool).
 
+`exclude_bot_defense_activity` - (Optional) Exclude Bot Defense activity in malicious user detection (bool).
+
+`include_bot_defense_activity` - (Optional) Include Bot Defense activity in malicious user detection (bool).
+
 `cooling_off_period` - (Required) a high to medium or medium to low or low to none. (`Int`).
 
 `exclude_failed_login_activity` - (Optional) Exclude persistent login failures activity (401 response code) in malicious user detection (bool).
@@ -187,6 +196,10 @@ Enable AI based malicious user detection.
 
 `include_non_existent_url_activity_custom` - (Optional) Include Non-Existent URL Activity using custom threshold in malicious user detection. See [Include Non Existent Url Activity Custom ](#include-non-existent-url-activity-custom) below for details.
 
+`exclude_rate_limit` - (Optional) Exclude Rate Limiting in malicious user detection (bool).
+
+`include_rate_limit` - (Optional) Include Rate Limiting in malicious user detection (bool).
+
 `exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (bool).
 
 `include_waf_activity` - (Optional) Include WAF activity in malicious user detection (bool).
@@ -198,6 +211,10 @@ Enable learning user behavior patterns from this namespace.
 ### Exclude Bola Detection
 
 Disable Enumeration attack detection.
+
+### Exclude Bot Defense Activity
+
+Exclude Bot Defense activity in malicious user detection.
 
 ### Exclude Failed Login Activity
 
@@ -215,6 +232,10 @@ Exclude IP Reputation in malicious user detection.
 
 Exclude Non-Existent URL activity in malicious user detection.
 
+### Exclude Rate Limit
+
+Exclude Rate Limiting in malicious user detection.
+
 ### Exclude Waf Activity
 
 Exclude WAF activity in malicious user detection.
@@ -222,6 +243,10 @@ Exclude WAF activity in malicious user detection.
 ### High
 
 Use auto-calculated threshold decreased by margin for more sensitive detection.
+
+### Include Bot Defense Activity
+
+Include Bot Defense activity in malicious user detection.
 
 ### Include Failed Login Activity
 
@@ -254,6 +279,10 @@ Include Non-Existent URL Activity using automatic threshold in malicious user de
 Include Non-Existent URL Activity using custom threshold in malicious user detection.
 
 `nonexistent_requests_threshold` - (Required) The percentage of non-existent requests beyond which the system will flag this user as malicious (`Int`).
+
+### Include Rate Limit
+
+Include Rate Limiting in malicious user detection.
 
 ### Include Waf Activity
 

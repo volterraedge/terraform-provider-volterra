@@ -31,36 +31,29 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
+  // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
+  direct_connect_disabled = true
 
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
+  // One of the arguments from this list "egress_nat_gw egress_virtual_private_gateway egress_gateway_default" must be set
 
-  direct_connect_enabled {
-    // One of the arguments from this list "auto_asn custom_asn" must be set
-    custom_asn = "64512"
-
-    cloud_aggregated_prefix = ["10.0.0.0/20"]
-
-    dc_connect_aggregated_prefix = ["20.0.0.0/20"]
-
-    // One of the arguments from this list "hosted_vifs standard_vifs manual_gw" must be set
-    standard_vifs = true
+  egress_nat_gw {
+    // One of the arguments from this list "nat_gw_id" must be set
+    nat_gw_id = "nat_gw_id"
   }
-  // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
-  egress_gateway_default = true
-  instance_type          = ["a1.xlarge"]
+  instance_type = ["a1.xlarge"]
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-  disable_internet_vip = true
+  enable_internet_vip = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
+  // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
   f5xc_security_group = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "disable_allowed_vip_port use_http_port use_https_port use_http_https_port custom_ports" must be set
-      use_http_port = true
+      disable_allowed_vip_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -81,12 +74,16 @@ resource "volterra_aws_vpc_site" "example" {
 
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-      perf_mode_l7_enhanced = true
+
+      perf_mode_l3_enhanced {
+        // One of the arguments from this list "no_jumbo jumbo" must be set
+        no_jumbo = true
+      }
     }
   }
   ssh_key = ["ssh-rsa AAAAB..."]
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+  total_nodes = "1"
 }
 
 ```
@@ -124,9 +121,9 @@ Argument Reference
 
 `aws_cred` - (Optional) Reference to AWS credentials for automatic deployment. See [ref](#ref) below for details.
 
-`direct_connect_disabled` - (Optional) Direct Connect feature is disabled (bool).
+`direct_connect_disabled` - (Optional)Disable Private Connectivity to Site (bool).
 
-`direct_connect_enabled` - (Optional) Direct Connect feature is enabled. See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
+`direct_connect_enabled` - (Optional) Direct Connect feature is enabled(Legacy). See [Direct Connect Enabled ](#direct-connect-enabled) below for details.
 
 `private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity ](#private-connectivity) below for details.
 
@@ -362,7 +359,7 @@ Will assign latest available SW version.
 
 ### Direct Connect Enabled
 
-Direct Connect feature is enabled.
+Direct Connect feature is enabled(Legacy).
 
 `auto_asn` - (Optional) Automatically set ASN (bool).
 
@@ -542,6 +539,10 @@ One interface site is useful when site is only used as ingress gateway to the VP
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
+### Inside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+
 ### Inside Static Routes
 
 Manage static routes for inside network..
@@ -672,6 +673,10 @@ Operating System Details.
 
 `operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
+### Outside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
+
 ### Outside Static Routes
 
 Manage static routes for outside network..
@@ -718,6 +723,10 @@ Enable Private Connectivity to Site.
 
 `cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
 
+`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (bool).
+
+`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (bool).
+
 ### Private Key
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
@@ -756,7 +765,7 @@ Use same region as that of the Site.
 
 Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
 
-`cloudlink_network_name` - (Required) CloudLink ADN Network Name for private access connectivity to F5XC ADN. If needed, contact F5XC support team on instructions to set it up. (`String`).
+`cloudlink_network_name` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
 
 ### Site Registration Over Internet
 

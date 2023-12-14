@@ -23,11 +23,24 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_name private_ip k8s_service consul_service custom_endpoint_object vn_private_ip public_ip private_name vn_private_name" must be set
+    // One of the arguments from this list "public_name private_ip private_name vn_private_ip vn_private_name public_ip k8s_service consul_service custom_endpoint_object segment_ip segment_name" must be set
 
-    public_ip {
-      // One of the arguments from this list "ip ipv6" must be set
-      ip = "8.8.8.8"
+    private_name {
+      dns_name = "value"
+
+      // One of the arguments from this list "inside_network outside_network" must be set
+      inside_network   = true
+      refresh_interval = "20"
+
+      site_locator {
+        // One of the arguments from this list "site virtual_site" must be set
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
     }
 
     labels = {
@@ -35,7 +48,7 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  // One of the arguments from this list "lb_port port automatic_port" must be set
+  // One of the arguments from this list "port automatic_port lb_port" must be set
   port = "9080"
 
   // One of the arguments from this list "no_tls use_tls" must be set
@@ -337,6 +350,10 @@ List of origin servers in this pool.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
+`segment_ip` - (Optional) Specify origin server with IP address in a Segment on given Site. See [Segment Ip ](#segment-ip) below for details.
+
+`segment_name` - (Optional) Specify origin server with DNS name in Segment on given Site. See [Segment Name ](#segment-name) below for details.
+
 `vn_private_ip` - (Optional) Specify origin server IP address on virtual network other than inside or outside network. See [Vn Private Ip ](#vn-private-ip) below for details.
 
 `vn_private_name` - (Optional) Specify origin server name on virtual network other than inside or outside network. See [Vn Private Name ](#vn-private-name) below for details.
@@ -435,6 +452,30 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Segment Ip
+
+Specify origin server with IP address in a Segment on given Site.
+
+`ip` - (Optional) Private IPV4 address (`String`).
+
+`ipv6` - (Optional) Private IPV6 address (`String`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+
+`site_locator` - (Required) Site or Cloud RE Region or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
+### Segment Name
+
+Specify origin server with DNS name in Segment on given Site.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+
+`site_locator` - (Required) Site or Cloud RE Region or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
 ### Service Selector
 
 discovery has to happen. This implicit label is added to service_selector.
@@ -487,17 +528,17 @@ Use the host header as SNI. The host header value is extracted after any configu
 
 ### Use Mtls
 
-x-displayName: "Enable MTLS With Inline Certificate".
+x-displayName: "Enable by uploading a new certificate".
 
 `tls_certificates` - (Required) TLS Certificates. See [Tls Certificates ](#tls-certificates) below for details.
 
 ### Use Server Verification
 
-Perform origin server verification using the provided trusted CA list.
+Perform origin server verification using the provided Root CA list.
 
-`trusted_ca` - (Optional) Trusted CA List for verification of Server's certificate. See [ref](#ref) below for details.
+`trusted_ca` - (Optional) Select/Add a Root CA for verification of Server's certificate. See [ref](#ref) below for details.
 
-`trusted_ca_url` - (Optional) Inline Trusted CA certificates for verification of Server's certificate (`String`).
+`trusted_ca_url` - (Optional) Inline Root CA certificate for verification of Server's certificate (`String`).
 
 ### Use System Defaults
 
@@ -509,15 +550,15 @@ x-displayName: "Enable".
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
-`use_mtls` - (Optional) x-displayName: "Enable MTLS With Inline Certificate". See [Use Mtls ](#use-mtls) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable by uploading a new certificate". See [Use Mtls ](#use-mtls) below for details.
 
-`use_mtls_obj` - (Optional) x-displayName: "Enable MTLS With Certificate Object". See [ref](#ref) below for details.
+`use_mtls_obj` - (Optional) x-displayName: "Enable by selecting a certificate". See [ref](#ref) below for details.
 
 `skip_server_verification` - (Optional) Skip origin server verification (bool).
 
-`use_server_verification` - (Optional) Perform origin server verification using the provided trusted CA list. See [Use Server Verification ](#use-server-verification) below for details.
+`use_server_verification` - (Optional) Perform origin server verification using the provided Root CA list. See [Use Server Verification ](#use-server-verification) below for details.
 
-`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default trusted CA list (bool).
+`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC default Root CA list (bool).
 
 `disable_sni` - (Optional) Do not use SNI. (bool).
 
@@ -565,7 +606,7 @@ Specify origin server name on virtual network other than inside or outside netwo
 
 ### Volterra Trusted Ca
 
-Perform origin server verification using F5XC default trusted CA list.
+Perform origin server verification using F5XC default Root CA list.
 
 ### Wingman Secret Info
 

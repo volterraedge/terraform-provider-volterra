@@ -29,66 +29,21 @@ resource "volterra_discovery" "example" {
     access_info {
       // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
 
-      connection_info {
-        api_server = "api.acme.com:4430"
+      kubeconfig_url {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
 
-        tls_info {
-          ca_certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
+        secret_encoding_type = "secret_encoding_type"
 
-            secret_encoding_type = "secret_encoding_type"
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-            // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-            wingman_secret_info {
-              name = "ChargeBack-API-Key"
-            }
-          }
-
-          certificate = "value"
-
-          certificate_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-          }
-
-          key_url {
-            blindfold_secret_info_internal {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-
-            secret_encoding_type = "secret_encoding_type"
-
-            // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-            blindfold_secret_info {
-              decryption_provider = "value"
-              location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-              store_provider      = "value"
-            }
-          }
-
-          server_name    = "k8s.acme.com"
-          trusted_ca_url = "value"
+        blindfold_secret_info {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
         }
       }
 
@@ -102,9 +57,13 @@ resource "volterra_discovery" "example" {
     }
   }
   where {
-    // One of the arguments from this list "site virtual_site virtual_network" must be set
+    // One of the arguments from this list "segment virtual_network site virtual_site segment_site segment_vsite" must be set
 
-    virtual_network {
+    site {
+      // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+      disable_internet_vip = true
+      network_type         = "network_type"
+
       ref {
         name      = "test1"
         namespace = "staging"
@@ -313,6 +272,28 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Segment
+
+Reference to Segment.
+
+`ref` - (Required) A segment reference. See [ref](#ref) below for details.
+
+### Segment Site
+
+Reference to Segment object.
+
+`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
+
+`site` - (Required) Reference to a site. See [ref](#ref) below for details.
+
+### Segment Vsite
+
+Reference to Segment in a virtual site.
+
+`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
+
+`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
+
 ### Site
 
 Direct reference to site object.
@@ -323,7 +304,7 @@ Direct reference to site object.
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
-`ref` - (Optional) A site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
 ### Tls Info
 
@@ -359,7 +340,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Direct reference to virtual network object.
 
-`ref` - (Optional) A virtual network direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
 ### Virtual Site
 
@@ -371,11 +352,17 @@ Direct reference to virtual site object.
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`ref` - (Optional) A virtual_site direct reference. See [ref](#ref) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
 ### Where
 
 All the sites where this discovery config is valid..
+
+`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
+
+`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
+
+`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
 
 `site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
 

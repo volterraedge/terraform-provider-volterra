@@ -21,41 +21,22 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  do_not_advertise = true
 
-  advertise_custom {
-    advertise_where {
-      // One of the arguments from this list "site virtual_site vk8s_service virtual_network" must be set
+  // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
 
-      virtual_network {
-        // One of the arguments from this list "specific_v6_vip default_v6_vip" must be set
-        default_v6_vip = true
-
-        // One of the arguments from this list "default_vip specific_vip" must be set
-        default_vip = true
-
-        virtual_network {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
-
-      // One of the arguments from this list "use_default_port port" must be set
-      use_default_port = true
-    }
-  }
-
-  // One of the arguments from this list "api_specification api_definitions disable_api_definition api_definition" must be set
-
-  api_definitions {
-    api_definitions {
+  api_specification {
+    api_definition {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
+
+    // One of the arguments from this list "validation_custom_list validation_disabled validation_all_spec_endpoints" must be set
+    validation_disabled = true
   }
 
-  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
+  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
 
   enable_api_discovery {
     discovered_api_settings {
@@ -74,19 +55,26 @@ resource "volterra_http_loadbalancer" "example" {
         }
 
         sensitive_data_detection_config {
-          // One of the arguments from this list "any_domain specific_domain" must be set
+          // One of the arguments from this list "specific_domain any_domain" must be set
           any_domain = true
 
           // One of the arguments from this list "key_pattern value_pattern key_value_pattern" must be set
 
-          key_pattern {
-            // One of the arguments from this list "exact_value regex_value" must be set
-            exact_value = "x-volt-header"
+          key_value_pattern {
+            key_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
+              exact_value = "x-volt-header"
+            }
+
+            value_pattern {
+              // One of the arguments from this list "exact_value regex_value" must be set
+              exact_value = "x-volt-header"
+            }
           }
           // One of the arguments from this list "all_sections all_request_sections all_response_sections custom_sections" must be set
-          all_sections = true
+          all_request_sections = true
           // One of the arguments from this list "any_target api_endpoint_target base_path api_group" must be set
-          api_group = "oas-all-operations"
+          any_target = true
         }
 
         sensitive_data_type {
@@ -99,66 +87,30 @@ resource "volterra_http_loadbalancer" "example" {
       }
     }
   }
-  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+  // One of the arguments from this list "enable_challenge js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
   no_challenge = true
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
   enable_ddos_detection {
-    // One of the arguments from this list "disable_auto_mitigation enable_auto_mitigation" must be set
-    enable_auto_mitigation = true
+    // One of the arguments from this list "enable_auto_mitigation disable_auto_mitigation" must be set
+
+    enable_auto_mitigation {
+      // One of the arguments from this list "block js_challenge" must be set
+      block = true
+    }
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
+  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
   round_robin = true
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  https {
-    add_hsts                = true
-    connection_idle_timeout = "60000"
-
-    // One of the arguments from this list "default_loadbalancer non_default_loadbalancer" must be set
-    non_default_loadbalancer = true
-
-    header_transformation_type {
-      // One of the arguments from this list "default_header_transformation proper_case_header_transformation" must be set
-      default_header_transformation = true
-    }
-
-    http_protocol_options {
-      // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v2_only http_protocol_enable_v1_v2" must be set
-      http_protocol_enable_v2_only = true
-    }
-
-    http_redirect = true
-
-    // One of the arguments from this list "enable_path_normalize disable_path_normalize" must be set
-    enable_path_normalize = true
+  http {
+    dns_volterra_managed = true
 
     // One of the arguments from this list "port port_ranges" must be set
-    port = "443"
-
-    // One of the arguments from this list "default_header server_name append_server_name pass_through" must be set
-    append_server_name = "append_server_name"
-
-    // One of the arguments from this list "tls_parameters tls_cert_params" must be set
-
-    tls_cert_params {
-      certificates {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
-
-      tls_config {
-        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-        default_security = true
-      }
-    }
+    port_ranges = "80,443,8080-8191,9080"
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
@@ -198,10 +150,10 @@ resource "volterra_http_loadbalancer" "example" {
       // One of the arguments from this list "any_domain specific_domain" must be set
       any_domain = true
 
-      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
+      // One of the arguments from this list "ref_rate_limiter inline_rate_limiter" must be set
 
       inline_rate_limiter {
-        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
+        // One of the arguments from this list "ref_user_id use_http_lb_user_id" must be set
         use_http_lb_user_id = true
         threshold           = "1"
         unit                = "unit"
@@ -214,8 +166,14 @@ resource "volterra_http_loadbalancer" "example" {
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-  // One of the arguments from this list "app_firewall disable_waf" must be set
-  disable_waf = true
+
+  // One of the arguments from this list "disable_waf app_firewall" must be set
+
+  app_firewall {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -275,7 +233,7 @@ Argument Reference
 
 `enable_challenge` - (Optional) Configure auto mitigation i.e risk based challenges for malicious users. See [Enable Challenge ](#enable-challenge) below for details.
 
-`js_challenge` - (Optional) Configure Javascript challenge on this load balancer. See [Js Challenge ](#js-challenge) below for details.
+`js_challenge` - (Optional) Configure JavaScript challenge on this load balancer. See [Js Challenge ](#js-challenge) below for details.
 
 `no_challenge` - (Optional) No challenge is enabled for this load balancer (bool).
 
@@ -295,7 +253,7 @@ Argument Reference
 
 `enable_ddos_detection` - (Optional) x-displayName: "Enable". See [Enable Ddos Detection ](#enable-ddos-detection) below for details.
 
-`ddos_mitigation_rules` - (Optional) Define manual mitigation rules to block L7 DDos attacks.. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
+`ddos_mitigation_rules` - (Optional) Define manual mitigation rules to block L7 DDoS attacks.. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
 `default_route_pools` - (Optional) Origin Pools used when no route is specified (default route). See [Default Route Pools ](#default-route-pools) below for details.
 
@@ -479,11 +437,19 @@ Advertise this load balancer on public network.
 
 Where should this load balancer be available.
 
+`cloud_edge_segment` - (Optional) Advertise on a segment on a Cloud Edge. See [Cloud Edge Segment ](#cloud-edge-segment) below for details.
+
+`segment` - (Optional) Advertise on a segment. See [Segment ](#segment) below for details.
+
 `site` - (Optional) Advertise on a customer site and a given network.. See [Site ](#site) below for details.
+
+`site_segment` - (Optional) Advertise on a segment on a site. See [Site Segment ](#site-segment) below for details.
 
 `virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
+
+`virtual_site_segment` - (Optional) Advertise on a segment on a virtual site. See [Virtual Site Segment ](#virtual-site-segment) below for details.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Vk8s Service ](#vk8s-service) below for details.
 
@@ -529,11 +495,11 @@ System flags Good Bot traffic and allow it to continue to the origin.
 
 ### Always Enable Captcha Challenge
 
-Challenge rules can be used to selectively disable Captcha challenge or enable Javascript challenge for some requests..
+Challenge rules can be used to selectively disable Captcha challenge or enable JavaScript challenge for some requests..
 
 ### Always Enable Js Challenge
 
-Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests..
+Challenge rules can be used to selectively disable JavaScript challenge or enable Captcha challenge for some requests..
 
 ### Any Asn
 
@@ -759,16 +725,6 @@ Validation will be performed for selected path prefixes.
 
 Token is found in Authorization HTTP header with Bearer authentication scheme.
 
-### Blindfold
-
-Encrypt JWKS.
-
-`built_in` - (Optional) Use Built-In policy to encrypt key (bool).
-
-`custom_policy` - (Optional) Choose custom policy to encrypt key. See [ref](#ref) below for details.
-
-`key` - (Required) x-required (`String`).
-
 ### Blindfold Secret Info
 
 Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
@@ -837,6 +793,10 @@ The actual request body value is extracted from the request API as a string..
 
 Select Bot Defense Standard.
 
+`disable_cors_support` - (Optional) protect against Bot Attacks. (bool).
+
+`enable_cors_support` - (Optional) Allows Bot Defense to work with your existing CORS policies. (bool).
+
 `policy` - (Required) Bot Defense Policy.. See [Policy ](#policy) below for details.
 
 `regional_endpoint` - (Required) x-required (`String`).
@@ -848,6 +808,8 @@ Select Bot Defense Standard.
 Select Bot Defense Advanced.
 
 `mobile` - (Optional) Select infrastructure for mobile.. See [ref](#ref) below for details.
+
+`policy` - (Required) Bot Defense Advanced Policy.. See [Policy ](#policy) below for details.
 
 `web` - (Optional) Select infrastructure for web.. See [ref](#ref) below for details.
 
@@ -864,10 +826,6 @@ specify the maximum buffer size and buffer interval with this config..
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
 `max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).
-
-### Built In
-
-Use Built-In policy to encrypt key.
 
 ### Captcha Challenge
 
@@ -942,6 +900,18 @@ The predicate evaluates to true if the expressions in the label selector are tru
 Client-Side Defense configuration for JavaScript insertion.
 
 `policy` - (Required) Please ensure that the same domains are configured in the Client-Side Defense configuration.. See [Policy ](#policy) below for details.
+
+### Cloud Edge Segment
+
+Advertise on a segment on a Cloud Edge.
+
+`cloud_edge` - (Required) x-required. See [ref](#ref) below for details.
+
+`ip` - (Required) Use given IP address as VIP on the Cloud Edge (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the Cloud Edge (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
 
 ### Compression Params
 
@@ -1185,7 +1155,7 @@ Combination of Region, ASN and TLS Fingerprints.
 
 ### Ddos Mitigation Rules
 
-Define manual mitigation rules to block L7 DDos attacks..
+Define manual mitigation rules to block L7 DDoS attacks..
 
 `expiration_timestamp` - (Optional) the configuration but is not applied anymore. (`String`).
 
@@ -1323,6 +1293,10 @@ x-displayName: "Disable".
 
 Circuit Breaker is disabled.
 
+### Disable Cors Support
+
+protect against Bot Attacks..
+
 ### Disable Ddos Detection
 
 x-displayName: "Disable".
@@ -1366,6 +1340,10 @@ Outlier detection is disabled.
 ### Disable Path Normalize
 
 x-displayName: "Disable".
+
+### Disable Request Timeout
+
+x-displayName: "No Timeout".
 
 ### Disable Sni
 
@@ -1429,6 +1407,10 @@ x-displayName: "Enable".
 
 x-displayName: "Enable".
 
+`block` - (Optional) x-displayName: "Block" (bool).
+
+`js_challenge` - (Optional) x-displayName: "JavaScript Challenge". See [Js Challenge ](#js-challenge) below for details.
+
 ### Enable Challenge
 
 Configure auto mitigation i.e risk based challenges for malicious users.
@@ -1439,11 +1421,15 @@ Configure auto mitigation i.e risk based challenges for malicious users.
 
 `default_js_challenge_parameters` - (Optional) Use default parameters (bool).
 
-`js_challenge_parameters` - (Optional) Configure Javascript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
+`js_challenge_parameters` - (Optional) Configure JavaScript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
 
 `default_mitigation_settings` - (Optional) For high level, users will be temporarily blocked. (bool).
 
 `malicious_user_mitigation` - (Optional) Define the mitigation actions to be taken for different threat levels. See [ref](#ref) below for details.
+
+### Enable Cors Support
+
+Allows Bot Defense to work with your existing CORS policies..
 
 ### Enable Ddos Detection
 
@@ -1451,7 +1437,7 @@ x-displayName: "Enable".
 
 `disable_auto_mitigation` - (Optional) x-displayName: "Disable" (bool).
 
-`enable_auto_mitigation` - (Optional) x-displayName: "Enable" (bool).
+`enable_auto_mitigation` - (Optional) x-displayName: "Enable". See [Enable Auto Mitigation ](#enable-auto-mitigation) below for details.
 
 ### Enable Discovery
 
@@ -1955,7 +1941,7 @@ Custom JavaScript Configuration. Custom JavaScript code can be executed at vario
 
 ### Js Challenge
 
-Configure Javascript challenge on this load balancer.
+Configure JavaScript challenge on this load balancer.
 
 `cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
@@ -1965,7 +1951,7 @@ Configure Javascript challenge on this load balancer.
 
 ### Js Challenge Parameters
 
-Configure Javascript challenge parameters.
+Configure JavaScript challenge parameters.
 
 `cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
 
@@ -1999,9 +1985,7 @@ Specify custom JavaScript insertion rules..
 
 The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details..
 
-`blindfold` - (Optional) Encrypt JWKS. See [Blindfold ](#blindfold) below for details.
-
-`cleartext` - (Optional) Store JWKS in the clear text (`String`).
+`cleartext` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).
 
 ### Jwt Validation
 
@@ -2181,7 +2165,7 @@ More options like header manipulation, compression etc..
 
 ### No Challenge
 
-Challenge rules can be used to selectively enable Javascript or Captcha challenge for some requests..
+Challenge rules can be used to selectively enable JavaScript or Captcha challenge for some requests..
 
 ### No Crl
 
@@ -2309,6 +2293,10 @@ List of origin servers in this pool.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
 
+`segment_ip` - (Optional) Specify origin server with IP address in a Segment on given Site. See [Segment Ip ](#segment-ip) below for details.
+
+`segment_name` - (Optional) Specify origin server with DNS name in Segment on given Site. See [Segment Name ](#segment-name) below for details.
+
 `vn_private_ip` - (Optional) Specify origin server IP address on virtual network other than inside or outside network. See [Vn Private Ip ](#vn-private-ip) below for details.
 
 `vn_private_name` - (Optional) Specify origin server name on virtual network other than inside or outside network. See [Vn Private Name ](#vn-private-name) below for details.
@@ -2385,15 +2373,15 @@ Specifies the settings for policy rule based challenge.
 
 `default_captcha_challenge_parameters` - (Optional) Use default parameters (bool).
 
-`always_enable_captcha_challenge` - (Optional) Challenge rules can be used to selectively disable Captcha challenge or enable Javascript challenge for some requests. (bool).
+`always_enable_captcha_challenge` - (Optional) Challenge rules can be used to selectively disable Captcha challenge or enable JavaScript challenge for some requests. (bool).
 
-`always_enable_js_challenge` - (Optional) Challenge rules can be used to selectively disable Javascript challenge or enable Captcha challenge for some requests. (bool).
+`always_enable_js_challenge` - (Optional) Challenge rules can be used to selectively disable JavaScript challenge or enable Captcha challenge for some requests. (bool).
 
-`no_challenge` - (Optional) Challenge rules can be used to selectively enable Javascript or Captcha challenge for some requests. (bool).
+`no_challenge` - (Optional) Challenge rules can be used to selectively enable JavaScript or Captcha challenge for some requests. (bool).
 
 `default_js_challenge_parameters` - (Optional) Use default parameters (bool).
 
-`js_challenge_parameters` - (Optional) Configure Javascript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
+`js_challenge_parameters` - (Optional) Configure JavaScript challenge parameters. See [Js Challenge Parameters ](#js-challenge-parameters) below for details.
 
 `default_mitigation_settings` - (Optional) For high level, users will be temporarily blocked. (bool).
 
@@ -2843,6 +2831,40 @@ Secret Value of the HTTP header..
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
+### Segment
+
+Advertise on a segment.
+
+`ipv4_vip` - (Required) Configure IPV4 VIP address (`String`).
+
+`ipv6_vip` - (Optional) Configure IPV6 VIP address (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+### Segment Ip
+
+Specify origin server with IP address in a Segment on given Site.
+
+`ip` - (Optional) Private IPV4 address (`String`).
+
+`ipv6` - (Optional) Private IPV6 address (`String`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+
+`site_locator` - (Required) Site or Cloud RE Region or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
+### Segment Name
+
+Specify origin server with DNS name in Segment on given Site.
+
+`dns_name` - (Required) DNS Name (`String`).
+
+`refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+
+`site_locator` - (Required) Site or Cloud RE Region or Virtual site where this origin server is located. See [Site Locator ](#site-locator) below for details.
+
 ### Sensitive Data Detection Config
 
 The custom data detection config specifies targets, scopes & the pattern to be detected..
@@ -3045,6 +3067,18 @@ Site or Virtual site where this origin server is located.
 
 `virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
 
+### Site Segment
+
+Advertise on a segment on a site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`site` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Skip Data Guard
 
 x-displayName: "Skip".
@@ -3071,7 +3105,9 @@ Custom Settings for Slow DDoS Mitigation.
 
 `request_headers_timeout` - (Optional) provides protection against Slowloris attacks. (`Int`).
 
-`request_timeout` - (Optional) provides protection against Slow POST attacks. (`Int`).
+`disable_request_timeout` - (Optional) x-displayName: "No Timeout" (bool).
+
+`request_timeout` - (Optional) x-example: "60000" (`Int`).
 
 ### Strip Query Params
 
@@ -3394,6 +3430,18 @@ Advertise on a virtual network.
 Advertise on a customer virtual site and a given network..
 
 `network` - (Required) IP address of primary network interface in the network (`String`).
+
+`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
+
+### Virtual Site Segment
+
+Advertise on a segment on a virtual site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 

@@ -20,11 +20,34 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "proxy_label_selector drp_http_connect any_proxy network_connector" must be set
+  // One of the arguments from this list "network_connector proxy_label_selector drp_http_connect any_proxy" must be set
   any_proxy = true
 
-  // One of the arguments from this list "allow_list deny_list rule_list allow_all" must be set
-  allow_all = true
+  // One of the arguments from this list "rule_list allow_all allow_list deny_list" must be set
+
+  deny_list {
+    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
+    default_action_next_policy = true
+
+    dest_list {
+      port_ranges = "80,443,8080-8191,9080"
+
+      prefixes = ["10.0.0./24"]
+    }
+
+    http_list {
+      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
+      exact_value = "abc.zyz.com"
+
+      // One of the arguments from this list "path_exact_value path_prefix_value path_regex_value any_path" must be set
+      path_exact_value = "/abc/zyz"
+    }
+
+    tls_list {
+      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
+      exact_value = "abc.zyz.com"
+    }
+  }
 }
 
 ```
@@ -63,6 +86,8 @@ Argument Reference
 `deny_list` - (Optional) List of denied connections. See [Deny List ](#deny-list) below for details.
 
 `rule_list` - (Optional) List of custom rules. See [Rule List ](#rule-list) below for details.
+
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
 
 ### All Destinations
 
@@ -128,6 +153,10 @@ L4 destinations for non-HTTP and non-TLS connections and TLS connections without
 
 `prefixes` - (Required) Destination IPv4 prefixes. (`String`).
 
+### Dst Any
+
+Traffic is not matched against any segment.
+
 ### Dst Asn List
 
 The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB..
@@ -144,7 +173,15 @@ Destination is the set of prefixes determined by the label selector expression.
 
 Addresses that are covered by the given list of IPv4 prefixes.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Http List
 
@@ -167,6 +204,10 @@ URLs for HTTP connections.
 ### Inside Sources
 
 All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
+
+### Intra Segment
+
+Traffic is matched for source and destination on the same segment.
 
 ### Label Selector
 
@@ -200,7 +241,9 @@ In case of an HTTP Connect, the destination port is extracted from the connect d
 
 list of ip prefixes that are representing source of traffic seen by proxy.
 
-`prefixes` - (Required) List of IPv4 prefixes that represent an endpoint (`String`).
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 ### Proxy Label Selector
 
@@ -271,6 +314,30 @@ List of custom rules.
 `namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).
 
 `prefix_list` - (Optional) list of ip prefixes that are representing source of traffic seen by proxy. See [Prefix List ](#prefix-list) below for details.
+
+### Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+`dst_any` - (Optional) Traffic is not matched against any segment (bool).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segments ](#dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (bool).
+
+`src_any` - (Optional) Traffic is not matched against any segment (bool).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segments ](#src-segments) below for details.
+
+### Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Tls List
 

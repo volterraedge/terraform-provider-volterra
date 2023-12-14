@@ -24,53 +24,45 @@ resource "volterra_fleet" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
-  no_dc_cluster_group = true
-  fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  dc_cluster_group_inside {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  fleet_label = ["sfo"]
+  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
   disable_gpu = true
 
-  // One of the arguments from this list "device_list interface_list default_config" must be set
-  default_config = true
+  // One of the arguments from this list "interface_list default_config device_list" must be set
 
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
-
-  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
-  default_sriov_interface = true
-
-  // One of the arguments from this list "default_storage_class storage_class_list" must be set
-
-  storage_class_list {
-    storage_classes {
-      advanced_storage_parameters = {
-        "key1" = "value1"
-      }
-
-      allow_volume_expansion = true
-      default_storage_class  = true
-      description            = "Volume from my fast storage"
-
-      // One of the arguments from this list "netapp_trident pure_service_orchestrator custom_storage hpe_storage" must be set
-
-      pure_service_orchestrator {
-        backend         = "block"
-        bandwidth_limit = "1G"
-        iops_limit      = "3000"
-      }
-      reclaim_policy     = "Delete"
-      storage_class_name = "premium"
-      storage_device     = "DellEMC-isilon_F800-0"
+  interface_list {
+    interfaces {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
   }
+
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+  default_sriov_interface = true
+  // One of the arguments from this list "default_storage_class storage_class_list" must be set
+  default_storage_class = true
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
   // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
-  allow_all_usb = true
+  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
+  deny_all_usb = true
 }
 
 ```
@@ -394,9 +386,11 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Use custom SR-IOV interfaces Configuration.
 
-`interface_name` - (Required) Name for SR-IOV physical interface (`String`).
+`interface_name` - (Required) Name of SR-IOV physical interface (`String`).
 
-`number_of_vfs` - (Required) Number of virtual functions (`Int`).
+`number_of_vfio_vfs` - (Optional) Number of virtual functions reserved for VNFs and DPDK-based CNFs (`Int`).
+
+`number_of_vfs` - (Required) Total number of virtual functions (`Int`).
 
 ### Sriov Interfaces
 

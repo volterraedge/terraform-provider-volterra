@@ -20,23 +20,25 @@ resource "volterra_tcp_loadbalancer" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public advertise_custom do_not_advertise" must be set
-  do_not_advertise = true
+  // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
 
+  advertise_on_public {
+    public_ip {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
-
   // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_round_robin = true
-
+  hash_policy_choice_source_ip_stickiness = true
   // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
   tcp = true
-
-  // One of the arguments from this list "active_service_policies service_policies_from_namespace no_service_policies" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
-
-  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
-  no_sni = true
+  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+  sni = true
 }
 
 ```
@@ -86,10 +88,6 @@ Argument Reference
 
 `idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
-`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
-
-`port_ranges` - (Optinal) Each port range consists of a single port or two ports separated by "-". (`String`).
-
 `tcp` - (Optional) TCP Load Balancer. (bool).
 
 `tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
@@ -97,6 +95,10 @@ Argument Reference
 `tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
+
+`listen_port` - (Optional) Listen Port for this load balancer (`Int`).
+
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 `active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
 
@@ -132,11 +134,19 @@ Advertise this load balancer on public network.
 
 Where should this load balancer be available.
 
+`cloud_edge_segment` - (Optional) Advertise on a segment on a Cloud Edge. See [Cloud Edge Segment ](#cloud-edge-segment) below for details.
+
+`segment` - (Optional) Advertise on a segment. See [Segment ](#segment) below for details.
+
 `site` - (Optional) Advertise on a customer site and a given network.. See [Site ](#site) below for details.
+
+`site_segment` - (Optional) Advertise on a segment on a site. See [Site Segment ](#site-segment) below for details.
 
 `virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
+
+`virtual_site_segment` - (Optional) Advertise on a segment on a virtual site. See [Virtual Site Segment ](#virtual-site-segment) below for details.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Vk8s Service ](#vk8s-service) below for details.
 
@@ -172,6 +182,18 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Cloud Edge Segment
+
+Advertise on a segment on a Cloud Edge.
+
+`cloud_edge` - (Required) x-required. See [ref](#ref) below for details.
+
+`ip` - (Required) Use given IP address as VIP on the Cloud Edge (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the Cloud Edge (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Custom Hash Algorithms
 
 Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
@@ -191,6 +213,10 @@ Custom selection of TLS versions and cipher suites.
 ### Default Security
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
+
+### Default V6 Vip
+
+Use the default VIP, system allocated or configured in the virtual network.
 
 ### Default Vip
 
@@ -256,19 +282,43 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Segment
+
+Advertise on a segment.
+
+`ipv4_vip` - (Required) Configure IPV4 VIP address (`String`).
+
+`ipv6_vip` - (Optional) Configure IPV6 VIP address (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Site
 
 Advertise on a customer site and a given network..
 
 `ip` - (Optional) Use given IP address as VIP on the site (`String`).
 
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
 `network` - (Required) By default VIP chosen as ip address of primary network interface in the network (`String`).
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Site Segment
+
+Advertise on a segment on a site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`site` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Tls Cert Params
 
-TLS Parameters and selected Certificates for downstream connections (RE sites only).
+Multiple domains with separate TLS certificates on this load balancer.
 
 `certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
 
@@ -308,7 +358,7 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 ### Tls Parameters
 
-Inline TLS parameters for downstream connections..
+Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 
@@ -322,9 +372,9 @@ Inline TLS parameters for downstream connections..
 
 User is responsible for managing DNS to this load balancer..
 
-`tls_cert_params` - (Optional) TLS Parameters and selected Certificates for downstream connections (RE sites only). See [Tls Cert Params ](#tls-cert-params) below for details.
+`tls_cert_params` - (Optional) Multiple domains with separate TLS certificates on this load balancer. See [Tls Cert Params ](#tls-cert-params) below for details.
 
-`tls_parameters` - (Optional) Inline TLS parameters for downstream connections.. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_parameters` - (Optional) Single RSA and/or ECDSA TLS certificate for all domains on this load balancer. See [Tls Parameters ](#tls-parameters) below for details.
 
 ### Tls Tcp Auto Cert
 
@@ -348,7 +398,13 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (bool).
 
-`trusted_ca_url` - (Required) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Select/Add a Root CA certificate. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Inline Root CA certificate (`String`).
+
+`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
+
+`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
 
 ### Use System Defaults
 
@@ -372,9 +428,13 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 Advertise on a virtual network.
 
+`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
+
+`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
+
 `default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
 
-`specific_vip` - (Optional) Use given IP address as VIP on VoltADN private Network (`String`).
+`specific_vip` - (Optional) Use given IPV4 address as VIP on virtual Network (`String`).
 
 `virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
@@ -383,6 +443,18 @@ Advertise on a virtual network.
 Advertise on a customer virtual site and a given network..
 
 `network` - (Required) IP address of primary network interface in the network (`String`).
+
+`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
+
+### Virtual Site Segment
+
+Advertise on a segment on a virtual site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
@@ -399,6 +471,16 @@ Advertise on vK8s Service Network on RE..
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Xfcc Disabled
+
+No X-Forwarded-Client-Cert header will be added.
+
+### Xfcc Options
+
+X-Forwarded-Client-Cert header will be added with the configured fields.
+
+`xfcc_header_elements` - (Required) X-Forwarded-Client-Cert header elements to be added to requests (`List of Strings`).
 
 Attribute Reference
 -------------------

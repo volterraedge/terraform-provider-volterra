@@ -21,22 +21,20 @@ resource "volterra_app_firewall" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "allow_all_response_codes allowed_response_codes" must be set
-  allow_all_response_codes = true
 
+  allowed_response_codes {
+    response_code = ["[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]"]
+  }
   // One of the arguments from this list "disable_anonymization default_anonymization custom_anonymization" must be set
-  default_anonymization = true
-
+  disable_anonymization = true
   // One of the arguments from this list "use_default_blocking_page blocking_page" must be set
   use_default_blocking_page = true
-
   // One of the arguments from this list "default_bot_setting bot_protection_setting" must be set
   default_bot_setting = true
-
   // One of the arguments from this list "default_detection_settings detection_settings" must be set
   default_detection_settings = true
-
   // One of the arguments from this list "use_loadbalancer_setting blocking monitoring" must be set
-  blocking = true
+  use_loadbalancer_setting = true
 }
 
 ```
@@ -158,13 +156,23 @@ Define Custom Security Policy settings.
 
 `signature_selection_setting` - (Optional) Attack Signatures are patterns that identify attacks on a web application and its components. See [Signature Selection Setting ](#signature-selection-setting) below for details.
 
+`disable_staging` - (Optional) Enforce new and updated attack signatures (bool).
+
+`stage_new_and_updated_signatures` - (Optional) would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode). See [Stage New And Updated Signatures ](#stage-new-and-updated-signatures) below for details.
+
+`stage_new_signatures` - (Optional) Stage new attack signatures only. Updated signatures will be enforced. See [Stage New Signatures ](#stage-new-signatures) below for details.
+
 `disable_threat_campaigns` - (Optional) x-displayName: "Disable" (bool).
 
 `enable_threat_campaigns` - (Optional) x-displayName: "Enable" (bool).
 
 `default_violation_settings` - (Optional) All violations are enabled for detection (bool).
 
-`violation_settings` - (Required) Define violations to be disabled for detection. See [Violation Settings ](#violation-settings) below for details.
+`violation_settings` - (Optional) Define violations to be disabled for detection. See [Violation Settings ](#violation-settings) below for details.
+
+### Disable Staging
+
+Enforce new and updated attack signatures.
 
 ### Disable Suppression
 
@@ -219,6 +227,18 @@ Attack Signatures are patterns that identify attacks on a web application and it
 `high_medium_low_accuracy_signatures` - (Optional) Enables high, medium and low accuracy signatures (bool).
 
 `only_high_accuracy_signatures` - (Optional) Enables only high accuracy signatures (bool).
+
+### Stage New And Updated Signatures
+
+would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode).
+
+`staging_period` - (Required) 20 days. (`Int`).
+
+### Stage New Signatures
+
+Stage new attack signatures only. Updated signatures will be enforced.
+
+`staging_period` - (Required) 20 days. (`Int`).
 
 ### Violation Settings
 

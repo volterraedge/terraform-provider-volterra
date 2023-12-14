@@ -24,25 +24,28 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   // One of the arguments from this list "http https_auto_cert https" must be set
 
-  https_auto_cert {
-    add_hsts      = true
-    http_redirect = true
+  http {
+    dns_volterra_managed = true
 
-    tls_config {
-      // One of the arguments from this list "tls_12_plus tls_11_plus" must be set
-      tls_12_plus = true
-    }
+    // One of the arguments from this list "port port_ranges" must be set
+    port_ranges = "80,443,8080-8191,9080"
   }
   origin_pool {
     follow_origin_redirect = true
+
+    more_origin_options {
+      disable_byte_range_request = true
+      websocket_proxy            = true
+    }
+
     origin_request_timeout = "100s"
 
     origin_servers {
       // One of the arguments from this list "public_ip public_name" must be set
 
-      public_ip {
-        // One of the arguments from this list "ip ipv6" must be set
-        ip = "8.8.8.8"
+      public_name {
+        dns_name         = "value"
+        refresh_interval = "20"
       }
     }
 
@@ -51,7 +54,7 @@ resource "volterra_cdn_loadbalancer" "example" {
       refresh_interval = "20"
     }
 
-    // One of the arguments from this list "no_tls use_tls" must be set
+    // One of the arguments from this list "use_tls no_tls" must be set
     no_tls = true
   }
 }
@@ -165,6 +168,14 @@ Bypass Caching of content from the origin.
 
 Disable Caching of content from the origin.
 
+### Cache Headers
+
+Configure cache rule headers to match the criteria.
+
+`name` - (Optional) Name of the header (`String`).
+
+`operator` - (Optional) Available operators. See [Operator ](#operator) below for details.
+
 ### Cache Options
 
 Cache Options.
@@ -177,11 +188,13 @@ Cache Options.
 
 The Cache Rule Expression Terms that are ANDed.
 
-`headers` - (Optional) Configure cache rule headers to match the criteria. See [Headers ](#headers) below for details.
+`cache_headers` - (Optional) Configure cache rule headers to match the criteria. See [Cache Headers ](#cache-headers) below for details.
+
+`cookie_matcher` - (Optional) Note that all specified cookie matcher predicates must evaluate to true.. See [Cookie Matcher ](#cookie-matcher) below for details.
 
 `path_match` - (Optional) URI path of route. See [Path Match ](#path-match) below for details.
 
-`query_params` - (Optional) List of (key, value) query parameters. See [Query Params ](#query-params) below for details.
+`query_parameters` - (Optional) List of (key, value) query parameters. See [Query Parameters ](#query-parameters) below for details.
 
 ### Cache Rules
 
@@ -225,6 +238,14 @@ Token is found in the cookie.
 
 `name` - (Required) A case-insensitive cookie name. (`String`).
 
+### Cookie Matcher
+
+Note that all specified cookie matcher predicates must evaluate to true..
+
+`name` - (Required) A case-sensitive cookie name. (`String`).
+
+`operator` - (Optional) . See [Operator ](#operator) below for details.
+
 ### Custom
 
 Enable Custom Authenticaiton.
@@ -240,6 +261,12 @@ Use hash algorithms in the custom order. F5XC will try to fetch ocsp response fr
 ### Default Cache Action
 
 Default value for Cache action..
+
+`cache_disabled` - (Optional) Disable Caching of content from the origin (bool).
+
+`cache_ttl_default` - (Optional) Cache TTL value to use when the origin does not provide one (`String`).
+
+`cache_ttl_override` - (Optional) Override the Cache TTL directive in the response from the origin (`String`).
 
 `eligible_for_cache` - (Optional) Eligible for caching the content. See [Eligible For Cache ](#eligible-for-cache) below for details.
 
@@ -267,6 +294,10 @@ Eligible for caching the content.
 
 `scheme_hostname_uri_query` - (Optional) . See [Scheme Hostname Uri Query ](#scheme-hostname-uri-query) below for details.
 
+`scheme_proxy_host_request_uri` - (Optional) . See [Scheme Proxy Host Request Uri ](#scheme-proxy-host-request-uri) below for details.
+
+`scheme_proxy_host_uri` - (Optional) . See [Scheme Proxy Host Uri ](#scheme-proxy-host-uri) below for details.
+
 ### Geo Filtering
 
 Geo filtering options.
@@ -293,20 +324,6 @@ Request/Response header related options.
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
 
-### Headers
-
-Configure cache rule headers to match the criteria.
-
-`invert_match` - (Optional) Invert the result of the match to detect missing header or non-matching value (`Bool`).
-
-`name` - (Required) Name of the header (`String`).
-
-`exact` - (Optional) Header value to match exactly (`String`).
-
-`presence` - (Optional) If true, check for presence of header (`Bool`).
-
-`regex` - (Optional) Regex match of the header value in re2 format (`String`).
-
 ### Hostname Uri
 
 .
@@ -315,7 +332,7 @@ Configure cache rule headers to match the criteria.
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Http
 
@@ -393,6 +410,14 @@ More options like header manipulation, compression etc..
 
 `security_options` - (Optional) Security related options. See [Security Options ](#security-options) below for details.
 
+### More Origin Options
+
+x-displayName: "Advanced Configuration".
+
+`disable_byte_range_request` - (Optional) Choice to enable/disable origin byte range requrests towards origin (`Bool`).
+
+`websocket_proxy` - (Optional) Option to enable proxying of websocket connections to the origin server (`Bool`).
+
 ### No Mtls
 
 x-displayName: "Disable".
@@ -400,6 +425,28 @@ x-displayName: "Disable".
 ### No Tls
 
 Origin servers do not use TLS.
+
+### Operator
+
+Available operators.
+
+`Contains` - (Optional) Field must contain (`String`).
+
+`DoesNotContain` - (Optional) Field must not contain (`String`).
+
+`DoesNotEndWith` - (Optional) Field must not end with (`String`).
+
+`DoesNotEqual` - (Optional) Field must not equal (`String`).
+
+`DoesNotStartWith` - (Optional) Field must not start with (`String`).
+
+`Endswith` - (Optional) Field must end with (`String`).
+
+`Equals` - (Optional) Field must exactly match (`String`).
+
+`MatchRegex` - (Optional) Field matches regular expression (`String`).
+
+`Startswith` - (Optional) Field must start with (`String`).
 
 ### Origin Log Options
 
@@ -412,6 +459,8 @@ Origin response headers to log.
 x-required.
 
 `follow_origin_redirect` - (Optional) Instructs the CDN to follow redirects from the origin server(s) (`Bool`).
+
+`more_origin_options` - (Optional) x-displayName: "Advanced Configuration". See [More Origin Options ](#more-origin-options) below for details.
 
 `origin_request_timeout` - (Optional) Configures the time after which a request to the origin will time out waiting for a response (`String`).
 
@@ -435,11 +484,7 @@ List of original servers.
 
 URI path of route.
 
-`path` - (Optional) Exact path value to match (`String`).
-
-`prefix` - (Optional) Path prefix to match (e.g. the value / will match on all paths) (`String`).
-
-`regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
+`operator` - (Optional) A specification of path match. See [Operator ](#operator) below for details.
 
 ### Private Key
 
@@ -479,15 +524,13 @@ Token is found in the Query-Param.
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-### Query Params
+### Query Parameters
 
 List of (key, value) query parameters.
 
 `key` - (Required) In the above example, assignee_username is the key (`String`).
 
-`exact` - (Optional) Exact match value for the query parameter key (`String`).
-
-`regex` - (Optional) Regex match value for the query parameter key (`String`).
+`operator` - (Optional) . See [Operator ](#operator) below for details.
 
 ### Ref
 
@@ -539,7 +582,7 @@ Expressions are evaluated in the order in which they are specified. The evaluati
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Scheme Hostname Uri
 
@@ -549,7 +592,7 @@ Expressions are evaluated in the order in which they are specified. The evaluati
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Scheme Hostname Uri Query
 
@@ -559,7 +602,27 @@ Expressions are evaluated in the order in which they are specified. The evaluati
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`set_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+### Scheme Proxy Host Request Uri
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
+
+### Scheme Proxy Host Uri
+
+.
+
+`cache_override` - (Optional) Honour Cache Override (`Bool`).
+
+`cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
+
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Secret Key
 

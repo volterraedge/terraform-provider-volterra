@@ -49,7 +49,7 @@ Argument Reference
 
 `route53` - (Optional) sub domain in Amazon Route 53 zone owned by users. See [Route53 ](#route53) below for details.
 
-`verification_only` - (Optional) Volterra will verify this domain, but will not manage it. (bool).
+`verification_only` - (Optional) F5XC will verify this domain, but will not manage it. (bool).
 
 `volterra_managed` - (Optional) sub domain (bool).
 
