@@ -173,6 +173,7 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 			}
 			config.apiP12File = fmt.Sprintf("file:///%s", tmp.Name())
 			config.apiP12Password = os.Getenv(EnvVarP12Password)
+			defer cleanupTempFile(tmp.Name())
 		}
 	}
 
@@ -190,6 +191,13 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 		config.apiP12File, config.url)
 
 	return config.Client()
+}
+
+// cleanupTempFile removes the specified temporary file
+func cleanupTempFile(filePath string) {
+	if err := os.Remove(filePath); err != nil {
+		fmt.Println("Error removing temporary file:", err)
+	}
 }
 
 func getResourceMap() map[string]*schema.Resource {
