@@ -2,6 +2,7 @@ package statemigration
 
 import (
 	"context"
+	"reflect"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -6616,6 +6617,12 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 								},
 							},
 						},
+
+						"disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -7434,6 +7441,26 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 							},
 						},
 
+						"mandatory_claims": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"claim_names": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
 						"reserved_claims": {
 
 							Type:     schema.TypeSet,
@@ -7585,6 +7612,49 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"l7_ddos_action_block": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"l7_ddos_action_default": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"l7_ddos_action_js_challenge": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cookie_expiry": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"custom_page": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"js_script_delay": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"l7_ddos_action_none": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"http": {
@@ -8800,7 +8870,7 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																		"key_value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -8829,7 +8899,7 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																					"value_pattern": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -8854,7 +8924,7 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																		"value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -9765,6 +9835,18 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
 										},
+									},
+
+									"disable_lb_source_ip_persistance": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_lb_source_ip_persistance": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"disable_outlier_detection": {
@@ -11855,13 +11937,13 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"inline_rate_limiter": {
@@ -12633,6 +12715,48 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 													},
 												},
 
+												"csrf_policy": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"all_load_balancer_domains": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"custom_domain_list": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"domains": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"disable_location_add": {
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -13228,7 +13352,7 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Required: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -14029,9 +14153,16 @@ func ResourceHttpLoadbalancerInstanceStateUpgradeV0(ctx context.Context, rawStat
 	for _, v := range rawState["enable_ddos_detection"].([]interface{}) {
 		a := v.(map[string]interface{})
 		a["disable_auto_mitigation"] = a["disable_auto_mitigation"].(bool)
-		a["enable_auto_mitigation"] = []interface{}{map[string]interface{}{
-			"block": a["enable_auto_mitigation"].(bool),
-		}}
+		value, ok := a["enable_auto_mitigation"]
+		if ok {
+			if reflect.TypeOf(value).Kind() == reflect.Bool {
+				a["enable_auto_mitigation"] = []interface{}{map[string]interface{}{
+					"block": a["enable_auto_mitigation"].(bool),
+				}}
+			}
+		} else {
+			a["disable_auto_mitigation"] = a["disable_auto_mitigation"].([]interface{})
+		}
 	}
 	return rawState, nil
 }
