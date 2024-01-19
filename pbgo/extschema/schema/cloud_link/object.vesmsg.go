@@ -1033,6 +1033,15 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 
 	}
 
+	if fv, exists := v.FldValidators["gcp_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_path"))
+		if err := fv(ctx, m.GetGcpPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["interconnect"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("interconnect"))
@@ -1099,6 +1108,24 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 
 	}
 
+	if fv, exists := v.FldValidators["project"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("project"))
+		if err := fv(ctx, m.GetProject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["router"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("router"))
@@ -1130,6 +1157,15 @@ func (v *ValidateGCPCloudInterconnectAttachmentStatusType) Validate(ctx context.
 
 		vOpts := append(opts, db.WithValidateField("vlan"))
 		if err := fv(ctx, m.GetVlan(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_network"))
+		if err := fv(ctx, m.GetVpcNetwork(), vOpts...); err != nil {
 			return err
 		}
 

@@ -34,6 +34,15 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *CustomAPIGrpcClient) doRPCAssignAPIDefinition(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AssignAPIDefinitionReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.AssignAPIDefinition(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &DeleteDoSAutoMitigationRuleReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -70,6 +79,15 @@ func (c *CustomAPIGrpcClient) doRPCGetSecurityConfig(ctx context.Context, yamlRe
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ListAvailableAPIDefinitionsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.ListAvailableAPIDefinitions(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -100,6 +118,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
+
 	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
 
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
@@ -107,6 +127,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
 
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
+
+	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
 
 	ccl.rpcFns = rpcFns
 
@@ -119,6 +141,92 @@ type CustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *CustomAPIRestClient) doRPCAssignAPIDefinition(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AssignAPIDefinitionReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("api_definition", fmt.Sprintf("%v", req.ApiDefinition))
+		q.Add("create_if_not_exists", fmt.Sprintf("%v", req.CreateIfNotExists))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &AssignAPIDefinitionResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *CustomAPIRestClient) doRPCDeleteDoSAutoMitigationRule(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -458,6 +566,90 @@ func (c *CustomAPIRestClient) doRPCGetSecurityConfig(ctx context.Context, callOp
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ListAvailableAPIDefinitionsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ListAvailableAPIDefinitionsResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -482,6 +674,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["AssignAPIDefinition"] = ccl.doRPCAssignAPIDefinition
+
 	rpcFns["DeleteDoSAutoMitigationRule"] = ccl.doRPCDeleteDoSAutoMitigationRule
 
 	rpcFns["GetDnsInfo"] = ccl.doRPCGetDnsInfo
@@ -489,6 +683,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["GetDoSAutoMitigationRules"] = ccl.doRPCGetDoSAutoMitigationRules
 
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
+
+	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
 
 	ccl.rpcFns = rpcFns
 
@@ -502,6 +698,10 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
+func (c *customAPIInprocClient) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq, opts ...grpc.CallOption) (*AssignAPIDefinitionResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition", nil)
+	return c.CustomAPIServer.AssignAPIDefinition(ctx, in)
+}
 func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule", nil)
 	return c.CustomAPIServer.DeleteDoSAutoMitigationRule(ctx, in)
@@ -517,6 +717,10 @@ func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, i
 func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig", nil)
 	return c.CustomAPIServer.GetSecurityConfig(ctx, in)
+}
+func (c *customAPIInprocClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions", nil)
+	return c.CustomAPIServer.ListAvailableAPIDefinitions(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -540,6 +744,58 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *customAPISrv) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq) (*AssignAPIDefinitionResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *AssignAPIDefinitionResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.AssignAPIDefinition' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+	if err := s.svc.CustomAPIProcessDRef(ctx, in); err != nil {
+		return nil, err
+	}
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.AssignAPIDefinition(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp", rsp)...)
+
+	return rsp, nil
+}
 func (s *customAPISrv) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -736,6 +992,55 @@ func (s *customAPISrv) GetSecurityConfig(ctx context.Context, in *GetSecurityCon
 
 	return rsp, nil
 }
+func (s *customAPISrv) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ListAvailableAPIDefinitionsResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ListAvailableAPIDefinitions' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ListAvailableAPIDefinitions(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 	return &customAPISrv{svc: svc}
@@ -847,6 +1152,198 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getsecurityconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_definitions/assign": {
+            "post": {
+                "summary": "Assign API Definition",
+                "description": "Set a reference to the API Definition, with an option to create an empty one if not exists.",
+                "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerAssignAPIDefinitionResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerAssignAPIDefinitionReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-assignapidefinition"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_definitions/available": {
+            "get": {
+                "summary": "List Available API Definitions",
+                "description": "List API definitions suitable for API Inventory management\nAPI Definitions which are associated at most with one app type.",
+                "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerListAvailableAPIDefinitionsResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nNamespace of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"blogging-app\"\nName of the HTTP Load Balancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-listavailableapidefinitions"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions"
             },
             "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
@@ -1199,6 +1696,53 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerAssignAPIDefinitionReq": {
+            "type": "object",
+            "description": "Request form for Assign API Definition",
+            "title": "Assign API Definition Request",
+            "x-displayname": "Assign API Definition Request",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq",
+            "properties": {
+                "api_definition": {
+                    "description": " A reference to API Definition object.\n The referenced object may not exists.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API Definition",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "API Definition",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "create_if_not_exists": {
+                    "type": "boolean",
+                    "description": " Create an empty API Definition object, if not exists",
+                    "title": "Create if not exists",
+                    "format": "boolean",
+                    "x-displayname": "Create if not exists"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the HTTP Load Balancer\n\nExample: - \"blogging-app\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "blogging-app"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the HTTP Load Balancer\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                }
+            }
+        },
+        "http_loadbalancerAssignAPIDefinitionResp": {
+            "type": "object",
+            "description": "Response form for Assign API Definition",
+            "title": "Assign API Definition Response",
+            "x-displayname": "Assign API Definition Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp"
+        },
         "http_loadbalancerDeleteDoSAutoMitigationRuleRsp": {
             "type": "object",
             "description": "Response of Delete DoS Auto-Mitigation Rule API",
@@ -1359,6 +1903,21 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "5",
                         "ves.io.schema.rules.repeated.min_items": "1"
                     }
+                }
+            }
+        },
+        "http_loadbalancerListAvailableAPIDefinitionsResp": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp",
+            "properties": {
+                "available_api_definitions": {
+                    "type": "array",
+                    "description": " The list of references to available API Definition objects.",
+                    "title": "Available API Definitions",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Available API Definitions"
                 }
             }
         },
@@ -1812,6 +2371,52 @@ var CustomAPISwaggerJSON string = `{
             "default": "MITIGATION_MANUAL",
             "x-displayname": "DoS Mitigation Type",
             "x-ves-proto-enum": "ves.io.schema.dos_mitigation.Type"
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
         },
         "schemavirtual_host_dns_infoGlobalSpecType": {
             "type": "object",

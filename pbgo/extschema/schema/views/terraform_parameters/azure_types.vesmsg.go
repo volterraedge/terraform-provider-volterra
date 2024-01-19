@@ -1388,6 +1388,15 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["enable_accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_accelerated_networking"))
+		if err := fv(ctx, m.GetEnableAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["express_route"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("express_route"))

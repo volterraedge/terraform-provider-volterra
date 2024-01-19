@@ -265,6 +265,17 @@ func (v *ValidateCreateV2Request) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *CreateV2Request_SourceMarketplace:
+		if fv, exists := v.FldValidators["source_choice.source_marketplace"]; exists {
+			val := m.GetSourceChoice().(*CreateV2Request_SourceMarketplace).SourceMarketplace
+			vOpts := append(opts,
+				db.WithValidateField("source_choice"),
+				db.WithValidateField("source_marketplace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -349,6 +360,7 @@ var DefaultCreateV2RequestValidator = func() *ValidateCreateV2Request {
 
 	v.FldValidators["source_choice.source_internal_sre"] = SourceInternalSreValidator().Validate
 	v.FldValidators["source_choice.source_msp"] = SourceMspValidator().Validate
+	v.FldValidators["source_choice.source_marketplace"] = SourceMarketplaceValidator().Validate
 
 	return v
 }()

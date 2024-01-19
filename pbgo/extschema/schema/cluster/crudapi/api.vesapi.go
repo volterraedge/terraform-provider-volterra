@@ -2771,6 +2771,7 @@ var APISwaggerJSON string = `{
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
+            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
             "properties": {
@@ -4097,7 +4098,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4108,14 +4109,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Skip verification of hostname"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Trusted CA List",
+                    "description": " Trusted CA List",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaTrustedCAList",
                     "x-displayname": "Trusted CA List"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
                     "x-displayname": "Inline Trusted CA List",
@@ -4209,17 +4210,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "Upstream TLS Parameters",
             "x-ves-displayorder": "5,6",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
-            "x-ves-oneof-field-tls_params_choice": "[\"cert_params\",\"common_params\"]",
+            "x-ves-oneof-field-tls_params_choice": "[\"common_params\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
             "properties": {
                 "cert_params": {
-                    "description": "Exclusive with [common_params]\n TLS certificate parameters for upstream connections",
+                    "description": " TLS certificate parameters for upstream connections",
                     "title": "TLS Certificate Parameters",
                     "$ref": "#/definitions/schemaUpstreamCertificateParamsType",
                     "x-displayname": "TLS Certificate Parameters"
                 },
                 "common_params": {
-                    "description": "Exclusive with [cert_params]\n Common TLS parameters used in upstream connections",
+                    "description": "Exclusive with []\n Common TLS parameters used in upstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Inline TLS Parameters"

@@ -5107,6 +5107,191 @@ func IpMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *JWTClaimMatcherType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JWTClaimMatcherType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *JWTClaimMatcherType) DeepCopy() *JWTClaimMatcherType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JWTClaimMatcherType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JWTClaimMatcherType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JWTClaimMatcherType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JWTClaimMatcherTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJWTClaimMatcherType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJWTClaimMatcherType) MatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for match")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateJWTClaimMatcherType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateJWTClaimMatcherType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JWTClaimMatcherType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JWTClaimMatcherType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["invert_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invert_matcher"))
+		if err := fv(ctx, m.GetInvertMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["match"]; exists {
+		val := m.GetMatch()
+		vOpts := append(opts,
+			db.WithValidateField("match"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMatch().(type) {
+	case *JWTClaimMatcherType_CheckPresent:
+		if fv, exists := v.FldValidators["match.check_present"]; exists {
+			val := m.GetMatch().(*JWTClaimMatcherType_CheckPresent).CheckPresent
+			vOpts := append(opts,
+				db.WithValidateField("match"),
+				db.WithValidateField("check_present"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *JWTClaimMatcherType_CheckNotPresent:
+		if fv, exists := v.FldValidators["match.check_not_present"]; exists {
+			val := m.GetMatch().(*JWTClaimMatcherType_CheckNotPresent).CheckNotPresent
+			vOpts := append(opts,
+				db.WithValidateField("match"),
+				db.WithValidateField("check_not_present"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *JWTClaimMatcherType_Item:
+		if fv, exists := v.FldValidators["match.item"]; exists {
+			val := m.GetMatch().(*JWTClaimMatcherType_Item).Item
+			vOpts := append(opts,
+				db.WithValidateField("match"),
+				db.WithValidateField("item"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJWTClaimMatcherTypeValidator = func() *ValidateJWTClaimMatcherType {
+	v := &ValidateJWTClaimMatcherType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMatch := v.MatchValidationRuleHandler
+	rulesMatch := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMatch(rulesMatch)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JWTClaimMatcherType.match: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["match"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for JWTClaimMatcherType.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	v.FldValidators["match.item"] = MatcherTypeValidator().Validate
+
+	return v
+}()
+
+func JWTClaimMatcherTypeValidator() db.Validator {
+	return DefaultJWTClaimMatcherTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *JwtTokenAuthOptions) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -12534,6 +12719,17 @@ func (v *ValidateWafAction) Validate(ctx context.Context, pm interface{}, opts .
 			vOpts := append(opts,
 				db.WithValidateField("action_type"),
 				db.WithValidateField("jwt_validation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafAction_JwtClaimsValidation:
+		if fv, exists := v.FldValidators["action_type.jwt_claims_validation"]; exists {
+			val := m.GetActionType().(*WafAction_JwtClaimsValidation).JwtClaimsValidation
+			vOpts := append(opts,
+				db.WithValidateField("action_type"),
+				db.WithValidateField("jwt_claims_validation"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -22,6 +22,7 @@ import (
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	dos_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 	io "io"
 	math "math"
@@ -665,6 +666,248 @@ func (m *DeleteDoSAutoMitigationRuleRsp) GetName() string {
 	return ""
 }
 
+// List Available API Definitions Request
+//
+// x-displayName: "List Available API Definitions Request"
+// Request form for List Available API Definitions
+type ListAvailableAPIDefinitionsReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the HTTP Load Balancer
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "blogging-app"
+	// Name of the HTTP Load Balancer
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *ListAvailableAPIDefinitionsReq) Reset()      { *m = ListAvailableAPIDefinitionsReq{} }
+func (*ListAvailableAPIDefinitionsReq) ProtoMessage() {}
+func (*ListAvailableAPIDefinitionsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{9}
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAvailableAPIDefinitionsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAvailableAPIDefinitionsReq.Merge(m, src)
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAvailableAPIDefinitionsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAvailableAPIDefinitionsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAvailableAPIDefinitionsReq proto.InternalMessageInfo
+
+func (m *ListAvailableAPIDefinitionsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *ListAvailableAPIDefinitionsReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type ListAvailableAPIDefinitionsResp struct {
+	// Available API Definitions
+	//
+	// x-displayName: "Available API Definitions"
+	// The list of references to available API Definition objects.
+	AvailableApiDefinitions []*views.ObjectRefType `protobuf:"bytes,1,rep,name=available_api_definitions,json=availableApiDefinitions,proto3" json:"available_api_definitions,omitempty"`
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Reset()      { *m = ListAvailableAPIDefinitionsResp{} }
+func (*ListAvailableAPIDefinitionsResp) ProtoMessage() {}
+func (*ListAvailableAPIDefinitionsResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{10}
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ListAvailableAPIDefinitionsResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAvailableAPIDefinitionsResp.Merge(m, src)
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *ListAvailableAPIDefinitionsResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAvailableAPIDefinitionsResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAvailableAPIDefinitionsResp proto.InternalMessageInfo
+
+func (m *ListAvailableAPIDefinitionsResp) GetAvailableApiDefinitions() []*views.ObjectRefType {
+	if m != nil {
+		return m.AvailableApiDefinitions
+	}
+	return nil
+}
+
+// Assign API Definition Request
+//
+// x-displayName: "Assign API Definition Request"
+// Request form for Assign API Definition
+type AssignAPIDefinitionReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// Namespace of the HTTP Load Balancer
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "blogging-app"
+	// Name of the HTTP Load Balancer
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// API Definition
+	//
+	// x-displayName: "API Definition"
+	// x-required
+	// A reference to API Definition object.
+	// The referenced object may not exists.
+	ApiDefinition *views.ObjectRefType `protobuf:"bytes,3,opt,name=api_definition,json=apiDefinition,proto3" json:"api_definition,omitempty"`
+	// Create if not exists
+	//
+	// x-displayName: "Create if not exists"
+	// Create an empty API Definition object, if not exists
+	CreateIfNotExists bool `protobuf:"varint,4,opt,name=create_if_not_exists,json=createIfNotExists,proto3" json:"create_if_not_exists,omitempty"`
+}
+
+func (m *AssignAPIDefinitionReq) Reset()      { *m = AssignAPIDefinitionReq{} }
+func (*AssignAPIDefinitionReq) ProtoMessage() {}
+func (*AssignAPIDefinitionReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{11}
+}
+func (m *AssignAPIDefinitionReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AssignAPIDefinitionReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AssignAPIDefinitionReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AssignAPIDefinitionReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AssignAPIDefinitionReq.Merge(m, src)
+}
+func (m *AssignAPIDefinitionReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *AssignAPIDefinitionReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_AssignAPIDefinitionReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AssignAPIDefinitionReq proto.InternalMessageInfo
+
+func (m *AssignAPIDefinitionReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *AssignAPIDefinitionReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *AssignAPIDefinitionReq) GetApiDefinition() *views.ObjectRefType {
+	if m != nil {
+		return m.ApiDefinition
+	}
+	return nil
+}
+
+func (m *AssignAPIDefinitionReq) GetCreateIfNotExists() bool {
+	if m != nil {
+		return m.CreateIfNotExists
+	}
+	return false
+}
+
+// Assign API Definition Response
+//
+// x-displayName: "Assign API Definition Response"
+// Response form for Assign API Definition
+type AssignAPIDefinitionResp struct {
+}
+
+func (m *AssignAPIDefinitionResp) Reset()      { *m = AssignAPIDefinitionResp{} }
+func (*AssignAPIDefinitionResp) ProtoMessage() {}
+func (*AssignAPIDefinitionResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e0f78b47e1ecaa96, []int{12}
+}
+func (m *AssignAPIDefinitionResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AssignAPIDefinitionResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AssignAPIDefinitionResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AssignAPIDefinitionResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AssignAPIDefinitionResp.Merge(m, src)
+}
+func (m *AssignAPIDefinitionResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *AssignAPIDefinitionResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_AssignAPIDefinitionResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AssignAPIDefinitionResp proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
 	golang_proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest")
@@ -684,6 +927,14 @@ func init() {
 	golang_proto.RegisterType((*DeleteDoSAutoMitigationRuleReq)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq")
 	proto.RegisterType((*DeleteDoSAutoMitigationRuleRsp)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp")
 	golang_proto.RegisterType((*DeleteDoSAutoMitigationRuleRsp)(nil), "ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp")
+	proto.RegisterType((*ListAvailableAPIDefinitionsReq)(nil), "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq")
+	golang_proto.RegisterType((*ListAvailableAPIDefinitionsReq)(nil), "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq")
+	proto.RegisterType((*ListAvailableAPIDefinitionsResp)(nil), "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp")
+	golang_proto.RegisterType((*ListAvailableAPIDefinitionsResp)(nil), "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp")
+	proto.RegisterType((*AssignAPIDefinitionReq)(nil), "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq")
+	golang_proto.RegisterType((*AssignAPIDefinitionReq)(nil), "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq")
+	proto.RegisterType((*AssignAPIDefinitionResp)(nil), "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp")
+	golang_proto.RegisterType((*AssignAPIDefinitionResp)(nil), "ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp")
 }
 
 func init() {
@@ -694,78 +945,93 @@ func init() {
 }
 
 var fileDescriptor_e0f78b47e1ecaa96 = []byte{
-	// 1133 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcf, 0x6f, 0x1b, 0xc5,
-	0x17, 0xf7, 0xac, 0x9d, 0x36, 0x9e, 0x7e, 0xbf, 0xc8, 0x9d, 0x86, 0xb0, 0x71, 0xa3, 0x6d, 0x58,
-	0xa9, 0x52, 0x14, 0xd5, 0xbb, 0xa5, 0x01, 0x09, 0x5a, 0x24, 0x94, 0x5f, 0x24, 0x8d, 0x42, 0x09,
-	0x4e, 0x4e, 0x20, 0xb1, 0x1a, 0xef, 0x8e, 0xd7, 0x03, 0xeb, 0x9d, 0xe9, 0xce, 0xac, 0x93, 0xa8,
-	0x8a, 0x54, 0xe5, 0x2f, 0x80, 0x54, 0xdc, 0x39, 0x72, 0xe1, 0x0e, 0xe4, 0x92, 0x1b, 0x3d, 0xa1,
-	0x08, 0x2e, 0x95, 0xb8, 0x10, 0x87, 0x03, 0xbd, 0xf5, 0xce, 0x05, 0xed, 0xd8, 0x4e, 0xfc, 0x2b,
-	0xae, 0x09, 0xbd, 0xcd, 0xbc, 0xf7, 0x79, 0x6f, 0xde, 0x7c, 0x66, 0xde, 0x67, 0x06, 0xbe, 0x5f,
-	0x23, 0xc2, 0xa2, 0xcc, 0x16, 0x6e, 0x85, 0x54, 0xb1, 0x5d, 0xa3, 0x64, 0x4b, 0xd8, 0x15, 0x29,
-	0xb9, 0x13, 0x30, 0xec, 0x95, 0x70, 0x80, 0x43, 0x97, 0x44, 0x36, 0x8f, 0x4b, 0x01, 0x75, 0x1d,
-	0x37, 0x16, 0x92, 0x55, 0x31, 0xa7, 0x16, 0x8f, 0x98, 0x64, 0xe8, 0x66, 0x23, 0xda, 0x6a, 0x44,
-	0x5b, 0x2a, 0xda, 0xea, 0x89, 0xce, 0x17, 0x7c, 0x2a, 0x2b, 0x71, 0xc9, 0x72, 0x59, 0xd5, 0xf6,
-	0x99, 0xcf, 0x6c, 0x15, 0x5d, 0x8a, 0xcb, 0x6a, 0xa6, 0x26, 0x6a, 0xd4, 0xc8, 0x9a, 0x9f, 0xf4,
-	0x19, 0xf3, 0x03, 0x62, 0x63, 0x4e, 0x6d, 0x1c, 0x86, 0x4c, 0x62, 0x49, 0x59, 0x28, 0x9a, 0xde,
-	0xe9, 0xce, 0x8a, 0x3d, 0x26, 0x9c, 0x2a, 0x95, 0xd4, 0x57, 0x20, 0x5b, 0xee, 0x70, 0xd2, 0x42,
-	0x5e, 0xef, 0x44, 0x32, 0xde, 0x9e, 0x66, 0xa2, 0xd3, 0xd9, 0x1e, 0x37, 0xd9, 0xc5, 0x09, 0x0e,
-	0xa8, 0x87, 0x25, 0x69, 0x7a, 0xcd, 0x2e, 0x2f, 0x11, 0x24, 0xac, 0x75, 0x25, 0x9f, 0xea, 0x65,
-	0xd5, 0xe9, 0x44, 0xdc, 0xee, 0x46, 0x44, 0x32, 0xc6, 0x81, 0x53, 0x61, 0x42, 0x3a, 0x5e, 0x28,
-	0x1c, 0x1a, 0x96, 0x99, 0xcd, 0x4a, 0x5f, 0x10, 0x57, 0x36, 0x22, 0xcc, 0x25, 0x78, 0x75, 0x99,
-	0xc8, 0xc5, 0x50, 0xdc, 0x0f, 0xcb, 0xac, 0x48, 0x1e, 0xc6, 0x44, 0x48, 0x34, 0x09, 0xb3, 0x21,
-	0xae, 0x12, 0xc1, 0xb1, 0x4b, 0x74, 0x30, 0x05, 0xa6, 0xb3, 0xc5, 0x33, 0x03, 0x42, 0x30, 0x93,
-	0x4c, 0x74, 0x4d, 0x39, 0xd4, 0xd8, 0xf4, 0x20, 0x6a, 0x4f, 0x23, 0x38, 0x0b, 0x05, 0x41, 0x0f,
-	0xe0, 0x68, 0x6b, 0x55, 0x95, 0xe6, 0xca, 0x9d, 0x59, 0xab, 0xfb, 0x6c, 0xfb, 0x54, 0x68, 0x2d,
-	0x07, 0xac, 0x84, 0x83, 0x0d, 0x4e, 0xdc, 0xcd, 0x1d, 0x4e, 0x8a, 0x97, 0xbd, 0x46, 0x5e, 0xf3,
-	0x5b, 0x0d, 0x8e, 0x2d, 0x13, 0xb9, 0x41, 0xdc, 0x38, 0xa2, 0x72, 0x67, 0x81, 0x85, 0x65, 0xea,
-	0x17, 0xc9, 0xc3, 0x97, 0x14, 0xbc, 0x06, 0xc7, 0x71, 0x10, 0x38, 0x3d, 0x37, 0x48, 0xe8, 0x69,
-	0x55, 0xd4, 0x58, 0x57, 0x51, 0x4b, 0x55, 0x2e, 0x77, 0x56, 0x52, 0xc5, 0x31, 0x1c, 0x04, 0x2b,
-	0x52, 0xf2, 0xb5, 0xf6, 0x18, 0x14, 0xc3, 0x37, 0x7a, 0x33, 0x39, 0x01, 0x15, 0x52, 0xcf, 0xa8,
-	0x74, 0xf7, 0xac, 0xa1, 0xee, 0xaf, 0xb5, 0xb2, 0xb9, 0xb9, 0x9e, 0xa4, 0x9e, 0x6f, 0x1a, 0xd6,
-	0xa8, 0x90, 0x2b, 0xa9, 0xe2, 0xeb, 0x95, 0xee, 0x25, 0x13, 0xc7, 0xfc, 0x0d, 0x78, 0xad, 0x3d,
-	0xda, 0x71, 0x2b, 0x8c, 0xba, 0x04, 0x8d, 0x1e, 0x1e, 0x80, 0xf4, 0xd1, 0x01, 0xd0, 0x56, 0x33,
-	0xa3, 0x5a, 0x2e, 0x6d, 0xfe, 0x0d, 0xfa, 0x51, 0x24, 0x38, 0x7a, 0x13, 0xfe, 0x0f, 0x73, 0xee,
-	0x94, 0x69, 0x44, 0xb6, 0x70, 0x10, 0xe8, 0x60, 0x2a, 0x3d, 0x9d, 0x2d, 0x5e, 0xc1, 0x9c, 0x7f,
-	0xd8, 0x34, 0xa1, 0x1b, 0xf0, 0x4a, 0x89, 0x49, 0xc7, 0x23, 0x65, 0x12, 0x8a, 0xe4, 0x7c, 0x13,
-	0x04, 0x2c, 0x31, 0xb9, 0xd8, 0xb0, 0xa0, 0x9b, 0xf0, 0x35, 0x2f, 0xe9, 0x0c, 0x8f, 0x48, 0xe2,
-	0x26, 0xf7, 0x4e, 0x4f, 0x2b, 0xcc, 0xff, 0x13, 0xeb, 0x62, 0xcb, 0x98, 0xc0, 0x30, 0xa7, 0x4e,
-	0x72, 0xc1, 0x9a, 0xb0, 0x4c, 0x03, 0x86, 0x39, 0x5d, 0x3f, 0x35, 0x26, 0x87, 0xd6, 0x84, 0x10,
-	0x4f, 0x1f, 0x51, 0x88, 0x33, 0x03, 0x9a, 0x85, 0xe3, 0xed, 0xf5, 0x3a, 0x9c, 0x44, 0x4e, 0xc4,
-	0x62, 0x49, 0xf4, 0x4b, 0x0a, 0x7a, 0xad, 0xad, 0xf2, 0x75, 0x12, 0x15, 0x13, 0x97, 0x59, 0x83,
-	0x63, 0xfd, 0x58, 0x45, 0x9f, 0xc3, 0xab, 0x3d, 0xfc, 0x37, 0x18, 0x98, 0x7f, 0xeb, 0xa7, 0xe7,
-	0x87, 0x69, 0xb8, 0x0f, 0x2e, 0x9b, 0x23, 0x51, 0x5a, 0x7f, 0xac, 0x25, 0xd3, 0xec, 0x3e, 0xb8,
-	0x64, 0x66, 0x22, 0x2d, 0x07, 0x92, 0xd9, 0xc8, 0x3e, 0xd0, 0x72, 0x23, 0xad, 0xd1, 0x28, 0x28,
-	0xe6, 0xba, 0x4f, 0xc8, 0x5c, 0x87, 0x93, 0xc9, 0xf5, 0x67, 0x1b, 0x73, 0xb1, 0x64, 0x1f, 0x9d,
-	0xea, 0x46, 0x31, 0x0e, 0x88, 0x78, 0xf9, 0xfd, 0xec, 0xd7, 0x50, 0x4f, 0xc0, 0xa0, 0x94, 0x82,
-	0xa3, 0x2a, 0xd4, 0x93, 0xa3, 0xc0, 0xb1, 0x64, 0x67, 0x42, 0xe5, 0x44, 0x89, 0x5b, 0x9d, 0x5c,
-	0x6f, 0xaf, 0x75, 0x6a, 0x9a, 0xb5, 0xc8, 0x36, 0x3a, 0xd3, 0xaa, 0xd6, 0x1d, 0xf7, 0x98, 0x98,
-	0xeb, 0xc8, 0xa9, 0x56, 0x5c, 0xcd, 0x8c, 0x82, 0x9c, 0x96, 0x54, 0x65, 0x2c, 0x92, 0x80, 0x48,
-	0xd2, 0xb7, 0xb0, 0x0b, 0x6d, 0x15, 0x7d, 0x00, 0x27, 0xcf, 0xd9, 0x89, 0xa3, 0xb0, 0x69, 0x85,
-	0x9d, 0xe8, 0x5b, 0xd8, 0x83, 0x84, 0xab, 0xb7, 0x07, 0x17, 0x25, 0x78, 0xbf, 0x65, 0xef, 0xd4,
-	0xb3, 0x30, 0xbb, 0xa0, 0x5e, 0x9e, 0xb9, 0xf5, 0xfb, 0xe8, 0x39, 0x80, 0xf0, 0x4c, 0xc1, 0xd0,
-	0xbb, 0x43, 0xf6, 0x70, 0x8f, 0x76, 0xe6, 0xdf, 0xbb, 0x40, 0x64, 0x43, 0x2e, 0xcd, 0xf2, 0xd3,
-	0x1f, 0x34, 0x50, 0xff, 0x59, 0xbf, 0x5a, 0x23, 0xa2, 0x40, 0x59, 0x81, 0x47, 0x6c, 0x7b, 0xa7,
-	0x10, 0x11, 0xec, 0xed, 0xfd, 0xf6, 0xe7, 0x13, 0x6d, 0x19, 0x2d, 0x35, 0x5f, 0x4c, 0xfb, 0x94,
-	0x50, 0x61, 0x3f, 0x3a, 0x1d, 0xef, 0xf6, 0xbe, 0xb0, 0x4d, 0xf7, 0xae, 0xed, 0x13, 0x59, 0xf0,
-	0x42, 0x51, 0x48, 0xe4, 0x15, 0xed, 0x6b, 0x4a, 0xf4, 0x3b, 0x35, 0x02, 0xdd, 0x1b, 0xbe, 0xf0,
-	0x1e, 0x01, 0xce, 0x5f, 0x3c, 0x58, 0x70, 0x73, 0x0f, 0x34, 0x37, 0x3e, 0x53, 0x7e, 0x67, 0xdb,
-	0x2d, 0x6c, 0x61, 0xcc, 0x0b, 0x25, 0x2c, 0xa8, 0x5b, 0xa8, 0xb2, 0x90, 0x4a, 0x16, 0xdd, 0x9a,
-	0xea, 0xcf, 0xc8, 0xaa, 0x79, 0x01, 0x46, 0x7c, 0x22, 0x1d, 0xd1, 0xac, 0xc1, 0x71, 0x55, 0x11,
-	0x77, 0xc1, 0x0c, 0xfa, 0x51, 0x83, 0x13, 0xe7, 0x36, 0x1c, 0x5a, 0xf8, 0x17, 0xa7, 0x7a, 0x9e,
-	0x0a, 0xe4, 0xff, 0x7b, 0x12, 0xc1, 0xcd, 0xaf, 0x5b, 0x64, 0xdd, 0x56, 0x64, 0xa9, 0x9d, 0x90,
-	0x2a, 0x11, 0x95, 0xe1, 0x28, 0xdb, 0x40, 0x9f, 0x5c, 0xf8, 0x12, 0x9d, 0xa7, 0x37, 0xe8, 0x77,
-	0x0d, 0x5e, 0x1f, 0xd0, 0x81, 0x68, 0x69, 0xc8, 0x8d, 0x0f, 0x96, 0x96, 0xfc, 0xab, 0x48, 0x23,
-	0xb8, 0xf9, 0x7d, 0x8b, 0xc1, 0x42, 0x7f, 0x06, 0x63, 0x41, 0xce, 0xa5, 0x2f, 0x9a, 0xe1, 0xaf,
-	0x9c, 0x3e, 0xfb, 0xd1, 0x20, 0xf9, 0xdb, 0xcd, 0xdf, 0x4d, 0x9e, 0xf8, 0x5f, 0x0f, 0xc0, 0xad,
-	0xe1, 0x76, 0xff, 0xb1, 0xfa, 0xde, 0xed, 0xfd, 0xa2, 0x6b, 0x39, 0x30, 0xff, 0x0d, 0x38, 0x3a,
-	0x36, 0x52, 0xcf, 0x8e, 0x8d, 0xd4, 0x8b, 0x63, 0x03, 0x3c, 0xae, 0x1b, 0xe0, 0xbb, 0xba, 0x01,
-	0x9e, 0xd6, 0x0d, 0x70, 0x54, 0x37, 0xc0, 0x1f, 0x75, 0x03, 0xfc, 0x55, 0x37, 0x52, 0x2f, 0xea,
-	0x06, 0xf8, 0xea, 0xc4, 0x48, 0x1d, 0x9e, 0x18, 0xe0, 0xe8, 0xc4, 0x48, 0x3d, 0x3b, 0x31, 0x52,
-	0x9f, 0x7e, 0xe6, 0x33, 0xfe, 0xa5, 0x6f, 0xd5, 0x58, 0x20, 0x49, 0x14, 0x61, 0x2b, 0x16, 0xb6,
-	0x1a, 0x94, 0x59, 0x54, 0x4d, 0x68, 0xa9, 0x51, 0x8f, 0x44, 0x85, 0x96, 0xdb, 0xe6, 0x25, 0x9f,
-	0xd9, 0x64, 0x5b, 0x36, 0xbf, 0x9e, 0x83, 0x7f, 0xfe, 0xa5, 0x4b, 0xea, 0xf7, 0x39, 0xfb, 0x4f,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x6e, 0x5c, 0xa1, 0x2e, 0x29, 0x0c, 0x00, 0x00,
+	// 1369 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0x4d, 0x6c, 0x1b, 0x45,
+	0x1b, 0xf6, 0xac, 0x93, 0x36, 0x99, 0x7c, 0x5f, 0x95, 0x4c, 0xf3, 0xa5, 0x8e, 0x13, 0x6d, 0xfa,
+	0xad, 0x54, 0xa9, 0x8a, 0x6a, 0x6f, 0x69, 0x41, 0x82, 0x96, 0x1f, 0x25, 0x4d, 0x9a, 0xa4, 0x2a,
+	0x6d, 0xd8, 0xe4, 0x04, 0x88, 0xd5, 0x78, 0x77, 0xec, 0x0c, 0xac, 0x77, 0xa6, 0x3b, 0xb3, 0xf9,
+	0x51, 0x89, 0x54, 0x55, 0xe2, 0xc0, 0x09, 0x48, 0xe1, 0xce, 0x11, 0x55, 0xe2, 0x0e, 0xf4, 0x52,
+	0x4e, 0xed, 0x09, 0x45, 0x70, 0x29, 0xe2, 0x42, 0x1d, 0x0e, 0x70, 0xeb, 0x9d, 0x0b, 0x9a, 0xb1,
+	0x9d, 0xf8, 0x67, 0xe3, 0x1a, 0x37, 0xb7, 0xdd, 0x79, 0x7f, 0xe6, 0x99, 0xe7, 0x7d, 0xe7, 0x7d,
+	0xd6, 0x86, 0xaf, 0xaf, 0x13, 0x91, 0xa7, 0xcc, 0x16, 0xde, 0x1a, 0x29, 0x63, 0x7b, 0x9d, 0x92,
+	0x0d, 0x61, 0xaf, 0x49, 0xc9, 0xdd, 0x80, 0x61, 0xbf, 0x80, 0x03, 0x1c, 0x7a, 0x24, 0xb2, 0x79,
+	0x5c, 0x08, 0xa8, 0xe7, 0x7a, 0xb1, 0x90, 0xac, 0x8c, 0x39, 0xcd, 0xf3, 0x88, 0x49, 0x86, 0xce,
+	0x54, 0xa3, 0xf3, 0xd5, 0xe8, 0xbc, 0x8e, 0xce, 0xb7, 0x45, 0x67, 0x73, 0x25, 0x2a, 0xd7, 0xe2,
+	0x42, 0xde, 0x63, 0x65, 0xbb, 0xc4, 0x4a, 0xcc, 0xd6, 0xd1, 0x85, 0xb8, 0xa8, 0xdf, 0xf4, 0x8b,
+	0x7e, 0xaa, 0x66, 0xcd, 0x4e, 0x96, 0x18, 0x2b, 0x05, 0xc4, 0xc6, 0x9c, 0xda, 0x38, 0x0c, 0x99,
+	0xc4, 0x92, 0xb2, 0x50, 0xd4, 0xac, 0x67, 0x9b, 0x11, 0xfb, 0x4c, 0xb8, 0x65, 0x2a, 0x69, 0x49,
+	0x3b, 0xd9, 0x72, 0x8b, 0x93, 0xba, 0xe7, 0x44, 0xb3, 0x27, 0xe3, 0x8d, 0x69, 0xc6, 0x9b, 0x8d,
+	0x8d, 0x71, 0x93, 0x2d, 0x9c, 0xe0, 0x80, 0xfa, 0x58, 0x92, 0x9a, 0xd5, 0x6a, 0xb1, 0x12, 0x41,
+	0xc2, 0xf5, 0x96, 0xe4, 0xa7, 0xdb, 0x59, 0x75, 0x9b, 0x3d, 0xa6, 0x92, 0x78, 0x6f, 0x04, 0x71,
+	0xbe, 0xd5, 0x21, 0x92, 0x31, 0x0e, 0xdc, 0x35, 0x26, 0xa4, 0xeb, 0x87, 0xc2, 0xa5, 0x61, 0x91,
+	0xd9, 0xac, 0xf0, 0x21, 0xf1, 0x64, 0x35, 0xc2, 0x9a, 0x87, 0x23, 0x0b, 0x44, 0xce, 0x85, 0x62,
+	0x29, 0x2c, 0x32, 0x87, 0xdc, 0x8a, 0x89, 0x90, 0x68, 0x12, 0x0e, 0x86, 0xb8, 0x4c, 0x04, 0xc7,
+	0x1e, 0xc9, 0x80, 0xd3, 0xe0, 0xec, 0xa0, 0x73, 0xb0, 0x80, 0x10, 0xec, 0x53, 0x2f, 0x19, 0x43,
+	0x1b, 0xf4, 0xb3, 0xe5, 0x43, 0xd4, 0x98, 0x46, 0x70, 0x16, 0x0a, 0x82, 0x6e, 0xc0, 0x81, 0xfa,
+	0xae, 0x3a, 0xcd, 0xd0, 0x85, 0x8b, 0xf9, 0xd6, 0xe2, 0x27, 0x20, 0xcc, 0x2f, 0x04, 0xac, 0x80,
+	0x83, 0x15, 0x4e, 0xbc, 0xd5, 0x2d, 0x4e, 0x9c, 0xe3, 0x7e, 0x35, 0xaf, 0xf5, 0xb5, 0x01, 0x47,
+	0x17, 0x88, 0x5c, 0x21, 0x5e, 0x1c, 0x51, 0xb9, 0x75, 0x85, 0x85, 0x45, 0x5a, 0x72, 0xc8, 0xad,
+	0xe7, 0x00, 0xbe, 0x0e, 0xc7, 0x70, 0x10, 0xb8, 0x6d, 0x2d, 0x26, 0x32, 0x69, 0x0d, 0x6a, 0xb4,
+	0x05, 0xd4, 0x7c, 0x99, 0xcb, 0xad, 0xc5, 0x94, 0x33, 0x8a, 0x83, 0x60, 0x51, 0x4a, 0x7e, 0xbd,
+	0x31, 0x06, 0xc5, 0xf0, 0x54, 0x7b, 0x26, 0x37, 0xa0, 0x42, 0x66, 0xfa, 0x74, 0xba, 0xcb, 0xf9,
+	0xae, 0x1a, 0x3c, 0xbf, 0xb8, 0xba, 0xba, 0xac, 0x52, 0xcf, 0xd6, 0x16, 0xae, 0x53, 0x21, 0x17,
+	0x53, 0xce, 0xff, 0xd6, 0x5a, 0xb7, 0x54, 0x86, 0xd9, 0x29, 0x78, 0xb2, 0x31, 0xda, 0xf5, 0xd6,
+	0x18, 0xf5, 0x08, 0x1a, 0x78, 0xf8, 0x00, 0xa4, 0x77, 0x1f, 0x00, 0xe3, 0x5a, 0xdf, 0x80, 0x31,
+	0x9c, 0xb6, 0xfe, 0x06, 0x49, 0x14, 0x09, 0x8e, 0xfe, 0x0f, 0xff, 0x83, 0x39, 0x77, 0x8b, 0x34,
+	0x22, 0x1b, 0x38, 0x08, 0x32, 0xe0, 0x74, 0xfa, 0xec, 0xa0, 0x33, 0x84, 0x39, 0xbf, 0x5a, 0x5b,
+	0x42, 0x53, 0x70, 0xa8, 0xc0, 0xa4, 0xeb, 0x93, 0x22, 0x09, 0x85, 0xaa, 0xaf, 0xf2, 0x80, 0x05,
+	0x26, 0xe7, 0xaa, 0x2b, 0xe8, 0x0c, 0x3c, 0xe1, 0xab, 0xab, 0xe3, 0x13, 0x49, 0x3c, 0xd5, 0x98,
+	0x99, 0xb4, 0xf6, 0xf9, 0xaf, 0x5a, 0x9d, 0xab, 0x2f, 0x2a, 0x37, 0xcc, 0xa9, 0xab, 0x1a, 0xac,
+	0xe6, 0xd6, 0x57, 0x75, 0xc3, 0x9c, 0x2e, 0xef, 0x2f, 0xaa, 0xa2, 0xd5, 0x5c, 0x88, 0x9f, 0xe9,
+	0xd7, 0x1e, 0x07, 0x0b, 0xe8, 0x22, 0x1c, 0x6b, 0xc4, 0xeb, 0x72, 0x12, 0xb9, 0x11, 0x8b, 0x25,
+	0xc9, 0x1c, 0xd3, 0xae, 0x27, 0x1b, 0x90, 0x2f, 0x93, 0xc8, 0x51, 0x26, 0x6b, 0x1d, 0x8e, 0x26,
+	0xb1, 0x8a, 0x3e, 0x80, 0x23, 0x6d, 0xfc, 0x57, 0x19, 0x98, 0x7d, 0xe9, 0x87, 0xbf, 0x1e, 0xa6,
+	0xe1, 0x0e, 0x38, 0x6e, 0xf5, 0x47, 0xe9, 0xcc, 0x1d, 0x43, 0xbd, 0x0e, 0xee, 0x80, 0x63, 0x56,
+	0x5f, 0x64, 0x0c, 0x03, 0xf5, 0xd6, 0xbf, 0x03, 0x8c, 0xe1, 0xfe, 0xfa, 0xd3, 0x00, 0x70, 0x86,
+	0x5b, 0x2b, 0x64, 0x2d, 0xc3, 0x49, 0xd5, 0xfe, 0x6c, 0x65, 0x26, 0x96, 0xec, 0xed, 0xfd, 0xc1,
+	0xe2, 0xc4, 0x01, 0x11, 0xcf, 0xef, 0xcf, 0xa4, 0x0b, 0x75, 0x0f, 0x74, 0x4a, 0x29, 0x38, 0x2a,
+	0xc3, 0x8c, 0x2a, 0x05, 0x8e, 0x25, 0x3b, 0x98, 0x64, 0x6e, 0xa4, 0xcc, 0xba, 0x72, 0xed, 0x77,
+	0xad, 0x79, 0xe8, 0xe5, 0xe7, 0xd8, 0x4a, 0x73, 0x5a, 0x7d, 0x75, 0xc7, 0x7c, 0x26, 0x66, 0x9a,
+	0x72, 0xea, 0x1d, 0xaf, 0xf5, 0x0d, 0x80, 0x61, 0x43, 0xa1, 0x32, 0xe7, 0x48, 0x40, 0x24, 0x49,
+	0x04, 0xd6, 0xd3, 0x51, 0xd1, 0x5b, 0x70, 0xf2, 0x90, 0x93, 0xb8, 0xda, 0x37, 0xad, 0x7d, 0xc7,
+	0x13, 0x81, 0xdd, 0x50, 0x5c, 0xbd, 0xdc, 0x19, 0x94, 0xe0, 0x89, 0x0c, 0x3b, 0xd0, 0x54, 0xbd,
+	0x31, 0xb3, 0x8e, 0x69, 0x80, 0x0b, 0x01, 0x99, 0x59, 0x5e, 0x9a, 0x23, 0x45, 0x1a, 0x52, 0x3d,
+	0x71, 0x7b, 0xab, 0xda, 0x97, 0x00, 0x4e, 0x75, 0x4c, 0x2a, 0x38, 0xba, 0x05, 0xc7, 0x71, 0xdd,
+	0xec, 0xaa, 0x7b, 0xe2, 0x1f, 0x38, 0xe8, 0x9e, 0x1c, 0xba, 0x60, 0x25, 0x4e, 0x90, 0x9b, 0x7a,
+	0x6e, 0x3b, 0xa4, 0xa8, 0x86, 0xe2, 0xec, 0xc8, 0xfd, 0xed, 0x13, 0xcd, 0xd1, 0xce, 0xa9, 0xfd,
+	0xbc, 0x33, 0x9c, 0x36, 0x6c, 0x6b, 0xfd, 0x0a, 0xe0, 0xd8, 0x8c, 0x10, 0xb4, 0x14, 0x36, 0xe1,
+	0xe9, 0xad, 0x5c, 0xef, 0xc3, 0x96, 0x7d, 0x6b, 0x53, 0xb4, 0x47, 0xd0, 0x6a, 0x28, 0x1c, 0x40,
+	0x42, 0x36, 0x1c, 0xf5, 0x22, 0x82, 0x25, 0x71, 0x69, 0xd1, 0x0d, 0x99, 0x74, 0xc9, 0x26, 0x15,
+	0x52, 0xe8, 0xd1, 0x3a, 0xe0, 0x8c, 0x54, 0x6d, 0x4b, 0xc5, 0x1b, 0x4c, 0xce, 0x6b, 0x83, 0x35,
+	0x0e, 0x4f, 0x25, 0x1e, 0x4d, 0xf0, 0x0b, 0x3f, 0x9e, 0x80, 0x83, 0x57, 0xf4, 0xc7, 0xc7, 0xcc,
+	0xf2, 0x12, 0xfa, 0xd4, 0x80, 0xf0, 0x40, 0xa3, 0xd0, 0xab, 0x5d, 0x4e, 0xe9, 0x36, 0x75, 0xcc,
+	0xbe, 0xd6, 0x43, 0x64, 0x55, 0x10, 0xad, 0x4f, 0xc0, 0xe3, 0xef, 0x0c, 0x50, 0x79, 0x94, 0x39,
+	0x5f, 0x7c, 0x65, 0xd3, 0xcb, 0x09, 0x35, 0xa5, 0x49, 0x99, 0x88, 0xb5, 0x5c, 0x01, 0x0b, 0xea,
+	0xe5, 0xca, 0x2c, 0xa4, 0x92, 0x45, 0xe7, 0xd4, 0xa7, 0x40, 0x8e, 0xb2, 0x1c, 0x8f, 0xd8, 0xe6,
+	0x56, 0x2e, 0x22, 0xd8, 0xbf, 0xfb, 0xcb, 0x1f, 0xf7, 0x8c, 0x05, 0x34, 0x5f, 0xfb, 0xa8, 0xb2,
+	0xf7, 0x6b, 0x24, 0xec, 0xdb, 0xfb, 0xcf, 0xdb, 0xed, 0x1f, 0x61, 0x35, 0xf3, 0xb6, 0x5d, 0x22,
+	0x32, 0xe7, 0x87, 0x22, 0xa7, 0x04, 0x16, 0xed, 0x18, 0x5a, 0xf6, 0x9b, 0x55, 0x02, 0x5d, 0xee,
+	0xfe, 0x60, 0x6d, 0x12, 0x9c, 0xed, 0x3d, 0x58, 0x70, 0xeb, 0x6e, 0x9d, 0x97, 0x69, 0xcd, 0xcb,
+	0x06, 0xc6, 0xbc, 0x3b, 0x46, 0xae, 0x59, 0x3d, 0x30, 0x52, 0x22, 0xd2, 0x15, 0x35, 0x0c, 0xae,
+	0xa7, 0x41, 0x5c, 0x02, 0xd3, 0xe8, 0x7b, 0x03, 0x8e, 0x1f, 0x3a, 0x72, 0xd1, 0x95, 0x7f, 0x51,
+	0xf5, 0xc3, 0x74, 0x20, 0xfb, 0xe2, 0x49, 0x04, 0xb7, 0xbe, 0x78, 0xb1, 0x26, 0x5a, 0x41, 0xef,
+	0xf4, 0xdc, 0x44, 0x87, 0x29, 0x0e, 0xfa, 0xcd, 0x80, 0x13, 0x1d, 0x66, 0x30, 0x9a, 0xef, 0xf2,
+	0xe0, 0x9d, 0xc5, 0x25, 0x7b, 0x14, 0x69, 0x04, 0xb7, 0xbe, 0xad, 0x33, 0x98, 0x4b, 0x66, 0x30,
+	0x16, 0xe4, 0x50, 0xfa, 0xa2, 0x69, 0x7e, 0xe4, 0xf4, 0xd9, 0xb7, 0x3b, 0x09, 0xe0, 0x36, 0xba,
+	0x6f, 0xc0, 0x89, 0x0e, 0xb2, 0xd2, 0x35, 0xbb, 0x9d, 0xf5, 0x2e, 0x7b, 0xf5, 0x28, 0xd2, 0x08,
+	0x6e, 0x7d, 0x5c, 0x63, 0x37, 0xdb, 0xc4, 0x60, 0xfd, 0xc6, 0x1d, 0x50, 0xb9, 0x8a, 0x9c, 0x9e,
+	0xa9, 0x6c, 0x11, 0x4e, 0x7b, 0x5f, 0xfa, 0xd0, 0x67, 0x06, 0x3c, 0x99, 0xa0, 0x08, 0xe8, 0x8d,
+	0x2e, 0x4f, 0x97, 0x2c, 0x94, 0xd9, 0x37, 0x5f, 0x24, 0x5c, 0x70, 0x6b, 0xab, 0xf2, 0x28, 0x33,
+	0x91, 0x4c, 0xc8, 0x46, 0x44, 0x25, 0xa9, 0x32, 0x62, 0xdd, 0x3c, 0x3a, 0x46, 0x34, 0x90, 0x4b,
+	0x60, 0x3a, 0x7b, 0x49, 0xfd, 0x46, 0xf8, 0xf9, 0x01, 0x38, 0xd7, 0xdd, 0x09, 0xaa, 0x92, 0x7d,
+	0xf7, 0xa7, 0x8c, 0x31, 0x0c, 0x66, 0xbf, 0x02, 0xbb, 0x4f, 0xcd, 0xd4, 0x93, 0xa7, 0x66, 0xea,
+	0xd9, 0x53, 0x13, 0xdc, 0xa9, 0x98, 0xe0, 0x9b, 0x8a, 0x09, 0x1e, 0x57, 0x4c, 0xb0, 0x5b, 0x31,
+	0xc1, 0xef, 0x15, 0x13, 0xfc, 0x59, 0x31, 0x53, 0xcf, 0x2a, 0x26, 0xf8, 0x7c, 0xcf, 0x4c, 0x3d,
+	0xdc, 0x33, 0xc1, 0xee, 0x9e, 0x99, 0x7a, 0xb2, 0x67, 0xa6, 0xde, 0x7d, 0xaf, 0xc4, 0xf8, 0x47,
+	0xa5, 0xfc, 0x3a, 0x0b, 0x24, 0x89, 0x22, 0x9c, 0x8f, 0x85, 0xad, 0x1f, 0x8a, 0x2c, 0x2a, 0x2b,
+	0x0a, 0xd6, 0xa9, 0x4f, 0xa2, 0x5c, 0xdd, 0x6c, 0xf3, 0x42, 0x89, 0xd9, 0x64, 0x53, 0xd6, 0x7e,
+	0xbb, 0x76, 0xfe, 0x6f, 0xa1, 0x70, 0x4c, 0xff, 0x7c, 0xbd, 0xf8, 0x4f, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x52, 0x6e, 0x68, 0xb4, 0x8b, 0x10, 0x00, 0x00,
 }
 
 func (this *GetDnsInfoRequest) Equal(that interface{}) bool {
@@ -1108,6 +1374,116 @@ func (this *DeleteDoSAutoMitigationRuleRsp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ListAvailableAPIDefinitionsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListAvailableAPIDefinitionsReq)
+	if !ok {
+		that2, ok := that.(ListAvailableAPIDefinitionsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *ListAvailableAPIDefinitionsResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ListAvailableAPIDefinitionsResp)
+	if !ok {
+		that2, ok := that.(ListAvailableAPIDefinitionsResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AvailableApiDefinitions) != len(that1.AvailableApiDefinitions) {
+		return false
+	}
+	for i := range this.AvailableApiDefinitions {
+		if !this.AvailableApiDefinitions[i].Equal(that1.AvailableApiDefinitions[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AssignAPIDefinitionReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AssignAPIDefinitionReq)
+	if !ok {
+		that2, ok := that.(AssignAPIDefinitionReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
+	}
+	if this.CreateIfNotExists != that1.CreateIfNotExists {
+		return false
+	}
+	return true
+}
+func (this *AssignAPIDefinitionResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AssignAPIDefinitionResp)
+	if !ok {
+		that2, ok := that.(AssignAPIDefinitionResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
 func (this *GetDnsInfoRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1230,6 +1606,53 @@ func (this *DeleteDoSAutoMitigationRuleRsp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ListAvailableAPIDefinitionsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&http_loadbalancer.ListAvailableAPIDefinitionsReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ListAvailableAPIDefinitionsResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.ListAvailableAPIDefinitionsResp{")
+	if this.AvailableApiDefinitions != nil {
+		s = append(s, "AvailableApiDefinitions: "+fmt.Sprintf("%#v", this.AvailableApiDefinitions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AssignAPIDefinitionReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&http_loadbalancer.AssignAPIDefinitionReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.ApiDefinition != nil {
+		s = append(s, "ApiDefinition: "+fmt.Sprintf("%#v", this.ApiDefinition)+",\n")
+	}
+	s = append(s, "CreateIfNotExists: "+fmt.Sprintf("%#v", this.CreateIfNotExists)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AssignAPIDefinitionResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&http_loadbalancer.AssignAPIDefinitionResp{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1271,6 +1694,17 @@ type CustomAPIClient interface {
 	// x-displayName: "Delete DoS Auto-Mitigation Rule for Http Load Balancer"
 	// Delete the corresponding DoS Auto-Mitigation Rule for the given HTTP load balancer
 	DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error)
+	// List Available API Definitions
+	//
+	// x-displayName: "List Available API Definitions"
+	// List API definitions suitable for API Inventory management
+	// API Definitions which are associated at most with one app type.
+	ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error)
+	// Assign API Definition
+	//
+	// x-displayName: "Assign API Definition"
+	// Set a reference to the API Definition, with an option to create an empty one if not exists.
+	AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq, opts ...grpc.CallOption) (*AssignAPIDefinitionResp, error)
 }
 
 type customAPIClient struct {
@@ -1317,6 +1751,24 @@ func (c *customAPIClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *D
 	return out, nil
 }
 
+func (c *customAPIClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
+	out := new(ListAvailableAPIDefinitionsResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.CustomAPI/ListAvailableAPIDefinitions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq, opts ...grpc.CallOption) (*AssignAPIDefinitionResp, error) {
+	out := new(AssignAPIDefinitionResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.http_loadbalancer.CustomAPI/AssignAPIDefinition", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// GetDnsInfo
@@ -1339,6 +1791,17 @@ type CustomAPIServer interface {
 	// x-displayName: "Delete DoS Auto-Mitigation Rule for Http Load Balancer"
 	// Delete the corresponding DoS Auto-Mitigation Rule for the given HTTP load balancer
 	DeleteDoSAutoMitigationRule(context.Context, *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error)
+	// List Available API Definitions
+	//
+	// x-displayName: "List Available API Definitions"
+	// List API definitions suitable for API Inventory management
+	// API Definitions which are associated at most with one app type.
+	ListAvailableAPIDefinitions(context.Context, *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error)
+	// Assign API Definition
+	//
+	// x-displayName: "Assign API Definition"
+	// Set a reference to the API Definition, with an option to create an empty one if not exists.
+	AssignAPIDefinition(context.Context, *AssignAPIDefinitionReq) (*AssignAPIDefinitionResp, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1356,6 +1819,12 @@ func (*UnimplementedCustomAPIServer) GetDoSAutoMitigationRules(ctx context.Conte
 }
 func (*UnimplementedCustomAPIServer) DeleteDoSAutoMitigationRule(ctx context.Context, req *DeleteDoSAutoMitigationRuleReq) (*DeleteDoSAutoMitigationRuleRsp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDoSAutoMitigationRule not implemented")
+}
+func (*UnimplementedCustomAPIServer) ListAvailableAPIDefinitions(ctx context.Context, req *ListAvailableAPIDefinitionsReq) (*ListAvailableAPIDefinitionsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAvailableAPIDefinitions not implemented")
+}
+func (*UnimplementedCustomAPIServer) AssignAPIDefinition(ctx context.Context, req *AssignAPIDefinitionReq) (*AssignAPIDefinitionResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AssignAPIDefinition not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -1434,6 +1903,42 @@ func _CustomAPI_DeleteDoSAutoMitigationRule_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_ListAvailableAPIDefinitions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAvailableAPIDefinitionsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).ListAvailableAPIDefinitions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.CustomAPI/ListAvailableAPIDefinitions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).ListAvailableAPIDefinitions(ctx, req.(*ListAvailableAPIDefinitionsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_AssignAPIDefinition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssignAPIDefinitionReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).AssignAPIDefinition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.http_loadbalancer.CustomAPI/AssignAPIDefinition",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).AssignAPIDefinition(ctx, req.(*AssignAPIDefinitionReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.http_loadbalancer.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -1453,6 +1958,14 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteDoSAutoMitigationRule",
 			Handler:    _CustomAPI_DeleteDoSAutoMitigationRule_Handler,
+		},
+		{
+			MethodName: "ListAvailableAPIDefinitions",
+			Handler:    _CustomAPI_ListAvailableAPIDefinitions_Handler,
+		},
+		{
+			MethodName: "AssignAPIDefinition",
+			Handler:    _CustomAPI_AssignAPIDefinition_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1869,6 +2382,162 @@ func (m *DeleteDoSAutoMitigationRuleRsp) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
+func (m *ListAvailableAPIDefinitionsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAvailableAPIDefinitionsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAvailableAPIDefinitionsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ListAvailableAPIDefinitionsResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ListAvailableAPIDefinitionsResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AvailableApiDefinitions) > 0 {
+		for iNdEx := len(m.AvailableApiDefinitions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AvailableApiDefinitions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AssignAPIDefinitionReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AssignAPIDefinitionReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AssignAPIDefinitionReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CreateIfNotExists {
+		i--
+		if m.CreateIfNotExists {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AssignAPIDefinitionResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AssignAPIDefinitionResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AssignAPIDefinitionResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -2076,6 +2745,71 @@ func (m *DeleteDoSAutoMitigationRuleRsp) Size() (n int) {
 	return n
 }
 
+func (m *ListAvailableAPIDefinitionsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ListAvailableAPIDefinitionsResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AvailableApiDefinitions) > 0 {
+		for _, e := range m.AvailableApiDefinitions {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AssignAPIDefinitionReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.CreateIfNotExists {
+		n += 2
+	}
+	return n
+}
+
+func (m *AssignAPIDefinitionResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -2203,6 +2937,54 @@ func (this *DeleteDoSAutoMitigationRuleRsp) String() string {
 	}
 	s := strings.Join([]string{`&DeleteDoSAutoMitigationRuleRsp{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListAvailableAPIDefinitionsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ListAvailableAPIDefinitionsReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ListAvailableAPIDefinitionsResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAvailableApiDefinitions := "[]*ObjectRefType{"
+	for _, f := range this.AvailableApiDefinitions {
+		repeatedStringForAvailableApiDefinitions += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForAvailableApiDefinitions += "}"
+	s := strings.Join([]string{`&ListAvailableAPIDefinitionsResp{`,
+		`AvailableApiDefinitions:` + repeatedStringForAvailableApiDefinitions + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AssignAPIDefinitionReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AssignAPIDefinitionReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`CreateIfNotExists:` + fmt.Sprintf("%v", this.CreateIfNotExists) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AssignAPIDefinitionResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AssignAPIDefinitionResp{`,
 		`}`,
 	}, "")
 	return s
@@ -3320,6 +4102,436 @@ func (m *DeleteDoSAutoMitigationRuleRsp) Unmarshal(dAtA []byte) error {
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAvailableAPIDefinitionsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ListAvailableAPIDefinitionsResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ListAvailableAPIDefinitionsResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AvailableApiDefinitions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AvailableApiDefinitions = append(m.AvailableApiDefinitions, &views.ObjectRefType{})
+			if err := m.AvailableApiDefinitions[len(m.AvailableApiDefinitions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AssignAPIDefinitionReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AssignAPIDefinitionReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AssignAPIDefinitionReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiDefinition == nil {
+				m.ApiDefinition = &views.ObjectRefType{}
+			}
+			if err := m.ApiDefinition.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreateIfNotExists", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.CreateIfNotExists = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AssignAPIDefinitionResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AssignAPIDefinitionResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AssignAPIDefinitionResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

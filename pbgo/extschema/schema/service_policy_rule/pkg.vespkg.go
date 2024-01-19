@@ -73,12 +73,27 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.url_matcher",
 		"spec.virtual_host_matcher",
 		"spec.waf_action.data_guard_control",
+		"spec.waf_action.jwt_claims_validation",
 		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.service_policy_rule.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "object.spec.gc_spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []string{
@@ -102,6 +117,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.url_matcher",
 		"spec.virtual_host_matcher",
 		"spec.waf_action.data_guard_control",
+		"spec.waf_action.jwt_claims_validation",
 		"spec.waf_action.jwt_validation",
 		"spec.waf_action.waf_in_monitoring_mode",
 	}

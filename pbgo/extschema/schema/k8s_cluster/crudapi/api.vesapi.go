@@ -3178,7 +3178,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
                     "title": "Allow VK8s namespace access",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Allow K8s API Access"
+                    "x-displayname": "Allow VK8s namespace access"
                 }
             }
         },

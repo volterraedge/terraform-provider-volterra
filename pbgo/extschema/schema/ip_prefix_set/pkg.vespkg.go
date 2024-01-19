@@ -49,8 +49,59 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ip_prefix_set.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

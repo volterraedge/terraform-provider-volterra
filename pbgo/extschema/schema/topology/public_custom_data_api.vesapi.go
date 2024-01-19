@@ -1837,7 +1837,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "schematopologyMetricType": {
             "type": "string",
-            "description": "List of metric types applicable for the nodes and edges in the topology graph.\nNot all metric types are applicable for all nodes or edges. For example, LATENCY metric\nis applicable only for the edges where both the vertices are sites and CPU_USAGE metric is\napplicable only for node of type instance. This list is a union of all metric types.\n\nTotal incoming traffic in bytes\nTotal outgoing traffic in bytes\nTotal incoming packets dropped\nTotal outgoing packets dropped\nReachability based on probes sent periodically\nAverage latency in seconds\nAverage CPU utilization in percentage\nAverage Memory utilization in percentage\nAverage Disk utilization in percentage\nConnection status of the tunnel",
+            "description": "List of metric types applicable for the nodes and edges in the topology graph.\nNot all metric types are applicable for all nodes or edges. For example, LATENCY metric\nis applicable only for the edges where both the vertices are sites and CPU_USAGE metric is\napplicable only for node of type instance. This list is a union of all metric types.\n\nTotal incoming traffic in bytes\nTotal outgoing traffic in bytes\nTotal incoming packets dropped\nTotal outgoing packets dropped\nReachability based on probes sent periodically\nAverage latency in seconds\nAverage CPU utilization in percentage\nAverage Memory utilization in percentage\nAverage Disk utilization in percentage\nConnection status of the tunnel\nControl plane connection status of the tunnel",
             "title": "Metric Type",
             "enum": [
                 "METRIC_TYPE_IN_BYTES",
@@ -1849,7 +1849,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "METRIC_TYPE_CPU_USAGE_PERCENT",
                 "METRIC_TYPE_MEMORY_USAGE_PERCENT",
                 "METRIC_TYPE_DISK_USAGE_PERCENT",
-                "METRIC_TYPE_DATA_PLANE_CONNECTION_STATUS"
+                "METRIC_TYPE_DATA_PLANE_CONNECTION_STATUS",
+                "METRIC_TYPE_CONTROL_PLANE_CONNECTION_STATUS"
             ],
             "default": "METRIC_TYPE_IN_BYTES",
             "x-displayname": "Metric Type",

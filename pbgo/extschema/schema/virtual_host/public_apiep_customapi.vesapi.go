@@ -125,6 +125,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetVulnerabilities(ctx context.Context, 
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCUpdateVulnerabilitiesState(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateVulnerabilitiesStateReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateVulnerabilitiesState(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -174,6 +183,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
 
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
+
+	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
 
 	ccl.rpcFns = rpcFns
 
@@ -1077,6 +1088,94 @@ func (c *ApiepCustomAPIRestClient) doRPCGetVulnerabilities(ctx context.Context, 
 	return pbRsp, nil
 }
 
+func (c *ApiepCustomAPIRestClient) doRPCUpdateVulnerabilitiesState(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateVulnerabilitiesStateReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("context", fmt.Sprintf("%v", req.Context))
+		q.Add("domain", fmt.Sprintf("%v", req.Domain))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("vuln_id", fmt.Sprintf("%v", req.VulnId))
+		q.Add("vuln_state", fmt.Sprintf("%v", req.VulnState))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateVulnerabilitiesStateRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -1120,6 +1219,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	rpcFns["GetTopSensitiveData"] = ccl.doRPCGetTopSensitiveData
 
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
+
+	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
 
 	ccl.rpcFns = rpcFns
 
@@ -1172,6 +1273,10 @@ func (c *apiepCustomAPIInprocClient) GetTopSensitiveData(ctx context.Context, in
 func (c *apiepCustomAPIInprocClient) GetVulnerabilities(ctx context.Context, in *GetVulnerabilitiesReq, opts ...grpc.CallOption) (*GetVulnerabilitiesRsp, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities", nil)
 	return c.ApiepCustomAPIServer.GetVulnerabilities(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) UpdateVulnerabilitiesState(ctx context.Context, in *UpdateVulnerabilitiesStateReq, opts ...grpc.CallOption) (*UpdateVulnerabilitiesStateRsp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState", nil)
+	return c.ApiepCustomAPIServer.UpdateVulnerabilitiesState(ctx, in)
 }
 
 func NewApiepCustomAPIInprocClient(svc svcfw.Service) ApiepCustomAPIClient {
@@ -1682,6 +1787,55 @@ func (s *apiepCustomAPISrv) GetVulnerabilities(ctx context.Context, in *GetVulne
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetVulnerabilitiesRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepCustomAPISrv) UpdateVulnerabilitiesState(ctx context.Context, in *UpdateVulnerabilitiesStateReq) (*UpdateVulnerabilitiesStateRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *UpdateVulnerabilitiesStateRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.UpdateVulnerabilitiesState' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateVulnerabilitiesState(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -2796,6 +2950,106 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getvulnerabilities"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/vulnerability/update_state": {
+            "post": {
+                "summary": "Update Vulnerabilities for Virtual Host",
+                "description": "Update vulnerabilities for the given Virtual Host",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostUpdateVulnerabilitiesStateRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostUpdateVulnerabilitiesStateReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-updatevulnerabilitiesstate"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
@@ -4327,6 +4581,75 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostUpdateVulnerabilitiesStateReq": {
+            "type": "object",
+            "description": "Request model for UpdateVulnerabilitiesStateReq API",
+            "title": "UpdateVulnerabilitiesStateReq",
+            "x-displayname": "Update Vulnerability State",
+            "x-ves-oneof-field-context": "[\"api_endpoint\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq",
+            "properties": {
+                "api_endpoint": {
+                    "description": "Exclusive with []\n API Endpoint",
+                    "title": "api_endpoint",
+                    "$ref": "#/definitions/schemavirtual_hostAPIEndpoint",
+                    "x-displayname": "API Endpoint"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " domain for which vulnerability state should be updated.\n\nExample: - \"www.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "www.example.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
+                },
+                "vuln_id": {
+                    "type": "string",
+                    "description": " Vulnerability ID\n\nExample: - HTTP_SUPPORTED_AND_HSTS_NOT_SET-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "vulnerability_id",
+                    "x-displayname": "Vulnerability ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vuln_state": {
+                    "description": " State of the vulnerability\n\nExample: - \"RESOLVED\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "State",
+                    "$ref": "#/definitions/virtual_hostVulnStatus",
+                    "x-displayname": "State",
+                    "x-ves-example": "RESOLVED",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "virtual_hostUpdateVulnerabilitiesStateRsp": {
+            "type": "object",
+            "description": "Response model for UpdateVulnerabilitiesStateRsp API.",
+            "title": "UpdateVulnerabilitiesStateRsp",
+            "x-displayname": "UpdateVulnerabilitiesStateRsp API Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.UpdateVulnerabilitiesStateRsp"
+        },
         "virtual_hostVulnContext": {
             "type": "string",
             "description": "Context of where vulnerability found\n\nVulnerability has been identified at API Endpoint level.\nVulnerability has been identified at API BasePath level.\nVulnerability has been identified at Domain level.",
@@ -4453,12 +4776,14 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "virtual_hostVulnStatus": {
             "type": "string",
-            "description": "Status of vulnerability found\n\nVulnerability has no status\nVulnerability has no status\nVulnerability has resolution confirmed status",
+            "description": "Status of vulnerability found\n\nVulnerability has no status\nVulnerability has open status and it will be under Active tab\nVulnerability has ignore status\nThe vulnerability Ignored manually and it will be under Archived tab\nThe next Discovery process should ignore the vulnerability.\nVulnerability has resolution status\nThe vulnerability resolved manually and it will be under Archived tab\nThe next Discovery process should validate the resolution and reopen (Move to Active and mark as Open) if not resolved.\nVulnerability has under review status and it will be under Active tab\nThe vulnerability under security or development team responsibility",
             "title": "Status",
             "enum": [
                 "STATUS_NONE",
                 "STATUS_OPEN",
-                "STATUS_RESOLUTION_CONFIRMED"
+                "STATUS_IGNORE",
+                "STATUS_RESOLUTION_CONFIRMED",
+                "STATUS_UNDER_REVIEW"
             ],
             "default": "STATUS_NONE",
             "x-displayname": "Status",
@@ -4542,6 +4867,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "description": " Title of the vulnerability found.",
                     "title": "title",
                     "x-displayname": "Title"
+                },
+                "vuln_id": {
+                    "type": "string",
+                    "description": " Vulnerability ID\n\nExample: - HTTP_SUPPORTED_AND_HSTS_NOT_SET-",
+                    "title": "vulnerability_id",
+                    "x-displayname": "vulnerability_id"
                 }
             }
         }

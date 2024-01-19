@@ -154,6 +154,15 @@ func (v *ValidateAuth) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
+	if fv, exists := v.FldValidators["disable_post_logout_redirect_uri"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_post_logout_redirect_uri"))
+		if err := fv(ctx, m.GetDisablePostLogoutRedirectUri(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["end_session_endpoint"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("end_session_endpoint"))

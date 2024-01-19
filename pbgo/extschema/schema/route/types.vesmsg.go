@@ -2652,6 +2652,15 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["destinations"]; exists {
 		vOpts := append(opts, db.WithValidateField("destinations"))
 		if err := fv(ctx, m.GetDestinations(), vOpts...); err != nil {
@@ -2854,6 +2863,8 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	v.FldValidators["buffer_policy"] = ves_io_schema.BufferConfigTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	return v
 }()

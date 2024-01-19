@@ -4340,12 +4340,26 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Filter for HTTP Loadbalancers Inventory",
             "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerInventoryFilterType",
             "properties": {
+                "api_definition": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with API Definition",
+                    "title": "API Definition",
+                    "format": "boolean",
+                    "x-displayname": "API Definition"
+                },
                 "api_protection": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with API Protection configured",
                     "title": "API Protection",
                     "format": "boolean",
                     "x-displayname": "API Protection"
+                },
+                "api_schema_validation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with API Schema Validation",
+                    "title": "API Schema Validation",
+                    "format": "boolean",
+                    "x-displayname": "API Schema Validation"
                 },
                 "bot_protection": {
                     "type": "boolean",
@@ -4354,6 +4368,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Bot Protection"
                 },
+                "client_blocking": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Client Blocking",
+                    "title": "Client Blocking",
+                    "format": "boolean",
+                    "x-displayname": "Client Blocking"
+                },
                 "client_side_defense": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with Client Side Defense configured",
@@ -4361,12 +4382,68 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Client Side Defense"
                 },
+                "cookie_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Cookie Protection",
+                    "title": "Cookie Protection",
+                    "format": "boolean",
+                    "x-displayname": "Cookie Protection"
+                },
+                "cors_policy": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with CORS Policy",
+                    "title": "CORS Policy",
+                    "format": "boolean",
+                    "x-displayname": "CORS Policy"
+                },
+                "csrf_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with CSRF Protection",
+                    "title": "CSRF Protection",
+                    "format": "boolean",
+                    "x-displayname": "CSRF Protection"
+                },
+                "data_guard": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Data Guard",
+                    "title": "Data Guard",
+                    "format": "boolean",
+                    "x-displayname": "Data Guard"
+                },
+                "ddos_auto_mitigation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with DDoS Auto Mitigation",
+                    "title": "DDoS Auto Mitigation",
+                    "format": "boolean",
+                    "x-displayname": "DDoS Auto Mitigation"
+                },
+                "ddos_mitigation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with DDoS Mitigation",
+                    "title": "DDoS Mitigation",
+                    "format": "boolean",
+                    "x-displayname": "DDoS Mitigation"
+                },
                 "ddos_protection": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with DDoS Protection configured",
                     "title": "DDoS Protection",
                     "format": "boolean",
                     "x-displayname": "DDoS Protection"
+                },
+                "default_loadbalancer": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Default Loadbalancer",
+                    "title": "Default Loadbalancer",
+                    "format": "boolean",
+                    "x-displayname": "Default Loadbalancer"
+                },
+                "graph_ql_inspection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with GraphQL Inspection",
+                    "title": "GraphQL Inspection",
+                    "format": "boolean",
+                    "x-displayname": "GraphQL Inspection"
                 },
                 "http_only": {
                     "type": "boolean",
@@ -4389,12 +4466,33 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Malicious User Detection"
                 },
+                "malicious_user_mitigation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Malicious User Mitigation",
+                    "title": "Malicious User Mitigation",
+                    "format": "boolean",
+                    "x-displayname": "Malicious User Mitigation"
+                },
+                "mutual_tls": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Mutual TLS",
+                    "title": "Mutual TLS",
+                    "format": "boolean",
+                    "x-displayname": "Mutual TLS"
+                },
                 "namespace_service_policy": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with Namespace Service Policy configured",
                     "title": "Namespace Service Policy",
                     "format": "boolean",
                     "x-displayname": "Namespace Service Policy"
+                },
+                "origin_server_subset": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Origin Server Subset",
+                    "title": "Origin Server Subset",
+                    "format": "boolean",
+                    "x-displayname": "Origin Server Subset"
                 },
                 "private_advertisement": {
                     "type": "boolean",
@@ -4410,6 +4508,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Public Advertisement"
                 },
+                "routes": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Routes",
+                    "title": "Routes",
+                    "format": "boolean",
+                    "x-displayname": "Routes"
+                },
                 "service_policy": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with Service Policy configured",
@@ -4417,12 +4522,40 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Service Policy"
                 },
+                "slow_ddos_mitigation": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Slow DDoS Mitigation",
+                    "title": "Slow DDoS Mitigation",
+                    "format": "boolean",
+                    "x-displayname": "Slow DDoS Mitigation"
+                },
+                "trusted_client": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Trusted Client",
+                    "title": "Trusted Client",
+                    "format": "boolean",
+                    "x-displayname": "Trusted Client"
+                },
+                "trusted_client_ip_headers": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Trusted Client IP Headers",
+                    "title": "Trusted Client IP Headers",
+                    "format": "boolean",
+                    "x-displayname": "Trusted Client IP Headers"
+                },
                 "waf": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with WAF configured",
                     "title": "WAF",
                     "format": "boolean",
                     "x-displayname": "WAF"
+                },
+                "waf_exclusion": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with WAF Exclusion",
+                    "title": "WAF Exclusion",
+                    "format": "boolean",
+                    "x-displayname": "WAF Exclusion"
                 }
             }
         },
@@ -4535,11 +4668,23 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Loadbalancer Inventory Results",
             "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerResultType",
             "properties": {
+                "api_definition_enabled": {
+                    "description": " API Definition configured ",
+                    "title": "API Definition Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Definition Enabled or Disabled"
+                },
                 "api_protection_enabled": {
                     "description": " API Protection configured",
                     "title": "API Protection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Protection Enabled or Disabled"
+                },
+                "api_schema_validation_enabled": {
+                    "description": " API Schema Validation configured ",
+                    "title": "API Schema Validation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Schema Validation Enabled or Disabled"
                 },
                 "bot_protection_enabled": {
                     "description": " Bot Protection configured",
@@ -4547,17 +4692,106 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Bot Protection Enabled or Disabled"
                 },
+                "certification_expiration_date": {
+                    "type": "string",
+                    "description": " Certification Expiration Date",
+                    "title": "Certification Expiration Date",
+                    "format": "date-time",
+                    "x-displayname": "Certification Expiration Date"
+                },
+                "certification_status": {
+                    "type": "string",
+                    "description": " Certification Status",
+                    "title": "Certification Status",
+                    "x-displayname": "Certification Status"
+                },
+                "client_blocking_enabled": {
+                    "description": " Client Blocking configured ",
+                    "title": "Client Blocking Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Blocking Enabled or Disabled"
+                },
                 "client_side_defense_enabled": {
                     "description": " Client Side Defense configured",
                     "title": "Client Side Defense Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Client Side Defense Enabled or Disabled"
                 },
-                "ddos_protection_enabled": {
-                    "description": " DDoS Protection configured",
-                    "title": "DDoS Protection Status",
+                "connection_idle_timeout": {
+                    "type": "integer",
+                    "description": " Connection Idle Timeout",
+                    "title": "Connection Idle Timeout",
+                    "format": "int64",
+                    "x-displayname": "Connection Idle Timeout"
+                },
+                "cookie_protection_enabled": {
+                    "description": " Cookie Protection configured ",
+                    "title": "Cookie Protection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DDoS Protection Enabled or Disabled"
+                    "x-displayname": "Cookie Protection Enabled or Disabled"
+                },
+                "cors_policy_enabled": {
+                    "description": " CORS Policy configured ",
+                    "title": "CORS Policy Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "CORS Policy Enabled or Disabled"
+                },
+                "csrf_protection_enabled": {
+                    "description": " CSRF Protection configured ",
+                    "title": "CSRF Protection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "CSRF Protection Enabled or Disabled"
+                },
+                "data_guard_enabled": {
+                    "description": " Data Guard configured  ",
+                    "title": "Data Guard Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Data Guard Enabled or Disabled"
+                },
+                "ddos_auto_mitigation_enabled": {
+                    "description": " DDoS Auto Mitigation configured ",
+                    "title": "DDoS Auto Mitigation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DDoS Auto Mitigation Enabled or Disabled"
+                },
+                "ddos_mitigation_enabled": {
+                    "description": " DDoS Mitigation configured ",
+                    "title": "DDoS Mitigation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DDoS Mitigation Enabled or Disabled"
+                },
+                "ddos_protection_enabled": {
+                    "description": " DDoS Detection configured",
+                    "title": "DDoS Detection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DDoS Detection Enabled or Disabled"
+                },
+                "default_loadbalancer_enabled": {
+                    "description": " Default Loadbalancer configured ",
+                    "title": "Default Loadbalancer Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Loadbalancer Enabled or Disabled"
+                },
+                "dns_info": {
+                    "type": "string",
+                    "description": " DNS Info",
+                    "title": "DNS Info",
+                    "x-displayname": "DNS Info"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " Domains ",
+                    "title": "Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domains"
+                },
+                "graph_ql_inspection_enabled": {
+                    "description": " GraphQL Inspection configured ",
+                    "title": "GraphQL Inspection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "GraphQL Inspection Enabled or Disabled"
                 },
                 "http_enabled": {
                     "description": " HTTP only loadbalancers",
@@ -4565,17 +4799,48 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "HTTP Only Enabled or Disabled"
                 },
+                "http_listen_port_choice": {
+                    "type": "string",
+                    "description": " HTTP Listen Port Choice ",
+                    "title": "HTTP Listen Port Choice",
+                    "x-displayname": "HTTP Listen Port Choice"
+                },
+                "idle_timeout": {
+                    "type": "integer",
+                    "description": " Idle Timeout ",
+                    "title": "Idle Timeout",
+                    "format": "int64",
+                    "x-displayname": "Idle Timeout"
+                },
                 "ip_reputation_enabled": {
                     "description": " IP Reputation configured",
                     "title": "IP Reputation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "IP Reputation Enabled or Disabled"
                 },
+                "loadbalancer_algorithm": {
+                    "type": "string",
+                    "description": " Loadbalancer Algorithm configured ",
+                    "title": "Loadbalancer Algorithm",
+                    "x-displayname": "Loadbalancer Algorithm"
+                },
                 "malicious_user_detection_enabled": {
                     "description": " HTTP loadbalancer Malicious User Detection configured",
                     "title": "Malicious User Detection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Malicious User Detection Enabled or Disabled"
+                },
+                "malicious_user_mitigation_enabled": {
+                    "description": " Malicious User Mitigation configured ",
+                    "title": "Malicious User Mitigation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Malicious User Mitigation Enabled or Disabled"
+                },
+                "mutual_tls_enabled": {
+                    "description": " Mutual TLS configured ",
+                    "title": "Mutual TLS Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Mutual TLS Enabled or Disabled"
                 },
                 "name": {
                     "type": "string",
@@ -4595,6 +4860,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Namespace Service Policy Enabled or Disabled"
                 },
+                "origin_server_subset_enabled": {
+                    "description": " Origin Server Subset configured ",
+                    "title": "Origin Server Subset Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Origin Server Subset Enabled or Disabled"
+                },
                 "private_advertisement_enabled": {
                     "description": " advertised privately configured",
                     "title": "Private Advertisement Status",
@@ -4608,10 +4879,16 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Public Advertisement Enabled or Disabled"
                 },
                 "rate_limit": {
-                    "description": " Rate Limit Status",
-                    "title": "Rate Limit Status",
+                    "description": " Rate Limiting configured",
+                    "title": "Rate Limiting Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Rate Limiting Enabled or Disabled"
+                },
+                "routes_enabled": {
+                    "description": " Routes configured ",
+                    "title": "Routes Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Routes Enabled or Disabled"
                 },
                 "service_policy_enabled": {
                     "description": " Service Policy configured ",
@@ -4619,11 +4896,53 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Service Policy Enabled or Disabled"
                 },
+                "slow_ddos_mitigation_enabled": {
+                    "description": " Slow DDoS Mitigation configured ",
+                    "title": "Slow DDoS Mitigation Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Slow DDoS Mitigation Enabled or Disabled"
+                },
+                "tls_security_level": {
+                    "type": "string",
+                    "description": " TLS Security Level",
+                    "title": "TLS Security Level",
+                    "x-displayname": "TLS Security Level"
+                },
+                "trusted_client_enabled": {
+                    "description": " Trusted Client configured ",
+                    "title": "Trusted Client Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Trusted Client Enabled or Disabled"
+                },
+                "trusted_client_ip_headers_enabled": {
+                    "description": " Trusted Client IP Headers configured ",
+                    "title": "Trusted Client IP Headers Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Trusted Client IP Headers Enabled or Disabled"
+                },
+                "vip_type": {
+                    "type": "string",
+                    "description": " VIP Type ",
+                    "title": "VIP Type",
+                    "x-displayname": "VIP Type"
+                },
                 "waf_enabled": {
                     "description": " WAF configured",
                     "title": "WAF Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "WAF Enabled or Disabled"
+                },
+                "waf_exclusion_enabled": {
+                    "description": " WAF Exclusion configured ",
+                    "title": "WAF Exclusion Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "WAF Exclusion Enabled or Disabled"
+                },
+                "waf_policy_name": {
+                    "type": "string",
+                    "description": " Name of the WAF policy (if applicable)",
+                    "title": "WAF Policy Name",
+                    "x-displayname": "WAF Policy Name"
                 }
             }
         },

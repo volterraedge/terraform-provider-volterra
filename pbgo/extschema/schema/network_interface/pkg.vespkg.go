@@ -98,8 +98,92 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.network_interface.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.network_interface.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_interface.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.network_interface.API.Replace"] = []string{
@@ -115,6 +199,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ethernet_interface.static_ipv6_address.fleet_static_ip",
 		"spec.tunnel_interface.inside_network",
 		"spec.tunnel_interface.static_ip.fleet_static_ip",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.network_interface.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

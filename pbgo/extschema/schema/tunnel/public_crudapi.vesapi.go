@@ -3814,14 +3814,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Auto IP"
                 },
                 "ip_address": {
-                    "description": "Exclusive with [auto]\n Local Source IP to be used for tunnel\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [auto]\n Local Source IP to be used for tunnel",
                     "title": "Local IP Address",
                     "$ref": "#/definitions/schemaIpAddressType",
-                    "x-displayname": "Local IP Address Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Local IP Address Type"
                 },
                 "virtual_network_type": {
                     "description": " Local Virtual network to be used for transporting encapsulated packets\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

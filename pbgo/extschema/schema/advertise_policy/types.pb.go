@@ -64,6 +64,7 @@ type GlobalSpecType struct {
 	// Port
 	//
 	// x-displayName: "TCP/UDP Port"
+	// x-required
 	// x-example: "80"
 	// Port to advertise.
 	//

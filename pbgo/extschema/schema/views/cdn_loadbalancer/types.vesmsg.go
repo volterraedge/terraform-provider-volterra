@@ -1536,6 +1536,16 @@ func (v *ValidateCDNOriginServerType) ChoiceValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateCDNOriginServerType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCDNOriginServerType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CDNOriginServerType)
 	if !ok {
@@ -1586,6 +1596,15 @@ func (v *ValidateCDNOriginServerType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1611,6 +1630,18 @@ var DefaultCDNOriginServerTypeValidator = func() *ValidateCDNOriginServerType {
 		panic(errMsg)
 	}
 	v.FldValidators["choice"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNOriginServerType.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
 
 	v.FldValidators["choice.public_ip"] = ves_io_schema_views_origin_pool.OriginServerPublicIPValidator().Validate
 	v.FldValidators["choice.public_name"] = ves_io_schema_views_origin_pool.OriginServerPublicNameValidator().Validate

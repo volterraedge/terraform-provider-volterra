@@ -3236,6 +3236,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTunnelEncapsulationType",
                     "x-displayname": "Encapsulation Type"
                 },
+                "ike_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(ike)",
+                    "title": "ike_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ike tunnel flap reason"
+                },
                 "isLocal": {
                     "type": "boolean",
                     "description": " Identifies if the ipsec connection is local to the ver node or not",
@@ -3254,6 +3260,12 @@ var APISwaggerJSON string = `{
                     "title": "role",
                     "$ref": "#/definitions/siteTunnelRole",
                     "x-displayname": "Role"
+                },
+                "ssl_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(Ssl)",
+                    "title": "ssl_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ssl tunnel flap reason"
                 },
                 "state": {
                     "description": " connection state which identifies whether connection is UP/DOWN",
@@ -3278,6 +3290,25 @@ var APISwaggerJSON string = `{
                     "description": " The VER node in the local site from which the connection is setup",
                     "title": "verNodeName",
                     "x-displayname": "VER Node Name"
+                }
+            }
+        },
+        "siteTunnelFlapReason": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.TunnelFlapReason",
+            "properties": {
+                "flap_reason": {
+                    "type": "string",
+                    "description": " flap reason for tunnel",
+                    "title": "Flap Reason",
+                    "x-displayname": "Flap Reason"
+                },
+                "time": {
+                    "type": "string",
+                    "description": " flap time for tunnel",
+                    "title": "Flap time",
+                    "format": "date-time",
+                    "x-displayname": "Flap time"
                 }
             }
         },

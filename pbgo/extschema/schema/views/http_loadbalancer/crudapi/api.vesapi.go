@@ -2821,35 +2821,23 @@ var APISwaggerJSON string = `{
                     "x-displayname": "All Request \u0026 Response"
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "any_target": {
-                    "description": "Exclusive with [api_endpoint_target]\n The rule will be applied for all requests on this LB.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [api_endpoint_target]\n The rule will be applied for all requests on this LB.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All API Endpoints",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "All API Endpoints"
                 },
                 "api_endpoint_target": {
-                    "description": "Exclusive with [any_target]\n The rule is applied only for the specified api endpoints.\n\nExample: - \"/endpoint1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [any_target]\n The rule is applied only for the specified api endpoints.\n\nExample: - \"/endpoint1\"-",
                     "title": "api endpoint target",
                     "$ref": "#/definitions/app_typeAPIEndpoint",
                     "x-displayname": "API Endpoint",
-                    "x-ves-example": "/endpoint1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-ves-example": "/endpoint1"
                 },
                 "custom_sections": {
                     "description": "Exclusive with [all_request_sections all_response_sections all_sections]\n",
@@ -2858,48 +2846,34 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Sections"
                 },
                 "key_pattern": {
-                    "description": "Exclusive with [key_value_pattern value_pattern]\n Search for pattern across all field names in the specified sections.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [key_value_pattern value_pattern]\n Search for pattern across all field names in the specified sections.",
                     "title": "key pattern",
                     "$ref": "#/definitions/app_typeKeyPattern",
-                    "x-displayname": "Key Pattern",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Key Pattern"
                 },
                 "key_value_pattern": {
-                    "description": "Exclusive with [key_pattern value_pattern]\n Search for specific field and value patterns in the specified sections.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [key_pattern value_pattern]\n Search for specific field and value patterns in the specified sections.",
                     "title": "key-value pattern",
                     "$ref": "#/definitions/app_typeKeyValuePattern",
-                    "x-displayname": "Key-Value Pattern",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Key-Value Pattern"
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
                     "x-ves-example": "api.example.com",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
                 },
                 "value_pattern": {
-                    "description": "Exclusive with [key_pattern key_value_pattern]\n Search for pattern across all field values in the specified sections.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [key_pattern key_value_pattern]\n Search for pattern across all field values in the specified sections.",
                     "title": "value pattern",
                     "$ref": "#/definitions/app_typeValuePattern",
-                    "x-displayname": "Value Pattern",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Value Pattern"
                 }
             }
         },
@@ -3542,14 +3516,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "api_endpoint_method": {
                     "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
@@ -3595,14 +3565,12 @@ var APISwaggerJSON string = `{
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
                     "x-ves-example": "api.example.com",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
@@ -3628,14 +3596,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "api_group": {
                     "type": "string",
@@ -3686,14 +3650,12 @@ var APISwaggerJSON string = `{
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
                     "x-ves-example": "api.example.com",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
@@ -3854,10 +3816,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "validation_all_spec_endpoints": {
-                    "description": "Exclusive with [validation_custom_list validation_disabled]\n Validate all api-endpoints listed in the OpenAPI specification file (a.k.a. swagger).\n  Any other end-points not listed will act according to \"Fall Through Mode\"",
-                    "title": "All endpoints",
+                    "description": "Exclusive with [validation_custom_list validation_disabled]\n Validate all API endpoints specified by the API Inventory.\n  All other API endpoints would proceed according to \"Fall Through Mode\"",
+                    "title": "validation_all_spec_endpoints",
                     "$ref": "#/definitions/http_loadbalancerOpenApiValidationAllSpecEndpointsSettings",
-                    "x-displayname": "All Endpoints"
+                    "x-displayname": "API Inventory"
                 },
                 "validation_custom_list": {
                     "description": "Exclusive with [validation_all_spec_endpoints validation_disabled]\n Define API groups, base paths, or API endpoints and their OpenAPI validation modes.\n  Any other end-points not listed will act according to \"Fall Through Mode\"",
@@ -4114,14 +4076,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ApiEndpointRule",
             "properties": {
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "api_endpoint_method": {
                     "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
@@ -4157,13 +4115,11 @@ var APISwaggerJSON string = `{
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
@@ -4723,13 +4679,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Block User"
                 },
                 "ddos_client_source": {
-                    "description": "Exclusive with [ip_prefix_list]\n Combination of Region, ASN and TLS Fingerprints\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "description": "Exclusive with [ip_prefix_list]\n Combination of Region, ASN and TLS Fingerprints\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
                     "title": "ddos_client_source",
                     "$ref": "#/definitions/http_loadbalancerDDoSClientSource",
                     "x-displayname": "DDoS Client Source",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.message.required_one_nonzero_field": "true"
                     }
                 },
@@ -4745,14 +4699,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ip_prefix_list": {
-                    "description": "Exclusive with [ddos_client_source]\n IPv4 prefix string.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [ddos_client_source]\n IPv4 prefix string.",
                     "title": "ip source",
                     "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "IP Source",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "IP Source"
                 },
                 "metadata": {
                     "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -4845,34 +4795,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.FallThroughRule",
             "properties": {
                 "action_block": {
-                    "description": "Exclusive with [action_report action_skip]\n Block the request and issue an API security event\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [action_report action_skip]\n Block the request and issue an API security event",
                     "title": "block",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Block",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Block"
                 },
                 "action_report": {
-                    "description": "Exclusive with [action_block action_skip]\n Continue processing the request and issue an API security event\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [action_block action_skip]\n Continue processing the request and issue an API security event",
                     "title": "report",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Report",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Report"
                 },
                 "action_skip": {
-                    "description": "Exclusive with [action_block action_report]\n Continue processing the request\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [action_block action_report]\n Continue processing the request",
                     "title": "skip",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Skip",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Skip"
                 },
                 "api_endpoint": {
                     "description": "Exclusive with [api_group base_path]\n The API endpoint (Path + Method) which this validation applies to",
@@ -5048,6 +4986,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/http_loadbalancerJWKS",
                     "x-displayname": "JSON Web Key Set (JWKS)"
                 },
+                "mandatory_claims": {
+                    "description": " Configuration for validation of mandatory claims. The system will verify that the claim exists in JWT.\n If the claim does not exist JWT token validation will fail.",
+                    "title": "Mandatory Claims",
+                    "$ref": "#/definitions/http_loadbalancerMandatoryClaims",
+                    "x-displayname": "Mandatory Claims"
+                },
                 "reserved_claims": {
                     "description": " Configuration required for validation of reserved claims. If some claims are absent in\n the token validation of these claims should be disabled.",
                     "title": "reserved_claims",
@@ -5072,6 +5016,29 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerMandatoryClaims": {
+            "type": "object",
+            "description": "Configurable Validation of mandatory Claims.",
+            "title": "MandatoryClaims",
+            "x-displayname": "Mandatory Claims",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.MandatoryClaims",
+            "properties": {
+                "claim_names": {
+                    "type": "array",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Claim names",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Claim Names",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -5141,14 +5108,14 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerOpenApiValidationAllSpecEndpointsSettings": {
             "type": "object",
-            "description": "Settings for all endpoints validation",
-            "title": "OpenAPI Validation All Endpoints Settings",
-            "x-displayname": "All Endpoints",
+            "description": "Settings for API Inventory validation",
+            "title": "OpenAPI Validation API Inventory Settings",
+            "x-displayname": "API Inventory",
             "x-ves-oneof-field-oversized_body_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings",
             "properties": {
                 "fall_through_mode": {
-                    "description": " Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Determine what to do with unprotected endpoints (not part of the API Inventory or doesn't have a specific rule in custom rules)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Fall Through Mode",
                     "$ref": "#/definitions/http_loadbalancerOpenApiFallThroughMode",
                     "x-displayname": "Fall Through Mode",
@@ -5158,13 +5125,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "settings": {
-                    "description": " OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+                    "description": " OpenAPI specification validation settings relevant for \"API Inventory\" enforcement and for \"Custom list\" enforcement",
                     "title": "OpenAPI specification validation common settings",
                     "$ref": "#/definitions/http_loadbalancerOpenApiValidationCommonSettings",
                     "x-displayname": "Common Settings"
                 },
                 "validation_mode": {
-                    "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Validation mode of OpenAPI specification.\n  When a validation mismatch occurs on a request to one of the API Inventory endpoints\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Validation Mode",
                     "$ref": "#/definitions/http_loadbalancerOpenApiValidationMode",
                     "x-displayname": "Validation Mode",
@@ -5177,7 +5144,7 @@ var APISwaggerJSON string = `{
         },
         "http_loadbalancerOpenApiValidationCommonSettings": {
             "type": "object",
-            "description": "OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+            "description": "OpenAPI specification validation settings relevant for \"API Inventory\" enforcement and for \"Custom list\" enforcement",
             "title": "OpenAPI specification validation common settings",
             "x-displayname": "Common Settings",
             "x-ves-oneof-field-oversized_body_choice": "[\"oversized_body_fail_validation\",\"oversized_body_skip_validation\"]",
@@ -5335,14 +5302,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.OpenApiValidationRule",
             "properties": {
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "api_endpoint": {
                     "description": "Exclusive with [api_group base_path]\n The API endpoint (Path + Method) which this validation applies to",
@@ -5385,13 +5348,11 @@ var APISwaggerJSON string = `{
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
@@ -5536,15 +5497,13 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -5650,15 +5609,13 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -5791,15 +5748,13 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -6025,6 +5980,12 @@ var APISwaggerJSON string = `{
                     "title": "cors_policy",
                     "$ref": "#/definitions/schemaCorsPolicy",
                     "x-displayname": "CORS Policy"
+                },
+                "csrf_policy": {
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+                    "title": "csrf_policy",
+                    "$ref": "#/definitions/schemaCsrfPolicy",
+                    "x-displayname": "CSRF Policy"
                 },
                 "default_retry_policy": {
                     "description": "Exclusive with [no_retry_policy retry_policy]\n Use system default retry policy",
@@ -6457,14 +6418,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ServerUrlRule",
             "properties": {
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Any Domain"
                 },
                 "base_path": {
                     "type": "string",
@@ -6494,13 +6451,11 @@ var APISwaggerJSON string = `{
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "domain",
                     "maxLength": 128,
                     "x-displayname": "Specific Domain",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128",
                         "ves.io.schema.rules.string.vh_domain": "true"
                     }
@@ -6789,14 +6744,12 @@ var APISwaggerJSON string = `{
                 },
                 "as_number": {
                     "type": "integer",
-                    "description": "Exclusive with [http_header ip_prefix user_identifier]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
+                    "description": "Exclusive with [http_header ip_prefix user_identifier]\n RFC 6793 defined 4-byte AS number\n\nExample: - \"4683\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 401308\n",
                     "title": "as number",
                     "format": "int64",
                     "x-displayname": "AS Number",
                     "x-ves-example": "4683",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "401308"
                     }
@@ -6819,24 +6772,18 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_header": {
-                    "description": "Exclusive with [as_number ip_prefix user_identifier]\n Request header name and value pairs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [as_number ip_prefix user_identifier]\n Request header name and value pairs",
                     "title": "HTTP Header",
                     "$ref": "#/definitions/http_loadbalancerHttpHeaderMatcherList",
-                    "x-displayname": "HTTP Headers",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "HTTP Headers"
                 },
                 "ip_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [as_number http_header user_identifier]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with [as_number http_header user_identifier]\n IPv4 prefix string.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "ip prefix",
                     "x-displayname": "IP Prefix",
                     "x-ves-example": "192.168.20.0/24",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true"
                     }
                 },
@@ -6967,7 +6914,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [api_groups base_paths]\n Validation will be performed for all requests on this LB",
                     "title": "all_endpoint",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All Endpoints"
+                    "x-displayname": "API Inventory"
                 },
                 "api_groups": {
                     "description": "Exclusive with [all_endpoint base_paths]\n Validation will be performed for the endpoints mentioned in the API Groups",
@@ -7045,7 +6992,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "settings": {
-                    "description": " OpenAPI specification validation settings relevant for \"All endpoints\" enforcement and for \"Custom list\" enforcement",
+                    "description": " OpenAPI specification validation settings relevant for \"API Inventory\" enforcement and for \"Custom list\" enforcement",
                     "title": "OpenAPI specification validation common settings",
                     "$ref": "#/definitions/http_loadbalancerOpenApiValidationCommonSettings",
                     "x-displayname": "OpenAPI specification validation settings"
@@ -7348,6 +7295,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
+            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
@@ -7609,13 +7557,11 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching.default:production",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ves_service_namespace_name": "true"
                     }
                 },
@@ -7644,7 +7590,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "IP address on given Sites",
             "x-ves-displayorder": "10,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
-            "x-ves-oneof-field-private_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-private_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
@@ -7655,7 +7601,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
@@ -7665,7 +7611,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP6",
                     "x-displayname": "IP6",
                     "x-ves-example": "2001::10",
@@ -7752,12 +7698,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
             "x-ves-displayorder": "2",
-            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
@@ -7767,7 +7713,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPV6",
                     "x-displayname": "Public IPV6",
                     "x-ves-example": "2001::1",
@@ -7820,12 +7766,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerSegmentIP",
             "x-displayname": "IP address of Origin server in Segment on given Site",
             "x-ves-displayorder": "1,4,5",
-            "x-ves-oneof-field-ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
@@ -7835,7 +7781,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP6",
                     "x-displayname": "IP6",
                     "x-ves-example": "2001::10",
@@ -8006,12 +7952,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerVirtualNetworkIP",
             "x-displayname": "IP address Virtual Network",
             "x-ves-displayorder": "10,2",
-            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPV4",
                     "x-displayname": "IPV4",
                     "x-ves-example": "1.1.1.1",
@@ -8021,7 +7967,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n IPV6 address\n\nExample: - \"2001::11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPV6 address\n\nExample: - \"2001::11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPV6",
                     "x-displayname": "IPV6",
                     "x-ves-example": "2001::11",
@@ -8105,7 +8051,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -8117,7 +8063,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [use_mtls]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -8156,13 +8102,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [no_mtls]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable by uploading a new certificate"
                 },
                 "use_mtls_obj": {
-                    "description": "Exclusive with [no_mtls use_mtls]\n",
                     "title": "Enable MTLS With Certificate Object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Enable by selecting a certificate"
@@ -8186,18 +8131,18 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA for verification of Server's certificate",
+                    "description": " Select/Add a Root CA for verification of Server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
@@ -11109,22 +11054,27 @@ var APISwaggerJSON string = `{
             "description": "To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n1. The origin that caused the user agent to issue the request (source origin).\n2. The origin that the request is going to (target origin).\nWhen the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being if the source-origin has been added to they policy as valid.\nBecause CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
             "title": "CsrfPolicy",
             "x-displayname": "CSRF Policy",
-            "x-ves-displayorder": "1",
-            "x-ves-oneof-field-allowed_domains": "[\"all_load_balancer_domains\",\"custom_domain_list\"]",
+            "x-ves-oneof-field-allowed_domains": "[\"all_load_balancer_domains\",\"custom_domain_list\",\"disabled\"]",
             "x-ves-proto-message": "ves.io.schema.CsrfPolicy",
             "properties": {
                 "all_load_balancer_domains": {
-                    "description": "Exclusive with [custom_domain_list]\n Add All load balancer domains to source origin (allow) list.",
+                    "description": "Exclusive with [custom_domain_list disabled]\n Add All load balancer domains to source origin (allow) list.",
                     "title": "all_load_balancer_domains",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "All HTTP Loadbalancer Domains"
                 },
                 "custom_domain_list": {
-                    "description": "Exclusive with [all_load_balancer_domains]\n Add one or more domains to source origin (allow) list.\n\nExample: - \"abc.xyz.com\"-",
+                    "description": "Exclusive with [all_load_balancer_domains disabled]\n Add one or more domains to source origin (allow) list.\n\nExample: - \"abc.xyz.com\"-",
                     "title": "custom_domain_list",
                     "$ref": "#/definitions/schemaDomainNameList",
                     "x-displayname": "Specified domains",
                     "x-ves-example": "abc.xyz.com"
+                },
+                "disabled": {
+                    "description": "Exclusive with [all_load_balancer_domains custom_domain_list]\n Allow all source origin domains.",
+                    "title": "disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
                 }
             }
         },
@@ -11766,17 +11716,21 @@ var APISwaggerJSON string = `{
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
+                    "minItems": 1,
                     "maxItems": 6,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Retry Condition",
                     "x-ves-example": "5xx",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
                         "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -12840,7 +12794,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -12857,14 +12811,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
+                    "description": " Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
@@ -13078,14 +13032,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OriginPoolWithWeight",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [pool]\n More flexible, advanced feature control with cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [pool]\n More flexible, advanced feature control with cluster",
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Custom Cluster",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Custom Cluster"
                 },
                 "endpoint_subsets": {
                     "type": "object",
@@ -13098,14 +13048,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "pool": {
-                    "description": "Exclusive with [cluster]\n Simple, commonly used pool parameters with origin pool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [cluster]\n Simple, commonly used pool parameters with origin pool",
                     "title": "Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Origin Pool",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Origin Pool"
                 },
                 "priority": {
                     "type": "integer",
@@ -13193,7 +13139,7 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.\n - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site\n\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
@@ -13201,7 +13147,8 @@ var APISwaggerJSON string = `{
                 "SITE_NETWORK_OUTSIDE",
                 "SITE_NETWORK_SERVICE",
                 "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
-                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP"
+                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP",
+                "SITE_NETWORK_IP_FABRIC"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
@@ -13737,6 +13684,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
             "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
+            "x-ves-oneof-field-l7_ddos_auto_mitigation_action": "[\"l7_ddos_action_block\",\"l7_ddos_action_default\",\"l7_ddos_action_js_challenge\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
             "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
             "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
@@ -14094,7 +14042,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTPS with Custom Certificate"
                 },
                 "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "title": "HTTPS",
                     "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
                     "x-displayname": "HTTPS with Automatic Certificate"
@@ -14119,6 +14067,24 @@ var APISwaggerJSON string = `{
                     "title": "JWT Validation",
                     "$ref": "#/definitions/http_loadbalancerJWTValidation",
                     "x-displayname": "JWT Validation"
+                },
+                "l7_ddos_action_block": {
+                    "description": "Exclusive with [l7_ddos_action_default l7_ddos_action_js_challenge]\n Block suspicious sources",
+                    "title": "block",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Block"
+                },
+                "l7_ddos_action_default": {
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
+                    "title": "Default",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "l7_ddos_action_js_challenge": {
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_default]\n Serve JavaScript challenge to suspicious sources",
+                    "title": "JavaScript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "JavaScript Challenge"
                 },
                 "least_active": {
                     "description": "Exclusive with [cookie_stickiness random ring_hash round_robin source_ip_stickiness]\n Request are sent to origin server that has least active requests",

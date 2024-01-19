@@ -26,15 +26,15 @@ var (
 	_ = fmt.Sprintf("dummy for fmt import use")
 )
 
-// Create CustomAPIEywaprime GRPC Client satisfying server.CustomClient
-type CustomAPIEywaprimeGrpcClient struct {
+// Create CustomPrivateAPIEywaprime GRPC Client satisfying server.CustomClient
+type CustomPrivateAPIEywaprimeGrpcClient struct {
 	conn       *grpc.ClientConn
-	grpcClient CustomAPIEywaprimeClient
+	grpcClient CustomPrivateAPIEywaprimeClient
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomAPIEywaprimeGrpcClient) doRPCCreateV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCCreateV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateV2Request{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.signup.CreateV2Request", yamlReq)
@@ -43,7 +43,7 @@ func (c *CustomAPIEywaprimeGrpcClient) doRPCCreateV2(ctx context.Context, yamlRe
 	return rsp, err
 }
 
-func (c *CustomAPIEywaprimeGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
+func (c *CustomPrivateAPIEywaprimeGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
 		return nil, fmt.Errorf("Error, no such rpc %s", rpc)
@@ -67,10 +67,10 @@ func (c *CustomAPIEywaprimeGrpcClient) DoRPC(ctx context.Context, rpc string, op
 	return rsp, nil
 }
 
-func NewCustomAPIEywaprimeGrpcClient(cc *grpc.ClientConn) server.CustomClient {
-	ccl := &CustomAPIEywaprimeGrpcClient{
+func NewCustomPrivateAPIEywaprimeGrpcClient(cc *grpc.ClientConn) server.CustomClient {
+	ccl := &CustomPrivateAPIEywaprimeGrpcClient{
 		conn:       cc,
-		grpcClient: NewCustomAPIEywaprimeClient(cc),
+		grpcClient: NewCustomPrivateAPIEywaprimeClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateV2"] = ccl.doRPCCreateV2
@@ -80,15 +80,15 @@ func NewCustomAPIEywaprimeGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	return ccl
 }
 
-// Create CustomAPIEywaprime REST Client satisfying server.CustomClient
-type CustomAPIEywaprimeRestClient struct {
+// Create CustomPrivateAPIEywaprime REST Client satisfying server.CustomClient
+type CustomPrivateAPIEywaprimeRestClient struct {
 	baseURL string
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *CustomAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomPrivateAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -175,7 +175,7 @@ func (c *CustomAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context, callOp
 	return pbRsp, nil
 }
 
-func (c *CustomAPIEywaprimeRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
+func (c *CustomPrivateAPIEywaprimeRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
 		return nil, fmt.Errorf("Error, no such rpc %s", rpc)
@@ -192,8 +192,8 @@ func (c *CustomAPIEywaprimeRestClient) DoRPC(ctx context.Context, rpc string, op
 	return rsp, nil
 }
 
-func NewCustomAPIEywaprimeRestClient(baseURL string, hc http.Client) server.CustomClient {
-	ccl := &CustomAPIEywaprimeRestClient{
+func NewCustomPrivateAPIEywaprimeRestClient(baseURL string, hc http.Client) server.CustomClient {
+	ccl := &CustomPrivateAPIEywaprimeRestClient{
 		baseURL: baseURL,
 		client:  hc,
 	}
@@ -206,44 +206,44 @@ func NewCustomAPIEywaprimeRestClient(baseURL string, hc http.Client) server.Cust
 	return ccl
 }
 
-// Create customAPIEywaprimeInprocClient
+// Create customPrivateAPIEywaprimeInprocClient
 
-// INPROC Client (satisfying CustomAPIEywaprimeClient interface)
-type customAPIEywaprimeInprocClient struct {
-	CustomAPIEywaprimeServer
+// INPROC Client (satisfying CustomPrivateAPIEywaprimeClient interface)
+type customPrivateAPIEywaprimeInprocClient struct {
+	CustomPrivateAPIEywaprimeServer
 }
 
-func (c *customAPIEywaprimeInprocClient) CreateV2(ctx context.Context, in *CreateV2Request, opts ...grpc.CallOption) (*CreateV2Response, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomAPIEywaprime.CreateV2", nil)
-	return c.CustomAPIEywaprimeServer.CreateV2(ctx, in)
+func (c *customPrivateAPIEywaprimeInprocClient) CreateV2(ctx context.Context, in *CreateV2Request, opts ...grpc.CallOption) (*CreateV2Response, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2", nil)
+	return c.CustomPrivateAPIEywaprimeServer.CreateV2(ctx, in)
 }
 
-func NewCustomAPIEywaprimeInprocClient(svc svcfw.Service) CustomAPIEywaprimeClient {
-	return &customAPIEywaprimeInprocClient{CustomAPIEywaprimeServer: NewCustomAPIEywaprimeServer(svc)}
+func NewCustomPrivateAPIEywaprimeInprocClient(svc svcfw.Service) CustomPrivateAPIEywaprimeClient {
+	return &customPrivateAPIEywaprimeInprocClient{CustomPrivateAPIEywaprimeServer: NewCustomPrivateAPIEywaprimeServer(svc)}
 }
 
-// RegisterGwCustomAPIEywaprimeHandler registers with grpc-gw with an inproc-client backing so that
+// RegisterGwCustomPrivateAPIEywaprimeHandler registers with grpc-gw with an inproc-client backing so that
 // rest to grpc happens without a grpc.Dial (thus avoiding additional certs for mTLS)
-func RegisterGwCustomAPIEywaprimeHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
+func RegisterGwCustomPrivateAPIEywaprimeHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
 	s, ok := svc.(svcfw.Service)
 	if !ok {
 		return fmt.Errorf("svc is not svcfw.Service")
 	}
-	return RegisterCustomAPIEywaprimeHandlerClient(ctx, mux, NewCustomAPIEywaprimeInprocClient(s))
+	return RegisterCustomPrivateAPIEywaprimeHandlerClient(ctx, mux, NewCustomPrivateAPIEywaprimeInprocClient(s))
 }
 
-// Create customAPIEywaprimeSrv
+// Create customPrivateAPIEywaprimeSrv
 
-// SERVER (satisfying CustomAPIEywaprimeServer interface)
-type customAPIEywaprimeSrv struct {
+// SERVER (satisfying CustomPrivateAPIEywaprimeServer interface)
+type customPrivateAPIEywaprimeSrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPIEywaprimeSrv) CreateV2(ctx context.Context, in *CreateV2Request) (*CreateV2Response, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.signup.CustomAPIEywaprime")
-	cah, ok := ah.(CustomAPIEywaprimeServer)
+func (s *customPrivateAPIEywaprimeSrv) CreateV2(ctx context.Context, in *CreateV2Request) (*CreateV2Response, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.signup.CustomPrivateAPIEywaprime")
+	cah, ok := ah.(CustomPrivateAPIEywaprimeServer)
 	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIEywaprimeServer", ah)
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIEywaprimeServer", ah)
 	}
 
 	var (
@@ -251,27 +251,13 @@ func (s *customAPIEywaprimeSrv) CreateV2(ctx context.Context, in *CreateV2Reques
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.signup.CreateV2Request", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPIEywaprime.CreateV2' operation on 'signup'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
 	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
 		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
 		return nil, server.GRPCStatusFromError(err).Err()
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.signup.CustomAPIEywaprime.CreateV2"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -284,20 +270,18 @@ func (s *customAPIEywaprimeSrv) CreateV2(ctx context.Context, in *CreateV2Reques
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.signup.CreateV2Response", rsp)...)
-
 	return rsp, nil
 }
 
-func NewCustomAPIEywaprimeServer(svc svcfw.Service) CustomAPIEywaprimeServer {
-	return &customAPIEywaprimeSrv{svc: svc}
+func NewCustomPrivateAPIEywaprimeServer(svc svcfw.Service) CustomPrivateAPIEywaprimeServer {
+	return &customPrivateAPIEywaprimeSrv{svc: svc}
 }
 
-var CustomAPIEywaprimeSwaggerJSON string = `{
+var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "Signup V2 API",
-        "description": "Use this API to signup (v2) for F5XC service.\none can signup to use volterra service as an individual/free account or\nas a team account more suited for enterprise customers.\nfor more details on what each type of account features, visit - https://console.ves.volterra.io/signup/usage_plan\nsince signup flow includes more complex selections and passing in secure payment processing,\nwe recommend using web UI for this process https://console.ves.volterra.io/signup/start",
+        "description": "Use this API to signup (v2) for F5XC service.",
         "version": "version not set"
     },
     "schemes": [
@@ -312,11 +296,11 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/no_auth/v2/signup": {
+        "/ves.io.schema/introspect/write/v2/signup": {
             "post": {
-                "summary": "Create v2 signup",
-                "description": "Create creates a new v2 signup request, this will trigger the signup flow and eventually result in a new customer tenant.",
-                "operationId": "ves.io.schema.signup.CustomAPIEywaprime.CreateV2",
+                "summary": "Create V2",
+                "description": "CreateV2 creates a new v2 signup request, this will trigger the signup flow and eventually result in a new customer tenant.",
+                "operationId": "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -384,18 +368,18 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                     }
                 ],
                 "tags": [
-                    "CustomAPIEywaprime"
+                    "CustomPrivateAPIEywaprime"
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapieywaprime-createv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customprivateapieywaprime-createv2"
                 },
                 "x-ves-in-development": "true",
-                "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPIEywaprime.CreateV2"
+                "x-ves-proto-rpc": "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2"
             },
-            "x-displayname": "Custom API Eywaprime",
-            "x-ves-proto-service": "ves.io.schema.signup.CustomAPIEywaprime",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+            "x-displayname": "Custom Private API Eywaprime",
+            "x-ves-proto-service": "ves.io.schema.signup.CustomPrivateAPIEywaprime",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
         }
     },
     "definitions": {
@@ -434,6 +418,13 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "schemaCRMInfo": {
+            "type": "object",
+            "description": "CRM Information",
+            "title": "CRM Information",
+            "x-displayname": "CRM Information",
+            "x-ves-proto-message": "ves.io.schema.CRMInfo"
         },
         "schemaClearSecretInfoType": {
             "type": "object",
@@ -769,12 +760,6 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                     "$ref": "#/definitions/schemainfraprotect_informationGlobalSpecType",
                     "x-displayname": "Infra Protect Info"
                 },
-                "payment_address": {
-                    "description": " payment address for the account, if not provided, the company mailing address is assumed as the payment address",
-                    "title": "Payment Address",
-                    "$ref": "#/definitions/signupContactMeta",
-                    "x-displayname": "Payment Address"
-                },
                 "payment_provider_token": {
                     "type": "string",
                     "description": " provider token for payment for the account\n\nExample: - \"msnofjaonoaksnqaaz\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -919,7 +904,7 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
             "type": "object",
             "title": "Create V2 Request",
             "x-displayname": "Create V2 Request",
-            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_msp\",\"source_plan_transition\"]",
+            "x-ves-oneof-field-source_choice": "[\"source_internal_sre\"]",
             "x-ves-proto-message": "ves.io.schema.signup.CreateV2Request",
             "properties": {
                 "account_details": {
@@ -952,29 +937,11 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "source_internal_scaling": {
-                    "description": "Exclusive with [source_internal_sre source_msp source_plan_transition]\n For internal use ONLY\n payload for the request made internally for scaling",
-                    "title": "Source Internal Scaling",
-                    "$ref": "#/definitions/signupSourceInternalScaling",
-                    "x-displayname": "Source Internal Scaling"
-                },
                 "source_internal_sre": {
-                    "description": "Exclusive with [source_internal_scaling source_msp source_plan_transition]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
+                    "description": "Exclusive with []\n For internal use ONLY\n payload for the request made internally, probably via SRE",
                     "title": "Source Internal SRE",
                     "$ref": "#/definitions/signupSourceInternalSre",
                     "x-displayname": "Source Internal SRE"
-                },
-                "source_msp": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_plan_transition]\n payload for the creation request, for MSP tenant",
-                    "title": "Source MSP",
-                    "$ref": "#/definitions/signupSourceMsp",
-                    "x-displayname": "Source MSP"
-                },
-                "source_plan_transition": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_msp]\n payload for the signup made out of a plan transition request.",
-                    "title": "Source Plan Transition",
-                    "$ref": "#/definitions/signupSourcePlanTransition",
-                    "x-displayname": "Source Plan Transition"
                 },
                 "user_details": {
                     "description": " details of the user\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -1010,15 +977,27 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
         },
         "signupCrmInfoV2": {
             "type": "object",
+            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
             "title": "fields of crm info message",
             "x-displayname": "Crm Info",
             "x-ves-proto-message": "ves.io.schema.signup.CrmInfoV2"
         },
+        "signupMarketplaceAws": {
+            "type": "object",
+            "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for AWS Marketplace",
+            "title": "Marketplace Aws",
+            "properties": {
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
+                }
+            }
+        },
         "signupSourceInternalScaling": {
             "type": "object",
-            "title": "Source Internal Scaling",
-            "x-displayname": "Source Internal Scaling",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceInternalScaling"
+            "description": "x-displayName: \"Source Internal Scaling\"",
+            "title": "Source Internal Scaling"
         },
         "signupSourceInternalSre": {
             "type": "object",
@@ -1026,8 +1005,14 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
             "x-displayname": "Source Internal SRE",
             "x-ves-proto-message": "ves.io.schema.signup.SourceInternalSre",
             "properties": {
+                "crm_details": {
+                    "description": " This field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo",
+                    "x-displayname": "CRM Details"
+                },
                 "crm_info": {
-                    "description": " this field holds the CRM info",
+                    "description": " this field holds the CRM info\n This field is deprecated. use CrmDetails instead",
                     "title": "crm_info",
                     "$ref": "#/definitions/signupCrmInfoV2",
                     "x-displayname": "CRM Info"
@@ -1053,28 +1038,65 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": " tenant id to be used while creating a tenant instead of generating a new one.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "tenant_id",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant Id",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "signupSourceMarketplace": {
+            "type": "object",
+            "description": "x-displayName: \"Source Marketplace\"\npayload for the creation request, for Marketplace source",
+            "title": "Source Marketplace",
+            "properties": {
+                "marketplace_aws": {
+                    "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for Aws Marketplace",
+                    "title": "MarketplaceAws",
+                    "$ref": "#/definitions/signupMarketplaceAws"
                 }
             }
         },
         "signupSourceMsp": {
             "type": "object",
+            "description": "x-displayName: \"Source MSP\"",
             "title": "Source MSP",
-            "x-displayname": "Source MSP",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceMsp",
             "properties": {
+                "child_tenant_obj_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Child Tenant Object Name\"\nthis field holds the name of child tenant configuration.",
+                    "title": "child_tenant_obj_name"
+                },
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
+                },
                 "crm_info": {
-                    "description": " this field holds the CRM info",
+                    "description": "x-displayName: \"CRM Info\"\nthis field holds the CRM info\nThis field is deprecated. use CrmDetails instead",
                     "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2",
-                    "x-displayname": "CRM Info"
+                    "$ref": "#/definitions/signupCrmInfoV2"
                 }
             }
         },
         "signupSourcePlanTransition": {
             "type": "object",
+            "description": "x-displayName: \"Source Plan Transition\"\nSourcePlanTransition can be only used for Free to Individual plan transition signups",
             "title": "Source Plan Transition",
-            "x-displayname": "Source Plan Transition",
-            "x-ves-proto-message": "ves.io.schema.signup.SourcePlanTransition"
+            "properties": {
+                "is_sso_enabled": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"IsSsoEnabled\"\nx-example: true\nIsSsoEnabled tells whether the sso should be enabled for new tenant",
+                    "title": "IsSsoEnabled",
+                    "format": "boolean"
+                }
+            }
         },
         "signupUserMeta": {
             "type": "object",
@@ -1144,5 +1166,5 @@ var CustomAPIEywaprimeSwaggerJSON string = `{
         }
     },
     "x-displayname": "Signup V2",
-    "x-ves-proto-file": "ves.io/schema/signup/public_customapi_eywaprime.proto"
+    "x-ves-proto-file": "ves.io/schema/signup/private_customapi_eywaprime.proto"
 }`

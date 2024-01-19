@@ -2896,7 +2896,7 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "x-displayName: \"Custom Port Number\"\nx-required\nx-example: \"3000\"\nCustom port number used for communication",
+                    "description": "x-displayName: \"Custom Port Number\"\nx-example: \"3000\"\nCustom port number used for communication",
                     "title": "Custom Port Number",
                     "format": "int64"
                 },
@@ -3190,14 +3190,12 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [default_https_port default_syslog_tls_port]\n Custom port number used for communication\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [default_https_port default_syslog_tls_port]\n Custom port number used for communication\n\nExample: - \"3000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Custom Port Number",
                     "format": "int64",
                     "x-displayname": "TCP Port Number",
                     "x-ves-example": "3000",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
@@ -3974,7 +3972,7 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "x-displayName: \"Site Network\"\nThis defines network types to be used on site\n\n - SITE_NETWORK_INSIDE_AND_OUTSIDE: x-displayName: \"Inside and Outside Network\"\nAll inside and outside networks.\n - SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Inside and Outside Network with Internet VIP\"\nAll inside and outside networks with internet VIP support.\n - SITE_NETWORK_INSIDE: x-displayName: \"Inside Network\"\nAll inside networks.\n - SITE_NETWORK_OUTSIDE: x-displayName: \"Outside Network\"\nAll outside networks.\n - SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Outside Network with internet VIP\"\nAll outside networks with internet VIP support.\n - SITE_NETWORK_SERVICE: x-displayName: \"vK8s Service Network\"\nvK8s service network.",
+            "description": "x-displayName: \"Site Network\"\nThis defines network types to be used on site\n\n - SITE_NETWORK_INSIDE_AND_OUTSIDE: x-displayName: \"Inside and Outside Network\"\nAll inside and outside networks.\n - SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Inside and Outside Network with Internet VIP\"\nAll inside and outside networks with internet VIP support.\n - SITE_NETWORK_INSIDE: x-displayName: \"Inside Network\"\nAll inside networks.\n - SITE_NETWORK_OUTSIDE: x-displayName: \"Outside Network\"\nAll outside networks.\n - SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP: x-displayName: \"Outside Network with internet VIP\"\nAll outside networks with internet VIP support.\n - SITE_NETWORK_SERVICE: x-displayName: \"vK8s Service Network\"\nvK8s service network.\n - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site\n\nx-displayName: \"Site IP Fabric Network\"\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
@@ -3982,7 +3980,8 @@ var APISwaggerJSON string = `{
                 "SITE_NETWORK_INSIDE",
                 "SITE_NETWORK_OUTSIDE",
                 "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
-                "SITE_NETWORK_SERVICE"
+                "SITE_NETWORK_SERVICE",
+                "SITE_NETWORK_IP_FABRIC"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE"
         }

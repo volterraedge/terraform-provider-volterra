@@ -1673,10 +1673,6 @@ func (v *ValidateDetectionSetting) ViolationDetectionSettingValidationRuleHandle
 	return validatorFn, nil
 }
 
-func (v *ValidateDetectionSetting) ViolationDetectionSettingViolationSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ViolationSettingsValidator().Validate, nil
-}
-
 func (v *ValidateDetectionSetting) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DetectionSetting)
 	if !ok {
@@ -1893,20 +1889,10 @@ var DefaultDetectionSettingValidator = func() *ValidateDetectionSetting {
 	}
 	v.FldValidators["violation_detection_setting"] = vFn
 
-	vrhViolationDetectionSettingViolationSettings := v.ViolationDetectionSettingViolationSettingsValidationRuleHandler
-	rulesViolationDetectionSettingViolationSettings := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["violation_detection_setting.violation_settings"], err = vrhViolationDetectionSettingViolationSettings(rulesViolationDetectionSettingViolationSettings)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DetectionSetting.violation_detection_setting_violation_settings: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["violation_detection_setting.violation_settings"] = vFnMap["violation_detection_setting.violation_settings"]
-
 	v.FldValidators["signatures_staging_settings.stage_new_signatures"] = SignaturesStagingSettingsValidator().Validate
 	v.FldValidators["signatures_staging_settings.stage_new_and_updated_signatures"] = SignaturesStagingSettingsValidator().Validate
+
+	v.FldValidators["violation_detection_setting.violation_settings"] = ViolationSettingsValidator().Validate
 
 	v.FldValidators["signature_selection_setting"] = SignatureSelectionSettingValidator().Validate
 

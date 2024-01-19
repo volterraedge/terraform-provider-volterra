@@ -63,10 +63,118 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cluster.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cluster.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cluster.API.Create"] = "ves.io.schema.cluster.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cluster.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cluster.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cluster.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cluster.API.Replace"] = []string{
@@ -77,6 +185,21 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.wingman_secret_info",
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cluster.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.tls_parameters.cert_params",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.cert_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cluster.API.Replace"] = "ves.io.schema.cluster.ReplaceRequest"

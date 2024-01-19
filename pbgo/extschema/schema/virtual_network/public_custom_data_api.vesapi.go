@@ -503,7 +503,7 @@ var CustomDataAPISwaggerJSON string = `{
             "properties": {
                 "data": {
                     "type": "array",
-                    "description": " List of counter data ",
+                    "description": " List of counter data",
                     "title": "Data",
                     "items": {
                         "$ref": "#/definitions/virtual_networkSIDCounterTypeData"
@@ -568,7 +568,7 @@ var CustomDataAPISwaggerJSON string = `{
                 },
                 "filter": {
                     "type": "string",
-                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in SIDCounterLabel {SITE, VIRTUAL_NETWORK, SID_PREFIX} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels. \n\nExample: - \"{SITE=\\\"site-1\\\"}\"-",
+                    "description": " filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in SIDCounterLabel {SITE, VIRTUAL_NETWORK, SID_PREFIX} can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{SITE=\\\"site-1\\\"}\"-",
                     "title": "Label Filter",
                     "x-displayname": "Filter",
                     "x-ves-example": "{SITE=\\\"site-1\\\"}"

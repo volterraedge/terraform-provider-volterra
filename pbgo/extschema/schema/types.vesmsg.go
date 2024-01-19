@@ -3094,7 +3094,6 @@ var DefaultCRMInfoValidator = func() *ValidateCRMInfo {
 	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
 	rulesCustomerIdentifier := map[string]string{
 		"ves.io.schema.rules.string.max_len": "255",
-		"ves.io.schema.rules.string.min_len": "1",
 	}
 	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
 	if err != nil {
@@ -4064,6 +4063,14 @@ type ValidateCsrfPolicy struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCsrfPolicy) AllowedDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for allowed_domains")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCsrfPolicy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CsrfPolicy)
 	if !ok {
@@ -4076,6 +4083,16 @@ func (v *ValidateCsrfPolicy) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["allowed_domains"]; exists {
+		val := m.GetAllowedDomains()
+		vOpts := append(opts,
+			db.WithValidateField("allowed_domains"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAllowedDomains().(type) {
@@ -4101,6 +4118,17 @@ func (v *ValidateCsrfPolicy) Validate(ctx context.Context, pm interface{}, opts 
 				return err
 			}
 		}
+	case *CsrfPolicy_Disabled:
+		if fv, exists := v.FldValidators["allowed_domains.disabled"]; exists {
+			val := m.GetAllowedDomains().(*CsrfPolicy_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("allowed_domains"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4110,6 +4138,25 @@ func (v *ValidateCsrfPolicy) Validate(ctx context.Context, pm interface{}, opts 
 // Well-known symbol for default validator implementation
 var DefaultCsrfPolicyValidator = func() *ValidateCsrfPolicy {
 	v := &ValidateCsrfPolicy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAllowedDomains := v.AllowedDomainsValidationRuleHandler
+	rulesAllowedDomains := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAllowedDomains(rulesAllowedDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CsrfPolicy.allowed_domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["allowed_domains"] = vFn
 
 	v.FldValidators["allowed_domains.custom_domain_list"] = DomainNameListValidator().Validate
 
@@ -11627,8 +11674,10 @@ var DefaultRetryPolicyTypeValidator = func() *ValidateRetryPolicyType {
 
 	vrhRetryCondition := v.RetryConditionValidationRuleHandler
 	rulesRetryCondition := map[string]string{
+		"ves.io.schema.rules.message.required":         "true",
 		"ves.io.schema.rules.repeated.items.string.in": "[\"5xx\",\"gateway-error\",\"connect-failure\",\"refused-stream\",\"retriable-4xx\",\"retriable-status-codes\"]",
 		"ves.io.schema.rules.repeated.max_items":       "6",
+		"ves.io.schema.rules.repeated.min_items":       "1",
 		"ves.io.schema.rules.repeated.unique":          "true",
 	}
 	vFn, err = vrhRetryCondition(rulesRetryCondition)

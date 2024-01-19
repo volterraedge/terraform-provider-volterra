@@ -4549,6 +4549,54 @@ func (v *ValidateGlobalSpecType) AdditionalApiGroupMatchersValidationRuleHandler
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt_claims")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.JWTClaimMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.JWTClaimMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for jwt_claims")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.JWTClaimMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.JWTClaimMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated jwt_claims")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items jwt_claims")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -4956,6 +5004,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -5311,6 +5367,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["additional_api_group_matchers"] = vFn
+
+	vrhJwtClaims := v.JwtClaimsValidationRuleHandler
+	rulesJwtClaims := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhJwtClaims(rulesJwtClaims)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.jwt_claims: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["jwt_claims"] = vFn
 
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate

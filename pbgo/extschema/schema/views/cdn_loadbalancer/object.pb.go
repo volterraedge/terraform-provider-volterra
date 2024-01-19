@@ -47,7 +47,7 @@ const (
 	CDN_LB_STATUS_DEPLOY_FAILED CDNLoadbalancerDeploymentStatus = 2
 	// x-displayName: "Deployed"
 	CDN_LB_STATUS_DEPLOYED CDNLoadbalancerDeploymentStatus = 3
-	// x-displayName: "Failed"
+	// x-displayname: "Failed"
 	CDN_LB_STATUS_FAILED CDNLoadbalancerDeploymentStatus = 4
 )
 

@@ -15,7 +15,6 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_cloud_connect "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
@@ -455,15 +454,6 @@ func (v *ValidateAWSTGWResourceShareType) Validate(ctx context.Context, pm inter
 
 	}
 
-	if fv, exists := v.FldValidators["feature_set"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("feature_set"))
-		if err := fv(ctx, m.GetFeatureSet(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["invitation_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("invitation_status"))
@@ -494,26 +484,11 @@ func (v *ValidateAWSTGWResourceShareType) Validate(ctx context.Context, pm inter
 	if fv, exists := v.FldValidators["receiver_account_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("receiver_account_id"))
-		if err := fv(ctx, m.GetReceiverAccountId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["receiver_arn"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("receiver_arn"))
-		if err := fv(ctx, m.GetReceiverArn(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["receiver_aws_account"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("receiver_aws_account"))
-		if err := fv(ctx, m.GetReceiverAwsAccount(), vOpts...); err != nil {
-			return err
+		for idx, item := range m.GetReceiverAccountId() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -578,506 +553,6 @@ var DefaultAWSTGWResourceShareTypeValidator = func() *ValidateAWSTGWResourceShar
 
 func AWSTGWResourceShareTypeValidator() db.Validator {
 	return DefaultAWSTGWResourceShareTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *AWSTGWSpokeAttachmentListType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *AWSTGWSpokeAttachmentListType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *AWSTGWSpokeAttachmentListType) DeepCopy() *AWSTGWSpokeAttachmentListType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &AWSTGWSpokeAttachmentListType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *AWSTGWSpokeAttachmentListType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *AWSTGWSpokeAttachmentListType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AWSTGWSpokeAttachmentListTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *AWSTGWSpokeAttachmentListType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetAttachmentsDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *AWSTGWSpokeAttachmentListType) GetAttachmentsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetAttachments() == nil {
-		return nil, nil
-	}
-
-	var drInfos []db.DRefInfo
-	for idx, e := range m.GetAttachments() {
-		driSet, err := e.GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAttachments() GetDRefInfo() FAILED")
-		}
-		for i := range driSet {
-			dri := &driSet[i]
-			dri.DRField = fmt.Sprintf("attachments[%v].%s", idx, dri.DRField)
-		}
-		drInfos = append(drInfos, driSet...)
-	}
-	return drInfos, nil
-
-}
-
-type ValidateAWSTGWSpokeAttachmentListType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentListType) AttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for attachments")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*AWSTGWSpokeAttachmentType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := AWSTGWSpokeAttachmentTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for attachments")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*AWSTGWSpokeAttachmentType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*AWSTGWSpokeAttachmentType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated attachments")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items attachments")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentListType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AWSTGWSpokeAttachmentListType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *AWSTGWSpokeAttachmentListType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["attachments"]; exists {
-		vOpts := append(opts, db.WithValidateField("attachments"))
-		if err := fv(ctx, m.GetAttachments(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultAWSTGWSpokeAttachmentListTypeValidator = func() *ValidateAWSTGWSpokeAttachmentListType {
-	v := &ValidateAWSTGWSpokeAttachmentListType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhAttachments := v.AttachmentsValidationRuleHandler
-	rulesAttachments := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "128",
-		"ves.io.schema.rules.repeated.min_items": "0",
-		"ves.io.schema.rules.repeated.unique":    "true",
-	}
-	vFn, err = vrhAttachments(rulesAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentListType.attachments: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["attachments"] = vFn
-
-	return v
-}()
-
-func AWSTGWSpokeAttachmentListTypeValidator() db.Validator {
-	return DefaultAWSTGWSpokeAttachmentListTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *AWSTGWSpokeAttachmentType) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *AWSTGWSpokeAttachmentType) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *AWSTGWSpokeAttachmentType) DeepCopy() *AWSTGWSpokeAttachmentType {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &AWSTGWSpokeAttachmentType{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *AWSTGWSpokeAttachmentType) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *AWSTGWSpokeAttachmentType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return AWSTGWSpokeAttachmentTypeValidator().Validate(ctx, m, opts...)
-}
-
-func (m *AWSTGWSpokeAttachmentType) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetCredentialChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetCredentialChoiceDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-
-}
-
-func (m *AWSTGWSpokeAttachmentType) GetCredentialChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetCredentialChoice().(type) {
-	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
-
-		return nil, nil
-
-	case *AWSTGWSpokeAttachmentType_Cred:
-
-		vref := m.GetCred()
-		if vref == nil {
-			return nil, nil
-		}
-		vdRef := db.NewDirectRefForView(vref)
-		vdRef.SetKind("cloud_credentials.Object")
-		dri := db.DRefInfo{
-			RefdType:   "cloud_credentials.Object",
-			RefdTenant: vref.Tenant,
-			RefdNS:     vref.Namespace,
-			RefdName:   vref.Name,
-			DRField:    "cred",
-			Ref:        vdRef,
-		}
-		return []db.DRefInfo{dri}, nil
-
-	default:
-		return nil, nil
-	}
-}
-
-// GetCredentialChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *AWSTGWSpokeAttachmentType) GetCredentialChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetCredentialChoice().(type) {
-	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
-
-	case *AWSTGWSpokeAttachmentType_Cred:
-		refdType, err := d.TypeForEntryKind("", "", "cloud_credentials.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: cloud_credentials")
-		}
-
-		vref := m.GetCred()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "cloud_credentials.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
-}
-
-func (m *AWSTGWSpokeAttachmentType) GetSegmentDRefInfo() ([]db.DRefInfo, error) {
-
-	vref := m.GetSegment()
-	if vref == nil {
-		return nil, nil
-	}
-	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("segment.Object")
-	dri := db.DRefInfo{
-		RefdType:   "segment.Object",
-		RefdTenant: vref.Tenant,
-		RefdNS:     vref.Namespace,
-		RefdName:   vref.Name,
-		DRField:    "segment",
-		Ref:        vdRef,
-	}
-	return []db.DRefInfo{dri}, nil
-
-}
-
-// GetSegmentDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *AWSTGWSpokeAttachmentType) GetSegmentDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
-	}
-
-	vref := m.GetSegment()
-	if vref == nil {
-		return nil, nil
-	}
-	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "segment.Object",
-		Tenant:    vref.Tenant,
-		Namespace: vref.Namespace,
-		Name:      vref.Name,
-	}
-	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting referred entry")
-	}
-	if refdEnt != nil {
-		entries = append(entries, refdEnt)
-	}
-
-	return entries, nil
-}
-
-type ValidateAWSTGWSpokeAttachmentType struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentType) CredentialChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for credential_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentType) SpokesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for spokes")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_cloud_connect.AWSVPCAttachmentListTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSTGWSpokeAttachmentType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*AWSTGWSpokeAttachmentType)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *AWSTGWSpokeAttachmentType got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["credential_choice"]; exists {
-		val := m.GetCredentialChoice()
-		vOpts := append(opts,
-			db.WithValidateField("credential_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetCredentialChoice().(type) {
-	case *AWSTGWSpokeAttachmentType_UseSiteCredential:
-		if fv, exists := v.FldValidators["credential_choice.use_site_credential"]; exists {
-			val := m.GetCredentialChoice().(*AWSTGWSpokeAttachmentType_UseSiteCredential).UseSiteCredential
-			vOpts := append(opts,
-				db.WithValidateField("credential_choice"),
-				db.WithValidateField("use_site_credential"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSTGWSpokeAttachmentType_Cred:
-		if fv, exists := v.FldValidators["credential_choice.cred"]; exists {
-			val := m.GetCredentialChoice().(*AWSTGWSpokeAttachmentType_Cred).Cred
-			vOpts := append(opts,
-				db.WithValidateField("credential_choice"),
-				db.WithValidateField("cred"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["segment"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("segment"))
-		if err := fv(ctx, m.GetSegment(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["spokes"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("spokes"))
-		if err := fv(ctx, m.GetSpokes(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultAWSTGWSpokeAttachmentTypeValidator = func() *ValidateAWSTGWSpokeAttachmentType {
-	v := &ValidateAWSTGWSpokeAttachmentType{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhCredentialChoice := v.CredentialChoiceValidationRuleHandler
-	rulesCredentialChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhCredentialChoice(rulesCredentialChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.credential_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["credential_choice"] = vFn
-
-	vrhSpokes := v.SpokesValidationRuleHandler
-	rulesSpokes := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSpokes(rulesSpokes)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSTGWSpokeAttachmentType.spokes: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["spokes"] = vFn
-
-	v.FldValidators["credential_choice.cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
-
-	return v
-}()
-
-func AWSTGWSpokeAttachmentTypeValidator() db.Validator {
-	return DefaultAWSTGWSpokeAttachmentTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1771,12 +1246,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -1931,33 +1400,6 @@ func (m *CreateSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *CreateSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetVpcAttach() == nil {
-		return nil, nil
-	}
-	switch m.GetVpcAttach().(type) {
-	case *CreateSpecType_VpcAttachments:
-
-		return nil, nil
-
-	case *CreateSpecType_SpokeAttachments:
-		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "spoke_attachments." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1984,10 +1426,6 @@ func (v *ValidateCreateSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateCreateSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2280,28 +1718,11 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	switch m.GetVpcAttach().(type) {
-	case *CreateSpecType_VpcAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
-			val := m.GetVpcAttach().(*CreateSpecType_VpcAttachments).VpcAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("vpc_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *CreateSpecType_SpokeAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
-			val := m.GetVpcAttach().(*CreateSpecType_SpokeAttachments).SpokeAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2354,18 +1775,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
-	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
-	rulesVpcAttachSpokeAttachments := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CreateSpecType.vpc_attach_spoke_attachments: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
-
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -2397,7 +1806,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -2677,12 +2086,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	return drInfos, nil
 
 }
@@ -2837,33 +2240,6 @@ func (m *GetSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *GetSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetVpcAttach() == nil {
-		return nil, nil
-	}
-	switch m.GetVpcAttach().(type) {
-	case *GetSpecType_VpcAttachments:
-
-		return nil, nil
-
-	case *GetSpecType_SpokeAttachments:
-		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "spoke_attachments." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -2890,10 +2266,6 @@ func (v *ValidateGetSpecType) LogsReceiverChoiceValidationRuleHandler(rules map[
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateGetSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3372,28 +2744,11 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	switch m.GetVpcAttach().(type) {
-	case *GetSpecType_VpcAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
-			val := m.GetVpcAttach().(*GetSpecType_VpcAttachments).VpcAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("vpc_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GetSpecType_SpokeAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
-			val := m.GetVpcAttach().(*GetSpecType_SpokeAttachments).SpokeAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -3457,18 +2812,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
-	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
-	rulesVpcAttachSpokeAttachments := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GetSpecType.vpc_attach_spoke_attachments: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
 
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
@@ -3547,7 +2890,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -3661,12 +3004,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -3858,33 +3195,6 @@ func (m *GlobalSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *GlobalSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetVpcAttach() == nil {
-		return nil, nil
-	}
-	switch m.GetVpcAttach().(type) {
-	case *GlobalSpecType_VpcAttachments:
-
-		return nil, nil
-
-	case *GlobalSpecType_SpokeAttachments:
-		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "spoke_attachments." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3911,10 +3221,6 @@ func (v *ValidateGlobalSpecType) LogsReceiverChoiceValidationRuleHandler(rules m
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateGlobalSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4457,28 +3763,11 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	switch m.GetVpcAttach().(type) {
-	case *GlobalSpecType_VpcAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
-			val := m.GetVpcAttach().(*GlobalSpecType_VpcAttachments).VpcAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("vpc_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *GlobalSpecType_SpokeAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
-			val := m.GetVpcAttach().(*GlobalSpecType_SpokeAttachments).SpokeAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4542,18 +3831,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
-
-	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
-	rulesVpcAttachSpokeAttachments := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field GlobalSpecType.vpc_attach_spoke_attachments: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
 
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
@@ -4643,7 +3920,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -4759,12 +4036,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetVnConfigDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetVnConfigDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetVpcAttachDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetVpcAttachDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4923,33 +4194,6 @@ func (m *ReplaceSpecType) GetVnConfigDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetVpcAttachDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetVpcAttach() == nil {
-		return nil, nil
-	}
-	switch m.GetVpcAttach().(type) {
-	case *ReplaceSpecType_VpcAttachments:
-
-		return nil, nil
-
-	case *ReplaceSpecType_SpokeAttachments:
-		drInfos, err := m.GetSpokeAttachments().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSpokeAttachments().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "spoke_attachments." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
-
-}
-
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -4976,10 +4220,6 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) VpcAttachSpokeAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return AWSTGWSpokeAttachmentListTypeValidator().Validate, nil
 }
 
 func (v *ValidateReplaceSpecType) AwsParametersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -5201,28 +4441,11 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	switch m.GetVpcAttach().(type) {
-	case *ReplaceSpecType_VpcAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.vpc_attachments"]; exists {
-			val := m.GetVpcAttach().(*ReplaceSpecType_VpcAttachments).VpcAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("vpc_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *ReplaceSpecType_SpokeAttachments:
-		if fv, exists := v.FldValidators["vpc_attach.spoke_attachments"]; exists {
-			val := m.GetVpcAttach().(*ReplaceSpecType_SpokeAttachments).SpokeAttachments
-			vOpts := append(opts,
-				db.WithValidateField("vpc_attach"),
-				db.WithValidateField("spoke_attachments"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["vpc_attachments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc_attachments"))
+		if err := fv(ctx, m.GetVpcAttachments(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -5275,18 +4498,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
-	vrhVpcAttachSpokeAttachments := v.VpcAttachSpokeAttachmentsValidationRuleHandler
-	rulesVpcAttachSpokeAttachments := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["vpc_attach.spoke_attachments"], err = vrhVpcAttachSpokeAttachments(rulesVpcAttachSpokeAttachments)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.vpc_attach_spoke_attachments: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["vpc_attach.spoke_attachments"] = vFnMap["vpc_attach.spoke_attachments"]
-
 	vrhAwsParameters := v.AwsParametersValidationRuleHandler
 	rulesAwsParameters := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -5305,7 +4516,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["vpc_attach.vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
+	v.FldValidators["vpc_attachments"] = VPCAttachmentListTypeValidator().Validate
 
 	v.FldValidators["tgw_security"] = SecurityConfigTypeValidator().Validate
 
@@ -8343,41 +7554,6 @@ func (r *CreateSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
-// create setters in CreateSpecType from GlobalSpecType for oneof fields
-func (r *CreateSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.VpcAttach.(type) {
-	case nil:
-		o.VpcAttach = nil
-
-	case *CreateSpecType_SpokeAttachments:
-		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *CreateSpecType_VpcAttachments:
-		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *CreateSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.VpcAttach.(type) {
-	case nil:
-		r.VpcAttach = nil
-
-	case *GlobalSpecType_SpokeAttachments:
-		r.VpcAttach = &CreateSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *GlobalSpecType_VpcAttachments:
-		r.VpcAttach = &CreateSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8394,7 +7570,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Tags = f.GetTags()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.GetVpcAttachFromGlobalSpecType(f)
+	m.VpcAttachments = f.GetVpcAttachments()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -8424,7 +7600,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Tags = m1.Tags
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	m1.SetVpcAttachToGlobalSpecType(f)
+	f.VpcAttachments = m1.VpcAttachments
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -8552,41 +7728,6 @@ func (r *GetSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
-// create setters in GetSpecType from GlobalSpecType for oneof fields
-func (r *GetSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.VpcAttach.(type) {
-	case nil:
-		o.VpcAttach = nil
-
-	case *GetSpecType_SpokeAttachments:
-		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *GetSpecType_VpcAttachments:
-		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *GetSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.VpcAttach.(type) {
-	case nil:
-		r.VpcAttach = nil
-
-	case *GlobalSpecType_SpokeAttachments:
-		r.VpcAttach = &GetSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *GlobalSpecType_VpcAttachments:
-		r.VpcAttach = &GetSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8611,7 +7752,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VnConfig = f.GetVnConfig()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
-	m.GetVpcAttachFromGlobalSpecType(f)
+	m.VpcAttachments = f.GetVpcAttachments()
 	m.VpcIpPrefixes = f.GetVpcIpPrefixes()
 }
 
@@ -8650,7 +7791,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VnConfig = m1.VnConfig
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
-	m1.SetVpcAttachToGlobalSpecType(f)
+	f.VpcAttachments = m1.VpcAttachments
 	f.VpcIpPrefixes = m1.VpcIpPrefixes
 }
 
@@ -8779,41 +7920,6 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
-// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
-func (r *ReplaceSpecType) SetVpcAttachToGlobalSpecType(o *GlobalSpecType) error {
-	switch of := r.VpcAttach.(type) {
-	case nil:
-		o.VpcAttach = nil
-
-	case *ReplaceSpecType_SpokeAttachments:
-		o.VpcAttach = &GlobalSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *ReplaceSpecType_VpcAttachments:
-		o.VpcAttach = &GlobalSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
-func (r *ReplaceSpecType) GetVpcAttachFromGlobalSpecType(o *GlobalSpecType) error {
-	switch of := o.VpcAttach.(type) {
-	case nil:
-		r.VpcAttach = nil
-
-	case *GlobalSpecType_SpokeAttachments:
-		r.VpcAttach = &ReplaceSpecType_SpokeAttachments{SpokeAttachments: of.SpokeAttachments}
-
-	case *GlobalSpecType_VpcAttachments:
-		r.VpcAttach = &ReplaceSpecType_VpcAttachments{VpcAttachments: of.VpcAttachments}
-
-	default:
-		return fmt.Errorf("Unknown oneof field %T", of)
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -8836,7 +7942,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.VnConfig = f.GetVnConfig()
-	m.GetVpcAttachFromGlobalSpecType(f)
+	m.VpcAttachments = f.GetVpcAttachments()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -8874,7 +7980,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	f.TgwSecurity = m1.TgwSecurity
 	f.VnConfig = m1.VnConfig
-	m1.SetVpcAttachToGlobalSpecType(f)
+	f.VpcAttachments = m1.VpcAttachments
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

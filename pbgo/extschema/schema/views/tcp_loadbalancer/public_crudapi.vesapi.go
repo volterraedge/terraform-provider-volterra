@@ -3983,7 +3983,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -4000,14 +4000,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
+                    "description": " Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
@@ -4198,14 +4198,10 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.OriginPoolWithWeight",
             "properties": {
                 "cluster": {
-                    "description": "Exclusive with [pool]\n More flexible, advanced feature control with cluster\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [pool]\n More flexible, advanced feature control with cluster",
                     "title": "Cluster",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Custom Cluster",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Custom Cluster"
                 },
                 "endpoint_subsets": {
                     "type": "object",
@@ -4218,14 +4214,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "pool": {
-                    "description": "Exclusive with [cluster]\n Simple, commonly used pool parameters with origin pool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [cluster]\n Simple, commonly used pool parameters with origin pool",
                     "title": "Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Origin Pool",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Origin Pool"
                 },
                 "priority": {
                     "type": "integer",
@@ -4250,7 +4242,7 @@ var APISwaggerJSON string = `{
         },
         "viewsSiteNetwork": {
             "type": "string",
-            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.",
+            "description": "This defines network types to be used on site\n\nAll inside and outside networks.\nAll inside and outside networks with internet VIP support.\nAll inside networks.\nAll outside networks.\nAll outside networks with internet VIP support.\nvK8s service network.\n - SITE_NETWORK_IP_FABRIC: VER IP Fabric network for the site\n\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network",
             "title": "SiteNetwork",
             "enum": [
                 "SITE_NETWORK_INSIDE_AND_OUTSIDE",
@@ -4258,7 +4250,8 @@ var APISwaggerJSON string = `{
                 "SITE_NETWORK_OUTSIDE",
                 "SITE_NETWORK_SERVICE",
                 "SITE_NETWORK_OUTSIDE_WITH_INTERNET_VIP",
-                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP"
+                "SITE_NETWORK_INSIDE_AND_OUTSIDE_WITH_INTERNET_VIP",
+                "SITE_NETWORK_IP_FABRIC"
             ],
             "default": "SITE_NETWORK_INSIDE_AND_OUTSIDE",
             "x-displayname": "Site Network",
@@ -4886,14 +4879,12 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -4926,7 +4917,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TLS over TCP with Custom Certificate"
                 },
                 "tls_tcp_auto_cert": {
-                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
                     "x-displayname": "TLS over TCP with Automatic Certificate"
                 }
@@ -5094,14 +5085,12 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -5134,7 +5123,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TLS over TCP with Custom Certificate"
                 },
                 "tls_tcp_auto_cert": {
-                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
                     "x-displayname": "TLS over TCP with Automatic Certificate"
                 }
@@ -5324,15 +5313,13 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -5370,7 +5357,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TLS over TCP with Custom Certificate"
                 },
                 "tls_tcp_auto_cert": {
-                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "title": "TLS over TCP with automatic certificate",
                     "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
                     "x-displayname": "TLS over TCP with Automatic Certificate"
@@ -5545,14 +5532,12 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -5585,7 +5570,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "TLS over TCP with Custom Certificate"
                 },
                 "tls_tcp_auto_cert": {
-                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud using Delegated domain feature\n or a DNS CNAME record should be created in your DNS provider's portal.",
+                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
                     "x-displayname": "TLS over TCP with Automatic Certificate"
                 }

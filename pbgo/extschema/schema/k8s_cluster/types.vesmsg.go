@@ -1467,6 +1467,14 @@ func (v *ValidateCreateSpecType) PodSecurityPolicyChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1769,6 +1777,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
+		val := m.GetVk8SNamespaceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vk8s_namespace_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVk8SNamespaceAccessChoice().(type) {
+	case *CreateSpecType_Vk8SNamespaceAccessDeny:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_deny"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*CreateSpecType_Vk8SNamespaceAccessDeny).Vk8SNamespaceAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Vk8SNamespaceAccessPermit:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_permit"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*CreateSpecType_Vk8SNamespaceAccessPermit).Vk8SNamespaceAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_permit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1871,6 +1915,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
+
+	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
+	rulesVk8SNamespaceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVk8SNamespaceAccessChoice(rulesVk8SNamespaceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.vk8s_namespace_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace_access_choice"] = vFn
 
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
 
@@ -2115,6 +2170,14 @@ func (v *ValidateGetSpecType) PodSecurityPolicyChoiceValidationRuleHandler(rules
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for pod_security_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace_access_choice")
 	}
 	return validatorFn, nil
 }
@@ -2421,6 +2484,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
+		val := m.GetVk8SNamespaceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vk8s_namespace_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVk8SNamespaceAccessChoice().(type) {
+	case *GetSpecType_Vk8SNamespaceAccessDeny:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_deny"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*GetSpecType_Vk8SNamespaceAccessDeny).Vk8SNamespaceAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_Vk8SNamespaceAccessPermit:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_permit"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*GetSpecType_Vk8SNamespaceAccessPermit).Vk8SNamespaceAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_permit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -2523,6 +2622,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
+
+	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
+	rulesVk8SNamespaceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVk8SNamespaceAccessChoice(rulesVk8SNamespaceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.vk8s_namespace_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace_access_choice"] = vFn
 
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
 
@@ -4710,6 +4820,14 @@ func (v *ValidateReplaceSpecType) PodSecurityPolicyChoiceValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) Vk8SNamespaceAccessChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vk8s_namespace_access_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -5012,6 +5130,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["vk8s_namespace_access_choice"]; exists {
+		val := m.GetVk8SNamespaceAccessChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vk8s_namespace_access_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVk8SNamespaceAccessChoice().(type) {
+	case *ReplaceSpecType_Vk8SNamespaceAccessDeny:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_deny"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*ReplaceSpecType_Vk8SNamespaceAccessDeny).Vk8SNamespaceAccessDeny
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_deny"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Vk8SNamespaceAccessPermit:
+		if fv, exists := v.FldValidators["vk8s_namespace_access_choice.vk8s_namespace_access_permit"]; exists {
+			val := m.GetVk8SNamespaceAccessChoice().(*ReplaceSpecType_Vk8SNamespaceAccessPermit).Vk8SNamespaceAccessPermit
+			vOpts := append(opts,
+				db.WithValidateField("vk8s_namespace_access_choice"),
+				db.WithValidateField("vk8s_namespace_access_permit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -5114,6 +5268,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["pod_security_policy_choice"] = vFn
+
+	vrhVk8SNamespaceAccessChoice := v.Vk8SNamespaceAccessChoiceValidationRuleHandler
+	rulesVk8SNamespaceAccessChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVk8SNamespaceAccessChoice(rulesVk8SNamespaceAccessChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.vk8s_namespace_access_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vk8s_namespace_access_choice"] = vFn
 
 	v.FldValidators["apps_choice.cluster_wide_app_list"] = ClusterWideAppListTypeValidator().Validate
 
@@ -5414,6 +5579,41 @@ func (r *CreateSpecType) GetPodSecurityPolicyChoiceFromGlobalSpecType(o *GlobalS
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetVk8SNamespaceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		o.Vk8SNamespaceAccessChoice = nil
+
+	case *CreateSpecType_Vk8SNamespaceAccessDeny:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *CreateSpecType_Vk8SNamespaceAccessPermit:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetVk8SNamespaceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		r.Vk8SNamespaceAccessChoice = nil
+
+	case *GlobalSpecType_Vk8SNamespaceAccessDeny:
+		r.Vk8SNamespaceAccessChoice = &CreateSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *GlobalSpecType_Vk8SNamespaceAccessPermit:
+		r.Vk8SNamespaceAccessChoice = &CreateSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -5426,6 +5626,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
+	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -5451,6 +5652,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
+	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -5741,6 +5943,41 @@ func (r *GetSpecType) GetPodSecurityPolicyChoiceFromGlobalSpecType(o *GlobalSpec
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetVk8SNamespaceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		o.Vk8SNamespaceAccessChoice = nil
+
+	case *GetSpecType_Vk8SNamespaceAccessDeny:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *GetSpecType_Vk8SNamespaceAccessPermit:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetVk8SNamespaceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		r.Vk8SNamespaceAccessChoice = nil
+
+	case *GlobalSpecType_Vk8SNamespaceAccessDeny:
+		r.Vk8SNamespaceAccessChoice = &GetSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *GlobalSpecType_Vk8SNamespaceAccessPermit:
+		r.Vk8SNamespaceAccessChoice = &GetSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -5753,6 +5990,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
+	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -5778,6 +6016,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
+	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -6068,6 +6307,41 @@ func (r *ReplaceSpecType) GetPodSecurityPolicyChoiceFromGlobalSpecType(o *Global
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetVk8SNamespaceAccessChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		o.Vk8SNamespaceAccessChoice = nil
+
+	case *ReplaceSpecType_Vk8SNamespaceAccessDeny:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *ReplaceSpecType_Vk8SNamespaceAccessPermit:
+		o.Vk8SNamespaceAccessChoice = &GlobalSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetVk8SNamespaceAccessChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.Vk8SNamespaceAccessChoice.(type) {
+	case nil:
+		r.Vk8SNamespaceAccessChoice = nil
+
+	case *GlobalSpecType_Vk8SNamespaceAccessDeny:
+		r.Vk8SNamespaceAccessChoice = &ReplaceSpecType_Vk8SNamespaceAccessDeny{Vk8SNamespaceAccessDeny: of.Vk8SNamespaceAccessDeny}
+
+	case *GlobalSpecType_Vk8SNamespaceAccessPermit:
+		r.Vk8SNamespaceAccessChoice = &ReplaceSpecType_Vk8SNamespaceAccessPermit{Vk8SNamespaceAccessPermit: of.Vk8SNamespaceAccessPermit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -6080,6 +6354,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
+	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -6105,6 +6380,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
+	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

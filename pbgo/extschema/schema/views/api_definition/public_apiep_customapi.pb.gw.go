@@ -28,84 +28,8 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(ctx context.Context, marshaler runtime.Marshaler, client PublicApiepCustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetAPIEndpointsSchemaReq
-	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["namespace"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
-	}
-
-	protoReq.Namespace, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
-	}
-
-	val, ok = pathParams["name"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
-	}
-
-	protoReq.Name, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
-	}
-
-	msg, err := client.GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(ctx context.Context, marshaler runtime.Marshaler, server PublicApiepCustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetAPIEndpointsSchemaReq
-	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["namespace"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
-	}
-
-	protoReq.Namespace, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
-	}
-
-	val, ok = pathParams["name"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
-	}
-
-	protoReq.Name, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
-	}
-
-	msg, err := server.GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, &protoReq)
-	return msg, metadata, err
-
-}
-
-func request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(ctx context.Context, marshaler runtime.Marshaler, client PublicApiepCustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateAPIEndpointsSchemaReq
+func request_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(ctx context.Context, marshaler runtime.Marshaler, client PublicApiepCustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetAPIEndpointsSchemaUpdatesReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -145,13 +69,13 @@ func request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := client.UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetAPIEndpointsSchemaUpdates(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(ctx context.Context, marshaler runtime.Marshaler, server PublicApiepCustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UpdateAPIEndpointsSchemaReq
+func local_request_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(ctx context.Context, marshaler runtime.Marshaler, server PublicApiepCustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetAPIEndpointsSchemaUpdatesReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -191,7 +115,99 @@ func local_request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSch
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
 	}
 
-	msg, err := server.UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, &protoReq)
+	msg, err := server.GetAPIEndpointsSchemaUpdates(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+func request_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(ctx context.Context, marshaler runtime.Marshaler, client PublicApiepCustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateAPIEndpointsSchemasReq
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := client.UpdateAPIEndpointsSchemas(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(ctx context.Context, marshaler runtime.Marshaler, server PublicApiepCustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UpdateAPIEndpointsSchemasReq
+	var metadata runtime.ServerMetadata
+
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["namespace"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "namespace")
+	}
+
+	protoReq.Namespace, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "namespace", err)
+	}
+
+	val, ok = pathParams["name"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "name")
+	}
+
+	protoReq.Name, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "name", err)
+	}
+
+	msg, err := server.UpdateAPIEndpointsSchemas(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -201,7 +217,7 @@ func local_request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSch
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 func RegisterPublicApiepCustomAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server PublicApiepCustomAPIServer) error {
 
-	mux.Handle("GET", pattern_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -210,18 +226,18 @@ func RegisterPublicApiepCustomAPIHandlerServer(ctx context.Context, mux *runtime
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -230,14 +246,14 @@ func RegisterPublicApiepCustomAPIHandlerServer(ctx context.Context, mux *runtime
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -282,7 +298,7 @@ func RegisterPublicApiepCustomAPIHandler(ctx context.Context, mux *runtime.Serve
 // "PublicApiepCustomAPIClient" to call the correct interceptors.
 func RegisterPublicApiepCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client PublicApiepCustomAPIClient) error {
 
-	mux.Handle("GET", pattern_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -291,18 +307,18 @@ func RegisterPublicApiepCustomAPIHandlerClient(ctx context.Context, mux *runtime
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -311,14 +327,14 @@ func RegisterPublicApiepCustomAPIHandlerClient(ctx context.Context, mux *runtime
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -326,13 +342,13 @@ func RegisterPublicApiepCustomAPIHandlerClient(ctx context.Context, mux *runtime
 }
 
 var (
-	pattern_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 2, 6, 2, 7}, []string{"public", "namespaces", "namespace", "api_definitions", "name", "api_inventory", "schema", "new_discoveries"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 2, 6, 2, 7}, []string{"public", "namespaces", "namespace", "api_definitions", "name", "api_inventory", "api_endpoints", "get_schema_updates"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 2, 6, 2, 7}, []string{"public", "namespaces", "namespace", "api_definitions", "name", "api_inventory", "schema", "new_discoveries"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5, 2, 6, 2, 7}, []string{"public", "namespaces", "namespace", "api_definitions", "name", "api_inventory", "api_endpoints", "update_schemas"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (
-	forward_PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_0 = runtime.ForwardResponseMessage
+	forward_PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_0 = runtime.ForwardResponseMessage
 
-	forward_PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_0 = runtime.ForwardResponseMessage
+	forward_PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_0 = runtime.ForwardResponseMessage
 )

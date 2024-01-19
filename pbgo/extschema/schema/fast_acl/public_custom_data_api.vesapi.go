@@ -592,7 +592,7 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Label"
                 },
                 "op": {
-                    "description": " Operator to evaluate the label ",
+                    "description": " Operator to evaluate the label",
                     "title": "Operator",
                     "$ref": "#/definitions/schemaMetricLabelOp",
                     "x-displayname": "Operator"

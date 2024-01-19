@@ -110,10 +110,6 @@ func (v *ValidateAPIEndpointProtectionRule) DomainChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
-func (v *ValidateAPIEndpointProtectionRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateAPIEndpointProtectionRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -304,18 +300,8 @@ var DefaultAPIEndpointProtectionRuleValidator = func() *ValidateAPIEndpointProte
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIEndpointProtectionRule.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -325,7 +311,6 @@ var DefaultAPIEndpointProtectionRuleValidator = func() *ValidateAPIEndpointProte
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhMetadata := v.MetadataValidationRuleHandler
@@ -450,10 +435,6 @@ func (v *ValidateAPIGroupProtectionRule) DomainChoiceValidationRuleHandler(rules
 		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateAPIGroupProtectionRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
 }
 
 func (v *ValidateAPIGroupProtectionRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -656,18 +637,8 @@ var DefaultAPIGroupProtectionRuleValidator = func() *ValidateAPIGroupProtectionR
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field APIGroupProtectionRule.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -677,7 +648,6 @@ var DefaultAPIGroupProtectionRuleValidator = func() *ValidateAPIGroupProtectionR
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhMetadata := v.MetadataValidationRuleHandler
@@ -3327,10 +3297,6 @@ func (v *ValidateApiEndpointRule) DomainChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateApiEndpointRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateApiEndpointRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -3496,18 +3462,8 @@ var DefaultApiEndpointRuleValidator = func() *ValidateApiEndpointRule {
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ApiEndpointRule.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -3517,7 +3473,6 @@ var DefaultApiEndpointRuleValidator = func() *ValidateApiEndpointRule {
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhRateLimiterChoice := v.RateLimiterChoiceValidationRuleHandler
@@ -7023,6 +6978,14 @@ func (v *ValidateCreateSpecType) HashPolicyChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8086,6 +8049,64 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *CreateSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -8589,6 +8610,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
 
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8816,6 +8848,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
@@ -9445,9 +9479,6 @@ func (v *ValidateDDoSMitigationRule) MitigationChoiceValidationRuleHandler(rules
 func (v *ValidateDDoSMitigationRule) MitigationChoiceDdosClientSourceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return DDoSClientSourceValidator().Validate, nil
 }
-func (v *ValidateDDoSMitigationRule) MitigationChoiceIpPrefixListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema_policy.PrefixMatchListValidator().Validate, nil
-}
 
 func (v *ValidateDDoSMitigationRule) MetadataValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
@@ -9622,7 +9653,6 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 
 	vrhMitigationChoiceDdosClientSource := v.MitigationChoiceDdosClientSourceValidationRuleHandler
 	rulesMitigationChoiceDdosClientSource := map[string]string{
-		"ves.io.schema.rules.message.required":                   "true",
 		"ves.io.schema.rules.message.required_one_nonzero_field": "true",
 	}
 	vFnMap["mitigation_choice.ddos_client_source"], err = vrhMitigationChoiceDdosClientSource(rulesMitigationChoiceDdosClientSource)
@@ -9630,18 +9660,8 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DDoSMitigationRule.mitigation_choice_ddos_client_source: %s", err)
 		panic(errMsg)
 	}
-	vrhMitigationChoiceIpPrefixList := v.MitigationChoiceIpPrefixListValidationRuleHandler
-	rulesMitigationChoiceIpPrefixList := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["mitigation_choice.ip_prefix_list"], err = vrhMitigationChoiceIpPrefixList(rulesMitigationChoiceIpPrefixList)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DDoSMitigationRule.mitigation_choice_ip_prefix_list: %s", err)
-		panic(errMsg)
-	}
 
 	v.FldValidators["mitigation_choice.ddos_client_source"] = vFnMap["mitigation_choice.ddos_client_source"]
-	v.FldValidators["mitigation_choice.ip_prefix_list"] = vFnMap["mitigation_choice.ip_prefix_list"]
 
 	vrhMetadata := v.MetadataValidationRuleHandler
 	rulesMetadata := map[string]string{
@@ -9664,6 +9684,8 @@ var DefaultDDoSMitigationRuleValidator = func() *ValidateDDoSMitigationRule {
 		panic(errMsg)
 	}
 	v.FldValidators["expiration_timestamp"] = vFn
+
+	v.FldValidators["mitigation_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
 
 	return v
 }()
@@ -10045,16 +10067,6 @@ func (v *ValidateFallThroughRule) ActionChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateFallThroughRule) ActionChoiceActionSkipValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateFallThroughRule) ActionChoiceActionReportValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateFallThroughRule) ActionChoiceActionBlockValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateFallThroughRule) ConditionTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -10241,38 +10253,6 @@ var DefaultFallThroughRuleValidator = func() *ValidateFallThroughRule {
 		panic(errMsg)
 	}
 	v.FldValidators["action_choice"] = vFn
-
-	vrhActionChoiceActionSkip := v.ActionChoiceActionSkipValidationRuleHandler
-	rulesActionChoiceActionSkip := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["action_choice.action_skip"], err = vrhActionChoiceActionSkip(rulesActionChoiceActionSkip)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FallThroughRule.action_choice_action_skip: %s", err)
-		panic(errMsg)
-	}
-	vrhActionChoiceActionReport := v.ActionChoiceActionReportValidationRuleHandler
-	rulesActionChoiceActionReport := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["action_choice.action_report"], err = vrhActionChoiceActionReport(rulesActionChoiceActionReport)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FallThroughRule.action_choice_action_report: %s", err)
-		panic(errMsg)
-	}
-	vrhActionChoiceActionBlock := v.ActionChoiceActionBlockValidationRuleHandler
-	rulesActionChoiceActionBlock := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["action_choice.action_block"], err = vrhActionChoiceActionBlock(rulesActionChoiceActionBlock)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field FallThroughRule.action_choice_action_block: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["action_choice.action_skip"] = vFnMap["action_choice.action_skip"]
-	v.FldValidators["action_choice.action_report"] = vFnMap["action_choice.action_report"]
-	v.FldValidators["action_choice.action_block"] = vFnMap["action_choice.action_block"]
 
 	vrhConditionTypeChoice := v.ConditionTypeChoiceValidationRuleHandler
 	rulesConditionTypeChoice := map[string]string{
@@ -11130,6 +11110,14 @@ func (v *ValidateGetSpecType) HashPolicyChoiceValidationRuleHandler(rules map[st
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for hash_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
 	}
 	return validatorFn, nil
 }
@@ -12251,6 +12239,64 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *GetSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -12763,6 +12809,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
 
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -12990,6 +13047,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
@@ -13903,6 +13962,14 @@ func (v *ValidateGlobalSpecType) HostRewriteParamsHostRewriteValidationRuleHandl
 		return nil, errors.Wrap(err, "ValidationRuleHandler for host_rewrite")
 	}
 	return oValidatorFn_HostRewrite, nil
+}
+
+func (v *ValidateGlobalSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -15068,6 +15135,64 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *GlobalSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -15601,6 +15726,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["host_rewrite_params.host_rewrite"] = vFnMap["host_rewrite_params.host_rewrite"]
 
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -15828,6 +15964,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
@@ -16892,6 +17030,15 @@ func (v *ValidateJWTValidation) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["mandatory_claims"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mandatory_claims"))
+		if err := fv(ctx, m.GetMandatoryClaims(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["reserved_claims"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("reserved_claims"))
@@ -16980,11 +17127,152 @@ var DefaultJWTValidationValidator = func() *ValidateJWTValidation {
 
 	v.FldValidators["reserved_claims"] = ReservedClaimsValidator().Validate
 
+	v.FldValidators["mandatory_claims"] = MandatoryClaimsValidator().Validate
+
 	return v
 }()
 
 func JWTValidationValidator() db.Validator {
 	return DefaultJWTValidationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MandatoryClaims) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MandatoryClaims) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MandatoryClaims) DeepCopy() *MandatoryClaims {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MandatoryClaims{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MandatoryClaims) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MandatoryClaims) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MandatoryClaimsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMandatoryClaims struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMandatoryClaims) ClaimNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for claim_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for claim_names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated claim_names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items claim_names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMandatoryClaims) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MandatoryClaims)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MandatoryClaims got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["claim_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("claim_names"))
+		if err := fv(ctx, m.GetClaimNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMandatoryClaimsValidator = func() *ValidateMandatoryClaims {
+	v := &ValidateMandatoryClaims{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhClaimNames := v.ClaimNamesValidationRuleHandler
+	rulesClaimNames := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhClaimNames(rulesClaimNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MandatoryClaims.claim_names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["claim_names"] = vFn
+
+	return v
+}()
+
+func MandatoryClaimsValidator() db.Validator {
+	return DefaultMandatoryClaimsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -18591,10 +18879,6 @@ func (v *ValidateOpenApiValidationRule) DomainChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateOpenApiValidationRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateOpenApiValidationRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -18820,18 +19104,8 @@ var DefaultOpenApiValidationRuleValidator = func() *ValidateOpenApiValidationRul
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OpenApiValidationRule.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -18841,7 +19115,6 @@ var DefaultOpenApiValidationRuleValidator = func() *ValidateOpenApiValidationRul
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhMetadata := v.MetadataValidationRuleHandler
@@ -19846,6 +20119,14 @@ type ValidateProxyTypeHttp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateProxyTypeHttp) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeHttp) PortChoicePortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_Port, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
@@ -19882,6 +20163,16 @@ func (v *ValidateProxyTypeHttp) Validate(ctx context.Context, pm interface{}, op
 			return err
 		}
 
+	}
+
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetPortChoice().(type) {
@@ -19925,6 +20216,17 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttp.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -19936,7 +20238,6 @@ var DefaultProxyTypeHttpValidator = func() *ValidateProxyTypeHttp {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.string.max_len":                "512",
 		"ves.io.schema.rules.string.max_ports":              "64",
 		"ves.io.schema.rules.string.min_len":                "1",
@@ -20060,6 +20361,14 @@ func (v *ValidateProxyTypeHttps) PathNormalizeChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for path_normalize_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateProxyTypeHttps) PortChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_choice")
 	}
 	return validatorFn, nil
 }
@@ -20225,6 +20534,16 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["port_choice"]; exists {
+		val := m.GetPortChoice()
+		vOpts := append(opts,
+			db.WithValidateField("port_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetPortChoice().(type) {
 	case *ProxyTypeHttps_Port:
 		if fv, exists := v.FldValidators["port_choice.port"]; exists {
@@ -20351,6 +20670,17 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	v.FldValidators["path_normalize_choice"] = vFn
 
+	vrhPortChoice := v.PortChoiceValidationRuleHandler
+	rulesPortChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPortChoice(rulesPortChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.port_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port_choice"] = vFn
+
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65535",
@@ -20362,7 +20692,6 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.string.max_len":                "512",
 		"ves.io.schema.rules.string.max_ports":              "64",
 		"ves.io.schema.rules.string.min_len":                "1",
@@ -20845,7 +21174,6 @@ var DefaultProxyTypeHttpsAutoCertsValidator = func() *ValidateProxyTypeHttpsAuto
 	}
 	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
 	rulesPortChoicePortRanges := map[string]string{
-		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.string.max_len":                "512",
 		"ves.io.schema.rules.string.max_ports":              "64",
 		"ves.io.schema.rules.string.min_len":                "1",
@@ -22200,6 +22528,14 @@ func (v *ValidateReplaceSpecType) HashPolicyChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -23263,6 +23599,64 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *ReplaceSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_type"]; exists {
 		val := m.GetLoadbalancerType()
 		vOpts := append(opts,
@@ -23766,6 +24160,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["hash_policy_choice"] = vFn
 
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -23993,6 +24398,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["hash_policy_choice.ring_hash"] = HashPolicyListTypeValidator().Validate
 
 	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["loadbalancer_type.http"] = ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = ProxyTypeHttpsValidator().Validate
@@ -25073,6 +25480,15 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["disable_location_add"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("disable_location_add"))
@@ -25607,6 +26023,8 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
 
 	return v
 }()
@@ -27158,10 +27576,6 @@ func (v *ValidateServerUrlRule) DomainChoiceValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateServerUrlRule) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateServerUrlRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -27309,18 +27723,8 @@ var DefaultServerUrlRuleValidator = func() *ValidateServerUrlRule {
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServerUrlRule.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -27330,7 +27734,6 @@ var DefaultServerUrlRuleValidator = func() *ValidateServerUrlRule {
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhRateLimiterChoice := v.RateLimiterChoiceValidationRuleHandler
@@ -29106,10 +29509,6 @@ func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceHttpHeaderValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return HttpHeaderMatcherListValidator().Validate, nil
-}
-
 func (v *ValidateSimpleClientSrcRule) ClientSourceChoiceIpPrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_IpPrefix, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -29384,7 +29783,6 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 	vrhClientSourceChoiceIpPrefix := v.ClientSourceChoiceIpPrefixValidationRuleHandler
 	rulesClientSourceChoiceIpPrefix := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.string.ipv4_prefix": "true",
 	}
 	vFnMap["client_source_choice.ip_prefix"], err = vrhClientSourceChoiceIpPrefix(rulesClientSourceChoiceIpPrefix)
@@ -29394,22 +29792,12 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 	}
 	vrhClientSourceChoiceAsNumber := v.ClientSourceChoiceAsNumberValidationRuleHandler
 	rulesClientSourceChoiceAsNumber := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "401308",
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "401308",
 	}
 	vFnMap["client_source_choice.as_number"], err = vrhClientSourceChoiceAsNumber(rulesClientSourceChoiceAsNumber)
 	if err != nil {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_as_number: %s", err)
-		panic(errMsg)
-	}
-	vrhClientSourceChoiceHttpHeader := v.ClientSourceChoiceHttpHeaderValidationRuleHandler
-	rulesClientSourceChoiceHttpHeader := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["client_source_choice.http_header"], err = vrhClientSourceChoiceHttpHeader(rulesClientSourceChoiceHttpHeader)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SimpleClientSrcRule.client_source_choice_http_header: %s", err)
 		panic(errMsg)
 	}
 	vrhClientSourceChoiceUserIdentifier := v.ClientSourceChoiceUserIdentifierValidationRuleHandler
@@ -29424,7 +29812,6 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 
 	v.FldValidators["client_source_choice.ip_prefix"] = vFnMap["client_source_choice.ip_prefix"]
 	v.FldValidators["client_source_choice.as_number"] = vFnMap["client_source_choice.as_number"]
-	v.FldValidators["client_source_choice.http_header"] = vFnMap["client_source_choice.http_header"]
 	v.FldValidators["client_source_choice.user_identifier"] = vFnMap["client_source_choice.user_identifier"]
 
 	vrhExpirationTimestamp := v.ExpirationTimestampValidationRuleHandler
@@ -29461,6 +29848,8 @@ var DefaultSimpleClientSrcRuleValidator = func() *ValidateSimpleClientSrcRule {
 		panic(errMsg)
 	}
 	v.FldValidators["actions"] = vFn
+
+	v.FldValidators["client_source_choice.http_header"] = HttpHeaderMatcherListValidator().Validate
 
 	return v
 }()
@@ -29514,14 +29903,6 @@ func (v *ValidateSingleLoadBalancerAppSetting) ApiDiscoveryChoiceValidationRuleH
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateSingleLoadBalancerAppSetting) DdosDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ddos_detection_choice")
 	}
 	return validatorFn, nil
 }
@@ -29582,16 +29963,6 @@ func (v *ValidateSingleLoadBalancerAppSetting) Validate(ctx context.Context, pm 
 			}
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["ddos_detection_choice"]; exists {
-		val := m.GetDdosDetectionChoice()
-		vOpts := append(opts,
-			db.WithValidateField("ddos_detection_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetDdosDetectionChoice().(type) {
@@ -29681,17 +30052,6 @@ var DefaultSingleLoadBalancerAppSettingValidator = func() *ValidateSingleLoadBal
 		panic(errMsg)
 	}
 	v.FldValidators["api_discovery_choice"] = vFn
-
-	vrhDdosDetectionChoice := v.DdosDetectionChoiceValidationRuleHandler
-	rulesDdosDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhDdosDetectionChoice(rulesDdosDetectionChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SingleLoadBalancerAppSetting.ddos_detection_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ddos_detection_choice"] = vFn
 
 	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
 	rulesMaliciousUserDetectionChoice := map[string]string{
@@ -31142,6 +31502,53 @@ func (r *CreateSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *CreateSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *CreateSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *CreateSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *CreateSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -31533,6 +31940,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
@@ -31587,6 +31995,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
@@ -32002,6 +32411,53 @@ func (r *GetSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecType)
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *GetSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GetSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GetSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GetSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -32398,6 +32854,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.InternetVipInfo = f.GetInternetVipInfo()
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
@@ -32458,6 +32915,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.InternetVipInfo = m1.InternetVipInfo
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation
@@ -32874,6 +33332,53 @@ func (r *ReplaceSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecT
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *ReplaceSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *ReplaceSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *ReplaceSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *ReplaceSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -33265,6 +33770,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetHashPolicyChoiceFromGlobalSpecType(f)
 	m.GetIpReputationChoiceFromGlobalSpecType(f)
 	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
 	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MaliciousUserMitigation = f.GetMaliciousUserMitigation()
@@ -33319,6 +33825,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetHashPolicyChoiceToGlobalSpecType(f)
 	m1.SetIpReputationChoiceToGlobalSpecType(f)
 	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
 	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MaliciousUserMitigation = m1.MaliciousUserMitigation

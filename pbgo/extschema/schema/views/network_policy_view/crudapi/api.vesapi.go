@@ -2935,7 +2935,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [any inside_endpoints label_selector outside_endpoints]\n List of ip prefixes that are representing endpoint\n For egress rules: from this endpoints to remote endpoints these ip prefixes are source ip.\n For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.\n\nExample: - \"192.168.20.0/24\", \"2001:db08::1::/112\"-",
                     "title": "ipv4/ipv6 prefix list",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4i/IPv6 Prefix List",
+                    "x-displayname": "IPv4/IPv6 Prefix List",
                     "x-ves-example": "192.168.20.0/24\", \"2001:db08::1::/112"
                 }
             }

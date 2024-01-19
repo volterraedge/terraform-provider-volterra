@@ -1635,14 +1635,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-?(gov-)?([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.pattern": "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$"
+                        "ves.io.schema.rules.string.pattern": "^([a-z]{2})-?(gov-)?([a-z0-9]{4,20})-([a-z0-9]{2})$"
                     }
                 },
                 "id": {

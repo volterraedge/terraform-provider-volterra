@@ -2361,17 +2361,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "any_domain": {
-                    "description": "x-required\nx-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
+                    "description": "x-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
                     "title": "any domain",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "any_target": {
-                    "description": "x-required\nx-displayName: \"All API Endpoints\"\nThe rule will be applied for all requests on this LB.",
+                    "description": "x-displayName: \"All API Endpoints\"\nThe rule will be applied for all requests on this LB.",
                     "title": "any domain",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "api_endpoint_target": {
-                    "description": "x-required\nx-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
+                    "description": "x-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
                     "title": "api endpoint target",
                     "$ref": "#/definitions/app_typeAPIEndpoint"
                 },
@@ -2382,7 +2382,7 @@ var APISwaggerJSON string = `{
                 },
                 "base_path": {
                     "type": "string",
-                    "description": "x-required\nx-example: \"/v1\"\nx-displayName: \"Base Path\"\nThe rule is applied only for the requests matching the specified base path.",
+                    "description": "x-example: \"/v1\"\nx-displayName: \"Base Path\"\nThe rule is applied only for the requests matching the specified base path.",
                     "title": "base path"
                 },
                 "custom_sections": {
@@ -2391,22 +2391,22 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/app_typeCustomSections"
                 },
                 "key_pattern": {
-                    "description": "x-displayName: \"Key Pattern\"\nx-required\nSearch for pattern across all field names in the specified sections.",
+                    "description": "x-displayName: \"Key Pattern\"\nSearch for pattern across all field names in the specified sections.",
                     "title": "key pattern",
                     "$ref": "#/definitions/app_typeKeyPattern"
                 },
                 "key_value_pattern": {
-                    "description": "x-displayName: \"Key-Value Pattern\"\nx-required\nSearch for specific field and value patterns in the specified sections.",
+                    "description": "x-displayName: \"Key-Value Pattern\"\nSearch for specific field and value patterns in the specified sections.",
                     "title": "key-value pattern",
                     "$ref": "#/definitions/app_typeKeyValuePattern"
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "x-required\nx-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
+                    "description": "x-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
                     "title": "domain"
                 },
                 "value_pattern": {
-                    "description": "x-displayName: \"Value Pattern\"\nx-required\nSearch for pattern across all field values in the specified sections.",
+                    "description": "x-displayName: \"Value Pattern\"\nSearch for pattern across all field values in the specified sections.",
                     "title": "value pattern",
                     "$ref": "#/definitions/app_typeValuePattern"
                 }

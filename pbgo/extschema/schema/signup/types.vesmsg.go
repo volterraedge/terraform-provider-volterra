@@ -262,6 +262,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["crm_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("crm_info"))
@@ -505,6 +514,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["crm_info"] = CrmInfoValidator().Validate
 
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
+
 	return v
 }()
 
@@ -593,6 +604,16 @@ func (v *ValidateCrmInfo) OrderTypeValidationRuleHandler(rules map[string]string
 	return validatorFn, nil
 }
 
+func (v *ValidateCrmInfo) CustomerIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_identifier")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCrmInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CrmInfo)
 	if !ok {
@@ -611,6 +632,15 @@ func (v *ValidateCrmInfo) Validate(ctx context.Context, pm interface{}, opts ...
 
 		vOpts := append(opts, db.WithValidateField("account_id"))
 		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_identifier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_identifier"))
+		if err := fv(ctx, m.GetCustomerIdentifier(), vOpts...); err != nil {
 			return err
 		}
 
@@ -713,6 +743,17 @@ var DefaultCrmInfoValidator = func() *ValidateCrmInfo {
 		panic(errMsg)
 	}
 	v.FldValidators["order_type"] = vFn
+
+	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
+	rulesCustomerIdentifier := map[string]string{
+		"ves.io.schema.rules.string.max_len": "255",
+	}
+	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.customer_identifier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["customer_identifier"] = vFn
 
 	return v
 }()
@@ -1046,6 +1087,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["crm_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("crm_info"))
@@ -1289,6 +1339,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["crm_info"] = CrmInfoValidator().Validate
 
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
+
 	return v
 }()
 
@@ -1384,6 +1436,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CompanyContact = f.GetCompanyContact()
 	m.CompanyName = f.GetCompanyName()
 	m.ContactNumber = f.GetContactNumber()
+	m.CrmDetails = f.GetCrmDetails()
 	m.CrmInfo = f.GetCrmInfo()
 	m.Currency = f.GetCurrency()
 	m.Customer = f.GetCustomer()
@@ -1426,6 +1479,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CompanyContact = m1.CompanyContact
 	f.CompanyName = m1.CompanyName
 	f.ContactNumber = m1.ContactNumber
+	f.CrmDetails = m1.CrmDetails
 	f.CrmInfo = m1.CrmInfo
 	f.Currency = m1.Currency
 	f.Customer = m1.Customer

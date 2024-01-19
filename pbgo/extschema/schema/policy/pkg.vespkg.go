@@ -37,6 +37,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.policy.HttpQueryParameterName"] = HttpQueryParameterNameValidator()
 	vr["ves.io.schema.policy.IPThreatCategoryListType"] = IPThreatCategoryListTypeValidator()
 	vr["ves.io.schema.policy.IpMatcherType"] = IpMatcherTypeValidator()
+	vr["ves.io.schema.policy.JWTClaimMatcherType"] = JWTClaimMatcherTypeValidator()
 	vr["ves.io.schema.policy.JwtTokenAuthOptions"] = JwtTokenAuthOptionsValidator()
 	vr["ves.io.schema.policy.L4DestMatcherType"] = L4DestMatcherTypeValidator()
 	vr["ves.io.schema.policy.MatcherType"] = MatcherTypeValidator()

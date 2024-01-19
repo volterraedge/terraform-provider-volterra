@@ -30,6 +30,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsListStatusType"] = AWSAttachmentsListStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSAttachmentsStatusType"] = AWSAttachmentsStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable"] = AWSDefaultRoutesRouteTableValidator()
 	vr["ves.io.schema.cloud_connect.AWSREType"] = AWSRETypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableListType"] = AWSRouteTableListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AWSRouteTableType"] = AWSRouteTableTypeValidator()
@@ -40,11 +41,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.CloudConnectStatusType"] = CloudConnectStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudLinkListType"] = CloudLinkListTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.cloud_connect.DefaultRoute"] = DefaultRouteValidator()
 	vr["ves.io.schema.cloud_connect.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.cloud_connect.PeerType"] = PeerTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceAWSREType"] = ReplaceAWSRETypeValidator()
+	vr["ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType"] = ReplaceAWSTGWSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.cloud_connect.SubnetStatusType"] = SubnetStatusTypeValidator()
 
 }
 

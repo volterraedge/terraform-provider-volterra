@@ -2877,7 +2877,7 @@ var APISwaggerJSON string = `{
             "title": "Ethernet Interface",
             "x-displayname": "Ethernet Interface",
             "x-ves-oneof-field-address_choice": "[\"dhcp_client\",\"dhcp_server\",\"static_ip\"]",
-            "x-ves-oneof-field-ipv6_address_choice": "[\"ipv6_auto_config\",\"no_ipv6_address\",\"static_ipv6_address\"]",
+            "x-ves-oneof-field-ipv6_address_choice": "[\"no_ipv6_address\",\"static_ipv6_address\"]",
             "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-network_choice": "[\"segment_network\",\"site_local_inside_network\",\"site_local_network\",\"storage_network\"]",
             "x-ves-oneof-field-node_choice": "[\"cluster\",\"node\"]",
@@ -2919,7 +2919,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DHCP server"
                 },
                 "ipv6_auto_config": {
-                    "description": "Exclusive with [no_ipv6_address static_ipv6_address]\n Configuration corresponding to IPV6 auto configuration",
+                    "description": " Configuration corresponding to IPV6 auto configuration",
                     "title": "IPV6 Auto configuration",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigType",
                     "x-displayname": "IPV6 AutoConfiguration"
@@ -2954,7 +2954,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_ipv6_address": {
-                    "description": "Exclusive with [ipv6_auto_config static_ipv6_address]\n Interface does not have an IPv6 Address.",
+                    "description": "Exclusive with [static_ipv6_address]\n Interface does not have an IPv6 Address.",
                     "title": "no_ipv6_address",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No IPv6 Address"
@@ -3014,7 +3014,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Static IP"
                 },
                 "static_ipv6_address": {
-                    "description": "Exclusive with [ipv6_auto_config no_ipv6_address]\n Interface IP is configured statically",
+                    "description": "Exclusive with [no_ipv6_address]\n Interface IP is configured statically",
                     "title": "Static IP",
                     "$ref": "#/definitions/network_interfaceStaticIPParametersType",
                     "x-displayname": "Static IP"
@@ -3773,14 +3773,12 @@ var APISwaggerJSON string = `{
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": "Exclusive with [untagged]\n Configure a VLAN tagged interface\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
+                    "description": "Exclusive with [untagged]\n Configure a VLAN tagged interface\n\nExample: - \"10\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 4095\n",
                     "title": "VLAN Id",
                     "format": "int64",
                     "x-displayname": "VLAN Id",
                     "x-ves-example": "10",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "4095"
                     }

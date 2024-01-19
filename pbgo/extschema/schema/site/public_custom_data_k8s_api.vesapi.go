@@ -138,6 +138,15 @@ func (c *CustomDataK8SAPIGrpcClient) doRPCPodList(ctx context.Context, yamlReq s
 	return rsp, err
 }
 
+func (c *CustomDataK8SAPIGrpcClient) doRPCPodsMetrics(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &PodsMetricsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PodsMetricsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.PodsMetrics(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataK8SAPIGrpcClient) doRPCReplicaSetList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ReplicaSetListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -234,6 +243,8 @@ func NewCustomDataK8SAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["PersistentVolumeList"] = ccl.doRPCPersistentVolumeList
 
 	rpcFns["PodList"] = ccl.doRPCPodList
+
+	rpcFns["PodsMetrics"] = ccl.doRPCPodsMetrics
 
 	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
 
@@ -1179,6 +1190,99 @@ func (c *CustomDataK8SAPIRestClient) doRPCPodList(ctx context.Context, callOpts 
 	return pbRsp, nil
 }
 
+func (c *CustomDataK8SAPIRestClient) doRPCPodsMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &PodsMetricsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.site.PodsMetricsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		q.Add("filters", fmt.Sprintf("%v", req.Filters))
+		for _, item := range req.GroupBy {
+			q.Add("group_by", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.MetricSelector {
+			q.Add("metric_selector", fmt.Sprintf("%v", item))
+		}
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("site", fmt.Sprintf("%v", req.Site))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &PodsMetricsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.site.PodsMetricsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomDataK8SAPIRestClient) doRPCReplicaSetList(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1650,6 +1754,8 @@ func NewCustomDataK8SAPIRestClient(baseURL string, hc http.Client) server.Custom
 
 	rpcFns["PodList"] = ccl.doRPCPodList
 
+	rpcFns["PodsMetrics"] = ccl.doRPCPodsMetrics
+
 	rpcFns["ReplicaSetList"] = ccl.doRPCReplicaSetList
 
 	rpcFns["SecretList"] = ccl.doRPCSecretList
@@ -1715,6 +1821,10 @@ func (c *customDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context,
 func (c *customDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PodList, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodList", nil)
 	return c.CustomDataK8SAPIServer.PodList(ctx, in)
+}
+func (c *customDataK8SAPIInprocClient) PodsMetrics(ctx context.Context, in *PodsMetricsRequest, opts ...grpc.CallOption) (*PodsMetricsResponse, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics", nil)
+	return c.CustomDataK8SAPIServer.PodsMetrics(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList", nil)
@@ -2294,6 +2404,55 @@ func (s *customDataK8SAPISrv) PodList(ctx context.Context, in *PodListRequest) (
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "k8s.io.api.core.v1.PodList", rsp)...)
+
+	return rsp, nil
+}
+func (s *customDataK8SAPISrv) PodsMetrics(ctx context.Context, in *PodsMetricsRequest) (*PodsMetricsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.site.CustomDataK8SAPI")
+	cah, ok := ah.(CustomDataK8SAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataK8SAPIServer", ah)
+	}
+
+	var (
+		rsp *PodsMetricsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.site.PodsMetricsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataK8SAPI.PodsMetrics' operation on 'site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.site.CustomDataK8SAPI.PodsMetrics"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.PodsMetrics(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.site.PodsMetricsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -5026,6 +5185,106 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/system/site/{site}/namespaces/{namespace}/pods/metrics": {
+            "post": {
+                "summary": "Pods Metrics",
+                "description": "API to get pods metrics for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/sitePodsMetricsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Site"
+                    },
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of cronjobs in a site",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sitePodsMetricsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/system/site/{site}/namespaces/{namespace}/virtualmachineinstances/metrics": {
             "post": {
                 "summary": "VirtualMachineInstances Metrics",
@@ -5121,6 +5380,98 @@ var CustomDataK8SAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-virtualmachineinstancesmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics"
+            },
+            "x-displayname": "Custom Data K8s API",
+            "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/site/{site}/pods/metrics": {
+            "post": {
+                "summary": "Pods Metrics",
+                "description": "API to get pods metrics for a given namespace in a site.",
+                "operationId": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/sitePodsMetricsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "site",
+                        "description": "site\n\nx-example: \"site-1\"\nSite name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Site"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sitePodsMetricsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomDataK8SAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics"
             },
             "x-displayname": "Custom Data K8s API",
             "x-ves-proto-service": "ves.io.schema.site.CustomDataK8SAPI",
@@ -5386,6 +5737,183 @@ var CustomDataK8SAPISwaggerJSON string = `{
             "default": "UNIT_MILLISECONDS",
             "x-displayname": "Unit",
             "x-ves-proto-enum": "ves.io.schema.UnitType"
+        },
+        "sitePodsMetricData": {
+            "type": "object",
+            "description": "Pods Metric Data",
+            "title": "PodsMetricData",
+            "x-displayname": "Pods Metric Data",
+            "x-ves-proto-message": "ves.io.schema.site.PodsMetricData",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "description": " List of metric data",
+                    "title": "Data",
+                    "items": {
+                        "$ref": "#/definitions/sitePodsMetricTypeData"
+                    },
+                    "x-displayname": "Data"
+                },
+                "type": {
+                    "description": " Metric Type",
+                    "title": "Type",
+                    "$ref": "#/definitions/sitePodsMetricType",
+                    "x-displayname": "Type"
+                },
+                "unit": {
+                    "description": " Unit for the metric value",
+                    "title": "Unit",
+                    "$ref": "#/definitions/schemaUnitType",
+                    "x-displayname": "Unit"
+                }
+            }
+        },
+        "sitePodsMetricLabel": {
+            "type": "string",
+            "description": "Labels in Pods metrics\n",
+            "title": "Pods MetricLabel",
+            "enum": [
+                "POD_NAMESPACE",
+                "POD_NAME",
+                "POD_IF_NAME",
+                "POD_IF_SUBNET",
+                "POD_IF_VLAN_ID"
+            ],
+            "default": "POD_NAMESPACE",
+            "x-displayname": "Pods MetricLabel",
+            "x-ves-proto-enum": "ves.io.schema.site.PodsMetricLabel"
+        },
+        "sitePodsMetricType": {
+            "type": "string",
+            "description": "List of metric types for Pods\n",
+            "title": "PodsMetricType",
+            "enum": [
+                "POD_METRIC_TYPE_IN_BYTES",
+                "POD_METRIC_TYPE_OUT_BYTES",
+                "POD_METRIC_TYPE_IN_DROP_PACKETS",
+                "POD_METRIC_TYPE_OUT_DROP_PACKETS",
+                "POD_METRIC_TYPE_IN_PACKETS",
+                "POD_METRIC_TYPE_OUT_PACKETS"
+            ],
+            "default": "POD_METRIC_TYPE_IN_BYTES",
+            "x-displayname": "Pods Metric Type",
+            "x-ves-proto-enum": "ves.io.schema.site.PodsMetricType"
+        },
+        "sitePodsMetricTypeData": {
+            "type": "object",
+            "description": "Metric Type Data contains labels that uniquely identifies individual entity and its corresponding metric values.",
+            "title": "PodsMetricTypeData",
+            "x-displayname": "Pods Metric Type Data",
+            "x-ves-proto-message": "ves.io.schema.site.PodsMetricTypeData",
+            "properties": {
+                "labels": {
+                    "type": "object",
+                    "description": " Labels contains the name/value pair that uniquely identifies an entity whose metric is being reported.\n \"name\" is the label name defined in \"PodsMetricLabel\"",
+                    "title": "Labels",
+                    "x-displayname": "Labels"
+                },
+                "values": {
+                    "type": "array",
+                    "description": " List of metric values. May contain more than one value if timeseries data is requested.",
+                    "title": "Value",
+                    "items": {
+                        "$ref": "#/definitions/schemaMetricValue"
+                    },
+                    "x-displayname": "Value"
+                }
+            }
+        },
+        "sitePodsMetricsRequest": {
+            "type": "object",
+            "description": "Request to get Pods Metrics",
+            "title": "PodsMetricsRequest",
+            "x-displayname": "Pods Metrics Request",
+            "x-ves-proto-message": "ves.io.schema.site.PodsMetricsRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " End time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570197600\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "End time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570197600",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "filters": {
+                    "type": "string",
+                    "description": " Filter to filter the metrics by the given label\n\nExample: - \"namespace=ns1\"-",
+                    "title": "Filter",
+                    "x-displayname": "Filter",
+                    "x-ves-example": "namespace=ns1"
+                },
+                "group_by": {
+                    "type": "array",
+                    "description": " Group By to group the metrics by the given label\n \"name\" is the label name defined in \"PodsMetricLabel\"\n\nExample: - \"name\"-",
+                    "title": "Group By",
+                    "items": {
+                        "$ref": "#/definitions/sitePodsMetricLabel"
+                    },
+                    "x-displayname": "Group By",
+                    "x-ves-example": "name"
+                },
+                "metric_selector": {
+                    "type": "array",
+                    "description": " Select metrics to be returned in the response.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Metric Selector",
+                    "items": {
+                        "$ref": "#/definitions/sitePodsMetricType"
+                    },
+                    "x-displayname": "Metric Selector",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace to scope the listing of cronjobs in a site\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "site": {
+                    "type": "string",
+                    "description": " Site name\n\nExample: - \"site-1\"-",
+                    "title": "site",
+                    "x-displayname": "Site",
+                    "x-ves-example": "site-1"
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " Start time of metric data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570194000\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "sitePodsMetricsResponse": {
+            "type": "object",
+            "description": "Pods Metrics Response",
+            "title": "PodsMetricsResponse",
+            "x-displayname": "Pods Metrics Response",
+            "x-ves-proto-message": "ves.io.schema.site.PodsMetricsResponse",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "description": " Data for the metric types specified in the request",
+                    "title": "Data",
+                    "items": {
+                        "$ref": "#/definitions/sitePodsMetricData"
+                    },
+                    "x-displayname": "Data"
+                }
+            }
         },
         "siteVirtualMachineInstancesMetricData": {
             "type": "object",

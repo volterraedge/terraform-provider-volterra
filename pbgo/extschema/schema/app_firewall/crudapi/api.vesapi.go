@@ -3041,14 +3041,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Stage new attack signatures"
                 },
                 "violation_settings": {
-                    "description": "Exclusive with [default_violation_settings]\n Define violations to be disabled for detection\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [default_violation_settings]\n Define violations to be disabled for detection",
                     "title": "Custom Violation Settings",
                     "$ref": "#/definitions/app_firewallViolationSettings",
-                    "x-displayname": "Custom",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Custom"
                 }
             }
         },

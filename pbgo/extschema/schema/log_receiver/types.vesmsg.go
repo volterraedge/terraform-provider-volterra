@@ -628,9 +628,8 @@ var DefaultDataDogReceiverValidator = func() *ValidateDataDogReceiver {
 
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
 	}
 	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
 	if err != nil {
@@ -2828,9 +2827,8 @@ var DefaultTLSConfigTypeValidator = func() *ValidateTLSConfigType {
 
 	vrhPortChoicePort := v.PortChoicePortValidationRuleHandler
 	rulesPortChoicePort := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "65535",
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
 	}
 	vFnMap["port_choice.port"], err = vrhPortChoicePort(rulesPortChoicePort)
 	if err != nil {

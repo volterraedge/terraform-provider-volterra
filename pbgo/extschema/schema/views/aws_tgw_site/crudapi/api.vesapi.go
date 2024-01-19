@@ -2755,11 +2755,6 @@ var APISwaggerJSON string = `{
                     "title": "Attachment Deployment Status",
                     "x-displayname": "Attachment Deployment Status"
                 },
-                "feature_set": {
-                    "type": "string",
-                    "description": " x-displayName \"Feature Set\"\n Indicates what features are available for this Resource Share",
-                    "title": "Resource Share Feature Set"
-                },
                 "invitation_status": {
                     "type": "string",
                     "description": " Resource Share Invitation State",
@@ -2780,22 +2775,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Resource Share Owner Account ID"
                 },
                 "receiver_account_id": {
-                    "type": "string",
+                    "type": "array",
                     "description": " Resource Share Acceptor Account ID",
                     "title": "Resource Share Acceptor Account ID",
+                    "items": {
+                        "type": "string"
+                    },
                     "x-displayname": "Resource Share Acceptor Account ID"
-                },
-                "receiver_arn": {
-                    "type": "string",
-                    "description": " Resource Share Receiver ARN",
-                    "title": "Resource Share Receiver ARN",
-                    "x-displayname": "Resource Share Receiver ARN"
-                },
-                "receiver_aws_account": {
-                    "type": "string",
-                    "description": " Resource Share Receiver Account",
-                    "title": "Resource Share Receiver Account",
-                    "x-displayname": "Resource Share Receiver Account"
                 },
                 "resource_share_arn": {
                     "type": "string",
@@ -2826,69 +2812,6 @@ var APISwaggerJSON string = `{
                     "description": " Resource Share Tags",
                     "title": "Resource Share Tags",
                     "x-displayname": "Resource Share Tags"
-                }
-            }
-        },
-        "aws_tgw_siteAWSTGWSpokeAttachmentListType": {
-            "type": "object",
-            "title": "List of AWSTGWSpokeAttachmentType",
-            "x-displayname": "AWSTGWSpokeAttachmentListType",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentListType",
-            "properties": {
-                "attachments": {
-                    "type": "array",
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 0\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Attachments",
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentType"
-                    },
-                    "x-displayname": "Attachments",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "0",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "aws_tgw_siteAWSTGWSpokeAttachmentType": {
-            "type": "object",
-            "description": "Spoke VPCs to be attached to this TGW",
-            "title": "AWS TGW Spoke Type",
-            "x-displayname": "AWS TGW Spoke VPC Type",
-            "x-ves-oneof-field-credential_choice": "[\"cred\",\"use_site_credential\"]",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentType",
-            "properties": {
-                "cred": {
-                    "description": "Exclusive with [use_site_credential]\n Attach VPCs using a cloud credential not associated with this site",
-                    "title": "Other Cloud Credentials",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Other Cloud Credential"
-                },
-                "segment": {
-                    "description": " Choose a network segment. All attached VPCs will be placed in this network segment",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
-                },
-                "spokes": {
-                    "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Attach VPCs",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "use_site_credential": {
-                    "description": "Exclusive with [cred]\n Attach VPCs using this site’s cloud credential",
-                    "title": "Site Cloud Credentials",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Site Cloud Credential"
                 }
             }
         },
@@ -3325,12 +3248,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 },
                 "resource_share_status": {
-                    "type": "array",
                     "description": " AWS TGW Resource Share",
                     "title": "AWS TGW Resource Share",
-                    "items": {
-                        "$ref": "#/definitions/aws_tgw_siteAWSTGWResourceShareType"
-                    },
+                    "$ref": "#/definitions/aws_tgw_siteAWSTGWResourceShareType",
                     "x-displayname": "AWS TGW Resource Share"
                 },
                 "tgw": {
@@ -3405,7 +3325,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "Spoke VPCs to be attached to the AWS TGW Site",
             "title": "Spoke VPCs",
-            "x-displayname": "Spoke VPCs (Legacy Mode)",
+            "x-displayname": "Spoke VPCs",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VPCAttachmentListType",
             "properties": {
                 "vpc_list": {
@@ -3631,6 +3551,12 @@ var APISwaggerJSON string = `{
                     "title": "Attachment Deployment Status",
                     "x-displayname": "Attachment Deployment Status"
                 },
+                "installed_routes": {
+                    "description": " Routing Options",
+                    "title": "Routing Options",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Routing Options"
+                },
                 "state": {
                     "type": "string",
                     "description": " Attachment State",
@@ -3642,7 +3568,7 @@ var APISwaggerJSON string = `{
                     "description": " Subnets to Route Traffic",
                     "title": "Subnets",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
                     "x-displayname": "Subnets"
                 },
@@ -3740,117 +3666,48 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "cloud_connectAWSSubnetIDListType": {
+        "cloud_connectSubnetStatusType": {
             "type": "object",
-            "description": "AWS Subnet IDs",
-            "title": "AWS Subnet IDs",
-            "x-displayname": "AWS Subnet IDs",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSubnetIDListType",
+            "description": "Subnet Status Type",
+            "title": "SubnetStatusType for AWS VPC Attachment",
+            "x-displayname": "Subnet Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.SubnetStatusType",
             "properties": {
-                "subnet_ids": {
-                    "type": "array",
-                    "description": " List of subnet IDs\n\nExample: - \"subnet-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "List of subnet IDs",
-                    "minItems": 1,
-                    "maxItems": 4,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of subnet IDs",
-                    "x-ves-example": "subnet-12345678901234567",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
-                        "ves.io.schema.rules.repeated.max_items": "4",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "cloud_connectAWSVPCAttachmentListType": {
-            "type": "object",
-            "title": "VPC Attachments",
-            "x-displayname": "VPC Attachments",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentListType",
-            "properties": {
-                "vpc_list": {
-                    "type": "array",
-                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
-                    "title": "vpc_list",
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/cloud_connectAWSVPCAttachmentType"
-                    },
-                    "x-displayname": "VPC List",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "128"
-                    }
-                }
-            }
-        },
-        "cloud_connectAWSVPCAttachmentType": {
-            "type": "object",
-            "title": "AWS VPC attachment",
-            "x-displayname": "VPC Attachment",
-            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"default_route\",\"manual_routing\"]",
-            "x-ves-oneof-field-subnet_choice": "[\"all_subnets\",\"subnet_ids\"]",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
-            "properties": {
-                "all_subnets": {
-                    "description": "Exclusive with [subnet_ids]\n All subnets are routed to transit gateway.",
-                    "title": "All subnets",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All subnets"
-                },
-                "custom_routing": {
-                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
-                    "title": "Advertise Custom CIDRs",
-                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Advertise Custom CIDRs"
-                },
-                "default_route": {
-                    "description": "Exclusive with [custom_routing manual_routing]\n default route towards the CE will be add to the route table",
-                    "title": "Override Default Route",
-                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Override Default Route"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key, label defined in shared namespace and unknown key.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 40\n",
-                    "title": "Labels For VPC ID",
-                    "x-displayname": "Labels For VPC ID",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.max_pairs": "40"
-                    }
-                },
-                "manual_routing": {
-                    "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
-                    "title": "Manual Routing",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Manual"
-                },
-                "subnet_ids": {
-                    "description": "Exclusive with [all_subnets]\n Specific subnets are routed to transit gateway.",
-                    "title": "Specific subnets",
-                    "$ref": "#/definitions/cloud_connectAWSSubnetIDListType",
-                    "x-displayname": "Specific subnets"
-                },
-                "vpc_id": {
+                "availability_zone": {
                     "type": "string",
-                    "description": " Enter the VPC ID of the VPC to be attached\n\nExample: - \"vpc-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
-                    "title": "VPC ID",
-                    "maxLength": 64,
-                    "x-displayname": "VPC ID",
-                    "x-ves-example": "vpc-12345678901234567",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
-                    }
+                    "description": "\n Availability Zone",
+                    "title": "Availability Zone\nx-displayName: \"Availability Zone\"",
+                    "x-displayname": "Availability Zone"
+                },
+                "interface_type": {
+                    "type": "string",
+                    "description": "\n Interface Type",
+                    "title": "Interface Type\nx-displayName: \"Interface Type\"",
+                    "x-displayname": "Interface Type"
+                },
+                "network_interface_id": {
+                    "type": "string",
+                    "description": " Network Interface ID",
+                    "title": "Network Interface ID",
+                    "x-displayname": "Network Interface ID"
+                },
+                "private_ipv4_address": {
+                    "type": "string",
+                    "description": "\n Private IPV4 Address",
+                    "title": "Private IPV4 Address\nx-displayName: \"Private IPV4 Address\"",
+                    "x-displayname": "Private IPV4 Address"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "\n Status",
+                    "title": "Status\nx-displayName: \"Status\"",
+                    "x-displayname": "Status"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "\n Subnet ID",
+                    "title": "Subnet ID\nx-displayName: \"Subnet ID\"",
+                    "x-displayname": "Subnet ID"
                 }
             }
         },
@@ -5298,7 +5155,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -5312,7 +5169,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_IP_AUTO",
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
-                "VIRTUAL_NETWORK_IP_FABRIC"
+                "VIRTUAL_NETWORK_IP_FABRIC",
+                "VIRTUAL_NETWORK_SEGMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -5817,14 +5675,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
+                    "description": " AWS availability zone, must be consistent with the selected AWS region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.pattern: ^([a-z]{2})-?(gov-)?([a-z0-9]{4,20})-([a-z0-9]{2})$\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-west-2a",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.pattern": "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$"
+                        "ves.io.schema.rules.string.pattern": "^([a-z]{2})-?(gov-)?([a-z0-9]{4,20})-([a-z0-9]{2})$"
                     }
                 },
                 "id": {
@@ -6601,7 +6459,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-vpc_attach": "[\"spoke_attachments\",\"vpc_attachments\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
             "properties": {
                 "aws_parameters": {
@@ -6705,16 +6562,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteSiteState",
                     "x-displayname": "Site State"
                 },
-                "spoke_attachments": {
-                    "description": "Exclusive with [vpc_attachments]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Enable VPC Attachments",
-                    "$ref": "#/definitions/aws_tgw_siteAWSTGWSpokeAttachmentListType",
-                    "x-displayname": "Enable VPC Attachments",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
                 "suggested_action": {
                     "type": "string",
                     "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
@@ -6772,10 +6619,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Networking"
                 },
                 "vpc_attachments": {
-                    "description": "Exclusive with [spoke_attachments]\n Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
+                    "description": " Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "[Legacy] Spoke VPCs"
+                    "x-displayname": "Spoke VPCs"
                 }
             }
         }

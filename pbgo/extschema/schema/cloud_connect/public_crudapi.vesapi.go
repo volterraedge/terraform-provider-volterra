@@ -2253,6 +2253,12 @@ var APISwaggerJSON string = `{
                     "title": "Attachment Deployment Status",
                     "x-displayname": "Attachment Deployment Status"
                 },
+                "installed_routes": {
+                    "description": " Routing Options",
+                    "title": "Routing Options",
+                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "x-displayname": "Routing Options"
+                },
                 "state": {
                     "type": "string",
                     "description": " Attachment State",
@@ -2264,7 +2270,7 @@ var APISwaggerJSON string = `{
                     "description": " Subnets to Route Traffic",
                     "title": "Subnets",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
                     "x-displayname": "Subnets"
                 },
@@ -2294,6 +2300,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAWSDefaultRoutesRouteTable": {
+            "type": "object",
+            "description": "AWS Route Table",
+            "title": "AWS Route Table",
+            "x-displayname": "AWS Route Table",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable",
+            "properties": {
+                "route_table_id": {
+                    "type": "array",
+                    "description": " Route table ID\n\nExample: - \"rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Route table ID",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "x-displayname": "Route table ID",
+                    "x-ves-example": "rtb-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(rtb-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "cloud_connectAWSREType": {
             "type": "object",
             "title": "Cloud Connect AWS Type",
@@ -2308,15 +2339,24 @@ var APISwaggerJSON string = `{
                     "x-displayname": "CloudLink"
                 },
                 "cred": {
-                    "description": " Select a cloud credential to begin onboarding VPCs",
+                    "description": " Select a cloud credential to begin onboarding VPCs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Cloud Credential",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential"
+                    "x-displayname": "Credential",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "region": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Region",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Cloud Edge"
+                    "x-displayname": "Cloud Edge",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "vpc_attachments": {
                     "title": "VPC Attachement List",
@@ -2393,59 +2433,48 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "cloud_connectAWSSubnetIDListType": {
-            "type": "object",
-            "description": "AWS Subnet IDs",
-            "title": "AWS Subnet IDs",
-            "x-displayname": "AWS Subnet IDs",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSSubnetIDListType",
-            "properties": {
-                "subnet_ids": {
-                    "type": "array",
-                    "description": " List of subnet IDs\n\nExample: - \"subnet-12345678901234567\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "List of subnet IDs",
-                    "minItems": 1,
-                    "maxItems": 4,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "List of subnet IDs",
-                    "x-ves-example": "subnet-12345678901234567",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
-                        "ves.io.schema.rules.repeated.max_items": "4",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
         "cloud_connectAWSTGWSiteType": {
             "type": "object",
-            "description": "x-displayName: \"AWS TGW Site Type\"\nCloud Connect AWS TGW Site Type",
+            "description": "Cloud Connect AWS TGW Site Type",
             "title": "Cloud Connect AWS TGW Site Type",
+            "x-displayname": "AWS TGW Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWSiteType",
             "properties": {
                 "cloud_links": {
-                    "description": "x-displayName: \"CloudLink\"\nReference to cloud link",
+                    "description": " Reference to cloud link",
                     "title": "Cloud Links",
-                    "$ref": "#/definitions/cloud_connectCloudLinkListType"
+                    "$ref": "#/definitions/cloud_connectCloudLinkListType",
+                    "x-displayname": "CloudLink"
                 },
                 "cred": {
-                    "description": "x-displayName: \"Credential Reference\"\nReference to cloud credential to deploy resources",
+                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Cloud Credential",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Credential Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "site": {
-                    "description": "x-displayName: \"AWS TGW Site Reference\"\nAWS TGW Site Reference",
+                    "description": " AWS TGW Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AWS TGW Site Reference",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "AWS TGW Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "vpc_attachments": {
-                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the AWS TGW Site",
+                    "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -2475,15 +2504,8 @@ var APISwaggerJSON string = `{
             "title": "AWS VPC attachment",
             "x-displayname": "VPC Attachment",
             "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"default_route\",\"manual_routing\"]",
-            "x-ves-oneof-field-subnet_choice": "[\"all_subnets\",\"subnet_ids\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
             "properties": {
-                "all_subnets": {
-                    "description": "Exclusive with [subnet_ids]\n All subnets are routed to transit gateway.",
-                    "title": "All subnets",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "All subnets"
-                },
                 "custom_routing": {
                     "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
                     "title": "Advertise Custom CIDRs",
@@ -2493,30 +2515,14 @@ var APISwaggerJSON string = `{
                 "default_route": {
                     "description": "Exclusive with [custom_routing manual_routing]\n default route towards the CE will be add to the route table",
                     "title": "Override Default Route",
-                    "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
+                    "$ref": "#/definitions/cloud_connectDefaultRoute",
                     "x-displayname": "Override Default Route"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Add Labels for each of the VPC ID, these labels can be used in firewall policy\n These labels used must be from known key, label defined in shared namespace and unknown key.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 40\n",
-                    "title": "Labels For VPC ID",
-                    "x-displayname": "Labels For VPC ID",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.max_pairs": "40"
-                    }
                 },
                 "manual_routing": {
                     "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Manual"
-                },
-                "subnet_ids": {
-                    "description": "Exclusive with [all_subnets]\n Specific subnets are routed to transit gateway.",
-                    "title": "Specific subnets",
-                    "$ref": "#/definitions/cloud_connectAWSSubnetIDListType",
-                    "x-displayname": "Specific subnets"
                 },
                 "vpc_id": {
                     "type": "string",
@@ -2622,17 +2628,44 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Create Cloud Connect",
             "x-displayname": "Create Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_re\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_re\",\"aws_tgw_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSREType",
                     "x-displayname": "AWS"
+                },
+                "aws_tgw_site": {
+                    "description": "Exclusive with [aws_re]\n",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
                 },
                 "segment": {
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment"
+                }
+            }
+        },
+        "cloud_connectDefaultRoute": {
+            "type": "object",
+            "description": "Select Override Default Route Choice",
+            "title": "Default Route Override Choice",
+            "x-displayname": "Override Default Route Choice",
+            "x-ves-oneof-field-default_route_choice": "[\"all_route_tables\",\"selective_route_tables\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.DefaultRoute",
+            "properties": {
+                "all_route_tables": {
+                    "description": "Exclusive with [selective_route_tables]\n Override default route for all route tables",
+                    "title": "Override for all route tables",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All RouteTables"
+                },
+                "selective_route_tables": {
+                    "description": "Exclusive with [all_route_tables]\n Override default route for selective route tables",
+                    "title": "Override for selective route tables",
+                    "$ref": "#/definitions/cloud_connectAWSDefaultRoutesRouteTable",
+                    "x-displayname": "Selective RouteTables"
                 }
             }
         },
@@ -2767,13 +2800,18 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Get Cloud Connect",
             "x-displayname": "Get Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_re\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_re\",\"aws_tgw_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSREType",
                     "x-displayname": "AWS"
+                },
+                "aws_tgw_site": {
+                    "description": "Exclusive with [aws_re]\n",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
                 },
                 "segment": {
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -2978,6 +3016,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectReplaceAWSTGWSiteType": {
+            "type": "object",
+            "description": "Cloud Connect AWS TGW Site Type",
+            "title": "Replace Cloud Connect AWS TGW Site Type",
+            "x-displayname": "AWS TGW Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType",
+            "properties": {
+                "vpc_attachments": {
+                    "description": " Spoke VPCs to be attached to the AWS TGW Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VPCs",
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
+                    "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "cloud_connectReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -3008,13 +3064,18 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Replace Cloud Connect",
             "x-displayname": "Replace Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_re\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_re\",\"aws_tgw_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAWSREType",
                     "x-displayname": "AWS"
+                },
+                "aws_tgw_site": {
+                    "description": "Exclusive with [aws_re]\n",
+                    "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
                 },
                 "segment": {
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -3072,6 +3133,51 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "cloud_connectSubnetStatusType": {
+            "type": "object",
+            "description": "Subnet Status Type",
+            "title": "SubnetStatusType for AWS VPC Attachment",
+            "x-displayname": "Subnet Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.SubnetStatusType",
+            "properties": {
+                "availability_zone": {
+                    "type": "string",
+                    "description": "\n Availability Zone",
+                    "title": "Availability Zone\nx-displayName: \"Availability Zone\"",
+                    "x-displayname": "Availability Zone"
+                },
+                "interface_type": {
+                    "type": "string",
+                    "description": "\n Interface Type",
+                    "title": "Interface Type\nx-displayName: \"Interface Type\"",
+                    "x-displayname": "Interface Type"
+                },
+                "network_interface_id": {
+                    "type": "string",
+                    "description": " Network Interface ID",
+                    "title": "Network Interface ID",
+                    "x-displayname": "Network Interface ID"
+                },
+                "private_ipv4_address": {
+                    "type": "string",
+                    "description": "\n Private IPV4 Address",
+                    "title": "Private IPV4 Address\nx-displayName: \"Private IPV4 Address\"",
+                    "x-displayname": "Private IPV4 Address"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "\n Status",
+                    "title": "Status\nx-displayName: \"Status\"",
+                    "x-displayname": "Status"
+                },
+                "subnet_id": {
+                    "type": "string",
+                    "description": "\n Subnet ID",
+                    "title": "Subnet ID\nx-displayName: \"Subnet ID\"",
+                    "x-displayname": "Subnet ID"
                 }
             }
         },
@@ -3981,14 +4087,20 @@ var APISwaggerJSON string = `{
             "title": "Cloud Connect specification",
             "x-displayname": "Specification",
             "x-ves-oneof-field-bandwidth_option": "[\"bandwidth_500mbs\"]",
-            "x-ves-oneof-field-cloud": "[\"aws_re\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_re\",\"aws_tgw_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GlobalSpecType",
             "properties": {
                 "aws_re": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "title": "AWS",
                     "$ref": "#/definitions/cloud_connectAWSREType",
                     "x-displayname": "AWS"
+                },
+                "aws_tgw_site": {
+                    "description": "Exclusive with [aws_re]\n",
+                    "title": "AWS TGW Site",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
                 },
                 "bandwidth_500mbs": {
                     "description": "Exclusive with []\n  500Mbps",

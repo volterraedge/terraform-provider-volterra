@@ -8344,6 +8344,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

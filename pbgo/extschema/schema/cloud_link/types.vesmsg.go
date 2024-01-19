@@ -2891,6 +2891,7 @@ var DefaultIpv4TypeValidator = func() *ValidateIpv4Type {
 	rulesRouterPeerAddress := map[string]string{
 		"ves.io.schema.rules.message.required":            "true",
 		"ves.io.schema.rules.string.ipv4_prefix":          "true",
+		"ves.io.schema.rules.string.max_ip_prefix_length": "32",
 		"ves.io.schema.rules.string.min_ip_prefix_length": "1",
 	}
 	vFn, err = vrhRouterPeerAddress(rulesRouterPeerAddress)
@@ -2904,6 +2905,7 @@ var DefaultIpv4TypeValidator = func() *ValidateIpv4Type {
 	rulesAwsRouterPeerAddress := map[string]string{
 		"ves.io.schema.rules.message.required":            "true",
 		"ves.io.schema.rules.string.ipv4_prefix":          "true",
+		"ves.io.schema.rules.string.max_ip_prefix_length": "32",
 		"ves.io.schema.rules.string.min_ip_prefix_length": "1",
 	}
 	vFn, err = vrhAwsRouterPeerAddress(rulesAwsRouterPeerAddress)

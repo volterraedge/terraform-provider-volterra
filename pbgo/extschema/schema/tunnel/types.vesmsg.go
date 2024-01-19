@@ -1275,8 +1275,12 @@ type ValidateLocalIpAddressType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateLocalIpAddressType) TypeIpAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.IpAddressTypeValidator().Validate, nil
+func (v *ValidateLocalIpAddressType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for type")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateLocalIpAddressType) VirtualNetworkTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1308,6 +1312,16 @@ func (v *ValidateLocalIpAddressType) Validate(ctx context.Context, pm interface{
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+		val := m.GetType()
+		vOpts := append(opts,
+			db.WithValidateField("type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetType().(type) {
@@ -1360,17 +1374,16 @@ var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhTypeIpAddress := v.TypeIpAddressValidationRuleHandler
-	rulesTypeIpAddress := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhType := v.TypeValidationRuleHandler
+	rulesType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFnMap["type.ip_address"], err = vrhTypeIpAddress(rulesTypeIpAddress)
+	vFn, err = vrhType(rulesType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LocalIpAddressType.type_ip_address: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LocalIpAddressType.type: %s", err)
 		panic(errMsg)
 	}
-
-	v.FldValidators["type.ip_address"] = vFnMap["type.ip_address"]
+	v.FldValidators["type"] = vFn
 
 	vrhVirtualNetworkType := v.VirtualNetworkTypeValidationRuleHandler
 	rulesVirtualNetworkType := map[string]string{
@@ -1382,6 +1395,8 @@ var DefaultLocalIpAddressTypeValidator = func() *ValidateLocalIpAddressType {
 		panic(errMsg)
 	}
 	v.FldValidators["virtual_network_type"] = vFn
+
+	v.FldValidators["type.ip_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
 	return v
 }()

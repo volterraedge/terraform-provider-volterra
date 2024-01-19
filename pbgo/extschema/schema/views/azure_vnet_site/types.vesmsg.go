@@ -1592,6 +1592,15 @@ func (v *ValidateAzureVnetIngressEgressGwARType) Validate(ctx context.Context, p
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
@@ -2075,6 +2084,8 @@ var DefaultAzureVnetIngressEgressGwARTypeValidator = func() *ValidateAzureVnetIn
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator().Validate
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
 }()
@@ -3479,6 +3490,15 @@ func (v *ValidateAzureVnetIngressEgressGwType) Validate(ctx context.Context, pm 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["az_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("az_nodes"))
 		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
@@ -3972,6 +3992,8 @@ var DefaultAzureVnetIngressEgressGwTypeValidator = func() *ValidateAzureVnetIngr
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
+
 	return v
 }()
 
@@ -4113,6 +4135,15 @@ func (v *ValidateAzureVnetIngressGwARType) Validate(ctx context.Context, pm inte
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
@@ -4171,6 +4202,8 @@ var DefaultAzureVnetIngressGwARTypeValidator = func() *ValidateAzureVnetIngressG
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
 }()
@@ -4361,6 +4394,15 @@ func (v *ValidateAzureVnetIngressGwType) Validate(ctx context.Context, pm interf
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["az_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("az_nodes"))
 		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
@@ -4428,6 +4470,8 @@ var DefaultAzureVnetIngressGwTypeValidator = func() *ValidateAzureVnetIngressGwT
 	v.FldValidators["azure_certified_hw"] = vFn
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
 }()
@@ -5864,6 +5908,15 @@ func (v *ValidateAzureVnetVoltstackClusterARType) Validate(ctx context.Context, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["azure_certified_hw"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("azure_certified_hw"))
@@ -6324,6 +6377,8 @@ var DefaultAzureVnetVoltstackClusterARTypeValidator = func() *ValidateAzureVnetV
 	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
 
 	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
+
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
 }()
@@ -7504,6 +7559,15 @@ func (v *ValidateAzureVnetVoltstackClusterType) Validate(ctx context.Context, pm
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("accelerated_networking"))
+		if err := fv(ctx, m.GetAcceleratedNetworking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["az_nodes"]; exists {
 		vOpts := append(opts, db.WithValidateField("az_nodes"))
 		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
@@ -7973,6 +8037,8 @@ var DefaultAzureVnetVoltstackClusterTypeValidator = func() *ValidateAzureVnetVol
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
 
 	v.FldValidators["storage_class_choice.storage_class_list"] = ves_io_schema_views.StorageClassListTypeValidator().Validate
+
+	v.FldValidators["accelerated_networking"] = ves_io_schema_views.AcceleratedNetworkingTypeValidator().Validate
 
 	return v
 }()

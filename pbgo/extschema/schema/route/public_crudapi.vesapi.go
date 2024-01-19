@@ -3200,6 +3200,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaCorsPolicy",
                     "x-displayname": "CORS Policy"
                 },
+                "csrf_policy": {
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+                    "title": "csrf_policy",
+                    "$ref": "#/definitions/schemaCsrfPolicy",
+                    "x-displayname": "Cross-Site Request Forgery Protection"
+                },
                 "destinations": {
                     "type": "array",
                     "description": " When requests have to distributed among multiple upstream clusters,\n multiple destinations are configured, each having its own cluster and weight.\n Traffic is distributed among clusters based on the weight configured.\n\n Example:\n    destinations:\n    - cluster:\n      - kind: ves.io.vega.cfg.adc.cluster.Object\n        uid: cluster-1\n     weight: 20\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-2\n     weight: 30\n   - cluster:\n     - kind: ves.io.vega.cfg.adc.cluster.Object\n       uid: cluster-3\n     weight: 50\n\n This indicates that out of every 100 requests, 50 goes to cluster-3, 30 to\n cluster-2 and 20 to cluster-1\n\n When single destination is configured, weight is ignored. All the requests are\n sent to the cluster specified in the destination\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -4030,6 +4036,35 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCsrfPolicy": {
+            "type": "object",
+            "description": "To mitigate CSRF attack , the policy checks where a request is coming from to determine if the request's origin is the same as its detination.The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n1. The origin that caused the user agent to issue the request (source origin).\n2. The origin that the request is going to (target origin).\nWhen the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being if the source-origin has been added to they policy as valid.\nBecause CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+            "title": "CsrfPolicy",
+            "x-displayname": "CSRF Policy",
+            "x-ves-oneof-field-allowed_domains": "[\"all_load_balancer_domains\",\"custom_domain_list\",\"disabled\"]",
+            "x-ves-proto-message": "ves.io.schema.CsrfPolicy",
+            "properties": {
+                "all_load_balancer_domains": {
+                    "description": "Exclusive with [custom_domain_list disabled]\n Add All load balancer domains to source origin (allow) list.",
+                    "title": "all_load_balancer_domains",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All HTTP Loadbalancer Domains"
+                },
+                "custom_domain_list": {
+                    "description": "Exclusive with [all_load_balancer_domains disabled]\n Add one or more domains to source origin (allow) list.\n\nExample: - \"abc.xyz.com\"-",
+                    "title": "custom_domain_list",
+                    "$ref": "#/definitions/schemaDomainNameList",
+                    "x-displayname": "Specified domains",
+                    "x-ves-example": "abc.xyz.com"
+                },
+                "disabled": {
+                    "description": "Exclusive with [all_load_balancer_domains custom_domain_list]\n Allow all source origin domains.",
+                    "title": "disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                }
+            }
+        },
         "schemaDenominatorType": {
             "type": "string",
             "description": "Denominator used in fraction where sampling percentages are needed. example sampled requests\n\nUse hundred as denominator\nUse ten thousand as denominator\nUse million as denominator",
@@ -4042,6 +4077,39 @@ var APISwaggerJSON string = `{
             "default": "HUNDRED",
             "x-displayname": "Denominator",
             "x-ves-proto-enum": "ves.io.schema.DenominatorType"
+        },
+        "schemaDomainNameList": {
+            "type": "object",
+            "description": "List of domain names used for Host header matching",
+            "title": "List of Domain names",
+            "x-displayname": "Domain name list",
+            "x-ves-proto-message": "ves.io.schema.DomainNameList",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": "\n A list of domain names that will be matched to loadbalancer.\n These domains are not used for SNI match.\n Wildcard names are supported in the suffix or prefix form.\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Domains",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Domain names",
+                    "x-ves-example": "www.foo.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
         },
         "schemaErrorCode": {
             "type": "string",
@@ -4560,17 +4628,21 @@ var APISwaggerJSON string = `{
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
+                    "minItems": 1,
                     "maxItems": 6,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Retry Condition",
                     "x-ves-example": "5xx",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
                         "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

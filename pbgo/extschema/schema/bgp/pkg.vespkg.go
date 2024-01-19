@@ -76,10 +76,54 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.target_service",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Create"] = "ves.io.schema.bgp.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.bgp.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bgp.API.Replace"] = []string{
@@ -92,6 +136,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.internal",
 		"spec.peers.#.metadata.disable",
 		"spec.peers.#.target_service",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Replace"] = "ves.io.schema.bgp.ReplaceRequest"

@@ -18,6 +18,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.signup.Object"] = ObjectValidator()
 	vr["ves.io.schema.signup.StatusObject"] = StatusObjectValidator()
 
+	vr["ves.io.schema.signup.CreateV2Request"] = CreateV2RequestValidator()
+	vr["ves.io.schema.signup.CreateV2Response"] = CreateV2ResponseValidator()
+
 	vr["ves.io.schema.signup.CityItem"] = CityItemValidator()
 	vr["ves.io.schema.signup.CountryItem"] = CountryItemValidator()
 	vr["ves.io.schema.signup.GetRequest"] = GetRequestValidator()
@@ -37,9 +40,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.signup.ValidateRegistrationResponse"] = ValidateRegistrationResponseValidator()
 	vr["ves.io.schema.signup.ValidationErrorField"] = ValidationErrorFieldValidator()
 
-	vr["ves.io.schema.signup.CreateV2Request"] = CreateV2RequestValidator()
-	vr["ves.io.schema.signup.CreateV2Response"] = CreateV2ResponseValidator()
-
 	vr["ves.io.schema.signup.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.signup.CrmInfo"] = CrmInfoValidator()
 	vr["ves.io.schema.signup.GetSpecType"] = GetSpecTypeValidator()
@@ -51,9 +51,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.signup.CompanyMeta"] = CompanyMetaValidator()
 	vr["ves.io.schema.signup.ContactMeta"] = ContactMetaValidator()
 	vr["ves.io.schema.signup.CrmInfoV2"] = CrmInfoV2Validator()
+	vr["ves.io.schema.signup.InternalMeta"] = InternalMetaValidator()
+	vr["ves.io.schema.signup.MarketplaceAws"] = MarketplaceAwsValidator()
 	vr["ves.io.schema.signup.SourceInternalScaling"] = SourceInternalScalingValidator()
 	vr["ves.io.schema.signup.SourceInternalSre"] = SourceInternalSreValidator()
 	vr["ves.io.schema.signup.SourceInternalSso"] = SourceInternalSsoValidator()
+	vr["ves.io.schema.signup.SourceMarketplace"] = SourceMarketplaceValidator()
 	vr["ves.io.schema.signup.SourceMsp"] = SourceMspValidator()
 	vr["ves.io.schema.signup.SourcePlanTransition"] = SourcePlanTransitionValidator()
 	vr["ves.io.schema.signup.SourcePublic"] = SourcePublicValidator()
@@ -75,30 +78,12 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.signup.CustomAPIEywaprime.CreateV2"] = []string{
-		".source_internal_sre.crm_info.account_id",
-		".source_internal_sre.crm_info.entitled_skus.#",
-		".source_internal_sre.crm_info.entitlement_id",
-		".source_internal_sre.crm_info.order_type",
-		".source_internal_sre.crm_info.subscription_id",
-		".source_msp.crm_info.account_id",
-		".source_msp.crm_info.entitled_skus.#",
-		".source_msp.crm_info.entitlement_id",
-		".source_msp.crm_info.order_type",
-		".source_msp.crm_info.subscription_id",
-		"billing_details.infraprotect_info.default_tunnel_bgp_secret.blindfold_secret_info_internal",
-		"billing_details.infraprotect_info.default_tunnel_bgp_secret.secret_encoding_type",
-		"billing_details.infraprotect_info.default_tunnel_bgp_secret.vault_secret_info",
-		"billing_details.infraprotect_info.default_tunnel_bgp_secret.wingman_secret_info",
-	}
-
-	mdr.RPCConfidentialRequestRegistry["ves.io.schema.signup.CustomAPIEywaprime.CreateV2"] = "ves.io.schema.signup.CreateV2Request"
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2"] = "ves.io.schema.signup.CreateV2Request"
 
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.signup.CustomAPI"] = "web"
-	sm["ves.io.schema.signup.CustomAPIEywaprime"] = "web"
 
 }
 
@@ -112,6 +97,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.signup.Object"] = CustomPrivateAPIEywaprimeSwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = NewCustomPrivateAPIEywaprimeGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = NewCustomPrivateAPIEywaprimeRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = RegisterCustomPrivateAPIEywaprimeServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = RegisterGwCustomPrivateAPIEywaprimeHandler
+		customCSR.ServerRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomPrivateAPIEywaprimeServer(svc)
+		}
+
+	}()
 
 	customCSR = mdr.PubCustomServiceRegistry
 
@@ -129,26 +134,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.signup.CustomAPI"] = RegisterGwCustomAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.signup.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
-		}
-
-	}()
-
-	customCSR = mdr.PubCustomServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-
-		customCSR.SwaggerRegistry["ves.io.schema.signup.Object"] = CustomAPIEywaprimeSwaggerJSON
-
-		customCSR.GrpcClientRegistry["ves.io.schema.signup.CustomAPIEywaprime"] = NewCustomAPIEywaprimeGrpcClient
-		customCSR.RestClientRegistry["ves.io.schema.signup.CustomAPIEywaprime"] = NewCustomAPIEywaprimeRestClient
-		if isExternal {
-			return
-		}
-		mdr.SvcRegisterHandlers["ves.io.schema.signup.CustomAPIEywaprime"] = RegisterCustomAPIEywaprimeServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.signup.CustomAPIEywaprime"] = RegisterGwCustomAPIEywaprimeHandler
-		customCSR.ServerRegistry["ves.io.schema.signup.CustomAPIEywaprime"] = func(svc svcfw.Service) server.APIHandler {
-			return NewCustomAPIEywaprimeServer(svc)
 		}
 
 	}()

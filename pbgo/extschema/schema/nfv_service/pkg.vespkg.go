@@ -54,6 +54,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nfv_service.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nfv_service.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nfv_service.InterfaceDetails"] = InterfaceDetailsValidator()
+	vr["ves.io.schema.nfv_service.NodeInfo"] = NodeInfoValidator()
 	vr["ves.io.schema.nfv_service.PANAWSAutoSetupType"] = PANAWSAutoSetupTypeValidator()
 	vr["ves.io.schema.nfv_service.PaloAltoAzNodesAWSType"] = PaloAltoAzNodesAWSTypeValidator()
 	vr["ves.io.schema.nfv_service.PaloAltoFWAWSReplaceType"] = PaloAltoFWAWSReplaceTypeValidator()
@@ -140,12 +141,60 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
@@ -163,16 +212,104 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.Get"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "create_form.spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "object.spec.gc_spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ssh_management_choice",
@@ -187,8 +324,56 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.nfv_service.API.List"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "items.#.get_spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.f5_big_ip_aws_service.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.palo_alto_fw_service.service_nodes.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.object.spec.gc_spec.ssh_management_choice",
@@ -225,6 +410,22 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.nfv_service.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
 		{
 			FieldPath:           "spec.ssh_management_choice",
 			AllowedEnvironments: []string{"test"},
