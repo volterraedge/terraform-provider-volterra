@@ -2909,6 +2909,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCRMInfo": {
+            "type": "object",
+            "description": "CRM Information",
+            "title": "CRM Information",
+            "x-displayname": "CRM Information",
+            "x-ves-proto-message": "ves.io.schema.CRMInfo"
+        },
         "schemaClearSecretInfoType": {
             "type": "object",
             "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
@@ -3799,8 +3806,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Contact Number",
                     "x-ves-example": "+11234567890"
                 },
+                "crm_details": {
+                    "description": " CrmDetails message to include crm info in source pipeline.",
+                    "title": "crm_details",
+                    "$ref": "#/definitions/schemaCRMInfo",
+                    "x-displayname": "CrmDetails"
+                },
                 "crm_info": {
-                    "description": " message to include crm info in TEEM pipeline.",
+                    "description": " message to include crm info in TEEM pipeline.\n This field is deprecated. use CrmDetails instead",
                     "title": "crm_info",
                     "$ref": "#/definitions/signupCrmInfo",
                     "x-displayname": "CrmInfo"
@@ -4061,6 +4074,7 @@ var APISwaggerJSON string = `{
         },
         "signupCrmInfo": {
             "type": "object",
+            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
             "title": "fileds of crm info meesage",
             "x-displayname": "Crm Info",
             "x-ves-proto-message": "ves.io.schema.signup.CrmInfo"

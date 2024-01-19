@@ -21,19 +21,19 @@ resource "volterra_service_policy_rule" "example" {
   namespace = "staging"
   action    = ["action"]
 
-  // One of the arguments from this list "asn_matcher any_asn asn_list" must be set
+  // One of the arguments from this list "asn_list asn_matcher any_asn" must be set
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "client_selector client_name_matcher any_client client_name ip_threat_category_list" must be set
+  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
   any_client = true
 
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
   any_ip = true
 
   waf_action {
-    // One of the arguments from this list "app_firewall_detection_control data_guard_control jwt_validation none waf_skip_processing waf_in_monitoring_mode" must be set
-    waf_in_monitoring_mode = true
+    // One of the arguments from this list "waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control jwt_validation jwt_claims_validation none" must be set
+    none = true
   }
 }
 
@@ -462,6 +462,10 @@ Criteria for matching the values for the Arg. The match is successful if any of 
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
+### Jwt Claims Validation
+
+Validate JWT Claims for this request.
+
 ### Jwt Validation
 
 Validate JWT for this request.
@@ -769,6 +773,8 @@ App Firewall action to be enforced if the input request matches the rule..
 `app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [App Firewall Detection Control ](#app-firewall-detection-control) below for details.
 
 `data_guard_control` - (Optional) Data Guard changes to be applied for this request. See [Data Guard Control ](#data-guard-control) below for details.
+
+`jwt_claims_validation` - (Optional) Validate JWT Claims for this request (bool).
 
 `jwt_validation` - (Optional) Validate JWT for this request (bool).
 

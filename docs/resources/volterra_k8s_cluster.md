@@ -23,7 +23,7 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
   no_cluster_wide_apps = true
 
-  // One of the arguments from this list "use_custom_cluster_role_bindings use_default_cluster_role_bindings" must be set
+  // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
   use_default_cluster_role_bindings = true
 
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
@@ -32,18 +32,20 @@ resource "volterra_k8s_cluster" "example" {
   // One of the arguments from this list "cluster_scoped_access_deny cluster_scoped_access_permit" must be set
   cluster_scoped_access_deny = true
 
-  // One of the arguments from this list "no_global_access global_access_enable" must be set
-  no_global_access = true
+  // One of the arguments from this list "global_access_enable no_global_access" must be set
+  global_access_enable = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
+  no_insecure_registries = true
 
-  insecure_registry_list {
-    insecure_registries = ["example.com:5000"]
-  }
   // One of the arguments from this list "no_local_access local_access_config" must be set
   no_local_access = true
+
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
   use_default_psp = true
+
+  // One of the arguments from this list "vk8s_namespace_access_deny vk8s_namespace_access_permit" must be set
+  vk8s_namespace_access_permit = true
 }
 
 ```
@@ -99,6 +101,10 @@ Argument Reference
 
 `use_default_psp` - (Optional) Select default pod security policies for this K8s cluster (bool).
 
+`vk8s_namespace_access_deny` - (Optional) Access to create, modify and delete resources in VK8s namespaces will be prevented for service accounts and Managed K8s clients. Resources in VK8s namespaces can be managed only through VK8s API or UI. (bool).
+
+`vk8s_namespace_access_permit` - (Optional) Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients. (bool).
+
 ### Argo Cd
 
 Deploy Argo Continuous Deployment(CD) application.
@@ -109,7 +115,7 @@ Deploy Argo Continuous Deployment(CD) application.
 
 ### Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by Volterra Secret Management Service.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -205,13 +211,13 @@ Select blindfold or clear text password for ArgoCD admin..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by Volterra Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in Volterra Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Prometheus
 
@@ -263,7 +269,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 ### Wingman Secret Info
 
-Secret is given as bootstrap secret in Volterra Security Sidecar.
+Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 

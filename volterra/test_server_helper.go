@@ -22,6 +22,8 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_known_label "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label"
+	ves_io_schema_known_label_key "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label_key"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
@@ -512,6 +514,8 @@ func makeCustomTestServer(t *testing.T, objectTypes []string) (*generic.Fixture,
 	customHandlers := map[string]func(svcfw.Service) server.APIHandler{
 		// alphabetically sorted list of custom APIs to struct that handles the RPCs
 		"ves.io.schema.api_credential.CustomAPI":                   newAPICredentialCustomAPIServer,
+		"ves.io.schema.known_label.CustomAPI":                      newKnownLabelCustomAPIServer,
+		"ves.io.schema.known_label_key.CustomAPI":                  newKnownLabelKeyCustomAPIServer,
 		"ves.io.schema.namespace.CustomAPI":                        newNSCustomAPIServer,
 		"ves.io.schema.virtual_host.CustomAPI":                     newVHCustomAPIServer,
 		"ves.io.schema.site.CustomStateAPI":                        newSiteCustomAPIServer,
@@ -618,3 +622,62 @@ func mkDBObjTenant(name, uid string) *ves_io_schema_tenant.DBObject {
 	}
 	return ves_io_schema_tenant.NewDBObject(pbObj)
 }
+
+// ves.io.schema.known_label.CustomAPI handling - start
+type knownLabelCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newKnownLabelCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &knownLabelCustomAPIServer{sf: sf}
+}
+
+func (s *knownLabelCustomAPIServer) Create(ctx context.Context, req *ves_io_schema_known_label.CreateRequest) (*ves_io_schema_known_label.CreateResponse, error) {
+	return &ves_io_schema_known_label.CreateResponse{}, nil
+}
+
+func (s *knownLabelCustomAPIServer) Get(ctx context.Context, req *ves_io_schema_known_label.GetRequest) (*ves_io_schema_known_label.GetResponse, error) {
+	return &ves_io_schema_known_label.GetResponse{
+		Label: []*ves_io_schema_known_label.LabelType{
+			{
+				Key:   req.Key,
+				Value: req.Value,
+			},
+		},
+	}, nil
+}
+
+func (s *knownLabelCustomAPIServer) Delete(ctx context.Context, req *ves_io_schema_known_label.DeleteRequest) (*ves_io_schema_known_label.DeleteResponse, error) {
+	return &ves_io_schema_known_label.DeleteResponse{}, nil
+}
+
+var _ ves_io_schema_known_label.CustomAPIServer = &knownLabelCustomAPIServer{}
+
+// ves.io.schema.known_label.CustomAPI handling - start
+type knownLabelKeyCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newKnownLabelKeyCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &knownLabelKeyCustomAPIServer{sf: sf}
+}
+
+func (s *knownLabelKeyCustomAPIServer) Create(ctx context.Context, req *ves_io_schema_known_label_key.CreateRequest) (*ves_io_schema_known_label_key.CreateResponse, error) {
+	return &ves_io_schema_known_label_key.CreateResponse{}, nil
+}
+
+func (s *knownLabelKeyCustomAPIServer) Get(ctx context.Context, req *ves_io_schema_known_label_key.GetRequest) (*ves_io_schema_known_label_key.GetResponse, error) {
+	return &ves_io_schema_known_label_key.GetResponse{
+		LabelKey: []*ves_io_schema_known_label_key.LabelKeyType{
+			{
+				Key: req.Key,
+			},
+		},
+	}, nil
+}
+
+func (s *knownLabelKeyCustomAPIServer) Delete(ctx context.Context, req *ves_io_schema_known_label_key.DeleteRequest) (*ves_io_schema_known_label_key.DeleteResponse, error) {
+	return &ves_io_schema_known_label_key.DeleteResponse{}, nil
+}
+
+var _ ves_io_schema_known_label_key.CustomAPIServer = &knownLabelKeyCustomAPIServer{}

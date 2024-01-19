@@ -1029,6 +1029,10 @@ var CustomPrivateAPISwaggerJSON string = `{
                 "client_secret": {
                     "type": "string"
                 },
+                "disable_post_logout_redirect_uri": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
                 "end_session_endpoint": {
                     "type": "string"
                 },

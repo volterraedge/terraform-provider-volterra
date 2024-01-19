@@ -2498,7 +2498,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.enum.in":          "[0,1,2,3,4,7,9,10]",
+		"ves.io.schema.rules.enum.in":          "[0,1,2,3,4,7,9,10,12]",
 		"ves.io.schema.rules.message.required": "true",
 	}
 	vFn, err = vrhType(rulesType)
@@ -4801,6 +4801,84 @@ var DefaultSNATPoolTypeValidator = func() *ValidateSNATPoolType {
 
 func SNATPoolTypeValidator() db.Validator {
 	return DefaultSNATPoolTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SegmentNetworkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentNetworkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentNetworkType) DeepCopy() *SegmentNetworkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentNetworkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentNetworkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentNetworkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentNetworkTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSegmentNetworkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentNetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentNetworkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentNetworkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["internet_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internet_enabled"))
+		if err := fv(ctx, m.GetInternetEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentNetworkTypeValidator = func() *ValidateSegmentNetworkType {
+	v := &ValidateSegmentNetworkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SegmentNetworkTypeValidator() db.Validator {
+	return DefaultSegmentNetworkTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

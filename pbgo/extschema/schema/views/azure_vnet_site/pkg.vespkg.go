@@ -109,10 +109,374 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = "ves.io.schema.views.azure_vnet_site.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []string{
@@ -142,6 +506,25 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.voltstack_cluster_ar.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = "ves.io.schema.views.azure_vnet_site.ReplaceRequest"

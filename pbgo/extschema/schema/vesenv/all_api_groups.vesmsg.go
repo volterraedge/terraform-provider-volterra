@@ -1838,6 +1838,39 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_application_infrastructure_protection_basic_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicMonitor).F5XcApplicationInfrastructureProtectionBasicMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_application_infrastructure_protection_basic_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicUser:
+		if fv, exists := v.FldValidators["choice.f5xc_application_infrastructure_protection_basic_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicUser).F5XcApplicationInfrastructureProtectionBasicUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_application_infrastructure_protection_basic_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_application_infrastructure_protection_basic_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcApplicationInfrastructureProtectionBasicAdmin).F5XcApplicationInfrastructureProtectionBasicAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_application_infrastructure_protection_basic_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *APIGroupChoice_F5XcWaapBasicMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_waap_basic_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcWaapBasicMonitor).F5XcWaapBasicMonitor
@@ -2295,6 +2328,61 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_authentication_intelligence_basic_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxOneMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_one_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxOneMonitor).F5XcNginxOneMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_one_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxOneUser:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_one_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxOneUser).F5XcNginxOneUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_one_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxOneAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_one_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxOneAdmin).F5XcNginxOneAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_one_admin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxMgmtSuiteApplication:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_mgmt_suite_application"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxMgmtSuiteApplication).F5XcNginxMgmtSuiteApplication
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_mgmt_suite_application"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcApplicationInfrastructureProtectionApplication:
+		if fv, exists := v.FldValidators["choice.f5xc_application_infrastructure_protection_application"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcApplicationInfrastructureProtectionApplication).F5XcApplicationInfrastructureProtectionApplication
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_application_infrastructure_protection_application"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

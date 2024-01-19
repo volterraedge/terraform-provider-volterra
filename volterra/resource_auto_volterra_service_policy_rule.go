@@ -1829,6 +1829,12 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
+						"jwt_claims_validation": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"jwt_validation": {
 
 							Type:     schema.TypeBool,
@@ -4272,6 +4278,18 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["jwt_claims_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_JwtClaimsValidation{}
+					actionTypeInt.JwtClaimsValidation = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
 				}
 
 			}
@@ -6745,6 +6763,18 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					}
 
+				}
+
+			}
+
+			if v, ok := wafActionMapStrToI["jwt_claims_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
+
+				actionTypeTypeFound = true
+
+				if v.(bool) {
+					actionTypeInt := &ves_io_schema_policy.WafAction_JwtClaimsValidation{}
+					actionTypeInt.JwtClaimsValidation = &ves_io_schema.Empty{}
+					wafAction.ActionType = actionTypeInt
 				}
 
 			}

@@ -32,12 +32,14 @@ resource "volterra_tcp_loadbalancer" "example" {
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
   // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_source_ip_stickiness = true
-  // One of the arguments from this list "tls_tcp tcp tls_tcp_auto_cert" must be set
+  hash_policy_choice_least_active = true
+  // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
   tcp = true
+  // One of the arguments from this list "listen_port port_ranges" must be set
+  listen_port = "0"
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  service_policies_from_namespace = true
-  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+  no_service_policies = true
+  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
   sni = true
 }
 
@@ -92,7 +94,7 @@ Argument Reference
 
 `tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
 
-`tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
+`tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
 
@@ -378,7 +380,7 @@ User is responsible for managing DNS to this load balancer..
 
 ### Tls Tcp Auto Cert
 
-or a DNS CNAME record should be created in your DNS provider's portal..
+or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud)..
 
 `no_mtls` - (Optional) x-displayName: "Disable" (bool).
 

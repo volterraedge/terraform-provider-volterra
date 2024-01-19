@@ -3609,9 +3609,10 @@ var CustomAPISwaggerJSON string = `{
         },
         "dns_zoneTSIGKeyAlgorithm": {
             "type": "string",
-            "description": "TSIG key value must be compatible with the specified algorithm\n\n - HMAC_MD5: HMAC_MD5\n\n - HMAC_SHA1: HMAC_SHA1\n\n - HMAC_SHA224: HMAC_SHA224\n\n - HMAC_SHA256: HMAC_SHA256\n\n - HMAC_SHA384: HMAC_SHA384\n\n - HMAC_SHA512: HMAC_SHA512\n",
+            "description": "TSIG key value must be compatible with the specified algorithm\n\n - UNDEFINED: UNDEFINED\n\n - HMAC_MD5: HMAC_MD5\n\n - HMAC_SHA1: HMAC_SHA1\n\n - HMAC_SHA224: HMAC_SHA224\n\n - HMAC_SHA256: HMAC_SHA256\n\n - HMAC_SHA384: HMAC_SHA384\n\n - HMAC_SHA512: HMAC_SHA512\n",
             "title": "TSIG Key Algorithm",
             "enum": [
+                "UNDEFINED",
                 "HMAC_MD5",
                 "HMAC_SHA1",
                 "HMAC_SHA224",
@@ -3619,7 +3620,7 @@ var CustomAPISwaggerJSON string = `{
                 "HMAC_SHA384",
                 "HMAC_SHA512"
             ],
-            "default": "HMAC_MD5",
+            "default": "UNDEFINED",
             "x-displayname": "TSIG Key algorithm",
             "x-ves-proto-enum": "ves.io.schema.dns_zone.TSIGKeyAlgorithm"
         },

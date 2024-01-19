@@ -20,11 +20,30 @@ resource "volterra_network_connector" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "slo_to_global_dr slo_to_global_snat sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat" must be set
+  // One of the arguments from this list "sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat slo_to_global_dr slo_to_global_snat" must be set
   sli_to_slo_dr = true
 
   // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-  disable_forward_proxy = true
+
+  enable_forward_proxy {
+    connection_timeout   = "4000"
+    max_connect_attempts = "3"
+
+    // One of the arguments from this list "no_interception tls_intercept" must be set
+
+    tls_intercept {
+      // One of the arguments from this list "enable_for_all_domains policy" must be set
+      enable_for_all_domains = true
+
+      // One of the arguments from this list "custom_certificate volterra_certificate" must be set
+      volterra_certificate = true
+
+      // One of the arguments from this list "trusted_ca_url volterra_trusted_ca" must be set
+      volterra_trusted_ca = true
+    }
+    white_listed_ports = ["[22, 9400]"]
+    white_listed_prefixes = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
+  }
 }
 
 ```

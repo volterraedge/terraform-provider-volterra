@@ -42,17 +42,17 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`api_inventory_exclusion_list` - (Optional) List of API Endpoints excluded from the API Inventory.. See [Api Inventory Exclusion List ](#api-inventory-exclusion-list) below for details.
+`api_inventory_exclusion_list` - (Optional) note: hidden until full release of the API Inventory feature. See [Api Inventory Exclusion List ](#api-inventory-exclusion-list) below for details.
 
-`api_inventory_inclusion_list` - (Optional) Typically, discovered API endpoints are added to the API Inventory using this list.. See [Api Inventory Inclusion List ](#api-inventory-inclusion-list) below for details.
+`api_inventory_inclusion_list` - (Optional) note: hidden until full release of the API Inventory feature. See [Api Inventory Inclusion List ](#api-inventory-inclusion-list) below for details.
 
-`non_api_endpoints` - (Optional) List of Non-API Endpoints.. See [Non Api Endpoints ](#non-api-endpoints) below for details.
+`non_api_endpoints` - (Optional) note: hidden until full release of the API Inventory feature. See [Non Api Endpoints ](#non-api-endpoints) below for details.
 
-`swagger_specs` - (Optional) Notice file versions. If swagger file is updated, need to select a new version here to redefine the API. (`List of String`).
+`swagger_specs` - (Optional) Notice file versions. If OpenAPI file is updated, need to select a new version here to redefine the API. (`List of String`).
 
 ### Api Inventory Exclusion List
 
-List of API Endpoints excluded from the API Inventory..
+note: hidden until full release of the API Inventory feature.
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 
@@ -60,7 +60,7 @@ List of API Endpoints excluded from the API Inventory..
 
 ### Api Inventory Inclusion List
 
-Typically, discovered API endpoints are added to the API Inventory using this list..
+note: hidden until full release of the API Inventory feature.
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 
@@ -68,7 +68,7 @@ Typically, discovered API endpoints are added to the API Inventory using this li
 
 ### Non Api Endpoints
 
-List of Non-API Endpoints..
+note: hidden until full release of the API Inventory feature.
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 

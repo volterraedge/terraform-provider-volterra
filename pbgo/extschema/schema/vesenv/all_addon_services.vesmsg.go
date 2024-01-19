@@ -452,6 +452,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_NginxOne:
+		if fv, exists := v.FldValidators["choice.nginx_one"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_NginxOne).NginxOne
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("nginx_one"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_F5XcApplicationTrafficInsightBasic:
 		if fv, exists := v.FldValidators["choice.f5xc_application_traffic_insight_basic"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_F5XcApplicationTrafficInsightBasic).F5XcApplicationTrafficInsightBasic

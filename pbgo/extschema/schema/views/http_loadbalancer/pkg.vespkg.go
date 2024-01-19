@@ -35,6 +35,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionReq"] = AssignAPIDefinitionReqValidator()
+	vr["ves.io.schema.views.http_loadbalancer.AssignAPIDefinitionResp"] = AssignAPIDefinitionRespValidator()
 	vr["ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleReq"] = DeleteDoSAutoMitigationRuleReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.DeleteDoSAutoMitigationRuleRsp"] = DeleteDoSAutoMitigationRuleRspValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetDnsInfoRequest"] = GetDnsInfoRequestValidator()
@@ -44,6 +46,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.GetSecurityConfigReq"] = GetSecurityConfigReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetSecurityConfigRsp"] = GetSecurityConfigRspValidator()
 	vr["ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList"] = HTTPLoadBalancerListValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq"] = ListAvailableAPIDefinitionsReqValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp"] = ListAvailableAPIDefinitionsRespValidator()
 
 	vr["ves.io.schema.views.http_loadbalancer.APIEndpointProtectionRule"] = APIEndpointProtectionRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.APIGroupProtectionRule"] = APIGroupProtectionRuleValidator()
@@ -87,6 +91,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.InlineRateLimiter"] = InlineRateLimiterValidator()
 	vr["ves.io.schema.views.http_loadbalancer.JWKS"] = JWKSValidator()
 	vr["ves.io.schema.views.http_loadbalancer.JWTValidation"] = JWTValidationValidator()
+	vr["ves.io.schema.views.http_loadbalancer.MandatoryClaims"] = MandatoryClaimsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = MirrorPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileSDKConfigType"] = MobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType"] = MobileTrafficIdentifierTypeValidator()
@@ -191,6 +196,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
+		"spec.default_pool.advanced_options.disable_lb_source_ip_persistance",
+		"spec.default_pool.advanced_options.enable_lb_source_ip_persistance",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -212,6 +219,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.jwt_validation.token_location.cookie",
 		"spec.jwt_validation.token_location.header",
 		"spec.jwt_validation.token_location.query_param",
+		"spec.l7_ddos_action_none",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
@@ -253,23 +261,159 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
 		},
 	}
 
@@ -284,36 +428,308 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "create_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "object.spec.gc_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "object.spec.gc_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
 		},
 	}
 
@@ -324,20 +740,156 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
 		},
 		{
 			FieldPath:           "items.#.object.spec.gc_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.object.spec.gc_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
 		},
 	}
 
@@ -378,6 +930,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
+		"spec.default_pool.advanced_options.disable_lb_source_ip_persistance",
+		"spec.default_pool.advanced_options.enable_lb_source_ip_persistance",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -399,6 +953,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.jwt_validation.token_location.cookie",
 		"spec.jwt_validation.token_location.header",
 		"spec.jwt_validation.token_location.query_param",
+		"spec.l7_ddos_action_none",
 		"spec.malicious_user_mitigation",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
@@ -440,12 +995,80 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.jwt_validation.mandatory_claims",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"demo1", "devtest"},
+			AllowedEnvironments: []string{"devtest", "test"},
 		},
 	}
 

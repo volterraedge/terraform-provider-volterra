@@ -1531,10 +1531,6 @@ func (v *ValidateCustomDataDetectionConfig) DomainChoiceValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
-func (v *ValidateCustomDataDetectionConfig) DomainChoiceAnyDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateCustomDataDetectionConfig) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1551,16 +1547,6 @@ func (v *ValidateCustomDataDetectionConfig) PatternChoiceValidationRuleHandler(r
 	return validatorFn, nil
 }
 
-func (v *ValidateCustomDataDetectionConfig) PatternChoiceKeyPatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return KeyPatternValidator().Validate, nil
-}
-func (v *ValidateCustomDataDetectionConfig) PatternChoiceValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ValuePatternValidator().Validate, nil
-}
-func (v *ValidateCustomDataDetectionConfig) PatternChoiceKeyValuePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return KeyValuePatternValidator().Validate, nil
-}
-
 func (v *ValidateCustomDataDetectionConfig) SectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1575,13 +1561,6 @@ func (v *ValidateCustomDataDetectionConfig) TargetChoiceValidationRuleHandler(ru
 		return nil, errors.Wrap(err, "ValidationRuleHandler for target_choice")
 	}
 	return validatorFn, nil
-}
-
-func (v *ValidateCustomDataDetectionConfig) TargetChoiceAnyTargetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateCustomDataDetectionConfig) TargetChoiceApiEndpointTargetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return APIEndpointValidator().Validate, nil
 }
 
 func (v *ValidateCustomDataDetectionConfig) TargetChoiceBasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -1838,18 +1817,8 @@ var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetect
 	}
 	v.FldValidators["domain_choice"] = vFn
 
-	vrhDomainChoiceAnyDomain := v.DomainChoiceAnyDomainValidationRuleHandler
-	rulesDomainChoiceAnyDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["domain_choice.any_domain"], err = vrhDomainChoiceAnyDomain(rulesDomainChoiceAnyDomain)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.domain_choice_any_domain: %s", err)
-		panic(errMsg)
-	}
 	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
 	rulesDomainChoiceSpecificDomain := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 		"ves.io.schema.rules.string.vh_domain": "true",
 	}
@@ -1859,7 +1828,6 @@ var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetect
 		panic(errMsg)
 	}
 
-	v.FldValidators["domain_choice.any_domain"] = vFnMap["domain_choice.any_domain"]
 	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
 
 	vrhPatternChoice := v.PatternChoiceValidationRuleHandler
@@ -1872,38 +1840,6 @@ var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetect
 		panic(errMsg)
 	}
 	v.FldValidators["pattern_choice"] = vFn
-
-	vrhPatternChoiceKeyPattern := v.PatternChoiceKeyPatternValidationRuleHandler
-	rulesPatternChoiceKeyPattern := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["pattern_choice.key_pattern"], err = vrhPatternChoiceKeyPattern(rulesPatternChoiceKeyPattern)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_key_pattern: %s", err)
-		panic(errMsg)
-	}
-	vrhPatternChoiceValuePattern := v.PatternChoiceValuePatternValidationRuleHandler
-	rulesPatternChoiceValuePattern := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["pattern_choice.value_pattern"], err = vrhPatternChoiceValuePattern(rulesPatternChoiceValuePattern)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_value_pattern: %s", err)
-		panic(errMsg)
-	}
-	vrhPatternChoiceKeyValuePattern := v.PatternChoiceKeyValuePatternValidationRuleHandler
-	rulesPatternChoiceKeyValuePattern := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["pattern_choice.key_value_pattern"], err = vrhPatternChoiceKeyValuePattern(rulesPatternChoiceKeyValuePattern)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.pattern_choice_key_value_pattern: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["pattern_choice.key_pattern"] = vFnMap["pattern_choice.key_pattern"]
-	v.FldValidators["pattern_choice.value_pattern"] = vFnMap["pattern_choice.value_pattern"]
-	v.FldValidators["pattern_choice.key_value_pattern"] = vFnMap["pattern_choice.key_value_pattern"]
 
 	vrhSectionChoice := v.SectionChoiceValidationRuleHandler
 	rulesSectionChoice := map[string]string{
@@ -1927,27 +1863,8 @@ var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetect
 	}
 	v.FldValidators["target_choice"] = vFn
 
-	vrhTargetChoiceAnyTarget := v.TargetChoiceAnyTargetValidationRuleHandler
-	rulesTargetChoiceAnyTarget := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["target_choice.any_target"], err = vrhTargetChoiceAnyTarget(rulesTargetChoiceAnyTarget)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_any_target: %s", err)
-		panic(errMsg)
-	}
-	vrhTargetChoiceApiEndpointTarget := v.TargetChoiceApiEndpointTargetValidationRuleHandler
-	rulesTargetChoiceApiEndpointTarget := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["target_choice.api_endpoint_target"], err = vrhTargetChoiceApiEndpointTarget(rulesTargetChoiceApiEndpointTarget)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CustomDataDetectionConfig.target_choice_api_endpoint_target: %s", err)
-		panic(errMsg)
-	}
 	vrhTargetChoiceBasePath := v.TargetChoiceBasePathValidationRuleHandler
 	rulesTargetChoiceBasePath := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.http_path": "true",
 		"ves.io.schema.rules.string.max_len":   "128",
 	}
@@ -1966,12 +1883,16 @@ var DefaultCustomDataDetectionConfigValidator = func() *ValidateCustomDataDetect
 		panic(errMsg)
 	}
 
-	v.FldValidators["target_choice.any_target"] = vFnMap["target_choice.any_target"]
-	v.FldValidators["target_choice.api_endpoint_target"] = vFnMap["target_choice.api_endpoint_target"]
 	v.FldValidators["target_choice.base_path"] = vFnMap["target_choice.base_path"]
 	v.FldValidators["target_choice.api_group"] = vFnMap["target_choice.api_group"]
 
+	v.FldValidators["pattern_choice.key_pattern"] = KeyPatternValidator().Validate
+	v.FldValidators["pattern_choice.value_pattern"] = ValuePatternValidator().Validate
+	v.FldValidators["pattern_choice.key_value_pattern"] = KeyValuePatternValidator().Validate
+
 	v.FldValidators["section_choice.custom_sections"] = CustomSectionsValidator().Validate
+
+	v.FldValidators["target_choice.api_endpoint_target"] = APIEndpointValidator().Validate
 
 	return v
 }()

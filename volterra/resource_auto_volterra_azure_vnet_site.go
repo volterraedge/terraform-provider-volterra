@@ -274,6 +274,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"az_nodes": {
 
 							Type:     schema.TypeList,
@@ -1922,6 +1944,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
@@ -3577,6 +3621,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+
 						"az_nodes": {
 
 							Type:     schema.TypeList,
@@ -3706,6 +3772,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
@@ -3841,6 +3929,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 
 						"az_nodes": {
 
@@ -4787,6 +4897,28 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"accelerated_networking": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"disable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
 
 						"azure_certified_hw": {
 							Type:     schema.TypeString,
@@ -6251,6 +6383,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.IngressEgressGw.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
 
@@ -8625,6 +8795,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.IngressEgressGwAr.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
@@ -11003,6 +11211,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
 
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.IngressGw.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -11198,6 +11444,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.IngressGwAr.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 
@@ -11397,6 +11681,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.VoltstackCluster.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
 
@@ -12725,6 +13047,44 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["accelerated_networking"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				acceleratedNetworking := &ves_io_schema_views.AcceleratedNetworkingType{}
+				siteTypeInt.VoltstackClusterAr.AcceleratedNetworking = acceleratedNetworking
+				for _, set := range sl {
+					acceleratedNetworkingMapStrToI := set.(map[string]interface{})
+
+					acceleratedNetworkingTypeFound := false
+
+					if v, ok := acceleratedNetworkingMapStrToI["disable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Disable{}
+							acceleratedNetworkingInt.Disable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+					if v, ok := acceleratedNetworkingMapStrToI["enable"]; ok && !isIntfNil(v) && !acceleratedNetworkingTypeFound {
+
+						acceleratedNetworkingTypeFound = true
+
+						if v.(bool) {
+							acceleratedNetworkingInt := &ves_io_schema_views.AcceleratedNetworkingType_Enable{}
+							acceleratedNetworkingInt.Enable = &ves_io_schema.Empty{}
+							acceleratedNetworking.AcceleratedNetworking = acceleratedNetworkingInt
+						}
+
+					}
+
+				}
+
+			}
 
 			if v, ok := cs["azure_certified_hw"]; ok && !isIntfNil(v) {
 

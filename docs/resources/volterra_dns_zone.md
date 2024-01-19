@@ -20,7 +20,7 @@ resource "volterra_dns_zone" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "primary secondary" must be set
+  // One of the arguments from this list "secondary primary" must be set
 
   primary {
     allow_http_lb_managed_records = true
@@ -29,16 +29,24 @@ resource "volterra_dns_zone" "example" {
       description = "Comment"
       ttl         = "3600"
 
-      // One of the arguments from this list "a_record ns_record ds_record afsdb_record alias_record cname_record mx_record naptr_record sshfp_record cert_record dlv_record aaaa_record srv_record lb_record loc_record eui48_record eui64_record tlsa_record caa_record ptr_record txt_record cds_record" must be set
+      // One of the arguments from this list "txt_record afsdb_record eui48_record cert_record a_record aaaa_record tlsa_record ptr_record ds_record ns_record srv_record lb_record cds_record sshfp_record dlv_record caa_record cname_record naptr_record eui64_record loc_record alias_record mx_record" must be set
 
-      cname_record {
-        name  = "www or mail or * or corp.web or *.b"
-        value = "example.com"
+      naptr_record {
+        name = "www or mail or * or ww* or *ab"
+
+        values {
+          flags       = "flags"
+          order       = "10"
+          preference  = "10"
+          regexp      = "regexp"
+          replacement = "replacement"
+          service     = "service"
+        }
       }
     }
 
     dnssec_mode {
-      // One of the arguments from this list "enable disable" must be set
+      // One of the arguments from this list "disable enable" must be set
       disable = true
     }
 
@@ -53,17 +61,25 @@ resource "volterra_dns_zone" "example" {
         description = "Comment"
         ttl         = "3600"
 
-        // One of the arguments from this list "alias_record cname_record mx_record naptr_record aaaa_record srv_record lb_record loc_record sshfp_record cert_record dlv_record caa_record ptr_record txt_record cds_record eui48_record eui64_record tlsa_record a_record ns_record ds_record afsdb_record" must be set
+        // One of the arguments from this list "loc_record alias_record mx_record naptr_record eui64_record eui48_record cert_record a_record aaaa_record txt_record afsdb_record ptr_record ds_record tlsa_record lb_record cds_record sshfp_record dlv_record caa_record cname_record ns_record srv_record" must be set
 
-        eui64_record {
-          name  = "www or mail or * or ww* or *ab"
-          value = "01-23-45-67-89-ab-cd-ef"
+        ptr_record {
+          name = "www or mail or * or corp.web or *.b"
+
+          values = ["my.example.com"]
         }
       }
     }
 
     // One of the arguments from this list "default_soa_parameters soa_parameters" must be set
-    default_soa_parameters = true
+
+    soa_parameters {
+      expire       = "360000"
+      negative_ttl = "1800"
+      refresh      = "86400"
+      retry        = "7200"
+      ttl          = "86400"
+    }
   }
 }
 

@@ -2692,6 +2692,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwARType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "active_enhanced_firewall_policies": {
                     "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
@@ -2849,6 +2855,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressEgressGwType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "active_enhanced_firewall_policies": {
                     "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
@@ -3006,6 +3018,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Azure Ingress Gateway on Alternate Region",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "azure_certified_hw": {
                     "type": "string",
                     "description": " Name for Azure certified hardware.\n\nExample: - \"azure-byol-voltmesh\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"azure-byol-voltmesh\\\"]\n  ves.io.schema.rules.string.max_len: 64\n",
@@ -3041,6 +3059,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Azure Ingress Gateway on Recommended Region",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "az_nodes": {
                     "type": "array",
                     "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
@@ -3169,6 +3193,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterARType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "active_enhanced_firewall_policies": {
                     "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
@@ -3314,6 +3344,12 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-storage_class_choice": "[\"default_storage\",\"storage_class_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetVoltstackClusterType",
             "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
                 "active_enhanced_firewall_policies": {
                     "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
@@ -5344,7 +5380,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -5358,7 +5394,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_IP_AUTO",
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
-                "VIRTUAL_NETWORK_IP_FABRIC"
+                "VIRTUAL_NETWORK_IP_FABRIC",
+                "VIRTUAL_NETWORK_SEGMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -5724,6 +5761,28 @@ var APISwaggerJSON string = `{
                 "UPGRADE_NOT_REQUIRED"
             ],
             "default": "UPGRADE_SUCCESSFUL"
+        },
+        "viewsAcceleratedNetworkingType": {
+            "type": "object",
+            "description": "x-required\nAccelerated Networking to reduce Latency, When Mode is toggled, traffic\ndisruption will be seen",
+            "title": "Accelerated Networking Type",
+            "x-displayname": "Accelerated Networking Type",
+            "x-ves-oneof-field-accelerated_networking": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AcceleratedNetworkingType",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\n\n Site not optimized for accelerated networking. All networking traffic in and\n out of the VM traverses the host and the virtual switch on Azure hosting\n infrastructure.",
+                    "title": "Disable Accelerated Networking",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Accelerated Networking"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\n\n Enable Accelerated Networking- Site optimized for accelerated networking.\n All Network traffic that arrives at the VM's network interface (NIC) is\n forwarded directly to the VM on Azure hosting infrastructure,  greatly\n improving networking performance",
+                    "title": "Enable Accelerated Networking",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Accelerated Networking"
+                }
+            }
         },
         "viewsAzureSpecialSubnetType": {
             "type": "object",
@@ -6612,7 +6671,7 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed\n\nExample: - \"Standard_D3_v2\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure \n you select a Virtual Machine that supports accelerated networking or \n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway \n \u003e advanced options.\n\nExample: - \"Standard_D3_v2\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Machine Type",
                     "maxLength": 64,
                     "x-displayname": "Azure Machine Type for Node",

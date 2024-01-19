@@ -3827,7 +3827,7 @@ var APISwaggerJSON string = `{
                 },
                 "vlan_id": {
                     "type": "integer",
-                    "description": "x-displayName: \"VLAN Id\"\nx-example: \"10\"\nx-required\nConfigure a VLAN tagged interface",
+                    "description": "x-displayName: \"VLAN Id\"\nx-example: \"10\"\nConfigure a VLAN tagged interface",
                     "title": "VLAN Id",
                     "format": "int64"
                 }

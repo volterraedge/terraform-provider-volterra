@@ -38,14 +38,16 @@ resource "volterra_fast_acl" "example" {
       name = "value"
 
       port {
-        // One of the arguments from this list "all user_defined dns" must be set
+        // One of the arguments from this list "dns all user_defined" must be set
         all = true
       }
 
-      // One of the arguments from this list "ip_prefix_set prefix" must be set
+      // One of the arguments from this list "prefix ip_prefix_set" must be set
 
       prefix {
-        prefix = ["[192.168.1.0/24, 192.168.2.0/24]\" or \"[2001:db8::1::/112, 2001::db8::2::/112]"]
+        ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+        prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
       }
     }
 
@@ -53,7 +55,7 @@ resource "volterra_fast_acl" "example" {
     outside_network = true
 
     // One of the arguments from this list "interface_services vip_services all_services" must be set
-    all_services = true
+    vip_services = true
   }
 }
 
@@ -126,7 +128,7 @@ Regional Edge : Tenant can not configure it.
 
 `address` - (Optional) List of IP addresses to match with destination. See [Address ](#address) below for details.
 
-`ports` - (Optional) Special value "0" means all valid ports on the VIPs. See [Ports ](#ports) below for details.
+`ports` - (Required) Special value "0" means all valid ports on the VIPs. See [Ports ](#ports) below for details.
 
 `protocol` - (Optional) Protocol to match in the traffic (`String`).
 
@@ -257,6 +259,8 @@ Special value "0" means all valid ports on the VIPs.
 ### Prefix
 
 List of IP prefixes.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 

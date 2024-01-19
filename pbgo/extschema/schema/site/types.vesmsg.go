@@ -4325,6 +4325,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["private_connectivity"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_connectivity"))
+		if err := fv(ctx, m.GetPrivateConnectivity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("region"))
@@ -6140,6 +6149,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("piku_enabled"))
 		if err := fv(ctx, m.GetPikuEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_connectivity"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_connectivity"))
+		if err := fv(ctx, m.GetPrivateConnectivity(), vOpts...); err != nil {
 			return err
 		}
 
@@ -10723,6 +10741,15 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["ike_tunnel_flap_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_tunnel_flap_reason"))
+		if err := fv(ctx, m.GetIkeTunnelFlapReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["isLocal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("isLocal"))
@@ -10745,6 +10772,15 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("role"))
 		if err := fv(ctx, m.GetRole(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssl_tunnel_flap_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssl_tunnel_flap_reason"))
+		if err := fv(ctx, m.GetSslTunnelFlapReason(), vOpts...); err != nil {
 			return err
 		}
 
@@ -10798,6 +10834,93 @@ var DefaultTunnelConnectionStatusValidator = func() *ValidateTunnelConnectionSta
 
 func TunnelConnectionStatusValidator() db.Validator {
 	return DefaultTunnelConnectionStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TunnelFlapReason) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TunnelFlapReason) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TunnelFlapReason) DeepCopy() *TunnelFlapReason {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TunnelFlapReason{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TunnelFlapReason) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TunnelFlapReason) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TunnelFlapReasonValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTunnelFlapReason struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTunnelFlapReason) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TunnelFlapReason)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TunnelFlapReason got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["flap_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("flap_reason"))
+		if err := fv(ctx, m.GetFlapReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("time"))
+		if err := fv(ctx, m.GetTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTunnelFlapReasonValidator = func() *ValidateTunnelFlapReason {
+	v := &ValidateTunnelFlapReason{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TunnelFlapReasonValidator() db.Validator {
+	return DefaultTunnelFlapReasonValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -11710,6 +11833,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
+	m.PrivateConnectivity = f.GetPrivateConnectivity()
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
 	m.SiteSubtype = f.GetSiteSubtype()
@@ -11765,6 +11889,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OutsideNameserverV6 = m1.OutsideNameserverV6
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
+	f.PrivateConnectivity = m1.PrivateConnectivity
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState
 	f.SiteSubtype = m1.SiteSubtype

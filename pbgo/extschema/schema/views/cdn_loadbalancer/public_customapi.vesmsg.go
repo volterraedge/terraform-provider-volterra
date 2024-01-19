@@ -1108,6 +1108,46 @@ func (v *ValidateCDNFieldAggregation) TopkValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateCDNFieldAggregation) SubAggsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for sub_aggs")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]*CDNFieldSubAggregation, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := CDNFieldSubAggregationValidator().Validate(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for sub_aggs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]*CDNFieldSubAggregation)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]*CDNFieldSubAggregation, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map sub_aggs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items sub_aggs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCDNFieldAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CDNFieldAggregation)
 	if !ok {
@@ -1126,6 +1166,14 @@ func (v *ValidateCDNFieldAggregation) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("field"))
 		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		if err := fv(ctx, m.GetSubAggs(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1178,11 +1226,110 @@ var DefaultCDNFieldAggregationValidator = func() *ValidateCDNFieldAggregation {
 	}
 	v.FldValidators["topk"] = vFn
 
+	vrhSubAggs := v.SubAggsValidationRuleHandler
+	rulesSubAggs := map[string]string{
+		"ves.io.schema.rules.map.keys.string.max_len": "64",
+		"ves.io.schema.rules.map.keys.string.min_len": "1",
+		"ves.io.schema.rules.map.max_pairs":           "16",
+	}
+	vFn, err = vrhSubAggs(rulesSubAggs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNFieldAggregation.sub_aggs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sub_aggs"] = vFn
+
 	return v
 }()
 
 func CDNFieldAggregationValidator() db.Validator {
 	return DefaultCDNFieldAggregationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNFieldSubAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNFieldSubAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNFieldSubAggregation) DeepCopy() *CDNFieldSubAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNFieldSubAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNFieldSubAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNFieldSubAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNFieldSubAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNFieldSubAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNFieldSubAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNFieldSubAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNFieldSubAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAggregationType().(type) {
+	case *CDNFieldSubAggregation_FieldAggregation:
+		if fv, exists := v.FldValidators["aggregation_type.field_aggregation"]; exists {
+			val := m.GetAggregationType().(*CDNFieldSubAggregation_FieldAggregation).FieldAggregation
+			vOpts := append(opts,
+				db.WithValidateField("aggregation_type"),
+				db.WithValidateField("field_aggregation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNFieldSubAggregationValidator = func() *ValidateCDNFieldSubAggregation {
+	v := &ValidateCDNFieldSubAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["aggregation_type.field_aggregation"] = FieldAggregationValidator().Validate
+
+	return v
+}()
+
+func CDNFieldSubAggregationValidator() db.Validator {
+	return DefaultCDNFieldSubAggregationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1381,6 +1528,150 @@ var DefaultCDNLogResponseValidator = func() *ValidateCDNLogResponse {
 
 func CDNLogResponseValidator() db.Validator {
 	return DefaultCDNLogResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *FieldAggregation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldAggregation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldAggregation) DeepCopy() *FieldAggregation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldAggregation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldAggregation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldAggregation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldAggregationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldAggregation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldAggregation) FieldValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag)
+		return int32(i)
+	}
+	// ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema_views_cdn_loadbalancer_access_log.CDNAccessLogTag_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFieldAggregation) TopkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for topk")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateFieldAggregation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldAggregation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldAggregation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field"))
+		if err := fv(ctx, m.GetField(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["topk"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("topk"))
+		if err := fv(ctx, m.GetTopk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldAggregationValidator = func() *ValidateFieldAggregation {
+	v := &ValidateFieldAggregation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhField := v.FieldValidationRuleHandler
+	rulesField := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhField(rulesField)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FieldAggregation.field: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field"] = vFn
+
+	vrhTopk := v.TopkValidationRuleHandler
+	rulesTopk := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhTopk(rulesTopk)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for FieldAggregation.topk: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["topk"] = vFn
+
+	return v
+}()
+
+func FieldAggregationValidator() db.Validator {
+	return DefaultFieldAggregationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2717,16 +3008,12 @@ type ValidateListServiceOperationsReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateListServiceOperationsReq) OptionsTimeRangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ServiceOperationsTimeRangeValidator().Validate, nil
-}
-
-func (v *ValidateListServiceOperationsReq) OptionsLastnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	oValidatorFn_Lastn, err := db.NewUint32ValidationRuleHandler(rules)
+func (v *ValidateListServiceOperationsReq) OptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for lastn")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for options")
 	}
-	return oValidatorFn_Lastn, nil
+	return validatorFn, nil
 }
 
 func (v *ValidateListServiceOperationsReq) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -2771,6 +3058,16 @@ func (v *ValidateListServiceOperationsReq) Validate(ctx context.Context, pm inte
 
 	}
 
+	if fv, exists := v.FldValidators["options"]; exists {
+		val := m.GetOptions()
+		vOpts := append(opts,
+			db.WithValidateField("options"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetOptions().(type) {
 	case *ListServiceOperationsReq_TimeRange:
 		if fv, exists := v.FldValidators["options.time_range"]; exists {
@@ -2812,27 +3109,16 @@ var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperat
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhOptionsTimeRange := v.OptionsTimeRangeValidationRuleHandler
-	rulesOptionsTimeRange := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhOptions := v.OptionsValidationRuleHandler
+	rulesOptions := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFnMap["options.time_range"], err = vrhOptionsTimeRange(rulesOptionsTimeRange)
+	vFn, err = vrhOptions(rulesOptions)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ListServiceOperationsReq.options_time_range: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListServiceOperationsReq.options: %s", err)
 		panic(errMsg)
 	}
-	vrhOptionsLastn := v.OptionsLastnValidationRuleHandler
-	rulesOptionsLastn := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["options.lastn"], err = vrhOptionsLastn(rulesOptionsLastn)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ListServiceOperationsReq.options_lastn: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["options.time_range"] = vFnMap["options.time_range"]
-	v.FldValidators["options.lastn"] = vFnMap["options.lastn"]
+	v.FldValidators["options"] = vFn
 
 	vrhNamespace := v.NamespaceValidationRuleHandler
 	rulesNamespace := map[string]string{
@@ -2844,6 +3130,8 @@ var DefaultListServiceOperationsReqValidator = func() *ValidateListServiceOperat
 		panic(errMsg)
 	}
 	v.FldValidators["namespace"] = vFn
+
+	v.FldValidators["options.time_range"] = ServiceOperationsTimeRangeValidator().Validate
 
 	return v
 }()

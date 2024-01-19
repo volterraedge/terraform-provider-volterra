@@ -4,7 +4,7 @@
 package api_definition
 
 import (
-	"bytes"
+	bytes "bytes"
 	"context"
 	"fmt"
 	io "io"
@@ -34,21 +34,21 @@ type PublicApiepCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *PublicApiepCustomAPIGrpcClient) doRPCGetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetAPIEndpointsSchemaReq{}
+func (c *PublicApiepCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetAPIEndpointsSchemaUpdatesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq", yamlReq)
 	}
-	rsp, err := c.grpcClient.GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, req, opts...)
+	rsp, err := c.grpcClient.GetAPIEndpointsSchemaUpdates(ctx, req, opts...)
 	return rsp, err
 }
 
-func (c *PublicApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &UpdateAPIEndpointsSchemaReq{}
+func (c *PublicApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq", yamlReq)
 	}
-	rsp, err := c.grpcClient.UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, req, opts...)
+	rsp, err := c.grpcClient.UpdateAPIEndpointsSchemas(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -82,9 +82,9 @@ func NewPublicApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient 
 		grpcClient: NewPublicApiepCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["GetAPIEndpointsWithNewlyDiscoveredSchema"] = ccl.doRPCGetAPIEndpointsWithNewlyDiscoveredSchema
+	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
 
-	rpcFns["UpdateAPIEndpointsWithNewlyDiscoveredSchema"] = ccl.doRPCUpdateAPIEndpointsWithNewlyDiscoveredSchema
+	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	ccl.rpcFns = rpcFns
 
@@ -99,16 +99,16 @@ type PublicApiepCustomAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *PublicApiepCustomAPIRestClient) doRPCGetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *PublicApiepCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetAPIEndpointsSchemaReq{}
+	req := &GetAPIEndpointsSchemaUpdatesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -138,8 +138,12 @@ func (c *PublicApiepCustomAPIRestClient) doRPCGetAPIEndpointsWithNewlyDiscovered
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		for _, item := range req.ApiEndpointsFilter {
+			q.Add("api_endpoints_filter", fmt.Sprintf("%v", item))
+		}
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query_type", fmt.Sprintf("%v", req.QueryType))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -171,9 +175,9 @@ func (c *PublicApiepCustomAPIRestClient) doRPCGetAPIEndpointsWithNewlyDiscovered
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetAPIEndpointsSchemaResp{}
+	pbRsp := &GetAPIEndpointsSchemaUpdatesResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -183,16 +187,16 @@ func (c *PublicApiepCustomAPIRestClient) doRPCGetAPIEndpointsWithNewlyDiscovered
 	return pbRsp, nil
 }
 
-func (c *PublicApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *PublicApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &UpdateAPIEndpointsSchemaReq{}
+	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -222,8 +226,8 @@ func (c *PublicApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsWithNewlyDiscove
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		for _, item := range req.ApiEndpoints {
-			q.Add("api_endpoints", fmt.Sprintf("%v", item))
+		for _, item := range req.ApiEndpointsSchemaUpdates {
+			q.Add("api_endpoints_schema_updates", fmt.Sprintf("%v", item))
 		}
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
@@ -258,9 +262,9 @@ func (c *PublicApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsWithNewlyDiscove
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &UpdateAPIEndpointsSchemaResp{}
+	pbRsp := &UpdateAPIEndpointsSchemasResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaResp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -294,9 +298,9 @@ func NewPublicApiepCustomAPIRestClient(baseURL string, hc http.Client) server.Cu
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["GetAPIEndpointsWithNewlyDiscoveredSchema"] = ccl.doRPCGetAPIEndpointsWithNewlyDiscoveredSchema
+	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
 
-	rpcFns["UpdateAPIEndpointsWithNewlyDiscoveredSchema"] = ccl.doRPCUpdateAPIEndpointsWithNewlyDiscoveredSchema
+	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	ccl.rpcFns = rpcFns
 
@@ -310,13 +314,13 @@ type publicApiepCustomAPIInprocClient struct {
 	PublicApiepCustomAPIServer
 }
 
-func (c *publicApiepCustomAPIInprocClient) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *GetAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsWithNewlyDiscoveredSchema", nil)
-	return c.PublicApiepCustomAPIServer.GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+func (c *publicApiepCustomAPIInprocClient) GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaUpdatesResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsSchemaUpdates", nil)
+	return c.PublicApiepCustomAPIServer.GetAPIEndpointsSchemaUpdates(ctx, in)
 }
-func (c *publicApiepCustomAPIInprocClient) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *UpdateAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemaResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsWithNewlyDiscoveredSchema", nil)
-	return c.PublicApiepCustomAPIServer.UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+func (c *publicApiepCustomAPIInprocClient) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error) {
+	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsSchemas", nil)
+	return c.PublicApiepCustomAPIServer.UpdateAPIEndpointsSchemas(ctx, in)
 }
 
 func NewPublicApiepCustomAPIInprocClient(svc svcfw.Service) PublicApiepCustomAPIClient {
@@ -340,7 +344,7 @@ type publicApiepCustomAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *publicApiepCustomAPISrv) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *GetAPIEndpointsSchemaReq) (*GetAPIEndpointsSchemaResp, error) {
+func (s *publicApiepCustomAPISrv) GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq) (*GetAPIEndpointsSchemaUpdatesResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_definition.PublicApiepCustomAPI")
 	cah, ok := ah.(PublicApiepCustomAPIServer)
 	if !ok {
@@ -348,16 +352,16 @@ func (s *publicApiepCustomAPISrv) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx c
 	}
 
 	var (
-		rsp *GetAPIEndpointsSchemaResp
+		rsp *GetAPIEndpointsSchemaUpdatesResp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'PublicApiepCustomAPI.GetAPIEndpointsWithNewlyDiscoveredSchema' operation on 'api_definition'"
+		userMsg := "The 'PublicApiepCustomAPI.GetAPIEndpointsSchemaUpdates' operation on 'api_definition'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -372,7 +376,7 @@ func (s *publicApiepCustomAPISrv) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx c
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsWithNewlyDiscoveredSchema"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsSchemaUpdates"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -380,16 +384,16 @@ func (s *publicApiepCustomAPISrv) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx c
 		}
 	}
 
-	rsp, err = cah.GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+	rsp, err = cah.GetAPIEndpointsSchemaUpdates(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp", rsp)...)
 
 	return rsp, nil
 }
-func (s *publicApiepCustomAPISrv) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *UpdateAPIEndpointsSchemaReq) (*UpdateAPIEndpointsSchemaResp, error) {
+func (s *publicApiepCustomAPISrv) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq) (*UpdateAPIEndpointsSchemasResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_definition.PublicApiepCustomAPI")
 	cah, ok := ah.(PublicApiepCustomAPIServer)
 	if !ok {
@@ -397,16 +401,16 @@ func (s *publicApiepCustomAPISrv) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ct
 	}
 
 	var (
-		rsp *UpdateAPIEndpointsSchemaResp
+		rsp *UpdateAPIEndpointsSchemasResp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'PublicApiepCustomAPI.UpdateAPIEndpointsWithNewlyDiscoveredSchema' operation on 'api_definition'"
+		userMsg := "The 'PublicApiepCustomAPI.UpdateAPIEndpointsSchemas' operation on 'api_definition'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -421,7 +425,7 @@ func (s *publicApiepCustomAPISrv) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ct
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsWithNewlyDiscoveredSchema"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsSchemas"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -429,12 +433,12 @@ func (s *publicApiepCustomAPISrv) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ct
 		}
 	}
 
-	rsp, err = cah.UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+	rsp, err = cah.UpdateAPIEndpointsSchemas(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaResp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp", rsp)...)
 
 	return rsp, nil
 }
@@ -462,103 +466,16 @@ var PublicApiepCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/{namespace}/api_definitions/{name}/api_inventory/schema/new_discoveries": {
-            "get": {
-                "summary": "Get API Endpoints With Newly Discovered Schema",
-                "description": "Get the list API endpoints which have discovered payload schema updates\nrelative to the approved (last time updated by user) schema spec\nNOTE: the list does not include API endpoints defined in user provided OpenAPI spec files",
-                "operationId": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsWithNewlyDiscoveredSchema",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/api_definitionGetAPIEndpointsSchemaResp"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "description": "Namespace\n\nx-example: \"shared\"\nThe namespace of the API Definition for the current request",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Namespace"
-                    },
-                    {
-                        "name": "name",
-                        "description": "Name\n\nx-example: \"name\"\nThe name of the API Definition for the current request",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Name"
-                    }
-                ],
-                "tags": [
-                    "PublicApiepCustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicapiepcustomapi-getapiendpointswithnewlydiscoveredschema"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsWithNewlyDiscoveredSchema"
-            },
+        "/public/namespaces/{namespace}/api_definitions/{name}/api_inventory/api_endpoints/get_schema_updates": {
             "post": {
-                "summary": "Update API Endpoints With Newly Discovered Schema",
-                "description": "Update the payload schema for the specified endpoints or all pending changes if empty list is provided.\nNOTE: only API endpoints returned by a call to -GetChangedEndpoints- can be updated.",
-                "operationId": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsWithNewlyDiscoveredSchema",
+                "summary": "Get API Endpoints Schema Updates",
+                "description": "Get list of schema pairs, current and updated, for each endpoint in the request\nor all pending changes if empty list is provided.\nNOTE: any API endpoint defined in user swagger files should be ignored",
+                "operationId": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsSchemaUpdates",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/api_definitionUpdateAPIEndpointsSchemaResp"
+                            "$ref": "#/definitions/api_definitionGetAPIEndpointsSchemaUpdatesResp"
                         }
                     },
                     "401": {
@@ -632,7 +549,7 @@ var PublicApiepCustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/api_definitionUpdateAPIEndpointsSchemaReq"
+                            "$ref": "#/definitions/api_definitionGetAPIEndpointsSchemaUpdatesReq"
                         }
                     }
                 ],
@@ -641,9 +558,109 @@ var PublicApiepCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicapiepcustomapi-updateapiendpointswithnewlydiscoveredschema"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicapiepcustomapi-getapiendpointsschemaupdates"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsWithNewlyDiscoveredSchema"
+                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.GetAPIEndpointsSchemaUpdates"
+            },
+            "x-displayname": "Public API Definition Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/api_definitions/{name}/api_inventory/api_endpoints/update_schemas": {
+            "post": {
+                "summary": "Update API Endpoints Schemas",
+                "description": "Update the payload schema for the specified endpoints or all pending changes if empty list is provided.\nNOTE: only API endpoints returned by a call to -GetAPIEndpointsSchemaStates- can be updated.",
+                "operationId": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsSchemas",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_definitionUpdateAPIEndpointsSchemasResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nThe namespace of the API Definition for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"name\"\nThe name of the API Definition for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_definitionUpdateAPIEndpointsSchemasReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "PublicApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicapiepcustomapi-updateapiendpointsschemas"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicApiepCustomAPI.UpdateAPIEndpointsSchemas"
             },
             "x-displayname": "Public API Definition Custom API",
             "x-ves-proto-service": "ves.io.schema.views.api_definition.PublicApiepCustomAPI",
@@ -651,6 +668,51 @@ var PublicApiepCustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "api_definitionApiEndpointWithSchema": {
+            "type": "object",
+            "description": "API endpoint and its schema",
+            "title": "API Endpoint With Schema",
+            "x-displayname": "API Endpoint With Schema",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.ApiEndpointWithSchema",
+            "properties": {
+                "api_operation": {
+                    "description": " The API operation which have schema updates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API Operation",
+                    "$ref": "#/definitions/api_definitionApiOperation",
+                    "x-displayname": "API Operation",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "schema": {
+                    "type": "string",
+                    "description": " The schema of the API endpoint",
+                    "title": "Schema",
+                    "format": "byte",
+                    "x-displayname": "Schema"
+                },
+                "schema_json": {
+                    "type": "string",
+                    "description": " The schema of the API endpoint",
+                    "title": "Schema JSON",
+                    "x-displayname": "Schema JSON"
+                }
+            }
+        },
+        "api_definitionApiInventorySchemaQueryType": {
+            "type": "string",
+            "description": "API Inventory Schema Query Type\n\n - API_INVENTORY_SCHEMA_FULL_RESPONSE: Full Response\n\n - API_INVENTORY_SCHEMA_CURRENT: Current Schema\n\n - API_INVENTORY_SCHEMA_UPDATED: Updated Schema\n",
+            "title": "API Inventory Schema Query Type",
+            "enum": [
+                "API_INVENTORY_SCHEMA_FULL_RESPONSE",
+                "API_INVENTORY_SCHEMA_CURRENT",
+                "API_INVENTORY_SCHEMA_UPDATED"
+            ],
+            "default": "API_INVENTORY_SCHEMA_FULL_RESPONSE",
+            "x-displayname": "API Inventory Schema Query Type",
+            "x-ves-proto-enum": "ves.io.schema.views.api_definition.ApiInventorySchemaQueryType"
+        },
         "api_definitionApiOperation": {
             "type": "object",
             "description": "API operation according to OpenAPI specification.",
@@ -688,41 +750,92 @@ var PublicApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "api_definitionGetAPIEndpointsSchemaResp": {
+        "api_definitionGetAPIEndpointsSchemaUpdatesReq": {
             "type": "object",
-            "description": "Response shape for Get API Endpoints With Newly Discovered Schema",
-            "title": "Get API Endpoints Schema Response",
-            "x-displayname": "Get API Endpoints Schema Response",
-            "x-ves-proto-message": "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaResp",
+            "description": "Request shape for Get API Endpoints Schema Updates",
+            "title": "Get API Endpoints Schema Updates Request",
+            "x-displayname": "Get API Endpoints Schema Updates Request",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq",
             "properties": {
-                "api_endpoints": {
+                "api_endpoints_filter": {
                     "type": "array",
-                    "description": " The list of discovered API endpoints with newly discovered schema.",
-                    "title": "API Endpoints",
-                    "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
-                    },
-                    "x-displayname": "API Endpoints"
-                }
-            }
-        },
-        "api_definitionUpdateAPIEndpointsSchemaReq": {
-            "type": "object",
-            "description": "Request shape for Update API Endpoints With Newly Discovered Schema",
-            "title": "Update API Endpoints Schema Request",
-            "x-displayname": "Update API Endpoints Schema Request",
-            "x-ves-proto-message": "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq",
-            "properties": {
-                "api_endpoints": {
-                    "type": "array",
-                    "description": " The list of discovered API endpoint to update schema for.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "API Endpoints",
-                    "minItems": 1,
+                    "description": " The list of discovered API endpoint to get schema for.\n NOTE: if empty, then the all API endpoints with schema changes would be returned\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
+                    "title": "API Endpoints Filter",
                     "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/api_definitionApiOperation"
                     },
-                    "x-displayname": "API Endpoints",
+                    "x-displayname": "API Endpoints Filter",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the API Definition for the current request\n\nExample: - \"name\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace of the API Definition for the current request\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                },
+                "query_type": {
+                    "description": " An option not to populate the schema fields, to reduce response size and time.",
+                    "title": "Query Type",
+                    "$ref": "#/definitions/api_definitionApiInventorySchemaQueryType",
+                    "x-displayname": "Query Type"
+                }
+            }
+        },
+        "api_definitionGetAPIEndpointsSchemaUpdatesResp": {
+            "type": "object",
+            "description": "Response shape for Get API Endpoints Schema Updates",
+            "title": "Get API Endpoints Schema Updates Response",
+            "x-displayname": "Get API Endpoints Schema Updates Response",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp",
+            "properties": {
+                "api_endpoints_current_schemas": {
+                    "type": "array",
+                    "description": " The list of discovered API endpoints with current schemas",
+                    "title": "API Endpoints Current Schemas",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Current Schemas"
+                },
+                "api_endpoints_updated_schemas": {
+                    "type": "array",
+                    "description": " The list of API Inventory API endpoints with updated schemas",
+                    "title": "API Endpoints Updated Schemas",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Updated Schemas"
+                }
+            }
+        },
+        "api_definitionUpdateAPIEndpointsSchemasReq": {
+            "type": "object",
+            "description": "Request shape for Update API Endpoints Schemas",
+            "title": "Update API Endpoints Schemas Request",
+            "x-displayname": "Update API Endpoints Schemas Request",
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq",
+            "properties": {
+                "api_endpoints_schema_updates": {
+                    "type": "array",
+                    "description": " The list of API Inventory API endpoints schema updates.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "API Endpoints Schema Updates",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Schema Updates",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -746,12 +859,23 @@ var PublicApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "api_definitionUpdateAPIEndpointsSchemaResp": {
+        "api_definitionUpdateAPIEndpointsSchemasResp": {
             "type": "object",
             "description": "Response shape for Update API Endpoints With Newly Discovered Schema",
             "title": "Update API Endpoints Schema Response",
             "x-displayname": "Update API Endpoints Schema Response",
-            "x-ves-proto-message": "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaResp"
+            "x-ves-proto-message": "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp",
+            "properties": {
+                "updated_api_endpoints": {
+                    "type": "array",
+                    "description": " The list of API endpoints which were successfully proceeded by the API Inventory request.",
+                    "title": "Updated API Endpoints",
+                    "items": {
+                        "$ref": "#/definitions/api_definitionApiOperation"
+                    },
+                    "x-displayname": "Updated API Endpoints"
+                }
+            }
         },
         "schemaHttpMethod": {
             "type": "string",

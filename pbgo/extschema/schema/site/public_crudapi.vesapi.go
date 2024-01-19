@@ -1682,6 +1682,19 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCloudLinkState": {
+            "type": "string",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "title": "CloudLink State",
+            "enum": [
+                "UP",
+                "DOWN",
+                "DEGRADED"
+            ],
+            "default": "UP",
+            "x-displayname": "CloudLink State",
+            "x-ves-proto-enum": "ves.io.schema.CloudLinkState"
+        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -2638,7 +2651,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVirtualNetworkType": {
             "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
             "title": "VirtualNetworkType",
             "enum": [
                 "VIRTUAL_NETWORK_SITE_LOCAL",
@@ -2652,7 +2665,8 @@ var APISwaggerJSON string = `{
                 "VIRTUAL_NETWORK_IP_AUTO",
                 "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
                 "VIRTUAL_NETWORK_SRV6_NETWORK",
-                "VIRTUAL_NETWORK_IP_FABRIC"
+                "VIRTUAL_NETWORK_IP_FABRIC",
+                "VIRTUAL_NETWORK_SEGMENT"
             ],
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
@@ -2970,6 +2984,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaServiceParameters"
                     },
                     "x-displayname": "Phobos Services"
+                },
+                "private_connectivity": {
+                    "description": " Private Connectivity Information like ADN network name and cloud link information",
+                    "title": "Private Connectivity Type",
+                    "$ref": "#/definitions/viewsPrivateConnectivityType",
+                    "x-displayname": "Private Connectivity Information"
                 },
                 "private_ip": {
                     "type": "string",
@@ -4285,6 +4305,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
+                "private_connectivity": {
+                    "description": " Private Connectivity Information like ADN network name and cloud link information",
+                    "$ref": "#/definitions/viewsPrivateConnectivityType",
+                    "x-displayname": "Private Connectivity Information"
+                },
                 "region": {
                     "type": "string",
                     "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
@@ -4890,7 +4915,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Message"
                 },
                 "phase": {
-                    "description": " ",
                     "title": "Offline survivability phase",
                     "$ref": "#/definitions/siteOfflineSurvivabilityPhase",
                     "x-displayname": "State"
@@ -5817,6 +5841,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTunnelEncapsulationType",
                     "x-displayname": "Encapsulation Type"
                 },
+                "ike_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(ike)",
+                    "title": "ike_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ike tunnel flap reason"
+                },
                 "isLocal": {
                     "type": "boolean",
                     "description": " Identifies if the ipsec connection is local to the ver node or not",
@@ -5835,6 +5865,12 @@ var APISwaggerJSON string = `{
                     "title": "role",
                     "$ref": "#/definitions/siteTunnelRole",
                     "x-displayname": "Role"
+                },
+                "ssl_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(Ssl)",
+                    "title": "ssl_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ssl tunnel flap reason"
                 },
                 "state": {
                     "description": " connection state which identifies whether connection is UP/DOWN",
@@ -5859,6 +5895,25 @@ var APISwaggerJSON string = `{
                     "description": " The VER node in the local site from which the connection is setup",
                     "title": "verNodeName",
                     "x-displayname": "VER Node Name"
+                }
+            }
+        },
+        "siteTunnelFlapReason": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.TunnelFlapReason",
+            "properties": {
+                "flap_reason": {
+                    "type": "string",
+                    "description": " flap reason for tunnel",
+                    "title": "Flap Reason",
+                    "x-displayname": "Flap Reason"
+                },
+                "time": {
+                    "type": "string",
+                    "description": " flap time for tunnel",
+                    "title": "Flap time",
+                    "format": "date-time",
+                    "x-displayname": "Flap time"
                 }
             }
         },
@@ -6649,6 +6704,49 @@ var APISwaggerJSON string = `{
                     "description": " Status",
                     "title": "Status",
                     "x-displayname": "Status"
+                }
+            }
+        },
+        "viewsPrivateConnectivityType": {
+            "type": "object",
+            "description": "Private Connectivity Information like ADN network name and cloud link information",
+            "title": "Private Connectivity Type",
+            "x-displayname": "Private Connectivity Information",
+            "x-ves-proto-message": "ves.io.schema.views.PrivateConnectivityType",
+            "properties": {
+                "cloud_link": {
+                    "description": " Information related to cloud link used by the site",
+                    "title": "Site CloudLink Type",
+                    "$ref": "#/definitions/viewsSiteCloudLinkType",
+                    "x-displayname": "Site CloudLink Information"
+                },
+                "private_network_name": {
+                    "type": "string",
+                    "description": " ADN Network Name for private access connectivity to F5XC ADN.",
+                    "title": "Private Network Name",
+                    "x-displayname": "Private Network Name"
+                }
+            }
+        },
+        "viewsSiteCloudLinkType": {
+            "type": "object",
+            "description": "Information related to cloud link used by the site",
+            "title": "Site CloudLink Type",
+            "x-displayname": "Site CloudLink Information",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.SiteCloudLinkType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the the CloudLink used with this site.",
+                    "title": "CloudLink Name",
+                    "x-displayname": "CloudLink Name"
+                },
+                "state": {
+                    "description": " State of the the CloudLink used with this site.",
+                    "title": "CloudLink State",
+                    "$ref": "#/definitions/schemaCloudLinkState",
+                    "x-displayname": "CloudLink State"
                 }
             }
         }

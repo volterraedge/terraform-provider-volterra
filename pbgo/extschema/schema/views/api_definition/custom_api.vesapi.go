@@ -4,7 +4,7 @@
 package api_definition
 
 import (
-	"bytes"
+	bytes "bytes"
 	"context"
 	"fmt"
 	io "io"

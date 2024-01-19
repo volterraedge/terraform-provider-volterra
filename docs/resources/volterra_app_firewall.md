@@ -21,18 +21,20 @@ resource "volterra_app_firewall" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "allow_all_response_codes allowed_response_codes" must be set
+  allow_all_response_codes = true
 
-  allowed_response_codes {
-    response_code = ["[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]"]
-  }
   // One of the arguments from this list "disable_anonymization default_anonymization custom_anonymization" must be set
   disable_anonymization = true
+
   // One of the arguments from this list "use_default_blocking_page blocking_page" must be set
   use_default_blocking_page = true
+
   // One of the arguments from this list "default_bot_setting bot_protection_setting" must be set
   default_bot_setting = true
+
   // One of the arguments from this list "default_detection_settings detection_settings" must be set
   default_detection_settings = true
+
   // One of the arguments from this list "use_loadbalancer_setting blocking monitoring" must be set
   use_loadbalancer_setting = true
 }

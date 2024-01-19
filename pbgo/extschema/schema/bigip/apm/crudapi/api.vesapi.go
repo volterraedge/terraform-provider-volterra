@@ -3444,7 +3444,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_gateway": {
                     "type": "string",
-                    "description": "\n \n\nExample: - \"10.2.3.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "\n\n\nExample: - \"10.2.3.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "BIG-IP Network Default Gateway",
                     "x-displayname": "Default Gateway",
                     "x-ves-example": "10.2.3.0",
@@ -3639,13 +3639,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "external_interface": {
-                    "description": "\n ",
+                    "description": "\n",
                     "title": "BIG-IP External interface details",
                     "$ref": "#/definitions/nfv_serviceInterfaceDetails",
                     "x-displayname": "External Interface"
                 },
                 "internal_interface": {
-                    "description": " \n ",
+                    "description": "\n",
                     "title": "BIG-IP Internal interface details",
                     "$ref": "#/definitions/nfv_serviceInterfaceDetails",
                     "x-displayname": "Internal Interface"
@@ -4815,7 +4815,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -4832,14 +4832,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
+                    "description": " Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,

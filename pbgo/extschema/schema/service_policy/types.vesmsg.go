@@ -3647,6 +3647,54 @@ func (v *ValidateSimpleRule) ClientNameValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateSimpleRule) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt_claims")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.JWTClaimMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.JWTClaimMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for jwt_claims")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.JWTClaimMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.JWTClaimMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated jwt_claims")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items jwt_claims")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleRule)
 	if !ok {
@@ -3920,6 +3968,14 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("ip_reputation_action"))
 		if err := fv(ctx, m.GetIpReputationAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4232,6 +4288,17 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 		panic(errMsg)
 	}
 	v.FldValidators["client_name"] = vFn
+
+	vrhJwtClaims := v.JwtClaimsValidationRuleHandler
+	rulesJwtClaims := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhJwtClaims(rulesJwtClaims)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleRule.jwt_claims: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["jwt_claims"] = vFn
 
 	v.FldValidators["domain_matcher"] = ves_io_schema_policy.MatcherTypeValidator().Validate
 

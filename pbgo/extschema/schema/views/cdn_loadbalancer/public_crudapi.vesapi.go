@@ -2529,7 +2529,7 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNLoadbalancerDeploymentStatus": {
             "type": "string",
-            "description": "Deployment status\n",
+            "description": "Deployment status\n\n - CDN_LB_STATUS_FAILED: x-displayname: \"Failed\"",
             "title": "CDN LoadBalancer Deployment status",
             "enum": [
                 "CDN_LB_STATUS_CREATED",
@@ -2585,6 +2585,18 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-choice": "[\"public_ip\",\"public_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNOriginServerType",
             "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": " Port the workload can be reached on\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Origin Server Port",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
                 "public_ip": {
                     "description": "Exclusive with [public_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicName",
@@ -3645,15 +3657,13 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": "Exclusive with [port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "minLength": 1,
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "64",
                         "ves.io.schema.rules.string.min_len": "1",
@@ -3719,12 +3729,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
             "x-ves-displayorder": "2",
-            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
@@ -3734,7 +3744,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPV6",
                     "x-displayname": "Public IPV6",
                     "x-ves-example": "2001::1",
@@ -3814,7 +3824,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -3826,7 +3836,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [use_mtls]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
@@ -3865,13 +3875,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [no_mtls]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable by uploading a new certificate"
                 },
                 "use_mtls_obj": {
-                    "description": "Exclusive with [no_mtls use_mtls]\n",
                     "title": "Enable MTLS With Certificate Object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Enable by selecting a certificate"
@@ -3895,18 +3904,18 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA for verification of Server's certificate",
+                    "description": " Select/Add a Root CA for verification of Server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,

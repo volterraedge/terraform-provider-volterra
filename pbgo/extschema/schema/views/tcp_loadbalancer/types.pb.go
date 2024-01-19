@@ -293,6 +293,7 @@ type GlobalSpecType struct {
 	Domains []string `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	// Listen Port
 	//
+	// x-required
 	// x-displayName: "Listen Port"
 	// Listen Port for this load balancer
 	//

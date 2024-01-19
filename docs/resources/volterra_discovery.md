@@ -20,7 +20,7 @@ resource "volterra_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "no_cluster_id cluster_id" must be set
+  // One of the arguments from this list "cluster_id no_cluster_id" must be set
   no_cluster_id = true
 
   // One of the arguments from this list "discovery_k8s discovery_consul" must be set
@@ -38,12 +38,11 @@ resource "volterra_discovery" "example" {
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
+        clear_secret_info {
+          provider = "box-provider"
+          url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
         }
       }
 
@@ -53,17 +52,17 @@ resource "volterra_discovery" "example" {
 
     publish_info {
       // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-      disable = true
+
+      dns_delegation {
+        dns_mode  = "dns_mode"
+        subdomain = "value"
+      }
     }
   }
   where {
-    // One of the arguments from this list "segment virtual_network site virtual_site segment_site segment_vsite" must be set
+    // One of the arguments from this list "virtual_site segment_site segment_vsite segment virtual_network site" must be set
 
-    site {
-      // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-      disable_internet_vip = true
-      network_type         = "network_type"
-
+    virtual_network {
       ref {
         name      = "test1"
         namespace = "staging"

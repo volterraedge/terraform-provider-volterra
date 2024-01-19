@@ -61,15 +61,6 @@ func (c *CustomAPIGrpcClient) doRPCAccessLogScrollQuery(ctx context.Context, yam
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCAccessLogScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.AccessLogScrollQueryV2(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &AuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -94,15 +85,6 @@ func (c *CustomAPIGrpcClient) doRPCAuditLogScrollQuery(ctx context.Context, yaml
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.AuditLogScrollQuery(ctx, req, opts...)
-	return rsp, err
-}
-
-func (c *CustomAPIGrpcClient) doRPCAuditLogScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.AuditLogScrollQueryV2(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -133,15 +115,6 @@ func (c *CustomAPIGrpcClient) doRPCFirewallLogScrollQuery(ctx context.Context, y
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCFirewallLogScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.FirewallLogScrollQueryV2(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &K8SAuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -166,15 +139,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, y
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.K8SAuditLogScrollQuery(ctx, req, opts...)
-	return rsp, err
-}
-
-func (c *CustomAPIGrpcClient) doRPCK8SAuditLogScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.K8SAuditLogScrollQueryV2(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -205,15 +169,6 @@ func (c *CustomAPIGrpcClient) doRPCK8SEventsScrollQuery(ctx context.Context, yam
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCK8SEventsScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.K8SEventsScrollQueryV2(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SAuditLogAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -241,15 +196,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCVK8SAuditLogScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.VK8SAuditLogScrollQueryV2(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCVK8SEventsAggregationQuery(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &VK8SEventsAggregationRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -274,15 +220,6 @@ func (c *CustomAPIGrpcClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ya
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.VK8SEventsScrollQuery(ctx, req, opts...)
-	return rsp, err
-}
-
-func (c *CustomAPIGrpcClient) doRPCVK8SEventsScrollQueryV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.VK8SEventsScrollQueryV2(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -322,15 +259,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["AccessLogScrollQuery"] = ccl.doRPCAccessLogScrollQuery
 
-	rpcFns["AccessLogScrollQueryV2"] = ccl.doRPCAccessLogScrollQueryV2
-
 	rpcFns["AuditLogAggregationQuery"] = ccl.doRPCAuditLogAggregationQuery
 
 	rpcFns["AuditLogQueryV2"] = ccl.doRPCAuditLogQueryV2
 
 	rpcFns["AuditLogScrollQuery"] = ccl.doRPCAuditLogScrollQuery
-
-	rpcFns["AuditLogScrollQueryV2"] = ccl.doRPCAuditLogScrollQueryV2
 
 	rpcFns["FirewallLogAggregationQuery"] = ccl.doRPCFirewallLogAggregationQuery
 
@@ -338,15 +271,11 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
 
-	rpcFns["FirewallLogScrollQueryV2"] = ccl.doRPCFirewallLogScrollQueryV2
-
 	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
 
 	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
 
 	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
-
-	rpcFns["K8SAuditLogScrollQueryV2"] = ccl.doRPCK8SAuditLogScrollQueryV2
 
 	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
 
@@ -354,23 +283,17 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
 
-	rpcFns["K8SEventsScrollQueryV2"] = ccl.doRPCK8SEventsScrollQueryV2
-
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
 
 	rpcFns["VK8SAuditLogQuery"] = ccl.doRPCVK8SAuditLogQuery
 
 	rpcFns["VK8SAuditLogScrollQuery"] = ccl.doRPCVK8SAuditLogScrollQuery
 
-	rpcFns["VK8SAuditLogScrollQueryV2"] = ccl.doRPCVK8SAuditLogScrollQueryV2
-
 	rpcFns["VK8SEventsAggregationQuery"] = ccl.doRPCVK8SEventsAggregationQuery
 
 	rpcFns["VK8SEventsQuery"] = ccl.doRPCVK8SEventsQuery
 
 	rpcFns["VK8SEventsScrollQuery"] = ccl.doRPCVK8SEventsScrollQuery
-
-	rpcFns["VK8SEventsScrollQueryV2"] = ccl.doRPCVK8SEventsScrollQueryV2
 
 	ccl.rpcFns = rpcFns
 
@@ -563,90 +486,6 @@ func (c *CustomAPIRestClient) doRPCAccessLogQueryV2(ctx context.Context, callOpt
 }
 
 func (c *CustomAPIRestClient) doRPCAccessLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCAccessLogScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -991,90 +830,6 @@ func (c *CustomAPIRestClient) doRPCAuditLogScrollQuery(ctx context.Context, call
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCAuditLogScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
 func (c *CustomAPIRestClient) doRPCFirewallLogAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1253,90 +1008,6 @@ func (c *CustomAPIRestClient) doRPCFirewallLogQuery(ctx context.Context, callOpt
 }
 
 func (c *CustomAPIRestClient) doRPCFirewallLogScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCFirewallLogScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -1683,90 +1354,6 @@ func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQuery(ctx context.Context, c
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCK8SAuditLogScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
 func (c *CustomAPIRestClient) doRPCK8SEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1947,90 +1534,6 @@ func (c *CustomAPIRestClient) doRPCK8SEventsQuery(ctx context.Context, callOpts 
 }
 
 func (c *CustomAPIRestClient) doRPCK8SEventsScrollQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCK8SEventsScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -2375,90 +1878,6 @@ func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQuery(ctx context.Context, 
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCVK8SAuditLogScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
 func (c *CustomAPIRestClient) doRPCVK8SEventsAggregationQuery(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -2720,90 +2139,6 @@ func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQuery(ctx context.Context, ca
 	return pbRsp, nil
 }
 
-func (c *CustomAPIRestClient) doRPCVK8SEventsScrollQueryV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &LogScrollRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.log.LogScrollRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("scroll_id", fmt.Sprintf("%v", req.ScrollId))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &LogResponse{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.log.LogResponse", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -2834,15 +2169,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["AccessLogScrollQuery"] = ccl.doRPCAccessLogScrollQuery
 
-	rpcFns["AccessLogScrollQueryV2"] = ccl.doRPCAccessLogScrollQueryV2
-
 	rpcFns["AuditLogAggregationQuery"] = ccl.doRPCAuditLogAggregationQuery
 
 	rpcFns["AuditLogQueryV2"] = ccl.doRPCAuditLogQueryV2
 
 	rpcFns["AuditLogScrollQuery"] = ccl.doRPCAuditLogScrollQuery
-
-	rpcFns["AuditLogScrollQueryV2"] = ccl.doRPCAuditLogScrollQueryV2
 
 	rpcFns["FirewallLogAggregationQuery"] = ccl.doRPCFirewallLogAggregationQuery
 
@@ -2850,15 +2181,11 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["FirewallLogScrollQuery"] = ccl.doRPCFirewallLogScrollQuery
 
-	rpcFns["FirewallLogScrollQueryV2"] = ccl.doRPCFirewallLogScrollQueryV2
-
 	rpcFns["K8SAuditLogAggregationQuery"] = ccl.doRPCK8SAuditLogAggregationQuery
 
 	rpcFns["K8SAuditLogQuery"] = ccl.doRPCK8SAuditLogQuery
 
 	rpcFns["K8SAuditLogScrollQuery"] = ccl.doRPCK8SAuditLogScrollQuery
-
-	rpcFns["K8SAuditLogScrollQueryV2"] = ccl.doRPCK8SAuditLogScrollQueryV2
 
 	rpcFns["K8SEventsAggregationQuery"] = ccl.doRPCK8SEventsAggregationQuery
 
@@ -2866,23 +2193,17 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["K8SEventsScrollQuery"] = ccl.doRPCK8SEventsScrollQuery
 
-	rpcFns["K8SEventsScrollQueryV2"] = ccl.doRPCK8SEventsScrollQueryV2
-
 	rpcFns["VK8SAuditLogAggregationQuery"] = ccl.doRPCVK8SAuditLogAggregationQuery
 
 	rpcFns["VK8SAuditLogQuery"] = ccl.doRPCVK8SAuditLogQuery
 
 	rpcFns["VK8SAuditLogScrollQuery"] = ccl.doRPCVK8SAuditLogScrollQuery
 
-	rpcFns["VK8SAuditLogScrollQueryV2"] = ccl.doRPCVK8SAuditLogScrollQueryV2
-
 	rpcFns["VK8SEventsAggregationQuery"] = ccl.doRPCVK8SEventsAggregationQuery
 
 	rpcFns["VK8SEventsQuery"] = ccl.doRPCVK8SEventsQuery
 
 	rpcFns["VK8SEventsScrollQuery"] = ccl.doRPCVK8SEventsScrollQuery
-
-	rpcFns["VK8SEventsScrollQueryV2"] = ccl.doRPCVK8SEventsScrollQueryV2
 
 	ccl.rpcFns = rpcFns
 
@@ -2908,10 +2229,6 @@ func (c *customAPIInprocClient) AccessLogScrollQuery(ctx context.Context, in *Lo
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AccessLogScrollQuery", nil)
 	return c.CustomAPIServer.AccessLogScrollQuery(ctx, in)
 }
-func (c *customAPIInprocClient) AccessLogScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AccessLogScrollQueryV2", nil)
-	return c.CustomAPIServer.AccessLogScrollQueryV2(ctx, in)
-}
 func (c *customAPIInprocClient) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.AuditLogAggregationQuery(ctx, in)
@@ -2923,10 +2240,6 @@ func (c *customAPIInprocClient) AuditLogQueryV2(ctx context.Context, in *AuditLo
 func (c *customAPIInprocClient) AuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogScrollQuery", nil)
 	return c.CustomAPIServer.AuditLogScrollQuery(ctx, in)
-}
-func (c *customAPIInprocClient) AuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.AuditLogScrollQueryV2", nil)
-	return c.CustomAPIServer.AuditLogScrollQueryV2(ctx, in)
 }
 func (c *customAPIInprocClient) FirewallLogAggregationQuery(ctx context.Context, in *FirewallLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery", nil)
@@ -2940,10 +2253,6 @@ func (c *customAPIInprocClient) FirewallLogScrollQuery(ctx context.Context, in *
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery", nil)
 	return c.CustomAPIServer.FirewallLogScrollQuery(ctx, in)
 }
-func (c *customAPIInprocClient) FirewallLogScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.FirewallLogScrollQueryV2", nil)
-	return c.CustomAPIServer.FirewallLogScrollQueryV2(ctx, in)
-}
 func (c *customAPIInprocClient) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.K8SAuditLogAggregationQuery(ctx, in)
@@ -2955,10 +2264,6 @@ func (c *customAPIInprocClient) K8SAuditLogQuery(ctx context.Context, in *K8SAud
 func (c *customAPIInprocClient) K8SAuditLogScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery", nil)
 	return c.CustomAPIServer.K8SAuditLogScrollQuery(ctx, in)
-}
-func (c *customAPIInprocClient) K8SAuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQueryV2", nil)
-	return c.CustomAPIServer.K8SAuditLogScrollQueryV2(ctx, in)
 }
 func (c *customAPIInprocClient) K8SEventsAggregationQuery(ctx context.Context, in *K8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery", nil)
@@ -2972,10 +2277,6 @@ func (c *customAPIInprocClient) K8SEventsScrollQuery(ctx context.Context, in *Lo
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery", nil)
 	return c.CustomAPIServer.K8SEventsScrollQuery(ctx, in)
 }
-func (c *customAPIInprocClient) K8SEventsScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.K8SEventsScrollQueryV2", nil)
-	return c.CustomAPIServer.K8SEventsScrollQueryV2(ctx, in)
-}
 func (c *customAPIInprocClient) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery", nil)
 	return c.CustomAPIServer.VK8SAuditLogAggregationQuery(ctx, in)
@@ -2988,10 +2289,6 @@ func (c *customAPIInprocClient) VK8SAuditLogScrollQuery(ctx context.Context, in 
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery", nil)
 	return c.CustomAPIServer.VK8SAuditLogScrollQuery(ctx, in)
 }
-func (c *customAPIInprocClient) VK8SAuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQueryV2", nil)
-	return c.CustomAPIServer.VK8SAuditLogScrollQueryV2(ctx, in)
-}
 func (c *customAPIInprocClient) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest, opts ...grpc.CallOption) (*LogAggregationResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery", nil)
 	return c.CustomAPIServer.VK8SEventsAggregationQuery(ctx, in)
@@ -3003,10 +2300,6 @@ func (c *customAPIInprocClient) VK8SEventsQuery(ctx context.Context, in *VK8SEve
 func (c *customAPIInprocClient) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
 	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery", nil)
 	return c.CustomAPIServer.VK8SEventsScrollQuery(ctx, in)
-}
-func (c *customAPIInprocClient) VK8SEventsScrollQueryV2(ctx context.Context, in *LogScrollRequest, opts ...grpc.CallOption) (*LogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log.CustomAPI.VK8SEventsScrollQueryV2", nil)
-	return c.CustomAPIServer.VK8SEventsScrollQueryV2(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -3177,55 +2470,6 @@ func (s *customAPISrv) AccessLogScrollQuery(ctx context.Context, in *LogScrollRe
 
 	return rsp, nil
 }
-func (s *customAPISrv) AccessLogScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.AccessLogScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AccessLogScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.AccessLogScrollQueryV2(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) AuditLogAggregationQuery(ctx context.Context, in *AuditLogAggregationRequest) (*LogAggregationResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -3365,55 +2609,6 @@ func (s *customAPISrv) AuditLogScrollQuery(ctx context.Context, in *LogScrollReq
 	}
 
 	rsp, err = cah.AuditLogScrollQuery(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) AuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.AuditLogScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.AuditLogScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.AuditLogScrollQueryV2(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -3569,55 +2764,6 @@ func (s *customAPISrv) FirewallLogScrollQuery(ctx context.Context, in *LogScroll
 
 	return rsp, nil
 }
-func (s *customAPISrv) FirewallLogScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.FirewallLogScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.FirewallLogScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.FirewallLogScrollQueryV2(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) K8SAuditLogAggregationQuery(ctx context.Context, in *K8SAuditLogAggregationRequest) (*LogAggregationResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -3757,55 +2903,6 @@ func (s *customAPISrv) K8SAuditLogScrollQuery(ctx context.Context, in *LogScroll
 	}
 
 	rsp, err = cah.K8SAuditLogScrollQuery(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) K8SAuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.K8SAuditLogScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SAuditLogScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.K8SAuditLogScrollQueryV2(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -3961,55 +3058,6 @@ func (s *customAPISrv) K8SEventsScrollQuery(ctx context.Context, in *LogScrollRe
 
 	return rsp, nil
 }
-func (s *customAPISrv) K8SEventsScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.K8SEventsScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.K8SEventsScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.K8SEventsScrollQueryV2(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) VK8SAuditLogAggregationQuery(ctx context.Context, in *VK8SAuditLogAggregationRequest) (*LogAggregationResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -4157,55 +3205,6 @@ func (s *customAPISrv) VK8SAuditLogScrollQuery(ctx context.Context, in *LogScrol
 
 	return rsp, nil
 }
-func (s *customAPISrv) VK8SAuditLogScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.VK8SAuditLogScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.VK8SAuditLogScrollQueryV2(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
 func (s *customAPISrv) VK8SEventsAggregationQuery(ctx context.Context, in *VK8SEventsAggregationRequest) (*LogAggregationResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
@@ -4345,55 +3344,6 @@ func (s *customAPISrv) VK8SEventsScrollQuery(ctx context.Context, in *LogScrollR
 	}
 
 	rsp, err = cah.VK8SEventsScrollQuery(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.log.LogResponse", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) VK8SEventsScrollQueryV2(ctx context.Context, in *LogScrollRequest) (*LogResponse, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.log.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *LogResponse
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.log.LogScrollRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.VK8SEventsScrollQueryV2' operation on 'log'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.log.CustomAPI.VK8SEventsScrollQueryV2"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.VK8SEventsScrollQueryV2(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -4699,9 +3649,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
             "post": {
-                "summary": "Access Log Scroll Query V2",
-                "description": "The response for access log query contain no more than 500 records.\nScroll request is used to scroll through more than 500 records or\nall records that matched the criteria in the\naccess log query in multiple batches. EOF is indicated by empty scroll_id in the response.\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.AccessLogScrollQueryV2",
+                "summary": "Access Log Scroll Query",
+                "description": "The response for access log query contain no more than 500 records.\nScroll request is used scroll through more than 500 records or all records that matched the criteria in the\naccess log query in multiple batches. EOF is indicated by empty scroll_id in the response.",
+                "operationId": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -4781,9 +3731,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -5062,9 +4012,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
             "post": {
-                "summary": "Audit Log Scroll Query V2",
-                "description": "The response for audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.AuditLogScrollQueryV2",
+                "summary": "Audit Log Scroll Query",
+                "description": "The response for audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -5144,9 +4094,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -5425,9 +4375,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
             "post": {
-                "summary": "Firewall Logs Scroll Query V2",
-                "description": "The response for firewall log query contain no more than 500 records.\nScroll request is used scroll through more than 500 records or all records that matched the criteria in the\nfirewall log query in multiple batches. EOF is indicated by empty scroll_id in the response.\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.FirewallLogScrollQueryV2",
+                "summary": "Firewall Logs Scroll Query",
+                "description": "The response for firewall log query contain no more than 500 records.\nScroll request is used scroll through more than 500 records or all records that matched the criteria in the\nfirewall log query in multiple batches. EOF is indicated by empty scroll_id in the response.",
+                "operationId": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -5507,9 +4457,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -5604,9 +4554,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
             },
             "post": {
-                "summary": "K8s Audit Log Scroll Query V2",
-                "description": "The response for K8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQueryV2",
+                "summary": "K8s Audit Log Scroll Query",
+                "description": "The response for K8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -5686,9 +4636,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -5783,9 +4733,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
             },
             "post": {
-                "summary": "K8s Events Scroll Query V2",
-                "description": "The response for K8s events query contain no more than 500 events.\nOne can use scroll request to scroll through more than 500 events or all events\nin multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.K8SEventsScrollQueryV2",
+                "summary": "K8s Events Scroll Query",
+                "description": "The response for K8s events query contain no more than 500 events.\nOne can use scroll request to scroll through more than 500 events or all events\nin multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -5865,9 +4815,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -6546,9 +5496,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
             "post": {
-                "summary": "vK8s Audit Log Scroll Query V2",
-                "description": "The response for vK8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQueryV2",
+                "summary": "vK8s Audit Log Scroll Query",
+                "description": "The response for vK8s audit log query contain no more than 500 messages.\nOne can use scroll request to scroll through more than 500 messages or all messages\nin multiple batches. empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -6628,9 +5578,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -6909,9 +5859,9 @@ var CustomAPISwaggerJSON string = `{
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },
             "post": {
-                "summary": "vK8s Events Scroll Query V2",
-                "description": "The response for vK8s events query contain no more than 500 events.\nOne can use scroll request to scroll through more than 500 events or all events\nin multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).\nThis uses post request to pass the scroll_id in the body.",
-                "operationId": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQueryV2",
+                "summary": "vK8s Events Scroll Query",
+                "description": "The response for vK8s events query contain no more than 500 events.\nOne can use scroll request to scroll through more than 500 events or all events\nin multiple batches. Empty scroll_id in the response indicates no more messages to fetch (EOF).",
+                "operationId": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
@@ -6991,9 +5941,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollqueryv2"
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQueryV2"
+                "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },
             "x-displayname": "Log",
             "x-ves-proto-service": "ves.io.schema.log.CustomAPI",
@@ -7400,11 +6350,42 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logFieldSubAggregationBucket": {
+            "type": "object",
+            "description": "x-displayName: \"Field Sub Aggregation Bucket\"\nField sub aggregation bucket containing field values and the number of logs.",
+            "title": "FieldSubAggregationBucket",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nKey contain the name/value pair that identifies the unique key fields\nx-example: \"HIT, MISS, REVALIDATED\"",
+                    "title": "keys"
+                },
+                "order_by": {
+                    "description": "x-displayName: \"Order by\"\nOrder by data for the metrics field aggregation bucket",
+                    "title": "Order by",
+                    "$ref": "#/definitions/logOrderByData"
+                }
+            }
+        },
         "logFieldSubAggregationData": {
             "type": "object",
             "description": "x-displayName: \"Field SubAggregation\"\nField subaggregation data",
             "title": "FieldSubAggregationData",
             "properties": {
+                "buckets": {
+                    "type": "array",
+                    "description": "x-displayName: \"Buckets\"\nLists of buckets containing field values and the corresponding log count",
+                    "title": "buckets",
+                    "items": {
+                        "$ref": "#/definitions/logFieldSubAggregationBucket"
+                    }
+                },
                 "cardinality_aggregation": {
                     "description": "cardinality aggregation data",
                     "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",

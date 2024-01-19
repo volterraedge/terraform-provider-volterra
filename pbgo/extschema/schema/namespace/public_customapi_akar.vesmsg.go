@@ -1540,10 +1540,28 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_definition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition"))
+		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection"))
 		if err := fv(ctx, m.GetApiProtection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_schema_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_schema_validation"))
+		if err := fv(ctx, m.GetApiSchemaValidation(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1558,6 +1576,15 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["client_blocking"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_blocking"))
+		if err := fv(ctx, m.GetClientBlocking(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["client_side_defense"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("client_side_defense"))
@@ -1567,10 +1594,82 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["cookie_protection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cookie_protection"))
+		if err := fv(ctx, m.GetCookieProtection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_protection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_protection"))
+		if err := fv(ctx, m.GetCsrfProtection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data_guard"))
+		if err := fv(ctx, m.GetDataGuard(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_auto_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_auto_mitigation"))
+		if err := fv(ctx, m.GetDdosAutoMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation"))
+		if err := fv(ctx, m.GetDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ddos_protection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ddos_protection"))
 		if err := fv(ctx, m.GetDdosProtection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_loadbalancer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_loadbalancer"))
+		if err := fv(ctx, m.GetDefaultLoadbalancer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graph_ql_inspection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("graph_ql_inspection"))
+		if err := fv(ctx, m.GetGraphQlInspection(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1603,10 +1702,37 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
+		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mutual_tls"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mutual_tls"))
+		if err := fv(ctx, m.GetMutualTls(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["namespace_service_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("namespace_service_policy"))
 		if err := fv(ctx, m.GetNamespaceServicePolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["origin_server_subset"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_server_subset"))
+		if err := fv(ctx, m.GetOriginServerSubset(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1630,6 +1756,15 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["routes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routes"))
+		if err := fv(ctx, m.GetRoutes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_policy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_policy"))
@@ -1639,10 +1774,46 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation"))
+		if err := fv(ctx, m.GetSlowDdosMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_client"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_client"))
+		if err := fv(ctx, m.GetTrustedClient(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_client_ip_headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_client_ip_headers"))
+		if err := fv(ctx, m.GetTrustedClientIpHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("waf"))
 		if err := fv(ctx, m.GetWaf(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_exclusion"))
+		if err := fv(ctx, m.GetWafExclusion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1906,10 +2077,28 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_definition_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition_enabled"))
+		if err := fv(ctx, m.GetApiDefinitionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection_enabled"))
 		if err := fv(ctx, m.GetApiProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_schema_validation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_schema_validation_enabled"))
+		if err := fv(ctx, m.GetApiSchemaValidationEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1924,10 +2113,100 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["certification_expiration_date"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certification_expiration_date"))
+		if err := fv(ctx, m.GetCertificationExpirationDate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["certification_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("certification_status"))
+		if err := fv(ctx, m.GetCertificationStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_blocking_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_blocking_enabled"))
+		if err := fv(ctx, m.GetClientBlockingEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["client_side_defense_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("client_side_defense_enabled"))
 		if err := fv(ctx, m.GetClientSideDefenseEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["connection_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("connection_idle_timeout"))
+		if err := fv(ctx, m.GetConnectionIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cookie_protection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cookie_protection_enabled"))
+		if err := fv(ctx, m.GetCookieProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy_enabled"))
+		if err := fv(ctx, m.GetCorsPolicyEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_protection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_protection_enabled"))
+		if err := fv(ctx, m.GetCsrfProtectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data_guard_enabled"))
+		if err := fv(ctx, m.GetDataGuardEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_auto_mitigation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_auto_mitigation_enabled"))
+		if err := fv(ctx, m.GetDdosAutoMitigationEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_enabled"))
+		if err := fv(ctx, m.GetDdosMitigationEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1942,10 +2221,67 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["default_loadbalancer_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_loadbalancer_enabled"))
+		if err := fv(ctx, m.GetDefaultLoadbalancerEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dns_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_info"))
+		if err := fv(ctx, m.GetDnsInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domains"))
+		for idx, item := range m.GetDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graph_ql_inspection_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("graph_ql_inspection_enabled"))
+		if err := fv(ctx, m.GetGraphQlInspectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["http_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("http_enabled"))
 		if err := fv(ctx, m.GetHttpEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["http_listen_port_choice"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_listen_port_choice"))
+		if err := fv(ctx, m.GetHttpListenPortChoice(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1960,10 +2296,37 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
+		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["malicious_user_detection_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("malicious_user_detection_enabled"))
 		if err := fv(ctx, m.GetMaliciousUserDetectionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malicious_user_mitigation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation_enabled"))
+		if err := fv(ctx, m.GetMaliciousUserMitigationEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mutual_tls_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mutual_tls_enabled"))
+		if err := fv(ctx, m.GetMutualTlsEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1996,6 +2359,15 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["origin_server_subset_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_server_subset_enabled"))
+		if err := fv(ctx, m.GetOriginServerSubsetEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["private_advertisement_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("private_advertisement_enabled"))
@@ -2023,6 +2395,15 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["routes_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routes_enabled"))
+		if err := fv(ctx, m.GetRoutesEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_policy_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_policy_enabled"))
@@ -2032,10 +2413,73 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("slow_ddos_mitigation_enabled"))
+		if err := fv(ctx, m.GetSlowDdosMitigationEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_security_level"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tls_security_level"))
+		if err := fv(ctx, m.GetTlsSecurityLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_client_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_client_enabled"))
+		if err := fv(ctx, m.GetTrustedClientEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_client_ip_headers_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("trusted_client_ip_headers_enabled"))
+		if err := fv(ctx, m.GetTrustedClientIpHeadersEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vip_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vip_type"))
+		if err := fv(ctx, m.GetVipType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["waf_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("waf_enabled"))
 		if err := fv(ctx, m.GetWafEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_enabled"))
+		if err := fv(ctx, m.GetWafExclusionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_policy_name"))
+		if err := fv(ctx, m.GetWafPolicyName(), vOpts...); err != nil {
 			return err
 		}
 

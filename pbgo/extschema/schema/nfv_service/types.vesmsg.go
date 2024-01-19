@@ -1512,9 +1512,8 @@ var DefaultEndpointServiceTypeValidator = func() *ValidateEndpointServiceType {
 
 	vrhInsideVipChoiceConfiguredVip := v.InsideVipChoiceConfiguredVipValidationRuleHandler
 	rulesInsideVipChoiceConfiguredVip := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.ip":        "true",
-		"ves.io.schema.rules.string.not_in":    "0.0.0.0",
+		"ves.io.schema.rules.string.ip":     "true",
+		"ves.io.schema.rules.string.not_in": "0.0.0.0",
 	}
 	vFnMap["inside_vip_choice.configured_vip"], err = vrhInsideVipChoiceConfiguredVip(rulesInsideVipChoiceConfiguredVip)
 	if err != nil {
@@ -1838,19 +1837,6 @@ func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceValidationRuleHandler(
 	return validatorFn, nil
 }
 
-func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceAWAFPayG200MbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceAWAFPayG3GbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceBestPlusPayG200MbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidateF5BigIpAWSMarketPlaceImageType) AmiChoiceBestPlusPayg_1GbpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-
 func (v *ValidateF5BigIpAWSMarketPlaceImageType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*F5BigIpAWSMarketPlaceImageType)
 	if !ok {
@@ -1948,48 +1934,6 @@ var DefaultF5BigIpAWSMarketPlaceImageTypeValidator = func() *ValidateF5BigIpAWSM
 		panic(errMsg)
 	}
 	v.FldValidators["ami_choice"] = vFn
-
-	vrhAmiChoiceAWAFPayG200Mbps := v.AmiChoiceAWAFPayG200MbpsValidationRuleHandler
-	rulesAmiChoiceAWAFPayG200Mbps := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["ami_choice.AWAFPayG200Mbps"], err = vrhAmiChoiceAWAFPayG200Mbps(rulesAmiChoiceAWAFPayG200Mbps)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_AWAFPayG200Mbps: %s", err)
-		panic(errMsg)
-	}
-	vrhAmiChoiceAWAFPayG3Gbps := v.AmiChoiceAWAFPayG3GbpsValidationRuleHandler
-	rulesAmiChoiceAWAFPayG3Gbps := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["ami_choice.AWAFPayG3Gbps"], err = vrhAmiChoiceAWAFPayG3Gbps(rulesAmiChoiceAWAFPayG3Gbps)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_AWAFPayG3Gbps: %s", err)
-		panic(errMsg)
-	}
-	vrhAmiChoiceBestPlusPayG200Mbps := v.AmiChoiceBestPlusPayG200MbpsValidationRuleHandler
-	rulesAmiChoiceBestPlusPayG200Mbps := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["ami_choice.BestPlusPayG200Mbps"], err = vrhAmiChoiceBestPlusPayG200Mbps(rulesAmiChoiceBestPlusPayG200Mbps)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_BestPlusPayG200Mbps: %s", err)
-		panic(errMsg)
-	}
-	vrhAmiChoiceBestPlusPayg_1Gbps := v.AmiChoiceBestPlusPayg_1GbpsValidationRuleHandler
-	rulesAmiChoiceBestPlusPayg_1Gbps := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["ami_choice.best_plus_payg_1gbps"], err = vrhAmiChoiceBestPlusPayg_1Gbps(rulesAmiChoiceBestPlusPayg_1Gbps)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSMarketPlaceImageType.ami_choice_best_plus_payg_1gbps: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["ami_choice.AWAFPayG200Mbps"] = vFnMap["ami_choice.AWAFPayG200Mbps"]
-	v.FldValidators["ami_choice.AWAFPayG3Gbps"] = vFnMap["ami_choice.AWAFPayG3Gbps"]
-	v.FldValidators["ami_choice.BestPlusPayG200Mbps"] = vFnMap["ami_choice.BestPlusPayG200Mbps"]
-	v.FldValidators["ami_choice.best_plus_payg_1gbps"] = vFnMap["ami_choice.best_plus_payg_1gbps"]
 
 	return v
 }()
@@ -2451,9 +2395,6 @@ func (v *ValidateF5BigIpAWSType) ImageChoiceValidationRuleHandler(rules map[stri
 func (v *ValidateF5BigIpAWSType) ImageChoiceByolImageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return F5BigIpAWSBYOLImageTypeValidator().Validate, nil
 }
-func (v *ValidateF5BigIpAWSType) ImageChoiceMarketPlaceImageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return F5BigIpAWSMarketPlaceImageTypeValidator().Validate, nil
-}
 
 func (v *ValidateF5BigIpAWSType) SiteTypeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -2763,26 +2704,15 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 
 	vrhImageChoiceByolImage := v.ImageChoiceByolImageValidationRuleHandler
 	rulesImageChoiceByolImage := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"image1\",\"image2\"]",
+		"ves.io.schema.rules.string.in": "[\"image1\",\"image2\"]",
 	}
 	vFnMap["image_choice.byol_image"], err = vrhImageChoiceByolImage(rulesImageChoiceByolImage)
 	if err != nil {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSType.image_choice_byol_image: %s", err)
 		panic(errMsg)
 	}
-	vrhImageChoiceMarketPlaceImage := v.ImageChoiceMarketPlaceImageValidationRuleHandler
-	rulesImageChoiceMarketPlaceImage := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["image_choice.market_place_image"], err = vrhImageChoiceMarketPlaceImage(rulesImageChoiceMarketPlaceImage)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field F5BigIpAWSType.image_choice_market_place_image: %s", err)
-		panic(errMsg)
-	}
 
 	v.FldValidators["image_choice.byol_image"] = vFnMap["image_choice.byol_image"]
-	v.FldValidators["image_choice.market_place_image"] = vFnMap["image_choice.market_place_image"]
 
 	vrhSiteTypeChoice := v.SiteTypeChoiceValidationRuleHandler
 	rulesSiteTypeChoice := map[string]string{
@@ -2856,6 +2786,8 @@ var DefaultF5BigIpAWSTypeValidator = func() *ValidateF5BigIpAWSType {
 		panic(errMsg)
 	}
 	v.FldValidators["tags"] = vFn
+
+	v.FldValidators["image_choice.market_place_image"] = F5BigIpAWSMarketPlaceImageTypeValidator().Validate
 
 	v.FldValidators["site_type_choice.aws_tgw_site_params"] = F5BigIpAWSTGWSiteTypeValidator().Validate
 	v.FldValidators["site_type_choice.aws_vpc_site_params"] = F5BigIpAWSVPCSiteTypeValidator().Validate
@@ -5041,6 +4973,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["node_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_info"))
+		for idx, item := range m.GetNodeInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pool"]; exists {
 		vOpts := append(opts, db.WithValidateField("origin_pool"))
 		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
@@ -5587,6 +5531,84 @@ var DefaultInterfaceDetailsValidator = func() *ValidateInterfaceDetails {
 
 func InterfaceDetailsValidator() db.Validator {
 	return DefaultInterfaceDetailsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NodeInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NodeInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NodeInfo) DeepCopy() *NodeInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NodeInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NodeInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NodeInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodeInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNodeInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNodeInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NodeInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NodeInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ssh_command"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_command"))
+		if err := fv(ctx, m.GetSshCommand(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodeInfoValidator = func() *ValidateNodeInfo {
+	v := &ValidateNodeInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NodeInfoValidator() db.Validator {
+	return DefaultNodeInfoValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -6229,11 +6251,12 @@ type ValidatePaloAltoFWAWSType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidatePaloAltoFWAWSType) AmiChoicePanAmiBundle1ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
-}
-func (v *ValidatePaloAltoFWAWSType) AmiChoicePanAmiBundle2ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ves_io_schema.EmptyValidator().Validate, nil
+func (v *ValidatePaloAltoFWAWSType) AmiChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ami_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidatePaloAltoFWAWSType) SetupOptionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -6377,6 +6400,16 @@ func (v *ValidatePaloAltoFWAWSType) Validate(ctx context.Context, pm interface{}
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["ami_choice"]; exists {
+		val := m.GetAmiChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ami_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetAmiChoice().(type) {
@@ -6526,27 +6559,16 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhAmiChoicePanAmiBundle1 := v.AmiChoicePanAmiBundle1ValidationRuleHandler
-	rulesAmiChoicePanAmiBundle1 := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhAmiChoice := v.AmiChoiceValidationRuleHandler
+	rulesAmiChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFnMap["ami_choice.pan_ami_bundle1"], err = vrhAmiChoicePanAmiBundle1(rulesAmiChoicePanAmiBundle1)
+	vFn, err = vrhAmiChoice(rulesAmiChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PaloAltoFWAWSType.ami_choice_pan_ami_bundle1: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PaloAltoFWAWSType.ami_choice: %s", err)
 		panic(errMsg)
 	}
-	vrhAmiChoicePanAmiBundle2 := v.AmiChoicePanAmiBundle2ValidationRuleHandler
-	rulesAmiChoicePanAmiBundle2 := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["ami_choice.pan_ami_bundle2"], err = vrhAmiChoicePanAmiBundle2(rulesAmiChoicePanAmiBundle2)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field PaloAltoFWAWSType.ami_choice_pan_ami_bundle2: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["ami_choice.pan_ami_bundle1"] = vFnMap["ami_choice.pan_ami_bundle1"]
-	v.FldValidators["ami_choice.pan_ami_bundle2"] = vFnMap["ami_choice.pan_ami_bundle2"]
+	v.FldValidators["ami_choice"] = vFn
 
 	vrhSetupOptions := v.SetupOptionsValidationRuleHandler
 	rulesSetupOptions := map[string]string{
@@ -6561,9 +6583,8 @@ var DefaultPaloAltoFWAWSTypeValidator = func() *ValidatePaloAltoFWAWSType {
 
 	vrhSetupOptionsSshKey := v.SetupOptionsSshKeyValidationRuleHandler
 	rulesSetupOptionsSshKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "8192",
-		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.max_len": "8192",
+		"ves.io.schema.rules.string.min_len": "1",
 	}
 	vFnMap["setup_options.ssh_key"], err = vrhSetupOptionsSshKey(rulesSetupOptionsSshKey)
 	if err != nil {
@@ -7856,6 +7877,16 @@ func (v *ValidateSSHManagementType) NodeSshPortsValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateSSHManagementType) DomainSuffixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_suffix")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SSHManagementType)
 	if !ok {
@@ -7940,6 +7971,15 @@ func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["domain_suffix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain_suffix"))
+		if err := fv(ctx, m.GetDomainSuffix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["node_ssh_ports"]; exists {
 		vOpts := append(opts, db.WithValidateField("node_ssh_ports"))
 		if err := fv(ctx, m.GetNodeSshPorts(), vOpts...); err != nil {
@@ -7974,6 +8014,18 @@ var DefaultSSHManagementTypeValidator = func() *ValidateSSHManagementType {
 		panic(errMsg)
 	}
 	v.FldValidators["node_ssh_ports"] = vFn
+
+	vrhDomainSuffix := v.DomainSuffixValidationRuleHandler
+	rulesDomainSuffix := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+	}
+	vFn, err = vrhDomainSuffix(rulesDomainSuffix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SSHManagementType.domain_suffix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_suffix"] = vFn
 
 	v.FldValidators["advertise_choice.advertise_on_public"] = ves_io_schema_views.AdvertisePublicValidator().Validate
 

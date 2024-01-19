@@ -20,12 +20,36 @@ resource "volterra_enhanced_firewall_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "allowed_destinations deny_all denied_sources denied_destinations rule_list allow_all allowed_sources" must be set
+  // One of the arguments from this list "allow_all allowed_sources allowed_destinations deny_all denied_sources denied_destinations rule_list" must be set
 
-  denied_sources {
-    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+  rule_list {
+    rules {
+      // One of the arguments from this list "deny allow insert_service" must be set
+      deny = true
 
-    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
+      advanced_action {
+        action = "action"
+      }
+
+      // One of the arguments from this list "inside_destinations all_slo_vips all_sli_vips destination_aws_subnet_ids destination_label_selector destination_aws_vpc_ids all_destinations destination_prefix_list destination_ip_prefix_set outside_destinations destination_namespace" must be set
+      destination_namespace = "destination_namespace"
+
+      label_matcher {
+        keys = ["['environment', 'location', 'deployment']"]
+      }
+
+      metadata {
+        description = "Virtual Host for acmecorp website"
+        disable     = true
+        name        = "acmecorp-web"
+      }
+
+      // One of the arguments from this list "all_sources source_prefix_list outside_sources source_aws_subnet_ids source_ip_prefix_set inside_sources source_namespace source_label_selector source_aws_vpc_ids" must be set
+      all_sources = true
+
+      // One of the arguments from this list "all_traffic all_tcp_traffic all_udp_traffic applications protocol_port_range" must be set
+      all_traffic = true
+    }
   }
 }
 

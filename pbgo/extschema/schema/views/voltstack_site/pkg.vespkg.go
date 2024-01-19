@@ -146,6 +146,84 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Create"] = "ves.io.schema.views.voltstack_site.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []string{
@@ -158,11 +236,233 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.master_nodes.#",
 	}
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.List"] = []string{
 		"items.#.get_spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"items.#.get_spec.master_nodes.#",
 		"items.#.object.spec.gc_spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"items.#.object.spec.gc_spec.master_nodes.#",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []string{
@@ -244,6 +544,45 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.internal",
 		"spec.local_control_plane.bgp_config.peers.#.metadata.disable",
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.sli_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_network_config.slo_config.static_v6_route_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = "ves.io.schema.views.voltstack_site.ReplaceRequest"

@@ -2469,6 +2469,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
+            "x-ves-oneof-field-vk8s_namespace_access_choice": "[\"vk8s_namespace_access_deny\",\"vk8s_namespace_access_permit\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.CreateSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
@@ -2550,6 +2551,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Pod Security Policies"
+                },
+                "vk8s_namespace_access_deny": {
+                    "description": "Exclusive with [vk8s_namespace_access_permit]\n Access to create, modify and delete resources in VK8s namespaces will be prevented for service accounts and Managed K8s clients. Resources in VK8s namespaces can be managed only through VK8s API or UI.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny VK8s namespace access"
+                },
+                "vk8s_namespace_access_permit": {
+                    "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow VK8s namespace access"
                 }
             }
         },
@@ -2692,6 +2703,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
+            "x-ves-oneof-field-vk8s_namespace_access_choice": "[\"vk8s_namespace_access_deny\",\"vk8s_namespace_access_permit\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GetSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
@@ -2773,6 +2785,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Pod Security Policies"
+                },
+                "vk8s_namespace_access_deny": {
+                    "description": "Exclusive with [vk8s_namespace_access_permit]\n Access to create, modify and delete resources in VK8s namespaces will be prevented for service accounts and Managed K8s clients. Resources in VK8s namespaces can be managed only through VK8s API or UI.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny VK8s namespace access"
+                },
+                "vk8s_namespace_access_permit": {
+                    "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow VK8s namespace access"
                 }
             }
         },
@@ -2940,7 +2962,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
                     "title": "Allow VK8s namespace access",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow K8s API Access"
+                    "x-displayname": "Allow VK8s namespace access"
                 }
             }
         },
@@ -3291,6 +3313,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
+            "x-ves-oneof-field-vk8s_namespace_access_choice": "[\"vk8s_namespace_access_deny\",\"vk8s_namespace_access_permit\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.ReplaceSpecType",
             "properties": {
                 "cluster_scoped_access_deny": {
@@ -3372,6 +3395,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Pod Security Policies"
+                },
+                "vk8s_namespace_access_deny": {
+                    "description": "Exclusive with [vk8s_namespace_access_permit]\n Access to create, modify and delete resources in VK8s namespaces will be prevented for service accounts and Managed K8s clients. Resources in VK8s namespaces can be managed only through VK8s API or UI.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Deny VK8s namespace access"
+                },
+                "vk8s_namespace_access_permit": {
+                    "description": "Exclusive with [vk8s_namespace_access_deny]\n Access to create, modify and delete resources in VK8s namespaces will be allowed for service accounts and Managed K8s clients.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Allow VK8s namespace access"
                 }
             }
         },

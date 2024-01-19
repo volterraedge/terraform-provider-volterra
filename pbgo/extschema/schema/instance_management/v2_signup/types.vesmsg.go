@@ -171,6 +171,27 @@ func (v *ValidateGlobalSpecType) BillingDetailsValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) InternalMetaValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for internal_meta")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_signup.InternalMetaValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -207,6 +228,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("company_details"))
 		if err := fv(ctx, m.GetCompanyDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["internal_meta"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_meta"))
+		if err := fv(ctx, m.GetInternalMeta(), vOpts...); err != nil {
 			return err
 		}
 
@@ -284,6 +314,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("source_choice"),
 				db.WithValidateField("source_internal_sso"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SourceMarketplace:
+		if fv, exists := v.FldValidators["source_choice.source_marketplace"]; exists {
+			val := m.GetSourceChoice().(*GlobalSpecType_SourceMarketplace).SourceMarketplace
+			vOpts := append(opts,
+				db.WithValidateField("source_choice"),
+				db.WithValidateField("source_marketplace"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -371,8 +412,20 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["billing_details"] = vFn
 
+	vrhInternalMeta := v.InternalMetaValidationRuleHandler
+	rulesInternalMeta := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhInternalMeta(rulesInternalMeta)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.internal_meta: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["internal_meta"] = vFn
+
 	v.FldValidators["source_choice.source_internal_sre"] = ves_io_schema_signup.SourceInternalSreValidator().Validate
 	v.FldValidators["source_choice.source_msp"] = ves_io_schema_signup.SourceMspValidator().Validate
+	v.FldValidators["source_choice.source_marketplace"] = ves_io_schema_signup.SourceMarketplaceValidator().Validate
 
 	return v
 }()

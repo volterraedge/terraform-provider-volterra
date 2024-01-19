@@ -3403,6 +3403,283 @@ func SwaggerSpecRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *UpdateVulnerabilitiesStateReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateVulnerabilitiesStateReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateVulnerabilitiesStateReq) DeepCopy() *UpdateVulnerabilitiesStateReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateVulnerabilitiesStateReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateVulnerabilitiesStateReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateVulnerabilitiesStateReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateVulnerabilitiesStateReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateVulnerabilitiesStateReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateVulnerabilitiesStateReq) DomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateVulnerabilitiesStateReq) VulnStateValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(VulnStatus)
+		return int32(i)
+	}
+	// VulnStatus_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, VulnStatus_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vuln_state")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateVulnerabilitiesStateReq) VulnIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vuln_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateVulnerabilitiesStateReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateVulnerabilitiesStateReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateVulnerabilitiesStateReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetContext().(type) {
+	case *UpdateVulnerabilitiesStateReq_ApiEndpoint:
+		if fv, exists := v.FldValidators["context.api_endpoint"]; exists {
+			val := m.GetContext().(*UpdateVulnerabilitiesStateReq_ApiEndpoint).ApiEndpoint
+			vOpts := append(opts,
+				db.WithValidateField("context"),
+				db.WithValidateField("api_endpoint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vuln_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vuln_id"))
+		if err := fv(ctx, m.GetVulnId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vuln_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vuln_state"))
+		if err := fv(ctx, m.GetVulnState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateVulnerabilitiesStateReqValidator = func() *ValidateUpdateVulnerabilitiesStateReq {
+	v := &ValidateUpdateVulnerabilitiesStateReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomain := v.DomainValidationRuleHandler
+	rulesDomain := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDomain(rulesDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateVulnerabilitiesStateReq.domain: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain"] = vFn
+
+	vrhVulnState := v.VulnStateValidationRuleHandler
+	rulesVulnState := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVulnState(rulesVulnState)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateVulnerabilitiesStateReq.vuln_state: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vuln_state"] = vFn
+
+	vrhVulnId := v.VulnIdValidationRuleHandler
+	rulesVulnId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVulnId(rulesVulnId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateVulnerabilitiesStateReq.vuln_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vuln_id"] = vFn
+
+	v.FldValidators["context.api_endpoint"] = APIEndpointValidator().Validate
+
+	return v
+}()
+
+func UpdateVulnerabilitiesStateReqValidator() db.Validator {
+	return DefaultUpdateVulnerabilitiesStateReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateVulnerabilitiesStateRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateVulnerabilitiesStateRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateVulnerabilitiesStateRsp) DeepCopy() *UpdateVulnerabilitiesStateRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateVulnerabilitiesStateRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateVulnerabilitiesStateRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateVulnerabilitiesStateRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateVulnerabilitiesStateRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateVulnerabilitiesStateRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateVulnerabilitiesStateRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateVulnerabilitiesStateRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateVulnerabilitiesStateRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateVulnerabilitiesStateRspValidator = func() *ValidateUpdateVulnerabilitiesStateRsp {
+	v := &ValidateUpdateVulnerabilitiesStateRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateVulnerabilitiesStateRspValidator() db.Validator {
+	return DefaultUpdateVulnerabilitiesStateRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *VulnEvidence) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3863,6 +4140,15 @@ func (v *ValidateVulnerability) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("title"))
 		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vuln_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vuln_id"))
+		if err := fv(ctx, m.GetVulnId(), vOpts...); err != nil {
 			return err
 		}
 

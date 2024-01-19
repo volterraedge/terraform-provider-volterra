@@ -26,6 +26,138 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AcceleratedNetworkingType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AcceleratedNetworkingType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AcceleratedNetworkingType) DeepCopy() *AcceleratedNetworkingType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AcceleratedNetworkingType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AcceleratedNetworkingType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AcceleratedNetworkingType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AcceleratedNetworkingTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAcceleratedNetworkingType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAcceleratedNetworkingType) AcceleratedNetworkingValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for accelerated_networking")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAcceleratedNetworkingType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AcceleratedNetworkingType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AcceleratedNetworkingType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["accelerated_networking"]; exists {
+		val := m.GetAcceleratedNetworking()
+		vOpts := append(opts,
+			db.WithValidateField("accelerated_networking"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetAcceleratedNetworking().(type) {
+	case *AcceleratedNetworkingType_Disable:
+		if fv, exists := v.FldValidators["accelerated_networking.disable"]; exists {
+			val := m.GetAcceleratedNetworking().(*AcceleratedNetworkingType_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("accelerated_networking"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AcceleratedNetworkingType_Enable:
+		if fv, exists := v.FldValidators["accelerated_networking.enable"]; exists {
+			val := m.GetAcceleratedNetworking().(*AcceleratedNetworkingType_Enable).Enable
+			vOpts := append(opts,
+				db.WithValidateField("accelerated_networking"),
+				db.WithValidateField("enable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAcceleratedNetworkingTypeValidator = func() *ValidateAcceleratedNetworkingType {
+	v := &ValidateAcceleratedNetworkingType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAcceleratedNetworking := v.AcceleratedNetworkingValidationRuleHandler
+	rulesAcceleratedNetworking := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhAcceleratedNetworking(rulesAcceleratedNetworking)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AcceleratedNetworkingType.accelerated_networking: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["accelerated_networking"] = vFn
+
+	return v
+}()
+
+func AcceleratedNetworkingTypeValidator() db.Validator {
+	return DefaultAcceleratedNetworkingTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AdvertiseCustom) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3344,13 +3476,6 @@ func (v *ValidateOriginPoolWithWeight) PoolChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateOriginPoolWithWeight) PoolChoicePoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ObjectRefTypeValidator().Validate, nil
-}
-func (v *ValidateOriginPoolWithWeight) PoolChoiceClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return ObjectRefTypeValidator().Validate, nil
-}
-
 func (v *ValidateOriginPoolWithWeight) EndpointSubsetsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemKeyRules := db.GetMapStringKeyRules(rules)
@@ -3508,28 +3633,6 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 	}
 	v.FldValidators["pool_choice"] = vFn
 
-	vrhPoolChoicePool := v.PoolChoicePoolValidationRuleHandler
-	rulesPoolChoicePool := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["pool_choice.pool"], err = vrhPoolChoicePool(rulesPoolChoicePool)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginPoolWithWeight.pool_choice_pool: %s", err)
-		panic(errMsg)
-	}
-	vrhPoolChoiceCluster := v.PoolChoiceClusterValidationRuleHandler
-	rulesPoolChoiceCluster := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["pool_choice.cluster"], err = vrhPoolChoiceCluster(rulesPoolChoiceCluster)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field OriginPoolWithWeight.pool_choice_cluster: %s", err)
-		panic(errMsg)
-	}
-
-	v.FldValidators["pool_choice.pool"] = vFnMap["pool_choice.pool"]
-	v.FldValidators["pool_choice.cluster"] = vFnMap["pool_choice.cluster"]
-
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
 		"ves.io.schema.rules.map.max_pairs": "16",
@@ -3551,6 +3654,9 @@ var DefaultOriginPoolWithWeightValidator = func() *ValidateOriginPoolWithWeight 
 		panic(errMsg)
 	}
 	v.FldValidators["priority"] = vFn
+
+	v.FldValidators["pool_choice.pool"] = ObjectRefTypeValidator().Validate
+	v.FldValidators["pool_choice.cluster"] = ObjectRefTypeValidator().Validate
 
 	return v
 }()

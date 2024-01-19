@@ -1186,6 +1186,48 @@ func (v *ValidateGetSpecType) NonApiEndpointsValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ApiInventoryOpenapiSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_inventory_openapi_spec")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_openapi_spec")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_openapi_spec")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_openapi_spec")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -1229,13 +1271,9 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	}
 
 	if fv, exists := v.FldValidators["api_inventory_openapi_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_inventory_openapi_spec"))
-		for idx, item := range m.GetApiInventoryOpenapiSpec() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetApiInventoryOpenapiSpec(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1332,6 +1370,20 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["non_api_endpoints"] = vFn
+
+	vrhApiInventoryOpenapiSpec := v.ApiInventoryOpenapiSpecValidationRuleHandler
+	rulesApiInventoryOpenapiSpec := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "512",
+		"ves.io.schema.rules.repeated.items.string.pattern":   "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
+		"ves.io.schema.rules.repeated.max_items":              "10",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhApiInventoryOpenapiSpec(rulesApiInventoryOpenapiSpec)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.api_inventory_openapi_spec: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_openapi_spec"] = vFn
 
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
 
@@ -1629,6 +1681,48 @@ func (v *ValidateGlobalSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) ApiInventoryOpenapiSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_inventory_openapi_spec")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_openapi_spec")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_openapi_spec")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_openapi_spec")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1672,13 +1766,9 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 
 	if fv, exists := v.FldValidators["api_inventory_openapi_spec"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_inventory_openapi_spec"))
-		for idx, item := range m.GetApiInventoryOpenapiSpec() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetApiInventoryOpenapiSpec(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1784,6 +1874,20 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["non_api_endpoints"] = vFn
+
+	vrhApiInventoryOpenapiSpec := v.ApiInventoryOpenapiSpecValidationRuleHandler
+	rulesApiInventoryOpenapiSpec := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "512",
+		"ves.io.schema.rules.repeated.items.string.pattern":   "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
+		"ves.io.schema.rules.repeated.max_items":              "10",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhApiInventoryOpenapiSpec(rulesApiInventoryOpenapiSpec)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.api_inventory_openapi_spec: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_openapi_spec"] = vFn
 
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
 

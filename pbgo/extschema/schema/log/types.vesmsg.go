@@ -623,6 +623,102 @@ func FieldAggregationDataValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *FieldSubAggregationBucket) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldSubAggregationBucket) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldSubAggregationBucket) DeepCopy() *FieldSubAggregationBucket {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldSubAggregationBucket{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldSubAggregationBucket) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldSubAggregationBucket) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldSubAggregationBucketValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldSubAggregationBucket struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldSubAggregationBucket) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldSubAggregationBucket)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldSubAggregationBucket got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("count"))
+		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["order_by"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("order_by"))
+		if err := fv(ctx, m.GetOrderBy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldSubAggregationBucketValidator = func() *ValidateFieldSubAggregationBucket {
+	v := &ValidateFieldSubAggregationBucket{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FieldSubAggregationBucketValidator() db.Validator {
+	return DefaultFieldSubAggregationBucketValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *FieldSubAggregationData) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -674,6 +770,18 @@ func (v *ValidateFieldSubAggregationData) Validate(ctx context.Context, pm inter
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["buckets"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("buckets"))
+		for idx, item := range m.GetBuckets() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {

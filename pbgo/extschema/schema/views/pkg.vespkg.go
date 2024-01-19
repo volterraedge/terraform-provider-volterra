@@ -48,7 +48,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.HostedVIFConfigType"] = HostedVIFConfigTypeValidator()
 	vr["ves.io.schema.views.OfflineSurvivabilityModeType"] = OfflineSurvivabilityModeTypeValidator()
 	vr["ves.io.schema.views.PrivateConnectConfigType"] = PrivateConnectConfigTypeValidator()
+	vr["ves.io.schema.views.PrivateConnectivityType"] = PrivateConnectivityTypeValidator()
 	vr["ves.io.schema.views.SecurityGroupType"] = SecurityGroupTypeValidator()
+	vr["ves.io.schema.views.SiteCloudLinkType"] = SiteCloudLinkTypeValidator()
 	vr["ves.io.schema.views.SiteStaticRoutesListType"] = SiteStaticRoutesListTypeValidator()
 	vr["ves.io.schema.views.SiteStaticRoutesType"] = SiteStaticRoutesTypeValidator()
 	vr["ves.io.schema.views.VifRegionConfig"] = VifRegionConfigValidator()
@@ -57,6 +59,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.StorageClassOpenebsEnterpriseType"] = StorageClassOpenebsEnterpriseTypeValidator()
 	vr["ves.io.schema.views.StorageClassType"] = StorageClassTypeValidator()
 
+	vr["ves.io.schema.views.AcceleratedNetworkingType"] = AcceleratedNetworkingTypeValidator()
 	vr["ves.io.schema.views.AdvertiseCustom"] = AdvertiseCustomValidator()
 	vr["ves.io.schema.views.AdvertisePublic"] = AdvertisePublicValidator()
 	vr["ves.io.schema.views.AdvertiseSiteVsite"] = AdvertiseSiteVsiteValidator()

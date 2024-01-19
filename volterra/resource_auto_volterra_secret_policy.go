@@ -363,7 +363,8 @@ func resourceVolterraSecretPolicyCreate(d *schema.ResourceData, meta interface{}
 	//decrypt_cache_timeout
 	if v, ok := d.GetOk("decrypt_cache_timeout"); ok && !isIntfNil(v) {
 
-		//createSpec.DecryptCacheTimeout = v.(string)
+		// createSpec.DecryptCacheTimeout =
+		// 	v.(string)
 
 	}
 
@@ -737,7 +738,8 @@ func resourceVolterraSecretPolicyUpdate(d *schema.ResourceData, meta interface{}
 
 	if v, ok := d.GetOk("decrypt_cache_timeout"); ok && !isIntfNil(v) {
 
-		//updateSpec.DecryptCacheTimeout = v.(string)
+		// updateSpec.DecryptCacheTimeout =
+		// 	v.(string)
 
 	}
 

@@ -2813,7 +2813,7 @@ var APISwaggerJSON string = `{
                 "cloud_link_state": {
                     "description": " State of the connections with the CloudLink deployment",
                     "title": "CloudLink State",
-                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "$ref": "#/definitions/schemaCloudLinkState",
                     "x-displayname": "CloudLink State"
                 },
                 "connection_status": {
@@ -2972,19 +2972,6 @@ var APISwaggerJSON string = `{
             "default": "IN_PROGRESS",
             "x-displayname": "Status",
             "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkDeploymentStatus"
-        },
-        "cloud_linkCloudLinkState": {
-            "type": "string",
-            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
-            "title": "CloudLink State",
-            "enum": [
-                "UP",
-                "DOWN",
-                "DEGRADED"
-            ],
-            "default": "UP",
-            "x-displayname": "CloudLink State",
-            "x-ves-proto-enum": "ves.io.schema.cloud_link.CloudLinkState"
         },
         "cloud_linkDirectConnectConnectionStatusType": {
             "type": "object",
@@ -3317,6 +3304,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.in": "[\\\"NONE\\\",\\\"IPSEC\\\"]"
                     }
                 },
+                "gcp_path": {
+                    "type": "string",
+                    "description": " Link to this interconnect's Cloud Router object in Google Cloud Platform",
+                    "title": "GCP Object Link",
+                    "x-displayname": "GCP Cloud Router Link"
+                },
                 "interconnect": {
                     "type": "string",
                     "description": " Name of the underlying GCP Cloud Interconnect that this attachment is attached to",
@@ -3365,11 +3358,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/cloud_linkGCPPartnerMetadata",
                     "x-displayname": "Partner Metadata"
                 },
+                "project": {
+                    "type": "string",
+                    "description": " GCP Project ID of this interconnect's Cloud Router",
+                    "title": "Cloud Router Project ID",
+                    "x-displayname": "Cloud Router Project ID"
+                },
+                "region": {
+                    "type": "string",
+                    "description": " Region of this interconnect's Cloud Router",
+                    "title": "Cloud Router Region",
+                    "x-displayname": "Cloud Router Region"
+                },
                 "router": {
                     "type": "string",
                     "description": " Name of the GCP Cloud Router to which this GCP Cloud Interconnect is connected",
                     "title": "Router",
-                    "x-displayname": "Project"
+                    "x-displayname": "Cloud Router"
                 },
                 "stack_type": {
                     "type": "string",
@@ -3398,6 +3403,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "4094"
                     }
+                },
+                "vpc_network": {
+                    "type": "string",
+                    "description": " VPC Network of this interconnect's Cloud Router",
+                    "title": "Cloud Router VPC Network",
+                    "x-displayname": "Cloud Router VPC Network"
                 }
             }
         },
@@ -3438,7 +3449,7 @@ var APISwaggerJSON string = `{
                 "cloud_link_state": {
                     "description": " State of the connections with the CloudLink deployment",
                     "title": "CloudLink State",
-                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "$ref": "#/definitions/schemaCloudLinkState",
                     "x-displayname": "CloudLink State"
                 },
                 "connection_status": {
@@ -3487,7 +3498,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "aws_router_peer_address": {
                     "type": "string",
-                    "description": " The BGP peer IP configured on the AWS endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
+                    "description": " The BGP peer IP configured on the AWS endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 32\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
                     "title": "AWS Router Peer IP/Prefix",
                     "x-displayname": "AWS Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
@@ -3495,12 +3506,13 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "32",
                         "ves.io.schema.rules.string.min_ip_prefix_length": "1"
                     }
                 },
                 "router_peer_address": {
                     "type": "string",
-                    "description": " The BGP peer IP configured on your (customer) endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
+                    "description": " The BGP peer IP configured on your (customer) endpoint\n\nExample: - \"10.1.0.0/31\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 32\n  ves.io.schema.rules.string.min_ip_prefix_length: 1\n",
                     "title": "Customer Peer IP/Prefix",
                     "x-displayname": "Customer Router IP/Prefix",
                     "x-ves-example": "10.1.0.0/31",
@@ -3508,6 +3520,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "32",
                         "ves.io.schema.rules.string.min_ip_prefix_length": "1"
                     }
                 }
@@ -4101,6 +4114,19 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCloudLinkState": {
+            "type": "string",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "title": "CloudLink State",
+            "enum": [
+                "UP",
+                "DOWN",
+                "DEGRADED"
+            ],
+            "default": "UP",
+            "x-displayname": "CloudLink State",
+            "x-ves-proto-enum": "ves.io.schema.CloudLinkState"
+        },
         "schemaConditionType": {
             "type": "object",
             "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
@@ -4692,7 +4718,7 @@ var APISwaggerJSON string = `{
                 "cloud_link_state": {
                     "description": " State of the connections with the CloudLink deployment",
                     "title": "CloudLink State",
-                    "$ref": "#/definitions/cloud_linkCloudLinkState",
+                    "$ref": "#/definitions/schemaCloudLinkState",
                     "x-displayname": "CloudLink State"
                 },
                 "disabled": {

@@ -2382,11 +2382,28 @@ var CustomAPISwaggerJSON string = `{
                     "title": "field",
                     "$ref": "#/definitions/access_logCDNAccessLogTag"
                 },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nThis option provides sub-aggregation for each field bucket\nThe key holds the value of sub-aggregations",
+                    "title": "sub aggregation"
+                },
                 "topk": {
                     "type": "integer",
                     "description": "x-displayName: \"TopK\"\nx-example: \"5\"\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
                     "title": "topk",
                     "format": "int64"
+                }
+            }
+        },
+        "cdn_loadbalancerCDNFieldSubAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"CDN Field SubAggregation\"\nAggregate access logs in each field bucket based on one of the sub aggregation types",
+            "title": "CDN Fiels SubAggregation",
+            "properties": {
+                "field_aggregation": {
+                    "description": "x-displayName: \"Field Aggregation\"\nAggregate based on one of the key fields in the access log",
+                    "title": "Field Aggregation",
+                    "$ref": "#/definitions/viewscdn_loadbalancerFieldAggregation"
                 }
             }
         },
@@ -3111,15 +3128,11 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "lastn": {
                     "type": "integer",
-                    "description": "Exclusive with [time_range]\n The last n service operations\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [time_range]\n The last n service operations\n\nExample: - \"5\"-",
                     "title": "lastn",
                     "format": "int64",
                     "x-displayname": "Last N",
-                    "x-ves-example": "5",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-ves-example": "5"
                 },
                 "name": {
                     "type": "string",
@@ -3140,14 +3153,10 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "time_range": {
-                    "description": "Exclusive with [lastn]\n service operations between a start and end time.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [lastn]\n service operations between a start and end time.",
                     "title": "time-range",
                     "$ref": "#/definitions/cdn_loadbalancerServiceOperationsTimeRange",
-                    "x-displayname": "Time Range",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Time Range"
                 }
             }
         },
@@ -3517,11 +3526,42 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "logFieldSubAggregationBucket": {
+            "type": "object",
+            "description": "x-displayName: \"Field Sub Aggregation Bucket\"\nField sub aggregation bucket containing field values and the number of logs.",
+            "title": "FieldSubAggregationBucket",
+            "properties": {
+                "count": {
+                    "type": "string",
+                    "description": "x-displayName: \"Count\"\nx-example: 45\n\nnumber of logs in this bucket",
+                    "title": "count",
+                    "format": "uint64"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "x-displayName: \"Key\"\nKey contain the name/value pair that identifies the unique key fields\nx-example: \"HIT, MISS, REVALIDATED\"",
+                    "title": "keys"
+                },
+                "order_by": {
+                    "description": "x-displayName: \"Order by\"\nOrder by data for the metrics field aggregation bucket",
+                    "title": "Order by",
+                    "$ref": "#/definitions/logOrderByData"
+                }
+            }
+        },
         "logFieldSubAggregationData": {
             "type": "object",
             "description": "x-displayName: \"Field SubAggregation\"\nField subaggregation data",
             "title": "FieldSubAggregationData",
             "properties": {
+                "buckets": {
+                    "type": "array",
+                    "description": "x-displayName: \"Buckets\"\nLists of buckets containing field values and the corresponding log count",
+                    "title": "buckets",
+                    "items": {
+                        "$ref": "#/definitions/logFieldSubAggregationBucket"
+                    }
+                },
                 "cardinality_aggregation": {
                     "description": "cardinality aggregation data",
                     "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
@@ -3751,6 +3791,24 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Value\"\nx-example: \"-15\"",
                     "title": "Value"
+                }
+            }
+        },
+        "viewscdn_loadbalancerFieldAggregation": {
+            "type": "object",
+            "description": "x-displayName: \"Field Aggregation\"\nAggregate access logs based on the key fields in the log.",
+            "title": "Field Aggregation",
+            "properties": {
+                "field": {
+                    "description": "x-displayName: \"Field\"\nx-required\n\nField name by which the logs should be aggregated.",
+                    "title": "field",
+                    "$ref": "#/definitions/access_logCDNAccessLogTag"
+                },
+                "topk": {
+                    "type": "integer",
+                    "description": "x-displayName: \"TopK\"\nx-example: \"5\"\nNumber of top field values to be returned in the response.\nOptional: If not specified, top 5 values will be returned in the response.",
+                    "title": "topk",
+                    "format": "int64"
                 }
             }
         }

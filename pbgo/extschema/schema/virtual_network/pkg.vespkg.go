@@ -47,6 +47,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_network.SNATPoolFleetType"] = SNATPoolFleetTypeValidator()
 	vr["ves.io.schema.virtual_network.SNATPoolSiteType"] = SNATPoolSiteTypeValidator()
 	vr["ves.io.schema.virtual_network.SNATPoolType"] = SNATPoolTypeValidator()
+	vr["ves.io.schema.virtual_network.SegmentNetworkType"] = SegmentNetworkTypeValidator()
 	vr["ves.io.schema.virtual_network.Srv6NetworkNsParametersType"] = Srv6NetworkNsParametersTypeValidator()
 	vr["ves.io.schema.virtual_network.StaticRouteViewType"] = StaticRouteViewTypeValidator()
 	vr["ves.io.schema.virtual_network.StaticV6RouteViewType"] = StaticV6RouteViewTypeValidator()
@@ -75,13 +76,88 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.srv6_network",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.static_v6_routes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_network.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.static_v6_routes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.static_v6_routes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_network.API.Replace"] = []string{
 		"spec.private_network",
 		"spec.srv6_network",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_network.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.static_v6_routes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

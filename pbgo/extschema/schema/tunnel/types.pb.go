@@ -263,6 +263,7 @@ func (m *InterfaceType) GetLocalIntf() []*schema.ObjectRefType {
 type LocalIpAddressType struct {
 	// Type
 	//
+	// x-required
 	// x-displayName: "Type"
 	// Options to choose local IP address
 	//

@@ -146,7 +146,9 @@ ip_prefix_list.
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-`ip_prefixes` - (Required) List of IPv4 prefix strings. (`String`).
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 ### Item
 

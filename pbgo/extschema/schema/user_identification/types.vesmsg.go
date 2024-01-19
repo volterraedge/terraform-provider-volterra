@@ -687,6 +687,13 @@ func (v *ValidateUserIdentificationRule) IdentifierIpAndHttpHeaderNameValidation
 	}
 	return oValidatorFn_IpAndHttpHeaderName, nil
 }
+func (v *ValidateUserIdentificationRule) IdentifierJwtClaimNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_JwtClaimName, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for jwt_claim_name")
+	}
+	return oValidatorFn_JwtClaimName, nil
+}
 
 func (v *ValidateUserIdentificationRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UserIdentificationRule)
@@ -845,6 +852,17 @@ func (v *ValidateUserIdentificationRule) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *UserIdentificationRule_JwtClaimName:
+		if fv, exists := v.FldValidators["identifier.jwt_claim_name"]; exists {
+			val := m.GetIdentifier().(*UserIdentificationRule_JwtClaimName).JwtClaimName
+			vOpts := append(opts,
+				db.WithValidateField("identifier"),
+				db.WithValidateField("jwt_claim_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -916,11 +934,22 @@ var DefaultUserIdentificationRuleValidator = func() *ValidateUserIdentificationR
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UserIdentificationRule.identifier_ip_and_http_header_name: %s", err)
 		panic(errMsg)
 	}
+	vrhIdentifierJwtClaimName := v.IdentifierJwtClaimNameValidationRuleHandler
+	rulesIdentifierJwtClaimName := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.min_bytes": "1",
+	}
+	vFnMap["identifier.jwt_claim_name"], err = vrhIdentifierJwtClaimName(rulesIdentifierJwtClaimName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UserIdentificationRule.identifier_jwt_claim_name: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["identifier.query_param_key"] = vFnMap["identifier.query_param_key"]
 	v.FldValidators["identifier.http_header_name"] = vFnMap["identifier.http_header_name"]
 	v.FldValidators["identifier.cookie_name"] = vFnMap["identifier.cookie_name"]
 	v.FldValidators["identifier.ip_and_http_header_name"] = vFnMap["identifier.ip_and_http_header_name"]
+	v.FldValidators["identifier.jwt_claim_name"] = vFnMap["identifier.jwt_claim_name"]
 
 	return v
 }()

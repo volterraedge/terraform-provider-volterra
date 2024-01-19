@@ -3206,6 +3206,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyJWTClaimMatcherType": {
+            "type": "object",
+            "description": "A JWT claim matcher specifies the name of a single JWT claim and the criteria for the input request to match it.\nThe input has a list of actual values for each JWT claim name in the JWT payload.\nA JWT claim matcher can check for one of the following:\n* Presence or absence of the JWT Claim in the input\n* At least one of the values for the JWT Claim in the input satisfies the MatcherType item",
+            "title": "JWTClaimMatcherType",
+            "x-displayname": "JWT Claim Matcher",
+            "x-ves-displayorder": "1,2,6",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.JWTClaimMatcherType",
+            "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item]\n Check that the JWT Claim is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Not Present"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item]\n Check that the JWT Claim is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Present"
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Matcher"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the JWT Claim. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " JWT claim name.\n\nExample: - \"user_id\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "JWT Claim Name",
+                    "x-ves-example": "user_id",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                }
+            }
+        },
         "policyKnownTlsFingerprintClass": {
             "type": "string",
             "description": "Specifies known TLS fingerprint classes\n\n - TLS_FINGERPRINT_NONE: TLS_FINGERPRINT_NONE\n\nNo TLS fingerprint\n - ANY_MALICIOUS_FINGERPRINT: ANY_MALICIOUS_FINGERPRINT\n\nTLS fingerprints known to be associated with malicious clients\n - ADWARE: ADWARE\n\nTLS fingerprints known to be associated with adware\n - ADWIND: ADWIND\n\nTLS fingerprints known to be associated with adwind\n - DRIDEX: DRIDEX\n\nTLS fingerprints known to be associated with dridex\n - GOOTKIT: GOOTKIT\n\nTLS fingerprints known to be associated with gootkit\n - GOZI: GOZI\n\nTLS fingerprints known to be associated with gozi\n - JBIFROST: JBIFROST\n\nTLS fingerprints known to be associated with jbifrost\n - QUAKBOT: QUAKBOT\n\nTLS fingerprints known to be associated with quakbot\n - RANSOMWARE: RANSOMWARE\n\nTLS fingerprints known to be associated with ransomware\n - TROLDESH: TROLDESH\n\nTLS fingerprints known to be associated with troldesh\n - TOFSEE: TOFSEE\n\nTLS fingerprints known to be associated with tofsee\n - TORRENTLOCKER: TORRENTLOCKER\n\nTLS fingerprints known to be associated with torrentlocker\n - TRICKBOT: TRICKBOT\n\nTLS fingerprints known to be associated with trickbot",
@@ -5966,6 +6015,19 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "jwt_claims": {
+                    "type": "array",
+                    "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "title": "JWT claims",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/policyJWTClaimMatcherType"
+                    },
+                    "x-displayname": "JWT Claims",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
                     "title": "label matcher",
@@ -6696,6 +6758,14 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"IP Reputation Action\"\nSpecifies how IP Reputation is handled",
                     "title": "IP Reputation Action",
                     "$ref": "#/definitions/policyModifyAction"
+                },
+                "jwt_claims": {
+                    "type": "array",
+                    "description": "x-displayName: \"JWT Claims\"\nA list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\ninstances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\nNote that all specified JWT claim predicates must evaluate to true.",
+                    "title": "JWT claims",
+                    "items": {
+                        "$ref": "#/definitions/policyJWTClaimMatcherType"
+                    }
                 },
                 "l4_dest_matcher": {
                     "description": "x-displayName: \"L4 Destination Matcher\"\nA L4 Destination matcher specifies a list of IPv4 prefixes and a TCP port range as match criteria. The match is considered successful if the destination\nIP matches one of the prefixes and the destination port belongs to the port range.",

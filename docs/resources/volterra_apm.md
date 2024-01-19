@@ -23,11 +23,21 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip" must be set
+    // One of the arguments from this list "advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet" must be set
 
-    advertise_on_slo_sli {
+    advertise_on_slo_internet_vip {
       // One of the arguments from this list "no_mtls use_mtls" must be set
-      no_mtls = true
+
+      use_mtls {
+        // One of the arguments from this list "no_crl crl" must be set
+        no_crl = true
+
+        // One of the arguments from this list "trusted_ca_url trusted_ca" must be set
+        trusted_ca_url = "trusted_ca_url"
+
+        // One of the arguments from this list "xfcc_disabled xfcc_options" must be set
+        xfcc_disabled = true
+      }
 
       tls_certificates {
         certificate_url = "value"
@@ -35,7 +45,7 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
 
-        disable_ocsp_stapling {}
+        use_system_defaults {}
         private_key {
           blindfold_secret_info_internal {
             decryption_provider = "value"
@@ -45,26 +55,24 @@ resource "volterra_apm" "example" {
 
           secret_encoding_type = "secret_encoding_type"
 
-          // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-          blindfold_secret_info {
-            decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
+          wingman_secret_info {
+            name = "ChargeBack-API-Key"
           }
         }
       }
 
       tls_config {
         // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-        default_security = true
+        medium_security = true
       }
     }
 
     domain_suffix = "foo.com"
 
     // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
-    advertise_on_public_default_vip = true
+    do_not_advertise = true
 
     // One of the arguments from this list "default_https_port https_port" must be set
     default_https_port = true
@@ -109,10 +117,10 @@ resource "volterra_apm" "example" {
         // One of the arguments from this list "automatic_vip configured_vip" must be set
         automatic_vip = true
 
-        // One of the arguments from this list "custom_tcp_ports no_tcp_ports default_tcp_ports http_port https_port" must be set
-        default_tcp_ports = true
+        // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
+        no_tcp_ports = true
 
-        // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
+        // One of the arguments from this list "custom_udp_ports no_udp_ports" must be set
         no_udp_ports = true
       }
 
@@ -137,7 +145,7 @@ resource "volterra_apm" "example" {
     // One of the arguments from this list "market_place_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
+      // One of the arguments from this list "best_plus_payg_1gbps BestPlusPayG200Mbps" must be set
       BestPlusPayG200Mbps = true
     }
   }

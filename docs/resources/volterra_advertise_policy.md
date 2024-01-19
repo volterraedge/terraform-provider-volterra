@@ -19,6 +19,9 @@ Example Usage
 resource "volterra_advertise_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  // One of the arguments from this list "port port_ranges" must be set
+  port = "80"
 }
 
 ```

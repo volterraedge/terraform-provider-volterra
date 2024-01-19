@@ -37,6 +37,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.PersistentVolumeClaimListRequest"] = PersistentVolumeClaimListRequestValidator()
 	vr["ves.io.schema.site.PersistentVolumeListRequest"] = PersistentVolumeListRequestValidator()
 	vr["ves.io.schema.site.PodListRequest"] = PodListRequestValidator()
+	vr["ves.io.schema.site.PodsMetricData"] = PodsMetricDataValidator()
+	vr["ves.io.schema.site.PodsMetricTypeData"] = PodsMetricTypeDataValidator()
+	vr["ves.io.schema.site.PodsMetricsRequest"] = PodsMetricsRequestValidator()
+	vr["ves.io.schema.site.PodsMetricsResponse"] = PodsMetricsResponseValidator()
 	vr["ves.io.schema.site.ReplicaSetListRequest"] = ReplicaSetListRequestValidator()
 	vr["ves.io.schema.site.SecretListRequest"] = SecretListRequestValidator()
 	vr["ves.io.schema.site.ServiceListRequest"] = ServiceListRequestValidator()
@@ -116,6 +120,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.SiteToSiteTunnelConnectivity"] = SiteToSiteTunnelConnectivityValidator()
 	vr["ves.io.schema.site.StorageDevice"] = StorageDeviceValidator()
 	vr["ves.io.schema.site.TunnelConnectionStatus"] = TunnelConnectionStatusValidator()
+	vr["ves.io.schema.site.TunnelFlapReason"] = TunnelFlapReasonValidator()
 	vr["ves.io.schema.site.USBDevice"] = USBDeviceValidator()
 	vr["ves.io.schema.site.VerInstanceRunningStateStatusType"] = VerInstanceRunningStateStatusTypeValidator()
 	vr["ves.io.schema.site.VerMasterStatusType"] = VerMasterStatusTypeValidator()
@@ -146,57 +151,129 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "object.spec.gc_spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "object.spec.gc_spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.object.spec.gc_spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.object.spec.gc_spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.inside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging"},
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.outside_vip_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.vip_selection",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
 

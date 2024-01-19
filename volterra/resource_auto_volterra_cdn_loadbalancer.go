@@ -2000,6 +2000,11 @@ func resourceVolterraCdnLoadbalancer() *schema.Resource {
 											},
 										},
 									},
+
+									"port": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
 								},
 							},
 						},
@@ -5102,6 +5107,10 @@ func resourceVolterraCdnLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 						}
 
+					}
+
+					if w, ok := originServersMapStrToI["port"]; ok && !isIntfNil(w) {
+						originServers[i].Port = uint32(w.(int))
 					}
 
 				}
@@ -8400,6 +8409,10 @@ func resourceVolterraCdnLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 						}
 
+					}
+
+					if w, ok := originServersMapStrToI["port"]; ok && !isIntfNil(w) {
+						originServers[i].Port = uint32(w.(int))
 					}
 
 				}

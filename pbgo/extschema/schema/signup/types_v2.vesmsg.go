@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_infraprotect_information "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information"
 )
 
@@ -381,15 +382,6 @@ func (v *ValidateBillingMeta) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("infraprotect_info"))
 		if err := fv(ctx, m.GetInfraprotectInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["payment_address"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("payment_address"))
-		if err := fv(ctx, m.GetPaymentAddress(), vOpts...); err != nil {
 			return err
 		}
 
@@ -902,6 +894,16 @@ func (v *ValidateCrmInfoV2) EntitledSkusValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateCrmInfoV2) CustomerIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_identifier")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCrmInfoV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CrmInfoV2)
 	if !ok {
@@ -920,6 +922,15 @@ func (v *ValidateCrmInfoV2) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("account_id"))
 		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["customer_identifier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("customer_identifier"))
+		if err := fv(ctx, m.GetCustomerIdentifier(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1031,11 +1042,307 @@ var DefaultCrmInfoV2Validator = func() *ValidateCrmInfoV2 {
 	}
 	v.FldValidators["entitled_skus"] = vFn
 
+	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
+	rulesCustomerIdentifier := map[string]string{
+		"ves.io.schema.rules.string.max_len": "255",
+	}
+	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.customer_identifier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["customer_identifier"] = vFn
+
 	return v
 }()
 
 func CrmInfoV2Validator() db.Validator {
 	return DefaultCrmInfoV2Validator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InternalMeta) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InternalMeta) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InternalMeta) DeepCopy() *InternalMeta {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InternalMeta{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InternalMeta) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InternalMeta) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InternalMetaValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInternalMeta struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInternalMeta) F5XcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for f5xc_instance_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInternalMeta) KcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for kc_instance_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInternalMeta) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInternalMeta) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InternalMeta)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InternalMeta got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["f5xc_instance_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("f5xc_instance_name"))
+		if err := fv(ctx, m.GetF5XcInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["kc_instance_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kc_instance_name"))
+		if err := fv(ctx, m.GetKcInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_id"))
+		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInternalMetaValidator = func() *ValidateInternalMeta {
+	v := &ValidateInternalMeta{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhF5XcInstanceName := v.F5XcInstanceNameValidationRuleHandler
+	rulesF5XcInstanceName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhF5XcInstanceName(rulesF5XcInstanceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InternalMeta.f5xc_instance_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["f5xc_instance_name"] = vFn
+
+	vrhKcInstanceName := v.KcInstanceNameValidationRuleHandler
+	rulesKcInstanceName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhKcInstanceName(rulesKcInstanceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InternalMeta.kc_instance_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["kc_instance_name"] = vFn
+
+	vrhTenantId := v.TenantIdValidationRuleHandler
+	rulesTenantId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhTenantId(rulesTenantId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InternalMeta.tenant_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_id"] = vFn
+
+	return v
+}()
+
+func InternalMetaValidator() db.Validator {
+	return DefaultInternalMetaValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MarketplaceAws) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MarketplaceAws) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MarketplaceAws) DeepCopy() *MarketplaceAws {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MarketplaceAws{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MarketplaceAws) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MarketplaceAws) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MarketplaceAwsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMarketplaceAws struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMarketplaceAws) CrmDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for crm_details")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema.CRMInfoValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMarketplaceAws) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MarketplaceAws)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MarketplaceAws got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMarketplaceAwsValidator = func() *ValidateMarketplaceAws {
+	v := &ValidateMarketplaceAws{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCrmDetails := v.CrmDetailsValidationRuleHandler
+	rulesCrmDetails := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCrmDetails(rulesCrmDetails)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MarketplaceAws.crm_details: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["crm_details"] = vFn
+
+	return v
+}()
+
+func MarketplaceAwsValidator() db.Validator {
+	return DefaultMarketplaceAwsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1168,6 +1475,16 @@ func (v *ValidateSourceInternalSre) KcInstanceNameValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateSourceInternalSre) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SourceInternalSre)
 	if !ok {
@@ -1180,6 +1497,15 @@ func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["crm_info"]; exists {
@@ -1204,6 +1530,15 @@ func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("kc_instance_name"))
 		if err := fv(ctx, m.GetKcInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_id"))
+		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1246,7 +1581,20 @@ var DefaultSourceInternalSreValidator = func() *ValidateSourceInternalSre {
 	}
 	v.FldValidators["kc_instance_name"] = vFn
 
+	vrhTenantId := v.TenantIdValidationRuleHandler
+	rulesTenantId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhTenantId(rulesTenantId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceInternalSre.tenant_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_id"] = vFn
+
 	v.FldValidators["crm_info"] = CrmInfoV2Validator().Validate
+
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
 }()
@@ -1326,6 +1674,92 @@ func SourceInternalSsoValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SourceMarketplace) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SourceMarketplace) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SourceMarketplace) DeepCopy() *SourceMarketplace {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SourceMarketplace{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SourceMarketplace) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SourceMarketplace) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SourceMarketplaceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSourceMarketplace struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSourceMarketplace) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SourceMarketplace)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SourceMarketplace got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetMarketplaceChoice().(type) {
+	case *SourceMarketplace_MarketplaceAws:
+		if fv, exists := v.FldValidators["marketplace_choice.marketplace_aws"]; exists {
+			val := m.GetMarketplaceChoice().(*SourceMarketplace_MarketplaceAws).MarketplaceAws
+			vOpts := append(opts,
+				db.WithValidateField("marketplace_choice"),
+				db.WithValidateField("marketplace_aws"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSourceMarketplaceValidator = func() *ValidateSourceMarketplace {
+	v := &ValidateSourceMarketplace{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["marketplace_choice.marketplace_aws"] = MarketplaceAwsValidator().Validate
+
+	return v
+}()
+
+func SourceMarketplaceValidator() db.Validator {
+	return DefaultSourceMarketplaceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SourceMsp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1365,6 +1799,16 @@ type ValidateSourceMsp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateSourceMsp) ChildTenantObjNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for child_tenant_obj_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSourceMsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SourceMsp)
 	if !ok {
@@ -1377,6 +1821,24 @@ func (v *ValidateSourceMsp) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["child_tenant_obj_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("child_tenant_obj_name"))
+		if err := fv(ctx, m.GetChildTenantObjName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["crm_info"]; exists {
@@ -1395,7 +1857,28 @@ func (v *ValidateSourceMsp) Validate(ctx context.Context, pm interface{}, opts .
 var DefaultSourceMspValidator = func() *ValidateSourceMsp {
 	v := &ValidateSourceMsp{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChildTenantObjName := v.ChildTenantObjNameValidationRuleHandler
+	rulesChildTenantObjName := map[string]string{
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhChildTenantObjName(rulesChildTenantObjName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceMsp.child_tenant_obj_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["child_tenant_obj_name"] = vFn
+
 	v.FldValidators["crm_info"] = CrmInfoV2Validator().Validate
+
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
 }()
@@ -1457,6 +1940,15 @@ func (v *ValidateSourcePlanTransition) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["is_sso_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("is_sso_enabled"))
+		if err := fv(ctx, m.GetIsSsoEnabled(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	return nil

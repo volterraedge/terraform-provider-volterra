@@ -954,6 +954,523 @@ func PodListRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *PodsMetricData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PodsMetricData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PodsMetricData) DeepCopy() *PodsMetricData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PodsMetricData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PodsMetricData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PodsMetricData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PodsMetricDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePodsMetricData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePodsMetricData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PodsMetricData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PodsMetricData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["unit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("unit"))
+		if err := fv(ctx, m.GetUnit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPodsMetricDataValidator = func() *ValidatePodsMetricData {
+	v := &ValidatePodsMetricData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PodsMetricDataValidator() db.Validator {
+	return DefaultPodsMetricDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PodsMetricTypeData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PodsMetricTypeData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PodsMetricTypeData) DeepCopy() *PodsMetricTypeData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PodsMetricTypeData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PodsMetricTypeData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PodsMetricTypeData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PodsMetricTypeDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePodsMetricTypeData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePodsMetricTypeData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PodsMetricTypeData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PodsMetricTypeData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["values"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("values"))
+		for idx, item := range m.GetValues() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPodsMetricTypeDataValidator = func() *ValidatePodsMetricTypeData {
+	v := &ValidatePodsMetricTypeData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PodsMetricTypeDataValidator() db.Validator {
+	return DefaultPodsMetricTypeDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PodsMetricsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PodsMetricsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PodsMetricsRequest) DeepCopy() *PodsMetricsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PodsMetricsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PodsMetricsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PodsMetricsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PodsMetricsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePodsMetricsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePodsMetricsRequest) MetricSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(PodsMetricType)
+		return int32(i)
+	}
+	// PodsMetricType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, PodsMetricType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for metric_selector")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []PodsMetricType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for metric_selector")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]PodsMetricType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []PodsMetricType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated metric_selector")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items metric_selector")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePodsMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePodsMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePodsMetricsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PodsMetricsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PodsMetricsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["filters"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filters"))
+		if err := fv(ctx, m.GetFilters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["group_by"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("group_by"))
+		for idx, item := range m.GetGroupBy() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["metric_selector"]; exists {
+		vOpts := append(opts, db.WithValidateField("metric_selector"))
+		if err := fv(ctx, m.GetMetricSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPodsMetricsRequestValidator = func() *ValidatePodsMetricsRequest {
+	v := &ValidatePodsMetricsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMetricSelector := v.MetricSelectorValidationRuleHandler
+	rulesMetricSelector := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.repeated.unique":  "true",
+	}
+	vFn, err = vrhMetricSelector(rulesMetricSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PodsMetricsRequest.metric_selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["metric_selector"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PodsMetricsRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PodsMetricsRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	return v
+}()
+
+func PodsMetricsRequestValidator() db.Validator {
+	return DefaultPodsMetricsRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PodsMetricsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PodsMetricsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PodsMetricsResponse) DeepCopy() *PodsMetricsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PodsMetricsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PodsMetricsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PodsMetricsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PodsMetricsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePodsMetricsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePodsMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PodsMetricsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PodsMetricsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPodsMetricsResponseValidator = func() *ValidatePodsMetricsResponse {
+	v := &ValidatePodsMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PodsMetricsResponseValidator() db.Validator {
+	return DefaultPodsMetricsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplicaSetListRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

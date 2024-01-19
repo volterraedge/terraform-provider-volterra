@@ -91,12 +91,141 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
+		"spec.rule_list.rules.#.spec.waf_action.jwt_claims_validation",
 		"spec.rule_list.rules.#.spec.waf_action.jwt_validation",
 		"spec.rule_list.rules.#.spec.waf_action.waf_in_monitoring_mode",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.simple_rules.#.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.service_policy.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.simple_rules.#.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.simple_rules.#.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.simple_rules.#.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.simple_rules.#.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy.API.Replace"] = []string{
@@ -128,8 +257,24 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
+		"spec.rule_list.rules.#.spec.waf_action.jwt_claims_validation",
 		"spec.rule_list.rules.#.spec.waf_action.jwt_validation",
 		"spec.rule_list.rules.#.spec.waf_action.waf_in_monitoring_mode",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
 	}
 
 }

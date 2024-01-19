@@ -434,7 +434,7 @@ var DefaultAWSSubnetInfoTypeValidator = func() *ValidateAWSSubnetInfoType {
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.pattern":   "^([a-z]{2})-([a-z0-9]{4,20})-([a-z0-9]{2})$",
+		"ves.io.schema.rules.string.pattern":   "^([a-z]{2})-?(gov-)?([a-z0-9]{4,20})-([a-z0-9]{2})$",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
@@ -6282,6 +6282,93 @@ func PrivateConnectConfigTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *PrivateConnectivityType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PrivateConnectivityType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PrivateConnectivityType) DeepCopy() *PrivateConnectivityType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PrivateConnectivityType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PrivateConnectivityType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PrivateConnectivityType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PrivateConnectivityTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePrivateConnectivityType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePrivateConnectivityType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PrivateConnectivityType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PrivateConnectivityType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_link"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_link"))
+		if err := fv(ctx, m.GetCloudLink(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["private_network_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("private_network_name"))
+		if err := fv(ctx, m.GetPrivateNetworkName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPrivateConnectivityTypeValidator = func() *ValidatePrivateConnectivityType {
+	v := &ValidatePrivateConnectivityType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func PrivateConnectivityTypeValidator() db.Validator {
+	return DefaultPrivateConnectivityTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SecurityGroupType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6417,6 +6504,93 @@ var DefaultSecurityGroupTypeValidator = func() *ValidateSecurityGroupType {
 
 func SecurityGroupTypeValidator() db.Validator {
 	return DefaultSecurityGroupTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteCloudLinkType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteCloudLinkType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteCloudLinkType) DeepCopy() *SiteCloudLinkType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteCloudLinkType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteCloudLinkType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteCloudLinkType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteCloudLinkTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteCloudLinkType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteCloudLinkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteCloudLinkType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteCloudLinkType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteCloudLinkTypeValidator = func() *ValidateSiteCloudLinkType {
+	v := &ValidateSiteCloudLinkType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SiteCloudLinkTypeValidator() db.Validator {
+	return DefaultSiteCloudLinkTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

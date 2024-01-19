@@ -12,6 +12,7 @@
 package api_definition
 
 import (
+	bytes "bytes"
 	context "context"
 	fmt "fmt"
 	_ "github.com/gogo/googleapis/google/api"
@@ -24,10 +25,12 @@ import (
 	status "google.golang.org/grpc/status"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -43,127 +46,48 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Get API Endpoints Schema Request
+// API Inventory Schema Query Type
 //
-// x-displayName: "Get API Endpoints Schema Request"
-// Request shape for Get API Endpoints With Newly Discovered Schema
-type GetAPIEndpointsSchemaReq struct {
-	// Namespace
+// x-displayName: "API Inventory Schema Query Type"
+// API Inventory Schema Query Type
+type ApiInventorySchemaQueryType int32
+
+const (
+	// Full Response
 	//
-	// x-displayName: "Namespace"
-	// x-example: "shared"
-	// The namespace of the API Definition for the current request
-	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
-	// Name
+	// x-displayName: "Full Response"
+	API_INVENTORY_SCHEMA_FULL_RESPONSE ApiInventorySchemaQueryType = 0
+	// Current Schema
 	//
-	// x-displayName: "Name"
-	// x-example: "name"
-	// The name of the API Definition for the current request
-	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// x-displayName: "Current Schema"
+	API_INVENTORY_SCHEMA_CURRENT ApiInventorySchemaQueryType = 1
+	// Updated Schema
+	//
+	// x-displayName: "Updated Schema"
+	API_INVENTORY_SCHEMA_UPDATED ApiInventorySchemaQueryType = 2
+)
+
+var ApiInventorySchemaQueryType_name = map[int32]string{
+	0: "API_INVENTORY_SCHEMA_FULL_RESPONSE",
+	1: "API_INVENTORY_SCHEMA_CURRENT",
+	2: "API_INVENTORY_SCHEMA_UPDATED",
 }
 
-func (m *GetAPIEndpointsSchemaReq) Reset()      { *m = GetAPIEndpointsSchemaReq{} }
-func (*GetAPIEndpointsSchemaReq) ProtoMessage() {}
-func (*GetAPIEndpointsSchemaReq) Descriptor() ([]byte, []int) {
+var ApiInventorySchemaQueryType_value = map[string]int32{
+	"API_INVENTORY_SCHEMA_FULL_RESPONSE": 0,
+	"API_INVENTORY_SCHEMA_CURRENT":       1,
+	"API_INVENTORY_SCHEMA_UPDATED":       2,
+}
+
+func (ApiInventorySchemaQueryType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_984a6f975e1e6c73, []int{0}
 }
-func (m *GetAPIEndpointsSchemaReq) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAPIEndpointsSchemaReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAPIEndpointsSchemaReq.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAPIEndpointsSchemaReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAPIEndpointsSchemaReq.Merge(m, src)
-}
-func (m *GetAPIEndpointsSchemaReq) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAPIEndpointsSchemaReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAPIEndpointsSchemaReq.DiscardUnknown(m)
-}
 
-var xxx_messageInfo_GetAPIEndpointsSchemaReq proto.InternalMessageInfo
-
-func (m *GetAPIEndpointsSchemaReq) GetNamespace() string {
-	if m != nil {
-		return m.Namespace
-	}
-	return ""
-}
-
-func (m *GetAPIEndpointsSchemaReq) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-// Get API Endpoints Schema Response
+// Get API Endpoints Schema Updates Request
 //
-// x-displayName: "Get API Endpoints Schema Response"
-// Response shape for Get API Endpoints With Newly Discovered Schema
-type GetAPIEndpointsSchemaResp struct {
-	// API Endpoints
-	//
-	// x-displayName: "API Endpoints"
-	// The list of discovered API endpoints with newly discovered schema.
-	ApiEndpoints []*ApiOperation `protobuf:"bytes,1,rep,name=api_endpoints,json=apiEndpoints,proto3" json:"api_endpoints,omitempty"`
-}
-
-func (m *GetAPIEndpointsSchemaResp) Reset()      { *m = GetAPIEndpointsSchemaResp{} }
-func (*GetAPIEndpointsSchemaResp) ProtoMessage() {}
-func (*GetAPIEndpointsSchemaResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_984a6f975e1e6c73, []int{1}
-}
-func (m *GetAPIEndpointsSchemaResp) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *GetAPIEndpointsSchemaResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAPIEndpointsSchemaResp.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *GetAPIEndpointsSchemaResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAPIEndpointsSchemaResp.Merge(m, src)
-}
-func (m *GetAPIEndpointsSchemaResp) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAPIEndpointsSchemaResp) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAPIEndpointsSchemaResp.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_GetAPIEndpointsSchemaResp proto.InternalMessageInfo
-
-func (m *GetAPIEndpointsSchemaResp) GetApiEndpoints() []*ApiOperation {
-	if m != nil {
-		return m.ApiEndpoints
-	}
-	return nil
-}
-
-// Update API Endpoints Schema Request
-//
-// x-displayName: "Update API Endpoints Schema Request"
-// Request shape for Update API Endpoints With Newly Discovered Schema
-type UpdateAPIEndpointsSchemaReq struct {
+// x-displayName: "Get API Endpoints Schema Updates Request"
+// Request shape for Get API Endpoints Schema Updates
+type GetAPIEndpointsSchemaUpdatesReq struct {
 	// Namespace
 	//
 	// x-displayName: "Namespace"
@@ -176,25 +100,30 @@ type UpdateAPIEndpointsSchemaReq struct {
 	// x-example: "name"
 	// The name of the API Definition for the current request
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	// API Endpoints
+	// API Endpoints Filter
 	//
-	// x-displayName: "API Endpoints"
-	// x-required
-	// The list of discovered API endpoint to update schema for.
-	ApiEndpoints []*ApiOperation `protobuf:"bytes,3,rep,name=api_endpoints,json=apiEndpoints,proto3" json:"api_endpoints,omitempty"`
+	// x-displayName: "API Endpoints Filter"
+	// The list of discovered API endpoint to get schema for.
+	// NOTE: if empty, then the all API endpoints with schema changes would be returned
+	ApiEndpointsFilter []*ApiOperation `protobuf:"bytes,3,rep,name=api_endpoints_filter,json=apiEndpointsFilter,proto3" json:"api_endpoints_filter,omitempty"`
+	// Query Type
+	//
+	// x-displayName: "Query Type"
+	// An option not to populate the schema fields, to reduce response size and time.
+	QueryType ApiInventorySchemaQueryType `protobuf:"varint,5,opt,name=query_type,json=queryType,proto3,enum=ves.io.schema.views.api_definition.ApiInventorySchemaQueryType" json:"query_type,omitempty"`
 }
 
-func (m *UpdateAPIEndpointsSchemaReq) Reset()      { *m = UpdateAPIEndpointsSchemaReq{} }
-func (*UpdateAPIEndpointsSchemaReq) ProtoMessage() {}
-func (*UpdateAPIEndpointsSchemaReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_984a6f975e1e6c73, []int{2}
+func (m *GetAPIEndpointsSchemaUpdatesReq) Reset()      { *m = GetAPIEndpointsSchemaUpdatesReq{} }
+func (*GetAPIEndpointsSchemaUpdatesReq) ProtoMessage() {}
+func (*GetAPIEndpointsSchemaUpdatesReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_984a6f975e1e6c73, []int{0}
 }
-func (m *UpdateAPIEndpointsSchemaReq) XXX_Unmarshal(b []byte) error {
+func (m *GetAPIEndpointsSchemaUpdatesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UpdateAPIEndpointsSchemaReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *GetAPIEndpointsSchemaUpdatesReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_UpdateAPIEndpointsSchemaReq.Marshal(b, m, deterministic)
+		return xxx_messageInfo_GetAPIEndpointsSchemaUpdatesReq.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -204,57 +133,286 @@ func (m *UpdateAPIEndpointsSchemaReq) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *UpdateAPIEndpointsSchemaReq) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateAPIEndpointsSchemaReq.Merge(m, src)
+func (m *GetAPIEndpointsSchemaUpdatesReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAPIEndpointsSchemaUpdatesReq.Merge(m, src)
 }
-func (m *UpdateAPIEndpointsSchemaReq) XXX_Size() int {
+func (m *GetAPIEndpointsSchemaUpdatesReq) XXX_Size() int {
 	return m.Size()
 }
-func (m *UpdateAPIEndpointsSchemaReq) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateAPIEndpointsSchemaReq.DiscardUnknown(m)
+func (m *GetAPIEndpointsSchemaUpdatesReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAPIEndpointsSchemaUpdatesReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UpdateAPIEndpointsSchemaReq proto.InternalMessageInfo
+var xxx_messageInfo_GetAPIEndpointsSchemaUpdatesReq proto.InternalMessageInfo
 
-func (m *UpdateAPIEndpointsSchemaReq) GetNamespace() string {
+func (m *GetAPIEndpointsSchemaUpdatesReq) GetNamespace() string {
 	if m != nil {
 		return m.Namespace
 	}
 	return ""
 }
 
-func (m *UpdateAPIEndpointsSchemaReq) GetName() string {
+func (m *GetAPIEndpointsSchemaUpdatesReq) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *UpdateAPIEndpointsSchemaReq) GetApiEndpoints() []*ApiOperation {
+func (m *GetAPIEndpointsSchemaUpdatesReq) GetApiEndpointsFilter() []*ApiOperation {
 	if m != nil {
-		return m.ApiEndpoints
+		return m.ApiEndpointsFilter
 	}
 	return nil
+}
+
+func (m *GetAPIEndpointsSchemaUpdatesReq) GetQueryType() ApiInventorySchemaQueryType {
+	if m != nil {
+		return m.QueryType
+	}
+	return API_INVENTORY_SCHEMA_FULL_RESPONSE
+}
+
+// Get API Endpoints Schema Updates Response
+//
+// x-displayName: "Get API Endpoints Schema Updates Response"
+// Response shape for Get API Endpoints Schema Updates
+type GetAPIEndpointsSchemaUpdatesResp struct {
+	// API Endpoints Current Schemas
+	//
+	// x-displayName: "API Endpoints Current Schemas"
+	// The list of discovered API endpoints with current schemas
+	ApiEndpointsCurrentSchemas []*ApiEndpointWithSchema `protobuf:"bytes,1,rep,name=api_endpoints_current_schemas,json=apiEndpointsCurrentSchemas,proto3" json:"api_endpoints_current_schemas,omitempty"`
+	// API Endpoints Updated Schemas
+	//
+	// x-displayName: "API Endpoints Updated Schemas"
+	// The list of API Inventory API endpoints with updated schemas
+	ApiEndpointsUpdatedSchemas []*ApiEndpointWithSchema `protobuf:"bytes,2,rep,name=api_endpoints_updated_schemas,json=apiEndpointsUpdatedSchemas,proto3" json:"api_endpoints_updated_schemas,omitempty"`
+}
+
+func (m *GetAPIEndpointsSchemaUpdatesResp) Reset()      { *m = GetAPIEndpointsSchemaUpdatesResp{} }
+func (*GetAPIEndpointsSchemaUpdatesResp) ProtoMessage() {}
+func (*GetAPIEndpointsSchemaUpdatesResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_984a6f975e1e6c73, []int{1}
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetAPIEndpointsSchemaUpdatesResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAPIEndpointsSchemaUpdatesResp.Merge(m, src)
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetAPIEndpointsSchemaUpdatesResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetAPIEndpointsSchemaUpdatesResp proto.InternalMessageInfo
+
+func (m *GetAPIEndpointsSchemaUpdatesResp) GetApiEndpointsCurrentSchemas() []*ApiEndpointWithSchema {
+	if m != nil {
+		return m.ApiEndpointsCurrentSchemas
+	}
+	return nil
+}
+
+func (m *GetAPIEndpointsSchemaUpdatesResp) GetApiEndpointsUpdatedSchemas() []*ApiEndpointWithSchema {
+	if m != nil {
+		return m.ApiEndpointsUpdatedSchemas
+	}
+	return nil
+}
+
+// Update API Endpoints Schemas Request
+//
+// x-displayName: "Update API Endpoints Schemas Request"
+// Request shape for Update API Endpoints Schemas
+type UpdateAPIEndpointsSchemasReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "shared"
+	// The namespace of the API Definition for the current request
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "name"
+	// The name of the API Definition for the current request
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// API Endpoints Schema Updates
+	//
+	// x-displayName: "API Endpoints Schema Updates"
+	// x-required
+	// The list of API Inventory API endpoints schema updates.
+	ApiEndpointsSchemaUpdates []*ApiEndpointWithSchema `protobuf:"bytes,3,rep,name=api_endpoints_schema_updates,json=apiEndpointsSchemaUpdates,proto3" json:"api_endpoints_schema_updates,omitempty"`
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) Reset()      { *m = UpdateAPIEndpointsSchemasReq{} }
+func (*UpdateAPIEndpointsSchemasReq) ProtoMessage() {}
+func (*UpdateAPIEndpointsSchemasReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_984a6f975e1e6c73, []int{2}
+}
+func (m *UpdateAPIEndpointsSchemasReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UpdateAPIEndpointsSchemasReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UpdateAPIEndpointsSchemasReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UpdateAPIEndpointsSchemasReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAPIEndpointsSchemasReq.Merge(m, src)
+}
+func (m *UpdateAPIEndpointsSchemasReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *UpdateAPIEndpointsSchemasReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAPIEndpointsSchemasReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateAPIEndpointsSchemasReq proto.InternalMessageInfo
+
+func (m *UpdateAPIEndpointsSchemasReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) GetApiEndpointsSchemaUpdates() []*ApiEndpointWithSchema {
+	if m != nil {
+		return m.ApiEndpointsSchemaUpdates
+	}
+	return nil
+}
+
+// API Endpoint With Schema
+//
+// x-displayName: "API Endpoint With Schema"
+// API endpoint and its schema
+type ApiEndpointWithSchema struct {
+	// API Operation
+	//
+	// x-displayName: "API Operation"
+	// x-required
+	// The API operation which have schema updates
+	ApiOperation *ApiOperation `protobuf:"bytes,1,opt,name=api_operation,json=apiOperation,proto3" json:"api_operation,omitempty"`
+	// Schema
+	//
+	// x-displayName: "Schema"
+	// The schema of the API endpoint
+	Schema []byte `protobuf:"bytes,2,opt,name=schema,proto3" json:"schema,omitempty"`
+	// Schema JSON
+	//
+	// x-displayName: "Schema JSON"
+	// The schema of the API endpoint
+	SchemaJson string `protobuf:"bytes,3,opt,name=schema_json,json=schemaJson,proto3" json:"schema_json,omitempty"`
+}
+
+func (m *ApiEndpointWithSchema) Reset()      { *m = ApiEndpointWithSchema{} }
+func (*ApiEndpointWithSchema) ProtoMessage() {}
+func (*ApiEndpointWithSchema) Descriptor() ([]byte, []int) {
+	return fileDescriptor_984a6f975e1e6c73, []int{3}
+}
+func (m *ApiEndpointWithSchema) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiEndpointWithSchema) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ApiEndpointWithSchema.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ApiEndpointWithSchema) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiEndpointWithSchema.Merge(m, src)
+}
+func (m *ApiEndpointWithSchema) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiEndpointWithSchema) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiEndpointWithSchema.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiEndpointWithSchema proto.InternalMessageInfo
+
+func (m *ApiEndpointWithSchema) GetApiOperation() *ApiOperation {
+	if m != nil {
+		return m.ApiOperation
+	}
+	return nil
+}
+
+func (m *ApiEndpointWithSchema) GetSchema() []byte {
+	if m != nil {
+		return m.Schema
+	}
+	return nil
+}
+
+func (m *ApiEndpointWithSchema) GetSchemaJson() string {
+	if m != nil {
+		return m.SchemaJson
+	}
+	return ""
 }
 
 // Update API Endpoints Schema Response
 //
 // x-displayName: "Update API Endpoints Schema Response"
 // Response shape for Update API Endpoints With Newly Discovered Schema
-type UpdateAPIEndpointsSchemaResp struct {
+type UpdateAPIEndpointsSchemasResp struct {
+	// Updated API Endpoints
+	//
+	// x-displayName: "Updated API Endpoints"
+	// The list of API endpoints which were successfully proceeded by the API Inventory request.
+	UpdatedApiEndpoints []*ApiOperation `protobuf:"bytes,1,rep,name=updated_api_endpoints,json=updatedApiEndpoints,proto3" json:"updated_api_endpoints,omitempty"`
 }
 
-func (m *UpdateAPIEndpointsSchemaResp) Reset()      { *m = UpdateAPIEndpointsSchemaResp{} }
-func (*UpdateAPIEndpointsSchemaResp) ProtoMessage() {}
-func (*UpdateAPIEndpointsSchemaResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_984a6f975e1e6c73, []int{3}
+func (m *UpdateAPIEndpointsSchemasResp) Reset()      { *m = UpdateAPIEndpointsSchemasResp{} }
+func (*UpdateAPIEndpointsSchemasResp) ProtoMessage() {}
+func (*UpdateAPIEndpointsSchemasResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_984a6f975e1e6c73, []int{4}
 }
-func (m *UpdateAPIEndpointsSchemaResp) XXX_Unmarshal(b []byte) error {
+func (m *UpdateAPIEndpointsSchemasResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *UpdateAPIEndpointsSchemaResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *UpdateAPIEndpointsSchemasResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_UpdateAPIEndpointsSchemaResp.Marshal(b, m, deterministic)
+		return xxx_messageInfo_UpdateAPIEndpointsSchemasResp.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -264,27 +422,38 @@ func (m *UpdateAPIEndpointsSchemaResp) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *UpdateAPIEndpointsSchemaResp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateAPIEndpointsSchemaResp.Merge(m, src)
+func (m *UpdateAPIEndpointsSchemasResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAPIEndpointsSchemasResp.Merge(m, src)
 }
-func (m *UpdateAPIEndpointsSchemaResp) XXX_Size() int {
+func (m *UpdateAPIEndpointsSchemasResp) XXX_Size() int {
 	return m.Size()
 }
-func (m *UpdateAPIEndpointsSchemaResp) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateAPIEndpointsSchemaResp.DiscardUnknown(m)
+func (m *UpdateAPIEndpointsSchemasResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateAPIEndpointsSchemasResp.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_UpdateAPIEndpointsSchemaResp proto.InternalMessageInfo
+var xxx_messageInfo_UpdateAPIEndpointsSchemasResp proto.InternalMessageInfo
+
+func (m *UpdateAPIEndpointsSchemasResp) GetUpdatedApiEndpoints() []*ApiOperation {
+	if m != nil {
+		return m.UpdatedApiEndpoints
+	}
+	return nil
+}
 
 func init() {
-	proto.RegisterType((*GetAPIEndpointsSchemaReq)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaReq")
-	golang_proto.RegisterType((*GetAPIEndpointsSchemaReq)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaReq")
-	proto.RegisterType((*GetAPIEndpointsSchemaResp)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaResp")
-	golang_proto.RegisterType((*GetAPIEndpointsSchemaResp)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaResp")
-	proto.RegisterType((*UpdateAPIEndpointsSchemaReq)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq")
-	golang_proto.RegisterType((*UpdateAPIEndpointsSchemaReq)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaReq")
-	proto.RegisterType((*UpdateAPIEndpointsSchemaResp)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaResp")
-	golang_proto.RegisterType((*UpdateAPIEndpointsSchemaResp)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemaResp")
+	proto.RegisterEnum("ves.io.schema.views.api_definition.ApiInventorySchemaQueryType", ApiInventorySchemaQueryType_name, ApiInventorySchemaQueryType_value)
+	golang_proto.RegisterEnum("ves.io.schema.views.api_definition.ApiInventorySchemaQueryType", ApiInventorySchemaQueryType_name, ApiInventorySchemaQueryType_value)
+	proto.RegisterType((*GetAPIEndpointsSchemaUpdatesReq)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq")
+	golang_proto.RegisterType((*GetAPIEndpointsSchemaUpdatesReq)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq")
+	proto.RegisterType((*GetAPIEndpointsSchemaUpdatesResp)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp")
+	golang_proto.RegisterType((*GetAPIEndpointsSchemaUpdatesResp)(nil), "ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp")
+	proto.RegisterType((*UpdateAPIEndpointsSchemasReq)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq")
+	golang_proto.RegisterType((*UpdateAPIEndpointsSchemasReq)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq")
+	proto.RegisterType((*ApiEndpointWithSchema)(nil), "ves.io.schema.views.api_definition.ApiEndpointWithSchema")
+	golang_proto.RegisterType((*ApiEndpointWithSchema)(nil), "ves.io.schema.views.api_definition.ApiEndpointWithSchema")
+	proto.RegisterType((*UpdateAPIEndpointsSchemasResp)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp")
+	golang_proto.RegisterType((*UpdateAPIEndpointsSchemasResp)(nil), "ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp")
 }
 
 func init() {
@@ -295,60 +464,88 @@ func init() {
 }
 
 var fileDescriptor_984a6f975e1e6c73 = []byte{
-	// 686 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x94, 0x4f, 0x6b, 0x13, 0x4f,
-	0x18, 0xc7, 0x33, 0x49, 0x7f, 0x7f, 0xba, 0xbf, 0xfe, 0x40, 0x16, 0x0f, 0x31, 0x0d, 0x43, 0xd9,
-	0x53, 0xfd, 0xb3, 0xbb, 0xa5, 0xfe, 0x03, 0x51, 0x6a, 0xaa, 0x22, 0x05, 0xb1, 0xa5, 0x52, 0x94,
-	0x22, 0x84, 0xc9, 0xee, 0x93, 0xed, 0x68, 0xb2, 0x33, 0xee, 0x4c, 0x36, 0x0d, 0x22, 0x48, 0x5f,
-	0x81, 0xd4, 0xb3, 0xe0, 0xd1, 0x17, 0xe0, 0x41, 0xec, 0xa5, 0x37, 0x8b, 0x07, 0x09, 0x7a, 0xe9,
-	0xd1, 0x6e, 0x3c, 0xe8, 0xc9, 0xbe, 0x04, 0xd9, 0xc9, 0x26, 0xda, 0xd5, 0xd4, 0x60, 0xf5, 0xf6,
-	0xcc, 0x7c, 0xf7, 0xf9, 0xee, 0xf3, 0x7c, 0xe6, 0x99, 0xd1, 0x66, 0x42, 0x10, 0x16, 0x65, 0xb6,
-	0x70, 0x56, 0xa0, 0x4e, 0xec, 0x90, 0x42, 0x53, 0xd8, 0x84, 0xd3, 0xb2, 0x0b, 0x55, 0xea, 0x53,
-	0x49, 0x99, 0x6f, 0xf3, 0x46, 0xa5, 0x46, 0x9d, 0x32, 0xe1, 0x14, 0x78, 0xd9, 0x69, 0x08, 0xc9,
-	0xea, 0x84, 0x53, 0x8b, 0x07, 0x4c, 0x32, 0xdd, 0xe8, 0x1a, 0x58, 0x5d, 0x03, 0x4b, 0x19, 0x58,
-	0x7b, 0x0d, 0x0a, 0xa6, 0x47, 0xe5, 0x4a, 0xa3, 0x62, 0x39, 0xac, 0x6e, 0x7b, 0xcc, 0x63, 0xb6,
-	0x4a, 0xad, 0x34, 0xaa, 0x6a, 0xa5, 0x16, 0x2a, 0xea, 0x5a, 0x16, 0x8a, 0x1e, 0x63, 0x5e, 0x0d,
-	0xe2, 0x32, 0x6c, 0xe2, 0xfb, 0x4c, 0x92, 0xd8, 0x45, 0x24, 0xea, 0x78, 0xa2, 0xf6, 0x3d, 0xa0,
-	0xce, 0x65, 0xab, 0x27, 0xee, 0x6d, 0x87, 0xf1, 0x6f, 0x33, 0x8b, 0xa9, 0x5e, 0x49, 0x8d, 0xba,
-	0x44, 0x42, 0xa2, 0x1a, 0x29, 0x15, 0x04, 0xf8, 0x61, 0xca, 0xc1, 0x1a, 0x82, 0x96, 0x6c, 0x71,
-	0x48, 0xbe, 0x37, 0xae, 0x69, 0xf9, 0xab, 0x20, 0x4b, 0x0b, 0x73, 0x57, 0x7c, 0x97, 0x33, 0xea,
-	0x4b, 0x71, 0x43, 0x65, 0x2e, 0xc2, 0x3d, 0xbd, 0xa8, 0x8d, 0xfa, 0xa4, 0x0e, 0x82, 0x13, 0x07,
-	0xf2, 0x68, 0x02, 0x4d, 0x8e, 0x2e, 0x7e, 0xdd, 0xd0, 0x75, 0x6d, 0x24, 0x5e, 0xe4, 0xb3, 0x4a,
-	0x50, 0xb1, 0x11, 0x68, 0x47, 0x06, 0xb8, 0x09, 0xae, 0x2f, 0x69, 0xff, 0xc7, 0x85, 0x40, 0x4f,
-	0xca, 0xa3, 0x89, 0xdc, 0xe4, 0x7f, 0xd3, 0x53, 0xd6, 0xcf, 0xcf, 0xc7, 0x2a, 0x71, 0x3a, 0xcf,
-	0x21, 0x50, 0x98, 0x17, 0xc7, 0x08, 0xa7, 0xfd, 0x1f, 0x18, 0xcf, 0x91, 0x36, 0xbe, 0xc4, 0x63,
-	0x4c, 0xbf, 0xa9, 0x0b, 0xdd, 0x49, 0x17, 0x9a, 0xfb, 0xb5, 0x42, 0x67, 0xc7, 0x5e, 0x7e, 0xda,
-	0xcc, 0xfd, 0xb3, 0x8e, 0x46, 0xfe, 0x45, 0x87, 0xdc, 0x54, 0xd9, 0x58, 0x2b, 0x0e, 0xae, 0x5a,
-	0xf0, 0xe9, 0xcf, 0x7f, 0x69, 0x87, 0x17, 0xd4, 0x58, 0x97, 0xe2, 0xa9, 0xbe, 0xa4, 0x86, 0xba,
-	0xb4, 0x30, 0xa7, 0xbf, 0xce, 0x6a, 0x93, 0x29, 0xc8, 0x37, 0xa9, 0x5c, 0xb9, 0x0e, 0xcd, 0x5a,
-	0xeb, 0x32, 0x15, 0x0e, 0x0b, 0x21, 0x00, 0xb7, 0xeb, 0xa4, 0x9f, 0x1f, 0xa6, 0xe6, 0x41, 0x03,
-	0x50, 0xb8, 0x70, 0x80, 0x6c, 0xc1, 0x8d, 0xa7, 0x68, 0xeb, 0x45, 0x16, 0x45, 0xaf, 0xf2, 0x67,
-	0xaa, 0xa7, 0x57, 0x1d, 0xb3, 0x49, 0x08, 0x37, 0x89, 0x1b, 0x12, 0xdf, 0x01, 0xd7, 0xac, 0x33,
-	0x9f, 0x4a, 0x16, 0x9c, 0x98, 0x08, 0x41, 0x98, 0x94, 0x99, 0x3c, 0x60, 0xab, 0x2d, 0x53, 0x80,
-	0xd3, 0x08, 0xa8, 0x6c, 0x99, 0x01, 0x10, 0x77, 0xed, 0xdd, 0x87, 0xc7, 0xd9, 0xdb, 0xfa, 0x72,
-	0x72, 0xbd, 0xed, 0xfe, 0xa9, 0x09, 0xfb, 0x7e, 0x3f, 0x7e, 0x90, 0x9a, 0xee, 0x44, 0xeb, 0x6e,
-	0x53, 0x3f, 0x04, 0x5f, 0xb2, 0xa0, 0xd5, 0xbb, 0x0f, 0x3e, 0x34, 0xcb, 0x6e, 0x02, 0x89, 0x82,
-	0xd0, 0xdb, 0x59, 0xed, 0xf8, 0xf7, 0xc7, 0x30, 0x98, 0xe7, 0xcc, 0x30, 0x44, 0xf6, 0x99, 0xc6,
-	0xc2, 0xc5, 0x83, 0x19, 0x08, 0x6e, 0x3c, 0x89, 0x89, 0x9e, 0xfa, 0x01, 0xd1, 0x86, 0x80, 0x81,
-	0x38, 0x9b, 0x01, 0x95, 0xa0, 0x78, 0x96, 0x8d, 0x3f, 0xc8, 0xf3, 0x1c, 0x3a, 0x56, 0x38, 0xbb,
-	0xb9, 0x81, 0x72, 0x6f, 0x37, 0xd0, 0xd1, 0x21, 0x1a, 0x9d, 0xaf, 0xdc, 0x01, 0x47, 0xae, 0xbd,
-	0xc9, 0x67, 0xa7, 0xd0, 0xec, 0x3a, 0x6a, 0xef, 0xe0, 0xcc, 0xf6, 0x0e, 0xce, 0xec, 0xee, 0x60,
-	0xf4, 0x30, 0xc2, 0xe8, 0x59, 0x84, 0xd1, 0x56, 0x84, 0x51, 0x3b, 0xc2, 0xe8, 0x7d, 0x84, 0xd1,
-	0xc7, 0x08, 0x67, 0x76, 0x23, 0x8c, 0x1e, 0x75, 0x70, 0x66, 0xb3, 0x83, 0x51, 0xbb, 0x83, 0x33,
-	0xdb, 0x1d, 0x9c, 0x59, 0xbe, 0xe5, 0x31, 0x7e, 0xd7, 0xb3, 0x42, 0x56, 0x93, 0x10, 0x04, 0xc4,
-	0x6a, 0x08, 0x5b, 0x05, 0x55, 0x16, 0xd4, 0x63, 0x14, 0x21, 0x75, 0x21, 0x30, 0x7b, 0xb2, 0xcd,
-	0x2b, 0x1e, 0xb3, 0x61, 0x55, 0x26, 0x4d, 0xec, 0xf3, 0x56, 0x56, 0xfe, 0x56, 0xcf, 0xe4, 0xc9,
-	0x2f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x65, 0xb3, 0x67, 0x86, 0x06, 0x00, 0x00,
+	// 1016 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcd, 0x6f, 0x1b, 0x45,
+	0x14, 0xf7, 0x6c, 0x3e, 0x20, 0xd3, 0x80, 0xa2, 0x25, 0x45, 0xae, 0xeb, 0x6e, 0xac, 0x3d, 0xa0,
+	0x10, 0xe1, 0xdd, 0x2a, 0x7c, 0x89, 0x5c, 0x8a, 0x93, 0x38, 0x10, 0xd4, 0x26, 0x66, 0x13, 0xf3,
+	0x75, 0x60, 0x19, 0xef, 0x8e, 0xed, 0x29, 0xf1, 0xce, 0x64, 0x67, 0xd6, 0x89, 0x05, 0x48, 0xa8,
+	0x12, 0x12, 0x37, 0x50, 0xb8, 0x73, 0xe9, 0x85, 0x0b, 0x77, 0x44, 0x2e, 0x39, 0x41, 0xc5, 0x01,
+	0x45, 0x70, 0x29, 0xe2, 0x42, 0x1c, 0x0e, 0x70, 0xa2, 0x07, 0xfe, 0x00, 0xb4, 0xb3, 0xbb, 0xc6,
+	0x76, 0x12, 0xd7, 0x4d, 0x7b, 0x9b, 0x99, 0xf7, 0xf6, 0xf7, 0xde, 0xef, 0xf7, 0xde, 0xec, 0x1b,
+	0x78, 0xad, 0x89, 0xb9, 0x41, 0xa8, 0xc9, 0x9d, 0x3a, 0x6e, 0x20, 0xb3, 0x49, 0xf0, 0x0e, 0x37,
+	0x11, 0x23, 0xb6, 0x8b, 0xab, 0xc4, 0x23, 0x82, 0x50, 0xcf, 0x64, 0x41, 0x65, 0x8b, 0x38, 0x36,
+	0x62, 0x04, 0x33, 0xdb, 0x09, 0xb8, 0xa0, 0x0d, 0xc4, 0x88, 0xc1, 0x7c, 0x2a, 0xa8, 0xaa, 0x47,
+	0x00, 0x46, 0x04, 0x60, 0x48, 0x00, 0xa3, 0x17, 0x20, 0x93, 0xaf, 0x11, 0x51, 0x0f, 0x2a, 0x86,
+	0x43, 0x1b, 0x66, 0x8d, 0xd6, 0xa8, 0x29, 0x3f, 0xad, 0x04, 0x55, 0xb9, 0x93, 0x1b, 0xb9, 0x8a,
+	0x20, 0x33, 0xd9, 0x1a, 0xa5, 0xb5, 0x2d, 0x1c, 0xa6, 0x61, 0x22, 0xcf, 0xa3, 0x02, 0x85, 0x28,
+	0x3c, 0xb6, 0x5e, 0x8e, 0xad, 0x1d, 0x0c, 0xdc, 0x60, 0xa2, 0x95, 0x18, 0x7b, 0xe9, 0x50, 0xd6,
+	0xfd, 0x65, 0xb6, 0x8f, 0x2b, 0xda, 0x22, 0x2e, 0x12, 0x38, 0xb6, 0xea, 0x7d, 0x56, 0xcc, 0xb1,
+	0xd7, 0xec, 0x43, 0xc8, 0x9d, 0x54, 0xcb, 0xee, 0xf5, 0x30, 0x86, 0xd0, 0x53, 0xb4, 0x18, 0x4e,
+	0xfc, 0x67, 0x4e, 0xf3, 0xef, 0x72, 0xd0, 0x6f, 0x2b, 0x70, 0xe6, 0x35, 0x2c, 0x0a, 0xa5, 0xd5,
+	0xa2, 0xe7, 0x32, 0x4a, 0x3c, 0xc1, 0x37, 0xa4, 0x6f, 0x99, 0x85, 0xc9, 0x73, 0x0b, 0x6f, 0xab,
+	0x59, 0x38, 0xe1, 0xa1, 0x06, 0xe6, 0x0c, 0x39, 0x38, 0x0d, 0x72, 0x60, 0x76, 0xc2, 0xfa, 0xff,
+	0x40, 0x55, 0xe1, 0x68, 0xb8, 0x49, 0x2b, 0xd2, 0x20, 0xd7, 0xaa, 0x07, 0xa7, 0xc3, 0xa4, 0x70,
+	0x02, 0x69, 0x57, 0xc9, 0x96, 0xc0, 0x7e, 0x7a, 0x24, 0x37, 0x32, 0x7b, 0x61, 0xfe, 0xaa, 0x71,
+	0xff, 0xa2, 0x1a, 0x05, 0x46, 0xd6, 0x19, 0xf6, 0x65, 0x6d, 0x16, 0xe1, 0xf7, 0x7f, 0x1f, 0x8c,
+	0x8c, 0xed, 0x01, 0x65, 0xca, 0xb5, 0x54, 0xc4, 0x48, 0x27, 0xd7, 0x15, 0x89, 0xab, 0xbe, 0x0f,
+	0xe1, 0x76, 0x80, 0xfd, 0x96, 0x1d, 0x52, 0x4b, 0x8f, 0xe5, 0xc0, 0xec, 0x93, 0xf3, 0xd7, 0x86,
+	0x8c, 0xb2, 0xea, 0x35, 0xb1, 0x27, 0xa8, 0xdf, 0x8a, 0x78, 0xbf, 0x19, 0xe2, 0x6c, 0xb6, 0x18,
+	0xb6, 0x26, 0xb6, 0x93, 0xa5, 0xfe, 0xb5, 0x02, 0x73, 0x83, 0x55, 0xe2, 0x4c, 0xfd, 0x18, 0x5e,
+	0xe9, 0x25, 0xed, 0x04, 0xbe, 0x8f, 0x3d, 0x61, 0x47, 0x09, 0xf0, 0x34, 0x90, 0xec, 0x5f, 0x19,
+	0x32, 0xaf, 0x24, 0xd2, 0xdb, 0x44, 0xd4, 0xa3, 0x60, 0x56, 0xa6, 0x9b, 0xfa, 0x52, 0x84, 0x1e,
+	0x99, 0xf8, 0xc9, 0xe8, 0x81, 0x4c, 0xcd, 0xed, 0x44, 0x57, 0x1e, 0x69, 0xf4, 0x88, 0xb8, 0x1b,
+	0x47, 0xd7, 0x7f, 0x07, 0x30, 0x1b, 0x1d, 0x9d, 0xd4, 0xe8, 0x9c, 0x3d, 0xf4, 0x39, 0x80, 0xd9,
+	0x5e, 0x46, 0x51, 0xca, 0x31, 0x31, 0x1e, 0x37, 0xd3, 0xf9, 0x09, 0x2d, 0x4e, 0x86, 0x5d, 0xf5,
+	0xd8, 0x1e, 0x18, 0x7d, 0x1c, 0x4c, 0xb9, 0xd6, 0xa5, 0x6e, 0x7a, 0x3d, 0xd5, 0xd5, 0xff, 0x01,
+	0xf0, 0xe2, 0xa9, 0x10, 0x6a, 0x19, 0x3e, 0x11, 0x86, 0xa2, 0x49, 0xa7, 0x4a, 0x6a, 0xe7, 0xe8,
+	0x70, 0x6b, 0x12, 0x75, 0xed, 0xd4, 0xa7, 0xe1, 0x78, 0xf4, 0xa5, 0x54, 0x64, 0xd2, 0x8a, 0x77,
+	0xea, 0x0c, 0xbc, 0x10, 0x8b, 0x70, 0x93, 0x53, 0x2f, 0x3d, 0x22, 0xe5, 0x82, 0xd1, 0xd1, 0x1b,
+	0x9c, 0x7a, 0x0b, 0x2b, 0x3f, 0xed, 0x83, 0x45, 0xa8, 0xc3, 0xf1, 0x1b, 0x58, 0xd4, 0xa9, 0x9b,
+	0x49, 0x47, 0x17, 0xb1, 0x93, 0x9f, 0xd1, 0x90, 0xe7, 0x39, 0x00, 0xb3, 0x70, 0xb4, 0x84, 0x44,
+	0x3d, 0x33, 0x0d, 0xd5, 0x5e, 0x0f, 0x86, 0x44, 0x5d, 0xff, 0x0c, 0xc0, 0x2b, 0x03, 0xea, 0xc9,
+	0x99, 0xea, 0xc2, 0x8b, 0x49, 0x87, 0xf5, 0x54, 0x29, 0xee, 0xf2, 0x07, 0x57, 0xe0, 0xa9, 0x18,
+	0xae, 0x4b, 0x68, 0x3e, 0xf7, 0x05, 0x80, 0x97, 0x07, 0xdc, 0x51, 0xf5, 0x19, 0xa8, 0x17, 0x4a,
+	0xab, 0xf6, 0xea, 0xda, 0x5b, 0xc5, 0xb5, 0xcd, 0x75, 0xeb, 0x5d, 0x7b, 0x63, 0xe9, 0xf5, 0xe2,
+	0x8d, 0x82, 0xbd, 0x52, 0xbe, 0x7e, 0xdd, 0xb6, 0x8a, 0x1b, 0xa5, 0xf5, 0xb5, 0x8d, 0xe2, 0x54,
+	0x4a, 0xcd, 0xc1, 0xec, 0xa9, 0x7e, 0x4b, 0x65, 0xcb, 0x2a, 0xae, 0x6d, 0x4e, 0x81, 0x33, 0x3d,
+	0xca, 0xa5, 0xe5, 0xc2, 0x66, 0x71, 0x79, 0x4a, 0xc9, 0x8c, 0x1e, 0xec, 0x83, 0xd4, 0xfc, 0xbf,
+	0x63, 0x70, 0xba, 0x24, 0x27, 0x56, 0x21, 0x1c, 0x58, 0x4b, 0x72, 0x5e, 0x15, 0x4a, 0xab, 0xea,
+	0x6f, 0x0a, 0xcc, 0x0e, 0xfa, 0x47, 0xa8, 0x4b, 0xc3, 0x48, 0x72, 0x9f, 0x7f, 0x71, 0x66, 0xf9,
+	0xe1, 0x41, 0x38, 0xd3, 0xbf, 0x05, 0x77, 0xbe, 0x53, 0x40, 0xfb, 0xc7, 0xf4, 0x4b, 0xd5, 0x17,
+	0x77, 0x9d, 0xfc, 0x0e, 0x42, 0x2c, 0x8f, 0xdc, 0x26, 0xf2, 0x1c, 0xec, 0xe6, 0x1b, 0xd4, 0x23,
+	0x82, 0xfa, 0xcf, 0x85, 0xd3, 0x28, 0x4f, 0x68, 0x9e, 0xf9, 0x74, 0xb7, 0x95, 0xe7, 0xd8, 0x09,
+	0x7c, 0x22, 0x5a, 0x79, 0x1f, 0x23, 0xf7, 0xd6, 0xaf, 0x7f, 0x7e, 0xa5, 0x10, 0xdd, 0x8d, 0x67,
+	0xb7, 0xd9, 0xb9, 0xc9, 0xdc, 0xfc, 0xa8, 0xb3, 0xfe, 0xa4, 0x6f, 0x30, 0xc5, 0xb6, 0xe8, 0x98,
+	0x24, 0x15, 0x35, 0x7b, 0xba, 0xc7, 0xac, 0x61, 0xd1, 0x77, 0xcf, 0x17, 0xc0, 0x9c, 0xfa, 0x83,
+	0x02, 0x2f, 0x9d, 0xd9, 0x8e, 0xea, 0xab, 0xc3, 0x68, 0x32, 0xe8, 0xef, 0x94, 0x29, 0x3c, 0x24,
+	0x02, 0x67, 0xfa, 0xed, 0x50, 0xce, 0x17, 0x4e, 0x91, 0x33, 0xe0, 0xf8, 0x4c, 0x2d, 0x77, 0x7c,
+	0x22, 0xb0, 0x14, 0x13, 0xeb, 0x1f, 0x3c, 0x7a, 0x31, 0x23, 0x05, 0x93, 0x09, 0xb0, 0x00, 0xe6,
+	0x32, 0x2f, 0x1f, 0xec, 0x83, 0x91, 0x5f, 0xf6, 0xc1, 0xb3, 0x43, 0xf0, 0x5d, 0xaf, 0xdc, 0xc4,
+	0x8e, 0xb8, 0xf5, 0x73, 0x5a, 0xb9, 0x0a, 0x16, 0xf7, 0xc0, 0xe1, 0x91, 0x96, 0xba, 0x7b, 0xa4,
+	0xa5, 0xee, 0x1d, 0x69, 0xe0, 0xd3, 0xb6, 0x06, 0xbe, 0x69, 0x6b, 0xe0, 0x4e, 0x5b, 0x03, 0x87,
+	0x6d, 0x0d, 0xfc, 0xd1, 0xd6, 0xc0, 0x5f, 0x6d, 0x2d, 0x75, 0xaf, 0xad, 0x81, 0x2f, 0x8f, 0xb5,
+	0xd4, 0xc1, 0xb1, 0x06, 0x0e, 0x8f, 0xb5, 0xd4, 0xdd, 0x63, 0x2d, 0xf5, 0xde, 0x3b, 0x35, 0xca,
+	0x3e, 0xac, 0x19, 0x4d, 0x1a, 0x8e, 0x6a, 0x1f, 0x19, 0x01, 0x37, 0xe5, 0xa2, 0x4a, 0xfd, 0x46,
+	0x28, 0x48, 0x93, 0xb8, 0xd8, 0xcf, 0x27, 0x66, 0x93, 0x55, 0x6a, 0xd4, 0xc4, 0xbb, 0x22, 0x7e,
+	0xb2, 0x0c, 0x78, 0xe9, 0x54, 0xc6, 0xe5, 0x1b, 0xe6, 0xf9, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff,
+	0x68, 0x08, 0xae, 0xfc, 0x66, 0x0a, 0x00, 0x00,
 }
 
-func (this *GetAPIEndpointsSchemaReq) Equal(that interface{}) bool {
+func (x ApiInventorySchemaQueryType) String() string {
+	s, ok := ApiInventorySchemaQueryType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (this *GetAPIEndpointsSchemaUpdatesReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GetAPIEndpointsSchemaReq)
+	that1, ok := that.(*GetAPIEndpointsSchemaUpdatesReq)
 	if !ok {
-		that2, ok := that.(GetAPIEndpointsSchemaReq)
+		that2, ok := that.(GetAPIEndpointsSchemaUpdatesReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -366,16 +563,27 @@ func (this *GetAPIEndpointsSchemaReq) Equal(that interface{}) bool {
 	if this.Name != that1.Name {
 		return false
 	}
+	if len(this.ApiEndpointsFilter) != len(that1.ApiEndpointsFilter) {
+		return false
+	}
+	for i := range this.ApiEndpointsFilter {
+		if !this.ApiEndpointsFilter[i].Equal(that1.ApiEndpointsFilter[i]) {
+			return false
+		}
+	}
+	if this.QueryType != that1.QueryType {
+		return false
+	}
 	return true
 }
-func (this *GetAPIEndpointsSchemaResp) Equal(that interface{}) bool {
+func (this *GetAPIEndpointsSchemaUpdatesResp) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GetAPIEndpointsSchemaResp)
+	that1, ok := that.(*GetAPIEndpointsSchemaUpdatesResp)
 	if !ok {
-		that2, ok := that.(GetAPIEndpointsSchemaResp)
+		that2, ok := that.(GetAPIEndpointsSchemaUpdatesResp)
 		if ok {
 			that1 = &that2
 		} else {
@@ -387,24 +595,32 @@ func (this *GetAPIEndpointsSchemaResp) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.ApiEndpoints) != len(that1.ApiEndpoints) {
+	if len(this.ApiEndpointsCurrentSchemas) != len(that1.ApiEndpointsCurrentSchemas) {
 		return false
 	}
-	for i := range this.ApiEndpoints {
-		if !this.ApiEndpoints[i].Equal(that1.ApiEndpoints[i]) {
+	for i := range this.ApiEndpointsCurrentSchemas {
+		if !this.ApiEndpointsCurrentSchemas[i].Equal(that1.ApiEndpointsCurrentSchemas[i]) {
+			return false
+		}
+	}
+	if len(this.ApiEndpointsUpdatedSchemas) != len(that1.ApiEndpointsUpdatedSchemas) {
+		return false
+	}
+	for i := range this.ApiEndpointsUpdatedSchemas {
+		if !this.ApiEndpointsUpdatedSchemas[i].Equal(that1.ApiEndpointsUpdatedSchemas[i]) {
 			return false
 		}
 	}
 	return true
 }
-func (this *UpdateAPIEndpointsSchemaReq) Equal(that interface{}) bool {
+func (this *UpdateAPIEndpointsSchemasReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*UpdateAPIEndpointsSchemaReq)
+	that1, ok := that.(*UpdateAPIEndpointsSchemasReq)
 	if !ok {
-		that2, ok := that.(UpdateAPIEndpointsSchemaReq)
+		that2, ok := that.(UpdateAPIEndpointsSchemasReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -422,24 +638,24 @@ func (this *UpdateAPIEndpointsSchemaReq) Equal(that interface{}) bool {
 	if this.Name != that1.Name {
 		return false
 	}
-	if len(this.ApiEndpoints) != len(that1.ApiEndpoints) {
+	if len(this.ApiEndpointsSchemaUpdates) != len(that1.ApiEndpointsSchemaUpdates) {
 		return false
 	}
-	for i := range this.ApiEndpoints {
-		if !this.ApiEndpoints[i].Equal(that1.ApiEndpoints[i]) {
+	for i := range this.ApiEndpointsSchemaUpdates {
+		if !this.ApiEndpointsSchemaUpdates[i].Equal(that1.ApiEndpointsSchemaUpdates[i]) {
 			return false
 		}
 	}
 	return true
 }
-func (this *UpdateAPIEndpointsSchemaResp) Equal(that interface{}) bool {
+func (this *ApiEndpointWithSchema) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*UpdateAPIEndpointsSchemaResp)
+	that1, ok := that.(*ApiEndpointWithSchema)
 	if !ok {
-		that2, ok := that.(UpdateAPIEndpointsSchemaResp)
+		that2, ok := that.(ApiEndpointWithSchema)
 		if ok {
 			that1 = &that2
 		} else {
@@ -451,51 +667,113 @@ func (this *UpdateAPIEndpointsSchemaResp) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if !this.ApiOperation.Equal(that1.ApiOperation) {
+		return false
+	}
+	if !bytes.Equal(this.Schema, that1.Schema) {
+		return false
+	}
+	if this.SchemaJson != that1.SchemaJson {
+		return false
+	}
 	return true
 }
-func (this *GetAPIEndpointsSchemaReq) GoString() string {
+func (this *UpdateAPIEndpointsSchemasResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpdateAPIEndpointsSchemasResp)
+	if !ok {
+		that2, ok := that.(UpdateAPIEndpointsSchemasResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.UpdatedApiEndpoints) != len(that1.UpdatedApiEndpoints) {
+		return false
+	}
+	for i := range this.UpdatedApiEndpoints {
+		if !this.UpdatedApiEndpoints[i].Equal(that1.UpdatedApiEndpoints[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *GetAPIEndpointsSchemaUpdatesReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&api_definition.GetAPIEndpointsSchemaUpdatesReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.ApiEndpointsFilter != nil {
+		s = append(s, "ApiEndpointsFilter: "+fmt.Sprintf("%#v", this.ApiEndpointsFilter)+",\n")
+	}
+	s = append(s, "QueryType: "+fmt.Sprintf("%#v", this.QueryType)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetAPIEndpointsSchemaUpdatesResp) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&api_definition.GetAPIEndpointsSchemaReq{")
-	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *GetAPIEndpointsSchemaResp) GoString() string {
-	if this == nil {
-		return "nil"
+	s = append(s, "&api_definition.GetAPIEndpointsSchemaUpdatesResp{")
+	if this.ApiEndpointsCurrentSchemas != nil {
+		s = append(s, "ApiEndpointsCurrentSchemas: "+fmt.Sprintf("%#v", this.ApiEndpointsCurrentSchemas)+",\n")
 	}
-	s := make([]string, 0, 5)
-	s = append(s, "&api_definition.GetAPIEndpointsSchemaResp{")
-	if this.ApiEndpoints != nil {
-		s = append(s, "ApiEndpoints: "+fmt.Sprintf("%#v", this.ApiEndpoints)+",\n")
+	if this.ApiEndpointsUpdatedSchemas != nil {
+		s = append(s, "ApiEndpointsUpdatedSchemas: "+fmt.Sprintf("%#v", this.ApiEndpointsUpdatedSchemas)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *UpdateAPIEndpointsSchemaReq) GoString() string {
+func (this *UpdateAPIEndpointsSchemasReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 7)
-	s = append(s, "&api_definition.UpdateAPIEndpointsSchemaReq{")
+	s = append(s, "&api_definition.UpdateAPIEndpointsSchemasReq{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	if this.ApiEndpoints != nil {
-		s = append(s, "ApiEndpoints: "+fmt.Sprintf("%#v", this.ApiEndpoints)+",\n")
+	if this.ApiEndpointsSchemaUpdates != nil {
+		s = append(s, "ApiEndpointsSchemaUpdates: "+fmt.Sprintf("%#v", this.ApiEndpointsSchemaUpdates)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *UpdateAPIEndpointsSchemaResp) GoString() string {
+func (this *ApiEndpointWithSchema) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 4)
-	s = append(s, "&api_definition.UpdateAPIEndpointsSchemaResp{")
+	s := make([]string, 0, 7)
+	s = append(s, "&api_definition.ApiEndpointWithSchema{")
+	if this.ApiOperation != nil {
+		s = append(s, "ApiOperation: "+fmt.Sprintf("%#v", this.ApiOperation)+",\n")
+	}
+	s = append(s, "Schema: "+fmt.Sprintf("%#v", this.Schema)+",\n")
+	s = append(s, "SchemaJson: "+fmt.Sprintf("%#v", this.SchemaJson)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *UpdateAPIEndpointsSchemasResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_definition.UpdateAPIEndpointsSchemasResp{")
+	if this.UpdatedApiEndpoints != nil {
+		s = append(s, "UpdatedApiEndpoints: "+fmt.Sprintf("%#v", this.UpdatedApiEndpoints)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -520,19 +798,19 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PublicApiepCustomAPIClient interface {
-	// Get API Endpoints With Newly Discovered Schema
+	// Get API Endpoints Schema Updates
 	//
-	// x-displayName: "Get API Endpoints With Newly Discovered Schema"
-	// Get the list API endpoints which have discovered payload schema updates
-	// relative to the approved (last time updated by user) schema spec
-	// NOTE: the list does not include API endpoints defined in user provided OpenAPI spec files
-	GetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *GetAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaResp, error)
-	// Update API Endpoints With Newly Discovered Schema
+	// x-displayName: "Get API Endpoints Schema Updates"
+	// Get list of schema pairs, current and updated, for each endpoint in the request
+	// or all pending changes if empty list is provided.
+	// NOTE: any API endpoint defined in user swagger files should be ignored
+	GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaUpdatesResp, error)
+	// Update API Endpoints Schemas
 	//
-	// x-displayName: "Update API Endpoints With Newly Discovered Schema"
+	// x-displayName: "Update API Endpoints Schemas"
 	// Update the payload schema for the specified endpoints or all pending changes if empty list is provided.
-	// NOTE: only API endpoints returned by a call to `GetChangedEndpoints` can be updated.
-	UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *UpdateAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemaResp, error)
+	// NOTE: only API endpoints returned by a call to `GetAPIEndpointsSchemaStates` can be updated.
+	UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error)
 }
 
 type publicApiepCustomAPIClient struct {
@@ -543,18 +821,18 @@ func NewPublicApiepCustomAPIClient(cc *grpc.ClientConn) PublicApiepCustomAPIClie
 	return &publicApiepCustomAPIClient{cc}
 }
 
-func (c *publicApiepCustomAPIClient) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *GetAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaResp, error) {
-	out := new(GetAPIEndpointsSchemaResp)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/GetAPIEndpointsWithNewlyDiscoveredSchema", in, out, opts...)
+func (c *publicApiepCustomAPIClient) GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaUpdatesResp, error) {
+	out := new(GetAPIEndpointsSchemaUpdatesResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/GetAPIEndpointsSchemaUpdates", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *publicApiepCustomAPIClient) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, in *UpdateAPIEndpointsSchemaReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemaResp, error) {
-	out := new(UpdateAPIEndpointsSchemaResp)
-	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/UpdateAPIEndpointsWithNewlyDiscoveredSchema", in, out, opts...)
+func (c *publicApiepCustomAPIClient) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error) {
+	out := new(UpdateAPIEndpointsSchemasResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/UpdateAPIEndpointsSchemas", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -563,68 +841,68 @@ func (c *publicApiepCustomAPIClient) UpdateAPIEndpointsWithNewlyDiscoveredSchema
 
 // PublicApiepCustomAPIServer is the server API for PublicApiepCustomAPI service.
 type PublicApiepCustomAPIServer interface {
-	// Get API Endpoints With Newly Discovered Schema
+	// Get API Endpoints Schema Updates
 	//
-	// x-displayName: "Get API Endpoints With Newly Discovered Schema"
-	// Get the list API endpoints which have discovered payload schema updates
-	// relative to the approved (last time updated by user) schema spec
-	// NOTE: the list does not include API endpoints defined in user provided OpenAPI spec files
-	GetAPIEndpointsWithNewlyDiscoveredSchema(context.Context, *GetAPIEndpointsSchemaReq) (*GetAPIEndpointsSchemaResp, error)
-	// Update API Endpoints With Newly Discovered Schema
+	// x-displayName: "Get API Endpoints Schema Updates"
+	// Get list of schema pairs, current and updated, for each endpoint in the request
+	// or all pending changes if empty list is provided.
+	// NOTE: any API endpoint defined in user swagger files should be ignored
+	GetAPIEndpointsSchemaUpdates(context.Context, *GetAPIEndpointsSchemaUpdatesReq) (*GetAPIEndpointsSchemaUpdatesResp, error)
+	// Update API Endpoints Schemas
 	//
-	// x-displayName: "Update API Endpoints With Newly Discovered Schema"
+	// x-displayName: "Update API Endpoints Schemas"
 	// Update the payload schema for the specified endpoints or all pending changes if empty list is provided.
-	// NOTE: only API endpoints returned by a call to `GetChangedEndpoints` can be updated.
-	UpdateAPIEndpointsWithNewlyDiscoveredSchema(context.Context, *UpdateAPIEndpointsSchemaReq) (*UpdateAPIEndpointsSchemaResp, error)
+	// NOTE: only API endpoints returned by a call to `GetAPIEndpointsSchemaStates` can be updated.
+	UpdateAPIEndpointsSchemas(context.Context, *UpdateAPIEndpointsSchemasReq) (*UpdateAPIEndpointsSchemasResp, error)
 }
 
 // UnimplementedPublicApiepCustomAPIServer can be embedded to have forward compatible implementations.
 type UnimplementedPublicApiepCustomAPIServer struct {
 }
 
-func (*UnimplementedPublicApiepCustomAPIServer) GetAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, req *GetAPIEndpointsSchemaReq) (*GetAPIEndpointsSchemaResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAPIEndpointsWithNewlyDiscoveredSchema not implemented")
+func (*UnimplementedPublicApiepCustomAPIServer) GetAPIEndpointsSchemaUpdates(ctx context.Context, req *GetAPIEndpointsSchemaUpdatesReq) (*GetAPIEndpointsSchemaUpdatesResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAPIEndpointsSchemaUpdates not implemented")
 }
-func (*UnimplementedPublicApiepCustomAPIServer) UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx context.Context, req *UpdateAPIEndpointsSchemaReq) (*UpdateAPIEndpointsSchemaResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAPIEndpointsWithNewlyDiscoveredSchema not implemented")
+func (*UnimplementedPublicApiepCustomAPIServer) UpdateAPIEndpointsSchemas(ctx context.Context, req *UpdateAPIEndpointsSchemasReq) (*UpdateAPIEndpointsSchemasResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAPIEndpointsSchemas not implemented")
 }
 
 func RegisterPublicApiepCustomAPIServer(s *grpc.Server, srv PublicApiepCustomAPIServer) {
 	s.RegisterService(&_PublicApiepCustomAPI_serviceDesc, srv)
 }
 
-func _PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAPIEndpointsSchemaReq)
+func _PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAPIEndpointsSchemaUpdatesReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PublicApiepCustomAPIServer).GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+		return srv.(PublicApiepCustomAPIServer).GetAPIEndpointsSchemaUpdates(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/GetAPIEndpointsWithNewlyDiscoveredSchema",
+		FullMethod: "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/GetAPIEndpointsSchemaUpdates",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PublicApiepCustomAPIServer).GetAPIEndpointsWithNewlyDiscoveredSchema(ctx, req.(*GetAPIEndpointsSchemaReq))
+		return srv.(PublicApiepCustomAPIServer).GetAPIEndpointsSchemaUpdates(ctx, req.(*GetAPIEndpointsSchemaUpdatesReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateAPIEndpointsSchemaReq)
+func _PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAPIEndpointsSchemasReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PublicApiepCustomAPIServer).UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, in)
+		return srv.(PublicApiepCustomAPIServer).UpdateAPIEndpointsSchemas(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/UpdateAPIEndpointsWithNewlyDiscoveredSchema",
+		FullMethod: "/ves.io.schema.views.api_definition.PublicApiepCustomAPI/UpdateAPIEndpointsSchemas",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PublicApiepCustomAPIServer).UpdateAPIEndpointsWithNewlyDiscoveredSchema(ctx, req.(*UpdateAPIEndpointsSchemaReq))
+		return srv.(PublicApiepCustomAPIServer).UpdateAPIEndpointsSchemas(ctx, req.(*UpdateAPIEndpointsSchemasReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -634,19 +912,19 @@ var _PublicApiepCustomAPI_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*PublicApiepCustomAPIServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetAPIEndpointsWithNewlyDiscoveredSchema",
-			Handler:    _PublicApiepCustomAPI_GetAPIEndpointsWithNewlyDiscoveredSchema_Handler,
+			MethodName: "GetAPIEndpointsSchemaUpdates",
+			Handler:    _PublicApiepCustomAPI_GetAPIEndpointsSchemaUpdates_Handler,
 		},
 		{
-			MethodName: "UpdateAPIEndpointsWithNewlyDiscoveredSchema",
-			Handler:    _PublicApiepCustomAPI_UpdateAPIEndpointsWithNewlyDiscoveredSchema_Handler,
+			MethodName: "UpdateAPIEndpointsSchemas",
+			Handler:    _PublicApiepCustomAPI_UpdateAPIEndpointsSchemas_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ves.io/schema/views/api_definition/public_apiep_customapi.proto",
 }
 
-func (m *GetAPIEndpointsSchemaReq) Marshal() (dAtA []byte, err error) {
+func (m *GetAPIEndpointsSchemaUpdatesReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -656,94 +934,25 @@ func (m *GetAPIEndpointsSchemaReq) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *GetAPIEndpointsSchemaReq) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetAPIEndpointsSchemaUpdatesReq) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GetAPIEndpointsSchemaReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GetAPIEndpointsSchemaUpdatesReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+	if m.QueryType != 0 {
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(m.QueryType))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x28
 	}
-	if len(m.Namespace) > 0 {
-		i -= len(m.Namespace)
-		copy(dAtA[i:], m.Namespace)
-		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *GetAPIEndpointsSchemaResp) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *GetAPIEndpointsSchemaResp) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *GetAPIEndpointsSchemaResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ApiEndpoints) > 0 {
-		for iNdEx := len(m.ApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.ApiEndpointsFilter) > 0 {
+		for iNdEx := len(m.ApiEndpointsFilter) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.ApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *UpdateAPIEndpointsSchemaReq) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *UpdateAPIEndpointsSchemaReq) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *UpdateAPIEndpointsSchemaReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ApiEndpoints) > 0 {
-		for iNdEx := len(m.ApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.ApiEndpointsFilter[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -771,7 +980,7 @@ func (m *UpdateAPIEndpointsSchemaReq) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *UpdateAPIEndpointsSchemaResp) Marshal() (dAtA []byte, err error) {
+func (m *GetAPIEndpointsSchemaUpdatesResp) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -781,16 +990,181 @@ func (m *UpdateAPIEndpointsSchemaResp) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *UpdateAPIEndpointsSchemaResp) MarshalTo(dAtA []byte) (int, error) {
+func (m *GetAPIEndpointsSchemaUpdatesResp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *UpdateAPIEndpointsSchemaResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GetAPIEndpointsSchemaUpdatesResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if len(m.ApiEndpointsUpdatedSchemas) > 0 {
+		for iNdEx := len(m.ApiEndpointsUpdatedSchemas) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiEndpointsUpdatedSchemas[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.ApiEndpointsCurrentSchemas) > 0 {
+		for iNdEx := len(m.ApiEndpointsCurrentSchemas) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiEndpointsCurrentSchemas[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateAPIEndpointsSchemasReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ApiEndpointsSchemaUpdates) > 0 {
+		for iNdEx := len(m.ApiEndpointsSchemaUpdates) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiEndpointsSchemaUpdates[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiEndpointWithSchema) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiEndpointWithSchema) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiEndpointWithSchema) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SchemaJson) > 0 {
+		i -= len(m.SchemaJson)
+		copy(dAtA[i:], m.SchemaJson)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.SchemaJson)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Schema) > 0 {
+		i -= len(m.Schema)
+		copy(dAtA[i:], m.Schema)
+		i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(len(m.Schema)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.ApiOperation != nil {
+		{
+			size, err := m.ApiOperation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UpdateAPIEndpointsSchemasResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateAPIEndpointsSchemasResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateAPIEndpointsSchemasResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.UpdatedApiEndpoints) > 0 {
+		for iNdEx := len(m.UpdatedApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UpdatedApiEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicApiepCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -805,7 +1179,7 @@ func encodeVarintPublicApiepCustomapi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *GetAPIEndpointsSchemaReq) Size() (n int) {
+func (m *GetAPIEndpointsSchemaUpdatesReq) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -819,17 +1193,32 @@ func (m *GetAPIEndpointsSchemaReq) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
+	if len(m.ApiEndpointsFilter) > 0 {
+		for _, e := range m.ApiEndpointsFilter {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if m.QueryType != 0 {
+		n += 1 + sovPublicApiepCustomapi(uint64(m.QueryType))
+	}
 	return n
 }
 
-func (m *GetAPIEndpointsSchemaResp) Size() (n int) {
+func (m *GetAPIEndpointsSchemaUpdatesResp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.ApiEndpoints) > 0 {
-		for _, e := range m.ApiEndpoints {
+	if len(m.ApiEndpointsCurrentSchemas) > 0 {
+		for _, e := range m.ApiEndpointsCurrentSchemas {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
+	if len(m.ApiEndpointsUpdatedSchemas) > 0 {
+		for _, e := range m.ApiEndpointsUpdatedSchemas {
 			l = e.Size()
 			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 		}
@@ -837,7 +1226,7 @@ func (m *GetAPIEndpointsSchemaResp) Size() (n int) {
 	return n
 }
 
-func (m *UpdateAPIEndpointsSchemaReq) Size() (n int) {
+func (m *UpdateAPIEndpointsSchemasReq) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -851,8 +1240,8 @@ func (m *UpdateAPIEndpointsSchemaReq) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 	}
-	if len(m.ApiEndpoints) > 0 {
-		for _, e := range m.ApiEndpoints {
+	if len(m.ApiEndpointsSchemaUpdates) > 0 {
+		for _, e := range m.ApiEndpointsSchemaUpdates {
 			l = e.Size()
 			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
 		}
@@ -860,12 +1249,39 @@ func (m *UpdateAPIEndpointsSchemaReq) Size() (n int) {
 	return n
 }
 
-func (m *UpdateAPIEndpointsSchemaResp) Size() (n int) {
+func (m *ApiEndpointWithSchema) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.ApiOperation != nil {
+		l = m.ApiOperation.Size()
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.Schema)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	l = len(m.SchemaJson)
+	if l > 0 {
+		n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateAPIEndpointsSchemasResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.UpdatedApiEndpoints) > 0 {
+		for _, e := range m.UpdatedApiEndpoints {
+			l = e.Size()
+			n += 1 + l + sovPublicApiepCustomapi(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -875,54 +1291,85 @@ func sovPublicApiepCustomapi(x uint64) (n int) {
 func sozPublicApiepCustomapi(x uint64) (n int) {
 	return sovPublicApiepCustomapi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *GetAPIEndpointsSchemaReq) String() string {
+func (this *GetAPIEndpointsSchemaUpdatesReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GetAPIEndpointsSchemaReq{`,
+	repeatedStringForApiEndpointsFilter := "[]*ApiOperation{"
+	for _, f := range this.ApiEndpointsFilter {
+		repeatedStringForApiEndpointsFilter += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForApiEndpointsFilter += "}"
+	s := strings.Join([]string{`&GetAPIEndpointsSchemaUpdatesReq{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ApiEndpointsFilter:` + repeatedStringForApiEndpointsFilter + `,`,
+		`QueryType:` + fmt.Sprintf("%v", this.QueryType) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GetAPIEndpointsSchemaResp) String() string {
+func (this *GetAPIEndpointsSchemaUpdatesResp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForApiEndpoints := "[]*ApiOperation{"
-	for _, f := range this.ApiEndpoints {
-		repeatedStringForApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "ApiOperation", 1) + ","
+	repeatedStringForApiEndpointsCurrentSchemas := "[]*ApiEndpointWithSchema{"
+	for _, f := range this.ApiEndpointsCurrentSchemas {
+		repeatedStringForApiEndpointsCurrentSchemas += strings.Replace(f.String(), "ApiEndpointWithSchema", "ApiEndpointWithSchema", 1) + ","
 	}
-	repeatedStringForApiEndpoints += "}"
-	s := strings.Join([]string{`&GetAPIEndpointsSchemaResp{`,
-		`ApiEndpoints:` + repeatedStringForApiEndpoints + `,`,
+	repeatedStringForApiEndpointsCurrentSchemas += "}"
+	repeatedStringForApiEndpointsUpdatedSchemas := "[]*ApiEndpointWithSchema{"
+	for _, f := range this.ApiEndpointsUpdatedSchemas {
+		repeatedStringForApiEndpointsUpdatedSchemas += strings.Replace(f.String(), "ApiEndpointWithSchema", "ApiEndpointWithSchema", 1) + ","
+	}
+	repeatedStringForApiEndpointsUpdatedSchemas += "}"
+	s := strings.Join([]string{`&GetAPIEndpointsSchemaUpdatesResp{`,
+		`ApiEndpointsCurrentSchemas:` + repeatedStringForApiEndpointsCurrentSchemas + `,`,
+		`ApiEndpointsUpdatedSchemas:` + repeatedStringForApiEndpointsUpdatedSchemas + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *UpdateAPIEndpointsSchemaReq) String() string {
+func (this *UpdateAPIEndpointsSchemasReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForApiEndpoints := "[]*ApiOperation{"
-	for _, f := range this.ApiEndpoints {
-		repeatedStringForApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "ApiOperation", 1) + ","
+	repeatedStringForApiEndpointsSchemaUpdates := "[]*ApiEndpointWithSchema{"
+	for _, f := range this.ApiEndpointsSchemaUpdates {
+		repeatedStringForApiEndpointsSchemaUpdates += strings.Replace(f.String(), "ApiEndpointWithSchema", "ApiEndpointWithSchema", 1) + ","
 	}
-	repeatedStringForApiEndpoints += "}"
-	s := strings.Join([]string{`&UpdateAPIEndpointsSchemaReq{`,
+	repeatedStringForApiEndpointsSchemaUpdates += "}"
+	s := strings.Join([]string{`&UpdateAPIEndpointsSchemasReq{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`ApiEndpoints:` + repeatedStringForApiEndpoints + `,`,
+		`ApiEndpointsSchemaUpdates:` + repeatedStringForApiEndpointsSchemaUpdates + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *UpdateAPIEndpointsSchemaResp) String() string {
+func (this *ApiEndpointWithSchema) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&UpdateAPIEndpointsSchemaResp{`,
+	s := strings.Join([]string{`&ApiEndpointWithSchema{`,
+		`ApiOperation:` + strings.Replace(fmt.Sprintf("%v", this.ApiOperation), "ApiOperation", "ApiOperation", 1) + `,`,
+		`Schema:` + fmt.Sprintf("%v", this.Schema) + `,`,
+		`SchemaJson:` + fmt.Sprintf("%v", this.SchemaJson) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpdateAPIEndpointsSchemasResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForUpdatedApiEndpoints := "[]*ApiOperation{"
+	for _, f := range this.UpdatedApiEndpoints {
+		repeatedStringForUpdatedApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "ApiOperation", 1) + ","
+	}
+	repeatedStringForUpdatedApiEndpoints += "}"
+	s := strings.Join([]string{`&UpdateAPIEndpointsSchemasResp{`,
+		`UpdatedApiEndpoints:` + repeatedStringForUpdatedApiEndpoints + `,`,
 		`}`,
 	}, "")
 	return s
@@ -935,7 +1382,7 @@ func valueToStringPublicApiepCustomapi(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *GetAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
+func (m *GetAPIEndpointsSchemaUpdatesReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -958,214 +1405,10 @@ func (m *GetAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: GetAPIEndpointsSchemaReq: wiretype end group for non-group")
+			return fmt.Errorf("proto: GetAPIEndpointsSchemaUpdatesReq: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAPIEndpointsSchemaReq: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicApiepCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicApiepCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetAPIEndpointsSchemaResp) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicApiepCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAPIEndpointsSchemaResp: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAPIEndpointsSchemaResp: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicApiepCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ApiEndpoints = append(m.ApiEndpoints, &ApiOperation{})
-			if err := m.ApiEndpoints[len(m.ApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicApiepCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *UpdateAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicApiepCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: UpdateAPIEndpointsSchemaReq: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpdateAPIEndpointsSchemaReq: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: GetAPIEndpointsSchemaUpdatesReq: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1234,7 +1477,7 @@ func (m *UpdateAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpoints", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointsFilter", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1261,8 +1504,148 @@ func (m *UpdateAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiEndpoints = append(m.ApiEndpoints, &ApiOperation{})
-			if err := m.ApiEndpoints[len(m.ApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ApiEndpointsFilter = append(m.ApiEndpointsFilter, &ApiOperation{})
+			if err := m.ApiEndpointsFilter[len(m.ApiEndpointsFilter)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryType", wireType)
+			}
+			m.QueryType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.QueryType |= ApiInventorySchemaQueryType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetAPIEndpointsSchemaUpdatesResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetAPIEndpointsSchemaUpdatesResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetAPIEndpointsSchemaUpdatesResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointsCurrentSchemas", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiEndpointsCurrentSchemas = append(m.ApiEndpointsCurrentSchemas, &ApiEndpointWithSchema{})
+			if err := m.ApiEndpointsCurrentSchemas[len(m.ApiEndpointsCurrentSchemas)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointsUpdatedSchemas", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiEndpointsUpdatedSchemas = append(m.ApiEndpointsUpdatedSchemas, &ApiEndpointWithSchema{})
+			if err := m.ApiEndpointsUpdatedSchemas[len(m.ApiEndpointsUpdatedSchemas)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1290,7 +1673,7 @@ func (m *UpdateAPIEndpointsSchemaReq) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *UpdateAPIEndpointsSchemaResp) Unmarshal(dAtA []byte) error {
+func (m *UpdateAPIEndpointsSchemasReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1313,12 +1696,352 @@ func (m *UpdateAPIEndpointsSchemaResp) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: UpdateAPIEndpointsSchemaResp: wiretype end group for non-group")
+			return fmt.Errorf("proto: UpdateAPIEndpointsSchemasReq: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: UpdateAPIEndpointsSchemaResp: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: UpdateAPIEndpointsSchemasReq: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpointsSchemaUpdates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiEndpointsSchemaUpdates = append(m.ApiEndpointsSchemaUpdates, &ApiEndpointWithSchema{})
+			if err := m.ApiEndpointsSchemaUpdates[len(m.ApiEndpointsSchemaUpdates)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiEndpointWithSchema) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiEndpointWithSchema: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiEndpointWithSchema: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiOperation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiOperation == nil {
+				m.ApiOperation = &ApiOperation{}
+			}
+			if err := m.ApiOperation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Schema", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Schema = append(m.Schema[:0], dAtA[iNdEx:postIndex]...)
+			if m.Schema == nil {
+				m.Schema = []byte{}
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SchemaJson", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SchemaJson = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateAPIEndpointsSchemasResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicApiepCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateAPIEndpointsSchemasResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateAPIEndpointsSchemasResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdatedApiEndpoints", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicApiepCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicApiepCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpdatedApiEndpoints = append(m.UpdatedApiEndpoints, &ApiOperation{})
+			if err := m.UpdatedApiEndpoints[len(m.UpdatedApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicApiepCustomapi(dAtA[iNdEx:])

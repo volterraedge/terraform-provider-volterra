@@ -969,6 +969,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Ratchet:
+		if fv, exists := v.FldValidators["choice.ratchet"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Ratchet).Ratchet
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ratchet"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

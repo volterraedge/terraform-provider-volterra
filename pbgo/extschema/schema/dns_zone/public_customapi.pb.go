@@ -404,7 +404,7 @@ func (m *TSIGConfiguration) GetTsigKeyAlgorithm() TSIGKeyAlgorithm {
 	if m != nil {
 		return m.TsigKeyAlgorithm
 	}
-	return HMAC_MD5
+	return UNDEFINED
 }
 
 func (m *TSIGConfiguration) GetTsigKeyValue() *schema.SecretType {

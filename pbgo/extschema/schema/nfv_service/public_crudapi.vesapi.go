@@ -2539,13 +2539,11 @@ var APISwaggerJSON string = `{
                 },
                 "configured_vip": {
                     "type": "string",
-                    "description": "Exclusive with [automatic_vip]\n Enter IP address for the default VIP\n\nExample: - \"10.1.2.6/32\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ip: true\n  ves.io.schema.rules.string.not_in: 0.0.0.0\n",
+                    "description": "Exclusive with [automatic_vip]\n Enter IP address for the default VIP\n\nExample: - \"10.1.2.6/32\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n  ves.io.schema.rules.string.not_in: 0.0.0.0\n",
                     "title": "Configured",
                     "x-displayname": "Configured VIP",
                     "x-ves-example": "10.1.2.6/32",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ip": "true",
                         "ves.io.schema.rules.string.not_in": "0.0.0.0"
                     }
@@ -2651,44 +2649,28 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.nfv_service.F5BigIpAWSMarketPlaceImageType",
             "properties": {
                 "AWAFPayG200Mbps": {
-                    "description": "Exclusive with [AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 200Mbps)",
                     "title": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 200Mbps)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 200Mbps)"
                 },
                 "AWAFPayG3Gbps": {
-                    "description": "Exclusive with [AWAFPayG200Mbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG200Mbps BestPlusPayG200Mbps best_plus_payg_1gbps]\n F5 Advanced WAF with LTM, IPI, and Threat Campaigns (PAYG, 3Gbps)",
                     "title": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 3Gbps)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "BIG-IP Advanced WAF (PAYG, 3Gbps)"
                 },
                 "BestPlusPayG200Mbps": {
-                    "description": "Exclusive with [AWAFPayG200Mbps AWAFPayG3Gbps best_plus_payg_1gbps]\n F5 Best Plus with all modules (PAYG, 200mbps)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG200Mbps AWAFPayG3Gbps best_plus_payg_1gbps]\n F5 Best Plus with all modules (PAYG, 200mbps)",
                     "title": "BIG-IP PAYG Best Plus (PAYG, 200mbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "BIG-IP PAYG Best Plus (PAYG, 200mbps)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "BIG-IP PAYG Best Plus (PAYG, 200mbps)"
                 },
                 "best_plus_payg_1gbps": {
-                    "description": "Exclusive with [AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps]\n F5 Best Plus with all modules in 1Gbps flavor\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps]\n F5 Best Plus with all modules in 1Gbps flavor",
                     "title": "F5 BIG-IP PAYG Best Plus (PAYG, 1Gbps)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "F5 BIG-IP PAYG Best Plus (PAYG, 1Gbps)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "F5 BIG-IP PAYG Best Plus (PAYG, 1Gbps)"
                 }
             }
         },
@@ -2783,14 +2765,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Endpoint Service"
                 },
                 "market_place_image": {
-                    "description": "Exclusive with []\n Select the BIG-IP pay as you go image to be used for this service\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with []\n Select the BIG-IP pay as you go image to be used for this service",
                     "title": "BIG-IP Pay as You Go Image",
                     "$ref": "#/definitions/nfv_serviceF5BigIpAWSMarketPlaceImageType",
-                    "x-displayname": "BIG-IP Pay as You Go Image",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "BIG-IP Pay as You Go Image"
                 },
                 "nodes": {
                     "type": "array",
@@ -3147,6 +3125,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "nfv_serviceNodeInfo": {
+            "type": "object",
+            "description": "Per Node Information, populated after NFV instances are deployed",
+            "title": "Per Node Information",
+            "x-displayname": "Per Node Information",
+            "x-ves-proto-message": "ves.io.schema.nfv_service.NodeInfo",
+            "properties": {
+                "ssh_command": {
+                    "type": "string",
+                    "description": " Example ssh command string for users to ssh into individual node",
+                    "title": "SSH Command",
+                    "x-displayname": "SSH Command Help String"
+                }
+            }
+        },
         "nfv_serviceObject": {
             "type": "object",
             "description": "NFV Service object",
@@ -3343,24 +3336,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "pan_ami_bundle1": {
-                    "description": "Exclusive with [pan_ami_bundle2]\n VM-Series Next-Generation Firewall Bundle 1\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [pan_ami_bundle2]\n VM-Series Next-Generation Firewall Bundle 1",
                     "title": "VM-Series Next-Generation Firewall Bundle 1",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "VM-Series Next-Generation Firewall Bundle 1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "VM-Series Next-Generation Firewall Bundle 1"
                 },
                 "pan_ami_bundle2": {
-                    "description": "Exclusive with [pan_ami_bundle1]\n VM-Series Next-Generation Firewall Bundle 2\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with [pan_ami_bundle1]\n VM-Series Next-Generation Firewall Bundle 2",
                     "title": "VM-Series Next-Generation Firewall Bundle 2",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "VM-Series Next-Generation Firewall Bundle 2",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "VM-Series Next-Generation Firewall Bundle 2"
                 },
                 "panorama_server": {
                     "description": "Exclusive with [disable_panaroma]\n Enabled adding firewall instances to Panorama for config management during bootstrap",
@@ -3380,15 +3365,13 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": "Exclusive with [auto_setup]\n Setup Authorized Public SSH key. User will be able to ssh to the vmseries nodes using\n its corresponding ssh private key.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": "Exclusive with [auto_setup]\n Setup Authorized Public SSH key. User will be able to ssh to the vmseries nodes using\n its corresponding ssh private key.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Setup Authorized Public SSH key",
                     "minLength": 1,
                     "maxLength": 8192,
                     "x-displayname": "Setup Authorized Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "8192",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
@@ -3649,6 +3632,18 @@ var APISwaggerJSON string = `{
                     "title": "Enable On Site Local Inside and Outside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable On Site Local Inside and Outside"
+                },
+                "domain_suffix": {
+                    "type": "string",
+                    "description": " Domain suffix will be used along with node name to form the hostname for ssh node management\n\nExample: - \"foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n",
+                    "title": "Domain Suffix",
+                    "x-displayname": "Domain Suffix",
+                    "x-ves-example": "foo.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
                 },
                 "node_ssh_ports": {
                     "type": "array",
@@ -5194,6 +5189,15 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "node_info": {
+                    "type": "array",
+                    "description": " Node level information like, ssh command ex strings are populated here",
+                    "title": "Node Information",
+                    "items": {
+                        "$ref": "#/definitions/nfv_serviceNodeInfo"
+                    },
+                    "x-displayname": "Node Information"
+                },
                 "palo_alto_fw_service": {
                     "description": "Exclusive with [f5_big_ip_aws_service]\n Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud",
                     "title": "Palo Alto Networks VM-Series Firewall on AWS",
@@ -5667,7 +5671,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -5684,14 +5688,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA certificate",
+                    "description": " Select/Add a Root CA certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,

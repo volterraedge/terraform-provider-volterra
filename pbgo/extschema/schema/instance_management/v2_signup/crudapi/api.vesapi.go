@@ -2804,7 +2804,7 @@ var APISwaggerJSON string = `{
             "description": "desired state of Signup",
             "title": "Signup specification",
             "x-displayname": "Signup",
-            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_internal_sso\",\"source_msp\",\"source_plan_transition\",\"source_public\"]",
+            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_public\"]",
             "x-ves-proto-message": "ves.io.schema.instance_management.v2_signup.GlobalSpecType",
             "properties": {
                 "account_details": {
@@ -2837,38 +2837,30 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "internal_meta": {
+                    "description": " we use it to store derived internal information like f5xc instance, kc instance\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Internal Meta",
+                    "$ref": "#/definitions/signupInternalMeta",
+                    "x-displayname": "Internal Meta",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "source_internal_scaling": {
-                    "description": "Exclusive with [source_internal_sre source_internal_sso source_msp source_plan_transition source_public]\n For internal use ONLY\n payload for the request made internally for scaling",
+                    "description": "Exclusive with [source_internal_sre source_public]\n For internal use ONLY\n payload for the request made internally for scaling",
                     "title": "Source Internal Scaling",
                     "$ref": "#/definitions/signupSourceInternalScaling",
                     "x-displayname": "Source Internal Scaling"
                 },
                 "source_internal_sre": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sso source_msp source_plan_transition source_public]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
+                    "description": "Exclusive with [source_internal_scaling source_public]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
                     "title": "Source Internal SRE",
                     "$ref": "#/definitions/signupSourceInternalSre",
                     "x-displayname": "Source Internal SRE"
                 },
-                "source_internal_sso": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_msp source_plan_transition source_public]\n payload for the request internally made while freemium sso signup",
-                    "title": "Source Internal SSO",
-                    "$ref": "#/definitions/signupSourceInternalSso",
-                    "x-displayname": "Source Internal SSO"
-                },
-                "source_msp": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_internal_sso source_plan_transition source_public]\n payload for the creation request, for MSP tenant",
-                    "title": "Source MSP",
-                    "$ref": "#/definitions/signupSourceMsp",
-                    "x-displayname": "Source MSP"
-                },
-                "source_plan_transition": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_internal_sso source_msp source_public]\n payload for the signup made out of a plan transition request.",
-                    "title": "Source Plan Transition",
-                    "$ref": "#/definitions/signupSourcePlanTransition",
-                    "x-displayname": "Source Plan Transition"
-                },
                 "source_public": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre source_internal_sso source_msp source_plan_transition]\n payload for the public request, made either via the dashboard or the CMD line",
+                    "description": "Exclusive with [source_internal_scaling source_internal_sre]\n payload for the public request, made either via the dashboard or the CMD line",
                     "title": "Source Public",
                     "$ref": "#/definitions/signupSourcePublic",
                     "x-displayname": "Source Public"
@@ -2960,6 +2952,13 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 }
             }
+        },
+        "schemaCRMInfo": {
+            "type": "object",
+            "description": "CRM Information",
+            "title": "CRM Information",
+            "x-displayname": "CRM Information",
+            "x-ves-proto-message": "ves.io.schema.CRMInfo"
         },
         "schemaClearSecretInfoType": {
             "type": "object",
@@ -3665,12 +3664,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemainfraprotect_informationGlobalSpecType",
                     "x-displayname": "Infra Protect Info"
                 },
-                "payment_address": {
-                    "description": " payment address for the account, if not provided, the company mailing address is assumed as the payment address",
-                    "title": "Payment Address",
-                    "$ref": "#/definitions/signupContactMeta",
-                    "x-displayname": "Payment Address"
-                },
                 "payment_provider_token": {
                     "type": "string",
                     "description": " provider token for payment for the account\n\nExample: - \"msnofjaonoaksnqaaz\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -3813,9 +3806,63 @@ var APISwaggerJSON string = `{
         },
         "signupCrmInfoV2": {
             "type": "object",
+            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
             "title": "fields of crm info message",
             "x-displayname": "Crm Info",
             "x-ves-proto-message": "ves.io.schema.signup.CrmInfoV2"
+        },
+        "signupInternalMeta": {
+            "type": "object",
+            "description": "we use it to store derived internal information like f5xc instance, kc instance",
+            "title": "InternalMeta",
+            "x-displayname": "Internal Meta",
+            "x-ves-proto-message": "ves.io.schema.signup.InternalMeta",
+            "properties": {
+                "f5xc_instance_name": {
+                    "type": "string",
+                    "description": " this field holds the f5xc instance name of the tenant\n\nExample: - \"gc-01\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "F5xcInstanceName",
+                    "maxLength": 64,
+                    "x-displayname": "F5xc Instance Name",
+                    "x-ves-example": "gc-01",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "kc_instance_name": {
+                    "type": "string",
+                    "description": " this field holds the kc instance name of the tenant\n\nExample: - \"kc-instance-3\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "KcInstanceName",
+                    "maxLength": 64,
+                    "x-displayname": "Kc Instance Name",
+                    "x-ves-example": "kc-instance-3",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": " this field holds the tenant id\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "TenantId",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant Id",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "signupMarketplaceAws": {
+            "type": "object",
+            "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for AWS Marketplace",
+            "title": "Marketplace Aws",
+            "properties": {
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
+                }
+            }
         },
         "signupSourceInternalScaling": {
             "type": "object",
@@ -3829,8 +3876,14 @@ var APISwaggerJSON string = `{
             "x-displayname": "Source Internal SRE",
             "x-ves-proto-message": "ves.io.schema.signup.SourceInternalSre",
             "properties": {
+                "crm_details": {
+                    "description": " This field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo",
+                    "x-displayname": "CRM Details"
+                },
                 "crm_info": {
-                    "description": " this field holds the CRM info",
+                    "description": " this field holds the CRM info\n This field is deprecated. use CrmDetails instead",
                     "title": "crm_info",
                     "$ref": "#/definitions/signupCrmInfoV2",
                     "x-displayname": "CRM Info"
@@ -3856,34 +3909,70 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": " tenant id to be used while creating a tenant instead of generating a new one.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "tenant_id",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant Id",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 }
             }
         },
         "signupSourceInternalSso": {
             "type": "object",
-            "title": "Source Internal SSO",
-            "x-displayname": "Source Internal SSO",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceInternalSso"
+            "description": "x-displayName: \"Source Internal SSO\"",
+            "title": "Source Internal SSO"
+        },
+        "signupSourceMarketplace": {
+            "type": "object",
+            "description": "x-displayName: \"Source Marketplace\"\npayload for the creation request, for Marketplace source",
+            "title": "Source Marketplace",
+            "properties": {
+                "marketplace_aws": {
+                    "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for Aws Marketplace",
+                    "title": "MarketplaceAws",
+                    "$ref": "#/definitions/signupMarketplaceAws"
+                }
+            }
         },
         "signupSourceMsp": {
             "type": "object",
+            "description": "x-displayName: \"Source MSP\"",
             "title": "Source MSP",
-            "x-displayname": "Source MSP",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceMsp",
             "properties": {
+                "child_tenant_obj_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Child Tenant Object Name\"\nthis field holds the name of child tenant configuration.",
+                    "title": "child_tenant_obj_name"
+                },
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
+                },
                 "crm_info": {
-                    "description": " this field holds the CRM info",
+                    "description": "x-displayName: \"CRM Info\"\nthis field holds the CRM info\nThis field is deprecated. use CrmDetails instead",
                     "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2",
-                    "x-displayname": "CRM Info"
+                    "$ref": "#/definitions/signupCrmInfoV2"
                 }
             }
         },
         "signupSourcePlanTransition": {
             "type": "object",
+            "description": "x-displayName: \"Source Plan Transition\"\nSourcePlanTransition can be only used for Free to Individual plan transition signups",
             "title": "Source Plan Transition",
-            "x-displayname": "Source Plan Transition",
-            "x-ves-proto-message": "ves.io.schema.signup.SourcePlanTransition"
+            "properties": {
+                "is_sso_enabled": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"IsSsoEnabled\"\nx-example: true\nIsSsoEnabled tells whether the sso should be enabled for new tenant",
+                    "title": "IsSsoEnabled",
+                    "format": "boolean"
+                }
+            }
         },
         "signupSourcePublic": {
             "type": "object",

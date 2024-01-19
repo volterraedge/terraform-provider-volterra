@@ -7364,9 +7364,8 @@ var DefaultLayer2SriovInterfaceTypeValidator = func() *ValidateLayer2SriovInterf
 
 	vrhVlanChoiceVlanId := v.VlanChoiceVlanIdValidationRuleHandler
 	rulesVlanChoiceVlanId := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "1",
-		"ves.io.schema.rules.uint32.lte":       "4095",
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "4095",
 	}
 	vFnMap["vlan_choice.vlan_id"], err = vrhVlanChoiceVlanId(rulesVlanChoiceVlanId)
 	if err != nil {

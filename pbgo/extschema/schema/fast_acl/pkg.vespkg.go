@@ -72,8 +72,84 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.site_acl.fast_acl_rules.#.name",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fast_acl.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.fast_acl.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.fast_acl.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.fast_acl.API.Replace"] = []string{
@@ -82,6 +158,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.re_acl.fast_acl_rules.#.name",
 		"spec.site_acl.fast_acl_rules.#.metadata.disable",
 		"spec.site_acl.fast_acl_rules.#.name",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.fast_acl.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.site_acl.fast_acl_rules.#.prefix.ipv6_prefix.#",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

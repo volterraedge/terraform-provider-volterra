@@ -22,13 +22,13 @@ resource "volterra_cdn_loadbalancer" "example" {
 
   domains = ["www.foo.com"]
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
 
     // One of the arguments from this list "port port_ranges" must be set
-    port_ranges = "80,443,8080-8191,9080"
+    port = "80"
   }
   origin_pool {
     follow_origin_redirect = true
@@ -43,10 +43,12 @@ resource "volterra_cdn_loadbalancer" "example" {
     origin_servers {
       // One of the arguments from this list "public_ip public_name" must be set
 
-      public_name {
-        dns_name         = "value"
-        refresh_interval = "20"
+      public_ip {
+        // One of the arguments from this list "ipv6 ip" must be set
+        ip = "8.8.8.8"
       }
+
+      port = "80"
     }
 
     public_name {
@@ -54,7 +56,7 @@ resource "volterra_cdn_loadbalancer" "example" {
       refresh_interval = "20"
     }
 
-    // One of the arguments from this list "use_tls no_tls" must be set
+    // One of the arguments from this list "no_tls use_tls" must be set
     no_tls = true
   }
 }
@@ -479,6 +481,8 @@ List of original servers.
 `public_ip` - (Optional) Specify origin server with public IP. See [Public Ip ](#public-ip) below for details.
 
 `public_name` - (Optional) Specify origin server with public DNS name. See [Public Name ](#public-name) below for details.
+
+`port` - (Optional) Port the workload can be reached on (`Int`).
 
 ### Path Match
 

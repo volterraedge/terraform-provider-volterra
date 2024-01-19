@@ -51,6 +51,7 @@ import (
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
+	ves_io_schema_network_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set"
 	ves_io_schema_nfv_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
 	ves_io_schema_protocol_inspection "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection"
@@ -63,6 +64,7 @@ import (
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_site_mesh_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 	ves_io_schema_trusted_ca_list "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list"
+	ves_io_schema_static_component "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ui/static_component"
 	ves_io_schema_usb_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy"
 	ves_io_schema_user_identification "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification"
 	ves_io_schema_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
@@ -213,6 +215,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_firewall.ObjectType,
 		ves_io_schema_network_policy.ObjectType,
 		ves_io_schema_network_policy_rule.ObjectType,
+		ves_io_schema_network_policy_set.ObjectType,
 		ves_io_schema_nfv_service.ObjectType,
 		ves_io_schema_policer.ObjectType,
 		ves_io_schema_protocol_inspection.ObjectType,
@@ -225,6 +228,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_service_policy_rule.ObjectType,
 		ves_io_schema_site_mesh_group.ObjectType,
 		ves_io_schema_trusted_ca_list.ObjectType,
+		ves_io_schema_static_component.ObjectType,
 		ves_io_schema_usb_policy.ObjectType,
 		ves_io_schema_user_identification.ObjectType,
 		ves_io_schema_api_definition.ObjectType,

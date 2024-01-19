@@ -40,8 +40,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWInfoConfigType"] = AWSTGWInfoConfigTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWResourceShareType"] = AWSTGWResourceShareTypeValidator()
-	vr["ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentListType"] = AWSTGWSpokeAttachmentListTypeValidator()
-	vr["ves.io.schema.views.aws_tgw_site.AWSTGWSpokeAttachmentType"] = AWSTGWSpokeAttachmentTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSTGWStatusType"] = AWSTGWStatusTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.AWSVPNTunnelConfigType"] = AWSVPNTunnelConfigTypeValidator()
 	vr["ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType"] = ActiveServicePoliciesTypeValidator()
@@ -87,10 +85,106 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = "ves.io.schema.views.aws_tgw_site.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.aws_tgw_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.aws_tgw_site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.aws_parameters.az_nodes.#.inside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.aws_parameters.az_nodes.#.outside_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.aws_parameters.az_nodes.#.workload_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Replace"] = []string{

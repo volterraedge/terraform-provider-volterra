@@ -3045,6 +3045,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
+            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
@@ -3306,13 +3307,11 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching.default:production",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.ves_service_namespace_name": "true"
                     }
                 },
@@ -3341,7 +3340,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "IP address on given Sites",
             "x-ves-displayorder": "10,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
-            "x-ves-oneof-field-private_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-private_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
@@ -3352,7 +3351,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
@@ -3362,7 +3361,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP6",
                     "x-displayname": "IP6",
                     "x-ves-example": "2001::10",
@@ -3449,12 +3448,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerPublicIP",
             "x-displayname": "Public IP",
             "x-ves-displayorder": "2",
-            "x-ves-oneof-field-public_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-public_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPublicIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Public IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "Public IPV4",
                     "x-ves-example": "8.8.8.8",
@@ -3464,7 +3463,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Public IPV6 address\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPV6",
                     "x-displayname": "Public IPV6",
                     "x-ves-example": "2001::1",
@@ -3517,12 +3516,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerSegmentIP",
             "x-displayname": "IP address of Origin server in Segment on given Site",
             "x-ves-displayorder": "1,4,5",
-            "x-ves-oneof-field-ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
@@ -3532,7 +3531,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP6",
                     "x-displayname": "IP6",
                     "x-ves-example": "2001::10",
@@ -3703,12 +3702,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerVirtualNetworkIP",
             "x-displayname": "IP address Virtual Network",
             "x-ves-displayorder": "10,2",
-            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-virtual_network_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n IPV4 address\n\nExample: - \"1.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPV4",
                     "x-displayname": "IPV4",
                     "x-ves-example": "1.1.1.1",
@@ -3718,7 +3717,7 @@ var APISwaggerJSON string = `{
                 },
                 "ipv6": {
                     "type": "string",
-                    "description": "Exclusive with [ip]\n IPV6 address\n\nExample: - \"2001::11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": " IPV6 address\n\nExample: - \"2001::11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IPV6",
                     "x-displayname": "IPV6",
                     "x-ves-example": "2001::11",
@@ -3813,7 +3812,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -3825,7 +3824,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [use_mtls]\n",
                     "title": "No MTLS",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -3864,13 +3863,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
+                    "description": "Exclusive with [no_mtls]\n",
                     "title": "Enable MTLS With Inline Certificate",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
                     "x-displayname": "Enable by uploading a new certificate"
                 },
                 "use_mtls_obj": {
-                    "description": "Exclusive with [no_mtls use_mtls]\n",
                     "title": "Enable MTLS With Certificate Object",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Enable by selecting a certificate"
@@ -3894,18 +3892,18 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA for verification of Server's certificate",
+                    "description": " Select/Add a Root CA for verification of Server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Select a Root CA certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [trusted_ca]\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with []\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,

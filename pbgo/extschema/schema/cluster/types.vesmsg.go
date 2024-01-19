@@ -1621,6 +1621,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetLbSourceIpPersistanceChoice().(type) {
+	case *GetSpecType_EnableLbSourceIpPersistance:
+		if fv, exists := v.FldValidators["lb_source_ip_persistance_choice.enable_lb_source_ip_persistance"]; exists {
+			val := m.GetLbSourceIpPersistanceChoice().(*GetSpecType_EnableLbSourceIpPersistance).EnableLbSourceIpPersistance
+			vOpts := append(opts,
+				db.WithValidateField("lb_source_ip_persistance_choice"),
+				db.WithValidateField("enable_lb_source_ip_persistance"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableLbSourceIpPersistance:
+		if fv, exists := v.FldValidators["lb_source_ip_persistance_choice.disable_lb_source_ip_persistance"]; exists {
+			val := m.GetLbSourceIpPersistanceChoice().(*GetSpecType_DisableLbSourceIpPersistance).DisableLbSourceIpPersistance
+			vOpts := append(opts,
+				db.WithValidateField("lb_source_ip_persistance_choice"),
+				db.WithValidateField("disable_lb_source_ip_persistance"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["loadbalancer_algorithm"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
@@ -2337,6 +2363,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("http_protocol_type"),
 				db.WithValidateField("auto_http_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetLbSourceIpPersistanceChoice().(type) {
+	case *GlobalSpecType_EnableLbSourceIpPersistance:
+		if fv, exists := v.FldValidators["lb_source_ip_persistance_choice.enable_lb_source_ip_persistance"]; exists {
+			val := m.GetLbSourceIpPersistanceChoice().(*GlobalSpecType_EnableLbSourceIpPersistance).EnableLbSourceIpPersistance
+			vOpts := append(opts,
+				db.WithValidateField("lb_source_ip_persistance_choice"),
+				db.WithValidateField("enable_lb_source_ip_persistance"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableLbSourceIpPersistance:
+		if fv, exists := v.FldValidators["lb_source_ip_persistance_choice.disable_lb_source_ip_persistance"]; exists {
+			val := m.GetLbSourceIpPersistanceChoice().(*GlobalSpecType_DisableLbSourceIpPersistance).DisableLbSourceIpPersistance
+			vOpts := append(opts,
+				db.WithValidateField("lb_source_ip_persistance_choice"),
+				db.WithValidateField("disable_lb_source_ip_persistance"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3696,6 +3748,41 @@ func (r *GetSpecType) GetHttpProtocolTypeFromGlobalSpecType(o *GlobalSpecType) e
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetLbSourceIpPersistanceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.LbSourceIpPersistanceChoice.(type) {
+	case nil:
+		o.LbSourceIpPersistanceChoice = nil
+
+	case *GetSpecType_DisableLbSourceIpPersistance:
+		o.LbSourceIpPersistanceChoice = &GlobalSpecType_DisableLbSourceIpPersistance{DisableLbSourceIpPersistance: of.DisableLbSourceIpPersistance}
+
+	case *GetSpecType_EnableLbSourceIpPersistance:
+		o.LbSourceIpPersistanceChoice = &GlobalSpecType_EnableLbSourceIpPersistance{EnableLbSourceIpPersistance: of.EnableLbSourceIpPersistance}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetLbSourceIpPersistanceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.LbSourceIpPersistanceChoice.(type) {
+	case nil:
+		r.LbSourceIpPersistanceChoice = nil
+
+	case *GlobalSpecType_DisableLbSourceIpPersistance:
+		r.LbSourceIpPersistanceChoice = &GetSpecType_DisableLbSourceIpPersistance{DisableLbSourceIpPersistance: of.DisableLbSourceIpPersistance}
+
+	case *GlobalSpecType_EnableLbSourceIpPersistance:
+		r.LbSourceIpPersistanceChoice = &GetSpecType_EnableLbSourceIpPersistance{EnableLbSourceIpPersistance: of.EnableLbSourceIpPersistance}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetPanicThresholdTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PanicThresholdType.(type) {
 	case nil:
@@ -3745,6 +3832,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HealthChecks = f.GetHealthChecks()
 	m.HttpIdleTimeout = f.GetHttpIdleTimeout()
 	m.GetHttpProtocolTypeFromGlobalSpecType(f)
+	m.GetLbSourceIpPersistanceChoiceFromGlobalSpecType(f)
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
@@ -3777,6 +3865,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HealthChecks = m1.HealthChecks
 	f.HttpIdleTimeout = m1.HttpIdleTimeout
 	m1.SetHttpProtocolTypeToGlobalSpecType(f)
+	m1.SetLbSourceIpPersistanceChoiceToGlobalSpecType(f)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)

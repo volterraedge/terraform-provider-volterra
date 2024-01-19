@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -16,6 +17,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.dos_mitigation.Object"] = ObjectValidator()
 	vr["ves.io.schema.dos_mitigation.StatusObject"] = StatusObjectValidator()
+
+	vr["ves.io.schema.dos_mitigation.CreateBulkRequest"] = CreateBulkRequestValidator()
+	vr["ves.io.schema.dos_mitigation.CreateBulkResponse"] = CreateBulkResponseValidator()
+	vr["ves.io.schema.dos_mitigation.DeleteBulkRequest"] = DeleteBulkRequestValidator()
+	vr["ves.io.schema.dos_mitigation.DeleteBulkResponse"] = DeleteBulkResponseValidator()
+	vr["ves.io.schema.dos_mitigation.FailedOperation"] = FailedOperationValidator()
 
 	vr["ves.io.schema.dos_mitigation.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.dos_mitigation.Destination"] = DestinationValidator()
@@ -61,6 +68,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.dos_mitigation.Object"] = PrivateDosMitigationAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = NewPrivateDosMitigationAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = NewPrivateDosMitigationAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = RegisterPrivateDosMitigationAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = RegisterGwPrivateDosMitigationAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.dos_mitigation.PrivateDosMitigationAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewPrivateDosMitigationAPIServer(svc)
+		}
+
+	}()
 
 }
 

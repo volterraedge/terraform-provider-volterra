@@ -34,8 +34,8 @@ resource "volterra_bgp" "example" {
     bgp_router_id_key  = "value"
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "local_address from_site ip_address" must be set
-    from_site = true
+    // One of the arguments from this list "from_site ip_address local_address" must be set
+    ip_address = "ip_address"
   }
 
   peers {
@@ -49,44 +49,35 @@ resource "volterra_bgp" "example" {
     passive_mode_disabled = true
     target_service        = "value"
 
-    // One of the arguments from this list "external internal" must be set
+    // One of the arguments from this list "internal external" must be set
 
-    internal {
-      // One of the arguments from this list "address from_site dns_name" must be set
-      dns_name = "dns_name"
+    external {
+      // One of the arguments from this list "address_ipv6 subnet_begin_offset subnet_end_offset from_site default_gateway address" must be set
+      address = "address"
 
-      family_inet6vpn {
-        // One of the arguments from this list "disable enable" must be set
-        enable = true
-      }
+      asn = "64512"
 
-      family_inetvpn {
-        // One of the arguments from this list "enable disable" must be set
+      // One of the arguments from this list "no_authentication md5_auth_key" must be set
+      no_authentication = true
 
-        enable {
-          // One of the arguments from this list "disable enable" must be set
-          enable = true
-        }
-      }
-
-      family_rtarget {
-        // One of the arguments from this list "disable enable" must be set
-        enable = true
-      }
-
-      family_uuidvpn {
+      family_inet {
         // One of the arguments from this list "enable disable" must be set
         enable = true
       }
 
-      // One of the arguments from this list "disable_mtls enable_mtls" must be set
-      disable_mtls = true
-      port         = "179"
+      // One of the arguments from this list "interface_list inside_interfaces outside_interfaces interface" must be set
+
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+      port = "179"
     }
   }
 
   where {
-    // One of the arguments from this list "virtual_site site" must be set
+    // One of the arguments from this list "site virtual_site" must be set
 
     site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set

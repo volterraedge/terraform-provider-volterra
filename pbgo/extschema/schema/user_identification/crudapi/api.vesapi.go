@@ -3523,6 +3523,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client IP and TLS Fingerprint"
                 },
+                "jwt_claim_name": {
+                    "type": "string",
+                    "description": " Use the JWT claim value as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "JWT claim name",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "JWT Claim Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
                 "none": {
                     "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint query_param_key tls_fingerprint]\n Do not use any user identifier.",
                     "title": "none",

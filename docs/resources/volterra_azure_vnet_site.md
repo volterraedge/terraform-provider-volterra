@@ -20,7 +20,7 @@ resource "volterra_azure_vnet_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
   default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
@@ -30,18 +30,24 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
-  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "azure_region alternate_region" must be set
+  // One of the arguments from this list "alternate_region azure_region" must be set
   azure_region = "eastus"
   resource_group = ["my-resources"]
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  voltstack_cluster {
-    az_nodes {
-      azure_az  = "1"
-      disk_size = "80"
+  ingress_gw_ar {
+    accelerated_networking {
+      // One of the arguments from this list "disable enable" must be set
+      enable = true
+    }
+
+    azure_certified_hw = "azure-byol-voltmesh"
+
+    node {
+      fault_domain = "1"
 
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -51,50 +57,27 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
+
+      node_number   = "1"
+      update_domain = "1"
     }
 
-    azure_certified_hw = "azure-byol-voltstack-combo"
-
-    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
-    no_dc_cluster_group = true
-
-    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-    no_global_network = true
-
-    // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
-    no_k8s_cluster = true
-
-    // One of the arguments from this list "no_network_policy active_network_policies active_enhanced_firewall_policies" must be set
-    no_network_policy = true
-
-    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
-
-    outside_static_routes {
-      static_route_list {
-        // One of the arguments from this list "simple_static_route custom_static_route" must be set
-        simple_static_route = "10.5.1.0/24"
-      }
+    performance_enhancement_mode {
+      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+      perf_mode_l7_enhanced = true
     }
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
-    // One of the arguments from this list "storage_class_list default_storage" must be set
-    default_storage = true
   }
+  ssh_key = ["ssh-rsa AAAAB..."]
   vnet {
-    // One of the arguments from this list "existing_vnet new_vnet" must be set
+    // One of the arguments from this list "new_vnet existing_vnet" must be set
 
-    new_vnet {
-      // One of the arguments from this list "name autogenerate" must be set
-      name = "name"
-
-      primary_ipv4 = "10.1.0.0/16"
+    existing_vnet {
+      resource_group = "MyResourceGroup"
+      vnet_name      = "MyVnet"
     }
   }
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+  no_worker_nodes = true
 }
 
 ```
@@ -120,9 +103,11 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Use default behavior of allowing ports mentioned in blocked services (bool).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -134,7 +119,7 @@ Argument Reference
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
 
-`machine_type` - (Optional) Select Instance size based on performance needed (`String`).
+`machine_type` - (Optional) > advanced options. (`String`).
 
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
@@ -158,7 +143,7 @@ Argument Reference
 
 `voltstack_cluster_ar` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster Ar ](#voltstack-cluster-ar) below for details.
 
-`ssh_key` - (Optional) Public SSH key for accessing the site. (`String`).
+`ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
@@ -172,9 +157,17 @@ Argument Reference
 
 `total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
+### Accelerated Networking
+
+disruption will be seen.
+
+`disable` - (Optional) infrastructure. (bool).
+
+`enable` - (Optional) improving networking performance (bool).
+
 ### Active Enhanced Firewall Policies
 
-Enhanced Firewall Policies active for this site..
+with an additional option for service insertion..
 
 `enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
 
@@ -189,6 +182,10 @@ Enable Forward Proxy for this site and manage policies.
 Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
+
+### Advertise To Route Server
+
+Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
 
 ### Authorized Key
 
@@ -212,7 +209,7 @@ The subnet CIDR is autogenerated..
 
 ### Auto Asn
 
-(Recommended) Automatically set ASN for BGP between Site and Azure Route Servers.
+(Recommended) Automatically set ASN for F5XC Site.
 
 ### Autogenerate
 
@@ -260,7 +257,7 @@ Use custom blocked services configuration.
 
 Use custom blocked services configuration.
 
-`dns` - (Optional) Matches ssh port 53 (bool).
+`dns` - (Optional) Matches DNS port 53 (bool).
 
 `ssh` - (Optional) Matches ssh port 22 (bool).
 
@@ -342,6 +339,10 @@ Use standard storage class configured as AWS EBS.
 
 Will assign latest available SW version.
 
+### Disable
+
+infrastructure..
+
 ### Disable Forward Proxy
 
 Forward Proxy is disabled for this connector.
@@ -356,7 +357,11 @@ This is the default behavior if no choice is selected..
 
 ### Dns
 
-Matches ssh port 53.
+Matches DNS port 53.
+
+### Do Not Advertise To Route Server
+
+Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP.
 
 ### Domain Match
 
@@ -367,6 +372,10 @@ Domain value or regular expression to match.
 `regex_value` - (Optional) Regular Expression value for the domain name (`String`).
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### Enable
+
+improving networking performance.
 
 ### Enable For All Domains
 
@@ -412,9 +421,9 @@ Express Route is disabled on this site.
 
 Express Route is enabled on this site.
 
-`auto_asn` - (Optional) (Recommended) Automatically set ASN for BGP between Site and Azure Route Servers (bool).
+`auto_asn` - (Optional) (Recommended) Automatically set ASN for F5XC Site (bool).
 
-`custom_asn` - (Optional) Set custom ASN for BGP between Site and Azure Route Servers (`Int`).
+`custom_asn` - (Optional) Set custom ASN for F5XC Site (`Int`).
 
 `connections` - (Required) Add the ExpressRoute Circuit Connections to this site. See [Connections ](#connections) below for details.
 
@@ -433,6 +442,10 @@ Express Route is enabled on this site.
 `sku_high_perf` - (Optional) High Perf SKU (bool).
 
 `sku_standard` - (Optional) Standard SKU (bool).
+
+`advertise_to_route_server` - (Optional) Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
+
+`do_not_advertise_to_route_server` - (Optional) Do Not Advertise Spoke Vnet CIDR Routes To Azure Route Server via BGP (bool).
 
 ### Forward Proxy Allow All
 
@@ -480,6 +493,8 @@ This VNet is a hub VNet.
 
 Two interface site is useful when site is used as ingress/egress gateway to the VNet..
 
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
+
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
@@ -508,7 +523,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -527,6 +542,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 ### Ingress Egress Gw Ar
 
 Two interface site is useful when site is used as ingress/egress gateway to the VNet..
+
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
@@ -554,7 +571,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -576,6 +593,8 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 One interface site is useful when site is only used as ingress gateway to the VNet..
 
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
+
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
@@ -585,6 +604,8 @@ One interface site is useful when site is only used as ingress gateway to the VN
 ### Ingress Gw Ar
 
 One interface site is useful when site is only used as ingress gateway to the VNet..
+
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
@@ -740,14 +761,6 @@ Enable/Disable offline survivability mode.
 
 `no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
 
-### Openebs Enterprise
-
-Storage class Device configuration for OpenEBS Enterprise.
-
-`replication` - (Optional) Replication sets the replication factor of the PV, i.e. the number of data replicas to be maintained for it such as 1 or 3. (`Int`).
-
-`storage_class_size` - (Optional) Three 10GB disk will be created and assigned to nodes. (`Int`).
-
 ### Os
 
 Operating System Details.
@@ -780,7 +793,7 @@ Subnets for the outside interface of the node.
 
 ### Perf Mode L3 Enhanced
 
-Site optimized for L3 traffic processing.
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
 
@@ -788,15 +801,15 @@ Site optimized for L3 traffic processing.
 
 ### Perf Mode L7 Enhanced
 
-Site optimized for L7 traffic processing.
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
 ### Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (bool).
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
 
 ### Policy
 
@@ -844,7 +857,7 @@ Select the type of subnet to be used for Azure Route Server.
 
 Site Registration and Site to RE tunnels go over the Azure Express Route.
 
-`cloudlink_network_name` - (Required) Cloud Link ADN Network Name for private access connectivity to F5XC ADN. (`String`).
+`cloudlink_network_name` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
 
 ### Site Registration Over Internet
 
@@ -921,8 +934,6 @@ Add additional custom storage classes in kubernetes for site.
 List of custom storage classes.
 
 `default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
-
-`openebs_enterprise` - (Optional) Storage class Device configuration for OpenEBS Enterprise. See [Openebs Enterprise ](#openebs-enterprise) below for details.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
@@ -1018,6 +1029,8 @@ Default volterra trusted CA list for validating upstream server certificate.
 
 App Stack Cluster using single interface, useful for deploying K8s cluster..
 
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
+
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Az Nodes ](#az-nodes) below for details.
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
@@ -1040,7 +1053,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 
@@ -1062,6 +1075,8 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 App Stack Cluster using single interface, useful for deploying K8s cluster..
 
+`accelerated_networking` - (Optional) disruption will be seen. See [Accelerated Networking ](#accelerated-networking) below for details.
+
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
 `dc_cluster_group` - (Optional) This site is member of dc cluster group via outside network. See [ref](#ref) below for details.
@@ -1082,7 +1097,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
 
-`active_enhanced_firewall_policies` - (Optional) Enhanced Firewall Policies active for this site.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
 
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
 

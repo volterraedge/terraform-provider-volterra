@@ -100,10 +100,178 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https_management.do_not_advertise_on_internet",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bigip.apm.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bigip.apm.API.Create"] = "ves.io.schema.bigip.apm.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.bigip.apm.API.Get"] = []string{
 		"object",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "create_form.spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "object.spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "items.#.object.spec.gc_spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.bigip.apm.API.Replace"] = []string{
@@ -128,6 +296,25 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.https_management.disable_local",
 		"spec.https_management.do_not_advertise",
 		"spec.https_management.do_not_advertise_on_internet",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bigip.apm.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.https_management.advertise_on_sli_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_internet_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_sli.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
+		{
+			FieldPath:           "spec.https_management.advertise_on_slo_vip.use_mtls.trusted_ca",
+			AllowedEnvironments: []string{"test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bigip.apm.API.Replace"] = "ves.io.schema.bigip.apm.ReplaceRequest"

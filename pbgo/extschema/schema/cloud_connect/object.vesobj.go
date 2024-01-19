@@ -1303,6 +1303,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
 
+	v.FldValidators["cloud_connect_status"] = CloudConnectStatusTypeValidator().Validate
+
 	return v
 }()
 

@@ -39,21 +39,26 @@ resource "volterra_route" "example" {
         name         = "Content-Type"
 
         // One of the arguments from this list "exact regex presence" must be set
-        regex = "regex"
+        exact = "application/json"
       }
 
       http_method = "http_method"
 
+      incoming_port {
+        // One of the arguments from this list "port port_ranges no_port_match" must be set
+        port = "6443"
+      }
+
       path {
-        // One of the arguments from this list "prefix path regex" must be set
-        prefix = "/register/"
+        // One of the arguments from this list "regex prefix path" must be set
+        regex = "regex"
       }
 
       query_params {
         key = "assignee_username"
 
         // One of the arguments from this list "exact regex" must be set
-        regex = "regex"
+        exact = "exact"
       }
     }
 
@@ -62,7 +67,24 @@ resource "volterra_route" "example" {
       name   = "value"
 
       // One of the arguments from this list "value secret_value" must be set
-      value = "value"
+
+      secret_value {
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+        blindfold_secret_info {
+          decryption_provider = "value"
+          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          store_provider      = "value"
+        }
+      }
     }
 
     request_headers_to_remove = ["host"]
@@ -79,101 +101,9 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_redirect route_direct_response" must be set
 
-    route_destination {
-      buffer_policy {
-        disabled          = true
-        max_request_bytes = "2048"
-        max_request_time  = "30"
-      }
-
-      // One of the arguments from this list "do_not_retract_cluster retract_cluster" must be set
-      retract_cluster = true
-
-      cors_policy {
-        allow_credentials = true
-        allow_headers     = "value"
-        allow_methods     = "GET"
-
-        allow_origin = ["value"]
-
-        allow_origin_regex = ["value"]
-        disabled           = true
-        expose_headers     = "value"
-        max_age            = "value"
-        maximum_age        = "-1"
-      }
-
-      destinations {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        endpoint_subsets = {
-          "key1" = "value1"
-        }
-
-        priority = "1"
-        weight   = "10"
-      }
-
-      endpoint_subsets = {
-        "key1" = "value1"
-      }
-
-      hash_policy {
-        // One of the arguments from this list "header_name cookie source_ip" must be set
-        header_name = "host"
-
-        terminal = true
-      }
-
-      // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
-
-      mirror_policy {
-        cluster {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        percent {
-          denominator = "denominator"
-          numerator   = "5"
-        }
-      }
-
-      prefix_rewrite = "/"
-      priority       = "priority"
-
-      retry_policy {
-        back_off {
-          base_interval = "5"
-          max_interval  = "60"
-        }
-
-        num_retries     = "3"
-        per_try_timeout = "1000"
-
-        retriable_status_codes = ["403"]
-
-        retry_condition = ["5xx"]
-        retry_on        = "5xx"
-      }
-
-      spdy_config {
-        use_spdy = true
-      }
-
-      timeout = "2000"
-
-      web_socket_config {
-        idle_timeout         = "2000"
-        max_connect_attempts = "5"
-        use_websocket        = true
-      }
+    route_direct_response {
+      response_body = "OK"
+      response_code = "200"
     }
     service_policy {
       // One of the arguments from this list "disable context_extensions" must be set
@@ -181,10 +111,10 @@ resource "volterra_route" "example" {
     }
     skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "waf waf_rules app_firewall" must be set
+      // One of the arguments from this list "inherit_waf app_firewall disable_waf" must be set
 
-      waf {
-        waf {
+      app_firewall {
+        app_firewall {
           name      = "test1"
           namespace = "staging"
           tenant    = "acmecorp"
@@ -225,11 +155,15 @@ Add httponly attribute.
 
 Add secure attribute.
 
+### All Load Balancer Domains
+
+Add All load balancer domains to source origin (allow) list..
+
 ### App Firewall
 
 A direct reference to an Application Firewall configuration object.
 
-`app_firewall` - (Optional) References to an Application Firewall configuration object. See [ref](#ref) below for details.
+`app_firewall` - (Required) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Back Off
 
@@ -263,9 +197,9 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 Configuration for Bot Defense Javascript Injection.
 
-`javascript_location` - (Optional) Defines where perform the Bot Defense Javascript Injection in HTML page. (`String`).
+`javascript_location` - (Optional) Select the location where you would like to insert the Javascript tag(s). (`String`).
 
-`js_download_path` - (Optional) If not specified, default to ‘/common.js’. (`String`).
+`javascript_tags` - (Required) Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first.. See [Javascript Tags ](#javascript-tags) below for details.
 
 ### Bot Defense Javascript Injection Inline Mode
 
@@ -349,6 +283,22 @@ resources from a server at a different origin.
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
+### Csrf Policy
+
+Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.)..
+
+`all_load_balancer_domains` - (Optional) Add All load balancer domains to source origin (allow) list. (bool).
+
+`custom_domain_list` - (Optional) Add one or more domains to source origin (allow) list.. See [Custom Domain List ](#custom-domain-list) below for details.
+
+`disabled` - (Optional) Allow all source origin domains. (bool).
+
+### Custom Domain List
+
+Add one or more domains to source origin (allow) list..
+
+`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
+
 ### Destinations
 
 sent to the cluster specified in the destination.
@@ -360,6 +310,14 @@ sent to the cluster specified in the destination.
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 
 `weight` - (Optional) sent to the cluster specified in the destination (`Int`).
+
+### Disable Waf
+
+Any Application Firewall configuration will not be enforced.
+
+### Disabled
+
+Allow all source origin domains..
 
 ### Do Not Retract Cluster
 
@@ -403,9 +361,31 @@ Ignore Samesite attribute.
 
 Ignore secure attribute.
 
+### Incoming Port
+
+The port on which the request is received.
+
+`no_port_match` - (Optional) Disable matching of ports (bool).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
+### Inherit Waf
+
+Any Application Firewall configuration that was configured on a higher level will be enforced.
+
 ### Inherited Bot Defense Javascript Injection
 
 Hence no custom configuration is applied on the route.
+
+### Javascript Tags
+
+Select Add item to configure your javascript tag. If adding both Bot Adv and Fraud, the Bot Javascript should be added first..
+
+`javascript_url` - (Required) Please enter the full URL (include domain and path), or relative path. (`String`).
+
+`tag_attributes` - (Optional) Add the tag attributes you want to include in your Javascript tag.. See [Tag Attributes ](#tag-attributes) below for details.
 
 ### Match
 
@@ -414,6 +394,8 @@ route match condition.
 `headers` - (Optional) List of (key, value) headers. See [Headers ](#headers) below for details.
 
 `http_method` - (Optional) The name of the HTTP Method (GET, PUT, POST, etc) (`String`).
+
+`incoming_port` - (Optional) The port on which the request is received. See [Incoming Port ](#incoming-port) below for details.
 
 `path` - (Optional) URI path of route. See [Path ](#path) below for details.
 
@@ -426,6 +408,10 @@ useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
 `cluster` - (Required) referred here must be present.. See [ref](#ref) below for details.
 
 `percent` - (Optional) Percentage of requests to be mirrored. See [Percent ](#percent) below for details.
+
+### No Port Match
+
+Disable matching of ports.
 
 ### Path
 
@@ -513,7 +499,7 @@ Indicates that the route has a retry policy..
 
 `retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
 
-`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
+`retry_condition` - (Required) matching one defined in retriable_status_codes field (`String`).
 
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 
@@ -528,6 +514,8 @@ Send request to one of the destination from list of destinations.
 `retract_cluster` - (Optional) for route (bool).
 
 `cors_policy` - (Optional) resources from a server at a different origin. See [Cors Policy ](#cors-policy) below for details.
+
+`csrf_policy` - (Optional) Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).. See [Csrf Policy ](#csrf-policy) below for details.
 
 `destinations` - (Required) sent to the cluster specified in the destination. See [Destinations ](#destinations) below for details.
 
@@ -566,6 +554,8 @@ Send direct response.
 Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
+
+`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).
 
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
@@ -669,6 +659,14 @@ Specifies the list of query params to be removed. Not supported.
 
 `query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
 
+### Tag Attributes
+
+Add the tag attributes you want to include in your Javascript tag..
+
+`javascript_tag` - (Optional) Select from one of the predefined tag attibutes. (`String`).
+
+`tag_value` - (Optional) Add the tag attribute value. (`String`).
+
 ### Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
@@ -683,27 +681,15 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Waf
-
-A WAF object direct reference.
-
-`waf` - (Optional) A direct reference to web application firewall configuration object. See [ref](#ref) below for details.
-
-### Waf Rules
-
-A set of direct references of WAF Rules objects.
-
-`waf_rules` - (Optional) References to a set of WAF Rules configuration object. See [ref](#ref) below for details.
-
 ### Waf Type
 
 waf_type specified at route level overrides waf configuration at VirtualHost level.
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [App Firewall ](#app-firewall) below for details.
 
-`waf` - (Optional) A WAF object direct reference. See [Waf ](#waf) below for details.
+`disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (bool).
 
-`waf_rules` - (Optional) A set of direct references of WAF Rules objects. See [Waf Rules ](#waf-rules) below for details.
+`inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (bool).
 
 ### Web Socket Config
 

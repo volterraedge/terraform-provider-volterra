@@ -21,10 +21,10 @@ resource "volterra_dns_lb_pool" "example" {
   namespace           = "staging"
   load_balancing_mode = ["load_balancing_mode"]
 
-  // One of the arguments from this list "aaaa_pool cname_pool mx_pool srv_pool a_pool" must be set
+  // One of the arguments from this list "mx_pool srv_pool a_pool aaaa_pool cname_pool" must be set
 
   a_pool {
-    // One of the arguments from this list "health_check disable_health_check" must be set
+    // One of the arguments from this list "disable_health_check health_check" must be set
     disable_health_check = true
     max_answers          = "1"
 

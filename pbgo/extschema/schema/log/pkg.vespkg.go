@@ -34,6 +34,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.DateSubAggregationData"] = DateSubAggregationDataValidator()
 	vr["ves.io.schema.log.FieldAggregationBucket"] = FieldAggregationBucketValidator()
 	vr["ves.io.schema.log.FieldAggregationData"] = FieldAggregationDataValidator()
+	vr["ves.io.schema.log.FieldSubAggregationBucket"] = FieldSubAggregationBucketValidator()
 	vr["ves.io.schema.log.FieldSubAggregationData"] = FieldSubAggregationDataValidator()
 	vr["ves.io.schema.log.LogAggregationData"] = LogAggregationDataValidator()
 	vr["ves.io.schema.log.MetricsAggregationData"] = MetricsAggregationDataValidator()

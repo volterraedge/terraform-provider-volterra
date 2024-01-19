@@ -1559,14 +1559,6 @@ type ValidateMaliciousUserDetectionSetting struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateMaliciousUserDetectionSetting) BolaActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for bola_activity_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateMaliciousUserDetectionSetting) BotDefenseActivityChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1643,16 +1635,6 @@ func (v *ValidateMaliciousUserDetectionSetting) Validate(ctx context.Context, pm
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["bola_activity_choice"]; exists {
-		val := m.GetBolaActivityChoice()
-		vOpts := append(opts,
-			db.WithValidateField("bola_activity_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetBolaActivityChoice().(type) {
@@ -1985,17 +1967,6 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhBolaActivityChoice := v.BolaActivityChoiceValidationRuleHandler
-	rulesBolaActivityChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhBolaActivityChoice(rulesBolaActivityChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for MaliciousUserDetectionSetting.bola_activity_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["bola_activity_choice"] = vFn
-
 	vrhBotDefenseActivityChoice := v.BotDefenseActivityChoiceValidationRuleHandler
 	rulesBotDefenseActivityChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2020,9 +1991,8 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 
 	vrhCoolingOffPeriodSettingCoolingOffPeriod := v.CoolingOffPeriodSettingCoolingOffPeriodValidationRuleHandler
 	rulesCoolingOffPeriodSettingCoolingOffPeriod := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gt":        "0",
-		"ves.io.schema.rules.uint32.lte":       "120",
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "120",
 	}
 	vFnMap["cooling_off_period_setting.cooling_off_period"], err = vrhCoolingOffPeriodSettingCoolingOffPeriod(rulesCoolingOffPeriodSettingCoolingOffPeriod)
 	if err != nil {

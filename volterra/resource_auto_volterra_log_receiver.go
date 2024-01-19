@@ -236,7 +236,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 						"port": {
 
 							Type:     schema.TypeInt,
-							Required: true,
+							Optional: true,
 						},
 
 						"datadog_default_server": {
@@ -491,7 +491,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
-										Required: true,
+										Optional: true,
 									},
 
 									"server_name": {
@@ -869,7 +869,7 @@ func resourceVolterraLogReceiver() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
-										Required: true,
+										Optional: true,
 									},
 
 									"server_name": {
