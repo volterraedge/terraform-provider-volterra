@@ -6648,6 +6648,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 								},
 							},
 						},
+
+						"disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -7466,6 +7472,26 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							},
 						},
 
+						"mandatory_claims": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"claim_names": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
 						"reserved_claims": {
 
 							Type:     schema.TypeSet,
@@ -7617,6 +7643,49 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"l7_ddos_action_block": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"l7_ddos_action_default": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"l7_ddos_action_js_challenge": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cookie_expiry": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"custom_page": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"js_script_delay": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"l7_ddos_action_none": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"http": {
@@ -8832,7 +8901,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"key_value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -8861,7 +8930,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																					"value_pattern": {
 
 																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Required: true,
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -8886,7 +8955,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																		"value_pattern": {
 
 																			Type:     schema.TypeSet,
-																			Required: true,
+																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
@@ -9797,6 +9866,18 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{},
 										},
+									},
+
+									"disable_lb_source_ip_persistance": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"enable_lb_source_ip_persistance": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"disable_outlier_detection": {
@@ -11887,13 +11968,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"any_domain": {
 
 										Type:     schema.TypeBool,
-										Required: true,
+										Optional: true,
 									},
 
 									"specific_domain": {
 
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"inline_rate_limiter": {
@@ -12665,6 +12746,48 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													},
 												},
 
+												"csrf_policy": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"all_load_balancer_domains": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"custom_domain_list": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"domains": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
 												"disable_location_add": {
 													Type:     schema.TypeBool,
 													Optional: true,
@@ -13260,7 +13383,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Required: true,
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -23466,6 +23589,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+					allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
 		}
 
 	}
@@ -24692,6 +24827,26 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := jwtValidationMapStrToI["mandatory_claims"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				mandatoryClaims := &ves_io_schema_views_http_loadbalancer.MandatoryClaims{}
+				jwtValidation.MandatoryClaims = mandatoryClaims
+				for _, set := range sl {
+					mandatoryClaimsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := mandatoryClaimsMapStrToI["claim_names"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mandatoryClaims.ClaimNames = ls
+					}
+
+				}
+
+			}
+
 			if v, ok := jwtValidationMapStrToI["reserved_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -24929,6 +25084,79 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			}
 
+		}
+
+	}
+
+	//l7_ddos_auto_mitigation_action
+
+	l7DdosAutoMitigationActionTypeFound := false
+
+	if v, ok := d.GetOk("l7_ddos_action_block"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_L7DdosActionBlock{}
+			l7DdosAutoMitigationActionInt.L7DdosActionBlock = &ves_io_schema.Empty{}
+			createSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_default"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_L7DdosActionDefault{}
+			l7DdosAutoMitigationActionInt.L7DdosActionDefault = &ves_io_schema.Empty{}
+			createSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_js_challenge"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+		l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_L7DdosActionJsChallenge{}
+		l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
+		createSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.CookieExpiry = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.CustomPage = v.(string)
+
+			}
+
+			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.JsScriptDelay = uint32(v.(int))
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_none"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_L7DdosActionNone{}
+			l7DdosAutoMitigationActionInt.L7DdosActionNone = &ves_io_schema.Empty{}
+			createSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
 		}
 
 	}
@@ -28148,6 +28376,32 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 						httpProtocolTypeTypeFound = true
 						_ = v
+					}
+
+					lbSourceIpPersistanceChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+						lbSourceIpPersistanceChoiceTypeFound = true
+
+						if v.(bool) {
+							lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableLbSourceIpPersistance{}
+							lbSourceIpPersistanceChoiceInt.DisableLbSourceIpPersistance = &ves_io_schema.Empty{}
+							advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["enable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+						lbSourceIpPersistanceChoiceTypeFound = true
+
+						if v.(bool) {
+							lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableLbSourceIpPersistance{}
+							lbSourceIpPersistanceChoiceInt.EnableLbSourceIpPersistance = &ves_io_schema.Empty{}
+							advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+						}
+
 					}
 
 					outlierDetectionChoiceTypeFound := false
@@ -32115,6 +32369,69 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 										corsPolicy.MaximumAge = int32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["csrf_policy"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								csrfPolicy := &ves_io_schema.CsrfPolicy{}
+								advancedOptions.CsrfPolicy = csrfPolicy
+								for _, set := range sl {
+									csrfPolicyMapStrToI := set.(map[string]interface{})
+
+									allowedDomainsTypeFound := false
+
+									if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+
+										if v.(bool) {
+											allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+											allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+											csrfPolicy.AllowedDomains = allowedDomainsInt
+										}
+
+									}
+
+									if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+										allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+										allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+										csrfPolicy.AllowedDomains = allowedDomainsInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												allowedDomainsInt.CustomDomainList.Domains = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+
+										if v.(bool) {
+											allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+											allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+											csrfPolicy.AllowedDomains = allowedDomainsInt
+										}
+
 									}
 
 								}
@@ -43561,6 +43878,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+					allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
+				}
+
+			}
+
 		}
 
 	}
@@ -44775,6 +45104,26 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+			if v, ok := jwtValidationMapStrToI["mandatory_claims"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				mandatoryClaims := &ves_io_schema_views_http_loadbalancer.MandatoryClaims{}
+				jwtValidation.MandatoryClaims = mandatoryClaims
+				for _, set := range sl {
+					mandatoryClaimsMapStrToI := set.(map[string]interface{})
+
+					if w, ok := mandatoryClaimsMapStrToI["claim_names"]; ok && !isIntfNil(w) {
+						ls := make([]string, len(w.([]interface{})))
+						for i, v := range w.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						mandatoryClaims.ClaimNames = ls
+					}
+
+				}
+
+			}
+
 			if v, ok := jwtValidationMapStrToI["reserved_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -45012,6 +45361,77 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			}
 
+		}
+
+	}
+
+	l7DdosAutoMitigationActionTypeFound := false
+
+	if v, ok := d.GetOk("l7_ddos_action_block"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_L7DdosActionBlock{}
+			l7DdosAutoMitigationActionInt.L7DdosActionBlock = &ves_io_schema.Empty{}
+			updateSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_default"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_L7DdosActionDefault{}
+			l7DdosAutoMitigationActionInt.L7DdosActionDefault = &ves_io_schema.Empty{}
+			updateSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_js_challenge"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+		l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_L7DdosActionJsChallenge{}
+		l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
+		updateSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.CookieExpiry = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.CustomPage = v.(string)
+
+			}
+
+			if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
+
+				l7DdosAutoMitigationActionInt.L7DdosActionJsChallenge.JsScriptDelay = uint32(v.(int))
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("l7_ddos_action_none"); ok && !l7DdosAutoMitigationActionTypeFound {
+
+		l7DdosAutoMitigationActionTypeFound = true
+
+		if v.(bool) {
+			l7DdosAutoMitigationActionInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_L7DdosActionNone{}
+			l7DdosAutoMitigationActionInt.L7DdosActionNone = &ves_io_schema.Empty{}
+			updateSpec.L7DdosAutoMitigationAction = l7DdosAutoMitigationActionInt
 		}
 
 	}
@@ -48221,6 +48641,32 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 						httpProtocolTypeTypeFound = true
 						_ = v
+					}
+
+					lbSourceIpPersistanceChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+						lbSourceIpPersistanceChoiceTypeFound = true
+
+						if v.(bool) {
+							lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableLbSourceIpPersistance{}
+							lbSourceIpPersistanceChoiceInt.DisableLbSourceIpPersistance = &ves_io_schema.Empty{}
+							advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["enable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+						lbSourceIpPersistanceChoiceTypeFound = true
+
+						if v.(bool) {
+							lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableLbSourceIpPersistance{}
+							lbSourceIpPersistanceChoiceInt.EnableLbSourceIpPersistance = &ves_io_schema.Empty{}
+							advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+						}
+
 					}
 
 					outlierDetectionChoiceTypeFound := false
@@ -52183,6 +52629,69 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 										corsPolicy.MaximumAge = int32(w.(int))
+									}
+
+								}
+
+							}
+
+							if v, ok := advancedOptionsMapStrToI["csrf_policy"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								csrfPolicy := &ves_io_schema.CsrfPolicy{}
+								advancedOptions.CsrfPolicy = csrfPolicy
+								for _, set := range sl {
+									csrfPolicyMapStrToI := set.(map[string]interface{})
+
+									allowedDomainsTypeFound := false
+
+									if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+
+										if v.(bool) {
+											allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+											allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+											csrfPolicy.AllowedDomains = allowedDomainsInt
+										}
+
+									}
+
+									if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+										allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+										allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+										csrfPolicy.AllowedDomains = allowedDomainsInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												allowedDomainsInt.CustomDomainList.Domains = ls
+
+											}
+
+										}
+
+									}
+
+									if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+										allowedDomainsTypeFound = true
+
+										if v.(bool) {
+											allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+											allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+											csrfPolicy.AllowedDomains = allowedDomainsInt
+										}
+
 									}
 
 								}
