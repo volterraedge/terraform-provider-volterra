@@ -29,6 +29,7 @@ import (
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 )
 
 // resourceVolterraHttpLoadbalancer is implementation of Volterra's HttpLoadbalancer resources
@@ -14053,6 +14054,14 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 		},
+		SchemaVersion: 1,
+        StateUpgraders: []schema.StateUpgrader{
+            {
+                Type:    statemigration.ResourceHttpLoadbalancerInstanceResourceV0().CoreConfigSchema().ImpliedType(),
+                Upgrade: statemigration.ResourceHttpLoadbalancerInstanceStateUpgradeV0,
+                Version: 0,
+            },
+        },
 	}
 }
 

@@ -2,8 +2,10 @@
 package volterra
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"reflect"
 	"testing"
 
 	"github.com/google/uuid"
@@ -24,6 +26,7 @@ import (
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	vh_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/server"
 )
@@ -510,4 +513,37 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			namespace = "%[4]s"
 		}
 		`, name, namespace, existLbName, existNsName, timeout)
+}
+
+func TestResourceHttpLoadbalancerInstanceStateUpgradeV0(t *testing.T) {
+	rawState := map[string]interface{}{
+		"enable_ddos_detection": []interface{}{
+			map[string]interface{}{
+				"disable_auto_mitigation": true,
+				"enable_auto_mitigation":  true,
+			},
+		},
+	}
+
+	// Expected output state after upgrade
+	expectedState := map[string]interface{}{
+		"enable_ddos_detection": []interface{}{
+			map[string]interface{}{
+				"disable_auto_mitigation": true,
+				"enable_auto_mitigation": []interface{}{
+					map[string]interface{}{
+						"block": true,
+					},
+				},
+			},
+		},
+	}
+
+	updatedState, err := statemigration.ResourceHttpLoadbalancerInstanceStateUpgradeV0(context.Background(), rawState, nil)
+	if err != nil {
+		t.Fatalf("error during state upgrade: %v", err)
+	}
+	if !reflect.DeepEqual(updatedState, expectedState) {
+		t.Fatalf("expected state:\n%#v\ngot:\n%#v\n", expectedState, updatedState)
+	}
 }
