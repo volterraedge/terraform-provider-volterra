@@ -43,6 +43,8 @@ const (
 	servicePolicy             = "volterra_service_policy"
 	cloudSiteLabels           = "volterra_cloud_site_labels"
 	setCloudSiteInfo          = "volterra_set_cloud_site_info"
+	setKnownLabelKey          = "volterra_known_label_key"
+	setKnownLabel             = "volterra_known_label"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -224,5 +226,7 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[servicePolicy] = resourceVolterraServicePolicy()
 	resourceMap[cloudSiteLabels] = resourceVolterraCloudSiteLabels()
 	resourceMap[setCloudSiteInfo] = resourceVolterraSetCloudSiteInfo()
+	resourceMap[setKnownLabelKey] = resourceVolterraSetKnownLabelKey()
+	resourceMap[setKnownLabel] = resourceVolterraSetKnownLabel()
 	return resourceMap
 }
