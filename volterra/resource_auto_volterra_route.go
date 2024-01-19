@@ -746,6 +746,48 @@ func resourceVolterraRoute() *schema.Resource {
 										},
 									},
 
+									"csrf_policy": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"all_load_balancer_domains": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"custom_domain_list": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"domains": {
+
+																Type: schema.TypeList,
+
+																Required: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"disabled": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"destinations": {
 
 										Type:     schema.TypeList,
@@ -1035,7 +1077,7 @@ func resourceVolterraRoute() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Required: true,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -2231,6 +2273,69 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 								corsPolicy.MaximumAge = int32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["csrf_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						csrfPolicy := &ves_io_schema.CsrfPolicy{}
+						routeActionInt.RouteDestination.CsrfPolicy = csrfPolicy
+						for _, set := range sl {
+							csrfPolicyMapStrToI := set.(map[string]interface{})
+
+							allowedDomainsTypeFound := false
+
+							if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+
+								if v.(bool) {
+									allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+									allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+									csrfPolicy.AllowedDomains = allowedDomainsInt
+								}
+
+							}
+
+							if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+								allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+								allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+								csrfPolicy.AllowedDomains = allowedDomainsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										allowedDomainsInt.CustomDomainList.Domains = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+
+								if v.(bool) {
+									allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+									allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+									csrfPolicy.AllowedDomains = allowedDomainsInt
+								}
+
 							}
 
 						}
@@ -3970,6 +4075,69 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
 								corsPolicy.MaximumAge = int32(w.(int))
+							}
+
+						}
+
+					}
+
+					if v, ok := cs["csrf_policy"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						csrfPolicy := &ves_io_schema.CsrfPolicy{}
+						routeActionInt.RouteDestination.CsrfPolicy = csrfPolicy
+						for _, set := range sl {
+							csrfPolicyMapStrToI := set.(map[string]interface{})
+
+							allowedDomainsTypeFound := false
+
+							if v, ok := csrfPolicyMapStrToI["all_load_balancer_domains"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+
+								if v.(bool) {
+									allowedDomainsInt := &ves_io_schema.CsrfPolicy_AllLoadBalancerDomains{}
+									allowedDomainsInt.AllLoadBalancerDomains = &ves_io_schema.Empty{}
+									csrfPolicy.AllowedDomains = allowedDomainsInt
+								}
+
+							}
+
+							if v, ok := csrfPolicyMapStrToI["custom_domain_list"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+								allowedDomainsInt := &ves_io_schema.CsrfPolicy_CustomDomainList{}
+								allowedDomainsInt.CustomDomainList = &ves_io_schema.DomainNameList{}
+								csrfPolicy.AllowedDomains = allowedDomainsInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["domains"]; ok && !isIntfNil(v) {
+
+										ls := make([]string, len(v.([]interface{})))
+										for i, v := range v.([]interface{}) {
+											ls[i] = v.(string)
+										}
+										allowedDomainsInt.CustomDomainList.Domains = ls
+
+									}
+
+								}
+
+							}
+
+							if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+								allowedDomainsTypeFound = true
+
+								if v.(bool) {
+									allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+									allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+									csrfPolicy.AllowedDomains = allowedDomainsInt
+								}
+
 							}
 
 						}

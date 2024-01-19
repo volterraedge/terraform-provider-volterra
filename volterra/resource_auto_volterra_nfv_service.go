@@ -2969,6 +2969,11 @@ func resourceVolterraNfvService() *schema.Resource {
 							Optional: true,
 						},
 
+						"domain_suffix": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+
 						"node_ssh_ports": {
 
 							Type:     schema.TypeList,
@@ -7012,6 +7017,12 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["domain_suffix"]; ok && !isIntfNil(v) {
+
+				sshManagementChoiceInt.EnabledSshAccess.DomainSuffix = v.(string)
+
+			}
+
 			if v, ok := cs["node_ssh_ports"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -9646,6 +9657,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 					advertiseChoiceInt.AdvertiseOnSloSli = &ves_io_schema.Empty{}
 					sshManagementChoiceInt.EnabledSshAccess.AdvertiseChoice = advertiseChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["domain_suffix"]; ok && !isIntfNil(v) {
+
+				sshManagementChoiceInt.EnabledSshAccess.DomainSuffix = v.(string)
 
 			}
 

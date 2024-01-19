@@ -508,6 +508,18 @@ func resourceVolterraK8SCluster() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
+
+			"vk8s_namespace_access_deny": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"vk8s_namespace_access_permit": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -1232,6 +1244,34 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 			podSecurityPolicyChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_UseDefaultPsp{}
 			podSecurityPolicyChoiceInt.UseDefaultPsp = &ves_io_schema.Empty{}
 			createSpec.PodSecurityPolicyChoice = podSecurityPolicyChoiceInt
+		}
+
+	}
+
+	//vk8s_namespace_access_choice
+
+	vk8SNamespaceAccessChoiceTypeFound := false
+
+	if v, ok := d.GetOk("vk8s_namespace_access_deny"); ok && !vk8SNamespaceAccessChoiceTypeFound {
+
+		vk8SNamespaceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			vk8SNamespaceAccessChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_Vk8SNamespaceAccessDeny{}
+			vk8SNamespaceAccessChoiceInt.Vk8SNamespaceAccessDeny = &ves_io_schema.Empty{}
+			createSpec.Vk8SNamespaceAccessChoice = vk8SNamespaceAccessChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("vk8s_namespace_access_permit"); ok && !vk8SNamespaceAccessChoiceTypeFound {
+
+		vk8SNamespaceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			vk8SNamespaceAccessChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_Vk8SNamespaceAccessPermit{}
+			vk8SNamespaceAccessChoiceInt.Vk8SNamespaceAccessPermit = &ves_io_schema.Empty{}
+			createSpec.Vk8SNamespaceAccessChoice = vk8SNamespaceAccessChoiceInt
 		}
 
 	}
@@ -1985,6 +2025,32 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 			podSecurityPolicyChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_UseDefaultPsp{}
 			podSecurityPolicyChoiceInt.UseDefaultPsp = &ves_io_schema.Empty{}
 			updateSpec.PodSecurityPolicyChoice = podSecurityPolicyChoiceInt
+		}
+
+	}
+
+	vk8SNamespaceAccessChoiceTypeFound := false
+
+	if v, ok := d.GetOk("vk8s_namespace_access_deny"); ok && !vk8SNamespaceAccessChoiceTypeFound {
+
+		vk8SNamespaceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			vk8SNamespaceAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_Vk8SNamespaceAccessDeny{}
+			vk8SNamespaceAccessChoiceInt.Vk8SNamespaceAccessDeny = &ves_io_schema.Empty{}
+			updateSpec.Vk8SNamespaceAccessChoice = vk8SNamespaceAccessChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("vk8s_namespace_access_permit"); ok && !vk8SNamespaceAccessChoiceTypeFound {
+
+		vk8SNamespaceAccessChoiceTypeFound = true
+
+		if v.(bool) {
+			vk8SNamespaceAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_Vk8SNamespaceAccessPermit{}
+			vk8SNamespaceAccessChoiceInt.Vk8SNamespaceAccessPermit = &ves_io_schema.Empty{}
+			updateSpec.Vk8SNamespaceAccessChoice = vk8SNamespaceAccessChoiceInt
 		}
 
 	}

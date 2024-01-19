@@ -175,6 +175,18 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
+						"disable_lb_source_ip_persistance": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_lb_source_ip_persistance": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"disable_outlier_detection": {
 
 							Type:     schema.TypeBool,
@@ -1817,6 +1829,32 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			lbSourceIpPersistanceChoiceTypeFound := false
+
+			if v, ok := advancedOptionsMapStrToI["disable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+				lbSourceIpPersistanceChoiceTypeFound = true
+
+				if v.(bool) {
+					lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableLbSourceIpPersistance{}
+					lbSourceIpPersistanceChoiceInt.DisableLbSourceIpPersistance = &ves_io_schema.Empty{}
+					advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["enable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+				lbSourceIpPersistanceChoiceTypeFound = true
+
+				if v.(bool) {
+					lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableLbSourceIpPersistance{}
+					lbSourceIpPersistanceChoiceInt.EnableLbSourceIpPersistance = &ves_io_schema.Empty{}
+					advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
 				}
 
 			}
@@ -4059,6 +4097,32 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+				}
+
+			}
+
+			lbSourceIpPersistanceChoiceTypeFound := false
+
+			if v, ok := advancedOptionsMapStrToI["disable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+				lbSourceIpPersistanceChoiceTypeFound = true
+
+				if v.(bool) {
+					lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableLbSourceIpPersistance{}
+					lbSourceIpPersistanceChoiceInt.DisableLbSourceIpPersistance = &ves_io_schema.Empty{}
+					advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["enable_lb_source_ip_persistance"]; ok && !isIntfNil(v) && !lbSourceIpPersistanceChoiceTypeFound {
+
+				lbSourceIpPersistanceChoiceTypeFound = true
+
+				if v.(bool) {
+					lbSourceIpPersistanceChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_EnableLbSourceIpPersistance{}
+					lbSourceIpPersistanceChoiceInt.EnableLbSourceIpPersistance = &ves_io_schema.Empty{}
+					advancedOptions.LbSourceIpPersistanceChoice = lbSourceIpPersistanceChoiceInt
 				}
 
 			}

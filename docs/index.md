@@ -22,7 +22,7 @@ provider "volterra" {
 
 * `api_p12_file` - API credential p12 file path (`String`). See [ref](#api-credential-options) below for details.
 
-* `api_cert` - API certificate file path. `api_cert`, `api_key` and `api_ca_cert` trio must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
+* `api_cert` - API certificate file path. `api_cert`, `api_key` duo must be given. This can also be sourced from `VOLT_API_CERT` env variable (`String`).
 
 * `api_key` - API certificate private key file path. This can also be sourced from `VOLT_API_KEY` env variable (`String`).
 
@@ -38,7 +38,7 @@ provider "volterra" {
 
 **OR**
 
-- Use `api_cert`, `api_key` and `api_ca_cert` variables for authentication.
+- Use `api_cert`, `api_key` variables for authentication.
 
 **OR**
 

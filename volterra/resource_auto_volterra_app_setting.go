@@ -295,7 +295,7 @@ func resourceVolterraAppSetting() *schema.Resource {
 												"cooling_off_period": {
 
 													Type:     schema.TypeInt,
-													Required: true,
+													Optional: true,
 												},
 
 												"exclude_failed_login_activity": {

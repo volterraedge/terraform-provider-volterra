@@ -32,6 +32,7 @@ import (
 )
 
 // TestAccHTTPLB token creation test
+// TestAccHTTPLB token creation test
 func TestHTTPLB(t *testing.T) {
 	name := generateResourceName()
 	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
@@ -102,7 +103,11 @@ func TestHTTPLB(t *testing.T) {
 				},
 				Domains: []string{"abc.com"},
 				LoadbalancerType: &http_lb.GlobalSpecType_Http{
-					Http: &http_lb.ProxyTypeHttp{},
+					Http: &http_lb.ProxyTypeHttp{
+						PortChoice: &http_lb.ProxyTypeHttp_Port{
+							Port: 80,
+						},
+					},
 				},
 				DefaultRoutePools: []*ves_io_schema_views.OriginPoolWithWeight{{
 					PoolChoice: &ves_io_schema_views.OriginPoolWithWeight_Pool{
@@ -305,6 +310,7 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  no_challenge = true
 		  http {
 			dns_volterra_managed = false
+			port = 80
 		  }
 		  disable_rate_limit = false
 		  app_firewall {

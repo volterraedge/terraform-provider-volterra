@@ -869,6 +869,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 								},
 							},
 						},
+
+						"disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
 			},
@@ -1654,7 +1660,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Required: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -3546,6 +3552,18 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 					}
 
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+					allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
 				}
 
 			}
@@ -6592,6 +6610,18 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 					}
 
+				}
+
+			}
+
+			if v, ok := csrfPolicyMapStrToI["disabled"]; ok && !isIntfNil(v) && !allowedDomainsTypeFound {
+
+				allowedDomainsTypeFound = true
+
+				if v.(bool) {
+					allowedDomainsInt := &ves_io_schema.CsrfPolicy_Disabled{}
+					allowedDomainsInt.Disabled = &ves_io_schema.Empty{}
+					csrfPolicy.AllowedDomains = allowedDomainsInt
 				}
 
 			}

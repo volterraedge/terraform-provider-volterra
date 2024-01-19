@@ -121,6 +121,12 @@ func resourceVolterraUserIdentification() *schema.Resource {
 							Optional: true,
 						},
 
+						"jwt_claim_name": {
+
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
 						"none": {
 
 							Type:     schema.TypeBool,
@@ -312,6 +318,17 @@ func resourceVolterraUserIdentificationCreate(d *schema.ResourceData, meta inter
 					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
 					rules[i].Identifier = identifierInt
 				}
+
+			}
+
+			if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
+
+				rules[i].Identifier = identifierInt
+
+				identifierInt.JwtClaimName = v.(string)
 
 			}
 
@@ -565,6 +582,17 @@ func resourceVolterraUserIdentificationUpdate(d *schema.ResourceData, meta inter
 					identifierInt.IpAndTlsFingerprint = &ves_io_schema.Empty{}
 					rules[i].Identifier = identifierInt
 				}
+
+			}
+
+			if v, ok := rulesMapStrToI["jwt_claim_name"]; ok && !isIntfNil(v) && !identifierTypeFound {
+
+				identifierTypeFound = true
+				identifierInt := &ves_io_schema_user_identification.UserIdentificationRule_JwtClaimName{}
+
+				rules[i].Identifier = identifierInt
+
+				identifierInt.JwtClaimName = v.(string)
 
 			}
 

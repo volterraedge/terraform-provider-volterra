@@ -53,6 +53,8 @@ resource "volterra_registration_approval" "example" {
 
 `private_network_name` - (Optional) Name of the private network for which you are approving the request (`String`).
 
+`tunnel_type` - (Optional) Tunnel type specifies the type of tunnel to be used for traffic between the sites (`String`).
+
 Attribute Reference
 -------------------
 
