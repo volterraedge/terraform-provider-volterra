@@ -33,27 +33,22 @@ resource "volterra_aws_vpc_site" "example" {
   }
   // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
   direct_connect_disabled = true
-
-  // One of the arguments from this list "egress_nat_gw egress_virtual_private_gateway egress_gateway_default" must be set
-
-  egress_nat_gw {
-    // One of the arguments from this list "nat_gw_id" must be set
-    nat_gw_id = "nat_gw_id"
-  }
-  instance_type = ["a1.xlarge"]
+  // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
+  egress_gateway_default = true
+  instance_type          = ["a1.xlarge"]
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
-  enable_internet_vip = true
+  disable_internet_vip = true
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
   // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
   f5xc_security_group = true
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
       // One of the arguments from this list "disable_allowed_vip_port use_http_port use_https_port use_http_https_port custom_ports" must be set
-      disable_allowed_vip_port = true
+      use_http_port = true
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -77,13 +72,13 @@ resource "volterra_aws_vpc_site" "example" {
 
       perf_mode_l3_enhanced {
         // One of the arguments from this list "no_jumbo jumbo" must be set
-        no_jumbo = true
+        jumbo = true
       }
     }
   }
   ssh_key = ["ssh-rsa AAAAB..."]
-  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
-  total_nodes = "1"
+  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
+  no_worker_nodes = true
 }
 
 ```

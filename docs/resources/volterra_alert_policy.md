@@ -32,12 +32,30 @@ resource "volterra_alert_policy" "example" {
 
     // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
 
-    group {
-      groups = ["groups"]
+    custom {
+      alertlabel {
+        // One of the arguments from this list "exact_match regex_match" must be set
+        exact_match = "Major"
+      }
+
+      alertname {
+        // One of the arguments from this list "exact_match regex_match" must be set
+        exact_match = "Major"
+      }
+
+      group {
+        // One of the arguments from this list "exact_match regex_match" must be set
+        exact_match = "Major"
+      }
+
+      severity {
+        // One of the arguments from this list "regex_match exact_match" must be set
+        exact_match = "Major"
+      }
     }
     notification_parameters {
       // One of the arguments from this list "individual ves_io_group custom default" must be set
-      individual      = true
+      default         = true
       group_interval  = "1m"
       group_wait      = "30s"
       repeat_interval = "4h"

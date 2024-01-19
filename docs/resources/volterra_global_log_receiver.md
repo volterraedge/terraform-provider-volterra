@@ -21,17 +21,19 @@ resource "volterra_global_log_receiver" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
-  ns_current = true
 
-  // One of the arguments from this list "audit_logs request_logs security_events" must be set
+  ns_list {
+    namespaces = ["default"]
+  }
+  // One of the arguments from this list "request_logs security_events audit_logs" must be set
   request_logs = true
 
-  // One of the arguments from this list "datadog_receiver splunk_receiver kafka_receiver new_relic_receiver gcp_bucket_receiver s3_receiver elastic_receiver azure_receiver azure_event_hubs_receiver aws_cloud_watch_receiver sumo_logic_receiver qradar_receiver http_receiver" must be set
+  // One of the arguments from this list "s3_receiver sumo_logic_receiver kafka_receiver new_relic_receiver qradar_receiver gcp_bucket_receiver aws_cloud_watch_receiver http_receiver datadog_receiver splunk_receiver elastic_receiver azure_receiver azure_event_hubs_receiver" must be set
 
-  gcp_bucket_receiver {
+  azure_receiver {
     batch {
       // One of the arguments from this list "max_bytes_disabled max_bytes" must be set
-      max_bytes_disabled = true
+      max_bytes = "16384"
 
       // One of the arguments from this list "max_events_disabled max_events" must be set
       max_events_disabled = true
@@ -40,18 +42,30 @@ resource "volterra_global_log_receiver" "example" {
       timeout_seconds_default = true
     }
 
-    bucket = "my-log-bucket"
-
     compression {
       // One of the arguments from this list "compression_none compression_gzip" must be set
-      compression_none = true
+      compression_gzip = true
     }
 
-    gcp_cred {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+    connection_string {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
+      }
+
+      secret_encoding_type = "secret_encoding_type"
+
+      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+
+      blindfold_secret_info {
+        decryption_provider = "value"
+        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        store_provider      = "value"
+      }
     }
+
+    container_name = "logs"
   }
 }
 

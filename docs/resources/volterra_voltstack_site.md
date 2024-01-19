@@ -20,33 +20,35 @@ resource "volterra_voltstack_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
+
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
-  disable_gpu = true
-  // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+  enable_gpu = true
+
+  // One of the arguments from this list "k8s_cluster no_k8s_cluster" must be set
   no_k8s_cluster = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_node_configuration {
     name      = "master-0"
     public_ip = "192.168.0.156"
   }
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
+
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
   default_sriov_interface = true
+
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
   default_storage_config = true
+
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]

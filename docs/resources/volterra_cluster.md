@@ -98,6 +98,20 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
+### Cert Params
+
+TLS certificate parameters for upstream connections.
+
+`certificates` - (Required) Client TLS Certificate required for mTLS authentication. See [ref](#ref) below for details.
+
+`cipher_suites` - (Optional) will be used. (`String`).
+
+`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
+
 ### Circuit Breaker
 
 allows to apply back pressure on downstream quickly..
@@ -122,7 +136,7 @@ Clear Secret is used for the secrets that are not encrypted.
 
 ### Common Params
 
-Common TLS parameters used in both upstream and downstream connections.
+Common TLS parameters used in upstream connections.
 
 `cipher_suites` - (Optional) will be used. (`String`).
 
@@ -158,7 +172,7 @@ Do not use SNI..
 
 .
 
-`keys` - (Optional) List of keys that define a cluster subset class. (`String`).
+`keys` - (Required) List of keys that define a cluster subset class. (`String`).
 
 ### Header Transformation Type
 
@@ -238,13 +252,21 @@ Set of TLS certificates.
 
 TLS parameters to access upstream endpoints for this cluster.
 
-`common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Common Params ](#common-params) below for details.
-
-`disable_sni` - (Optional) Do not use SNI. (bool).
+`disable_sni` - (Optional) Do not use SNI.. See [Disable Sni ](#disable-sni) below for details.
 
 `sni` - (Optional) SNI value to be used. (`String`).
 
-`use_host_header_as_sni` - (Optional) Use the host header as SNI (bool).
+`use_host_header_as_sni` - (Optional) Use the host header as SNI. See [Use Host Header As Sni ](#use-host-header-as-sni) below for details.
+
+`cert_params` - (Optional) TLS certificate parameters for upstream connections. See [Cert Params ](#cert-params) below for details.
+
+`common_params` - (Optional) Common TLS parameters used in upstream connections. See [Common Params ](#common-params) below for details.
+
+### Trusted Ca
+
+Trusted CA List.
+
+`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
 
 ### Use Host Header As Sni
 
@@ -260,7 +282,9 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-`trusted_ca_url` - (Optional) The URL for a trust store (`String`).
+`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
 
 `use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
 

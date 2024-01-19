@@ -27,12 +27,12 @@ resource "volterra_aws_tgw_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+      // One of the arguments from this list "inside_subnet reserved_inside_subnet" must be set
       reserved_inside_subnet = true
       disk_size              = "80"
 
       outside_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -41,7 +41,7 @@ resource "volterra_aws_tgw_site" "example" {
       }
 
       workload_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -51,20 +51,19 @@ resource "volterra_aws_tgw_site" "example" {
     }
 
     // One of the arguments from this list "aws_cred assisted" must be set
-
-    aws_cred {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+    assisted      = true
     disk_size     = "80"
     instance_type = "a1.xlarge"
+
     // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
     disable_internet_vip = true
+
     // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
     f5xc_security_group = true
+
     // One of the arguments from this list "new_vpc vpc_id" must be set
     vpc_id = "vpc-12345678901234567"
+
     ssh_key = "ssh-rsa AAAAB..."
 
     // One of the arguments from this list "new_tgw existing_tgw" must be set
@@ -77,19 +76,14 @@ resource "volterra_aws_tgw_site" "example" {
     nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
   default_blocked_services = true
 
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
+  // One of the arguments from this list "private_connectivity direct_connect_disabled direct_connect_enabled" must be set
   direct_connect_disabled = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
 }
 
 ```
@@ -147,8 +141,6 @@ Argument Reference
 
 `vn_config` - (Optional) Site Network related details will be configured. See [Vn Config ](#vn-config) below for details.
 
-`spoke_attachments` - (Optional) x-required. See [Spoke Attachments ](#spoke-attachments) below for details.
-
 `vpc_attachments` - (Optional) Note that this choice would be deprecated in the near release.. See [Vpc Attachments ](#vpc-attachments) below for details.
 
 ### Active East West Service Policies
@@ -174,10 +166,6 @@ Enable Forward Proxy for this site and manage policies.
 Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
-
-### All Subnets
-
-All subnets are routed to transit gateway..
 
 ### Allowed Vip Port
 
@@ -210,18 +198,6 @@ Allowed VIP Port Configuration for Inside Network.
 ### Assisted
 
 In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
-
-### Attachments
-
-x-required.
-
-`cred` - (Optional) Attach VPCs using a cloud credential not associated with this site. See [ref](#ref) below for details.
-
-`use_site_credential` - (Optional) Attach VPCs using this site’s cloud credential (bool).
-
-`segment` - (Optional) Choose a network segment. All attached VPCs will be placed in this network segment. See [ref](#ref) below for details.
-
-`spokes` - (Required) Spoke VPCs to be attached to the AWS TGW Site. See [Spokes ](#spokes) below for details.
 
 ### Auto Asn
 
@@ -371,12 +347,6 @@ Custom list of ports to be allowed.
 
 `port_ranges` - (Required) Port Ranges (`String`).
 
-### Custom Routing
-
-Routes for user specified CIDRs towards the CE will be installed for this subnet.
-
-`route_tables` - (Required) Route Tables. See [Route Tables ](#route-tables) below for details.
-
 ### Custom Security Group
 
 With this option, ingress and egress traffic will be controlled via security group ids..
@@ -400,12 +370,6 @@ Use Custom static route to configure all advanced options.
 ### Default Os Version
 
 Will assign latest available OS version.
-
-### Default Route
-
-default route towards the CE will be add to the route table.
-
-`route_tables` - (Required) Route Tables. See [Route Tables ](#route-tables) below for details.
 
 ### Default Sw Version
 
@@ -595,10 +559,6 @@ L3 performance mode enhancement to use jumbo frame.
 
 and a user associate AWS DirectConnect Gateway with it..
 
-### Manual Routing
-
-No route tables will be programmed by F5. User will manage routing.
-
 ### New Tgw
 
 Details needed to create new TGW.
@@ -781,14 +741,6 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Autogenerate and reserve a subnet from the Primary CIDR.
 
-### Route Tables
-
-Route Tables.
-
-`route_table_id` - (Optional) Route table ID (`String`).
-
-`static_routes` - (Required) List of Static Routes (`String`).
-
 ### Same As Site Region
 
 Use same region as that of the Site.
@@ -823,18 +775,6 @@ creating ipsec between two sites which are part of the site mesh group.
 
 creating ipsec between two sites which are part of the site mesh group.
 
-### Spoke Attachments
-
-x-required.
-
-`attachments` - (Required) x-required. See [Attachments ](#attachments) below for details.
-
-### Spokes
-
-Spoke VPCs to be attached to the AWS TGW Site.
-
-`vpc_list` - (Optional) x-displayName: "VPC List". See [Vpc List ](#vpc-list) below for details.
-
 ### Ssh
 
 Matches ssh port 22.
@@ -850,12 +790,6 @@ List of Static routes.
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
-
-### Subnet Ids
-
-Specific subnets are routed to transit gateway..
-
-`subnet_ids` - (Required) List of subnet IDs (`String`).
 
 ### Subnet Param
 
@@ -934,10 +868,6 @@ Only HTTP Port (80) will be allowed..
 ### Use Https Port
 
 Only HTTPS Port (443) will be allowed..
-
-### Use Site Credential
-
-Attach VPCs using this site’s cloud credential.
 
 ### Use System Defaults
 
@@ -1025,21 +955,11 @@ Note that this choice would be deprecated in the near release..
 
 ### Vpc List
 
-x-displayName: "VPC List".
+List of VPC attachments to transit gateway.
 
-`labels` - (Optional) These labels used must be from known key, label defined in shared namespace and unknown key. (`String`).
+`labels` - (Optional) Add labels for the VPC attachment. These labels can then be used in policies such as enhanced firewall. (`String`).
 
-`custom_routing` - (Optional) Routes for user specified CIDRs towards the CE will be installed for this subnet. See [Custom Routing ](#custom-routing) below for details.
-
-`default_route` - (Optional) default route towards the CE will be add to the route table. See [Default Route ](#default-route) below for details.
-
-`manual_routing` - (Optional) No route tables will be programmed by F5. User will manage routing (bool).
-
-`all_subnets` - (Optional) All subnets are routed to transit gateway. (bool).
-
-`subnet_ids` - (Optional) Specific subnets are routed to transit gateway.. See [Subnet Ids ](#subnet-ids) below for details.
-
-`vpc_id` - (Required) Enter the VPC ID of the VPC to be attached (`String`).
+`vpc_id` - (Optional) Information about existing VPC (`String`).
 
 ### Web User Interface
 

@@ -23,24 +23,11 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "public_name private_ip private_name vn_private_ip vn_private_name public_ip k8s_service consul_service custom_endpoint_object segment_ip segment_name" must be set
+    // One of the arguments from this list "vn_private_ip vn_private_name segment_name public_name k8s_service consul_service custom_endpoint_object public_ip private_ip private_name segment_ip" must be set
 
-    private_name {
-      dns_name = "value"
-
-      // One of the arguments from this list "inside_network outside_network" must be set
-      inside_network   = true
+    public_name {
+      dns_name         = "value"
       refresh_interval = "20"
-
-      site_locator {
-        // One of the arguments from this list "site virtual_site" must be set
-
-        site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
     }
 
     labels = {
@@ -49,9 +36,9 @@ resource "volterra_origin_pool" "example" {
   }
 
   // One of the arguments from this list "port automatic_port lb_port" must be set
-  port = "9080"
+  lb_port = true
 
-  // One of the arguments from this list "no_tls use_tls" must be set
+  // One of the arguments from this list "use_tls no_tls" must be set
   no_tls = true
 }
 
@@ -121,6 +108,10 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 `http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (bool).
 
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http2 Options ](#http2-options) below for details.
+
+`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistance (bool).
+
+`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistance (bool).
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (bool).
 
@@ -240,6 +231,10 @@ Use the default subset provided here. Select endpoints matching default subset..
 
 Circuit Breaker is disabled.
 
+### Disable Lb Source Ip Persistance
+
+Disable LB source IP persistance.
+
 ### Disable Ocsp Stapling
 
 This is the default behavior if no choice is selected..
@@ -255,6 +250,10 @@ Do not use SNI..
 ### Disable Subsets
 
 Subset load balancing is disabled. All eligible origin servers will be considered for load balancing..
+
+### Enable Lb Source Ip Persistance
+
+Enable LB source IP persistance.
 
 ### Enable Subsets
 

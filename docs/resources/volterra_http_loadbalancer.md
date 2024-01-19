@@ -25,18 +25,15 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
 
-  api_specification {
-    api_definition {
+  api_definitions {
+    api_definitions {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
-
-    // One of the arguments from this list "validation_custom_list validation_disabled validation_all_spec_endpoints" must be set
-    validation_disabled = true
   }
 
-  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
+  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
   enable_api_discovery {
     discovered_api_settings {
@@ -55,25 +52,18 @@ resource "volterra_http_loadbalancer" "example" {
         }
 
         sensitive_data_detection_config {
-          // One of the arguments from this list "specific_domain any_domain" must be set
+          // One of the arguments from this list "any_domain specific_domain" must be set
           any_domain = true
 
           // One of the arguments from this list "key_pattern value_pattern key_value_pattern" must be set
 
-          key_value_pattern {
-            key_pattern {
-              // One of the arguments from this list "exact_value regex_value" must be set
-              exact_value = "x-volt-header"
-            }
-
-            value_pattern {
-              // One of the arguments from this list "exact_value regex_value" must be set
-              exact_value = "x-volt-header"
-            }
+          key_pattern {
+            // One of the arguments from this list "exact_value regex_value" must be set
+            regex_value = "'^new.*$', 'san f.*', '.* del .*'"
           }
           // One of the arguments from this list "all_sections all_request_sections all_response_sections custom_sections" must be set
-          all_request_sections = true
-          // One of the arguments from this list "any_target api_endpoint_target base_path api_group" must be set
+          all_sections = true
+          // One of the arguments from this list "base_path api_group any_target api_endpoint_target" must be set
           any_target = true
         }
 
@@ -87,8 +77,13 @@ resource "volterra_http_loadbalancer" "example" {
       }
     }
   }
-  // One of the arguments from this list "enable_challenge js_challenge captcha_challenge policy_based_challenge no_challenge" must be set
-  no_challenge = true
+
+  // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+
+  captcha_challenge {
+    cookie_expiry = "1000"
+    custom_page   = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  }
 
   // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
 
@@ -101,10 +96,12 @@ resource "volterra_http_loadbalancer" "example" {
     }
   }
   domains = ["www.foo.com"]
-  // One of the arguments from this list "source_ip_stickiness cookie_stickiness ring_hash round_robin least_active random" must be set
+  // One of the arguments from this list "ring_hash round_robin least_active random source_ip_stickiness cookie_stickiness" must be set
   round_robin = true
+  // One of the arguments from this list "l7_ddos_action_default l7_ddos_action_block l7_ddos_action_js_challenge l7_ddos_action_none" must be set
+  l7_ddos_action_block = true
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
+  // One of the arguments from this list "https_auto_cert https http" must be set
 
   http {
     dns_volterra_managed = true
@@ -114,66 +111,16 @@ resource "volterra_http_loadbalancer" "example" {
   }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
   enable_malicious_user_detection = true
-
-  // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
-
-  api_rate_limit {
-    api_endpoint_rules {
-      api_endpoint_method {
-        invert_matcher = true
-
-        methods = ["['GET', 'POST', 'DELETE']"]
-      }
-
-      api_endpoint_path = "value"
-      base_path         = "/"
-
-      // One of the arguments from this list "any_domain specific_domain" must be set
-      any_domain = true
-
-      // One of the arguments from this list "inline_rate_limiter ref_rate_limiter" must be set
-
-      inline_rate_limiter {
-        // One of the arguments from this list "use_http_lb_user_id ref_user_id" must be set
-        use_http_lb_user_id = true
-        threshold           = "1"
-        unit                = "unit"
-      }
-    }
-
-    // One of the arguments from this list "no_ip_allowed_list ip_allowed_list custom_ip_allowed_list" must be set
-    no_ip_allowed_list = true
-
-    server_url_rules {
-      base_path = "/"
-
-      // One of the arguments from this list "any_domain specific_domain" must be set
-      any_domain = true
-
-      // One of the arguments from this list "ref_rate_limiter inline_rate_limiter" must be set
-
-      inline_rate_limiter {
-        // One of the arguments from this list "ref_user_id use_http_lb_user_id" must be set
-        use_http_lb_user_id = true
-        threshold           = "1"
-        unit                = "unit"
-      }
-    }
-  }
+  // One of the arguments from this list "rate_limit disable_rate_limit api_rate_limit" must be set
+  disable_rate_limit = true
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
   service_policies_from_namespace = true
   // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
   disable_trust_client_ip_headers = true
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
   user_id_client_ip = true
-
   // One of the arguments from this list "disable_waf app_firewall" must be set
-
-  app_firewall {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  disable_waf = true
 }
 
 ```
@@ -279,11 +226,19 @@ Argument Reference
 
 `jwt_validation` - (Optional) tokens or tokens that are not yet valid.. See [Jwt Validation ](#jwt-validation) below for details.
 
+`l7_ddos_action_block` - (Optional) Block suspicious sources (bool).
+
+`l7_ddos_action_default` - (Optional) Block suspicious sources and serve JavaScript challenge to rest of traffic (bool).
+
+`l7_ddos_action_js_challenge` - (Optional) Serve JavaScript challenge to suspicious sources. See [L7 Ddos Action Js Challenge ](#l7-ddos-action-js-challenge) below for details.
+
+`l7_ddos_action_none` - (Optional) Disable auto mitigation (bool).
+
 `http` - (Optional) HTTP Load Balancer.. See [Http ](#http) below for details.
 
 `https` - (Optional) User is responsible for managing DNS to this load balancer.. See [Https ](#https) below for details.
 
-`https_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal.. See [Https Auto Cert ](#https-auto-cert) below for details.
+`https_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).. See [Https Auto Cert ](#https-auto-cert) below for details.
 
 `disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (bool).
 
@@ -408,6 +363,10 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 `http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (bool).
 
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http2 Options ](#http2-options) below for details.
+
+`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistance (bool).
+
+`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistance (bool).
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (bool).
 
@@ -633,7 +592,7 @@ Specify API definition and OpenAPI Validation.
 
 `api_definition` - (Required) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
 
-`validation_all_spec_endpoints` - (Optional) Any other end-points not listed will act according to "Fall Through Mode". See [Validation All Spec Endpoints ](#validation-all-spec-endpoints) below for details.
+`validation_all_spec_endpoints` - (Optional) All other API endpoints would proceed according to "Fall Through Mode". See [Validation All Spec Endpoints ](#validation-all-spec-endpoints) below for details.
 
 `validation_custom_list` - (Optional) Any other end-points not listed will act according to "Fall Through Mode". See [Validation Custom List ](#validation-custom-list) below for details.
 
@@ -1069,6 +1028,8 @@ Because CSRF attacks specifically target state-changing requests, the policy onl
 
 `custom_domain_list` - (Optional) Add one or more domains to source origin (allow) list.. See [Custom Domain List ](#custom-domain-list) below for details.
 
+`disabled` - (Optional) Allow all source origin domains. (bool).
+
 ### Custom Domain List
 
 Add one or more domains to source origin (allow) list..
@@ -1317,6 +1278,10 @@ Disable introspection queries for the load balancer..
 
 Disable JavaScript insertion..
 
+### Disable Lb Source Ip Persistance
+
+Disable LB source IP persistance.
+
 ### Disable Learn From Redirect Traffic
 
 Disable learning API patterns from traffic with redirect response codes 3xx.
@@ -1360,6 +1325,10 @@ x-displayName: "Disable".
 ### Disable Transaction Result
 
 Disable collection of transaction result..
+
+### Disabled
+
+Allow all source origin domains..
 
 ### Disabled Built In Rules
 
@@ -1460,6 +1429,10 @@ Enable introspection queries for the load balancer..
 x-displayName: "Enable".
 
 `ip_threat_categories` - (Required) If the source IP matches on atleast one of the enabled IP threat categories, the request will be denied. (`List of Strings`).
+
+### Enable Lb Source Ip Persistance
+
+Enable LB source IP persistance.
 
 ### Enable Learn From Redirect Traffic
 
@@ -1571,7 +1544,7 @@ Failure Conditions.
 
 ### Fall Through Mode
 
-Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules).
+Determine what to do with unprotected endpoints (not part of the API Inventory or doesn't have a specific rule in custom rules).
 
 `fall_through_mode_allow` - (Optional) Allow any unprotected end point (bool).
 
@@ -1803,7 +1776,7 @@ User is responsible for managing DNS to this load balancer..
 
 ### Https Auto Cert
 
-or a DNS CNAME record should be created in your DNS provider's portal..
+or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud)..
 
 `add_hsts` - (Optional) Add HTTP Strict-Transport-Security response header (`Bool`).
 
@@ -1999,6 +1972,8 @@ tokens or tokens that are not yet valid..
 
 `jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Config ](#jwks-config) below for details.
 
+`mandatory_claims` - (Optional) If the claim does not exist JWT token validation will fail.. See [Mandatory Claims ](#mandatory-claims) below for details.
+
 `reserved_claims` - (Optional) the token validation of these claims should be disabled.. See [Reserved Claims ](#reserved-claims) below for details.
 
 `target` - (Required) Define endpoints for which JWT token validation will be performed. See [Target ](#target) below for details.
@@ -2037,6 +2012,16 @@ Search for specific field and value patterns in the specified sections..
 
 `value_pattern` - (Required) Pattern for value.. See [Value Pattern ](#value-pattern) below for details.
 
+### L7 Ddos Action Js Challenge
+
+Serve JavaScript challenge to suspicious sources.
+
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
+
+`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
+
 ### Lb Port
 
 Endpoint port is selected based on loadbalancer port.
@@ -2064,6 +2049,12 @@ x-displayName: "Logout".
 ### Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
+
+### Mandatory Claims
+
+If the claim does not exist JWT token validation will fail..
+
+`claim_names` - (Optional) x-displayName: "Claim Names" (`String`).
 
 ### Medium Security
 
@@ -2231,9 +2222,9 @@ Origin Pools for this route.
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
 
-`cluster` - (Required) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
+`cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
-`pool` - (Required) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
+`pool` - (Optional) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
 
 `priority` - (Optional) made active as per the increasing priority. (`Int`).
 
@@ -2931,7 +2922,7 @@ discovery has to happen. This implicit label is added to service_selector.
 
 ### Settings
 
-OpenAPI specification validation settings relevant for "All endpoints" enforcement and for "Custom list" enforcement.
+OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement.
 
 `oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
 
@@ -3333,17 +3324,17 @@ x-displayName: "Enable".
 
 ### Validation All Spec Endpoints
 
-Any other end-points not listed will act according to "Fall Through Mode".
+All other API endpoints would proceed according to "Fall Through Mode".
 
-`fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not in the OpenAPI specification file (a.k.a. swagger) or doesn't have a specific rule in custom rules). See [Fall Through Mode ](#fall-through-mode) below for details.
+`fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not part of the API Inventory or doesn't have a specific rule in custom rules). See [Fall Through Mode ](#fall-through-mode) below for details.
 
 `oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (bool).
 
 `oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
 
-`settings` - (Optional) OpenAPI specification validation settings relevant for "All endpoints" enforcement and for "Custom list" enforcement. See [Settings ](#settings) below for details.
+`settings` - (Optional) OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement. See [Settings ](#settings) below for details.
 
-`validation_mode` - (Required) When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger). See [Validation Mode ](#validation-mode) below for details.
+`validation_mode` - (Required) When a validation mismatch occurs on a request to one of the API Inventory endpoints. See [Validation Mode ](#validation-mode) below for details.
 
 ### Validation Custom List
 
@@ -3357,7 +3348,7 @@ Any other end-points not listed will act according to "Fall Through Mode".
 
 `oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (bool).
 
-`settings` - (Optional) OpenAPI specification validation settings relevant for "All endpoints" enforcement and for "Custom list" enforcement. See [Settings ](#settings) below for details.
+`settings` - (Optional) OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement. See [Settings ](#settings) below for details.
 
 ### Validation Disabled
 
@@ -3365,7 +3356,7 @@ Don't run OpenAPI validation.
 
 ### Validation Mode
 
-When a validation mismatch occurs on a request to one of the endpoints listed on the OpenAPI specification file (a.k.a. swagger).
+When a validation mismatch occurs on a request to one of the API Inventory endpoints.
 
 `response_validation_mode_active` - (Optional) Enforce OpenAPI validation processing for this event. See [Response Validation Mode Active ](#response-validation-mode-active) below for details.
 

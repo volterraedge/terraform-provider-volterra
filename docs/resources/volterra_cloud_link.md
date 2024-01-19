@@ -20,7 +20,7 @@ resource "volterra_cloud_link" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "azure gcp aws" must be set
+  // One of the arguments from this list "aws azure gcp" must be set
 
   aws {
     aws_cred {
@@ -42,7 +42,7 @@ resource "volterra_cloud_link" "example" {
 
           secret_encoding_type = "secret_encoding_type"
 
-          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+          // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
 
           blindfold_secret_info {
             decryption_provider = "value"
@@ -63,7 +63,10 @@ resource "volterra_cloud_link" "example" {
 
         // One of the arguments from this list "ipv4 ipv6" must be set
 
-        ipv6 {}
+        ipv4 {
+          aws_router_peer_address = "10.1.0.0/31"
+          router_peer_address     = "10.1.0.0/31"
+        }
         jumbo_mtu = true
         metadata {
           description = "Virtual Host for acmecorp website"
@@ -71,7 +74,7 @@ resource "volterra_cloud_link" "example" {
           name        = "acmecorp-web"
         }
         region = "us-east-1"
-        // One of the arguments from this list "user_assigned_name system_generated_name" must be set
+        // One of the arguments from this list "system_generated_name user_assigned_name" must be set
         system_generated_name = true
         tags = {
           "key1" = "value1"

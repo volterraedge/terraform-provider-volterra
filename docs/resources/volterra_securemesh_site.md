@@ -20,23 +20,20 @@ resource "volterra_securemesh_site" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "default_blocked_services blocked_services" must be set
+  // One of the arguments from this list "blocked_services default_blocked_services" must be set
+  default_blocked_services = true
 
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "web_user_interface dns ssh" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
   no_bond_devices = true
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
+
   master_node_configuration {
     name      = "master-0"
     public_ip = "192.168.0.156"
   }
+
   // One of the arguments from this list "default_network_config custom_network_config" must be set
   default_network_config = true
   volterra_certified_hw  = ["isv-8000-series-voltmesh"]

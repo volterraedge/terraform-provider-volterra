@@ -21,7 +21,7 @@ resource "volterra_protocol_inspection" "example" {
   namespace = "staging"
 
   enable_disable_compliance_checks {
-    // One of the arguments from this list "enable_compliance_checks disable_compliance_checks" must be set
+    // One of the arguments from this list "disable_compliance_checks enable_compliance_checks" must be set
 
     enable_compliance_checks {
       name      = "test1"
@@ -31,7 +31,7 @@ resource "volterra_protocol_inspection" "example" {
   }
 
   enable_disable_signatures {
-    // One of the arguments from this list "disable_signature enable_signature" must be set
+    // One of the arguments from this list "enable_signature disable_signature" must be set
     enable_signature = true
   }
 }

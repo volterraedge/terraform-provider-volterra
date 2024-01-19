@@ -50,7 +50,7 @@ resource "volterra_app_setting" "example" {
         exclude_bola_detection = true
 
         // One of the arguments from this list "include_bot_defense_activity exclude_bot_defense_activity" must be set
-        exclude_bot_defense_activity = true
+        include_bot_defense_activity = true
 
         // One of the arguments from this list "cooling_off_period" must be set
         cooling_off_period = "cooling_off_period"
@@ -60,20 +60,21 @@ resource "volterra_app_setting" "example" {
         include_failed_login_activity {
           login_failures_threshold = "10"
         }
-
         // One of the arguments from this list "include_forbidden_activity exclude_forbidden_activity" must be set
-
-        include_forbidden_activity {
-          forbidden_requests_threshold = "10"
-        }
+        exclude_forbidden_activity = true
         // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
         include_ip_reputation = true
+
         // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
-        exclude_non_existent_url_activity = true
-        // One of the arguments from this list "exclude_rate_limit include_rate_limit" must be set
+
+        include_non_existent_url_activity_automatic {
+          // One of the arguments from this list "low medium high" must be set
+          high = true
+        }
+        // One of the arguments from this list "include_rate_limit exclude_rate_limit" must be set
         include_rate_limit = true
-        // One of the arguments from this list "exclude_waf_activity include_waf_activity" must be set
-        exclude_waf_activity = true
+        // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
+        include_waf_activity = true
       }
     }
   }
@@ -176,7 +177,7 @@ Enable AI based malicious user detection.
 
 `include_bot_defense_activity` - (Optional) Include Bot Defense activity in malicious user detection (bool).
 
-`cooling_off_period` - (Required) a high to medium or medium to low or low to none. (`Int`).
+`cooling_off_period` - (Optional) a high to medium or medium to low or low to none. (`Int`).
 
 `exclude_failed_login_activity` - (Optional) Exclude persistent login failures activity (401 response code) in malicious user detection (bool).
 

@@ -367,6 +367,8 @@ CSRF is a mechanism that checks if request received at the server is from legiti
 
 `custom_domain_list` - (Optional) Add one or more domains to source origin (allow) list.. See [Custom Domain List ](#custom-domain-list) below for details.
 
+`disabled` - (Optional) Allow all source origin domains. (bool).
+
 ### Custom Domain List
 
 Add one or more domains to source origin (allow) list..
@@ -418,6 +420,10 @@ x-displayName: "Disable".
 ### Disable Waf
 
 Any Application Firewall configuration will not be enforced.
+
+### Disabled
+
+Allow all source origin domains..
 
 ### Dns Proxy Configuration
 
@@ -613,7 +619,7 @@ Indicates that the virtual_host has a retry policy..
 
 `retriable_status_codes` - (Optional) HTTP status codes that should trigger a retry in addition to those specified by retry_on. (`Int`).
 
-`retry_condition` - (Optional) matching one defined in retriable_status_codes field (`String`).
+`retry_condition` - (Required) matching one defined in retriable_status_codes field (`String`).
 
 `retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).
 

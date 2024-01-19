@@ -20,34 +20,11 @@ resource "volterra_forward_proxy_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "network_connector proxy_label_selector drp_http_connect any_proxy" must be set
-  any_proxy = true
+  // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
+  drp_http_connect = true
 
-  // One of the arguments from this list "rule_list allow_all allow_list deny_list" must be set
-
-  deny_list {
-    // One of the arguments from this list "default_action_next_policy default_action_deny default_action_allow" must be set
-    default_action_next_policy = true
-
-    dest_list {
-      port_ranges = "80,443,8080-8191,9080"
-
-      prefixes = ["10.0.0./24"]
-    }
-
-    http_list {
-      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
-      exact_value = "abc.zyz.com"
-
-      // One of the arguments from this list "path_exact_value path_prefix_value path_regex_value any_path" must be set
-      path_exact_value = "/abc/zyz"
-    }
-
-    tls_list {
-      // One of the arguments from this list "exact_value suffix_value regex_value" must be set
-      exact_value = "abc.zyz.com"
-    }
-  }
+  // One of the arguments from this list "deny_list rule_list allow_all allow_list" must be set
+  allow_all = true
 }
 
 ```

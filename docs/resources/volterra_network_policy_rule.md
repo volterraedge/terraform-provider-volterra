@@ -80,6 +80,8 @@ List of label keys to be matched in prefix_selector configured in remote_endpoin
 
 these IP prefixes are destination.
 
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
 `prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
 
 ### Prefix Selector

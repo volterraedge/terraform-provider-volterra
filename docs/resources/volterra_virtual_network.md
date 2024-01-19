@@ -21,7 +21,7 @@ resource "volterra_virtual_network" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "site_local_network site_local_inside_network legacy_type srv6_network global_network" must be set
-  global_network = true
+  site_local_inside_network = true
 }
 
 ```

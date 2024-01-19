@@ -24,17 +24,18 @@ resource "volterra_fleet" "example" {
   no_bond_devices = true
 
   // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  no_dc_cluster_group = true
+  fleet_label         = ["sfo"]
 
-  dc_cluster_group_inside {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+
+  enable_vgpu {
+    feature_type   = "feature_type"
+    server_address = "gridlicense1.example.com"
+    server_port    = "7070"
   }
-  fleet_label = ["sfo"]
-  // One of the arguments from this list "enable_gpu enable_vgpu disable_gpu" must be set
-  disable_gpu = true
 
-  // One of the arguments from this list "interface_list default_config device_list" must be set
+  // One of the arguments from this list "default_config device_list interface_list" must be set
 
   interface_list {
     interfaces {
@@ -43,15 +44,9 @@ resource "volterra_fleet" "example" {
       tenant    = "acmecorp"
     }
   }
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
-  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+  logs_streaming_disabled = true
+  // One of the arguments from this list "sriov_interfaces default_sriov_interface" must be set
   default_sriov_interface = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
@@ -59,10 +54,10 @@ resource "volterra_fleet" "example" {
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
-  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
   no_storage_static_routes = true
   // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
-  deny_all_usb = true
+  allow_all_usb = true
 }
 
 ```

@@ -21,8 +21,8 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "client_asn ip_and_http_header_name ip_and_tls_fingerprint client_country client_region client_city http_header_name cookie_name none tls_fingerprint client_ip query_param_key" must be set
-    client_ip = true
+    // One of the arguments from this list "none jwt_claim_name tls_fingerprint ip_and_http_header_name ip_and_tls_fingerprint client_ip http_header_name client_asn client_region query_param_key cookie_name client_country client_city" must be set
+    jwt_claim_name = "jwt_claim_name"
   }
 }
 
@@ -98,6 +98,8 @@ Evaluation of the rules is terminated once a user identifier has been extracted.
 `ip_and_http_header_name` - (Optional) Name of HTTP header from which the value should be extracted. (`String`).
 
 `ip_and_tls_fingerprint` - (Optional) Use the combination of Client IP and TLS Fingerprint as user identifier. (bool).
+
+`jwt_claim_name` - (Optional) Use the JWT claim value as user identifier. (`String`).
 
 `none` - (Optional) Do not use any user identifier. (bool).
 

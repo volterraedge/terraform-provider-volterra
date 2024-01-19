@@ -21,7 +21,14 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-  default_blocked_services = true
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "dns ssh web_user_interface" must be set
+      web_user_interface = true
+      network_type       = "network_type"
+    }
+  }
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -33,7 +40,7 @@ resource "volterra_gcp_vpc_site" "example" {
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
 
-  // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
+  // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
 
   log_receiver {
     name      = "test1"
@@ -43,7 +50,7 @@ resource "volterra_gcp_vpc_site" "example" {
   // One of the arguments from this list "private_connect_disabled private_connectivity" must be set
   private_connect_disabled = true
 
-  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
+  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -51,7 +58,7 @@ resource "volterra_gcp_vpc_site" "example" {
     gcp_zone_names = ["us-west1-a, us-west1-b, us-west1-c"]
 
     local_network {
-      // One of the arguments from this list "new_network existing_network new_network_autogenerate" must be set
+      // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
       new_network_autogenerate {
         autogenerate = true
@@ -61,9 +68,8 @@ resource "volterra_gcp_vpc_site" "example" {
     local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
-      new_subnet {
-        primary_ipv4 = "10.1.0.0/16"
-        subnet_name  = "subnet1-in-network1"
+      existing_subnet {
+        subnet_name = "subnet1-in-network1"
       }
     }
 
